@@ -1,0 +1,16 @@
+{
+  "name": "audiation",
+  "version": "1.0.0",
+  "description": "Open-source music player built on Electron",
+  "author": "projsh",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron-packager": "^12.0.2"
+  },
+  "devDependencies": {
+    "electron": "^2.0.2"
+  }
+}
