@@ -17,13 +17,13 @@ var currentTheme;
 var os = require('os');
 var fs = require('fs')
 
-if (!fs.existsSync('./settings.json')) {
+/*if (!fs.existsSync('./settings.json')) {
     theme = {
         theme: 'dark'
     }
     themeString = JSON.stringify(theme)
     fs.writeFile('./settings.json', themeString);
-}
+}*/
 
 $(document).ready(function() {
     setTimeout(function() {
@@ -188,7 +188,7 @@ try {
         alert('what you actually think this works like seriously it doesn\'t so move along please')
     })
 
-    const mainSettings = require('./settings.json');
+    /*const mainSettings = require('./settings.json');
     currentTheme = 'dark'
 
     function switchThemes() {
@@ -213,7 +213,7 @@ try {
 
     $('#switchThemesButton').click(function() {
         switchThemes();
-    })
+    })*/
 
     $('.tb-close').click(function() {
         const remote = require('electron').remote;
