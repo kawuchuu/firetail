@@ -5,7 +5,7 @@ const url = require('url');
 var win;
 
 function createWindow() {
-    win = new BrowserWindow({width: 1080, height: 889, icon: 'audiation.ico', frame: false});
+    win = new BrowserWindow({width: 1080, height: 889, icon: './assets/image/audiation.ico', frame: false});
 
     win.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),

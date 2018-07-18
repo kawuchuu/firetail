@@ -11,8 +11,8 @@ var newFileChosen;
 var newFileName;
 var pauseButtonActive = false;
 var currentSongPlaying;
-var currentNumber;
 var currentTheme;
+var allFilesList = {};
 
 var os = require('os');
 var fs = require('fs');
@@ -29,7 +29,7 @@ $(document).ready(function () {
 })
 
 var fileExtentions = ['mp3', 'wav', 'm4a', 'ogg', '3gp', 'aac', 'flac', 'webm', 'raw'];
-var newSongs = [];
+var s = [];
 
 $('#newList').html('<p style="text-align: center">Loading...');
 var theme;
@@ -39,21 +39,21 @@ remote = require('electron').remote;
 remote.getCurrentWindow().setMinimumSize(595, 525);
 
 function songActive() {
-    $(currentSongPlaying).css({
+    $(`#${currentSongPlaying}`).css({
         color: '#c464f1'
     })
-    $(`${currentSongPlaying} p`).addClass('new-song-constant');
-    $(`${currentSongPlaying} i`).show();
-    $(`${currentSongPlaying} i`).addClass('new-song-icon-constant')
-    $(`${currentSongPlaying} i`).css({
+    $(`#${currentSongPlaying} p`).addClass('new-song-constant');
+    $(`#${currentSongPlaying} i`).show();
+    $(`#${currentSongPlaying} i`).addClass('new-song-icon-constant')
+    $(`#${currentSongPlaying} i`).css({
         opacity: 1
     })
     if (pauseButtonActive === false) {
-        $(`${currentSongPlaying} i`).removeClass('fa-play');
-        $(`${currentSongPlaying} i`).addClass('fa-pause');
+        $(`#${currentSongPlaying} i`).removeClass('fa-play');
+        $(`#${currentSongPlaying} i`).addClass('fa-pause');
     } else {
-        $(`${currentSongPlaying} i`).addClass('fa-play');
-        $(`${currentSongPlaying} i`).removeClass('fa-pause');
+        $(`#${currentSongPlaying} i`).addClass('fa-play');
+        $(`#${currentSongPlaying} i`).removeClass('fa-pause');
     }
 }
 
@@ -61,73 +61,73 @@ function songActiveReset() {
     $('.play-pause').removeClass('fa-pause');
     $('.play-pause').addClass('fa-play');
     $(`p.new-song-title`).removeClass('new-song-constant');
-    $(`.play-pause`).removeClass('new-song-icon-constant')
+    $(`.play-pause`).removeClass('new-song-icon-constant');
     $(`.play-pause`).css({
         opacity: 0
     })
     $('.results-link').css({
         color: '#fff'
     })
-    $(`#newSong${currentNumber} i`).hide();
+    $(`#${currentSongPlaying} i`).hide();
 }
 
 function loadFiles() {
-    setTimeout(function () {
-        if (!fs.existsSync(`${os.homedir}/Music/Audiation`)) {
-            fs.mkdirSync(`${os.homedir}/Music/Audiation`);
-        }
-        fs.readdir(`${os.homedir}/Music/Audiation`, (err, files) => {
-            if (err) console.error(err);
-            newSongs = files.filter(f => f.split(".").pop() === 'mp3' || 'm4a' || 'wav' || 'ogg' || '3gp' || 'aac' || 'flac' || 'webm' || 'raw');
+    if (!fs.existsSync(`${os.homedir}/Music/Audiation`)) {
+        fs.mkdirSync(`${os.homedir}/Music/Audiation`);
+    }
+    fs.readdir(`${os.homedir}/Music/Audiation`, (err, files) => {
+        if (err) console.error(err);
+        s = files.filter(f => f.split(".").pop() === 'mp3' || 'm4a' || 'wav' || 'ogg' || '3gp' || 'aac' || 'flac' || 'webm' || 'raw');
 
-            if (newSongs.length === 0) {
-                $('#newList').html('<p style="text-align: center">No valid audio files found in the Audiation folder.<br><a class="open-file-browser">Click here</a> to open the Audiation folder.')
-                return $('.open-file-browser').click(function () {
-                    require('child_process').exec(`start "" "${os.homedir}\\Music\\Audiation`)
-                });
+        if (s.length === 0) {
+            $('#newList').html('<p style="text-align: center">No valid audio files found in the Audiation folder.<br><a class="open-file-browser">Click here</a> to open the Audiation folder.')
+            return $('.open-file-browser').click(function () {
+                require('child_process').exec(`start "" "${os.homedir}\\Music\\Audiation`)
+            });
+        }
+        fileTotal = s.length - 1;
+        $('#newList').html('');
+        s.forEach((f, i) => {
+            allFilesList[i] = f;
+            newFileName = f.slice(0, -4)
+            $('#newList').append(`<li class="results-link" id="${i}"><i class="play-pause fas fa-play" style="display: none; opacity: 0; transition: .2s;"></i><p class="new-song-title">${newFileName}`);
+            if (currentlyPlaying === true && currentSongPlaying) {
+                songActive();
             }
-            fileTotal = newSongs.length - 1;
-            $('#newList').html('');
-            newSongs.forEach((f, i) => {
-                newFileName = f.slice(0, -4)
-                $('#newList').append(`<li class="results-link" id="newSong${i}"><i class="play-pause fas fa-play" style="display: none; opacity: 0; transition: .2s;"></i><p class="new-song-title">${newFileName}`);
-                if (currentlyPlaying === true && currentSongPlaying) {
+            $(`#${i}`).click(function () {
+                if (currentlyPlaying === true && $(this).attr('id') === `#${currentSongPlaying}`.substr(1)) {
+                    resumeButton();
+                } else {
+                    currentSongPlaying = i;
+                    songActiveReset();
+                    newFileChosen = f;
+                    newFileName = f.slice(0, -4)
+                    if (currentlyPlaying === true) {
+                        audioStop();
+                    }
+                    $('p#songDuration').text('Calculating...')
+                    classicDetectSong();
+                    $(`#pauseButton, #${currentSongPlaying} i`).removeClass('fa-play');
+                    $(`#pauseButton, #${currentSongPlaying} i`).addClass('fa-pause');
                     songActive();
                 }
-                $(`#newSong${i}`).click(function () {
-                    if (currentlyPlaying === true && $(this).attr('id') === currentSongPlaying.substr(1)) {
-                        resumeButton();
-                    } else {
-                        currentSongPlaying = `#newSong${i}`;
-                        currentNumber = i;
-                        songActiveReset();
-                        newFileName = f.slice(0, -4)
-                        newFileChosen = f;
-                        if (currentlyPlaying === true) {
-                            audioStop();
-                        }
-                        $('p#songDuration').text('Calculating...')
-                        classicDetectSong();
-                        songActive();
-                    }
-                });
-                $(`#newSong${i}`).mouseover(function () {
-                    $(`#newSong${i} p`).addClass('new-song-hover');
-                    $(`#newSong${i} i`).show();
-                    $(`#newSong${i} i`).css({
-                        opacity: 1
-                    })
-                })
-                $(`#newSong${i}`).mouseleave(function () {
-                    $(`#newSong${i} p`).removeClass('new-song-hover')
-                    $(`#newSong${i} i`).css({
-                        opacity: 0
-                    });
-                    $(`#newSong${i} i`).hide();
+            });
+            $(`#${i}`).mouseover(function () {
+                $(`#${i} p`).addClass('new-song-hover');
+                $(`#${i} i`).show();
+                $(`#${i} i`).css({
+                    opacity: 1
                 })
             })
+            $(`#${i}`).mouseleave(function () {
+                $(`#${i} p`).removeClass('new-song-hover')
+                $(`#${i} i`).css({
+                    opacity: 0
+                });
+                $(`#${i} i`).hide();
+            })
         })
-    }, 500)
+    })
 }
 loadFiles();
 $('#openFileBrowser').click(function () {
@@ -139,13 +139,30 @@ $('#refreshFiles').click(function () {
     loadFiles();
 })
 
-$('#backwardButton').click(function () {
-    alert('what you actually think this works like seriously it doesn\'t so move along please')
+function previousSong() {
+    audioStop();
+    songActiveReset();
+    currentSongPlaying = currentSongPlaying - 1;
+    newFileChosen = allFilesList[currentSongPlaying];
+    songActive();
+    classicDetectSong();
+}
 
+function nextSong() {
+    audioStop();
+    songActiveReset();
+    currentSongPlaying = currentSongPlaying + 1;
+    newFileChosen = allFilesList[currentSongPlaying];
+    songActive();
+    classicDetectSong();
+}
+
+$('#backwardButton').click(function () {
+    previousSong();
 })
 
 $('#forwardButton').click(function () {
-    alert('what you actually think this works like seriously it doesn\'t so move along please')
+    nextSong();
 })
 
 /*const mainSettings = require('./settings.json');
@@ -262,7 +279,7 @@ function audioStop() {
 }
 
 var artist;
-var newSongTitle;
+var Title;
 
 function classicDetectSong() {
     try {
@@ -272,11 +289,11 @@ function classicDetectSong() {
             songTitleName = fileName;
         }
         if (songTitleName.includes(' - ')) {
-            var newSongTitleName = songTitleName.split(' - ');
-            artist = newSongTitleName[0];
-            newSongTitle = newSongTitleName[1];
+            var TitleName = songTitleName.split(' - ');
+            artist = TitleName[0];
+            Title = TitleName[1];
         } else {
-            newSongTitle = songTitleName;
+            Title = songTitleName;
             artist = 'Unknown'
         }
         if (audio) {
@@ -312,7 +329,7 @@ function classicDetectSong() {
                 audioStop();
             }
         }
-        $('h1#songTitle').text(newSongTitle);
+        $('h1#songTitle').text(Title);
         $('#artist').text(artist)
         seekBarTrack();
         audio.volume = 1;
@@ -384,15 +401,15 @@ function resumeButton() {
         case false:
             pauseButtonActive = true;
             audio.pause();
-            $(`#pauseButton, ${currentSongPlaying} i`).removeClass('fa-pause');
-            $(`#pauseButton, ${currentSongPlaying} i`).addClass('fa-play');
+            $(`#pauseButton, #${currentSongPlaying} i`).removeClass('fa-pause');
+            $(`#pauseButton, #${currentSongPlaying} i`).addClass('fa-play');
             //$('#pauseButton').text('Resume');
             break;
         case true:
             pauseButtonActive = false;
             audio.play();
-            $(`#pauseButton, ${currentSongPlaying} i`).removeClass('fa-play');
-            $(`#pauseButton, ${currentSongPlaying} i`).addClass('fa-pause');
+            $(`#pauseButton, #${currentSongPlaying} i`).removeClass('fa-play');
+            $(`#pauseButton, #${currentSongPlaying} i`).addClass('fa-pause');
             //$('#pauseButton').text('Pause')
     }
 }
@@ -433,7 +450,7 @@ function seekTimeUpdate() {
     var p = audio.currentTime / audio.duration;
     fillBar.style.width = p * 100 + '%';
     if (audio.currentTime === audio.duration) {
-        audioStop();
+        nextSong();
     }
     var songLength = parseInt(audio.currentTime);
     minutes = Math.floor(songLength / 60);

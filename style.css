@@ -1,11 +1,11 @@
 @font-face {
     font-family: 'Dosis';
-    src: url('./fonts/Dosis-Regular.otf') format('opentype')
+    src: url('./assets/fonts/Dosis-Regular.otf') format('opentype')
 }
 
 @font-face {
     font-family: 'Dosis Bold';
-    src: url('./fonts/Dosis-Bold.otf') format('opentype')
+    src: url('./assets/fonts/Dosis-Bold.otf') format('opentype')
 }
 
 html, body {
@@ -79,7 +79,7 @@ html, body {
 }
 
 h1.header-heading {
-    font-family: 'Bahnschrift', 'Muli', 'Karla', Arial, Helvetica, sans-serif;
+    font-family: 'Bahnschrift', 'Dosis', 'Muli', 'Karla', Arial, Helvetica, sans-serif;
     text-align: center;
     font-weight: normal;
     margin-top: 5px;
@@ -103,7 +103,7 @@ h1.header-heading {
 #betaTag {
     text-align: center;
     font-size: 9px;
-    font-family: 'Bahnschrift', Arial, Helvetica, sans-serif;
+    font-family: 'Bahnschrift', 'Dosis', sans-serif;
     margin-top: 0;
     opacity: .65;
     position: relative;
@@ -120,13 +120,12 @@ h1.header-heading {
     opacity: .65;
     font-weight: bold;
     font-size: 14px;
-    font-family: 'Muli', 'Karla', Arial, Helvetica, sans-serif;
 }
 
-button, label {
+button {
     background: #7f00b9;
     color: #fff;
-    font-family: 'Dosis', 'Muli', 'Karla', Arial, Helvetica, sans-serif;
+    font-family: 'Dosis Bold', 'Dosis', sans-serif;
     font-weight: bold;
     width: auto;
     height: 40px;
@@ -144,24 +143,6 @@ button, label {
     margin-right: 10px;
 }
 
-select.song-select {
-    width: 430px;
-    padding-left: 10px;
-    padding-right: 10px;
-    height: 50px;
-    background: #1f1f1f;
-    color: #fff;
-    font-family: 'Muli', 'Karla', Arial, Helvetica, sans-serif;
-    font-weight: bold;
-    font-size: 22px;
-    border: none;
-    border-radius: 5px;
-    outline: none;
-    transition: .2s;
-    text-align: center;
-    text-align-last: center; 
-}
-
 button:hover, .button-active, select:hover {
     opacity: .75;
     transition: .2s; 
@@ -169,23 +150,6 @@ button:hover, .button-active, select:hover {
 
 .button-active {
     cursor: default; 
-}
-
-label {
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-
-input[type="file"] {
-    display: none !important; 
-}
-
-div.playing-now {
-    display: none; 
-}
-
-div.playing-now-active {
-    display: block; 
 }
 
 .seek-bar {
@@ -218,6 +182,7 @@ div.playing-now-active {
 
 h1#songTitle {
     font-size: 22px;
+    font-family: 'Dosis Bold', 'Dosis', sans-serif;
     margin: 17px;
     margin-bottom: 0px;
     overflow: hidden;
@@ -350,7 +315,6 @@ p.new-song-title {
 }
 
 #pauseButton::before, #resumeButton::before, #stopButton::before, #backwardButton::before, #forwardButton::before {
-    /*margin-right: 15px;*/
     font-size: 22px;
     font-family: 'Font Awesome 5 Free';
 }
@@ -359,15 +323,9 @@ p.new-song-title {
     font-family: 'Font Awesome 5 Free';
     font-style: normal;
     font-weight: 400;
-    src: url("/fonts/webfonts/fa-regular-400.eot");
-    src: url("/fonts/webfonts/fa-regular-400.eot?#iefix") format("embedded-opentype"), url("../webfonts/fa-regular-400.woff2") format("woff2"), url("../webfonts/fa-regular-400.woff") format("woff"), url("../webfonts/fa-regular-400.ttf") format("truetype"), url("../webfonts/fa-regular-400.svg#fontawesome") format("svg"); 
+    src: url("./assets/fonts/webfonts/fa-regular-400.eot");
+    src: url("./assets/fonts/webfonts/fa-regular-400.eot?#iefix") format("embedded-opentype"), url("../webfonts/fa-regular-400.woff2") format("woff2"), url("../webfonts/fa-regular-400.woff") format("woff"), url("../webfonts/fa-regular-400.ttf") format("truetype"), url("../webfonts/fa-regular-400.svg#fontawesome") format("svg"); 
 }
-
-/*@media screen and (max-width: 800px) {
-    ul {
-        width: 90%;
-    }
-}*/
 
 body.light-theme {
     color: #1a1a1a !important;
