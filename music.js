@@ -17,20 +17,12 @@ var currentTheme;
 var os = require('os');
 var fs = require('fs')
 
-/*if (!fs.existsSync('./settings.json')) {
-    theme = {
-        theme: 'dark'
-    }
-    themeString = JSON.stringify(theme)
-    fs.writeFile('./settings.json', themeString);
-}*/
-
-$(document).ready(function() {
-    setTimeout(function() {
+$(document).ready(function () {
+    setTimeout(function () {
         $('#loadCover').css({
             opacity: 0
         })
-        setTimeout(function() {
+        setTimeout(function () {
             $('#loadCover').hide();
         }, 250)
     }, 1000)
@@ -39,214 +31,179 @@ $(document).ready(function() {
 var fileExtentions = ['mp3', 'wav', 'm4a', 'ogg', '3gp', 'aac', 'flac', 'webm', 'raw'];
 var newSongs = [];
 
-try {
-    $('#newList').html('<p style="text-align: center">Loading...');
-    var theme;
-    var themeString;
+$('#newList').html('<p style="text-align: center">Loading...');
+var theme;
+var themeString;
 
-    remote = require('electron').remote;
-    remote.getCurrentWindow().setMinimumSize(595, 525);
+remote = require('electron').remote;
+remote.getCurrentWindow().setMinimumSize(595, 525);
 
-    function loadFiles() {
-        setTimeout(function() {
-            if (!fs.existsSync(`${os.homedir}/Music/Audiation`)) {
-                fs.mkdirSync(`${os.homedir}/Music/Audiation`);
+function songActive() {
+    $(currentSongPlaying).css({
+        color: '#c464f1'
+    })
+    $(`${currentSongPlaying} p`).addClass('new-song-constant');
+    $(`${currentSongPlaying} i`).show();
+    $(`${currentSongPlaying} i`).addClass('new-song-icon-constant')
+    $(`${currentSongPlaying} i`).css({
+        opacity: 1
+    })
+    if (pauseButtonActive === false) {
+        $(`${currentSongPlaying} i`).removeClass('fa-play');
+        $(`${currentSongPlaying} i`).addClass('fa-pause');
+    } else {
+        $(`${currentSongPlaying} i`).addClass('fa-play');
+        $(`${currentSongPlaying} i`).removeClass('fa-pause');
+    }
+}
+
+function songActiveReset() {
+    $('.play-pause').removeClass('fa-pause');
+    $('.play-pause').addClass('fa-play');
+    $(`p.new-song-title`).removeClass('new-song-constant');
+    $(`.play-pause`).removeClass('new-song-icon-constant')
+    $(`.play-pause`).css({
+        opacity: 0
+    })
+    $('.results-link').css({
+        color: '#fff'
+    })
+    $(`#newSong${currentNumber} i`).hide();
+}
+
+function loadFiles() {
+    setTimeout(function () {
+        if (!fs.existsSync(`${os.homedir}/Music/Audiation`)) {
+            fs.mkdirSync(`${os.homedir}/Music/Audiation`);
+        }
+        fs.readdir(`${os.homedir}/Music/Audiation`, (err, files) => {
+            if (err) console.error(err);
+            newSongs = files.filter(f => f.split(".").pop() === 'mp3' || 'm4a' || 'wav' || 'ogg' || '3gp' || 'aac' || 'flac' || 'webm' || 'raw');
+
+            if (newSongs.length === 0) {
+                $('#newList').html('<p style="text-align: center">No valid audio files found in the Audiation folder.<br><a class="open-file-browser">Click here</a> to open the Audiation folder.')
+                return $('.open-file-browser').click(function () {
+                    require('child_process').exec(`start "" "${os.homedir}\\Music\\Audiation`)
+                });
             }
-            fs.readdir(`${os.homedir}/Music/Audiation`, (err, files) => {
-                if (err) console.error(err);
-                newSongs = files.filter(f => f.split(".").pop() === 'mp3' || 'm4a' || 'wav' || 'ogg' || '3gp' || 'aac' || 'flac' || 'webm' || 'raw');
-
-                if (newSongs.length === 0) {
-                    $('#newList').html('<p style="text-align: center">No valid audio files found in the Audiation folder.<br><a class="open-file-browser">Click here</a> to open the Audiation folder.')
-                    return $('.open-file-browser').click(function() {
-                        require('child_process').exec(`start "" "${os.homedir}\\Music\\Audiation`)
-                    });
+            fileTotal = newSongs.length - 1;
+            $('#newList').html('');
+            newSongs.forEach((f, i) => {
+                newFileName = f.slice(0, -4)
+                $('#newList').append(`<li class="results-link" id="newSong${i}"><i class="play-pause fas fa-play" style="display: none; opacity: 0; transition: .2s;"></i><p class="new-song-title">${newFileName}`);
+                if (currentlyPlaying === true && currentSongPlaying) {
+                    songActive();
                 }
-                fileTotal = newSongs.length - 1;
-                $('#newList').html('');
-                newSongs.forEach((f, i) => {
-                    newFileName = f.slice(0, -4)
-                    $('#newList').append(`<li class="results-link" id="newSong${i}"><i class="play-pause fas fa-play" style="display: none; opacity: 0; transition: .2s;"></i><p class="new-song-title">${newFileName}`);
-                    if (currentlyPlaying === true && currentSongPlaying) {
-                        $(currentSongPlaying).css({
-                            color: '#c464f1'
-                        })
-                        $(`${currentSongPlaying} p`).addClass('new-song-constant');
-                        $(`${currentSongPlaying} i`).show();
-                        $(`${currentSongPlaying} i`).addClass('new-song-icon-constant')
-                        $(`${currentSongPlaying} i`).css({
-                            opacity: 1
-                        })
-                        if (pauseButtonActive === false) {
-                            $(`${currentSongPlaying} i`).removeClass('fa-play');
-                            $(`${currentSongPlaying} i`).addClass('fa-pause');
-                        } else {
-                            $(`${currentSongPlaying} i`).addClass('fa-play');
-                            $(`${currentSongPlaying} i`).removeClass('fa-pause');
+                $(`#newSong${i}`).click(function () {
+                    if (currentlyPlaying === true && $(this).attr('id') === currentSongPlaying.substr(1)) {
+                        resumeButton();
+                    } else {
+                        currentSongPlaying = `#newSong${i}`;
+                        currentNumber = i;
+                        songActiveReset();
+                        newFileName = f.slice(0, -4)
+                        newFileChosen = f;
+                        if (currentlyPlaying === true) {
+                            audioStop();
                         }
+                        $('p#songDuration').text('Calculating...')
+                        classicDetectSong();
+                        songActive();
                     }
-                    $(`#newSong${i}`).click(function() {
-                        if (currentlyPlaying === true && $(this).attr('id') === currentSongPlaying.substr(1)) {
-                            resumeButton();
-                        } else {
-                            currentSongPlaying = `#newSong${i}`;
-                            currentNumber = i;
-                            $('.play-pause').removeClass('fa-pause');
-                            $('.play-pause').addClass('fa-play');
-                            $(`p.new-song-title`).removeClass('new-song-constant');
-                            $(`.play-pause`).removeClass('new-song-icon-constant')
-                            $(`.play-pause`).css({
-                                opacity: 0
-                            })
-                            $('.results-link').css({color: '#fff'})
-                            $(`#newSong${i} i`).hide();
-                            newFileName = f.slice(0, -4)
-                            newFileChosen = f;
-                            if (currentlyPlaying === true) {
-                                audioStop();
-                            }
-                            $('p#songDuration').text('Calculating...')
-                            classicDetectSong();
-                            $(this).css({
-                                color: '#c464f1'
-                            })
-                            $(`#newSong${i} p`).addClass('new-song-constant');
-                            $(`#newSong${i} i`).show();
-                            $(`#newSong${i} i`).addClass('new-song-icon-constant')
-                            $(`#newSong${i} i`).css({
-                                opacity: 1
-                            })
-                            $(`#newSong${i} i`).removeClass('fa-play');
-                            $(`#newSong${i} i`).addClass('fa-pause');
-                        }
-                    });
-                    $(`#newSong${i}`).mouseover(function() {
-                        $(`#newSong${i} p`).addClass('new-song-hover');
-                        $(`#newSong${i} i`).show();
-                        $(`#newSong${i} i`).css({
-                            opacity: 1
-                        })
-                    })
-                    $(`#newSong${i}`).mouseleave(function() {
-                        $(`#newSong${i} p`).removeClass('new-song-hover')
-                        $(`#newSong${i} i`).css({
-                            opacity: 0
-                        });
-                        $(`#newSong${i} i`).hide();
+                });
+                $(`#newSong${i}`).mouseover(function () {
+                    $(`#newSong${i} p`).addClass('new-song-hover');
+                    $(`#newSong${i} i`).show();
+                    $(`#newSong${i} i`).css({
+                        opacity: 1
                     })
                 })
+                $(`#newSong${i}`).mouseleave(function () {
+                    $(`#newSong${i} p`).removeClass('new-song-hover')
+                    $(`#newSong${i} i`).css({
+                        opacity: 0
+                    });
+                    $(`#newSong${i} i`).hide();
+                })
             })
-        }, 500)
-    }
-    loadFiles();
-    $('#openFileBrowser').click(function() {
-        require('child_process').exec(`start "" "${os.homedir}\\Music\\Audiation`)
-    });
-
-    $('#refreshFiles').click(function() {
-        $('#newList').html('<p style="text-align: center">Loading...');
-        loadFiles();
-    })
-
-    $('#backwardButton').click(function() {
-        alert('what you actually think this works like seriously it doesn\'t so move along please')
-        if (currentlyPlaying === true && $(this).attr('id') === currentSongPlaying.substr(1)) {
-            resumeButton();
-        } else {
-            currentSongPlaying = `#newSong${currentSongPlaying.substr(8,9) - 1}`;
-            $('.play-pause').removeClass('fa-pause');
-            $('.play-pause').addClass('fa-play');
-            $(`p.new-song-title`).removeClass('new-song-constant');
-            $(`.play-pause`).removeClass('new-song-icon-constant')
-            $(`.play-pause`).css({
-                opacity: 0
-            })
-            $('.results-link').css({color: '#fff'})
-            $(`#newSong${i} i`).hide();
-            newFileName = f.slice(0, -4)
-            newFileChosen = f;
-            if (currentlyPlaying === true) {
-                audioStop();
-            }
-            $('p#songDuration').text('Calculating...')
-            classicDetectSong();
-            $(this).css({
-                color: '#c464f1'
-            })
-            $(`#newSong${i} p`).addClass('new-song-constant');
-            $(`#newSong${i} i`).show();
-            $(`#newSong${i} i`).addClass('new-song-icon-constant')
-            $(`#newSong${i} i`).css({
-                opacity: 1
-            })
-            $(`#newSong${i} i`).removeClass('fa-play');
-            $(`#newSong${i} i`).addClass('fa-pause');
-        }
-    })
-
-    $('#forwardButton').click(function() {
-        alert('what you actually think this works like seriously it doesn\'t so move along please')
-    })
-
-    /*const mainSettings = require('./settings.json');
-    currentTheme = 'dark'
-
-    function switchThemes() {
-        switch(currentTheme) {
-            case "dark":
-                $('body, h1, #headerIcon, li, div.title-bar, div.tb-button svg').addClass('light-theme');
-                currentTheme = 'light'
-                break;
-            case "light":
-                $('body, h1, #headerIcon, li, div.title-bar, div.tb-button svg').removeClass('light-theme');
-                currentTheme = 'dark'
-        }
-    }
-
-    if (mainSettings.theme === "light") {
-        $('body').addClass('light-theme')
-    }
-
-    $('#switchThemesSpacer, #switchThemesButton').css({
-        display: 'inline-block'
-    })
-
-    $('#switchThemesButton').click(function() {
-        switchThemes();
-    })*/
-
-    $('.tb-close').click(function() {
-        const remote = require('electron').remote;
-        var window = remote.getCurrentWindow();
-        window.close();
-    });
-
-    $('.tb-maximize').click(function() {
-        const remote = require('electron').remote;
-        var window = remote.getCurrentWindow();
-        if (!window.isMaximized()) {
-            window.maximize();          
-        } else {
-            window.unmaximize();
-        }
-    });
-
-    $('.tb-minimize').click(function() {
-        const remote = require('electron').remote;
-        var window = remote.getCurrentWindow();
-        window.minimize();
-    })
-
-    document.addEventListener("keydown", function (e) {
-        if (e.which === 123) {
-            require('remote').getCurrentWindow().openDevTools();
-        } else if (e.which === 116) {
-            location.reload();
-        }
-    });
-} catch(err) {
-    console.error(`${err}\nThis usually means Audiation's HTML page was opened in a web browser.`);
+        })
+    }, 500)
 }
+loadFiles();
+$('#openFileBrowser').click(function () {
+    require('child_process').exec(`start "" "${os.homedir}\\Music\\Audiation`)
+});
+
+$('#refreshFiles').click(function () {
+    $('#newList').html('<p style="text-align: center">Loading...');
+    loadFiles();
+})
+
+$('#backwardButton').click(function () {
+    alert('what you actually think this works like seriously it doesn\'t so move along please')
+
+})
+
+$('#forwardButton').click(function () {
+    alert('what you actually think this works like seriously it doesn\'t so move along please')
+})
+
+const mainSettings = require('./settings.json');
+currentTheme = 'dark'
+
+function switchThemes() {
+    switch (currentTheme) {
+        case "dark":
+            $('body, h1, #headerIcon, li, div.title-bar, div.tb-button svg').addClass('light-theme');
+            currentTheme = 'light'
+            break;
+        case "light":
+            $('body, h1, #headerIcon, li, div.title-bar, div.tb-button svg').removeClass('light-theme');
+            currentTheme = 'dark'
+    }
+}
+
+if (mainSettings.theme === "light") {
+    $('body').addClass('light-theme')
+}
+
+$('#switchThemesSpacer, #switchThemesButton').css({
+    display: 'inline-block'
+})
+
+$('#switchThemesButton').click(function () {
+    switchThemes();
+})
+
+$('.tb-close').click(function () {
+    const remote = require('electron').remote;
+    var window = remote.getCurrentWindow();
+    window.close();
+});
+
+$('.tb-maximize').click(function () {
+    const remote = require('electron').remote;
+    var window = remote.getCurrentWindow();
+    if (!window.isMaximized()) {
+        window.maximize();
+    } else {
+        window.unmaximize();
+    }
+});
+
+$('.tb-minimize').click(function () {
+    const remote = require('electron').remote;
+    var window = remote.getCurrentWindow();
+    window.minimize();
+})
+
+document.addEventListener("keydown", function (e) {
+    if (e.which === 123) {
+        require('remote').getCurrentWindow().openDevTools();
+    } else if (e.which === 116) {
+        location.reload();
+    }
+});
 
 function noSongPlaying() {
     if (currentlyPlaying === false) {
@@ -260,22 +217,22 @@ function noSongPlaying() {
 
 noSongPlaying();
 
-$('#settingsButton').click(function() {
+$('#settingsButton').click(function () {
     $('#settings').show();
 })
 
-$("#settingsClose").click(function() {
+$("#settingsClose").click(function () {
     $("#settings").hide();
 })
 
 var fileAudio;
 
-document.getElementById('fileChoose').onchange = function(e) {
+document.getElementById('fileChoose').onchange = function (e) {
     var extention = this.files[0].name.split('.').pop().toLowerCase(),
         success = fileExtentions.indexOf(extention) > -1;
     if (success) {
         var reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             fileAudio = this.result;
         }
         reader.readAsDataURL(this.files[0]);
@@ -294,45 +251,22 @@ document.getElementById('fileChoose').onchange = function(e) {
 var songTitleName;
 
 function audioStop() {
-    $('.play-pause').removeClass('fa-pause');
-    $('.play-pause').addClass('fa-play');
-    $('.new-nowplaying').removeClass('np-active');
-    $(`p.new-song-title`).removeClass('new-song-constant');
-    $(`.play-pause`).removeClass('new-song-icon-constant')
-    pauseButtonActive = false;
-    //audio.play();
-    $(`#pauseButton`).removeClass('fa-play');
-    $(`#pauseButton`).addClass('fa-pause');
-    //$('#pauseButton').text('Pause')
-    $(`.play-pause`).css({
-         opacity: 0
-    })
-    $('.results-link').css({color: '#fff'})
-    $(`.play-pause`).hide();
+    songActiveReset();
     audio.pause();
     audio.currentTime = 0;
     currentlyPlaying = false;
     noSongPlaying();
     $('div.playing-now').removeClass('playing-now-active');
     $('div.play-button, select, div.play-type').show();
-    if (audioChoiceType === "localFile") {
-        $('div#localFilePlay').show();
-    }
     pauseButtonActive = false;
 }
 
-var ytaudiotype;
-
-var biquadFilter;
-var audioCtx;
 var artist;
 var newSongTitle;
 
 function classicDetectSong() {
     try {
-        if (audioChoiceType === "localFile" && fileName) {
-            songTitleName = fileName.split(".").pop() === 'mp3';
-        } else if (audioChoiceType === "new") {
+        if (audioChoiceType === "new") {
             songTitleName = newFileName;
         } else {
             songTitleName = fileName;
@@ -361,7 +295,7 @@ function classicDetectSong() {
             try {
                 audio = new Audio(`${os.homedir}/Music/Audiation/${newFileChosen}`);
                 audio.currentTime = 0;
-                audio.play().catch(function(err) {
+                audio.play().catch(function (err) {
                     console.error(err);
                     alert('Unable to play this song.');
                     $('#songTitle').text('No Song Playing...')
@@ -369,7 +303,7 @@ function classicDetectSong() {
                     $('p#songDuration').text('0:00 / 0:00')
                     audioStop();
                 })
-            } catch(err) {
+            } catch (err) {
                 console.error(err);
                 alert('Unable to play this song.');
                 $('#songTitle').text('No Song Playing...')
@@ -382,16 +316,16 @@ function classicDetectSong() {
         $('#artist').text(artist)
         seekBarTrack();
         audio.volume = 1;
-    } catch(err) {
+    } catch (err) {
         console.error(err.stack)
         currentlyPlaying = false;
         audioStop();
     }
 }
 
-$('button#localPlay').click(function() {
+$('button#localPlay').click(function () {
     //$('div#localFilePlay').css({
-        //display: 'block'
+    //display: 'block'
     //});
     $('div#new').css({
         display: 'none'
@@ -407,12 +341,12 @@ $('button#localPlay').click(function() {
     $('#openFileBrowser').hide();
 })
 
-$('#openDevTools').click(function() {
+$('#openDevTools').click(function () {
     var remote = require('electron').remote;
     remote.getCurrentWindow().openDevTools();
 })
 
-$('button#newPlay').click(function() {
+$('button#newPlay').click(function () {
     $('div#localFilePlay').hide();
     $('div#new').show();
     audioChoiceType = 'new';
@@ -423,7 +357,7 @@ $('button#newPlay').click(function() {
     $('button#localPlay').removeClass('button-active');
 })
 
-$('#playButton').click(function() {
+$('#playButton').click(function () {
     $('p#songDuration').text('Calculating...')
     if (currentlyPlaying === true) {
         audioStop();
@@ -433,7 +367,7 @@ $('#playButton').click(function() {
     }
 })
 
-$('#stopButton').click(function() {
+$('#stopButton').click(function () {
     if (currentlyPlaying === true) {
         audioStop();
     }
@@ -441,12 +375,12 @@ $('#stopButton').click(function() {
 
 var pauseButtonActive = false;
 
-$('#pauseButton').click(function() {
+$('#pauseButton').click(function () {
     resumeButton()
 })
 
 function resumeButton() {
-    switch(pauseButtonActive) {
+    switch (pauseButtonActive) {
         case false:
             pauseButtonActive = true;
             audio.pause();
@@ -463,13 +397,13 @@ function resumeButton() {
     }
 }
 
-$('div.seek-bar').mouseover(function() {
+$('div.seek-bar').mouseover(function () {
     if (currentlyPlaying === true) {
         $('div.handle').addClass('handle-hover');
     }
 })
 
-$('div.seek-bar').mouseleave(function() {
+$('div.seek-bar').mouseleave(function () {
     if (currentlyPlaying === true) {
         if (!mouseDown === false) return;
         $('div.handle').removeClass('handle-hover');
@@ -517,24 +451,24 @@ function seekTimeUpdate() {
 var seekBar = document.querySelector('.seek-bar');
 var fillBar = seekBar.querySelector('.fill');
 var audioLength = document.querySelector('#songDuration');
-        
+
 function seekBarTrack() {
     $('p#songDuration').text('Calculating...')
     audio.addEventListener('timeupdate', seekTimeUpdate);
-    audio.addEventListener('waiting', function() {
+    audio.addEventListener('waiting', function () {
         $('p#songDuration').text('Buffering...')
     })
 }
 
 var mouseDown = false;
 
-function clamp (min, val, max) {
+function clamp(min, val, max) {
     return Math.min(Math.max(min, val), max);
 }
 
 var p;
 
-function getP (e) {
+function getP(e) {
     p = (e.clientX - seekBar.offsetLeft) / seekBar.clientWidth;
     p = clamp(0, p, 1);
     return p;
