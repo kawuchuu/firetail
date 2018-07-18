@@ -144,6 +144,9 @@ function previousSong() {
     songActiveReset();
     currentSongPlaying = currentSongPlaying - 1;
     newFileChosen = allFilesList[currentSongPlaying];
+    newFileName = newFileChosen.slice(0, -4);
+    $(`#pauseButton, #${currentSongPlaying} i`).removeClass('fa-play');
+    $(`#pauseButton, #${currentSongPlaying} i`).addClass('fa-pause');
     songActive();
     classicDetectSong();
 }
@@ -153,6 +156,9 @@ function nextSong() {
     songActiveReset();
     currentSongPlaying = currentSongPlaying + 1;
     newFileChosen = allFilesList[currentSongPlaying];
+    newFileName = newFileChosen.slice(0, -4);
+    $(`#pauseButton, #${currentSongPlaying} i`).removeClass('fa-play');
+    $(`#pauseButton, #${currentSongPlaying} i`).addClass('fa-pause');
     songActive();
     classicDetectSong();
 }
