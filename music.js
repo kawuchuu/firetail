@@ -15,7 +15,7 @@ var currentNumber;
 var currentTheme;
 
 var os = require('os');
-var fs = require('fs')
+var fs = require('fs');
 
 $(document).ready(function () {
     setTimeout(function () {
@@ -148,7 +148,7 @@ $('#forwardButton').click(function () {
     alert('what you actually think this works like seriously it doesn\'t so move along please')
 })
 
-const mainSettings = require('./settings.json');
+/*const mainSettings = require('./settings.json');
 currentTheme = 'dark'
 
 function switchThemes() {
@@ -173,7 +173,7 @@ $('#switchThemesSpacer, #switchThemesButton').css({
 
 $('#switchThemesButton').click(function () {
     switchThemes();
-})
+})*/
 
 $('.tb-close').click(function () {
     const remote = require('electron').remote;

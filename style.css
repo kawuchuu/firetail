@@ -26,12 +26,13 @@ html, body {
 }
 
 ::-webkit-scrollbar {
-    background: #424242;
+    background: #313131;
     width: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #363636;
+    background: #242424;
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar-button {
