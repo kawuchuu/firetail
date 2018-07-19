@@ -183,7 +183,7 @@ button:hover, .button-active, select:hover {
 h1#songTitle {
     font-size: 22px;
     font-family: 'Dosis Bold', 'Dosis', sans-serif;
-    margin: 17px;
+    margin: 15px;
     margin-bottom: 0px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -259,11 +259,13 @@ li {
     border-right: 0;
     border-left: 0;
     padding: 10px;
+    padding-top: 5px;
     cursor: pointer;
     transition-duration: .2s;
     overflow: hidden;
     position: relative;
     left: default;
+    max-height: 50px;
 }
 
 li:hover {
@@ -281,7 +283,8 @@ p.new-song-title {
     margin: 0;
     padding: 0;
     transition-duration: .2s;
-    display: inline-block
+    display: inline-block;
+    vertical-align: middle
 }
 
 .results-link a {
@@ -300,31 +303,17 @@ p.new-song-title {
     opacity: 1 !important;
 }
 
-#pauseButton, #resumeButton, #backwardButton, #forwardButton {
-    font-size: 22px;
+div.new-nowplaying i {
+    font-size: 26px;
     margin: 15px;
-    font-family: 'Dosis', 'Muli', 'Karla', Arial, Helvetica, sans-serif;
     position: relative;
     cursor: pointer;
     transition: .2s;
 }
 
-#pauseButton:hover, #resumeButton:hover, #stopButton:hover, #backwardButton:hover, #forwardButton:hover {
-    color: #c464f1;
+div.new-nowplaying i:hover {
+    color: #c464f1 !important;
     transition: .2s;
-}
-
-#pauseButton::before, #resumeButton::before, #stopButton::before, #backwardButton::before, #forwardButton::before {
-    font-size: 22px;
-    font-family: 'Font Awesome 5 Free';
-}
-
-@font-face {
-    font-family: 'Font Awesome 5 Free';
-    font-style: normal;
-    font-weight: 400;
-    src: url("./assets/fonts/webfonts/fa-regular-400.eot");
-    src: url("./assets/fonts/webfonts/fa-regular-400.eot?#iefix") format("embedded-opentype"), url("../webfonts/fa-regular-400.woff2") format("woff2"), url("../webfonts/fa-regular-400.woff") format("woff"), url("../webfonts/fa-regular-400.ttf") format("truetype"), url("../webfonts/fa-regular-400.svg#fontawesome") format("svg"); 
 }
 
 body.light-theme {
@@ -402,6 +391,12 @@ body.light-theme::-webkit-scrollbar-thumb {
 #playType button {
     width: 150px;
     margin-left: 15px;
+}
+
+.play-pause {
+    font-size: 28px !important;
+    padding: 0;
+    vertical-align: middle;
 }
 
 #new {

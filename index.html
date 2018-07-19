@@ -5,7 +5,7 @@
         <link id="ssmain" rel="stylesheet" href="style.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" type="image/png" href="favicon.png"/>
-        <link href="./assets/fonts/css/fontawesome-all.css" rel="stylesheet">
+        <link href="./assets/fonts/material/material-icons.css" rel="stylesheet">
         <script>
             if (typeof module === 'object') {
                 window.module = module;
@@ -76,9 +76,11 @@
                 <div class="new-nowplaying">
                     <h1 id="songTitle">No Song Playing...</h1>
                     <p id="artist">Unknown</p>
-                    <i class="fas fa-step-backward" id="backwardButton"></i> <!--lol doesn't even work-->
-                    <i class="fas fa-pause" id="pauseButton"></i>
-                    <i class="fas fa-step-forward" id="forwardButton"></i> <!--doesn't work either can't be bothered adding it yet ok-->
+                    <i class="material-icons" id="repeatButton">repeat</i>
+                    <i class="material-icons" id="backwardButton">skip_previous</i>
+                    <i class="material-icons" id="pauseButton">pause</i>
+                    <i class="material-icons" id="forwardButton">skip_next</i>
+                    <i class="material-icons" id="shuffleButton">shuffle</i>
                     <div class="seek-bar">
                         <div class="fill"></div>
                         <div class="handle"></div>

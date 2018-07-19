@@ -13,6 +13,7 @@ var pauseButtonActive = false;
 var currentSongPlaying;
 var currentTheme;
 var allFilesList = {};
+var repeatEnabled = false;
 
 var os = require('os');
 var fs = require('fs');
@@ -49,17 +50,14 @@ function songActive() {
         opacity: 1
     })
     if (pauseButtonActive === false) {
-        $(`#${currentSongPlaying} i`).removeClass('fa-play');
-        $(`#${currentSongPlaying} i`).addClass('fa-pause');
+        $(`#${currentSongPlaying} i`).text('pause');
     } else {
-        $(`#${currentSongPlaying} i`).addClass('fa-play');
-        $(`#${currentSongPlaying} i`).removeClass('fa-pause');
+        $(`#${currentSongPlaying} i`).text('play_arrow');
     }
 }
 
 function songActiveReset() {
-    $('.play-pause').removeClass('fa-pause');
-    $('.play-pause').addClass('fa-play');
+    $('.play-pause').text('play_arrow');
     $(`p.new-song-title`).removeClass('new-song-constant');
     $(`.play-pause`).removeClass('new-song-icon-constant');
     $(`.play-pause`).css({
@@ -90,7 +88,7 @@ function loadFiles() {
         s.forEach((f, i) => {
             allFilesList[i] = f;
             newFileName = f.slice(0, -4)
-            $('#newList').append(`<li class="results-link" id="${i}"><i class="play-pause fas fa-play" style="display: none; opacity: 0; transition: .2s;"></i><p class="new-song-title">${newFileName}`);
+            $('#newList').append(`<li class="results-link" id="${i}"><i class="material-icons play-pause" style="display: none; opacity: 0; transition: .2s;">play_arrow</i><p class="new-song-title">${newFileName}`);
             if (currentlyPlaying === true && currentSongPlaying) {
                 songActive();
             }
@@ -107,16 +105,15 @@ function loadFiles() {
                     }
                     $('p#songDuration').text('Calculating...')
                     classicDetectSong();
-                    $(`#pauseButton, #${currentSongPlaying} i`).removeClass('fa-play');
-                    $(`#pauseButton, #${currentSongPlaying} i`).addClass('fa-pause');
+                    $(`#pauseButton, #${currentSongPlaying} i`).text('pause');
                     songActive();
                 }
             });
             $(`#${i}`).mouseover(function () {
                 $(`#${i} p`).addClass('new-song-hover');
-                $(`#${i} i`).show();
                 $(`#${i} i`).css({
-                    opacity: 1
+                    opacity: 1,
+                    display: 'inline-block'
                 })
             })
             $(`#${i}`).mouseleave(function () {
@@ -145,8 +142,7 @@ function previousSong() {
     currentSongPlaying = currentSongPlaying - 1;
     newFileChosen = allFilesList[currentSongPlaying];
     newFileName = newFileChosen.slice(0, -4);
-    $(`#pauseButton, #${currentSongPlaying} i`).removeClass('fa-play');
-    $(`#pauseButton, #${currentSongPlaying} i`).addClass('fa-pause');
+    $(`#pauseButton, #${currentSongPlaying} i`).text('play_arrow');
     songActive();
     classicDetectSong();
 }
@@ -157,18 +153,46 @@ function nextSong() {
     currentSongPlaying = currentSongPlaying + 1;
     newFileChosen = allFilesList[currentSongPlaying];
     newFileName = newFileChosen.slice(0, -4);
-    $(`#pauseButton, #${currentSongPlaying} i`).removeClass('fa-play');
-    $(`#pauseButton, #${currentSongPlaying} i`).addClass('fa-pause');
+    $(`#pauseButton, #${currentSongPlaying} i`).text('pause');
     songActive();
     classicDetectSong();
 }
 
 $('#backwardButton').click(function () {
-    previousSong();
+    if (currentSongPlaying === allFilesList[0]) {
+        audioStop();
+    } else {
+        previousSong();
+    }
 })
 
 $('#forwardButton').click(function () {
-    nextSong();
+   if (currentSongPlaying === allFilesList.length) {
+       audioStop();
+   } else {
+       nextSong();
+   }
+});
+
+$('#repeatButton').click(function () {
+    switch(repeatEnabled) {
+        case true:
+            repeatEnabled = false;
+            $(this).css({
+                color: '#fff'
+            });
+            break;
+        case false:
+            repeatEnabled = true;
+            $(this).css({
+                color: '#c464f1'
+            });
+            break;
+    }
+});
+
+$('#shuffleButton').click(function () {
+    alert('Placeholder.')
 })
 
 /*const mainSettings = require('./settings.json');
@@ -407,16 +431,13 @@ function resumeButton() {
         case false:
             pauseButtonActive = true;
             audio.pause();
-            $(`#pauseButton, #${currentSongPlaying} i`).removeClass('fa-pause');
-            $(`#pauseButton, #${currentSongPlaying} i`).addClass('fa-play');
+            $(`#pauseButton, #${currentSongPlaying} i`).text('play_arrow');
             //$('#pauseButton').text('Resume');
             break;
         case true:
             pauseButtonActive = false;
             audio.play();
-            $(`#pauseButton, #${currentSongPlaying} i`).removeClass('fa-play');
-            $(`#pauseButton, #${currentSongPlaying} i`).addClass('fa-pause');
-            //$('#pauseButton').text('Pause')
+            $(`#pauseButton, #${currentSongPlaying} i`).text('pause');
     }
 }
 
@@ -456,7 +477,15 @@ function seekTimeUpdate() {
     var p = audio.currentTime / audio.duration;
     fillBar.style.width = p * 100 + '%';
     if (audio.currentTime === audio.duration) {
-        nextSong();
+        switch(repeatEnabled) {
+            case true:
+                audio.currentTime = 0;
+                audio.play();
+                break;
+            case false:
+                nextSong();
+                break;
+        }
     }
     var songLength = parseInt(audio.currentTime);
     minutes = Math.floor(songLength / 60);
