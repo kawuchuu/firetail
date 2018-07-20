@@ -14,9 +14,13 @@ var currentSongPlaying;
 var currentTheme;
 var allFilesList = {};
 var repeatEnabled = false;
+var artist;
+var Title;
+var tags;
 
 var os = require('os');
 var fs = require('fs');
+var id3 = require('jsmediatags');
 
 $(document).ready(function () {
     setTimeout(function () {
@@ -142,7 +146,7 @@ function previousSong() {
     currentSongPlaying = currentSongPlaying - 1;
     newFileChosen = allFilesList[currentSongPlaying];
     newFileName = newFileChosen.slice(0, -4);
-    $(`#pauseButton, #${currentSongPlaying} i`).text('play_arrow');
+    $(`#pauseButton, #${currentSongPlaying} i`).text('pause');
     songActive();
     classicDetectSong();
 }
@@ -194,33 +198,6 @@ $('#repeatButton').click(function () {
 $('#shuffleButton').click(function () {
     alert('Placeholder.')
 })
-
-/*const mainSettings = require('./settings.json');
-currentTheme = 'dark'
-
-function switchThemes() {
-    switch (currentTheme) {
-        case "dark":
-            $('body, h1, #headerIcon, li, div.title-bar, div.tb-button svg').addClass('light-theme');
-            currentTheme = 'light'
-            break;
-        case "light":
-            $('body, h1, #headerIcon, li, div.title-bar, div.tb-button svg').removeClass('light-theme');
-            currentTheme = 'dark'
-    }
-}
-
-if (mainSettings.theme === "light") {
-    $('body').addClass('light-theme')
-}
-
-$('#switchThemesSpacer, #switchThemesButton').css({
-    display: 'inline-block'
-})
-
-$('#switchThemesButton').click(function () {
-    switchThemes();
-})*/
 
 $('.tb-close').click(function () {
     const remote = require('electron').remote;
@@ -274,7 +251,7 @@ $("#settingsClose").click(function () {
 
 var fileAudio;
 
-document.getElementById('fileChoose').onchange = function (e) {
+/*document.getElementById('fileChoose').onchange = function (e) {
     var extention = this.files[0].name.split('.').pop().toLowerCase(),
         success = fileExtentions.indexOf(extention) > -1;
     if (success) {
@@ -294,7 +271,7 @@ document.getElementById('fileChoose').onchange = function (e) {
         $('p#fileChosenText').text(`PLEASE CHOOSE A VALID FILE TYPE`);
         return $('button#playButton').addClass('button-active');
     }
-}
+}*/
 var songTitleName;
 
 function audioStop() {
@@ -308,36 +285,31 @@ function audioStop() {
     pauseButtonActive = false;
 }
 
-var artist;
-var Title;
-
 function classicDetectSong() {
     try {
-        if (audioChoiceType === "new") {
-            songTitleName = newFileName;
-        } else {
-            songTitleName = fileName;
-        }
-        if (songTitleName.includes(' - ')) {
-            var TitleName = songTitleName.split(' - ');
-            artist = TitleName[0];
-            Title = TitleName[1];
-        } else {
-            Title = songTitleName;
-            artist = 'Unknown'
-        }
+        new id3.Reader(`${os.homedir}/Music/Audiation/${newFileChosen}`)
+            .setTagsToRead(['title', 'artist'])
+            .read({
+                onSuccess: function(tag) {
+                    artist = tag.tags.artist;
+                    Title = tag.tags.title;
+                    newTags = tag;
+                    if (!tag.tags.artist) {
+                        $('#artist').text('Unknown');
+                    }
+                    if (!tag.tags.title) {
+                        $('#songTitle').text(newFileName);
+                    }
+                    $('h1#songTitle').text(Title);
+                    $('#artist').text(artist)
+                }
+            })
         if (audio) {
             audio.removeEventListener('timeupdate', seekTimeUpdate);
         }
         $('.new-nowplaying').addClass('np-active');
         currentlyPlaying = true;
         noSongPlaying();
-        if (audioChoiceType === 'localFile') {
-            audio = new Audio(fileAudio);
-            audio.currentTime = 0;
-            audio.play();
-            //$('h1#songTitle').text(fileName)
-        }
         if (audioChoiceType === 'new') {
             try {
                 audio = new Audio(`${os.homedir}/Music/Audiation/${newFileChosen}`);
@@ -359,8 +331,6 @@ function classicDetectSong() {
                 audioStop();
             }
         }
-        $('h1#songTitle').text(Title);
-        $('#artist').text(artist)
         seekBarTrack();
         audio.volume = 1;
     } catch (err) {
@@ -390,7 +360,7 @@ $('button#localPlay').click(function () {
 
 $('#openDevTools').click(function () {
     var remote = require('electron').remote;
-    remote.getCurrentWindow().openDevTools();
+    remote.getCurrentWindow().toggleDevTools();
 })
 
 $('button#newPlay').click(function () {

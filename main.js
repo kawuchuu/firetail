@@ -13,6 +13,7 @@ function createWindow() {
         slashes: true
     }))
     win.setMenu(null);
+    //win.webContents.toggleDevTools();
 }
 
 app.on('ready', createWindow);

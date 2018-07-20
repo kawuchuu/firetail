@@ -8,7 +8,8 @@
     "start": "electron ."
   },
   "dependencies": {
-    "electron-packager": "^12.0.2"
+    "electron-packager": "^12.0.2",
+    "jsmediatags": "^3.8.1"
   },
   "devDependencies": {
     "electron": "^2.0.2"
