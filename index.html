@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Audiation</title>
-        <link id="ssmain" rel="stylesheet" href="style.css">
+        <link id="ssmain" rel="stylesheet" href="./assets/css/style.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" type="image/png" href="favicon.png"/>
         <link href="./assets/fonts/material/material-icons.css" rel="stylesheet">
@@ -66,22 +66,25 @@
             </div>
             <center>
                 <div class="new-nowplaying">
-                    <h1 id="songTitle">No Song Playing...</h1>
-                    <p id="artist">Unknown</p>
-                    <i class="material-icons" id="repeatButton">repeat</i>
-                    <i class="material-icons" id="backwardButton">skip_previous</i>
-                    <i class="material-icons" id="pauseButton">pause</i>
-                    <i class="material-icons" id="forwardButton">skip_next</i>
-                    <i class="material-icons" id="shuffleButton">shuffle</i>
-                    <div class="seek-bar">
-                        <div class="fill"></div>
-                        <div class="handle"></div>
+                    <img src="./assets/svg/no_image.svg" id="songPicture">
+                    <div class="np-buttons">
+                        <h1 id="songTitle">No Song Playing...</h1>
+                        <p id="artist">Unknown</p>
+                        <i class="material-icons" id="repeatButton">repeat</i>
+                        <i class="material-icons" id="backwardButton">skip_previous</i>
+                        <i class="material-icons" id="pauseButton">pause</i>
+                        <i class="material-icons" id="forwardButton">skip_next</i>
+                        <i class="material-icons" id="shuffleButton">shuffle</i>
+                        <div class="seek-bar">
+                            <div class="fill"></div>
+                            <div class="handle"></div>
+                        </div>
+                        <p id="songDuration">0:00 / 0:00</p>
                     </div>
-                    <p id="songDuration">0:00 / 0:00</p>
                 </div>
             </center>
         </div>
-        <script src="./jquery-3.3.1.min.js"></script>
-        <script src="music.js"></script>
+        <script src="./assets/js/jquery-3.3.1.min.js"></script>
+        <script src="./assets/js/music.js"></script>
     </body>
 </html>

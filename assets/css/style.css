@@ -459,3 +459,17 @@ div.type-separator {
 #settingsClose {
     margin-top: 25px;
 }
+
+#songPicture {
+    width: 160px;
+    height: 160px;
+    margin: 20px;
+    left: 0;
+    position: fixed;
+    border-radius: 3px;
+}
+
+.np-buttons {
+    display: inline-block;
+    vertical-align: top;
+}

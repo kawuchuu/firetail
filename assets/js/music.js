@@ -288,20 +288,34 @@ function audioStop() {
 function classicDetectSong() {
     try {
         new id3.Reader(`${os.homedir}/Music/Audiation/${newFileChosen}`)
-            .setTagsToRead(['title', 'artist'])
+            .setTagsToRead(['title', 'artist', 'picture'])
             .read({
                 onSuccess: function(tag) {
                     artist = tag.tags.artist;
                     Title = tag.tags.title;
                     newTags = tag;
                     if (!tag.tags.artist) {
-                        $('#artist').text('Unknown');
+                        artist = 'Unknown'
                     }
                     if (!tag.tags.title) {
-                        $('#songTitle').text(newFileName);
+                        Title = newFileName;
+                    }
+                    var base64String = '';
+                    if (tag.tags.picture) {
+                        for (var i = 0; i < tag.tags.picture.data.length; i++) {
+                            base64String += String.fromCharCode(tag.tags.picture.data[i]);
+                        }
+                        document.getElementById('songPicture').src = 'data:' + tag.tags.picture.format + ';base64,' + window.btoa(base64String);
+                    } else {
+                        document.getElementById('songPicture').src = './assets/svg/no_image.svg';
                     }
                     $('h1#songTitle').text(Title);
                     $('#artist').text(artist)
+                },
+                onError: function() {
+                    $('#songTitle').text(newFileName);
+                    $('#artist').text('Unknown');
+                    document.getElementById('songPicture').src = './assets/svg/no_image.svg';
                 }
             })
         if (audio) {
