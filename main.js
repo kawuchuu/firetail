@@ -19,6 +19,7 @@ function createWindow() {
         slashes: true
     }))
     win.setMenu(null);
+    // If Audiation fails to start, uncomment the line below to find the cause. If it's an error on my behalf, please report it ASAP
     //win.webContents.toggleDevTools();
 }
 
