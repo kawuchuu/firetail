@@ -558,7 +558,7 @@ window.addEventListener('mousemove', function (e) {
         if (seconds > -1 && seconds < 10) {
             seconds = ('0' + seconds).slice(-2);
         }
-        $('#songDuration').html(`${minutes}:${seconds} / ${durationMinutes}:${durationSeconds}`);
+        $('#songDurationTime').html(`${minutes}:${seconds}`);
     }
 });
 
