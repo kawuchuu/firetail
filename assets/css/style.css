@@ -160,19 +160,19 @@ button:hover, .button-active, select:hover {
     align-items: center;
     border-radius: 999px;
     cursor: pointer; 
-    height: 7px;
+    height: 5px;
 }
 
 .seek-bar .fill {
-    height: 7px;
+    height: 5px;
     background: #7f00b9;
     border-radius: 10000px; 
     transition: .075s;
 }
 
 .seek-bar .handle {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     background: #7f00b9;
     border-radius: 11111px;
     margin-left: -5px;

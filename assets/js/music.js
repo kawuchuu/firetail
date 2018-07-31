@@ -42,6 +42,9 @@ var themeString;
 
 remote = require('electron').remote;
 remote.getCurrentWindow().setMinimumSize(720, 525);
+document.addEventListener('dragover', event => event.preventDefault())
+document.addEventListener('drop', event => event.preventDefault())
+document.querySelector('img').draggable = false;
 
 function songActive() {
     $(`#${currentSongPlaying}`).css({
