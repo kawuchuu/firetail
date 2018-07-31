@@ -65,7 +65,7 @@ html, body {
     height: 17px;
     display: inline-block;
     margin: 0;
-    padding: 12px;
+    padding: 11.5px;
     cursor: pointer;
     transition: .2s;
 }
@@ -345,7 +345,7 @@ body.light-theme::-webkit-scrollbar-thumb {
 
 #newContentWrapper {
     position: relative;
-    margin-left: 185px;
+    margin-left: 180px;
     border-radius: 10px;
 }
 
@@ -360,7 +360,6 @@ body.light-theme::-webkit-scrollbar-thumb {
     z-index: 4;
     background: #1f1f1f;
     height: 100%;
-    padding-right: 10px;
 }
 
 #playType button {
@@ -382,7 +381,7 @@ body.light-theme::-webkit-scrollbar-thumb {
 .app-content {
     margin-top: 40px;
     position: relative;
-    margin-bottom: 225px;
+    margin-bottom: 110px;
 }
 
 div.type-separator {
