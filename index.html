@@ -67,19 +67,26 @@
             <center>
                 <div class="new-nowplaying">
                     <img src="./assets/svg/no_image.svg" id="songPicture">
-                    <div class="np-buttons">
+                    <div class="title-artist">
                         <h1 id="songTitle">No Song Playing...</h1>
                         <p id="artist">Unknown</p>
-                        <i class="material-icons" id="repeatButton">repeat</i>
-                        <i class="material-icons" id="backwardButton">skip_previous</i>
-                        <i class="material-icons" id="pauseButton">pause</i>
-                        <i class="material-icons" id="forwardButton">skip_next</i>
-                        <i class="material-icons" id="shuffleButton">shuffle</i>
-                        <div class="seek-bar">
-                            <div class="fill"></div>
-                            <div class="handle"></div>
+                    </div>
+                    <div id="controls">
+                        <div class="np-buttons">
+                            <i class="material-icons" id="repeatButton">repeat</i>
+                            <i class="material-icons" id="backwardButton">skip_previous</i>
+                            <i class="material-icons" id="pauseButton">pause</i>
+                            <i class="material-icons" id="forwardButton">skip_next</i>
+                            <i class="material-icons" id="shuffleButton">shuffle</i>
                         </div>
-                        <p id="songDuration">0:00 / 0:00</p>
+                        <p class="song-duration" id="songDurationTime">0:00</p>
+                        <div class="seek-bar-wrapper">
+                            <div class="seek-bar">
+                                <div class="fill"></div>
+                                <div class="handle"></div>
+                            </div>
+                        </div>
+                        <p class="song-duration" id="songDurationLength">0:00</p>
                     </div>
                 </div>
             </center>

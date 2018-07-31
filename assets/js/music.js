@@ -43,7 +43,7 @@ var theme;
 var themeString;
 
 remote = require('electron').remote;
-remote.getCurrentWindow().setMinimumSize(595, 525);
+remote.getCurrentWindow().setMinimumSize(720, 525);
 
 function songActive() {
     $(`#${currentSongPlaying}`).css({
@@ -502,7 +502,8 @@ function seekTimeUpdate() {
         seconds = ('0' + seconds).slice(-2);
     }
     audioDuration();
-    $('#songDuration').html(`${minutes}:${seconds} / ${durationMinutes}:${durationSeconds}`);
+    document.getElementById('songDurationTime').innerHTML = `${minutes}:${seconds}`
+    document.getElementById('songDurationLength').innerHTML = `${durationMinutes}:${durationSeconds}`
 }
 
 var seekBar = document.querySelector('.seek-bar');
