@@ -12,11 +12,13 @@ var newFileName;
 var pauseButtonActive = false;
 var currentSongPlaying;
 var currentTheme;
-var allFilesList = {};
+var allFilesList = [];
 var repeatEnabled = false;
 var artist;
 var Title;
 var tags;
+var shuffleEnabled = false;
+var shuffleOrder = [];
 
 var os = require('os');
 var fs = require('fs');
@@ -90,7 +92,7 @@ function loadFiles() {
         fileTotal = s.length - 1;
         $('#newList').html('');
         s.forEach((f, i) => {
-            allFilesList[i] = f;
+            allFilesList.push(f);
             newFileName = f.slice(0, -4)
             $('#newList').append(`<li class="results-link" id="${i}"><i class="material-icons play-pause" style="display: none; opacity: 0; transition: .2s;">play_arrow</i><p class="new-song-title">${newFileName}`);
             if (currentlyPlaying === true && currentSongPlaying) {
@@ -143,7 +145,16 @@ $('#refreshFiles').click(function () {
 function previousSong() {
     audioStop();
     songActiveReset();
-    currentSongPlaying = currentSongPlaying - 1;
+    if (shuffleEnabled === true) {
+        /*if (shuffleOrder > 0) {
+            //temporary
+        } else {
+            currentSongPlaying = shuffleOrder[shuffleOrder.length - 1];
+        }*/
+        alert('This button currently doesn\'t work with shuffle')
+    } else {
+        currentSongPlaying = currentSongPlaying - 1;
+    }
     newFileChosen = allFilesList[currentSongPlaying];
     newFileName = newFileChosen.slice(0, -4);
     $(`#pauseButton, #${currentSongPlaying} i`).text('pause');
@@ -154,7 +165,16 @@ function previousSong() {
 function nextSong() {
     audioStop();
     songActiveReset();
-    currentSongPlaying = currentSongPlaying + 1;
+    if (shuffleEnabled === true) {
+        //if (shuffleOrder.length > 0) {
+            //currentSongPlaying = shuffleOrder
+        //} else {
+            currentSongPlaying = Math.floor(Math.random() * allFilesList.length);
+            shuffleOrder.push(currentSongPlaying);
+        //}
+    } else {
+        currentSongPlaying = currentSongPlaying + 1;
+    }
     newFileChosen = allFilesList[currentSongPlaying];
     newFileName = newFileChosen.slice(0, -4);
     $(`#pauseButton, #${currentSongPlaying} i`).text('pause');
@@ -196,7 +216,8 @@ $('#repeatButton').click(function () {
 });
 
 $('#shuffleButton').click(function () {
-    alert('Placeholder.')
+    alert('Warning: Shuffle is still pretty broken.')
+    shuffleEnabled = true;
 })
 
 $('.tb-close').click(function () {
