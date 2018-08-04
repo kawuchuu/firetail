@@ -15,6 +15,7 @@ var currentTheme;
 var allFilesList = [];
 var repeatEnabled = false;
 var artist;
+var album;
 var Title;
 var tags;
 var shuffleEnabled = false;
@@ -225,6 +226,9 @@ $('#repeatButton').click(function () {
 $('#shuffleButton').click(function () {
     //alert('Warning: Shuffle is still pretty broken.')
     shuffleEnabled = true;
+    $(this).css({
+        color: '#c464f1'
+    });
 })
 
 $('.tb-close').click(function () {
@@ -316,14 +320,18 @@ function audioStop() {
 function classicDetectSong() {
     try {
         new id3.Reader(`${os.homedir}/Music/Audiation/${newFileChosen}`)
-            .setTagsToRead(['title', 'artist', 'picture'])
+            .setTagsToRead(['title', 'artist', 'picture', 'album'])
             .read({
                 onSuccess: function (tag) {
                     artist = tag.tags.artist;
                     Title = tag.tags.title;
+                    album = tag.tags.album;
                     newTags = tag;
                     if (!tag.tags.artist) {
-                        artist = 'Unknown'
+                        artist = 'Unknown Artist'
+                    }
+                    if (!tag.tags.album) {
+                        album = 'Unknown Album'
                     }
                     if (!tag.tags.title) {
                         Title = newFileName;
@@ -338,11 +346,11 @@ function classicDetectSong() {
                         document.getElementById('songPicture').src = './assets/svg/no_image.svg';
                     }
                     $('h1#songTitle').text(Title);
-                    $('#artist').text(artist)
+                    $('#artist').text(`${album}  \u2022  ${artist}`)
                 },
                 onError: function () {
                     $('#songTitle').text(newFileName);
-                    $('#artist').text('Unknown');
+                    $('#artist').text('Unknown Album \u2022 Unknown Artist');
                     document.getElementById('songPicture').src = './assets/svg/no_image.svg';
                 }
             })
