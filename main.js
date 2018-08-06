@@ -19,7 +19,7 @@ function createWindow() {
         icon: './assets/image/audiation.ico', 
         frame: frameStyle,
         backgroundColor: '#1f1f1f',
-        titleBarStyle = 'hidden'
+        titleBarStyle: 'hidden-inset'
     });
 
     win.loadURL(url.format({
