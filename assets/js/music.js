@@ -36,6 +36,17 @@ $(document).ready(function () {
     }, 1000)
 })
 
+if (process.platform === 'win32') {
+    $('.title-bar-wrapper').show();
+}
+
+if (process.platform === 'linux') {
+    $('.title-bar').hide();
+    $('.app-content').css({
+        marginTop: '20px'
+    })
+}
+
 var fileExtentions = ['mp3', 'wav', 'm4a', 'ogg', '3gp', 'aac', 'flac', 'webm', 'raw'];
 var s = [];
 
@@ -90,7 +101,7 @@ function shuffle(array) {
     }
     return array;
 }
-
+var tempArray = ['test', 'a', 'asda', 'dasdsadad']
 function loadFiles() {
     if (!fs.existsSync(`${os.homedir}/Music/Audiation`)) {
         fs.mkdirSync(`${os.homedir}/Music/Audiation`);
@@ -110,7 +121,7 @@ function loadFiles() {
         $('#newList').html('');
         s.forEach((f, i) => {
             fileSongListStore.push(f);
-            allFilesList = fileSongListStore;
+            allFilesList.push(f);
             newFileName = f.slice(0, -4)
             $('#newList').append(`<li class="results-link" id="${i}"><i class="material-icons play-pause" style="display: none; opacity: 0; transition: .2s;">play_arrow</i><p class="new-song-title">${newFileName}`);
             if (currentlyPlaying === true && currentSongPlaying) {
@@ -148,7 +159,9 @@ function loadFiles() {
                 $(`#${i} i`).hide();
             })
         })
+        
         shuffleOrder = shuffle(allFilesList);
+        allFilesList = fileSongListStore;
     })
 }
 loadFiles();

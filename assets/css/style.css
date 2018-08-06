@@ -138,9 +138,10 @@ button {
     outline: none;
     cursor: pointer;
     transition: .2s;
-    font-size: 20px;
+    font-size: 18px;
     margin-left: 10px;
     margin-right: 10px;
+    text-align: left;
 }
 
 button:hover, .button-active, select:hover {
@@ -171,12 +172,12 @@ button:hover, .button-active, select:hover {
 }
 
 .seek-bar .handle {
-    width: 8px;
-    height: 8px;
+    width: 0px;
+    height: 0px;
     background: #7f00b9;
     border-radius: 11111px;
     margin-left: -5px;
-    transform: scale(1.5);
+    transform: scale(1.75);
     transition: all .1s;
 }
 
@@ -186,7 +187,9 @@ button:hover, .button-active, select:hover {
 
 .handle-hover {
     background-color: #9601db !important;
-    transform: scale(2.25) !important;
+    width: 8px !important;
+    height: 8px !important;
+    transition: all .1s !important;
 }
 
 .np-active {
@@ -512,4 +515,10 @@ div.new-nowplaying {
 #controls {
     overflow: hidden;
     background: rgb(27, 27, 27)
+}
+
+button i {
+    vertical-align: top;
+    position: relative;
+    margin-right: 12px;
 }

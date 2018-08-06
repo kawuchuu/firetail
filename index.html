@@ -16,7 +16,7 @@
     <body style="transition-duration: .2s">
         <div id="loadCover" style="transition-duration: .2s; height: 100%; width: 100%; z-index: 10; position: fixed; background: #1f1f1f; opacity: 1"></div>
         <div class="title-bar">
-            <div class="title-bar-wrapper">
+            <div class="title-bar-wrapper" style="display: none">
                 <center>
                     <div class="tb-button tb-minimize">
                         <svg id="TitleBarMinimize" width="15" height="15" viewBox="0 0 12 12">
@@ -50,13 +50,13 @@
                     <img id="headerIcon" src="./assets/svg/main-logo-white.svg">
                     <p id="betaTag">BETA</p>
                 </div>
-                <button id="newPlay" class="button-active">Library</button>
+                <button id="newPlay" class="button-active"><i class="material-icons">library_music</i>Library</button>
                 <div class="type-separator"></div>
                 <div id="extraButtons">
-                    <button id="refreshFiles">Refresh</button>
-                    <button id="openFileBrowser">Music Folder</button> <!--probably only works on windows but i don't care-->
-                    <button id="settingsButton">Settings</button>   
-                    <button id="openDevTools">Dev Tools</button>     
+                    <button id="refreshFiles"><i class="material-icons">refresh</i>Refresh</button>
+                    <button id="openFileBrowser"><i class="material-icons">folder</i>Folder</button> <!--probably only works on windows but i don't care-->
+                    <button id="settingsButton"><i class="material-icons">settings</i>Settings</button>   
+                    <button id="openDevTools"><i class="material-icons">code</i>Dev Tools</button>     
                 </div>
             </div>
             <div id="newContent">

@@ -1,16 +1,25 @@
 const {app, BrowserWindow} = require('electron');
 const path = require('path');
 const url = require('url');
+const os = require('os')
 
 var win;
+var frameStyle;
+
+if (process.platform === 'Linux') {
+    frameStyle = true;
+} else {
+    frameStyle = false;
+}
 
 function createWindow() {
     win = new BrowserWindow({
         width: 1080, 
-        height: 889, 
+        height: 889,
         icon: './assets/image/audiation.ico', 
-        frame: false,
-        backgroundColor: '#1f1f1f'
+        frame: frameStyle,
+        backgroundColor: '#1f1f1f',
+        titleBarStyle = 'hidden'
     });
 
     win.loadURL(url.format({
