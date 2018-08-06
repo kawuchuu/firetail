@@ -6,7 +6,7 @@ const os = require('os')
 var win;
 var frameStyle;
 
-if (process.platform === 'Linux') {
+if (process.platform === 'linux') {
     frameStyle = true;
 } else {
     frameStyle = false;
