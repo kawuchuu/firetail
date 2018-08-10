@@ -1,17 +1,31 @@
+/**
+ * Audiation - An Open-source music player, built with Electron.
+ * Copyright (c) projsh_ 2018
+ * 
+ * This project is under the terms of the GNU General Public Licence (v.3.0).
+ * 
+ * THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
+ * APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
+ * HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY
+ * OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM
+ * IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF
+ * ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+ * 
+ * You should have recieved a copy of this licence along with this program.
+ * If not, please visit the following website: http://www.gnu.org/licenses
+ * 
+ * Original Repo: https://github.com/projsh/audiation
+ */
+
 var audio;
-
-var audioChoiceType = 'new';
-var hasChoseFile = false;
-
-var fileName;
-var readFile;
 var currentlyPlaying = false;
 var fileTotal;
 var newFileChosen;
 var newFileName;
 var pauseButtonActive = false;
 var currentSongPlaying;
-var currentTheme;
 var allFilesList = [];
 var repeatEnabled = false;
 var artist;
@@ -21,6 +35,20 @@ var tags;
 var shuffleEnabled = false;
 var shuffleOrder = [];
 var fileSongListStore = [];
+var pauseButtonActive = false;
+var fileAudio;
+var songTitleName;
+var durationSongLength;
+var durationSeconds;
+var durationMinutes;
+var seconds;
+var minutes;
+var seekBar = document.querySelector('.seek-bar');
+var fillBar = seekBar.querySelector('.fill');
+var audioLength = document.querySelector('#songDuration');
+var mouseDown = false;
+var p;
+var s = [];
 
 var os = require('os');
 var fs = require('fs');
@@ -48,12 +76,7 @@ if (process.platform === 'linux') {
     })
 }
 
-var fileExtentions = ['mp3', 'wav', 'm4a', 'ogg', '3gp', 'aac', 'flac', 'webm', 'raw'];
-var s = [];
-
 $('#newList').html('<p style="text-align: center">Loading...');
-var theme;
-var themeString;
 
 remote = require('electron').remote;
 remote.getCurrentWindow().setMinimumSize(720, 525);
@@ -92,7 +115,8 @@ function songActiveReset() {
 }
 
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    var currentIndex = array.length,
+        temporaryValue, randomIndex;
     while (0 !== currentIndex) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
@@ -240,7 +264,7 @@ $('#repeatButton').click(function () {
 });
 
 $('#shuffleButton').click(function () {
-    switch(shuffleEnabled) {
+    switch (shuffleEnabled) {
         case true:
             shuffleEnabled = false;
             $(this).css({
@@ -283,12 +307,12 @@ $('.tb-minimize').click(function () {
     window.minimize();
 })
 
-window.onkeydown = function(e) { 
+window.onkeydown = function (e) {
     return !(e.keyCode == 32);
 };
 
 document.addEventListener("keydown", function (e) {
-    switch(e.which) {
+    switch (e.which) {
         case 32:
             if (currentlyPlaying) {
                 resumeButton();
@@ -319,10 +343,6 @@ $("#settingsClose").click(function () {
     $("#settings").hide();
 })
 
-var fileAudio;
-
-var songTitleName;
-
 function audioStop() {
     songActiveReset();
     audio.pause();
@@ -342,26 +362,24 @@ function classicDetectSong() {
         $('.new-nowplaying').addClass('np-active');
         currentlyPlaying = true;
         noSongPlaying();
-        if (audioChoiceType === 'new') {
-            try {
-                audio = new Audio(`${os.homedir}/Music/Audiation/${newFileChosen}`);
-                audio.currentTime = 0;
-                audio.play().catch(function (err) {
-                    console.error(err);
-                    alert('Unable to play this song.');
-                    $('#songTitle').text('No Song Playing...')
-                    $('#artist').text('Unknown')
-                    $('p#songDuration').text('0:00 / 0:00')
-                    audioStop();
-                })
-            } catch (err) {
+        try {
+            audio = new Audio(`${os.homedir}/Music/Audiation/${newFileChosen}`);
+            audio.currentTime = 0;
+            audio.play().catch(function (err) {
                 console.error(err);
                 alert('Unable to play this song.');
                 $('#songTitle').text('No Song Playing...')
                 $('#artist').text('Unknown')
                 $('p#songDuration').text('0:00 / 0:00')
                 audioStop();
-            }
+            })
+        } catch (err) {
+            console.error(err);
+            alert('Unable to play this song.');
+            $('#songTitle').text('No Song Playing...')
+            $('#artist').text('Unknown')
+            $('p#songDuration').text('0:00 / 0:00')
+            audioStop();
         }
         seekBarTrack();
         audio.volume = 1;
@@ -372,57 +390,10 @@ function classicDetectSong() {
     }
 }
 
-$('button#localPlay').click(function () {
-    //$('div#localFilePlay').css({
-    //display: 'block'
-    //});
-    $('div#new').css({
-        display: 'none'
-    })
-    $('#playButton').show();
-    audioChoiceType = 'localFile';
-    $(this).addClass('button-active');
-    $('button#newPlay').removeClass('button-active');
-    if (hasChoseFile === false) {
-        $('button#playButton').addClass('button-active')
-    }
-    $('#refreshFiles').hide();
-    $('#openFileBrowser').hide();
-})
-
 $('#openDevTools').click(function () {
     var remote = require('electron').remote;
     remote.getCurrentWindow().toggleDevTools();
 })
-
-$('button#newPlay').click(function () {
-    $('div#localFilePlay').hide();
-    $('div#new').show();
-    audioChoiceType = 'new';
-    $('#playButton').hide();
-    $('#refreshFiles').show();
-    $('#openFileBrowser').show();
-    $(this).addClass('button-active');
-    $('button#localPlay').removeClass('button-active');
-})
-
-$('#playButton').click(function () {
-    $('p#songDuration').text('Calculating...')
-    if (currentlyPlaying === true) {
-        audioStop();
-    }
-    if (audioChoiceType === "new" || audioChoiceType === "localFile" && hasChoseFile === true) {
-        classicDetectSong();
-    }
-})
-
-$('#stopButton').click(function () {
-    if (currentlyPlaying === true) {
-        audioStop();
-    }
-})
-
-var pauseButtonActive = false;
 
 $('#pauseButton').click(function () {
     resumeButton()
@@ -456,10 +427,6 @@ $('div.seek-bar').mouseleave(function () {
     }
 })
 
-var durationSongLength;
-var durationSeconds;
-var durationMinutes;
-
 function audioDuration() {
     durationSongLength = parseInt(audio.duration);
     durationMinutes = Math.floor(durationSongLength / 60);
@@ -471,9 +438,6 @@ function audioDuration() {
         durationSeconds = ('0' + durationSeconds).slice(-2);
     }
 }
-
-var seconds;
-var minutes;
 
 function seekTimeUpdate() {
     var p = audio.currentTime / audio.duration;
@@ -503,60 +467,52 @@ function seekTimeUpdate() {
     document.getElementById('songDurationLength').innerHTML = `${durationMinutes}:${durationSeconds}`
 }
 
-var seekBar = document.querySelector('.seek-bar');
-var fillBar = seekBar.querySelector('.fill');
-var audioLength = document.querySelector('#songDuration');
-
 function seekBarTrack() {
     $('p#songDuration').text('Calculating...')
     new id3.Reader(`${os.homedir}/Music/Audiation/${newFileChosen}`)
-            .setTagsToRead(['title', 'artist', 'picture', 'album'])
-            .read({
-                onSuccess: function (tag) {
-                    artist = tag.tags.artist;
-                    Title = tag.tags.title;
-                    album = tag.tags.album;
-                    newTags = tag;
-                    if (!tag.tags.artist) {
-                        artist = 'Unknown Artist'
+        .setTagsToRead(['title', 'artist', 'picture', 'album'])
+        .read({
+            onSuccess: function (tag) {
+                artist = tag.tags.artist;
+                Title = tag.tags.title;
+                album = tag.tags.album;
+                newTags = tag;
+                if (!tag.tags.artist) {
+                    artist = 'Unknown Artist'
+                }
+                if (!tag.tags.album) {
+                    album = 'Unknown Album'
+                }
+                if (!tag.tags.title) {
+                    Title = newFileName;
+                }
+                var base64String = '';
+                if (tag.tags.picture) {
+                    for (var i = 0; i < tag.tags.picture.data.length; i++) {
+                        base64String += String.fromCharCode(tag.tags.picture.data[i]);
                     }
-                    if (!tag.tags.album) {
-                        album = 'Unknown Album'
-                    }
-                    if (!tag.tags.title) {
-                        Title = newFileName;
-                    }
-                    var base64String = '';
-                    if (tag.tags.picture) {
-                        for (var i = 0; i < tag.tags.picture.data.length; i++) {
-                            base64String += String.fromCharCode(tag.tags.picture.data[i]);
-                        }
-                        document.getElementById('songPicture').src = 'data:' + tag.tags.picture.format + ';base64,' + window.btoa(base64String);
-                    } else {
-                        document.getElementById('songPicture').src = './assets/svg/no_image.svg';
-                    }
-                    $('h1#songTitle').text(Title);
-                    $('#artist').text(`${album}  \u2022  ${artist}`)
-                },
-                onError: function () {
-                    $('#songTitle').text(newFileName);
-                    $('#artist').text('Unknown Album \u2022 Unknown Artist');
+                    document.getElementById('songPicture').src = 'data:' + tag.tags.picture.format + ';base64,' + window.btoa(base64String);
+                } else {
                     document.getElementById('songPicture').src = './assets/svg/no_image.svg';
                 }
-            })
+                $('h1#songTitle').text(Title);
+                $('#artist').text(`${album}  \u2022  ${artist}`)
+            },
+            onError: function () {
+                $('#songTitle').text(newFileName);
+                $('#artist').text('Unknown Album \u2022 Unknown Artist');
+                document.getElementById('songPicture').src = './assets/svg/no_image.svg';
+            }
+        })
     audio.addEventListener('timeupdate', seekTimeUpdate);
     audio.addEventListener('waiting', function () {
         $('p#songDuration').text('Buffering...')
     })
 }
 
-var mouseDown = false;
-
 function clamp(min, val, max) {
     return Math.min(Math.max(min, val), max);
 }
-
-var p;
 
 function getP(e) {
     p = (e.clientX - seekBar.offsetLeft) / seekBar.clientWidth;
