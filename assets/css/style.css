@@ -514,7 +514,10 @@ div.new-nowplaying {
 
 #controls {
     overflow: hidden;
-    background: rgb(27, 27, 27)
+    background: rgb(27, 27, 27);
+    width: 720px;
+    height: auto;
+    z-index: 15
 }
 
 button i {

@@ -266,11 +266,19 @@ $('.tb-minimize').click(function () {
     window.minimize();
 })
 
+window.onkeydown = function(e) { 
+    return !(e.keyCode == 32);
+};
+
 document.addEventListener("keydown", function (e) {
-    if (e.which === 123) {
-        require('remote').getCurrentWindow().openDevTools();
-    } else if (e.which === 116) {
-        location.reload();
+    switch(e.which) {
+        case 32:
+            if (currentlyPlaying) {
+                resumeButton();
+            }
+            break;
+        case 116:
+            location.reload();
     }
 });
 
@@ -296,27 +304,6 @@ $("#settingsClose").click(function () {
 
 var fileAudio;
 
-/*document.getElementById('fileChoose').onchange = function (e) {
-    var extention = this.files[0].name.split('.').pop().toLowerCase(),
-        success = fileExtentions.indexOf(extention) > -1;
-    if (success) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            fileAudio = this.result;
-        }
-        reader.readAsDataURL(this.files[0]);
-        fileName = this.files[0].name;
-        $('p#fileChosenText').text(`FILE CHOSEN: ${fileName}`).css({
-            display: 'block'
-        })
-        hasChoseFile = true;
-        $('button#playButton').removeClass('button-active')
-    } else {
-        hasChoseFile = false;
-        $('p#fileChosenText').text(`PLEASE CHOOSE A VALID FILE TYPE`);
-        return $('button#playButton').addClass('button-active');
-    }
-}*/
 var songTitleName;
 
 function audioStop() {
@@ -332,41 +319,6 @@ function audioStop() {
 
 function classicDetectSong() {
     try {
-        new id3.Reader(`${os.homedir}/Music/Audiation/${newFileChosen}`)
-            .setTagsToRead(['title', 'artist', 'picture', 'album'])
-            .read({
-                onSuccess: function (tag) {
-                    artist = tag.tags.artist;
-                    Title = tag.tags.title;
-                    album = tag.tags.album;
-                    newTags = tag;
-                    if (!tag.tags.artist) {
-                        artist = 'Unknown Artist'
-                    }
-                    if (!tag.tags.album) {
-                        album = 'Unknown Album'
-                    }
-                    if (!tag.tags.title) {
-                        Title = newFileName;
-                    }
-                    var base64String = '';
-                    if (tag.tags.picture) {
-                        for (var i = 0; i < tag.tags.picture.data.length; i++) {
-                            base64String += String.fromCharCode(tag.tags.picture.data[i]);
-                        }
-                        document.getElementById('songPicture').src = 'data:' + tag.tags.picture.format + ';base64,' + window.btoa(base64String);
-                    } else {
-                        document.getElementById('songPicture').src = './assets/svg/no_image.svg';
-                    }
-                    $('h1#songTitle').text(Title);
-                    $('#artist').text(`${album}  \u2022  ${artist}`)
-                },
-                onError: function () {
-                    $('#songTitle').text(newFileName);
-                    $('#artist').text('Unknown Album \u2022 Unknown Artist');
-                    document.getElementById('songPicture').src = './assets/svg/no_image.svg';
-                }
-            })
         if (audio) {
             audio.removeEventListener('timeupdate', seekTimeUpdate);
         }
@@ -540,6 +492,41 @@ var audioLength = document.querySelector('#songDuration');
 
 function seekBarTrack() {
     $('p#songDuration').text('Calculating...')
+    new id3.Reader(`${os.homedir}/Music/Audiation/${newFileChosen}`)
+            .setTagsToRead(['title', 'artist', 'picture', 'album'])
+            .read({
+                onSuccess: function (tag) {
+                    artist = tag.tags.artist;
+                    Title = tag.tags.title;
+                    album = tag.tags.album;
+                    newTags = tag;
+                    if (!tag.tags.artist) {
+                        artist = 'Unknown Artist'
+                    }
+                    if (!tag.tags.album) {
+                        album = 'Unknown Album'
+                    }
+                    if (!tag.tags.title) {
+                        Title = newFileName;
+                    }
+                    var base64String = '';
+                    if (tag.tags.picture) {
+                        for (var i = 0; i < tag.tags.picture.data.length; i++) {
+                            base64String += String.fromCharCode(tag.tags.picture.data[i]);
+                        }
+                        document.getElementById('songPicture').src = 'data:' + tag.tags.picture.format + ';base64,' + window.btoa(base64String);
+                    } else {
+                        document.getElementById('songPicture').src = './assets/svg/no_image.svg';
+                    }
+                    $('h1#songTitle').text(Title);
+                    $('#artist').text(`${album}  \u2022  ${artist}`)
+                },
+                onError: function () {
+                    $('#songTitle').text(newFileName);
+                    $('#artist').text('Unknown Album \u2022 Unknown Artist');
+                    document.getElementById('songPicture').src = './assets/svg/no_image.svg';
+                }
+            })
     audio.addEventListener('timeupdate', seekTimeUpdate);
     audio.addEventListener('waiting', function () {
         $('p#songDuration').text('Buffering...')
