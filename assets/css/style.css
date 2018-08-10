@@ -155,20 +155,45 @@ button:hover, .button-active, select:hover {
 
 .seek-bar {
     margin: 10px;
-    width: 280px;
+    width: 450px;
     background: #2d2d2d;
     display: flex;
     align-items: center;
     border-radius: 999px;
     cursor: pointer; 
     height: 5px;
+    transition: .25s;
+}
+
+@media screen and (max-width: 1750px) {
+    .seek-bar {
+        width: 350px;
+    }
+}
+
+@media screen and (max-width: 1450px) {
+    .seek-bar {
+        width: 280px;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .seek-bar {
+        width: 200px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .seek-bar {
+        width: 150px;
+    }
 }
 
 .seek-bar .fill {
     height: 5px;
     background: #7f00b9;
     border-radius: 10000px; 
-    transition: .075s;
+    transition: .1s;
 }
 
 .seek-bar .handle {
@@ -454,11 +479,15 @@ div.type-separator {
     overflow: hidden;
 }
 
+.np-buttons {
+    width: 50%;
+}
+
 .title-artist {
     text-align: left !important;
     margin-top: 3px;
     margin-left: 80px;
-    width: 25%;
+    width: 20%;
     overflow: hidden;
     float: left;
     position: absolute;
@@ -494,6 +523,7 @@ h1#songTitle {
     opacity: .75;
     font-size: 14px;
     display: block;
+    text-overflow: ellipsis;
 }
 
 div.new-nowplaying {
