@@ -46,7 +46,7 @@ html, body {
     height: 40px;
     margin: 0;
     position: fixed;
-    z-index: 9;
+    z-index: 10;
     background: rgb(27, 27, 27);
 }
 
@@ -386,7 +386,7 @@ body.light-theme::-webkit-scrollbar-thumb {
 
 #playType {
     display: inline-block;
-    padding-top: 65px;
+    padding-top: 55px;
     vertical-align: top;
     position: fixed;
     z-index: 9;
@@ -427,7 +427,7 @@ div.type-separator {
     height: 3px;
     background: #3d3d3d;
     margin: 15px;
-    margin-left: 20px;
+    margin-left: 25px;
     margin-top: 20px;
 }
 
@@ -572,7 +572,7 @@ button i {
     padding: 10px;
     padding-left: 40px;
     width: 100%;
-    background-color: #1f1f1f;
+    background-color: #222222;
     height: 45px;
     position: fixed;
     left: 180px;

@@ -73,6 +73,12 @@ if (process.platform === 'linux') {
     $('.title-bar').hide();
     $('.app-content').css({
         marginTop: '20px'
+    });
+    $('#newContentWrapper h1').css({
+        top: '0'
+    });
+    $('#playType').css({
+        paddingTop: '15px'
     })
 }
 
