@@ -1,71 +1,82 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Audiation</title>
-        <link id="ssmain" rel="stylesheet" href="./assets/css/style.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="shortcut icon" type="image/png" href="favicon.png"/>
-        <link href="./assets/fonts/material/material-icons.css" rel="stylesheet">
-        <script>
-            if (typeof module === 'object') {
-                window.module = module;
-                module = undefined;
-            }
-        </script>
-    </head>
-    <body style="transition-duration: .2s">
-        <div id="loadCover" style="transition-duration: .2s; height: 100%; width: 100%; z-index: 10; position: fixed; background: #1f1f1f; opacity: 1"></div>
-        <div class="title-bar">
-            <div class="title-bar-wrapper" style="display: none">
-                <center>
-                    <div class="tb-button tb-minimize">
-                        <svg id="TitleBarMinimize" width="15" height="15" viewBox="0 0 12 12">
-                            <rect fill="#ffffff" width="10" height="1" x="1" y="6"></rect>
-                        </svg>
-                    </div>
-                    <div class="tb-button tb-maximize">
-                        <svg id="TitleBarMaximize" width="15" height="15" viewBox="0 0 12 12">
-                            <rect width="9" height="9" x="1.5" y="1.5" fill="none" stroke="#ffffff"></rect>
-                        </svg>
-                    </div>
-                    <div class="tb-button tb-close">       
-                        <svg id="TitleBarClose" width="15" height="15" viewBox="0 0 12 12">
-                            <polygon fill="#ffffff" fill-rule="evenodd" points="11 1.576 6.583 6 11 10.424 10.424 11 6 6.583 1.576 11 1 10.424 5.417 6 1 1.576 1.576 1 6 5.417 10.424 1"></polygon>
-                        </svg>
-                    </div>
-                </center>
+
+<head>
+    <title>Audiation</title>
+    <link id="ssmain" rel="stylesheet" href="./assets/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="favicon.png" />
+    <link href="./assets/fonts/material/material-icons.css" rel="stylesheet">
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+</head>
+
+<body style="transition-duration: .2s">
+    <div id="loadCover" style="transition-duration: .2s; height: 100%; width: 100%; z-index: 10; position: fixed; background: #1f1f1f; opacity: 1"></div>
+    <div class="title-bar">
+        <div class="title-bar-wrapper" style="display: none">
+            <center>
+                <div class="tb-button tb-minimize">
+                    <svg id="TitleBarMinimize" width="15" height="15" viewBox="0 0 12 12">
+                        <rect fill="#ffffff" width="10" height="1" x="1" y="6"></rect>
+                    </svg>
+                </div>
+                <div class="tb-button tb-maximize">
+                    <svg id="TitleBarMaximize" width="15" height="15" viewBox="0 0 12 12">
+                        <rect width="9" height="9" x="1.5" y="1.5" fill="none" stroke="#ffffff"></rect>
+                    </svg>
+                </div>
+                <div class="tb-button tb-close">
+                    <svg id="TitleBarClose" width="15" height="15" viewBox="0 0 12 12">
+                        <polygon fill="#ffffff" fill-rule="evenodd" points="11 1.576 6.583 6 11 10.424 10.424 11 6 6.583 1.576 11 1 10.424 5.417 6 1 1.576 1.576 1 6 5.417 10.424 1"></polygon>
+                    </svg>
+                </div>
+            </center>
+        </div>
+    </div>
+    <div class="play-type" id="playType">
+        <div class="play-type-wrapper">
+            <div class="logo-bottom">
+                <img id="headerIcon" src="./assets/svg/main-logo-white.svg">
+                <p id="betaTag">BETA</p>
+            </div>
+            <button id="newPlay" class="button-active">
+                <i class="material-icons">library_music</i>Library</button>
+            <div class="type-separator"></div>
+            <div id="extraButtons">
+                <button id="refreshFiles">
+                    <i class="material-icons">refresh</i>Refresh</button>
+                <button id="openFileBrowser">
+                    <i class="material-icons">folder</i>Folder</button>
+                <button id="settingsButton">
+                    <i class="material-icons">settings</i>Settings</button>
+                <button id="openDevTools">
+                    <i class="material-icons">code</i>Dev Tools</button>
             </div>
         </div>
-        <div class="app-content">
-            <div id="settings" style="display: none">
-                <center>
-                    <div id="settingsContent">
-                        <p>Settings coming soon!</p>
-                        <button id="settingsClose">Close</button>
-                    </div>
-                </center>
-            </div>
-            <div class="play-type" id="playType" style="margin-bottom: 20px;">
-                <div class="logo-bottom">
-                    <img id="headerIcon" src="./assets/svg/main-logo-white.svg">
-                    <p id="betaTag">BETA</p>
-                </div>
-                <button id="newPlay" class="button-active"><i class="material-icons">library_music</i>Library</button>
-                <div class="type-separator"></div>
-                <div id="extraButtons">
-                    <button id="refreshFiles"><i class="material-icons">refresh</i>Refresh</button>
-                    <button id="openFileBrowser"><i class="material-icons">folder</i>Folder</button> <!--probably only works on windows but i don't care-->
-                    <button id="settingsButton"><i class="material-icons">settings</i>Settings</button>   
-                    <button id="openDevTools"><i class="material-icons">code</i>Dev Tools</button>     
-                </div>
-            </div>
-            <div id="newContent">
-                <div id="newContentWrapper">
-                    <ul id="newList"></ul>
-                </div>
-            </div>
+    </div>
+    <div class="app-content">
+        <div id="settings" style="display: none">
             <center>
-                <div class="new-nowplaying">
+                <div id="settingsContent">
+                    <p>Settings coming soon!</p>
+                    <button id="settingsClose">Close</button>
+                </div>
+            </center>
+        </div>
+        <div id="newContent">
+            <div id="newContentWrapper">
+                <h1>Songs</h1>
+                <ul id="newList"></ul>
+            </div>
+        </div>
+        <center>
+            <div class="new-nowplaying">
+                <div class="np-wrapper">
                     <img src="./assets/svg/no_image.svg" id="songPicture">
                     <div class="title-artist">
                         <h1 id="songTitle">No Song Playing...</h1>
@@ -91,9 +102,11 @@
                         </div>
                     </div>
                 </div>
-            </center>
-        </div>
-        <script src="./assets/js/jquery-3.3.1.min.js"></script>
-        <script src="./assets/js/music.js"></script>
-    </body>
+            </div>
+        </center>
+    </div>
+    <script src="./assets/js/jquery-3.3.1.min.js"></script>
+    <script src="./assets/js/music.js"></script>
+</body>
+
 </html>

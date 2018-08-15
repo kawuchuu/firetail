@@ -46,7 +46,7 @@ html, body {
     margin: 0;
     position: fixed;
     z-index: 10;
-    background: #1f1f1f;
+    background: rgb(27, 27, 27);
 }
 
 .title-bar-name {
@@ -146,7 +146,8 @@ button {
 
 button:hover, .button-active, select:hover {
     opacity: .75;
-    transition: .2s; 
+    transition: .2s;
+    box-shadow: 0px 2px 15px rgba(174, 0, 255, 0.65)
 }
 
 .button-active {
@@ -204,6 +205,7 @@ button:hover, .button-active, select:hover {
     margin-left: -5px;
     transform: scale(1.75);
     transition: all .1s;
+    box-shadow: 0px 2px 15px rgba(174, 0, 255, 0.65)
 }
 
 #newPlay {
@@ -373,7 +375,7 @@ body.light-theme::-webkit-scrollbar-thumb {
 
 #newContentWrapper {
     position: relative;
-    margin-left: 180px;
+    margin-left: 215px;
     border-radius: 10px;
 }
 
@@ -383,16 +385,23 @@ body.light-theme::-webkit-scrollbar-thumb {
 
 #playType {
     display: inline-block;
+    padding-top: 65px;
     vertical-align: top;
     position: fixed;
-    z-index: 4;
-    background: #1f1f1f;
+    z-index: 9;
+    background: #242424;
+    height: 100%;
+    width: 190px;
+    box-shadow: 1px 0px 20px rgba(0,0,0,.15);
+}
+
+.play-type-wrapper {
     height: 100%;
 }
 
 #playType button {
     width: 150px;
-    margin-left: 15px;
+    margin-left: 20px;
 }
 
 .play-pause {
@@ -407,7 +416,7 @@ body.light-theme::-webkit-scrollbar-thumb {
 }
 
 .app-content {
-    margin-top: 40px;
+    margin-top: 60px;
     position: relative;
     margin-bottom: 110px;
 }
@@ -539,7 +548,8 @@ div.new-nowplaying {
     bottom: 0px;
     /*box-shadow: 0px 0px 8px rgba(0,0,0,.35);*/
     transition: .2s ease-in-out;
-    z-index: 6
+    z-index: 9;
+    box-shadow: 0px -1px 20px rgba(0,0,0,.25);
 }
 
 #controls {
@@ -554,4 +564,8 @@ button i {
     vertical-align: top;
     position: relative;
     margin-right: 12px;
+}
+
+#newContentWrapper h1 {
+    margin-top: 0;
 }

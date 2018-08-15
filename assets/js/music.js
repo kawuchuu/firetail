@@ -111,7 +111,9 @@ function songActiveReset() {
     $('.results-link').css({
         color: '#fff'
     })
-    $(`#${currentSongPlaying} i`).hide();
+    $(`#${currentSongPlaying} i`).css({
+        display: 'none'
+    });
 }
 
 function shuffle(array) {
@@ -326,10 +328,10 @@ document.addEventListener("keydown", function (e) {
 function noSongPlaying() {
     if (currentlyPlaying === false) {
         $('#songTitle, div.seek-bar, #songDuration').addClass('not-playing');
-        $('#stopButton, .resume-button, #pauseButton').addClass('button-active');
+        $('#stopButton, .resume-button').addClass('button-active');
     } else {
         $('#songTitle, div.seek-bar, #songDuration').removeClass('not-playing');
-        $('#stopButton, .resume-button, #pauseButton').removeClass('button-active');
+        $('#stopButton, .resume-button').removeClass('button-active');
     }
 }
 
@@ -491,7 +493,7 @@ function seekBarTrack() {
                     for (var i = 0; i < tag.tags.picture.data.length; i++) {
                         base64String += String.fromCharCode(tag.tags.picture.data[i]);
                     }
-                    document.getElementById('songPicture').src = 'data:' + tag.tags.picture.format + ';base64,' + window.btoa(base64String);
+                    document.getElementById('songPicture').src = 'data:' + tag.tags.picture.format + ';base64,' + btoa(base64String);
                 } else {
                     document.getElementById('songPicture').src = './assets/svg/no_image.svg';
                 }
