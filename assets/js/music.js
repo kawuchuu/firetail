@@ -80,6 +80,9 @@ if (process.platform === 'linux') {
     $('#playType').css({
         paddingTop: '15px'
     })
+    $('.shadow-hide').css({
+        top: '0'
+    })
 }
 
 $('#newList').html('<p style="text-align: center">Loading...');

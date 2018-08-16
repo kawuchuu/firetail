@@ -46,7 +46,7 @@ html, body {
     height: 40px;
     margin: 0;
     position: fixed;
-    z-index: 10;
+    z-index: 12;
     background: rgb(27, 27, 27);
 }
 
@@ -288,7 +288,8 @@ p.new-song-title {
     padding: 0;
     transition-duration: .2s;
     display: inline-block;
-    vertical-align: middle
+    vertical-align: middle;
+    line-height: 28px;
 }
 
 .results-link a {
@@ -526,6 +527,7 @@ h1#songTitle {
     /*padding-top: 15px;*/
     text-shadow: 0px 0px 10px #1d1d1d;
     display: block;
+    line-height: 22px;
 }
 
 #artist {
@@ -534,6 +536,7 @@ h1#songTitle {
     font-size: 14px;
     display: block;
     text-overflow: ellipsis;
+    line-height: 18px;
 }
 
 div.new-nowplaying {
@@ -579,4 +582,14 @@ button i {
     top: 40px;
     z-index: 8;
     box-shadow: 0px 1px 20px rgba(0,0,0,.15);
+}
+
+.shadow-hide {
+    z-index: 10;
+    background-color: #222222;
+    position: fixed;
+    height: 65px;
+    top: 40px;
+    width: 20px;
+    left: 190px;
 }
