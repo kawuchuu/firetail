@@ -43,12 +43,13 @@ var durationSeconds;
 var durationMinutes;
 var seconds;
 var minutes;
-var seekBar = document.querySelector('.seek-bar');
+var seekBar = document.querySelector('.seek-bar-wrapper');
 var fillBar = seekBar.querySelector('.fill');
 var audioLength = document.querySelector('#songDuration');
 var mouseDown = false;
 var p;
 var s = [];
+var previousDuration;
 
 var os = require('os');
 var fs = require('fs');
@@ -88,6 +89,7 @@ if (process.platform === 'linux') {
 $('#newList').html('<p style="text-align: center">Loading...');
 
 remote = require('electron').remote;
+const path = require('path');
 remote.getCurrentWindow().setMinimumSize(720, 525);
 document.addEventListener('dragover', event => event.preventDefault())
 document.addEventListener('drop', event => event.preventDefault())
@@ -109,6 +111,30 @@ function songActive() {
         $(`#${currentSongPlaying} i`).text('play_arrow');
     }
 }
+
+remote.getCurrentWindow().setThumbarButtons([
+    {
+        tooltip: 'Previous',
+        icon: path.join(__dirname, '/assets/image/skipprevious_white.png'),
+        click() {
+            previousSong()
+        }
+    },
+    {
+        tooltip: 'Play',
+        icon: path.join(__dirname, '/assets/image/play_arrow_white.png'),
+        click() {
+            resumeButton();
+        }
+    },
+    {
+        tooltip: 'Skip',
+        icon: path.join(__dirname, '/assets/image/skipnext_white.png'),
+        click() {
+            nextSong()
+        }
+    }
+])
 
 function songActiveReset() {
     $('.play-pause').text('play_arrow');
@@ -152,7 +178,6 @@ function loadFiles() {
                 require('child_process').exec(`start "" "${os.homedir}\\Music\\Audiation`)
             });
         }
-
         fileTotal = s.length - 1;
         $('#newList').html('');
         s.forEach((f, i) => {
@@ -311,11 +336,23 @@ $('.tb-maximize').click(function () {
         window.unmaximize();
     }
 });
+/*var remote = require('electron').remote;
+var window = remote.getCurrentWindow();
+window.addEventListener('maximize', function() {
+    console.log('xd')
+    $('.tb-maximize').html("<svg width='10' height='10' viewBox='0 0 11 11' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M11 8.798H8.798V11H0V2.202h2.202V0H11v8.798zm-3.298-5.5h-6.6v6.6h6.6v-6.6zM9.9 1.1H3.298v1.101h5.5v5.5h1.1v-6.6z' fill='#fff'/></svg>")
+})
+
+window.addEventListener('unmaximize', function() {
+    console.log('xd')
+    $('.tb-maximize').html('<svg id="TitleBarMaximize" width="12" height="12" viewBox="0 0 12 12"><rect width="9" height="9" x="1.5" y="1.5" fill="none" stroke="#ffffff"></rect></svg>')
+})*/
 
 $('.tb-minimize').click(function () {
     const remote = require('electron').remote;
     var window = remote.getCurrentWindow();
     window.minimize();
+
 })
 
 window.onkeydown = function (e) {
@@ -331,8 +368,15 @@ document.addEventListener("keydown", function (e) {
             break;
         case 116:
             location.reload();
+        
     }
 });
+
+const {globalShortcut} = require('electron').remote;
+
+globalShortcut.register('MediaPlayPause', resumeButton);
+globalShortcut.register('MediaPreviousTrack', previousSong);
+globalShortcut.register('MediaNextTrack', nextSong);
 
 function noSongPlaying() {
     if (currentlyPlaying === false) {
@@ -394,6 +438,29 @@ function classicDetectSong() {
         }
         seekBarTrack();
         audio.volume = 1;
+        remote.getCurrentWindow().setThumbarButtons([
+            {
+                tooltip: 'Previous',
+                icon: path.join(__dirname, '/assets/image/skipprevious_white.png'),
+                click() {
+                    previousSong()
+                }
+            },
+            {
+                tooltip: 'Pause',
+                icon: path.join(__dirname, '/assets/image/pause_white.png'),
+                click() {
+                    resumeButton();
+                }
+            },
+            {
+                tooltip: 'Skip',
+                icon: path.join(__dirname, '/assets/image/skipnext_white.png'),
+                click() {
+                    nextSong()
+                }
+            }
+        ])
     } catch (err) {
         console.error(err.stack)
         currentlyPlaying = false;
@@ -416,22 +483,67 @@ function resumeButton() {
             pauseButtonActive = true;
             audio.pause();
             $(`#pauseButton, #${currentSongPlaying} i`).text('play_arrow');
-            //$('#pauseButton').text('Resume');
+            remote.getCurrentWindow().setThumbarButtons([
+                {
+                    tooltip: 'Previous',
+                    icon: path.join(__dirname, '/assets/image/skipprevious_white.png'),
+                    click() {
+                        previousSong()
+                    }
+                },
+                {
+                    tooltip: 'Play',
+                    icon: path.join(__dirname, '/assets/image/play_arrow_white.png'),
+                    click() {
+                        resumeButton();
+                    }
+                },
+                {
+                    tooltip: 'Skip',
+                    icon: path.join(__dirname, '/assets/image/skipnext_white.png'),
+                    click() {
+                        nextSong()
+                    }
+                }
+            ])
             break;
         case true:
             pauseButtonActive = false;
             audio.play();
             $(`#pauseButton, #${currentSongPlaying} i`).text('pause');
+            remote.getCurrentWindow().setThumbarButtons([
+                {
+                    tooltip: 'Previous',
+                    icon: path.join(__dirname, '/assets/image/skipprevious_white.png'),
+                    click() {
+                        previousSong()
+                    }
+                },
+                {
+                    tooltip: 'Pause',
+                    icon: path.join(__dirname, '/assets/image/pause_white.png'),
+                    click() {
+                        resumeButton();
+                    }
+                },
+                {
+                    tooltip: 'Skip',
+                    icon: path.join(__dirname, '/assets/image/skipnext_white.png'),
+                    click() {
+                        nextSong()
+                    }
+                }
+            ])
     }
 }
 
-$('div.seek-bar').mouseover(function () {
+$('div.seek-bar-wrapper').mouseover(function () {
     if (currentlyPlaying === true) {
         $('div.handle').addClass('handle-hover');
     }
 })
 
-$('div.seek-bar').mouseleave(function () {
+$('div.seek-bar-wrapper').mouseleave(function () {
     if (currentlyPlaying === true) {
         if (!mouseDown === false) return;
         $('div.handle').removeClass('handle-hover');
