@@ -50,27 +50,23 @@ html, body {
     background: rgb(27, 27, 27);
 }
 
-.title-bar-name {
-    margin: 0;
-    float: left;
-    padding: 7px;
-}
-
 .title-bar-wrapper {
     float: right;
     -webkit-app-region: no-drag;
 }
 
 .tb-button {
-    width: 25px;
-    height: 18px;
+    width: 43px;
+    height: 32px;
     display: inline-block;
     margin: 0;
-    padding: 8px;
-    padding-left: 10px;
-    padding-top: 6px;
     cursor: pointer;
     transition: .2s;
+}
+
+.tb-button svg {
+    position: relative;
+    top: 6px;
 }
 
 .tb-button:hover {

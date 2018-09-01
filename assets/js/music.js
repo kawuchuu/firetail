@@ -315,12 +315,6 @@ $('#shuffleButton').click(function () {
     }
 })
 
-/*$('.np-buttons i').mousedown(function() {
-    $(this).css({
-        color: '#7f00b9'
-    })
-})*/
-
 $('.tb-close').click(function () {
     const remote = require('electron').remote;
     var window = remote.getCurrentWindow();
@@ -355,6 +349,8 @@ $('.tb-minimize').click(function () {
 
 })
 
+const {globalShortcut, dialog} = require('electron').remote;
+
 window.onkeydown = function (e) {
     return !(e.keyCode == 32);
 };
@@ -367,12 +363,19 @@ document.addEventListener("keydown", function (e) {
             }
             break;
         case 116:
-            location.reload();
-        
+        console.log(dialog)
+            dialog.showMessageBox({
+                type: 'warning',
+                buttons: ['Yes', 'Cancel'],
+                title: 'Reload',
+                message: 'Reloading will prevent media keys from functioning. Are you sure?'
+            }, function(i) {
+                if (i === 0) {
+                    location.reload();
+                }
+            })
     }
 });
-
-const {globalShortcut} = require('electron').remote;
 
 globalShortcut.register('MediaPlayPause', resumeButton);
 globalShortcut.register('MediaPreviousTrack', previousSong);
@@ -420,20 +423,10 @@ function classicDetectSong() {
         try {
             audio = new Audio(`${os.homedir}/Music/Audiation/${newFileChosen}`);
             audio.currentTime = 0;
-            audio.play().catch(function (err) {
-                console.error(err);
-                alert('Unable to play this song.');
-                $('#songTitle').text('No Song Playing...')
-                $('#artist').text('Unknown')
-                $('p#songDuration').text('0:00 / 0:00')
-                audioStop();
-            })
+            audio.play()
         } catch (err) {
             console.error(err);
-            alert('Unable to play this song.');
-            $('#songTitle').text('No Song Playing...')
-            $('#artist').text('Unknown')
-            $('p#songDuration').text('0:00 / 0:00')
+            dialog.showErrorBox('Error', err)
             audioStop();
         }
         seekBarTrack();
@@ -505,7 +498,8 @@ function resumeButton() {
                         nextSong()
                     }
                 }
-            ])
+            ]);
+            $('title').text('Audiation')
             break;
         case true:
             pauseButtonActive = false;
@@ -533,7 +527,12 @@ function resumeButton() {
                         nextSong()
                     }
                 }
-            ])
+            ]);
+            if (artist == "Unknown Artist") {
+                $('title').text(`${newFileName}`);
+            } else {
+                $('title').text(`${artist} - ${Title}`)
+            }
     }
 }
 
@@ -619,12 +618,22 @@ function seekBarTrack() {
                     document.getElementById('songPicture').src = './assets/svg/no_image.svg';
                 }
                 $('h1#songTitle').text(Title);
-                $('#artist').text(`${album}  \u2022  ${artist}`)
+                $('#artist').text(`${album}  \u2022  ${artist}`);
+                if (artist == "Unknown Artist") {
+                    $('title').text(`${newFileName}`);
+                } else {
+                    $('title').text(`${artist} - ${Title}`)
+                }
             },
             onError: function () {
                 $('#songTitle').text(newFileName);
                 $('#artist').text('Unknown Album \u2022 Unknown Artist');
                 document.getElementById('songPicture').src = './assets/svg/no_image.svg';
+                if (artist == "Unknown Artist") {
+                    $('title').text(`${newFileName}`);
+                } else {
+                    $('title').text(`${artist} - ${Title}`)
+                }
             }
         })
     audio.addEventListener('timeupdate', seekTimeUpdate);

@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, dialog} = require('electron');
 const path = require('path');
 const url = require('url');
 
@@ -27,6 +27,12 @@ function createWindow() {
         slashes: true
     }))
     win.setMenu(null);
+    process.on('unhandledRejection', function(err) {
+        dialog.showErrorBox('Error', err)
+    })
+    process.on('unhandledException', function(err) {
+        dialog.showErrorBox('Error', err)
+    })
     // If Audiation fails to start, uncomment the line below to find the cause. If it's an error on my behalf, please report it ASAP
     //win.webContents.toggleDevTools();
 }
