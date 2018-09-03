@@ -11,18 +11,13 @@
 html, body {
     margin: 0;
     background: #1f1f1f;
-    background-attachment: fixed;
-    background-size: cover;
-    background-position: center;
-    font-family: 'Dosis', 'Muli', 'Karla', Arial, Helvetica, sans-serif !important;
+    font-family: 'Dosis', Arial, Helvetica, sans-serif !important;
     color: #fff;
-    cursor: default;
     user-select: none;
     height: 100%;
     white-space: nowrap;
     overflow: auto;
     text-overflow: ellipsis;
-    position: relative;
 }
 
 ::-webkit-scrollbar {
@@ -385,7 +380,7 @@ body.light-theme::-webkit-scrollbar-thumb {
 
 #playType {
     display: inline-block;
-    padding-top: 55px;
+    padding-top: 40px;
     vertical-align: top;
     position: fixed;
     z-index: 9;
@@ -443,11 +438,12 @@ div.type-separator {
     height: 100%;
     width: 100%;
     background: rgba(0,0,0,.35);
-    z-index: 100;
+    z-index: 11;
     position: fixed;
     animation: settingsEntry 0.2s;
     align-content: center;
     align-items: center;
+    top: 0;
 }
 
 #settingsContent {

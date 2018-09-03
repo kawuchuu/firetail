@@ -18,7 +18,9 @@ function createWindow() {
         icon: './assets/image/audiation.ico', 
         frame: frameStyle,
         backgroundColor: '#1f1f1f',
-        titleBarStyle: 'hidden'
+        titleBarStyle: 'hidden',
+        show: false,
+        title: 'Audiation'
     });
 
     win.loadURL(url.format({
@@ -32,6 +34,9 @@ function createWindow() {
     })
     process.on('unhandledException', function(err) {
         dialog.showErrorBox('Error', err)
+    })
+    win.once('ready-to-show', () => {
+        win.show();
     })
     // If Audiation fails to start, uncomment the line below to find the cause. If it's an error on my behalf, please report it ASAP
     //win.webContents.toggleDevTools();

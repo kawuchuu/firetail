@@ -43,13 +43,15 @@ var durationSeconds;
 var durationMinutes;
 var seconds;
 var minutes;
-var seekBar = document.querySelector('.seek-bar-wrapper');
+var seekBar = document.querySelector('.seek-bar');
+var seekBarWrapper = document.querySelector('.seek-bar-wrapper');
 var fillBar = seekBar.querySelector('.fill');
 var audioLength = document.querySelector('#songDuration');
 var mouseDown = false;
 var p;
 var s = [];
 var previousDuration;
+var sortFileExt = {};
 
 var os = require('os');
 var fs = require('fs');
@@ -62,8 +64,9 @@ $(document).ready(function () {
         })
         setTimeout(function () {
             $('#loadCover').hide();
+            document.body.style.cursor = 'default'
         }, 250)
-    }, 1000)
+    }, 250);
 })
 
 if (process.platform === 'win32') {
@@ -89,6 +92,7 @@ if (process.platform === 'linux') {
 $('#newList').html('<p style="text-align: center">Loading...');
 
 remote = require('electron').remote;
+const {globalShortcut, dialog} = require('electron').remote;
 const path = require('path');
 remote.getCurrentWindow().setMinimumSize(720, 525);
 document.addEventListener('dragover', event => event.preventDefault())
@@ -164,14 +168,23 @@ function shuffle(array) {
     return array;
 }
 
+var fileextentions = ['mp3', 'm4a', 'wav', 'ogg', '3gp', 'aac', 'flac', 'webm', 'raw']
+
 function loadFiles() {
     if (!fs.existsSync(`${os.homedir}/Music/Audiation`)) {
         fs.mkdirSync(`${os.homedir}/Music/Audiation`);
     }
     fs.readdir(`${os.homedir}/Music/Audiation`, (err, files) => {
         if (err) console.error(err);
-        s = files.filter(f => f.split(".").pop() === 'mp3' || 'm4a' || 'wav' || 'ogg' || '3gp' || 'aac' || 'flac' || 'webm' || 'raw');
-
+        fileextentions.forEach((e) => {
+            sortFileExt[e] = files.filter(f => f.split(".").pop() === e);
+            s = s.concat(sortFileExt[e]);
+            s.sort(function(a, b) {
+                if (a.toLowerCase() < b.toLowerCase()) return -1;
+                if (a.toLowerCase() > b.toLowerCase()) return 1;
+                return 0;
+            });
+        });
         if (s.length === 0) {
             $('#newList').html('<p style="text-align: center">No valid audio files found in the Audiation folder.<br><a class="open-file-browser">Click here</a> to open the Audiation folder.')
             return $('.open-file-browser').click(function () {
@@ -183,7 +196,8 @@ function loadFiles() {
         s.forEach((f, i) => {
             fileSongListStore.push(f);
             allFilesList.push(f);
-            newFileName = f.slice(0, -4)
+            fName = f.split('.');
+            newFileName = f.slice(0, -fName[fName.length - 1].length - 1);
             $('#newList').append(`<li class="results-link" id="${i}"><i class="material-icons play-pause" style="display: none; opacity: 0; transition: .2s;">play_arrow</i><p class="new-song-title">${newFileName}`);
             if (currentlyPlaying === true && currentSongPlaying) {
                 songActive();
@@ -330,17 +344,16 @@ $('.tb-maximize').click(function () {
         window.unmaximize();
     }
 });
-/*var remote = require('electron').remote;
 var window = remote.getCurrentWindow();
-window.addEventListener('maximize', function() {
+window.addEventListener('maximize', () => {
     console.log('xd')
-    $('.tb-maximize').html("<svg width='10' height='10' viewBox='0 0 11 11' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M11 8.798H8.798V11H0V2.202h2.202V0H11v8.798zm-3.298-5.5h-6.6v6.6h6.6v-6.6zM9.9 1.1H3.298v1.101h5.5v5.5h1.1v-6.6z' fill='#fff'/></svg>")
+    //$('.tb-maximize').html("<svg width='10' height='10' viewBox='0 0 11 11' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M11 8.798H8.798V11H0V2.202h2.202V0H11v8.798zm-3.298-5.5h-6.6v6.6h6.6v-6.6zM9.9 1.1H3.298v1.101h5.5v5.5h1.1v-6.6z' fill='#fff'/></svg>")
 })
 
 window.addEventListener('unmaximize', function() {
     console.log('xd')
     $('.tb-maximize').html('<svg id="TitleBarMaximize" width="12" height="12" viewBox="0 0 12 12"><rect width="9" height="9" x="1.5" y="1.5" fill="none" stroke="#ffffff"></rect></svg>')
-})*/
+})
 
 $('.tb-minimize').click(function () {
     const remote = require('electron').remote;
@@ -348,8 +361,6 @@ $('.tb-minimize').click(function () {
     window.minimize();
 
 })
-
-const {globalShortcut, dialog} = require('electron').remote;
 
 window.onkeydown = function (e) {
     return !(e.keyCode == 32);
@@ -363,8 +374,7 @@ document.addEventListener("keydown", function (e) {
             }
             break;
         case 116:
-        console.log(dialog)
-            dialog.showMessageBox({
+            dialog.showMessageBox(remote.getCurrentWindow(), {
                 type: 'warning',
                 buttons: ['Yes', 'Cancel'],
                 title: 'Reload',
@@ -619,20 +629,18 @@ function seekBarTrack() {
                 }
                 $('h1#songTitle').text(Title);
                 $('#artist').text(`${album}  \u2022  ${artist}`);
-                if (artist == "Unknown Artist") {
+                if (!tag.tags.artist) {
                     $('title').text(`${newFileName}`);
                 } else {
                     $('title').text(`${artist} - ${Title}`)
                 }
             },
-            onError: function () {
+            onError: function (tag) {
                 $('#songTitle').text(newFileName);
                 $('#artist').text('Unknown Album \u2022 Unknown Artist');
                 document.getElementById('songPicture').src = './assets/svg/no_image.svg';
-                if (artist == "Unknown Artist") {
+                if (!artist) {
                     $('title').text(`${newFileName}`);
-                } else {
-                    $('title').text(`${artist} - ${Title}`)
                 }
             }
         })
@@ -652,7 +660,7 @@ function getP(e) {
     return p;
 }
 
-seekBar.addEventListener('mousedown', function (e) {
+seekBarWrapper.addEventListener('mousedown', function (e) {
     if (currentlyPlaying === true) {
         mouseDown = true;
         p = getP(e);
