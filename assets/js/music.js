@@ -174,6 +174,7 @@ function loadFiles() {
     if (!fs.existsSync(`${os.homedir}/Music/Audiation`)) {
         fs.mkdirSync(`${os.homedir}/Music/Audiation`);
     }
+    s = [];
     fs.readdir(`${os.homedir}/Music/Audiation`, (err, files) => {
         if (err) console.error(err);
         fileextentions.forEach((e) => {
