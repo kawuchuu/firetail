@@ -4,8 +4,8 @@
 	 viewBox="0 0 1080 1080" style="enable-background:new 0 0 1080 1080;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:#FFFFFF;}
-	.st1{fill:none;stroke:#FFFFFF;stroke-width:68;stroke-miterlimit:10;}
-	.st2{fill:none;stroke:#FFFFFF;stroke-width:68;stroke-linecap:round;stroke-miterlimit:10;}
+	.st1{fill:#FFFFFF;stroke:#FFFFFF;stroke-width:68;stroke-miterlimit:10;}
+	.st2{fill:#FFFFFF;stroke:#FFFFFF;stroke-width:68;stroke-linecap:round;stroke-miterlimit:10;}
 </style>
 <g>
 	<path class="st0" d="M540,162c51.1,0,100.6,10,147.1,29.7c45,19,85.4,46.3,120.2,81c34.7,34.7,62,75.2,81,120.2
@@ -15,10 +15,10 @@
 		C439.4,172,488.9,162,540,162 M540,94C293.7,94,94,293.7,94,540s199.7,446,446,446s446-199.7,446-446S786.3,94,540,94L540,94z"/>
 </g>
 <g>
-	<line class="st1" x1="711" y1="142" x2="141" y2="712"/>
+	<line class="st1" x1="674" y1="139" x2="138" y2="675"/>
 </g>
 <g>
-	<line class="st1" x1="934" y1="365" x2="364" y2="935"/>
+	<line class="st1" x1="946.5" y1="402.5" x2="401.5" y2="947.5"/>
 </g>
 <g>
 	<line class="st2" x1="468" y1="613" x2="251" y2="830"/>

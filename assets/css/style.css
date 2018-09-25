@@ -157,7 +157,7 @@ button:hover, .button-active {
     border-radius: 999px;
     cursor: pointer; 
     height: 5px;
-    transition: .25s;
+    transition: .15s;
 }
 
 @media screen and (max-width: 1750px) {
@@ -182,6 +182,12 @@ button:hover, .button-active {
     .seek-bar {
         width: 150px;
     }
+}
+
+.np-wrapper {
+    width: 100%;
+    position: relative;
+    height: auto;
 }
 
 .seek-bar .fill {
@@ -283,14 +289,14 @@ p.new-song-title {
     display: inline-block;
     vertical-align: middle;
     line-height: 28px;
+    transform: translateX(15px);
 }
 
-.results-link a {
+.results-link p {
     font-size: 20px;
-    transition: .2s;
 }
 
-.new-song-hover, .new-song-constant {
+/*.new-song-hover, .new-song-constant {
     transform: translateX(15px);
     position: relative;
     transition-duration: .2s;
@@ -299,7 +305,7 @@ p.new-song-title {
 .new-song-icon-constant {
     display: inline-block !important;
     opacity: 1 !important;
-}
+}*/
 
 div.new-nowplaying i {
     font-size: 26px;

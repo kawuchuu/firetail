@@ -15,7 +15,7 @@ function createWindow() {
     win = new BrowserWindow({
         width: 1080, 
         height: 889,
-        icon: './assets/image/audiation.ico', 
+        icon: './assets/image/audiation-main.ico', 
         frame: frameStyle,
         backgroundColor: '#1f1f1f',
         titleBarStyle: 'hidden',

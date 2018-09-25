@@ -52,6 +52,10 @@ var p;
 var s = [];
 var previousDuration;
 var sortFileExt = {};
+var shuffleList = [];
+var shuffleCheck = false;
+var shuffleWait = false;
+var shuffleCurrent;
 
 var os = require('os');
 var fs = require('fs');
@@ -100,20 +104,27 @@ document.addEventListener('drop', event => event.preventDefault())
 document.querySelector('img').draggable = false;
 
 function songActive() {
-    $(`#${currentSongPlaying}`).css({
+    var selectShuffle;
+    if (shuffleEnabled == true && shuffleCheck == false) {
+        selectShuffle = shuffleList[currentSongPlaying];
+    } else {
+        selectShuffle = currentSongPlaying;
+    }
+    $(`#${selectShuffle}`).css({
         color: '#c464f1'
     })
-    $(`#${currentSongPlaying} p`).addClass('new-song-constant');
-    $(`#${currentSongPlaying} i`).show();
-    $(`#${currentSongPlaying} i`).addClass('new-song-icon-constant')
-    $(`#${currentSongPlaying} i`).css({
+    //$(`#${selectShuffle} p`).addClass('new-song-constant');
+    //$(`#${selectShuffle} i`).show();
+    //$(`#${selectShuffle} i`).addClass('new-song-icon-constant')
+    $(`#${selectShuffle} i`).css({
         opacity: 1
     })
     if (pauseButtonActive === false) {
-        $(`#${currentSongPlaying} i`).text('pause');
+        $(`#${selectShuffle} i`).text('pause');
     } else {
-        $(`#${currentSongPlaying} i`).text('play_arrow');
+        $(`#${selectShuffle} i`).text('play_arrow');
     }
+    shuffleWait = false;
 }
 
 remote.getCurrentWindow().setThumbarButtons([
@@ -142,17 +153,17 @@ remote.getCurrentWindow().setThumbarButtons([
 
 function songActiveReset() {
     $('.play-pause').text('play_arrow');
-    $(`p.new-song-title`).removeClass('new-song-constant');
-    $(`.play-pause`).removeClass('new-song-icon-constant');
+    /*$(`p.new-song-title`).removeClass('new-song-constant');
+    $(`.play-pause`).removeClass('new-song-icon-constant');*/
     $(`.play-pause`).css({
         opacity: 0
     })
     $('.results-link').css({
         color: '#fff'
     })
-    $(`#${currentSongPlaying} i`).css({
+    /*$(`#${currentSongPlaying} i`).css({
         display: 'none'
-    });
+    });*/
 }
 
 function shuffle(array) {
@@ -175,6 +186,10 @@ function loadFiles() {
         fs.mkdirSync(`${os.homedir}/Music/Audiation`);
     }
     s = [];
+    allFilesList = [];
+    shuffleOrder = [];
+    fileSongListStore = [];
+    shuffleList = [];
     fs.readdir(`${os.homedir}/Music/Audiation`, (err, files) => {
         if (err) console.error(err);
         fileextentions.forEach((e) => {
@@ -199,11 +214,13 @@ function loadFiles() {
             allFilesList.push(f);
             fName = f.split('.');
             newFileName = f.slice(0, -fName[fName.length - 1].length - 1);
-            $('#newList').append(`<li class="results-link" id="${i}"><i class="material-icons play-pause" style="display: none; opacity: 0; transition: .2s;">play_arrow</i><p class="new-song-title">${newFileName}`);
+            $('#newList').append(`<li class="results-link" id="${i}"><i class="material-icons play-pause" style="opacity: 0; transition: .1s;">play_arrow</i><p class="new-song-title">${newFileName}`);
             if (currentlyPlaying === true && currentSongPlaying) {
                 songActive();
             }
             $(`#${i}`).click(function () {
+                shuffleCheck = false;
+                if (shuffleEnabled == true) shuffleCheck = true;
                 if (currentlyPlaying === true && $(this).attr('id') === `#${currentSongPlaying}`.substr(1)) {
                     resumeButton();
                 } else {
@@ -221,22 +238,45 @@ function loadFiles() {
                 }
             });
             $(`#${i}`).mouseover(function () {
-                $(`#${i} p`).addClass('new-song-hover');
+                //$(`#${i} p`).addClass('new-song-hover');
                 $(`#${i} i`).css({
                     opacity: 1,
-                    display: 'inline-block'
                 })
             })
             $(`#${i}`).mouseleave(function () {
-                $(`#${i} p`).removeClass('new-song-hover')
-                $(`#${i} i`).css({
-                    opacity: 0
-                });
-                $(`#${i} i`).hide();
+                //$(`#${i} p`).removeClass('new-song-hover')
+                console.log(i)
+                if (shuffleEnabled == true && shuffleCheck == false && shuffleWait == true) {
+                    if (shuffleList[currentSongPlaying] == i) {
+                        $(`#${i} i`).css({
+                            opacity: 1,
+                        })
+                    } else {
+                        $(`#${i} i`).css({
+                            opacity: 0
+                        })
+                        $(`#${i} i`).text('play_arrow');
+                    }
+                } else {
+                    if (currentSongPlaying == i) {
+                        $(`#${i} i`).css({
+                            opacity: 1,
+                        })
+                    } else {
+                        $(`#${i} i`).css({
+                            opacity: 0
+                        })
+                        $(`#${i} i`).text('play_arrow');
+                    }
+                }
+                //$(`#${i} i`).hide();
             })
         })
         shuffleOrder = shuffle(allFilesList);
         allFilesList = fileSongListStore;
+        shuffleOrder.forEach((f, i) => {
+            shuffleList.push(fileSongListStore.indexOf(f));
+        })
     })
 }
 loadFiles();
@@ -250,14 +290,18 @@ $('#refreshFiles').click(function () {
 })
 
 function previousSong() {
+    shuffleCheck = false;
     audioStop();
     songActiveReset();
     if (shuffleEnabled === true) {
         allFilesList = shuffleOrder;
     } else {
         allFilesList = fileSongListStore;
+        currentSongPlaying = currentSongPlaying - 1;
     }
-    currentSongPlaying = currentSongPlaying - 1;
+    if (shuffleEnabled == true) {
+        currentSongPlaying = shuffleList[currentSongPlaying];
+    }
     newFileChosen = allFilesList[currentSongPlaying];
     newFileName = newFileChosen.slice(0, -4);
     $(`#pauseButton, #${currentSongPlaying} i`).text('pause');
@@ -266,19 +310,26 @@ function previousSong() {
 }
 
 function nextSong() {
+    shuffleCheck = false;
     audioStop();
     songActiveReset();
     if (shuffleEnabled === true) {
         allFilesList = shuffleOrder;
     } else {
         allFilesList = fileSongListStore;
+        currentSongPlaying = currentSongPlaying + 1;
     }
-    currentSongPlaying = currentSongPlaying + 1;
+    if (shuffleEnabled == true) {
+        currentSongPlaying = shuffleList[currentSongPlaying];
+    }
     newFileChosen = allFilesList[currentSongPlaying];
     newFileName = newFileChosen.slice(0, -4);
     $(`#pauseButton, #${currentSongPlaying} i`).text('pause');
     songActive();
     classicDetectSong();
+    if (shuffleEnabled == true) {
+        currentSongPlaying = shuffleList[currentSongPlaying];
+    }
 }
 
 $('#backwardButton').click(function () {
@@ -304,13 +355,13 @@ $('#repeatButton').click(function () {
             $(this).css({
                 color: '#fff'
             });
+            
             break;
         case false:
             repeatEnabled = true;
             $(this).css({
                 color: '#c464f1'
             });
-            break;
     }
 });
 
@@ -321,12 +372,20 @@ $('#shuffleButton').click(function () {
             $(this).css({
                 color: '#fff'
             });
+            shuffleWait = true;
             break;
         case false:
             shuffleEnabled = true;
             $(this).css({
                 color: '#c464f1'
             });
+            shuffleWait = true;
+            dialog.showMessageBox(remote.getCurrentWindow(), {
+                type: 'warning',
+                buttons: ['OK'],
+                title: 'Shuffle',
+                message: 'The previous button currently doesn\'t work correctly while in shuffle mode.'
+            })
     }
 })
 
