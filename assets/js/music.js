@@ -56,10 +56,13 @@ var shuffleList = [];
 var shuffleCheck = false;
 var shuffleWait = false;
 var shuffleCurrent;
+var highlightSong;
 
 var os = require('os');
 var fs = require('fs');
 var id3 = require('jsmediatags');
+var ver = '1.0b';
+$('#audiationVer').text(`Audiation v.${ver}`);
 
 $(document).ready(function () {
     setTimeout(function () {
@@ -104,25 +107,16 @@ document.addEventListener('drop', event => event.preventDefault())
 document.querySelector('img').draggable = false;
 
 function songActive() {
-    var selectShuffle;
-    if (shuffleEnabled == true && shuffleCheck == false) {
-        selectShuffle = shuffleList[currentSongPlaying];
-    } else {
-        selectShuffle = currentSongPlaying;
-    }
-    $(`#${selectShuffle}`).css({
+    $(`#${highlightSong}`).css({
         color: '#c464f1'
     })
-    //$(`#${selectShuffle} p`).addClass('new-song-constant');
-    //$(`#${selectShuffle} i`).show();
-    //$(`#${selectShuffle} i`).addClass('new-song-icon-constant')
-    $(`#${selectShuffle} i`).css({
+    $(`#${highlightSong} i`).css({
         opacity: 1
     })
     if (pauseButtonActive === false) {
-        $(`#${selectShuffle} i`).text('pause');
+        $(`#${highlightSong} i`).text('pause');
     } else {
-        $(`#${selectShuffle} i`).text('play_arrow');
+        $(`#${highlightSong} i`).text('play_arrow');
     }
     shuffleWait = false;
 }
@@ -153,17 +147,12 @@ remote.getCurrentWindow().setThumbarButtons([
 
 function songActiveReset() {
     $('.play-pause').text('play_arrow');
-    /*$(`p.new-song-title`).removeClass('new-song-constant');
-    $(`.play-pause`).removeClass('new-song-icon-constant');*/
     $(`.play-pause`).css({
         opacity: 0
     })
     $('.results-link').css({
         color: '#fff'
     })
-    /*$(`#${currentSongPlaying} i`).css({
-        display: 'none'
-    });*/
 }
 
 function shuffle(array) {
@@ -221,10 +210,11 @@ function loadFiles() {
             $(`#${i}`).click(function () {
                 shuffleCheck = false;
                 if (shuffleEnabled == true) shuffleCheck = true;
-                if (currentlyPlaying === true && $(this).attr('id') === `#${currentSongPlaying}`.substr(1)) {
+                if (currentlyPlaying === true && $(this).attr('id') === `#${highlightSong}`.substr(1)) {
                     resumeButton();
                 } else {
                     currentSongPlaying = i;
+                    highlightSong = i;
                     songActiveReset();
                     newFileChosen = f;
                     newFileName = f.slice(0, -4)
@@ -233,19 +223,16 @@ function loadFiles() {
                     }
                     $('p#songDuration').text('Calculating...')
                     classicDetectSong();
-                    $(`#pauseButton, #${currentSongPlaying} i`).text('pause');
+                    $(`#pauseButton, #${highlightSong} i`).text('pause');
                     songActive();
                 }
             });
             $(`#${i}`).mouseover(function () {
-                //$(`#${i} p`).addClass('new-song-hover');
                 $(`#${i} i`).css({
                     opacity: 1,
                 })
             })
             $(`#${i}`).mouseleave(function () {
-                //$(`#${i} p`).removeClass('new-song-hover')
-                console.log(i)
                 if (shuffleEnabled == true && shuffleCheck == false && shuffleWait == true) {
                     if (shuffleList[currentSongPlaying] == i) {
                         $(`#${i} i`).css({
@@ -258,7 +245,7 @@ function loadFiles() {
                         $(`#${i} i`).text('play_arrow');
                     }
                 } else {
-                    if (currentSongPlaying == i) {
+                    if (highlightSong == i) {
                         $(`#${i} i`).css({
                             opacity: 1,
                         })
@@ -297,14 +284,20 @@ function previousSong() {
         allFilesList = shuffleOrder;
     } else {
         allFilesList = fileSongListStore;
-        currentSongPlaying = currentSongPlaying - 1;
     }
-    if (shuffleEnabled == true) {
-        currentSongPlaying = shuffleList[currentSongPlaying];
+    currentSongPlaying = currentSongPlaying - 1;
+    if (currentSongPlaying == -1) {
+        currentSongPlaying = allFilesList.length - 1;
     }
     newFileChosen = allFilesList[currentSongPlaying];
     newFileName = newFileChosen.slice(0, -4);
-    $(`#pauseButton, #${currentSongPlaying} i`).text('pause');
+    if (shuffleEnabled == true) {
+        highlightSong = shuffleList[currentSongPlaying];
+    } else {
+        highlightSong = currentSongPlaying;
+    }
+    //currentSongPlaying = shuffleList[currentSongPlaying];
+    $(`#pauseButton, #${highlightSong} i`).text('pause');
     songActive();
     classicDetectSong();
 }
@@ -317,24 +310,29 @@ function nextSong() {
         allFilesList = shuffleOrder;
     } else {
         allFilesList = fileSongListStore;
-        currentSongPlaying = currentSongPlaying + 1;
     }
-    if (shuffleEnabled == true) {
+    /*if (shuffleEnabled == true) {
         currentSongPlaying = shuffleList[currentSongPlaying];
+    }*/
+    currentSongPlaying = ++currentSongPlaying;
+    if (currentSongPlaying == allFilesList.length) {
+        currentSongPlaying = 0;
     }
     newFileChosen = allFilesList[currentSongPlaying];
     newFileName = newFileChosen.slice(0, -4);
-    $(`#pauseButton, #${currentSongPlaying} i`).text('pause');
+    if (shuffleEnabled == true) {
+        highlightSong = shuffleList[currentSongPlaying];
+    } else {
+        highlightSong = currentSongPlaying;
+    }
+    $(`#pauseButton, #${highlightSong} i`).text('pause');
     songActive();
     classicDetectSong();
-    if (shuffleEnabled == true) {
-        currentSongPlaying = shuffleList[currentSongPlaying];
-    }
 }
 
 $('#backwardButton').click(function () {
     if (currentSongPlaying === allFilesList[0]) {
-        audioStop();
+        audioStop(); 
     } else {
         previousSong();
     }
@@ -380,12 +378,12 @@ $('#shuffleButton').click(function () {
                 color: '#c464f1'
             });
             shuffleWait = true;
-            dialog.showMessageBox(remote.getCurrentWindow(), {
+            /*dialog.showMessageBox(remote.getCurrentWindow(), {
                 type: 'warning',
                 buttons: ['OK'],
                 title: 'Shuffle',
                 message: 'The previous button currently doesn\'t work correctly while in shuffle mode.'
-            })
+            })*/
     }
 })
 
@@ -406,13 +404,31 @@ $('.tb-maximize').click(function () {
 });
 var window = remote.getCurrentWindow();
 window.addEventListener('maximize', () => {
-    console.log('xd')
-    //$('.tb-maximize').html("<svg width='10' height='10' viewBox='0 0 11 11' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M11 8.798H8.798V11H0V2.202h2.202V0H11v8.798zm-3.298-5.5h-6.6v6.6h6.6v-6.6zM9.9 1.1H3.298v1.101h5.5v5.5h1.1v-6.6z' fill='#fff'/></svg>")
+    console.log('maximise')
+    $('.tb-maximize').html("<svg width='10' height='10' viewBox='0 0 11 11' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M11 8.798H8.798V11H0V2.202h2.202V0H11v8.798zm-3.298-5.5h-6.6v6.6h6.6v-6.6zM9.9 1.1H3.298v1.101h5.5v5.5h1.1v-6.6z' fill='#fff'/></svg>")
 })
 
-window.addEventListener('unmaximize', function() {
-    console.log('xd')
+window.addEventListener('unmaximize', () => {
+    console.log('unmaximise')
     $('.tb-maximize').html('<svg id="TitleBarMaximize" width="12" height="12" viewBox="0 0 12 12"><rect width="9" height="9" x="1.5" y="1.5" fill="none" stroke="#ffffff"></rect></svg>')
+});
+
+window.addEventListener('blur', () => {
+    $('.title-bar').css({
+        background: '#222222'
+    });
+    $('.tb-button').css({
+        opacity: .5
+    })
+})
+
+window.addEventListener('focus', () => {
+    $('.title-bar').css({
+        background: 'rgb(27,27,27)'
+    });
+    $('.tb-button').css({
+        opacity: 1
+    })
 })
 
 $('.tb-minimize').click(function () {
@@ -545,7 +561,7 @@ function resumeButton() {
         case false:
             pauseButtonActive = true;
             audio.pause();
-            $(`#pauseButton, #${currentSongPlaying} i`).text('play_arrow');
+            $(`#pauseButton, #${highlightSong} i`).text('play_arrow');
             remote.getCurrentWindow().setThumbarButtons([
                 {
                     tooltip: 'Previous',
@@ -574,7 +590,7 @@ function resumeButton() {
         case true:
             pauseButtonActive = false;
             audio.play();
-            $(`#pauseButton, #${currentSongPlaying} i`).text('pause');
+            $(`#pauseButton, #${highlightSong} i`).text('pause');
             remote.getCurrentWindow().setThumbarButtons([
                 {
                     tooltip: 'Previous',
