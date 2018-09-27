@@ -49,7 +49,7 @@
                 <div id="extraButtons">
                     <button id="refreshFiles">
                         <i class="material-icons">refresh</i>Refresh</button>
-                    <button id="openFileBrowser">
+                    <button id="openFileBrowser" style="display: none !important">
                         <i class="material-icons">folder</i>Folder</button>
                     <button id="settingsButton">
                         <i class="material-icons">settings</i>Settings</button>
@@ -80,26 +80,26 @@
                     <div class="np-wrapper">
                         <img src="./assets/svg/no_image.svg" id="songPicture">
                         <div class="title-artist">
-                            <h1 id="songTitle">No Song Playing...</h1>
-                            <p id="artist">Unknown</p>
+                            <h1 id="songTitle"></h1>
+                            <p id="artist"></p>
                         </div>
                         <div id="controls">
                             <div id="controlsWrapper">
                                 <div class="np-buttons">
                                     <i class="material-icons" id="repeatButton">repeat</i>
                                     <i class="material-icons" id="backwardButton">skip_previous</i>
-                                    <i class="material-icons" id="pauseButton">pause</i>
+                                    <i class="material-icons" id="pauseButton">play_arrow</i>
                                     <i class="material-icons" id="forwardButton">skip_next</i>
                                     <i class="material-icons" id="shuffleButton">shuffle</i>
                                 </div>
-                                <p class="song-duration" id="songDurationTime">0:00</p>
+                                <p class="song-duration" id="songDurationTime">-:--</p>
                                 <div class="seek-bar-wrapper">
                                     <div class="seek-bar">
                                         <div class="fill"></div>
                                         <div class="handle"></div>
                                     </div>
                                 </div>
-                                <p class="song-duration" id="songDurationLength">0:00</p>
+                                <p class="song-duration" id="songDurationLength">-:--</p>
                             </div>
                         </div>
                     </div>

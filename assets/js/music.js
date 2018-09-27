@@ -35,7 +35,6 @@ var tags;
 var shuffleEnabled = false;
 var shuffleOrder = [];
 var fileSongListStore = [];
-var pauseButtonActive = false;
 var fileAudio;
 var songTitleName;
 var durationSongLength;
@@ -78,6 +77,7 @@ $(document).ready(function () {
 
 if (process.platform === 'win32') {
     $('.title-bar-wrapper').show();
+    $('#openFileBrowser').show();
 }
 
 if (process.platform === 'linux') {
@@ -121,29 +121,59 @@ function songActive() {
     shuffleWait = false;
 }
 
-remote.getCurrentWindow().setThumbarButtons([
-    {
-        tooltip: 'Previous',
-        icon: path.join(__dirname, '/assets/image/skipprevious_white.png'),
-        click() {
-            previousSong()
+function toolbarPlay() {
+    remote.getCurrentWindow().setThumbarButtons([
+        {
+            tooltip: 'Previous',
+            icon: path.join(__dirname, '/assets/image/skipprevious_white.png'),
+            click() {
+                previousSong()
+            }
+        },
+        {
+            tooltip: 'Play',
+            icon: path.join(__dirname, '/assets/image/play_arrow_white.png'),
+            click() {
+                resumeButton();
+            }
+        },
+        {
+            tooltip: 'Skip',
+            icon: path.join(__dirname, '/assets/image/skipnext_white.png'),
+            click() {
+                nextSong()
+            }
         }
-    },
-    {
-        tooltip: 'Play',
-        icon: path.join(__dirname, '/assets/image/play_arrow_white.png'),
-        click() {
-            resumeButton();
+    ])
+}
+
+function toolbarPause() {
+    remote.getCurrentWindow().setThumbarButtons([
+        {
+            tooltip: 'Previous',
+            icon: path.join(__dirname, '/assets/image/skipprevious_white.png'),
+            click() {
+                previousSong()
+            }
+        },
+        {
+            tooltip: 'Pause',
+            icon: path.join(__dirname, '/assets/image/pause_white.png'),
+            click() {
+                resumeButton();
+            }
+        },
+        {
+            tooltip: 'Skip',
+            icon: path.join(__dirname, '/assets/image/skipnext_white.png'),
+            click() {
+                nextSong()
+            }
         }
-    },
-    {
-        tooltip: 'Skip',
-        icon: path.join(__dirname, '/assets/image/skipnext_white.png'),
-        click() {
-            nextSong()
-        }
-    }
-])
+    ])
+}
+
+toolbarPlay();
 
 function songActiveReset() {
     $('.play-pause').text('play_arrow');
@@ -191,7 +221,11 @@ function loadFiles() {
             });
         });
         if (s.length === 0) {
-            $('#newList').html('<p style="text-align: center">No valid audio files found in the Audiation folder.<br><a class="open-file-browser">Click here</a> to open the Audiation folder.')
+            if (process.platform === 'win32') {
+                $('#newList').html('<p style="text-align: center">No valid audio files found in the Audiation folder.<br><a class="open-file-browser">Click here</a> to open the Audiation folder.')
+            } else {
+                $('#newList').html('<p style="text-align: center">No valid audio files found in the Audiation folder.<br>Please add supported audio files to the folder.')
+            }
             return $('.open-file-browser').click(function () {
                 require('child_process').exec(`start "" "${os.homedir}\\Music\\Audiation`)
             });
@@ -221,7 +255,6 @@ function loadFiles() {
                     if (currentlyPlaying === true) {
                         audioStop();
                     }
-                    $('p#songDuration').text('Calculating...')
                     classicDetectSong();
                     $(`#pauseButton, #${highlightSong} i`).text('pause');
                     songActive();
@@ -256,7 +289,6 @@ function loadFiles() {
                         $(`#${i} i`).text('play_arrow');
                     }
                 }
-                //$(`#${i} i`).hide();
             })
         })
         shuffleOrder = shuffle(allFilesList);
@@ -278,15 +310,17 @@ $('#refreshFiles').click(function () {
 
 function previousSong() {
     shuffleCheck = false;
-    audioStop();
-    songActiveReset();
+    if (currentlyPlaying == true) {
+        audioStop();
+        songActiveReset();
+    }
     if (shuffleEnabled === true) {
         allFilesList = shuffleOrder;
     } else {
         allFilesList = fileSongListStore;
     }
     currentSongPlaying = currentSongPlaying - 1;
-    if (currentSongPlaying == -1) {
+    if (currentSongPlaying == -1 || currentlyPlaying == false) {
         currentSongPlaying = allFilesList.length - 1;
     }
     newFileChosen = allFilesList[currentSongPlaying];
@@ -296,7 +330,6 @@ function previousSong() {
     } else {
         highlightSong = currentSongPlaying;
     }
-    //currentSongPlaying = shuffleList[currentSongPlaying];
     $(`#pauseButton, #${highlightSong} i`).text('pause');
     songActive();
     classicDetectSong();
@@ -304,18 +337,20 @@ function previousSong() {
 
 function nextSong() {
     shuffleCheck = false;
-    audioStop();
-    songActiveReset();
+    if (currentlyPlaying === true) {
+        audioStop();
+        songActiveReset();
+    }
     if (shuffleEnabled === true) {
         allFilesList = shuffleOrder;
     } else {
         allFilesList = fileSongListStore;
     }
-    /*if (shuffleEnabled == true) {
-        currentSongPlaying = shuffleList[currentSongPlaying];
-    }*/
     currentSongPlaying = ++currentSongPlaying;
     if (currentSongPlaying == allFilesList.length) {
+        currentSongPlaying = 0;
+    }
+    if (currentlyPlaying === false) {
         currentSongPlaying = 0;
     }
     newFileChosen = allFilesList[currentSongPlaying];
@@ -378,12 +413,6 @@ $('#shuffleButton').click(function () {
                 color: '#c464f1'
             });
             shuffleWait = true;
-            /*dialog.showMessageBox(remote.getCurrentWindow(), {
-                type: 'warning',
-                buttons: ['OK'],
-                title: 'Shuffle',
-                message: 'The previous button currently doesn\'t work correctly while in shuffle mode.'
-            })*/
     }
 })
 
@@ -451,10 +480,10 @@ document.addEventListener("keydown", function (e) {
             break;
         case 116:
             dialog.showMessageBox(remote.getCurrentWindow(), {
-                type: 'warning',
-                buttons: ['Yes', 'Cancel'],
+                type: 'info',
+                buttons: ['OK', 'Cancel'],
                 title: 'Reload',
-                message: 'Reloading will prevent media keys from functioning. Are you sure?'
+                message: 'Reloading will prevent media keys from functioning.'
             }, function(i) {
                 if (i === 0) {
                     location.reload();
@@ -491,7 +520,6 @@ function audioStop() {
     songActiveReset();
     audio.pause();
     audio.currentTime = 0;
-    currentlyPlaying = false;
     noSongPlaying();
     $('div.playing-now').removeClass('playing-now-active');
     $('div.play-button, select, div.play-type').show();
@@ -517,29 +545,7 @@ function classicDetectSong() {
         }
         seekBarTrack();
         audio.volume = 1;
-        remote.getCurrentWindow().setThumbarButtons([
-            {
-                tooltip: 'Previous',
-                icon: path.join(__dirname, '/assets/image/skipprevious_white.png'),
-                click() {
-                    previousSong()
-                }
-            },
-            {
-                tooltip: 'Pause',
-                icon: path.join(__dirname, '/assets/image/pause_white.png'),
-                click() {
-                    resumeButton();
-                }
-            },
-            {
-                tooltip: 'Skip',
-                icon: path.join(__dirname, '/assets/image/skipnext_white.png'),
-                click() {
-                    nextSong()
-                }
-            }
-        ])
+        
     } catch (err) {
         console.error(err.stack)
         currentlyPlaying = false;
@@ -557,68 +563,36 @@ $('#pauseButton').click(function () {
 })
 
 function resumeButton() {
+    if (currentlyPlaying == false) {
+        pauseButtonActive = true;
+        currentSongPlaying = 0;
+        highlightSong = 0;
+        newFileChosen = allFilesList[0];
+        newFileName = newFileChosen.slice(0, -4);
+        $(`#pauseButton, #${highlightSong} i`).text('pause');
+        songActive();
+        classicDetectSong();
+    }
     switch (pauseButtonActive) {
         case false:
             pauseButtonActive = true;
             audio.pause();
             $(`#pauseButton, #${highlightSong} i`).text('play_arrow');
-            remote.getCurrentWindow().setThumbarButtons([
-                {
-                    tooltip: 'Previous',
-                    icon: path.join(__dirname, '/assets/image/skipprevious_white.png'),
-                    click() {
-                        previousSong()
-                    }
-                },
-                {
-                    tooltip: 'Play',
-                    icon: path.join(__dirname, '/assets/image/play_arrow_white.png'),
-                    click() {
-                        resumeButton();
-                    }
-                },
-                {
-                    tooltip: 'Skip',
-                    icon: path.join(__dirname, '/assets/image/skipnext_white.png'),
-                    click() {
-                        nextSong()
-                    }
-                }
-            ]);
-            $('title').text('Audiation')
+            
+            $('title').text('Audiation');
+            toolbarPlay();
             break;
         case true:
             pauseButtonActive = false;
             audio.play();
             $(`#pauseButton, #${highlightSong} i`).text('pause');
-            remote.getCurrentWindow().setThumbarButtons([
-                {
-                    tooltip: 'Previous',
-                    icon: path.join(__dirname, '/assets/image/skipprevious_white.png'),
-                    click() {
-                        previousSong()
-                    }
-                },
-                {
-                    tooltip: 'Pause',
-                    icon: path.join(__dirname, '/assets/image/pause_white.png'),
-                    click() {
-                        resumeButton();
-                    }
-                },
-                {
-                    tooltip: 'Skip',
-                    icon: path.join(__dirname, '/assets/image/skipnext_white.png'),
-                    click() {
-                        nextSong()
-                    }
-                }
-            ]);
+            toolbarPause();
             if (artist == "Unknown Artist") {
                 $('title').text(`${newFileName}`);
             } else {
                 $('title').text(`${artist} - ${Title}`)
             }
+            toolbarPause();
     }
 }
 
@@ -676,7 +650,6 @@ function seekTimeUpdate() {
 }
 
 function seekBarTrack() {
-    $('p#songDuration').text('Calculating...')
     new id3.Reader(`${os.homedir}/Music/Audiation/${newFileChosen}`)
         .setTagsToRead(['title', 'artist', 'picture', 'album'])
         .read({
@@ -721,9 +694,6 @@ function seekBarTrack() {
             }
         })
     audio.addEventListener('timeupdate', seekTimeUpdate);
-    audio.addEventListener('waiting', function () {
-        $('p#songDuration').text('Buffering...')
-    })
 }
 
 function clamp(min, val, max) {
