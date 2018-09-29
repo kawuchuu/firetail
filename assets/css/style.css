@@ -23,7 +23,7 @@ html, body {
 ::-webkit-scrollbar {
     background: #313131;
     width: 10px;
-    box-shadow: -1px 0px 20px rgba(0,0,0,.15);
+    box-shadow: -1px 0px 20px rgba(0,0,0,.3);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -74,7 +74,7 @@ html, body {
 }
 
 h1.header-heading {
-    font-family: 'Bahnschrift', 'Dosis', 'Muli', 'Karla', Arial, Helvetica, sans-serif;
+    font-family: 'Bahnschrift', 'Dosis', Arial, Helvetica, sans-serif;
     text-align: center;
     font-weight: normal;
     margin-top: 5px;
@@ -89,7 +89,6 @@ h1.header-heading {
     width: 50px;
     text-align: center;
     vertical-align: middle;
-    /*transform: translateY(-3px);*/
     margin-right: 10px;
     position: relative;
     margin-left: 25px;
@@ -140,9 +139,10 @@ button {
 }
 
 button:hover, .button-active {
-    background: #960cd6;
+    background: #ae00ff;
     transition: .2s;
-    box-shadow: 0px 2px 15px rgba(188, 44, 255, 0.65)
+    box-shadow: 0px 2px 15px rgba(149, 47, 196, 0.65);
+    transform: scale(1.05)
 }
 
 .button-active {
@@ -191,17 +191,17 @@ button:hover, .button-active {
     height: auto;
 }
 
-.seek-bar .fill {
+.fill {
     height: 5px;
-    background: #7f00b9;
+    background: #ae00ff;
     border-radius: 10000px; 
     transition: .1s;
 }
 
-.seek-bar .handle {
+.handle {
     width: 0px;
     height: 0px;
-    background: #7f00b9;
+    background: #ae00ff;
     border-radius: 11111px;
     margin-left: -5px;
     transform: scale(1.75);
@@ -214,7 +214,7 @@ button:hover, .button-active {
 }
 
 .handle-hover {
-    background-color: #9601db !important;
+    background-color: #ae00ff !important;
     width: 8px !important;
     height: 8px !important;
     transition: all .1s !important;
@@ -229,12 +229,6 @@ button:hover, .button-active {
     opacity: .65 !important;
 }
 
-#volumeChange {
-    width: 20px;
-    height: 60px;
-    background: #1d1d1d;
-}
-
 div#new {
     height: 100%
 }
@@ -247,7 +241,6 @@ ul {
     position: relative;
     padding: 0;
     transition: .2s;
-    /*height: -webkit-fill-available;*/
     height: 100%;
     margin: 0;
     margin-right: 0;
@@ -265,10 +258,8 @@ li {
     padding: 10px;
     padding-top: 5px;
     cursor: pointer;
-    transition-duration: .2s;
     overflow: hidden;
     position: relative;
-    left: default;
     max-height: 50px;
 }
 
@@ -297,17 +288,6 @@ p.new-song-title {
     font-size: 20px;
 }
 
-/*.new-song-hover, .new-song-constant {
-    transform: translateX(15px);
-    position: relative;
-    transition-duration: .2s;
-}
-
-.new-song-icon-constant {
-    display: inline-block !important;
-    opacity: 1 !important;
-}*/
-
 div.new-nowplaying i {
     font-size: 26px;
     margin: 12px;
@@ -326,43 +306,6 @@ div.new-nowplaying i {
 div.new-nowplaying i:hover {
     color: #c464f1 !important;
     transition: .2s;
-}
-
-body.light-theme {
-    color: #1a1a1a !important;
-    background: rgb(248, 248, 248) !important;
-}
-
-h1.light-theme {
-    color: #1a1a1a !important;
-}
-
-#headerIcon.light-theme {
-    filter: invert() !important
-}
-
-li.light-theme:hover {
-    background-color: #c2c2c2
-}
-
-li.light-theme {
-    border-bottom: 2px solid #a8a8a8
-}
-
-div.title-bar.light-theme {
-    background: transparent
-}
-
-div.tb-button svg.light-theme {
-    filter: invert()
-}
-
-body.light-theme::-webkit-scrollbar {
-    background: #b4b4b4 !important;
-}
-
-body.light-theme::-webkit-scrollbar-thumb {
-    background: #888888 !important;
 }
 
 #newContent {
@@ -394,7 +337,7 @@ body.light-theme::-webkit-scrollbar-thumb {
     background: #222222;
     height: 100%;
     width: 190px;
-    box-shadow: 1px 0px 20px rgba(0,0,0,.15);
+    box-shadow: 1px 0px 20px rgba(0,0,0,.3);
 }
 
 .play-type-wrapper {
@@ -410,6 +353,7 @@ body.light-theme::-webkit-scrollbar-thumb {
     font-size: 28px !important;
     padding: 0;
     vertical-align: middle;
+    transform: translateX(2px)
 }
 
 #new {
@@ -510,6 +454,7 @@ div.type-separator {
     vertical-align: top;
     background-color: rgb(27, 27, 27);
     overflow: hidden;
+    z-index: 10;
 }
 
 .np-buttons {
@@ -572,10 +517,9 @@ div.new-nowplaying {
     overflow-y: visible !important;
     display: block;
     bottom: 0px;
-    /*box-shadow: 0px 0px 8px rgba(0,0,0,.35);*/
     transition: .2s ease-in-out;
     z-index: 9;
-    box-shadow: 0px -1px 20px rgba(0,0,0,.25);
+    box-shadow: 0px -1px 20px rgba(0,0,0,.3);
 }
 
 #controls {
@@ -603,7 +547,7 @@ button i {
     left: 180px;
     top: 30px;
     z-index: 8;
-    box-shadow: 0px 1px 20px rgba(0,0,0,.15);
+    box-shadow: 0px 1px 20px rgba(0,0,0,.3);
 }
 
 .shadow-hide {
@@ -627,4 +571,30 @@ button i {
     width: 100%;
     height: 2px;
     position: fixed;
+}
+
+.volume-control {
+    position: relative;
+    bottom: 65px;
+    margin-right: 15px;
+}
+
+#volumeButton {
+    font-size: 20px;
+    display: inline-block;
+    top: 8px;
+}
+
+.vol-bar {
+    margin: 10px;
+    width: 85px;
+    background: #2d2d2d;
+    display: flex;
+    align-items: center;
+    border-radius: 999px;
+    cursor: pointer; 
+    height: 5px;
+    transition: .15s;
+    margin-right: 15px;
+    margin-left: 5px;
 }

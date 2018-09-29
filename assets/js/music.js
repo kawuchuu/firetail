@@ -24,6 +24,7 @@ var currentlyPlaying = false;
 var fileTotal;
 var newFileChosen;
 var newFileName;
+var fileName;
 var pauseButtonActive = false;
 var currentSongPlaying;
 var allFilesList = [];
@@ -43,10 +44,14 @@ var durationMinutes;
 var seconds;
 var minutes;
 var seekBar = document.querySelector('.seek-bar');
-var seekBarWrapper = document.querySelector('.seek-bar-wrapper');
-var fillBar = seekBar.querySelector('.fill');
+var volBar = document.querySelector('.vol-bar');
+var seekBarWrapper = document.querySelector('#seekWrapper');
+var seekFillBar = seekBar.querySelector('#seekFill');
 var audioLength = document.querySelector('#songDuration');
-var mouseDown = false;
+var volFillBar = volBar.querySelector('#volFill');
+var volWrapper = document.querySelector('#volWrapper')
+var seekMouseDown = false;
+var volMouseDown = false;
 var p;
 var s = [];
 var previousDuration;
@@ -56,12 +61,17 @@ var shuffleCheck = false;
 var shuffleWait = false;
 var shuffleCurrent;
 var highlightSong;
+var currentVol = 1;
+var muteSaveVol;
+var volWidth;
+var isMuted = false;
 
 var os = require('os');
 var fs = require('fs');
 var id3 = require('jsmediatags');
 var ver = '1.0b';
 $('#audiationVer').text(`Audiation v.${ver}`);
+$('#volFill').css({width: '100%'})
 
 $(document).ready(function () {
     setTimeout(function () {
@@ -114,7 +124,7 @@ function songActive() {
         opacity: 1
     })
     if (pauseButtonActive === false) {
-        $(`#${highlightSong} i`).text('pause');
+        $(`#${highlightSong} i`).text('volume_up');
     } else {
         $(`#${highlightSong} i`).text('play_arrow');
     }
@@ -236,9 +246,9 @@ function loadFiles() {
             fileSongListStore.push(f);
             allFilesList.push(f);
             fName = f.split('.');
-            newFileName = f.slice(0, -fName[fName.length - 1].length - 1);
-            $('#newList').append(`<li class="results-link" id="${i}"><i class="material-icons play-pause" style="opacity: 0; transition: .1s;">play_arrow</i><p class="new-song-title">${newFileName}`);
-            if (currentlyPlaying === true && currentSongPlaying) {
+            fileName = f.slice(0, -fName[fName.length - 1].length - 1);
+            $('#newList').append(`<li class="results-link" id="${i}"><i class="material-icons play-pause" style="opacity: 0;">play_arrow</i><p class="new-song-title">${fileName}`);
+            if (currentlyPlaying === true) {
                 songActive();
             }
             $(`#${i}`).click(function () {
@@ -255,15 +265,23 @@ function loadFiles() {
                     if (currentlyPlaying === true) {
                         audioStop();
                     }
-                    classicDetectSong();
-                    $(`#pauseButton, #${highlightSong} i`).text('pause');
+                    findSong();
                     songActive();
+                    if (document.getElementById(i).mouseover == false) {
+                        $(`#${highlightSong} i`).text('volume_up');
+                    } else {
+                        $(`#${highlightSong} i`).text('pause');
+                    }
+                    $('#pauseButton').text('pause') 
                 }
             });
             $(`#${i}`).mouseover(function () {
                 $(`#${i} i`).css({
                     opacity: 1,
                 })
+                if (currentSongPlaying == i && pauseButtonActive == false || shuffleList[currentSongPlaying] == i && pauseButtonActive == false) {
+                    $(`#${i} i`).text('pause')
+                }
             })
             $(`#${i}`).mouseleave(function () {
                 if (shuffleEnabled == true && shuffleCheck == false && shuffleWait == true) {
@@ -271,6 +289,9 @@ function loadFiles() {
                         $(`#${i} i`).css({
                             opacity: 1,
                         })
+                        if (pauseButtonActive == false) {
+                            $(`#${i} i`).text('volume_up')
+                        }
                     } else {
                         $(`#${i} i`).css({
                             opacity: 0
@@ -282,6 +303,9 @@ function loadFiles() {
                         $(`#${i} i`).css({
                             opacity: 1,
                         })
+                        if (pauseButtonActive == false) {
+                            $(`#${i} i`).text('volume_up')
+                        }
                     } else {
                         $(`#${i} i`).css({
                             opacity: 0
@@ -330,9 +354,10 @@ function previousSong() {
     } else {
         highlightSong = currentSongPlaying;
     }
-    $(`#pauseButton, #${highlightSong} i`).text('pause');
+    $(`#${highlightSong} i`).text('volume_up');
+    $('#pauseButton').text('pause') 
     songActive();
-    classicDetectSong();
+    findSong();
 }
 
 function nextSong() {
@@ -360,9 +385,10 @@ function nextSong() {
     } else {
         highlightSong = currentSongPlaying;
     }
-    $(`#pauseButton, #${highlightSong} i`).text('pause');
+    $(`#${highlightSong} i`).text('volume_up');
+    $('#pauseButton').text('pause') 
     songActive();
-    classicDetectSong();
+    findSong();
 }
 
 $('#backwardButton').click(function () {
@@ -432,15 +458,6 @@ $('.tb-maximize').click(function () {
     }
 });
 var window = remote.getCurrentWindow();
-window.addEventListener('maximize', () => {
-    console.log('maximise')
-    $('.tb-maximize').html("<svg width='10' height='10' viewBox='0 0 11 11' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M11 8.798H8.798V11H0V2.202h2.202V0H11v8.798zm-3.298-5.5h-6.6v6.6h6.6v-6.6zM9.9 1.1H3.298v1.101h5.5v5.5h1.1v-6.6z' fill='#fff'/></svg>")
-})
-
-window.addEventListener('unmaximize', () => {
-    console.log('unmaximise')
-    $('.tb-maximize').html('<svg id="TitleBarMaximize" width="12" height="12" viewBox="0 0 12 12"><rect width="9" height="9" x="1.5" y="1.5" fill="none" stroke="#ffffff"></rect></svg>')
-});
 
 window.addEventListener('blur', () => {
     $('.title-bar').css({
@@ -526,7 +543,7 @@ function audioStop() {
     pauseButtonActive = false;
 }
 
-function classicDetectSong() {
+function findSong() {
     try {
         if (audio) {
             audio.removeEventListener('timeupdate', seekTimeUpdate);
@@ -543,9 +560,9 @@ function classicDetectSong() {
             dialog.showErrorBox('Error', err)
             audioStop();
         }
+        audio.volume = currentVol;
         seekBarTrack();
-        audio.volume = 1;
-        
+        toolbarPause();
     } catch (err) {
         console.error(err.stack)
         currentlyPlaying = false;
@@ -562,6 +579,26 @@ $('#pauseButton').click(function () {
     resumeButton()
 })
 
+$('#volumeButton').click(function () {
+    switch(isMuted) {
+        case false:
+            isMuted = true;
+            muteSaveVol = audio.volume;
+            audio.volume = 0;
+            currentVol = audio.volume;
+            volWidth = volFillBar.style.width;
+            volFillBar.style.width = 0;
+            $(this).text('volume_off');
+            break;
+        case true:
+            isMuted = false;
+            audio.volume = muteSaveVol;
+            currentVol = audio.volume;
+            volFillBar.style.width = volWidth;
+            $(this).text('volume_up')
+    }
+})
+
 function resumeButton() {
     if (currentlyPlaying == false) {
         pauseButtonActive = true;
@@ -569,9 +606,10 @@ function resumeButton() {
         highlightSong = 0;
         newFileChosen = allFilesList[0];
         newFileName = newFileChosen.slice(0, -4);
-        $(`#pauseButton, #${highlightSong} i`).text('pause');
+        $(`#${highlightSong} i`).text('volume_up');
+        $('#pauseButton').text('pause') 
         songActive();
-        classicDetectSong();
+        findSong();
     }
     switch (pauseButtonActive) {
         case false:
@@ -585,7 +623,18 @@ function resumeButton() {
         case true:
             pauseButtonActive = false;
             audio.play();
-            $(`#pauseButton, #${highlightSong} i`).text('pause');
+            if (document.getElementById(highlightSong).mouseover == true) {
+                $(`#${highlightSong} i`).text('pause');
+                console.log('oof')
+            } else {
+                $(`#${highlightSong} i`).text('volume_up');
+                console.log('pauseicon')
+            }
+            if (document.getElementById(highlightSong).mouseover == false) {
+                $(`#${highlightSong} i`).text('volume_up');
+                console.log('xd')
+            }
+            $('#pauseButton').text('pause')
             toolbarPause();
             if (artist == "Unknown Artist") {
                 $('title').text(`${newFileName}`);
@@ -596,16 +645,29 @@ function resumeButton() {
     }
 }
 
-$('div.seek-bar-wrapper').mouseover(function () {
+$('#seekWrapper').mouseover(function () {
     if (currentlyPlaying === true) {
-        $('div.handle').addClass('handle-hover');
+        $('#seekHandle').addClass('handle-hover');
     }
 })
 
-$('div.seek-bar-wrapper').mouseleave(function () {
+$('#seekWrapper').mouseleave(function () {
     if (currentlyPlaying === true) {
-        if (!mouseDown === false) return;
-        $('div.handle').removeClass('handle-hover');
+        if (!seekMouseDown === false) return;
+        $('#seekHandle').removeClass('handle-hover');
+    }
+})
+
+$('#volWrapper').mouseover(function () {
+    if (currentlyPlaying === true) {
+        $('#volHandle').addClass('handle-hover');
+    }
+})
+
+$('#volWrapper').mouseleave(function () {
+    if (currentlyPlaying === true) {
+        if (!volMouseDown === false) return;
+        $('#volHandle').removeClass('handle-hover');
     }
 })
 
@@ -623,7 +685,7 @@ function audioDuration() {
 
 function seekTimeUpdate() {
     var p = audio.currentTime / audio.duration;
-    fillBar.style.width = p * 100 + '%';
+    seekFillBar.style.width = p * 100 + '%';
     if (audio.currentTime === audio.duration) {
         switch (repeatEnabled) {
             case true:
@@ -645,8 +707,12 @@ function seekTimeUpdate() {
         seconds = ('0' + seconds).slice(-2);
     }
     audioDuration();
+
     document.getElementById('songDurationTime').innerHTML = `${minutes}:${seconds}`
     document.getElementById('songDurationLength').innerHTML = `${durationMinutes}:${durationSeconds}`
+    if (isNaN(durationMinutes) == true) {
+        document.getElementById('songDurationLength').innerHTML = `-:--`
+    }
 }
 
 function seekBarTrack() {
@@ -677,7 +743,7 @@ function seekBarTrack() {
                     document.getElementById('songPicture').src = './assets/svg/no_image.svg';
                 }
                 $('h1#songTitle').text(Title);
-                $('#artist').text(`${album}  \u2022  ${artist}`);
+                $('#artist').text(`${artist}`);
                 if (!tag.tags.artist) {
                     $('title').text(`${newFileName}`);
                 } else {
@@ -686,7 +752,7 @@ function seekBarTrack() {
             },
             onError: function (tag) {
                 $('#songTitle').text(newFileName);
-                $('#artist').text('Unknown Album \u2022 Unknown Artist');
+                $('#artist').text('Unknown Artist');
                 document.getElementById('songPicture').src = './assets/svg/no_image.svg';
                 if (!artist) {
                     $('title').text(`${newFileName}`);
@@ -700,47 +766,93 @@ function clamp(min, val, max) {
     return Math.min(Math.max(min, val), max);
 }
 
-function getP(e) {
-    p = (e.clientX - seekBar.offsetLeft) / seekBar.clientWidth;
-    p = clamp(0, p, 1);
-    return p;
+function seekGetP(e) {
+    seekP = (e.clientX - seekBar.offsetLeft) / seekBar.clientWidth;
+    seekP = clamp(0, seekP, 1);
+    return seekP;
+}
+
+function volGetP(e) {
+    volP = (e.clientX - volBar.offsetLeft) / volBar.clientWidth;
+    volP = clamp(0, volP, 1);
+    return volP;
 }
 
 seekBarWrapper.addEventListener('mousedown', function (e) {
     if (currentlyPlaying === true) {
-        mouseDown = true;
-        p = getP(e);
-        fillBar.style.width = p * 100 + '%';
+        seekMouseDown = true;
+        seekP = seekGetP(e);
+        seekFillBar.style.width = seekP * 100 + '%';
         audio.removeEventListener('timeupdate', seekTimeUpdate);
-        $('div.handle').addClass('handle-hover');
+        $('#seekHandle').addClass('handle-hover');
     }
 });
 
-window.addEventListener('mousemove', function (e) {
+volWrapper.addEventListener('mousedown', function (e) {
     if (currentlyPlaying === true) {
-        if (!mouseDown) return;
-        p = getP(e);
-        fillBar.style.width = p * 100 + '%';
-        minutes = Math.floor((p * audio.duration) / 60);
-        seconds = Math.floor((p * audio.duration) / 1);
-        while (seconds >= 60) {
-            seconds = seconds - 60;
+        volMouseDown = true;
+        volP = volGetP(e);
+        volFillBar.style.width = volP * 100 + '%';
+        $('#volHandle').addClass('handle-hover');
+    }
+})
+
+window.addEventListener('mousemove', function (e) {
+    if (seekMouseDown == false && volMouseDown == false) return;
+    if (currentlyPlaying === true) {
+        if (seekMouseDown == true) {
+            seekP = seekGetP(e);
+            seekFillBar.style.width = seekP * 100 + '%';
+            minutes = Math.floor((seekP * audio.duration) / 60);
+            seconds = Math.floor((seekP * audio.duration) / 1);
+            while (seconds >= 60) {
+                seconds = seconds - 60;
+            }
+            if (seconds > -1 && seconds < 10) {
+                seconds = ('0' + seconds).slice(-2);
+            }
+            $('#songDurationTime').html(`${minutes}:${seconds}`);
         }
-        if (seconds > -1 && seconds < 10) {
-            seconds = ('0' + seconds).slice(-2);
+        if (volMouseDown == true) {
+            if (audio.volume == 0) {
+                isMuted = true;
+                $('#volumeButton').text('volume_off');
+            } else {
+                isMuted = false;
+                $('#volumeButton').text('volume_up');
+            }
+            volP = volGetP(e);
+            volFillBar.style.width = volP * 100 + '%';
+            audio.volume = volP * 1
+            currentVol = audio.volume;
         }
-        $('#songDurationTime').html(`${minutes}:${seconds}`);
     }
 });
 
 window.addEventListener('mouseup', function (e) {
+    if (seekMouseDown == false && volMouseDown == false) return;
     if (currentlyPlaying === true) {
-        if (!mouseDown) return;
-        mouseDown = false;
-        p = getP(e);
-        fillBar.style.width = p * 100 + '%';
-        audio.currentTime = p * audio.duration;
-        $('div.handle').removeClass('handle-hover');
-        seekBarTrack();
+        if (seekMouseDown == true) {
+            seekMouseDown = false;
+            seekP = seekGetP(e);
+            seekFillBar.style.width = seekP * 100 + '%';
+            audio.currentTime = seekP * audio.duration;
+            $('#seekHandle').removeClass('handle-hover');
+            seekBarTrack();
+        }
+        if (volMouseDown == true) {
+            if (audio.volume == 0) {
+                isMuted = true
+                $('#volumeButton').text('volume_off');
+            } else {
+                isMuted = false;
+                $('#volumeButton').text('volume_up');
+            }
+            volMouseDown = false;
+            volFillBar.style.width = volP * 100 + '%';
+            audio.volume = volP * 1
+            currentVol = audio.volume;
+            $('#volHandle').removeClass('handle-hover');
+        }
     }
 });
