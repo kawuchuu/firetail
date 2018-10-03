@@ -110,6 +110,18 @@ if (process.platform === 'darwin') {
     $('.title-bar').css({
         height: '20px'
     })
+    $('.app-content').css({
+        marginTop: '55px'
+    });
+    $('#newContentWrapper h1').css({
+        top: '20px'
+    });
+    $('#playType').css({
+        paddingTop: '35px'
+    })
+    $('.shadow-hide').css({
+        top: '20px'
+    })
 }
 
 $('#newList').html('<p style="text-align: center">Loading...');
