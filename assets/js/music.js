@@ -106,6 +106,12 @@ if (process.platform === 'linux') {
     })
 }
 
+if (process.platform === 'darwin') {
+    $('.title-bar').css({
+        height: '20px'
+    })
+}
+
 $('#newList').html('<p style="text-align: center">Loading...');
 
 remote = require('electron').remote;
