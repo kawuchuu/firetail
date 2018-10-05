@@ -145,8 +145,13 @@ button:hover, .button-active {
     transform: scale(1.05)
 }
 
+.button-active:hover {
+    background: linear-gradient(to right, #9a07df, #c500bb) !important
+}
+
 .button-active {
-    cursor: default; 
+    cursor: default;
+    background: linear-gradient(to right, #9a07df, #c500bb)
 }
 
 .seek-bar {
@@ -193,7 +198,7 @@ button:hover, .button-active {
 
 .fill {
     height: 5px;
-    background: #ae00ff;
+    background: linear-gradient(to right, #9a07df, #c500bb);
     border-radius: 10000px; 
     transition: .1s;
 }

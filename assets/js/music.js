@@ -347,7 +347,7 @@ $('#openFileBrowser').click(function () {
 
 $('#refreshFiles').click(function () {
     $('#newList').html('<p style="text-align: center">Loading...');
-    loadFiles();
+    setTimeout(loadFiles, 50)
 })
 
 function previousSong() {
