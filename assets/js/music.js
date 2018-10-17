@@ -65,6 +65,9 @@ var currentVol = 1;
 var muteSaveVol;
 var volWidth;
 var isMuted = false;
+var shuffleEnableFirst = false;
+var shuffleDisableFirst = false;
+var checkForShuffle = false;
 
 var os = require('os');
 var fs = require('fs');
@@ -271,7 +274,10 @@ function loadFiles() {
             }
             $(`#${i}`).click(function () {
                 shuffleCheck = false;
-                if (shuffleEnabled == true) shuffleCheck = true;
+                if (shuffleEnabled == true) {
+                    shuffleCheck = true;
+                    shuffleEnableFirst = true;
+                }
                 if (currentlyPlaying === true && $(this).attr('id') === `#${highlightSong}`.substr(1)) {
                     resumeButton();
                 } else {
@@ -289,6 +295,7 @@ function loadFiles() {
                         $(`#${highlightSong} i`).text('volume_up');
                     } else {
                         $(`#${highlightSong} i`).text('pause');
+                        console.log(`highlight`)
                     }
                     $('#pauseButton').text('pause') 
                 }
@@ -297,12 +304,12 @@ function loadFiles() {
                 $(`#${i} i`).css({
                     opacity: 1,
                 })
-                if (currentSongPlaying == i && pauseButtonActive == false || shuffleList[currentSongPlaying] == i && pauseButtonActive == false) {
-                    $(`#${i} i`).text('pause')
+                if (checkForShuffle == false && currentSongPlaying == i && pauseButtonActive == false || checkForShuffle == true && shuffleList[currentSongPlaying] == i && pauseButtonActive == false) {
+                    $(`#${i} i`).text('pause');
                 }
             })
             $(`#${i}`).mouseleave(function () {
-                if (shuffleEnabled == true && shuffleCheck == false && shuffleWait == true) {
+                if (checkForShuffle == true && shuffleCheck == false && shuffleWait == true) {
                     if (shuffleList[currentSongPlaying] == i) {
                         $(`#${i} i`).css({
                             opacity: 1,
@@ -358,12 +365,22 @@ function previousSong() {
     }
     if (shuffleEnabled === true) {
         allFilesList = shuffleOrder;
+        checkForShuffle = true;
     } else {
         allFilesList = fileSongListStore;
+        checkForShuffle = false;
     }
     currentSongPlaying = currentSongPlaying - 1;
     if (currentSongPlaying == -1 || currentlyPlaying == false) {
         currentSongPlaying = allFilesList.length - 1;
+    }
+    if (shuffleEnableFirst === true) {
+        currentSongPlaying = shuffleList.indexOf(highlightSong) - 1;
+        shuffleEnableFirst = false;
+    }
+    if (shuffleDisableFirst === true) {
+        currentSongPlaying = highlightSong - 1;
+        shuffleDisableFirst = false;
     }
     newFileChosen = allFilesList[currentSongPlaying];
     newFileName = newFileChosen.slice(0, -4);
@@ -386,8 +403,10 @@ function nextSong() {
     }
     if (shuffleEnabled === true) {
         allFilesList = shuffleOrder;
+        checkForShuffle = true;
     } else {
         allFilesList = fileSongListStore;
+        checkForShuffle = false;
     }
     currentSongPlaying = ++currentSongPlaying;
     if (currentSongPlaying == allFilesList.length) {
@@ -395,6 +414,14 @@ function nextSong() {
     }
     if (currentlyPlaying === false) {
         currentSongPlaying = 0;
+    }
+    if (shuffleEnableFirst === true) {
+        currentSongPlaying = shuffleList.indexOf(highlightSong) + 1;
+        shuffleEnableFirst = false;
+    }
+    if (shuffleDisableFirst === true) {
+        currentSongPlaying = highlightSong + 1;
+        shuffleDisableFirst = false;
     }
     newFileChosen = allFilesList[currentSongPlaying];
     newFileName = newFileChosen.slice(0, -4);
@@ -439,6 +466,7 @@ $('#repeatButton').click(function () {
             $(this).css({
                 color: '#c464f1'
             });
+        shuffleEnableFirst = false;
     }
 });
 
@@ -450,6 +478,8 @@ $('#shuffleButton').click(function () {
                 color: '#fff'
             });
             shuffleWait = true;
+            shuffleEnableFirst = false;
+            shuffleDisableFirst = true;
             break;
         case false:
             shuffleEnabled = true;
@@ -457,6 +487,8 @@ $('#shuffleButton').click(function () {
                 color: '#c464f1'
             });
             shuffleWait = true;
+            shuffleEnableFirst = true;
+            shuffleDisableFirst = false;
     }
 })
 
