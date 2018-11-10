@@ -28,7 +28,7 @@ function createWindow() {
         protocol: 'file:',
         slashes: true
     }))
-    win.setMenu(null);
+    win.setMenuBarVisibility(false);
     process.on('unhandledRejection', function(err) {
         dialog.showErrorBox('Error', err)
     })
@@ -39,7 +39,7 @@ function createWindow() {
         win.show();
     })
     // If Audiation fails to start, uncomment the line below to find the cause. If it's an error on my behalf, please report it ASAP
-    //win.webContents.toggleDevTools();
+    win.webContents.toggleDevTools();
 }
 
 app.on('ready', createWindow);

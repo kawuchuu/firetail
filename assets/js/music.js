@@ -68,10 +68,12 @@ var isMuted = false;
 var shuffleEnableFirst = false;
 var shuffleDisableFirst = false;
 var checkForShuffle = false;
+var albumArt;
 
 var os = require('os');
 var fs = require('fs');
 var id3 = require('jsmediatags');
+var mpris;
 var ver = '1.0b';
 $('#audiationVer').text(`Audiation v.${ver}`);
 $('#volFill').css({width: '100%'})
@@ -106,7 +108,16 @@ if (process.platform === 'linux') {
     })
     $('.shadow-hide').css({
         top: '0'
-    })
+    });
+    try {
+        mpris = require('mpris-service');
+        var player = mpris({
+            name: 'Audiation',
+            identity: 'Audiation'
+        });
+    } catch(err) {
+        console.error(err.stack);
+    }
 }
 
 if (process.platform === 'darwin') {
@@ -675,14 +686,11 @@ function resumeButton() {
             audio.play();
             if (document.getElementById(highlightSong).mouseover == true) {
                 $(`#${highlightSong} i`).text('pause');
-                console.log('oof')
             } else {
                 $(`#${highlightSong} i`).text('volume_up');
-                console.log('pauseicon')
             }
             if (document.getElementById(highlightSong).mouseover == false) {
                 $(`#${highlightSong} i`).text('volume_up');
-                console.log('xd')
             }
             $('#pauseButton').text('pause')
             toolbarPause();
@@ -788,7 +796,8 @@ function seekBarTrack() {
                     for (var i = 0; i < tag.tags.picture.data.length; i++) {
                         base64String += String.fromCharCode(tag.tags.picture.data[i]);
                     }
-                    document.getElementById('songPicture').src = 'data:' + tag.tags.picture.format + ';base64,' + btoa(base64String);
+                    albumArt = 'data:' + tag.tags.picture.format + ';base64,' + btoa(base64String);
+                    document.getElementById('songPicture').src = albumArt;
                 } else {
                     document.getElementById('songPicture').src = './assets/svg/no_image.svg';
                 }
@@ -809,6 +818,15 @@ function seekBarTrack() {
                 }
             }
         })
+    player.metadata = {
+        'mpris:trackid': player.objectPath('track/0'),
+        'mpris:length': audio.duration,
+        'mpris:artUrl': albumArt,
+        'xesam:title': Title,
+        'xesam:album': album,
+        'xesam:artist': artist
+    }
+    player.playbackStatus = 'Playing'
     audio.addEventListener('timeupdate', seekTimeUpdate);
 }
 
