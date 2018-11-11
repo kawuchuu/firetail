@@ -16,6 +16,8 @@
  * You should have recieved a copy of this licence along with this program.
  * If not, please visit the following website: http://www.gnu.org/licenses
  * 
+ * Thank you Victor Tran (vicr123) for helping me with MPRIS support
+ * 
  * Original Repo: https://github.com/projsh/audiation
  */
 
@@ -68,13 +70,29 @@ var isMuted = false;
 var shuffleEnableFirst = false;
 var shuffleDisableFirst = false;
 var checkForShuffle = false;
+var albumArt;
 
 var os = require('os');
 var fs = require('fs');
 var id3 = require('jsmediatags');
+var ipc = require('electron').ipcRenderer;
 var ver = '1.0b';
 $('#audiationVer').text(`Audiation v.${ver}`);
 $('#volFill').css({width: '100%'})
+
+ipc.on('playpause', (event, arg) => {
+    resumeButton()
+});
+ipc.on("play", (event, arg) => {
+    resumeButton();
+});
+ipc.on("next", (event, arg) => {
+    nextSong();
+})
+ipc.on("previous", (event, arg) => {
+    previousSong();
+})
+//TODO: implement the rest of the events
 
 $(document).ready(function () {
     setTimeout(function () {
@@ -106,7 +124,7 @@ if (process.platform === 'linux') {
     })
     $('.shadow-hide').css({
         top: '0'
-    })
+    });
 }
 
 if (process.platform === 'darwin') {
@@ -295,7 +313,6 @@ function loadFiles() {
                         $(`#${highlightSong} i`).text('volume_up');
                     } else {
                         $(`#${highlightSong} i`).text('pause');
-                        console.log(`highlight`)
                     }
                     $('#pauseButton').text('pause') 
                 }
@@ -559,9 +576,11 @@ document.addEventListener("keydown", function (e) {
     }
 });
 
-globalShortcut.register('MediaPlayPause', resumeButton);
-globalShortcut.register('MediaPreviousTrack', previousSong);
-globalShortcut.register('MediaNextTrack', nextSong);
+if (process.platform != 'linux') {
+    globalShortcut.register('MediaPlayPause', resumeButton);
+    globalShortcut.register('MediaPreviousTrack', previousSong);
+    globalShortcut.register('MediaNextTrack', nextSong);
+}
 
 function noSongPlaying() {
     if (currentlyPlaying === false) {
@@ -669,20 +688,18 @@ function resumeButton() {
             
             $('title').text('Audiation');
             toolbarPlay();
+            ipc.send('playbackstatus', 'Paused');
             break;
         case true:
             pauseButtonActive = false;
             audio.play();
             if (document.getElementById(highlightSong).mouseover == true) {
                 $(`#${highlightSong} i`).text('pause');
-                console.log('oof')
             } else {
                 $(`#${highlightSong} i`).text('volume_up');
-                console.log('pauseicon')
             }
             if (document.getElementById(highlightSong).mouseover == false) {
                 $(`#${highlightSong} i`).text('volume_up');
-                console.log('xd')
             }
             $('#pauseButton').text('pause')
             toolbarPause();
@@ -692,6 +709,7 @@ function resumeButton() {
                 $('title').text(`${artist} - ${Title}`)
             }
             toolbarPause();
+            ipc.send('playbackstatus', 'Playing');
     }
 }
 
@@ -788,7 +806,8 @@ function seekBarTrack() {
                     for (var i = 0; i < tag.tags.picture.data.length; i++) {
                         base64String += String.fromCharCode(tag.tags.picture.data[i]);
                     }
-                    document.getElementById('songPicture').src = 'data:' + tag.tags.picture.format + ';base64,' + btoa(base64String);
+                    albumArt = 'data:' + tag.tags.picture.format + ';base64,' + btoa(base64String);
+                    document.getElementById('songPicture').src = albumArt;
                 } else {
                     document.getElementById('songPicture').src = './assets/svg/no_image.svg';
                 }
@@ -799,6 +818,15 @@ function seekBarTrack() {
                 } else {
                     $('title').text(`${artist} - ${Title}`)
                 }
+
+                //Update mpris stuff
+                ipc.send('mpris-update', ["metadata", {
+                    'xesam:title': Title,
+                    'xesam:artist': artist,
+                    'xesam:album': album,
+                    'mpris:artURL': albumArt
+                }]);
+                ipc.send('mpris-update', ["playbackStatus", "Playing"]);
             },
             onError: function (tag) {
                 $('#songTitle').text(newFileName);
@@ -807,6 +835,8 @@ function seekBarTrack() {
                 if (!artist) {
                     $('title').text(`${newFileName}`);
                 }
+
+                console.log("hey, we got an ID3 tag error :(");
             }
         })
     audio.addEventListener('timeupdate', seekTimeUpdate);
