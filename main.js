@@ -4,7 +4,6 @@ const url = require('url');
 
 var win;
 var frameStyle;
-var mpris = require('mpris-service');
 var ipc = require('electron').ipcMain
 
 if (process.platform === 'linux') {
@@ -14,12 +13,6 @@ if (process.platform === 'linux') {
 }
 
 function createWindow() {
-    //thank you victor :)
-    let mprisPlayer = new mpris({
-        name: 'audiation',
-        identity: 'Audiation'
-    });
-
     win = new BrowserWindow({
         width: 1080, 
         height: 889,
@@ -31,29 +24,38 @@ function createWindow() {
         title: 'Audiation'
     });
 
-    ipc.on('mpris-update', (event, arg) => {
-        console.log("mpris-update event triggered");
-        if (arg[0] == "metadata" && arg[1]["mpris:trackid"] == null) {
-            arg[1]["mpris:trackid"] = mprisPlayer.objectPath('track/0'); //because we can't do this in the renderer
-            console.log(arg[1]);
-        }
-        mprisPlayer[arg[0]] = arg[1];
-    });
-    mprisPlayer.on('playpause', () => {
-        win.webContents.send("playpause");
-    });
-    mprisPlayer.on('play', () => {
-        win.webContents.send("play");
-    });
-    mprisPlayer.on('next', () => {
-        win.webContents.send("next");
-    })
-    mprisPlayer.on('previous', () => {
-        win.webContents.send("previous");
-    })
-    ipc.on('playbackstatus', (event, arg) => {
-        mprisPlayer.playbackStatus = arg;
-    });
+    //thank you victor :)
+    if (process.platform == 'linux') {
+        var mpris = require('mpris-service');
+        let mprisPlayer = new mpris({
+            name: 'audiation',
+            identity: 'Audiation'
+        });
+    
+        ipc.on('mpris-update', (event, arg) => {
+            console.log("mpris-update event triggered");
+            if (arg[0] == "metadata" && arg[1]["mpris:trackid"] == null) {
+                arg[1]["mpris:trackid"] = mprisPlayer.objectPath('track/0'); //because we can't do this in the renderer
+                console.log(arg[1]);
+            }
+            mprisPlayer[arg[0]] = arg[1];
+        });
+        mprisPlayer.on('playpause', () => {
+            win.webContents.send("playpause");
+        });
+        mprisPlayer.on('play', () => {
+            win.webContents.send("play");
+        });
+        mprisPlayer.on('next', () => {
+            win.webContents.send("next");
+        })
+        mprisPlayer.on('previous', () => {
+            win.webContents.send("previous");
+        })
+        ipc.on('playbackstatus', (event, arg) => {
+            mprisPlayer.playbackStatus = arg;
+        });
+    }
 
     win.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),
