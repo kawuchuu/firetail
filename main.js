@@ -4,6 +4,8 @@ const url = require('url');
 
 var win;
 var frameStyle;
+var mpris = require('mpris-service');
+var ipc = require('electron').ipcMain
 
 if (process.platform === 'linux') {
     frameStyle = true;
@@ -12,15 +14,45 @@ if (process.platform === 'linux') {
 }
 
 function createWindow() {
+    //thank you victor :)
+    let mprisPlayer = new mpris({
+        name: 'audiation',
+        identity: 'Audiation'
+    });
+
     win = new BrowserWindow({
         width: 1080, 
         height: 889,
-        icon: './assets/image/audiation-main.ico', 
+        icon: './assets/image/audiation-main-logo.png', 
         frame: frameStyle,
         backgroundColor: '#1f1f1f',
         titleBarStyle: 'hidden',
         show: false,
         title: 'Audiation'
+    });
+
+    ipc.on('mpris-update', (event, arg) => {
+        console.log("mpris-update event triggered");
+        if (arg[0] == "metadata" && arg[1]["mpris:trackid"] == null) {
+            arg[1]["mpris:trackid"] = mprisPlayer.objectPath('track/0'); //because we can't do this in the renderer
+            console.log(arg[1]);
+        }
+        mprisPlayer[arg[0]] = arg[1];
+    });
+    mprisPlayer.on('playpause', () => {
+        win.webContents.send("playpause");
+    });
+    mprisPlayer.on('play', () => {
+        win.webContents.send("play");
+    });
+    mprisPlayer.on('next', () => {
+        win.webContents.send("next");
+    })
+    mprisPlayer.on('previous', () => {
+        win.webContents.send("previous");
+    })
+    ipc.on('playbackstatus', (event, arg) => {
+        mprisPlayer.playbackStatus = arg;
     });
 
     win.loadURL(url.format({
@@ -39,7 +71,7 @@ function createWindow() {
         win.show();
     })
     // If Audiation fails to start, uncomment the line below to find the cause. If it's an error on my behalf, please report it ASAP
-    win.webContents.toggleDevTools();
+    //win.webContents.toggleDevTools();
 }
 
 app.on('ready', createWindow);

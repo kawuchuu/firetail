@@ -16,6 +16,8 @@
  * You should have recieved a copy of this licence along with this program.
  * If not, please visit the following website: http://www.gnu.org/licenses
  * 
+ * Thank you Victor Tran (vicr123) for helping me with MPRIS support
+ * 
  * Original Repo: https://github.com/projsh/audiation
  */
 
@@ -73,10 +75,24 @@ var albumArt;
 var os = require('os');
 var fs = require('fs');
 var id3 = require('jsmediatags');
-var mpris;
+var ipc = require('electron').ipcRenderer;
 var ver = '1.0b';
 $('#audiationVer').text(`Audiation v.${ver}`);
 $('#volFill').css({width: '100%'})
+
+ipc.on('playpause', (event, arg) => {
+    resumeButton()
+});
+ipc.on("play", (event, arg) => {
+    resumeButton();
+});
+ipc.on("next", (event, arg) => {
+    nextSong();
+})
+ipc.on("previous", (event, arg) => {
+    previousSong();
+})
+//TODO: implement the rest of the events
 
 $(document).ready(function () {
     setTimeout(function () {
@@ -109,15 +125,6 @@ if (process.platform === 'linux') {
     $('.shadow-hide').css({
         top: '0'
     });
-    try {
-        mpris = require('mpris-service');
-        var player = mpris({
-            name: 'Audiation',
-            identity: 'Audiation'
-        });
-    } catch(err) {
-        console.error(err.stack);
-    }
 }
 
 if (process.platform === 'darwin') {
@@ -306,7 +313,6 @@ function loadFiles() {
                         $(`#${highlightSong} i`).text('volume_up');
                     } else {
                         $(`#${highlightSong} i`).text('pause');
-                        console.log(`highlight`)
                     }
                     $('#pauseButton').text('pause') 
                 }
@@ -570,9 +576,11 @@ document.addEventListener("keydown", function (e) {
     }
 });
 
-globalShortcut.register('MediaPlayPause', resumeButton);
-globalShortcut.register('MediaPreviousTrack', previousSong);
-globalShortcut.register('MediaNextTrack', nextSong);
+if (process.platform != 'linux') {
+    globalShortcut.register('MediaPlayPause', resumeButton);
+    globalShortcut.register('MediaPreviousTrack', previousSong);
+    globalShortcut.register('MediaNextTrack', nextSong);
+}
 
 function noSongPlaying() {
     if (currentlyPlaying === false) {
@@ -680,6 +688,7 @@ function resumeButton() {
             
             $('title').text('Audiation');
             toolbarPlay();
+            ipc.send('playbackstatus', 'Paused');
             break;
         case true:
             pauseButtonActive = false;
@@ -700,6 +709,7 @@ function resumeButton() {
                 $('title').text(`${artist} - ${Title}`)
             }
             toolbarPause();
+            ipc.send('playbackstatus', 'Playing');
     }
 }
 
@@ -808,6 +818,15 @@ function seekBarTrack() {
                 } else {
                     $('title').text(`${artist} - ${Title}`)
                 }
+
+                //Update mpris stuff
+                ipc.send('mpris-update', ["metadata", {
+                    'xesam:title': Title,
+                    'xesam:artist': artist,
+                    'xesam:album': album,
+                    'mpris:artURL': albumArt
+                }]);
+                ipc.send('mpris-update', ["playbackStatus", "Playing"]);
             },
             onError: function (tag) {
                 $('#songTitle').text(newFileName);
@@ -816,17 +835,10 @@ function seekBarTrack() {
                 if (!artist) {
                     $('title').text(`${newFileName}`);
                 }
+
+                console.log("hey, we got an ID3 tag error :(");
             }
         })
-    player.metadata = {
-        'mpris:trackid': player.objectPath('track/0'),
-        'mpris:length': audio.duration,
-        'mpris:artUrl': albumArt,
-        'xesam:title': Title,
-        'xesam:album': album,
-        'xesam:artist': artist
-    }
-    player.playbackStatus = 'Playing'
     audio.addEventListener('timeupdate', seekTimeUpdate);
 }
 
