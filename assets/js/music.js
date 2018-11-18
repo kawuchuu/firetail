@@ -891,6 +891,9 @@ function upDownVol() {
     currentVol = volDec;
 }
 $('.vol-box').mousedown(function() {
+    if (isMuted == true) {
+        muteButton()
+    }
     volNum = $(this).attr('id').substr(3);
     upDownVol();
 })
