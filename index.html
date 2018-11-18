@@ -53,7 +53,7 @@
                         <i class="material-icons">folder</i>Folder</button>
                     <button id="settingsButton">
                         <i class="material-icons">settings</i>Settings</button>
-                    <button id="openDevTools">
+                    <button style="display: none !important" id="openDevTools">
                         <i class="material-icons">code</i>Dev Tools</button>
                 </div>
             </div>
@@ -72,25 +72,29 @@
                 <div id="newContentWrapper">
                     <div class="shadow-hide"></div>
                     <h1>Songs</h1>
-                    <ul id="newList"></ul>
+                    <ul id="newList">
+                        <div class="list-wrapper"></div>
+                    </ul>
                 </div>
             </div>
             <center>
                 <div class="new-nowplaying">
                     <div class="np-wrapper">
-                        <img src="./assets/svg/no_image.svg" id="songPicture">
-                        <div class="title-artist">
-                            <h1 id="songTitle"></h1>
-                            <p id="artist"></p>
+                        <div class="metadata">
+                            <img src="./assets/svg/no_image.svg" id="songPicture">
+                            <div class="title-artist">
+                                <h1 id="songTitle"></h1>
+                                <p id="artist"></p>
+                            </div>
                         </div>
                         <div id="controls">
                             <div id="controlsWrapper">
                                 <div class="np-buttons">
-                                    <i class="material-icons" id="repeatButton">repeat</i>
+                                    <i class="material-icons" id="shuffleButton">shuffle</i>
                                     <i class="material-icons" id="backwardButton">skip_previous</i>
                                     <i class="material-icons" id="pauseButton">play_arrow</i>
                                     <i class="material-icons" id="forwardButton">skip_next</i>
-                                    <i class="material-icons" id="shuffleButton">shuffle</i>
+                                    <i class="material-icons" id="repeatButton">repeat</i>
                                 </div>
                                 <p class="song-duration" id="songDurationTime">-:--</p>
                                 <div id="seekWrapper" class="seek-bar-wrapper">
@@ -102,12 +106,24 @@
                                 <p class="song-duration" id="songDurationLength">-:--</p>
                             </div>
                         </div>
-                        <div class="volume-control" align="right"> <!--Temporary-->
-                            <i class="material-icons" id="volumeButton">volume_up</i>
-                            <div id="volWrapper" class="seek-bar-wrapper">
+                        <div class="volume-control">
+                                <i class="material-icons" id="volumeButton">volume_up</i>
+                            <div id="volWrapper">
+                                <div style="display: none; opacity: 0" class="plus-minus">
+                                    <i class="material-icons" id="volUp">add</i>
+                                    <i class="material-icons" id="volDown">remove</i>
+                                </div>
                                 <div class="vol-bar">
-                                    <div id="volFill" class="fill"></div>
-                                    <div id="volHandle" class="handle"></div>
+                                    <div class="vol-box" id="vol1"></div>
+                                    <div class="vol-box" id="vol2"></div>
+                                    <div class="vol-box" id="vol3"></div>
+                                    <div class="vol-box" id="vol4"></div>
+                                    <div class="vol-box" id="vol5"></div>
+                                    <div class="vol-box" id="vol6"></div>
+                                    <div class="vol-box" id="vol7"></div>
+                                    <div class="vol-box" id="vol8"></div>
+                                    <div class="vol-box" id="vol9"></div>
+                                    <div class="vol-box" id="vol10"></div>
                                 </div>
                             </div>
                         </div>

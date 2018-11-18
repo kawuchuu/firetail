@@ -10,7 +10,7 @@
 
 html, body {
     margin: 0;
-    background: #1f1f1f;
+    background: #1a1a1a;
     font-family: 'Dosis', Arial, Helvetica, sans-serif !important;
     color: #fff;
     user-select: none;
@@ -21,13 +21,14 @@ html, body {
 }
 
 ::-webkit-scrollbar {
-    background: #313131;
+    background: transparent;
     width: 10px;
     box-shadow: -1px 0px 20px rgba(0,0,0,.3);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #242424;
+    background: #1a1a1a;
+    border: 2px solid #2d2d2d;
     border-radius: 10px;
 }
 
@@ -42,7 +43,8 @@ html, body {
     margin: 0;
     position: fixed;
     z-index: 12;
-    background: rgb(27, 27, 27);
+    background: #1e1e1e;
+    border-bottom: 2px solid #2d2d2d;
     transition: .15s;
 }
 
@@ -56,7 +58,6 @@ html, body {
     height: 32px;
     display: inline-block;
     margin: 0;
-    cursor: pointer;
     transition: .2s;
 }
 
@@ -161,9 +162,9 @@ button:hover, .button-active {
     display: flex;
     align-items: center;
     border-radius: 999px;
-    cursor: pointer; 
     height: 5px;
     transition: .15s;
+    z-index: 5
 }
 
 @media screen and (max-width: 1750px) {
@@ -193,7 +194,7 @@ button:hover, .button-active {
 .np-wrapper {
     width: 100%;
     position: relative;
-    height: auto;
+    height: 100%;
 }
 
 .fill {
@@ -241,22 +242,22 @@ div#new {
 ul {
     list-style-type: none;
     text-align: left;
-    overflow: hidden;
+    overflow: scroll;
     font-size: 22px;
-    position: relative;
+    position: fixed;
     padding: 0;
     transition: .2s;
     height: 100%;
     margin: 0;
     margin-right: 0;
-    border-radius: 10px 0px 0px 10px;
     white-space: nowrap;
-    background: #242424;
-    margin-top: 60px;
+    background: #1a1a1a;
+    margin-top: 20px;
+    width: 100%;
 }
 
 li {
-    border: 2px solid #2c2c2c;
+    border: 2px solid #2d2d2d;
     border-top: 0;
     border-right: 0;
     border-left: 0;
@@ -266,11 +267,11 @@ li {
     overflow: hidden;
     position: relative;
     max-height: 50px;
+    margin-left: 192px;
 }
 
 li:hover {
-    background: #2e2e2e;
-    transition-duration: .2s;
+    background: #212121;
 }
 
 .open-file-browser {
@@ -282,7 +283,6 @@ li:hover {
 p.new-song-title {
     margin: 0;
     padding: 0;
-    transition-duration: .2s;
     display: inline-block;
     vertical-align: middle;
     line-height: 28px;
@@ -323,10 +323,15 @@ div.new-nowplaying i:hover {
     overflow: visible;
 }
 
+.list-wrapper {
+    position: relative;
+    margin-bottom: 164px;
+}
+
 #newContentWrapper {
     position: relative;
-    margin-left: 215px;
     border-radius: 10px;
+    width: 100%;
 }
 
 #playType button {
@@ -339,7 +344,8 @@ div.new-nowplaying i:hover {
     vertical-align: top;
     position: fixed;
     z-index: 9;
-    background: #222222;
+    background: #1e1e1e;
+    border-right: 2px solid #2d2d2d;
     height: 100%;
     width: 190px;
     box-shadow: 1px 0px 20px rgba(0,0,0,.3);
@@ -358,7 +364,7 @@ div.new-nowplaying i:hover {
     font-size: 28px !important;
     padding: 0;
     vertical-align: middle;
-    transform: translateX(2px)
+    transform: translateX(2px);
 }
 
 #new {
@@ -369,7 +375,7 @@ div.new-nowplaying i:hover {
 .app-content {
     margin-top: 60px;
     position: relative;
-    margin-bottom: 110px;
+    margin-bottom: 200px;
 }
 
 div.type-separator {
@@ -457,7 +463,7 @@ div.type-separator {
     display: inline-block;
     position: relative;
     vertical-align: top;
-    background-color: rgb(27, 27, 27);
+    background-color: #1e1e1e;
     overflow: hidden;
     z-index: 10;
 }
@@ -516,7 +522,8 @@ div.new-nowplaying {
     height: 85px !important;
     min-height: 85px !important;
     margin-top: 15px;
-    background: rgb(27, 27, 27);
+    background: #1e1e1e;
+    border-top: 2px solid #2d2d2d;
     position: fixed;
     overflow: visible !important;
     overflow-y: visible !important;
@@ -529,7 +536,7 @@ div.new-nowplaying {
 
 #controls {
     overflow: hidden;
-    background: rgb(27, 27, 27);
+    background: #1e1e1e;
     width: 720px;
     height: auto;
     z-index: 15
@@ -546,7 +553,8 @@ button i {
     padding: 10px;
     padding-left: 40px;
     width: 100%;
-    background-color: #222222;
+    background-color: #1e1e1e;
+    border-bottom: 2px solid #2d2d2d;
     height: 45px;
     position: fixed;
     left: 180px;
@@ -557,7 +565,8 @@ button i {
 
 .shadow-hide {
     z-index: 10;
-    background-color: #222222;
+    background-color: #1e1e1e;
+    border-bottom: 2px solid #2d2d2d;
     position: fixed;
     height: 65px;
     top: 30px;
@@ -568,7 +577,8 @@ button i {
 .seek-bar-wrapper {
     padding-top: 3px;
     padding-bottom: 3px;
-    cursor: pointer;
+    position: inherit;
+    z-index: 15;
 }
 
 #noDrag {
@@ -580,26 +590,47 @@ button i {
 
 .volume-control {
     position: relative;
-    bottom: 65px;
     margin-right: 15px;
+    float: right;
+    bottom: 40px;
+    display: flex;
+    z-index: 10;
+    transition: .2s;
+
 }
 
 #volumeButton {
     font-size: 20px;
-    display: inline-block;
-    top: 8px;
+    bottom: 18px;
+    transition: .2s;
+}
+
+#volWrapper {
+    display: flex;
+    transition: .2s;
 }
 
 .vol-bar {
-    margin: 10px;
-    width: 85px;
-    background: #2d2d2d;
     display: flex;
-    align-items: center;
-    border-radius: 999px;
-    cursor: pointer; 
-    height: 5px;
-    transition: .15s;
-    margin-right: 15px;
-    margin-left: 5px;
+    position: relative;
+    transition: .2s;
+}
+
+.vol-box {
+    width: 7px;
+    height: 7px;
+    border-radius: 10px;
+    background: #3d3d3d;
+    margin: 0 2px 0 2px;
+    z-index: 16;
+}
+
+.plus-minus {
+    display: flex;
+    position: absolute;
+    bottom: 15px;
+    right: 5px;
+    float: right;
+    transition: .2s;
+    z-index: 16;
 }

@@ -78,6 +78,9 @@ var id3 = require('jsmediatags');
 var ipc = require('electron').ipcRenderer;
 var ver = '1.0b';
 $('#audiationVer').text(`Audiation v.${ver}`);
+$('#audiationVer').dblclick(function() {
+    $('#openDevTools').show();
+})
 $('#volFill').css({width: '100%'})
 
 ipc.on('playpause', (event, arg) => {
@@ -92,7 +95,6 @@ ipc.on("next", (event, arg) => {
 ipc.on("previous", (event, arg) => {
     previousSong();
 })
-//TODO: implement the rest of the events
 
 $(document).ready(function () {
     setTimeout(function () {
@@ -145,7 +147,7 @@ if (process.platform === 'darwin') {
     })
 }
 
-$('#newList').html('<p style="text-align: center">Loading...');
+$('.list-wrapper').html('<p style="text-align: center">Loading...');
 
 remote = require('electron').remote;
 const {globalShortcut, dialog} = require('electron').remote;
@@ -271,22 +273,22 @@ function loadFiles() {
         });
         if (s.length === 0) {
             if (process.platform === 'win32') {
-                $('#newList').html('<p style="text-align: center">No valid audio files found in the Audiation folder.<br><a class="open-file-browser">Click here</a> to open the Audiation folder.')
+                $('.list-wrapper').html('<p style="text-align: center">No valid audio files found in the Audiation folder.<br><a class="open-file-browser">Click here</a> to open the Audiation folder.')
             } else {
-                $('#newList').html('<p style="text-align: center">No valid audio files found in the Audiation folder.<br>Please add supported audio files to the folder.')
+                $('.list-wrapper').html('<p style="text-align: center">No valid audio files found in the Audiation folder.<br>Please add supported audio files to the folder.')
             }
             return $('.open-file-browser').click(function () {
                 require('child_process').exec(`start "" "${os.homedir}\\Music\\Audiation`)
             });
         }
         fileTotal = s.length - 1;
-        $('#newList').html('');
+        $('.list-wrapper').html('');
         s.forEach((f, i) => {
             fileSongListStore.push(f);
             allFilesList.push(f);
             fName = f.split('.');
-            fileName = f.slice(0, -fName[fName.length - 1].length - 1);
-            $('#newList').append(`<li class="results-link" id="${i}"><i class="material-icons play-pause" style="opacity: 0;">play_arrow</i><p class="new-song-title">${fileName}`);
+            fileName = f.slice(0, -fName[fName.length -1].length - 1);
+            $('.list-wrapper').append(`<li class="results-link" id="${i}"><i class="material-icons play-pause" style="opacity: 0;">play_arrow</i><p class="new-song-title">${fileName}`);
             if (currentlyPlaying === true) {
                 songActive();
             }
@@ -303,57 +305,41 @@ function loadFiles() {
                     highlightSong = i;
                     songActiveReset();
                     newFileChosen = f;
-                    newFileName = f.slice(0, -4)
+                    newFileName = f.slice(0, -fName[fName.length -1].length - 1);
                     if (currentlyPlaying === true) {
                         audioStop();
                     }
                     findSong();
                     songActive();
-                    if (document.getElementById(i).mouseover == false) {
+                    if (document.getElementById(i).mouseover == false && highlightSong == i) {
                         $(`#${highlightSong} i`).text('volume_up');
                     } else {
                         $(`#${highlightSong} i`).text('pause');
                     }
-                    $('#pauseButton').text('pause') 
+                    $('#pauseButton').text('pause');
                 }
             });
             $(`#${i}`).mouseover(function () {
                 $(`#${i} i`).css({
                     opacity: 1,
                 })
-                if (checkForShuffle == false && currentSongPlaying == i && pauseButtonActive == false || checkForShuffle == true && shuffleList[currentSongPlaying] == i && pauseButtonActive == false) {
+                if (highlightSong == i && pauseButtonActive == false) {
                     $(`#${i} i`).text('pause');
                 }
             })
             $(`#${i}`).mouseleave(function () {
-                if (checkForShuffle == true && shuffleCheck == false && shuffleWait == true) {
-                    if (shuffleList[currentSongPlaying] == i) {
-                        $(`#${i} i`).css({
-                            opacity: 1,
-                        })
-                        if (pauseButtonActive == false) {
-                            $(`#${i} i`).text('volume_up')
-                        }
-                    } else {
-                        $(`#${i} i`).css({
-                            opacity: 0
-                        })
-                        $(`#${i} i`).text('play_arrow');
+                if (highlightSong == i) {
+                    $(`#${i} i`).css({
+                        opacity: 1,
+                    })
+                    if (pauseButtonActive == false) {
+                        $(`#${i} i`).text('volume_up')
                     }
                 } else {
-                    if (highlightSong == i) {
-                        $(`#${i} i`).css({
-                            opacity: 1,
-                        })
-                        if (pauseButtonActive == false) {
-                            $(`#${i} i`).text('volume_up')
-                        }
-                    } else {
-                        $(`#${i} i`).css({
-                            opacity: 0
-                        })
-                        $(`#${i} i`).text('play_arrow');
-                    }
+                    $(`#${i} i`).css({
+                        opacity: 0
+                    })
+                    $(`#${i} i`).text('play_arrow');
                 }
             })
         })
@@ -370,9 +356,9 @@ $('#openFileBrowser').click(function () {
 });
 
 $('#refreshFiles').click(function () {
-    $('#newList').html('<p style="text-align: center">Loading...');
+    $('.list-wrapper').html('<p style="text-align: center">Loading...');
     setTimeout(loadFiles, 50)
-})
+});
 
 function previousSong() {
     shuffleCheck = false;
@@ -400,7 +386,7 @@ function previousSong() {
         shuffleDisableFirst = false;
     }
     newFileChosen = allFilesList[currentSongPlaying];
-    newFileName = newFileChosen.slice(0, -4);
+    newFileName = newFileChosen.slice(0, -fName[fName.length -1].length - 1);
     if (shuffleEnabled == true) {
         highlightSong = shuffleList[currentSongPlaying];
     } else {
@@ -441,7 +427,7 @@ function nextSong() {
         shuffleDisableFirst = false;
     }
     newFileChosen = allFilesList[currentSongPlaying];
-    newFileName = newFileChosen.slice(0, -4);
+    newFileName = newFileChosen.slice(0, -fName[fName.length -1].length - 1);
     if (shuffleEnabled == true) {
         highlightSong = shuffleList[currentSongPlaying];
     } else {
@@ -537,7 +523,7 @@ window.addEventListener('blur', () => {
 
 window.addEventListener('focus', () => {
     $('.title-bar').css({
-        background: 'rgb(27,27,27)'
+        background: '#1e1e1e'
     });
     $('.tb-button').css({
         opacity: 1
@@ -648,33 +634,13 @@ $('#pauseButton').click(function () {
     resumeButton()
 })
 
-$('#volumeButton').click(function () {
-    switch(isMuted) {
-        case false:
-            isMuted = true;
-            muteSaveVol = audio.volume;
-            audio.volume = 0;
-            currentVol = audio.volume;
-            volWidth = volFillBar.style.width;
-            volFillBar.style.width = 0;
-            $(this).text('volume_off');
-            break;
-        case true:
-            isMuted = false;
-            audio.volume = muteSaveVol;
-            currentVol = audio.volume;
-            volFillBar.style.width = volWidth;
-            $(this).text('volume_up')
-    }
-})
-
 function resumeButton() {
     if (currentlyPlaying == false) {
         pauseButtonActive = true;
         currentSongPlaying = 0;
         highlightSong = 0;
         newFileChosen = allFilesList[0];
-        newFileName = newFileChosen.slice(0, -4);
+        newFileName = f.slice(0, -fName[fName.length -1].length - 1);
         $(`#${highlightSong} i`).text('volume_up');
         $('#pauseButton').text('pause') 
         songActive();
@@ -685,7 +651,6 @@ function resumeButton() {
             pauseButtonActive = true;
             audio.pause();
             $(`#pauseButton, #${highlightSong} i`).text('play_arrow');
-            
             $('title').text('Audiation');
             toolbarPlay();
             ipc.send('playbackstatus', 'Paused');
@@ -693,15 +658,12 @@ function resumeButton() {
         case true:
             pauseButtonActive = false;
             audio.play();
-            if (document.getElementById(highlightSong).mouseover == true) {
+            $('#pauseButton').text('pause')
+            if ($(`#${highlightSong}`).is(':hover')) {
                 $(`#${highlightSong} i`).text('pause');
             } else {
                 $(`#${highlightSong} i`).text('volume_up');
             }
-            if (document.getElementById(highlightSong).mouseover == false) {
-                $(`#${highlightSong} i`).text('volume_up');
-            }
-            $('#pauseButton').text('pause')
             toolbarPause();
             if (artist == "Unknown Artist") {
                 $('title').text(`${newFileName}`);
@@ -835,8 +797,6 @@ function seekBarTrack() {
                 if (!artist) {
                     $('title').text(`${newFileName}`);
                 }
-
-                console.log("hey, we got an ID3 tag error :(");
             }
         })
     audio.addEventListener('timeupdate', seekTimeUpdate);
@@ -868,15 +828,6 @@ seekBarWrapper.addEventListener('mousedown', function (e) {
     }
 });
 
-volWrapper.addEventListener('mousedown', function (e) {
-    if (currentlyPlaying === true) {
-        volMouseDown = true;
-        volP = volGetP(e);
-        volFillBar.style.width = volP * 100 + '%';
-        $('#volHandle').addClass('handle-hover');
-    }
-})
-
 window.addEventListener('mousemove', function (e) {
     if (seekMouseDown == false && volMouseDown == false) return;
     if (currentlyPlaying === true) {
@@ -893,19 +844,6 @@ window.addEventListener('mousemove', function (e) {
             }
             $('#songDurationTime').html(`${minutes}:${seconds}`);
         }
-        if (volMouseDown == true) {
-            if (audio.volume == 0) {
-                isMuted = true;
-                $('#volumeButton').text('volume_off');
-            } else {
-                isMuted = false;
-                $('#volumeButton').text('volume_up');
-            }
-            volP = volGetP(e);
-            volFillBar.style.width = volP * 100 + '%';
-            audio.volume = volP * 1
-            currentVol = audio.volume;
-        }
     }
 });
 
@@ -920,19 +858,100 @@ window.addEventListener('mouseup', function (e) {
             $('#seekHandle').removeClass('handle-hover');
             seekBarTrack();
         }
-        if (volMouseDown == true) {
-            if (audio.volume == 0) {
-                isMuted = true
-                $('#volumeButton').text('volume_off');
-            } else {
-                isMuted = false;
-                $('#volumeButton').text('volume_up');
-            }
-            volMouseDown = false;
-            volFillBar.style.width = volP * 100 + '%';
-            audio.volume = volP * 1
-            currentVol = audio.volume;
-            $('#volHandle').removeClass('handle-hover');
-        }
     }
 });
+var volNum = 8;
+var volDec = .8;
+var volMuteCon = false;
+upDownVol();
+function upDownVol() {
+    if (volNum == 1) {
+        muteSaveVol = 0.1;
+    }
+    if (volNum == 11) volNum = volNum - 1;
+    if (isMuted == false) {
+        if (volNum == -1) { 
+            volNum = volNum + 1;
+        }
+    }
+    if (volNum == 10) {
+        volDec = 1;
+    } else {
+        volDec = parseFloat(`0.${volNum}`);
+    }
+    if (audio) {
+        audio.volume = volDec;
+    }
+    $('.vol-box').css({
+        background: '#3d3d3d'
+    })
+    for(i=0; i < volNum; i++) {
+        $(`#vol${i + 1}`).css({
+            background: '#c464f1'
+        })
+    };
+    currentVol = volDec;
+}
+$('.vol-box').mousedown(function() {
+    volNum = $(this).attr('id').substr(3);
+    upDownVol();
+})
+
+$('#volWrapper').mouseover(function() {
+    $('.vol-bar').css({
+        bottom: '22px'
+    });
+    $('.plus-minus').show();
+    $('.plus-minus').css({
+        opacity: 1
+    })
+})
+
+$('#volWrapper').mouseleave(function() {
+    $('.vol-bar').css({
+        bottom: '0'
+    })
+    $('.plus-minus').css({
+        opacity: 0
+    })
+    setTimeout(() => {
+        $('.plus-minus').hide();
+    }, 200)
+})
+
+$('#volUp').click(function() {
+    volNum++;
+    if (volNum == 1) {
+        muteButton();
+    }
+    upDownVol();
+})
+
+$('#volDown').click(function() {
+    volNum = volNum - 1;
+    if (volNum == 0) {
+        muteButton()
+    }
+    upDownVol();
+})
+var mutedFromButton = false;
+$('#volumeButton').click(function () {
+    muteButton();
+})
+
+function muteButton() {
+    switch(isMuted) {
+        case false:
+            isMuted = true;
+            muteSaveVol = parseInt(`${audio.volume}`.substr(2));
+            volNum = 0;
+            $('#volumeButton').text('volume_off');
+            upDownVol();
+            break;
+        case true:
+            volNum = muteSaveVol;
+            $('#volumeButton').text('volume_up');
+            upDownVol();
+            isMuted = false;
+    }
+}
