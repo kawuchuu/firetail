@@ -869,10 +869,8 @@ function upDownVol() {
         muteSaveVol = 0.1;
     }
     if (volNum == 11) volNum = volNum - 1;
-    if (isMuted == false) {
-        if (volNum == -1) { 
-            volNum = volNum + 1;
-        }
+    if (volNum == -1) { 
+        volNum = volNum + 1;
     }
     if (volNum == 10) {
         volDec = 1;
