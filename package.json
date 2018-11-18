@@ -11,9 +11,49 @@
     "jsmediatags": "^3.8.1"
   },
   "devDependencies": {
-    "electron": "^2.0.13"
+    "electron": "^3.0.9"
   },
   "optionalDependencies": {
     "mpris-service": "^1.1.4"
+  },
+  "build": {
+    "appId": "com.projsh.audiation",
+    "productName": "Audiation",
+    "copyright": "Copyright © 2018 projsh_",
+    "mac": {
+      "category": "public.app-category.music",
+      "target": "dmg",
+      "icon": "assets/image/icon.icns"
+    },
+    "dmg": {
+      "icon": "assets/image/icon.icns"
+    },
+    "win": {
+      "target": "portable",
+      "icon": "assets/image/icon.ico",
+      "publisherName": "projsh_"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": "x64"
+        },
+        {
+          "target": "deb",
+          "arch": "x64"
+        }
+      ],
+      "icon": "assets/image/icon1080x1080.png",
+      "category": "Audio",
+      "desktop": {
+        "Type": "Application",
+        "Name": "Audiation",
+        "Comment": "An open-source music player",
+        "Exec": "audiation",
+        "Icon": "icon.png",
+        "Terminal": "false"
+      }
+    }
   }
 }

@@ -921,18 +921,19 @@ $('#volWrapper').mouseleave(function() {
 })
 
 $('#volUp').click(function() {
-    volNum++;
-    if (volNum == 1) {
+    if (volNum == 0) {
         muteButton();
+    } else {
+        volNum++;
     }
     upDownVol();
 })
 
 $('#volDown').click(function() {
-    volNum = volNum - 1;
-    if (volNum == 0) {
+    if (volNum == 1) {
         muteButton()
     }
+    volNum = volNum - 1;
     upDownVol();
 })
 var mutedFromButton = false;
