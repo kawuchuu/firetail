@@ -1,15 +1,30 @@
 # Audiation
-Open-source music player built with Electron. Currently work-in-progress, but somewhat useable.
+Open-source music player built with Electron. Currently in beta, but useable.
 
-## How to run
-In order to run Audiation, you must have the Node.js framework installed.
+# Features
+## Current Features
+  - Simple song list, click a song on the list to play.
+  - Clean UI
+  - Essential controls: seek bar, pause/play, forward, previous, shuffle, repeat
+  - ID3 tag support
+  - Custom volume controls
+  - **Linux only:** MPRIS support (thanks Victor)
+## Planned Features
+  - Multiple source support
+  - Playlist creation
+  - Search filter
+  - Song, album, artist lists
+  - Customisable Settings
+  - Song list contains artist, album, duration column
+  
 
-Once installed, continue below.
+# How to run
+You can either use the executables provided or build it yourself.
 
-1. Etiher download a zip copy of this repo or clone it.
-2. Navigate to the directory where Audiation's files are stored and run `npm install`.
-3. Once all the dependencies have finished installing, run `npm start`.
-
-## Audiation folder
-In order to play songs, you must add your songs in the Audiation folder. This should be stored in your home directory's music folder.
-Once I add support for multiple sources, I will remove the Audiation folder requirement.
+## Build/Run
+  1. `git clone https://github.com/projsh/audiation.git`
+  2. `cd audiation`
+  3. `npm install`
+  4. **Optional. Linux only.** If you run into Node module errors, try rebuilding `dbus` using `electron-builder`.
+  5. `npm start`
+  6. **Optional.** If you'd like to build an executable, run `electron-builder --<platform>`. If you're building for Linux, `electron-builder` will create an AppImage and a Debian package. If you want to build other package types, edit `package.json`.
