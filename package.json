@@ -54,7 +54,6 @@
         "Type": "Application",
         "Name": "Audiation",
         "Comment": "Audio Player",
-        "Exec": "audiation",
         "Icon": "audiation",
         "Terminal": "false"
       }
