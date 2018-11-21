@@ -2,7 +2,11 @@
   "name": "audiation",
   "version": "1.0.0",
   "description": "Audio Player",
-  "author": "projsh",
+  "author": {
+    "name": "projsh_",
+    "email": "thisisatempfakeemail@gmail.com"
+  },
+  "repository": "https://github.com/projsh/audiation",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
