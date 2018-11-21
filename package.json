@@ -49,6 +49,7 @@
       ],
       "icon": "assets/image/icon1080x1080.png",
       "category": "Audio",
+      "executableName": "audiation",
       "desktop": {
         "Type": "Application",
         "Name": "Audiation",
