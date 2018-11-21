@@ -1,7 +1,7 @@
 {
   "name": "audiation",
-  "version": "1.0.0",
-  "description": "Open-source music player built on Electron",
+  "version": "1.0-beta",
+  "description": "Audio Player",
   "author": "projsh",
   "main": "main.js",
   "scripts": {
@@ -29,7 +29,10 @@
       "icon": "assets/image/icon.icns"
     },
     "win": {
-      "target": "portable",
+      "target": [
+        "nsis",
+        "portable"
+      ],
       "icon": "assets/image/icon.ico",
       "publisherName": "projsh_"
     },
@@ -49,9 +52,9 @@
       "desktop": {
         "Type": "Application",
         "Name": "Audiation",
-        "Comment": "An open-source music player",
+        "Comment": "Audio Player",
         "Exec": "audiation",
-        "Icon": "icon.png",
+        "Icon": "audiation",
         "Terminal": "false"
       }
     }
