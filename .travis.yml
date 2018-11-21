@@ -1,0 +1,11 @@
+language: node_js
+dist: trusty
+sudo: required
+node_js:
+  - "lts/*"
+before_install:
+  - npm i -g electron-builder
+  - electron-builder
+script:
+  - electron-builder --linux
+  - electron-builder --mac
