@@ -27,4 +27,4 @@ You can either use the executables provided or build it yourself.
   3. `npm install`
   4. **Optional. Linux only.** If you run into Node module errors, try rebuilding `dbus` using `electron-builder`.
   5. `npm start`
-  6. **Optional.** If you'd like to build an executable, run `electron-builder --<platform>`. If you're building for Linux, `electron-builder` will create an AppImage and a Debian package. If you want to build other package types, edit `package.json`.
+  6. **Optional.** If you'd like to build an executable, run `electron-builder --<platform>`. If you're building for Linux, `electron-builder` will create an AppImage, a Debian package, and a Pacman package. If you're building for Windows, `electron-builder` will create an installer and a portable executable. If you're building for macOS, `electron-builder` will create a DMG file. If you want to build other package types, edit `package.json`.
