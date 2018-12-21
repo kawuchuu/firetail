@@ -118,9 +118,9 @@ if (process.platform === 'win32') {
 if (process.platform === 'linux') {
     $('.title-bar').hide();
     $('.app-content').css({
-        marginTop: '20px'
+        marginTop: '30px'
     });
-    $('#newContentWrapper h1').css({
+    $('.top-bar').css({
         top: '0'
     });
     $('#playType').css({
@@ -129,6 +129,9 @@ if (process.platform === 'linux') {
     $('.shadow-hide').css({
         top: '0'
     });
+    $('#songsPage').css({
+        height: 'calc(100% - 153px)'
+    })
 }
 
 if (process.platform === 'darwin') {
@@ -136,9 +139,9 @@ if (process.platform === 'darwin') {
         height: '20px'
     })
     $('.app-content').css({
-        marginTop: '55px'
+        marginTop: '50px'
     });
-    $('#newContentWrapper h1').css({
+    $('.top-bar').css({
         top: '20px'
     });
     $('#playType').css({
@@ -146,6 +149,9 @@ if (process.platform === 'darwin') {
     })
     $('.shadow-hide').css({
         top: '20px'
+    });
+    $('#songsPage').css({
+        height: 'calc(100% - 173px)'
     })
 }
 
