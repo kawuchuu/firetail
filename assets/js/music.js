@@ -76,12 +76,14 @@ var os = require('os');
 var fs = require('fs');
 var id3 = require('jsmediatags');
 var ipc = require('electron').ipcRenderer;
-var ver = '1.0b';
+var ver = '1.1b';
 $('#audiationVer').text(`Audiation v.${ver}`);
 $('#audiationVer').dblclick(function() {
     $('#openDevTools').show();
 })
-$('#volFill').css({width: '100%'})
+$('#volFill').css({
+    width: '100%'
+})
 
 ipc.on('playpause', (event, arg) => {
     resumeButton()
@@ -96,12 +98,12 @@ ipc.on("previous", (event, arg) => {
     previousSong();
 })
 
-$(document).ready(function () {
-    setTimeout(function () {
+$(document).ready(function() {
+    setTimeout(function() {
         $('#loadCover').css({
             opacity: 0
         })
-        setTimeout(function () {
+        setTimeout(function() {
             $('#loadCover').hide();
             document.body.style.cursor = 'default'
         }, 250)
@@ -150,7 +152,10 @@ if (process.platform === 'darwin') {
 $('.list-wrapper').html('<p style="text-align: center">Loading...');
 
 remote = require('electron').remote;
-const {globalShortcut, dialog} = require('electron').remote;
+const {
+    globalShortcut,
+    dialog
+} = require('electron').remote;
 const path = require('path');
 remote.getCurrentWindow().setMinimumSize(720, 525);
 document.addEventListener('dragover', event => event.preventDefault())
@@ -173,8 +178,7 @@ function songActive() {
 }
 
 function toolbarPlay() {
-    remote.getCurrentWindow().setThumbarButtons([
-        {
+    remote.getCurrentWindow().setThumbarButtons([{
             tooltip: 'Previous',
             icon: path.join(__dirname, '/assets/image/skipprevious_white.png'),
             click() {
@@ -199,8 +203,7 @@ function toolbarPlay() {
 }
 
 function toolbarPause() {
-    remote.getCurrentWindow().setThumbarButtons([
-        {
+    remote.getCurrentWindow().setThumbarButtons([{
             tooltip: 'Previous',
             icon: path.join(__dirname, '/assets/image/skipprevious_white.png'),
             click() {
@@ -250,8 +253,10 @@ function shuffle(array) {
 }
 
 var fileextentions = ['mp3', 'm4a', 'wav', 'ogg', '3gp', 'aac', 'flac', 'webm', 'raw']
+var reloading;
 
 function loadFiles() {
+    reloading = true;
     if (!fs.existsSync(`${os.homedir}/Music/Audiation`)) {
         fs.mkdirSync(`${os.homedir}/Music/Audiation`);
     }
@@ -265,7 +270,7 @@ function loadFiles() {
         fileextentions.forEach((e) => {
             sortFileExt[e] = files.filter(f => f.split(".").pop() === e);
             s = s.concat(sortFileExt[e]);
-            s.sort(function(a, b) {
+            s.sort(function (a, b) {
                 if (a.toLowerCase() < b.toLowerCase()) return -1;
                 if (a.toLowerCase() > b.toLowerCase()) return 1;
                 return 0;
@@ -277,57 +282,77 @@ function loadFiles() {
             } else {
                 $('.list-wrapper').html('<p style="text-align: center">No valid audio files found in the Audiation folder.<br>Please add supported audio files to the folder.')
             }
-            return $('.open-file-browser').click(function () {
+            return $('.open-file-browser').click(function() {
                 require('child_process').exec(`start "" "${os.homedir}\\Music\\Audiation`)
             });
         }
         fileTotal = s.length - 1;
         $('.list-wrapper').html('');
         s.forEach((f, i) => {
+            function playSong() {
+                currentSongPlaying = i;
+                highlightSong = i;
+                songActiveReset();
+                newFileChosen = f;
+                newFileName = f.slice(0, -fName[fName.length - 1].length - 1);
+                if (currentlyPlaying === true) {
+                    audioStop();
+                }
+                $('#pauseButton').text('pause')
+                findSong();
+                songActive();
+            }
             fileSongListStore.push(f);
             allFilesList.push(f);
             fName = f.split('.');
-            fileName = f.slice(0, -fName[fName.length -1].length - 1);
+            fileName = f.slice(0, -fName[fName.length - 1].length - 1);
             $('.list-wrapper').append(`<li class="results-link" id="${i}"><i class="material-icons play-pause" style="opacity: 0;">play_arrow</i><p class="new-song-title">${fileName}`);
             if (currentlyPlaying === true) {
                 songActive();
             }
-            $(`#${i}`).click(function () {
+            /*$(`#${i}`).mouseover(function() {
+                console.log(i)
+            })*/
+            $(`#${i} p`).dblclick(function() {
                 shuffleCheck = false;
                 if (shuffleEnabled == true) {
                     shuffleCheck = true;
                     shuffleEnableFirst = true;
                 }
-                if (currentlyPlaying === true && $(this).attr('id') === `#${highlightSong}`.substr(1)) {
+                playSong();
+            });
+            $(`#${i} i`).click(function() {
+                shuffleCheck = false;
+                if (shuffleEnabled == true) {
+                    shuffleCheck = true;
+                    shuffleEnableFirst = true;
+                }
+                if (currentlyPlaying === true && $(`#${i}`).attr('id') === `#${highlightSong}`.substr(1)) {
                     resumeButton();
                 } else {
-                    currentSongPlaying = i;
-                    highlightSong = i;
-                    songActiveReset();
-                    newFileChosen = f;
-                    newFileName = f.slice(0, -fName[fName.length -1].length - 1);
-                    if (currentlyPlaying === true) {
-                        audioStop();
-                    }
-                    findSong();
-                    songActive();
-                    if (document.getElementById(i).mouseover == false && highlightSong == i) {
-                        $(`#${highlightSong} i`).text('volume_up');
-                    } else {
-                        $(`#${highlightSong} i`).text('pause');
-                    }
-                    $('#pauseButton').text('pause');
+                    playSong()
+                    $(`#${i} i`).text('pause');
                 }
-            });
-            $(`#${i}`).mouseover(function () {
+            })
+            $(`#${i}`).mouseover(function() {
                 $(`#${i} i`).css({
                     opacity: 1,
                 })
+            })
+            $(`#${i} i`).mouseover(function() {
                 if (highlightSong == i && pauseButtonActive == false) {
                     $(`#${i} i`).text('pause');
                 }
             })
-            $(`#${i}`).mouseleave(function () {
+            $(`#${i}`).mouseleave(function() {
+                if (highlightSong !== i) {
+                    $(`#${i} i`).css({
+                        opacity: 0
+                    })
+                    $(`#${i} i`).text('play_arrow');
+                }
+            })
+            $(`#${i} i`).mouseleave(function() {
                 if (highlightSong == i) {
                     $(`#${i} i`).css({
                         opacity: 1,
@@ -335,29 +360,28 @@ function loadFiles() {
                     if (pauseButtonActive == false) {
                         $(`#${i} i`).text('volume_up')
                     }
-                } else {
-                    $(`#${i} i`).css({
-                        opacity: 0
-                    })
-                    $(`#${i} i`).text('play_arrow');
                 }
             })
-        })
+        });
         shuffleOrder = shuffle(allFilesList);
         allFilesList = fileSongListStore;
         shuffleOrder.forEach((f, i) => {
             shuffleList.push(fileSongListStore.indexOf(f));
         })
-    })
+    });
+    reloading = false;
 }
 loadFiles();
-$('#openFileBrowser').click(function () {
+$('#openFileBrowser').click(function() {
     require('child_process').exec(`start "" "${os.homedir}\\Music\\Audiation`)
 });
 
-$('#refreshFiles').click(function () {
-    $('.list-wrapper').html('<p style="text-align: center">Loading...');
-    setTimeout(loadFiles, 50)
+$('#refreshFiles').click(function() {
+    if (reloading == false) {
+        $('.list-wrapper').html('<p style="text-align: center">Loading...');
+        reloading = true
+        setTimeout(loadFiles, 50)    
+    }
 });
 
 function previousSong() {
@@ -393,7 +417,7 @@ function previousSong() {
         highlightSong = currentSongPlaying;
     }
     $(`#${highlightSong} i`).text('volume_up');
-    $('#pauseButton').text('pause') 
+    $('#pauseButton').text('pause')
     songActive();
     findSong();
 }
@@ -434,20 +458,20 @@ function nextSong() {
         highlightSong = currentSongPlaying;
     }
     $(`#${highlightSong} i`).text('volume_up');
-    $('#pauseButton').text('pause') 
+    $('#pauseButton').text('pause')
     songActive();
     findSong();
 }
 
-$('#backwardButton').click(function () {
+$('#backwardButton').click(function() {
     if (currentSongPlaying === allFilesList[0]) {
-        audioStop(); 
+        audioStop();
     } else {
         previousSong();
     }
 })
 
-$('#forwardButton').click(function () {
+$('#forwardButton').click(function() {
     if (currentSongPlaying === allFilesList.length) {
         audioStop();
     } else {
@@ -455,25 +479,25 @@ $('#forwardButton').click(function () {
     }
 });
 
-$('#repeatButton').click(function () {
+$('#repeatButton').click(function() {
     switch (repeatEnabled) {
         case true:
             repeatEnabled = false;
             $(this).css({
                 color: '#fff'
             });
-            
+
             break;
         case false:
             repeatEnabled = true;
             $(this).css({
                 color: '#c464f1'
             });
-        shuffleEnableFirst = false;
+            shuffleEnableFirst = false;
     }
 });
 
-$('#shuffleButton').click(function () {
+$('#shuffleButton').click(function() {
     switch (shuffleEnabled) {
         case true:
             shuffleEnabled = false;
@@ -495,13 +519,13 @@ $('#shuffleButton').click(function () {
     }
 })
 
-$('.tb-close').click(function () {
+$('.tb-close').click(function() {
     const remote = require('electron').remote;
     var window = remote.getCurrentWindow();
     window.close();
 });
 
-$('.tb-maximize').click(function () {
+$('.tb-maximize').click(function() {
     const remote = require('electron').remote;
     var window = remote.getCurrentWindow();
     if (!window.isMaximized()) {
@@ -530,7 +554,7 @@ window.addEventListener('focus', () => {
     })
 })
 
-$('.tb-minimize').click(function () {
+$('.tb-minimize').click(function() {
     const remote = require('electron').remote;
     var window = remote.getCurrentWindow();
     window.minimize();
@@ -554,7 +578,7 @@ document.addEventListener("keydown", function (e) {
                 buttons: ['OK', 'Cancel'],
                 title: 'Reload',
                 message: 'Reloading will prevent media keys from functioning.'
-            }, function(i) {
+            }, function (i) {
                 if (i === 0) {
                     location.reload();
                 }
@@ -580,11 +604,11 @@ function noSongPlaying() {
 
 noSongPlaying();
 
-$('#settingsButton').click(function () {
+$('#settingsButton').click(function() {
     $('#settings').show();
 })
 
-$("#settingsClose").click(function () {
+$("#settingsClose").click(function() {
     $("#settings").hide();
 })
 
@@ -604,6 +628,9 @@ function findSong() {
             audio.removeEventListener('timeupdate', seekTimeUpdate);
         }
         $('.new-nowplaying').addClass('np-active');
+        $('#songPictureBlur').show();
+        $('#songPicture').removeClass('song-picture-decrease');
+        $('#songPictureBlur').removeClass('song-blur-hidden');
         currentlyPlaying = true;
         noSongPlaying();
         try {
@@ -625,13 +652,22 @@ function findSong() {
     }
 }
 
-$('#openDevTools').click(function () {
+$('#openDevTools').click(function() {
     var remote = require('electron').remote;
     remote.getCurrentWindow().toggleDevTools();
 })
 
-$('#pauseButton').click(function () {
+$('#pauseButton').click(function() {
     resumeButton()
+})
+var tabSection = 'songs'
+$('.top-bar h2').click(function() {
+    $(`#${tabSection}Page`).removeClass('active-tab');
+    console.log(tabSection)
+    tabSection = $(this).attr('id').substr(0, $(this).attr('id').length - 3);
+    $(`#${tabSection}Page`).addClass('active-tab');
+    $('.top-bar h2').removeClass('tab-active');
+    $(this).addClass('tab-active')
 })
 
 function resumeButton() {
@@ -640,9 +676,9 @@ function resumeButton() {
         currentSongPlaying = 0;
         highlightSong = 0;
         newFileChosen = allFilesList[0];
-        newFileName = f.slice(0, -fName[fName.length -1].length - 1);
+        newFileName = f.slice(0, -fName[fName.length - 1].length - 1);
         $(`#${highlightSong} i`).text('volume_up');
-        $('#pauseButton').text('pause') 
+        $('#pauseButton').text('pause')
         songActive();
         findSong();
     }
@@ -654,12 +690,14 @@ function resumeButton() {
             $('title').text('Audiation');
             toolbarPlay();
             ipc.send('playbackstatus', 'Paused');
+            $('#songPicture').addClass('song-picture-decrease');
+            $('#songPictureBlur').addClass('song-blur-hidden');
             break;
         case true:
             pauseButtonActive = false;
             audio.play();
             $('#pauseButton').text('pause')
-            if ($(`#${highlightSong}`).is(':hover')) {
+            if ($(`#${highlightSong} i`).is(':hover')) {
                 $(`#${highlightSong} i`).text('pause');
             } else {
                 $(`#${highlightSong} i`).text('volume_up');
@@ -672,29 +710,31 @@ function resumeButton() {
             }
             toolbarPause();
             ipc.send('playbackstatus', 'Playing');
+            $('#songPicture').removeClass('song-picture-decrease');
+            $('#songPictureBlur').removeClass('song-blur-hidden');
     }
 }
 
-$('#seekWrapper').mouseover(function () {
+$('#seekWrapper').mouseover(function() {
     if (currentlyPlaying === true) {
         $('#seekHandle').addClass('handle-hover');
     }
 })
 
-$('#seekWrapper').mouseleave(function () {
+$('#seekWrapper').mouseleave(function() {
     if (currentlyPlaying === true) {
         if (!seekMouseDown === false) return;
         $('#seekHandle').removeClass('handle-hover');
     }
 })
 
-$('#volWrapper').mouseover(function () {
+$('#volWrapper').mouseover(function() {
     if (currentlyPlaying === true) {
         $('#volHandle').addClass('handle-hover');
     }
 })
 
-$('#volWrapper').mouseleave(function () {
+$('#volWrapper').mouseleave(function() {
     if (currentlyPlaying === true) {
         if (!volMouseDown === false) return;
         $('#volHandle').removeClass('handle-hover');
@@ -769,9 +809,13 @@ function seekBarTrack() {
                         base64String += String.fromCharCode(tag.tags.picture.data[i]);
                     }
                     albumArt = 'data:' + tag.tags.picture.format + ';base64,' + btoa(base64String);
-                    document.getElementById('songPicture').src = albumArt;
+                    document.getElementById('songPicture').style.background = `url(${albumArt})`
+                    document.getElementById('songPictureBlur').style.background = `url(${albumArt})`
+
                 } else {
-                    document.getElementById('songPicture').src = './assets/svg/no_image.svg';
+                    document.getElementById('songPicture').style.background = 'url(assets/svg/no_image.svg)';
+                    document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image.svg)';
+
                 }
                 $('h1#songTitle').text(Title);
                 $('#artist').text(`${artist}`);
@@ -793,10 +837,9 @@ function seekBarTrack() {
             onError: function (tag) {
                 $('#songTitle').text(newFileName);
                 $('#artist').text('Unknown Artist');
-                document.getElementById('songPicture').src = './assets/svg/no_image.svg';
-                if (!artist) {
-                    $('title').text(`${newFileName}`);
-                }
+                document.getElementById('songPicture').style.background = 'url(assets/svg/no_image.svg)';
+                document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image.svg)';
+                $('title').text(`${newFileName}`);
             }
         })
     audio.addEventListener('timeupdate', seekTimeUpdate);
@@ -864,12 +907,13 @@ var volNum = 8;
 var volDec = .8;
 var volMuteCon = false;
 upDownVol();
+
 function upDownVol() {
     if (volNum == 1) {
         muteSaveVol = 0.1;
     }
     if (volNum == 11) volNum = volNum - 1;
-    if (volNum == -1) { 
+    if (volNum == -1) {
         volNum = volNum + 1;
     }
     if (volNum == 10) {
@@ -883,7 +927,7 @@ function upDownVol() {
     $('.vol-box').css({
         background: '#3d3d3d'
     })
-    for(i=0; i < volNum; i++) {
+    for (i = 0; i < volNum; i++) {
         $(`#vol${i + 1}`).css({
             background: '#c464f1'
         })
@@ -937,15 +981,19 @@ $('#volDown').click(function() {
     upDownVol();
 })
 var mutedFromButton = false;
-$('#volumeButton').click(function () {
+$('#volumeButton').click(function() {
     muteButton();
 })
 
 function muteButton() {
-    switch(isMuted) {
+    switch (isMuted) {
         case false:
             isMuted = true;
-            muteSaveVol = parseInt(`${audio.volume}`.substr(2));
+            if (volNum == 10) {
+                muteSaveVol = 10;
+            } else {
+                muteSaveVol = parseInt(`${audio.volume}`.substr(2));
+            }            
             volNum = 0;
             $('#volumeButton').text('volume_off');
             upDownVol();

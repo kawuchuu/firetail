@@ -14,8 +14,8 @@ if (process.platform === 'linux') {
 
 function createWindow() {
     win = new BrowserWindow({
-        width: 1080, 
-        height: 889,
+        width: 885, 
+        height: 655,
         icon: './assets/image/audiation-main-logo.png', 
         frame: frameStyle,
         backgroundColor: '#1f1f1f',

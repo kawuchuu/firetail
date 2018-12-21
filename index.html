@@ -71,17 +71,33 @@
             <div id="newContent">
                 <div id="newContentWrapper">
                     <div class="shadow-hide"></div>
-                    <h1>Songs</h1>
-                    <ul id="newList">
+                    <div class="top-bar">
+                        <h2 id="songsTab" class="tab-active">Songs</h2>
+                        <h2 id="artistsTab">Artists</h2>
+                        <h2 id="albumsTab">Albums</h2>
+                        <h2 id="playlistsTab">Playlists</h2>
+                    </div>
+                    <ul id="songsPage" class="active-tab">
                         <div class="list-wrapper"></div>
                     </ul>
+                    <div class="placeholder-message" id="artistsPage">
+                        <p>This is a placeholder message for the artists page.</p>
+                    </div>
+                    <div class="placeholder-message" id="albumsPage">
+                        <p>This is a placeholder message for the albums page.</p>
+                    </div>
+                    <div class="placeholder-message" id="playlistsPage">
+                        <p>This is a placeholder message for the playlists page.</p>
+                    </div>
+                    <!--<div class="list-push"></div>-->
                 </div>
             </div>
             <center>
                 <div class="new-nowplaying">
                     <div class="np-wrapper">
                         <div class="metadata">
-                            <img src="./assets/svg/no_image.svg" id="songPicture">
+                            <div id="songPicture"></div>
+                            <div style="display: none;" id="songPictureBlur"></div>
                             <div class="title-artist">
                                 <h1 id="songTitle"></h1>
                                 <p id="artist"></p>
@@ -110,8 +126,8 @@
                                 <i class="material-icons" id="volumeButton">volume_up</i>
                             <div id="volWrapper">
                                 <div style="display: none; opacity: 0" class="plus-minus">
-                                    <i class="material-icons" id="volUp">add</i>
                                     <i class="material-icons" id="volDown">remove</i>
+                                    <i class="material-icons" id="volUp">add</i>
                                 </div>
                                 <div class="vol-bar">
                                     <div class="vol-box" id="vol1"></div>
