@@ -345,7 +345,12 @@ div.new-nowplaying i:hover {
 }
 
 .play-type-wrapper {
-    height: 100%;
+    height: calc(100% - 135px);
+    overflow-y: auto;
+}
+
+.play-type-wrapper::-webkit-scrollbar {
+    display: none;
 }
 
 #playType button {

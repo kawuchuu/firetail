@@ -137,6 +137,10 @@ if (process.platform === 'linux') {
     $('#songsPage').css({
         height: 'calc(100% - 153px)'
     })
+    $('#effectsMenu').css({
+        top: 0,
+        height: '100%'
+    })
 }
 
 if (process.platform === 'darwin') {
@@ -157,6 +161,10 @@ if (process.platform === 'darwin') {
     });
     $('#songsPage').css({
         height: 'calc(100% - 173px)'
+    })
+    $('#effectsMenu').css({
+        top: '22px',
+        height: 'calc(100% - 22px)'
     })
 }
 
