@@ -683,7 +683,6 @@ function findSong() {
         try {
             if (firstPlay == true) {
                 firstPlay = false;
-                impulseGet();
                 audio = new Audio(`${os.homedir}/Music/Audiation/${newFileChosen}`);
                 source = audioCtx.createMediaElementSource(audio);
                 gain = audioCtx.createGain();
@@ -735,19 +734,19 @@ var reverbEnabled = false;
 $('#reverbEnable').click(function() {
     switch(reverbEnabled) {
         case false:
-        source.connect(convolverGain);
-        source.connect(masterGain);
-        masterGain.connect(masterCompression);
-        masterCompression.connect(audioCtx.destination);
-        convolver.disconnect();
-        $(this).text('Disable')
-        reverbEnabled = true;
-        break;
+            source.connect(convolverGain);
+            source.connect(masterGain);
+            masterGain.connect(masterCompression);
+            masterCompression.connect(audioCtx.destination);
+            impulseGet();
+            convolver.disconnect();
+            $(this).text('Disable')
+            reverbEnabled = true;
+            break;
         case true:
-        masterGain.disconnect(masterCompression);
-        masterCompression.disconnect(audioCtx.destination);
-        $(this).text('Enable')
-        reverbEnabled = false;
+            masterCompression.disconnect(audioCtx.destination);
+            $(this).text('Enable')
+            reverbEnabled = false;
     }
 })
 
