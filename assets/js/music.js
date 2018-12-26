@@ -683,6 +683,7 @@ function findSong() {
         try {
             if (firstPlay == true) {
                 firstPlay = false;
+                impulseGet();
                 audio = new Audio(`${os.homedir}/Music/Audiation/${newFileChosen}`);
                 source = audioCtx.createMediaElementSource(audio);
                 gain = audioCtx.createGain();
@@ -738,7 +739,6 @@ $('#reverbEnable').click(function() {
         source.connect(masterGain);
         masterGain.connect(masterCompression);
         masterCompression.connect(audioCtx.destination);
-        impulseGet();
         convolver.disconnect();
         $(this).text('Disable')
         reverbEnabled = true;
