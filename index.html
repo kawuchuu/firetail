@@ -8,10 +8,10 @@
         <link href="./assets/fonts/material/material-icons.css" rel="stylesheet">
         <script>
             if (typeof module === 'object') {
-                window.module = module;
-                module = undefined;
-            }
-        </script>
+                    window.module = module;
+                    module = undefined;
+                }
+            </script>
     </head>
     <body style="transition-duration: .2s; cursor: progress">
         <div id="loadCover" style="transition-duration: .2s; height: 100%; width: 100%; z-index: 12; position: fixed; background: #1f1f1f; opacity: 1"></div>
@@ -53,6 +53,8 @@
                         <i class="material-icons">folder</i>Folder</button>
                     <button id="settingsButton">
                         <i class="material-icons">settings</i>Settings</button>
+                    <button id="effectsButton">
+                        <i class="material-icons">blur_on</i>Effects</button>
                     <button style="display: none !important" id="openDevTools">
                         <i class="material-icons">code</i>Dev Tools</button>
                 </div>
@@ -67,6 +69,30 @@
                         <p id="audiationVer">Audiation v.</p>
                     </div>
                 </center>
+            </div>
+            <div id="effectsMenu" style="display: none">
+                <div class="effects-bg"></div>
+                <div class="effects-parent">
+                    <div class="effects-menu">
+                        <div class="effects-margin">
+                            <i class="material-icons close-button" id="effectsClose">close</i>
+                            <h1>Effects</h1>
+                            <div class="effect-controls">
+                                <p>This feature is still in development.<br>WARNING: SOME EFFECTS MAY DAMAGE YOUR HEARING.
+                                    CONTINUE AT YOUR OWN RISK.</p>
+                                <div id="gainControl">
+                                    <p>Gain</p>
+                                    <input type="number" value="1" min="0" max="100" id="gainInput">
+                                </div>
+                                <div id="reverbControl">
+                                    <p>Reverb Gain</p>
+                                    <input type="number" value="5" min="0" max="100" id="reverbInput">
+                                    <button id="reverbEnable">Enable</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id="newContent">
                 <div id="newContentWrapper">
@@ -123,7 +149,7 @@
                             </div>
                         </div>
                         <div class="volume-control">
-                                <i class="material-icons" id="volumeButton">volume_up</i>
+                            <i class="material-icons" id="volumeButton">volume_up</i>
                             <div id="volWrapper">
                                 <div style="display: none; opacity: 0" class="plus-minus">
                                     <i class="material-icons" id="volDown">remove</i>

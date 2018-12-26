@@ -18,6 +18,8 @@
  * 
  * Thank you Victor Tran (vicr123) for helping me with MPRIS support
  * 
+ * Steinman Hall impulse response credit: http://www.echothief.com/
+ * 
  * Original Repo: https://github.com/projsh/audiation
  */
 
@@ -71,6 +73,9 @@ var shuffleEnableFirst = false;
 var shuffleDisableFirst = false;
 var checkForShuffle = false;
 var albumArt;
+var AudioContext = window.AudioContext;
+var audioCtx = new AudioContext();
+var gain;
 
 var os = require('os');
 var fs = require('fs');
@@ -578,7 +583,7 @@ document.addEventListener("keydown", function (e) {
                 resumeButton();
             }
             break;
-        case 116:
+        /*case 116:
             dialog.showMessageBox(remote.getCurrentWindow(), {
                 type: 'info',
                 buttons: ['OK', 'Cancel'],
@@ -588,7 +593,7 @@ document.addEventListener("keydown", function (e) {
                 if (i === 0) {
                     location.reload();
                 }
-            })
+            })*/
     }
 });
 
@@ -616,7 +621,34 @@ $('#settingsButton').click(function() {
 
 $("#settingsClose").click(function() {
     $("#settings").hide();
+});
+
+function navOpen() {
+    $('#effectsMenu').show();
+    setTimeout(() => {
+        $('#effectsMenu').css({
+            opacity: 1
+        })
+    }, 1);
+}
+
+function navClose() {
+    $('#effectsMenu').css({
+        opacity: 0
+    })
+    setTimeout(() => {
+        $('#effectsMenu').hide();
+    }, 250);
+}
+
+$('#effectsButton').click(function () {
+    navOpen();
 })
+
+$('#effectsClose').click(function () {
+    navClose();
+});
+
 
 function audioStop() {
     songActiveReset();
@@ -627,7 +659,8 @@ function audioStop() {
     $('div.play-button, select, div.play-type').show();
     pauseButtonActive = false;
 }
-
+var firstPlay = true;
+var source;
 function findSong() {
     try {
         if (audio) {
@@ -640,12 +673,20 @@ function findSong() {
         currentlyPlaying = true;
         noSongPlaying();
         try {
-            audio = new Audio(`${os.homedir}/Music/Audiation/${newFileChosen}`);
+            if (firstPlay == true) {
+                firstPlay = false;
+                audio = new Audio(`${os.homedir}/Music/Audiation/${newFileChosen}`);
+                source = audioCtx.createMediaElementSource(audio);
+                gain = audioCtx.createGain();
+                source.connect(gain).connect(audioCtx.destination);
+            } else {
+                audio.src = `${os.homedir}/Music/Audiation/${newFileChosen}`
+            }
             audio.currentTime = 0;
-            audio.play()
+            audio.play();
         } catch (err) {
             console.error(err);
-            dialog.showErrorBox('Error', err)
+            //dialog.showErrorBox('Error', err)
             audioStop();
         }
         audio.volume = currentVol;
@@ -658,6 +699,66 @@ function findSong() {
     }
 }
 
+var convolverGain = audioCtx.createGain();
+var convolver = audioCtx.createConvolver();
+var masterGain = audioCtx.createGain();
+var masterCompression = audioCtx.createDynamicsCompressor();
+
+function impulseGet() {
+    convolver = audioCtx.createConvolver();
+    ajaxRequest = new XMLHttpRequest();
+    ajaxRequest.open('GET', './assets/impulse/SteinmanHall.wav', true);
+    ajaxRequest.responseType = 'arraybuffer';
+    ajaxRequest.onload = function () {
+        var impulseData = ajaxRequest.response;
+        audioCtx.decodeAudioData(impulseData, function (buffer) {
+            conBuffer = buffer;
+            convolver.buffer = conBuffer;
+            convolver.normalize = true;
+            convolverGain.gain.value = 5;
+            convolverGain.connect(convolver);
+            convolver.connect(masterGain);
+        });
+    }
+    ajaxRequest.send();
+}
+var reverbEnabled = false;
+$('#reverbEnable').click(function() {
+    switch(reverbEnabled) {
+        case false:
+        source.connect(convolverGain);
+        source.connect(masterGain);
+        masterGain.connect(masterCompression);
+        masterCompression.connect(audioCtx.destination);
+        impulseGet();
+        convolver.disconnect();
+        $(this).text('Disable')
+        reverbEnabled = true;
+        break;
+        case true:
+        masterGain.disconnect(masterCompression);
+        masterCompression.disconnect(audioCtx.destination);
+        $(this).text('Enable')
+        reverbEnabled = false;
+    }
+})
+
+var gainInput = 1;
+$('#gainInput').change(function() {
+    if ($(this).val() >= 100) $(this).val(100);
+    if ($(this).val() <= 0) $(this).val(0);
+    gainInput = $(this).val();
+    gain.gain.value = gainInput;
+})
+
+var reverbInput = 1;
+$('#reverbInput').change(function() {
+    if ($(this).val() >= 100) $(this).val(100);
+    if ($(this).val() <= 0) $(this).val(0);
+    reverbInput = $(this).val();
+    convolverGain.gain.value = reverbInput;
+})
+
 $('#openDevTools').click(function() {
     var remote = require('electron').remote;
     remote.getCurrentWindow().toggleDevTools();
@@ -666,10 +767,10 @@ $('#openDevTools').click(function() {
 $('#pauseButton').click(function() {
     resumeButton()
 })
+
 var tabSection = 'songs'
 $('.top-bar h2').click(function() {
     $(`#${tabSection}Page`).removeClass('active-tab');
-    console.log(tabSection)
     tabSection = $(this).attr('id').substr(0, $(this).attr('id').length - 3);
     $(`#${tabSection}Page`).addClass('active-tab');
     $('.top-bar h2').removeClass('tab-active');
@@ -935,7 +1036,7 @@ function upDownVol() {
     })
     for (i = 0; i < volNum; i++) {
         $(`#vol${i + 1}`).css({
-            background: '#c464f1'
+            background: '#9a07df'
         })
     };
     currentVol = volDec;
@@ -950,24 +1051,26 @@ $('.vol-box').mousedown(function() {
 
 $('#volWrapper').mouseover(function() {
     $('.vol-bar').css({
-        bottom: '22px'
+        bottom: '11px'
     });
-    $('.plus-minus').show();
+    /*$('.plus-minus').show();
     $('.plus-minus').css({
         opacity: 1
-    })
+    })*/
+    $('.vol-box').addClass('vol-change')
 })
 
 $('#volWrapper').mouseleave(function() {
     $('.vol-bar').css({
         bottom: '0'
     })
-    $('.plus-minus').css({
+    /*$('.plus-minus').css({
         opacity: 0
     })
     setTimeout(() => {
         $('.plus-minus').hide();
-    }, 200)
+    }, 200)*/
+    $('.vol-box').removeClass('vol-change')
 })
 
 $('#volUp').click(function() {

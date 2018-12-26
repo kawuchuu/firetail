@@ -412,7 +412,6 @@ div.type-separator {
     background: rgba(0,0,0,.35);
     z-index: 11;
     position: fixed;
-    align-content: center;
     align-items: center;
     top: 0;
     animation: settingsEntryBg .2s;
@@ -614,19 +613,18 @@ button i {
 }
 
 .volume-control {
-    position: relative;
+    position: fixed;
     margin-right: 15px;
-    float: right;
-    bottom: 40px;
     display: flex;
     z-index: 10;
     transition: .2s;
-
+    right: 0;
+    bottom: 7px;
 }
 
 #volumeButton {
     font-size: 20px;
-    bottom: 18px;
+    bottom: 20px;
     transition: .2s;
 }
 
@@ -639,15 +637,24 @@ button i {
     display: flex;
     position: relative;
     transition: .2s;
+    bottom: 0;
 }
 
 .vol-box {
-    width: 7px;
-    height: 7px;
-    border-radius: 10px;
+    width: 5px;
+    height: 5px;
     background: #3d3d3d;
-    margin: 0 2px 0 2px;
+    padding: 0 2px 0 2px;
     z-index: 16;
+    transition: height .2s;
+}
+
+.vol-box:first-child {
+    border-radius: 7px 0 0 7px;
+}
+
+.vol-box:last-child {
+    border-radius: 0 7px 7px 0;
 }
 
 .plus-minus {
@@ -679,16 +686,6 @@ button i {
     transition-property: background, opacity, transform;
 }
 
-.list-push {
-    width: 100%;
-    height: 85px;
-    position: relative;
-    bottom: 0;
-    background: #ff0000;
-    overflow: hidden;
-    display: none;
-}
-
 .song-picture-decrease, .song-blur-hidden {
     transform: scale(.85);
 }
@@ -708,4 +705,73 @@ button i {
 
 .placeholder-message {
     margin: 50px 0 0 210px;
+}
+
+.vol-change {
+    height: 30px;
+}
+
+#effectsMenu {
+    position: fixed;
+    top: 34px;
+    z-index: 11;
+    opacity: 0;
+    transition: .2s;
+    width: 100%;
+    height: calc(100% - 34px);
+}
+
+.effects-bg {
+    position: fixed;
+    background: rgba(0, 0, 0, .45);
+    height: 100%;
+    width: 100%;
+    transition: .25s;
+    z-index: 12;
+}
+
+.effects-parent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 13;
+    width: 100%;
+    height: 100%;
+}
+
+.effects-menu {
+    width: 650px;
+    height: 300px;
+    background: #1e1e1e;
+    border-radius: 10px;
+}
+
+.effects-margin {
+    margin: 30px;
+}
+
+h1 {
+    font-family: 'Dosis Bold', 'Dosis', sans-serif;
+}
+
+.close-button {
+    position: relative;
+    float: right;
+    font-size: 28px !important;
+    cursor: pointer;
+}
+
+.effect-controls {
+    position: relative;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.effect-controls input[type=number] {
+    background: #141414;
+    color: #fff;
+    outline: none;
+    border: 2px solid #2d2d2d;
+    border-radius: 20px;
 }
