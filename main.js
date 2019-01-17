@@ -92,6 +92,10 @@ function createMainWindow() {
     win.once('ready-to-show', () => {
         win.show();
     })
+    win.on('closed', (i) => {
+        app.exit();
+    })
+    
 }
 
 function createMiniPlayer() {

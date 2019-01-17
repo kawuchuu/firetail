@@ -559,8 +559,7 @@ $('#shuffleButton').click(function() {
 })
 
 $('.tb-close').click(function() {
-    app.quit();
-    remote.getCurrentWindow().close();
+    app.exit();
 });
 
 $('.tb-maximize').click(function() {
