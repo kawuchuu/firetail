@@ -192,3 +192,9 @@ window.addEventListener('mouseup', function (e) {
         }
     }
 });
+
+window.onbeforeunload = (i) => {
+    remote.getCurrentWindow().hide();
+    ipc.send('switch-windows-full');
+    i.returnValue = false;
+}
