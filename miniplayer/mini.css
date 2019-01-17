@@ -79,10 +79,15 @@ body {
 }
 
 .extra-buttons svg {
-    margin: 12px;
+    padding: 13px;
 }
 
-.extra-buttons svg:hover {
+.extra-buttons i {
+    font-size: 24px;
+    padding: 8px;
+}
+
+.extra-buttons svg:hover, .extra-buttons i:hover {
     opacity: .5;
 }
 
