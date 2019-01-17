@@ -1,0 +1,98 @@
+body {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.album-art {
+    height: 85px;
+    width: auto;
+}
+
+.metadata {
+    display: flex;
+    align-items: center;
+    width: 315px;
+    -webkit-app-region: drag;
+}
+
+.song-title {
+    font-size: 18px;
+    font-family: 'Dosis Bold', 'Dosis', sans-serif;
+    width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.song-artist {
+    opacity: .75;
+    font-size: 14px
+}
+
+.meta-text {
+    margin: 0 10px 0 20px;
+    width: 190px;
+    text-overflow: ellipsis;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.controls i {
+    margin: 15px;
+    transition: .2s;
+}
+
+.seek-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.seek-wrap p {
+    margin-top: 0;
+    margin: 0 0 5px 0;
+    text-align: center;
+    position: relative;
+}
+
+.top-section {
+    display: flex;
+}
+
+.extra-buttons {
+    width: 40px;
+    height: 85px;
+    background: #171717;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.extra-buttons svg {
+    margin: 12px;
+}
+
+.extra-buttons svg:hover {
+    opacity: .5;
+}
+
+.seek-bar {
+    width: 220px
+}
+
+.controls i:hover {
+    color: #c464f1 !important;
+}
+
+.bottom-section {
+    background: #1e1e1e;
+    position: relative;
+    z-index: 2;
+    height: 95px;
+    border-top: 2px solid #2d2d2d;
+    box-shadow: 0px -2px 20px rgba(0,0,0,.3);
+}

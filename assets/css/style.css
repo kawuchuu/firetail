@@ -137,6 +137,7 @@ button {
     margin-left: 10px;
     margin-right: 10px;
     text-align: left;
+    overflow: hidden;
 }
 
 button:hover, .button-active {

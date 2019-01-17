@@ -76,12 +76,20 @@ var albumArt;
 var AudioContext = window.AudioContext;
 var audioCtx = new AudioContext();
 var gain;
+remote = require('electron').remote;
+const {
+    globalShortcut,
+    dialog,
+    app
+} = require('electron').remote;
+const path = require('path');
 
 var os = require('os');
 var fs = require('fs');
 var id3 = require('jsmediatags');
 var ipc = require('electron').ipcRenderer;
 var ver = '1.1b';
+
 $('#audiationVer').text(`Audiation v.${ver}`);
 $('#audiationVer').dblclick(function() {
     $('#openDevTools').show();
@@ -101,6 +109,12 @@ ipc.on("next", (event, arg) => {
 })
 ipc.on("previous", (event, arg) => {
     previousSong();
+})
+ipc.on("shuffle", (event, arg) => {
+    enableShuffle();
+})
+ipc.on('repeat', (event, arg) => {
+    enableRepeat();
 })
 
 $(document).ready(function() {
@@ -170,12 +184,6 @@ if (process.platform === 'darwin') {
 
 $('.list-wrapper').html('<p style="text-align: center">Loading...');
 
-remote = require('electron').remote;
-const {
-    globalShortcut,
-    dialog
-} = require('electron').remote;
-const path = require('path');
 remote.getCurrentWindow().setMinimumSize(720, 525);
 document.addEventListener('dragover', event => event.preventDefault())
 document.addEventListener('drop', event => event.preventDefault())
@@ -439,6 +447,7 @@ function previousSong() {
     $('#pauseButton').text('pause')
     songActive();
     findSong();
+    ipc.send('play-mini')
 }
 
 function nextSong() {
@@ -480,6 +489,7 @@ function nextSong() {
     $('#pauseButton').text('pause')
     songActive();
     findSong();
+    ipc.send('play-mini')
 }
 
 $('#backwardButton').click(function() {
@@ -498,29 +508,11 @@ $('#forwardButton').click(function() {
     }
 });
 
-$('#repeatButton').click(function() {
-    switch (repeatEnabled) {
-        case true:
-            repeatEnabled = false;
-            $(this).css({
-                color: '#fff'
-            });
-
-            break;
-        case false:
-            repeatEnabled = true;
-            $(this).css({
-                color: '#c464f1'
-            });
-            shuffleEnableFirst = false;
-    }
-});
-
-$('#shuffleButton').click(function() {
+function enableShuffle() {
     switch (shuffleEnabled) {
         case true:
             shuffleEnabled = false;
-            $(this).css({
+            $('#shuffleButton').css({
                 color: '#fff'
             });
             shuffleWait = true;
@@ -529,23 +521,49 @@ $('#shuffleButton').click(function() {
             break;
         case false:
             shuffleEnabled = true;
-            $(this).css({
+            $('#shuffleButton').css({
                 color: '#c464f1'
             });
             shuffleWait = true;
             shuffleEnableFirst = true;
             shuffleDisableFirst = false;
     }
+    ipc.send('shuffle-enable')
+}
+
+function enableRepeat() {
+    switch (repeatEnabled) {
+        case true:
+            repeatEnabled = false;
+            $('#repeatButton').css({
+                color: '#fff'
+            });
+
+            break;
+        case false:
+            repeatEnabled = true;
+            $('#repeatButton').css({
+                color: '#c464f1'
+            });
+            shuffleEnableFirst = false;
+    }
+    ipc.send('repeat-enable')
+}
+
+$('#repeatButton').click(function() {
+    enableRepeat()
+});
+
+$('#shuffleButton').click(function() {
+    enableShuffle()
 })
 
 $('.tb-close').click(function() {
-    const remote = require('electron').remote;
-    var window = remote.getCurrentWindow();
-    window.close();
+    app.quit();
+    remote.getCurrentWindow().close();
 });
 
 $('.tb-maximize').click(function() {
-    const remote = require('electron').remote;
     var window = remote.getCurrentWindow();
     if (!window.isMaximized()) {
         window.maximize();
@@ -574,7 +592,6 @@ window.addEventListener('focus', () => {
 })
 
 $('.tb-minimize').click(function() {
-    const remote = require('electron').remote;
     var window = remote.getCurrentWindow();
     window.minimize();
 
@@ -657,6 +674,14 @@ $('#effectsClose').click(function () {
     navClose();
 });
 
+$('#miniPlayerButton').click(() => {
+    remote.getCurrentWindow().hide();
+    ipc.send('switch-windows-mini')
+})
+
+ipc.on('switch-windows', () => {
+    remote.getCurrentWindow().show();
+})
 
 function audioStop() {
     songActiveReset();
@@ -679,6 +704,7 @@ function findSong() {
         $('#songPicture').removeClass('song-picture-decrease');
         $('#songPictureBlur').removeClass('song-blur-hidden');
         currentlyPlaying = true;
+        ipc.send('is-playing', currentlyPlaying)
         noSongPlaying();
         try {
             if (firstPlay == true) {
@@ -823,10 +849,11 @@ function resumeButton() {
                 $('title').text(`${artist} - ${Title}`)
             }
             toolbarPause();
-            ipc.send('playbackstatus', 'Playing');
+            ipc.send('mprisplaybackstatus', 'Playing');
             $('#songPicture').removeClass('song-picture-decrease');
             $('#songPictureBlur').removeClass('song-blur-hidden');
     }
+    ipc.send('play-pause-mini')
 }
 
 $('#seekWrapper').mouseover(function() {
@@ -896,8 +923,26 @@ function seekTimeUpdate() {
     document.getElementById('songDurationLength').innerHTML = `${durationMinutes}:${durationSeconds}`
     if (isNaN(durationMinutes) == true) {
         document.getElementById('songDurationLength').innerHTML = `-:--`
+        durationMinutes = '-'
+        durationSeconds = '--'
     }
+    var seekTimeMini = {
+        'currentTimeString': `${minutes}:${seconds}`,
+        'songDurationString': `${durationMinutes}:${durationSeconds}`,
+        'currentTimeValue': audio.currentTime,
+        'songDurationValue': audio.duration
+    }
+    ipc.send('seek-time-mini', seekTimeMini)
 }
+
+ipc.on('remove-audio-listener', () => {
+    audio.removeEventListener('timeupdate', seekTimeUpdate);
+})
+
+ipc.on('seek-time-main', (event, arg) => {
+    audio.currentTime = arg;
+    audio.addEventListener('timeupdate', seekTimeUpdate);
+})
 
 function seekBarTrack() {
     new id3.Reader(`${os.homedir}/Music/Audiation/${newFileChosen}`)
@@ -929,7 +974,7 @@ function seekBarTrack() {
                 } else {
                     document.getElementById('songPicture').style.background = 'url(assets/svg/no_image.svg)';
                     document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image.svg)';
-
+                    albumArt = 'assets/svg/no_image.svg'
                 }
                 $('h1#songTitle').text(Title);
                 $('#artist').text(`${artist}`);
@@ -947,6 +992,13 @@ function seekBarTrack() {
                     'mpris:artURL': albumArt
                 }]);
                 ipc.send('mpris-update', ["playbackStatus", "Playing"]);
+                var tagInfo = {
+                    'title': Title,
+                    'artist': artist,
+                    'album': album,
+                    'art': albumArt
+                }
+                ipc.send('tag-info', tagInfo)
             },
             onError: function (tag) {
                 $('#songTitle').text(newFileName);
@@ -954,6 +1006,13 @@ function seekBarTrack() {
                 document.getElementById('songPicture').style.background = 'url(assets/svg/no_image.svg)';
                 document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image.svg)';
                 $('title').text(`${newFileName}`);
+                var tagInfo = {
+                    'title': newFileName,
+                    'artist': 'Unknown Artist',
+                    'album': 'Unknown Album',
+                    'art': 'assets/svg/no_image.svg'
+                }
+                ipc.send('tag-info', tagInfo)
             }
         })
     audio.addEventListener('timeupdate', seekTimeUpdate);
@@ -967,12 +1026,6 @@ function seekGetP(e) {
     seekP = (e.clientX - seekBar.offsetLeft) / seekBar.clientWidth;
     seekP = clamp(0, seekP, 1);
     return seekP;
-}
-
-function volGetP(e) {
-    volP = (e.clientX - volBar.offsetLeft) / volBar.clientWidth;
-    volP = clamp(0, volP, 1);
-    return volP;
 }
 
 seekBarWrapper.addEventListener('mousedown', function (e) {
