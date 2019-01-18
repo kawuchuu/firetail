@@ -12,6 +12,7 @@
     "start": "electron ."
   },
   "dependencies": {
+    "discord-rpc": "^3.0.1",
     "jsmediatags": "^3.8.1"
   },
   "devDependencies": {

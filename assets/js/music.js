@@ -88,6 +88,7 @@ var os = require('os');
 var fs = require('fs');
 var id3 = require('jsmediatags');
 var ipc = require('electron').ipcRenderer;
+var drpc = require('discord-rpc');
 var ver = '1.1b';
 
 $('#audiationVer').text(`Audiation v.${ver}`);
@@ -1005,6 +1006,9 @@ function seekBarTrack() {
                 document.getElementById('songPicture').style.background = 'url(assets/svg/no_image.svg)';
                 document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image.svg)';
                 $('title').text(`${newFileName}`);
+                Title = newFileName;
+                artist = 'Unknown Artist'
+                album = 'Unknown Album'
                 var tagInfo = {
                     'title': newFileName,
                     'artist': 'Unknown Artist',
@@ -1016,6 +1020,42 @@ function seekBarTrack() {
         })
     audio.addEventListener('timeupdate', seekTimeUpdate);
 }
+
+var clientId = '535619653762940948';
+const rpc = new drpc.Client({ transport: 'ipc' })
+
+async function rpcSetActivity() {
+    if (!rpc) {
+        return;
+    }
+    if (pauseButtonActive == true) {
+        rpcIsPaused = '\u23f8'
+    } else {
+        rpcIsPaused = '\u25b6'
+    }
+    if (currentlyPlaying == false) {
+        rpcIsIdle = true;
+        rpcTitle = `${rpcIsPaused} Idle`
+    } else {
+        rpcIsIdle = false;
+        rpcTitle = `${rpcIsPaused} ${Title}`
+    }
+    rpc.setActivity({
+        details: rpcTitle,
+        largeImageKey: 'large-key',
+        largeImageText: 'Audiation',
+        state: artist
+    });
+}
+
+rpc.on('ready', () => {
+    rpcSetActivity();
+    setInterval(() => {
+        rpcSetActivity();
+    }, 2500)
+})
+
+rpc.login({ clientId }).catch(console.error)
 
 function clamp(min, val, max) {
     return Math.min(Math.max(min, val), max);
