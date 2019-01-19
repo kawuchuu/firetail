@@ -11,6 +11,14 @@ matrix:
     - os: linux
       language: node_js
       node_js: "10"
+      env:
+        - ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true
+
+cache:
+  directories:
+    - node_modules
+    - $HOME/.cache/electron
+    - $HOME/.cache/electron-builder
 
 before_install:
   - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get install libdbus-1-dev -y; fi
