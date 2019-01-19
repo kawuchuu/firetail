@@ -1,29 +1,26 @@
-osx_image: xcode8.3
-sudo: required
-dist: trusty
 matrix:
 	include:
 	- os: osx
-  	- os: linux
-      env: CC=clang CXX=clang++ npm_config_clang=1
-      compiler: clang
+		osx_image: xcode9.2
+		language: node_js
+		node_js: "10"
+		env:
+        - ELECTRON_CACHE=$HOME/.cache/electron
+        - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+        - ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true
+	- os: linux
+		language: node_js
+		node_js: "10"
 cache:
-  directories:
-  - node_modules
-  - "$HOME/.electron"
-  - "$HOME/.cache"
-addons:
-	apt:
-		packages:
-		- libdbus-1-dev
-install:
-- nvm install 10
-- curl -o- -L https://yarnpkg.com/install.sh | bash
-- source ~/.bashrc
-- npm install -g xvfb-maybe
-- yarn
+  	directories:
+	- node_modules
+    - $HOME/.cache/electron
+    - $HOME/.cache/electron-builder
+before_install:
+	- if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get install libdbus-1-dev -y; fi
 script:
-- yarn run build
-branches:
-	only:
-    - master
+	- if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+		npm run build:linux
+	else
+		npm run build:mac
+	fi
