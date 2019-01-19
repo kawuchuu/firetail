@@ -40,5 +40,5 @@ after_success:
        bash upload.sh audiation*.deb*
     else
        wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-       bash upload Audiation*.dmg*
+       bash upload.sh Audiation*.dmg*
     fi
