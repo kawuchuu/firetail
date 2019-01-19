@@ -35,8 +35,9 @@ after_success:
   - |
     cd dist
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+       mv Audiation*.AppImage audiation.AppImage
        wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-       bash upload.sh Audiation*.AppImage*
+       bash upload.sh audiation.AppImage*
        bash upload.sh audiation*.deb*
     else
        wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
