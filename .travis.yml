@@ -1,11 +1,29 @@
-language: node_js
-dist: trusty
+osx_image: xcode8.3
 sudo: required
-node_js:
-  - "lts/*"
-before_install:
-  - npm i -g electron-builder
-  - electron-builder
+dist: trusty
+matrix:
+	include:
+	- os: osx
+  	- os: linux
+      env: CC=clang CXX=clang++ npm_config_clang=1
+      compiler: clang
+cache:
+  directories:
+  - node_modules
+  - "$HOME/.electron"
+  - "$HOME/.cache"
+addons:
+	apt:
+		packages:
+		- libdbus-1-dev
+install:
+- nvm install 10
+- curl -o- -L https://yarnpkg.com/install.sh | bash
+- source ~/.bashrc
+- npm install -g xvfb-maybe
+- yarn
 script:
-  - electron-builder --linux
-  - electron-builder --mac
+- yarn run build
+branches:
+	only:
+    - master
