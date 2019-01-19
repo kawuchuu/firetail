@@ -24,7 +24,7 @@ before_install:
 script:
   - |
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-       npm run build:linux
+       yarn run build:linux
     else
-       npm run build:mac
+       yarn run build:mac
     fi
