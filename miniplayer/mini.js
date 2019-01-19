@@ -112,6 +112,15 @@ $('#closeMini').click(() => {
     ipc.send('switch-windows-full');
 })
 
+$('#favoriteMini').click(() => {
+    if($('#favoriteMini').text() == 'favorite_border') {
+        $('#favoriteMini').text('favorite')
+    }
+    else {
+        $('#favoriteMini').text('favorite_border')
+    }
+})
+
 $('#minimizeMini').click(() => {
     remote.getCurrentWindow().minimize();
 })

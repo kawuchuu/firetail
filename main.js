@@ -101,7 +101,7 @@ function createMainWindow() {
 function createMiniPlayer() {
     var win = new BrowserWindow({
         width: 355, 
-        height: 180,
+        height: 215,
         icon: './assets/image/audiation-main-logo.png', 
         frame: false,
         backgroundColor: '#1f1f1f',
