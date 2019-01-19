@@ -22,9 +22,10 @@ before_install:
   - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get install libdbus-1-dev -y; fi
 
 install:
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo npm install -g electron-rebuild || electron-rebuild -v 3.0.8; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo npm install -g electron-rebuild; fi
 
 script:
+  - electron-rebuild -v 3.0.8
   - |
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
        npm run build:linux
