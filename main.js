@@ -105,7 +105,6 @@ function createMiniPlayer() {
         icon: './assets/image/audiation-main-logo.png', 
         frame: false,
         backgroundColor: '#1f1f1f',
-        titleBarStyle: 'hidden',
         show: false,
         title: 'Mini Player',
         alwaysOnTop: true,
