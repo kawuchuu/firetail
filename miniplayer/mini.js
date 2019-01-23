@@ -155,7 +155,7 @@ function clamp(min, val, max) {
 }
 
 function seekGetP(e) {
-    seekP = (e.clientX - seekBar.offsetLeft) / seekBar.clientWidth;
+    seekP = (e.clientX - seekBar.getBoundingClientRect().x) / seekBar.clientWidth;
     seekP = clamp(0, seekP, 1);
     return seekP;
 }
