@@ -2,3 +2,4 @@ backup/
 .vscode/
 node_modules/
 old-theme/
+dist/

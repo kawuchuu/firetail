@@ -120,7 +120,6 @@
                     <!--<div class="list-push"></div>-->
                 </div>
             </div>
-            <center>
                 <div class="new-nowplaying">
                     <div class="np-wrapper">
                         <div class="metadata">
@@ -140,40 +139,31 @@
                                     <i class="material-icons" id="forwardButton">skip_next</i>
                                     <i class="material-icons" id="repeatButton">repeat</i>
                                 </div>
-                                <p class="song-duration" id="songDurationTime">-:--</p>
-                                <div id="seekWrapper" class="seek-bar-wrapper">
-                                    <div class="seek-bar">
-                                        <div id="seekFill" class="fill"></div>
-                                        <div id="seekHandle" class="handle"></div>
+                                <div class="seek-time-wrap">
+                                    <p class="song-duration" id="songDurationTime">-:--</p>
+                                    <div id="seekWrapper" class="seek-bar-wrapper">
+                                        <div class="seek-bar">
+                                            <div id="seekFill" class="fill"></div>
+                                            <div id="seekHandle" class="handle"></div>
+                                        </div>
                                     </div>
+                                    <p class="song-duration" id="songDurationLength">-:--</p>
                                 </div>
-                                <p class="song-duration" id="songDurationLength">-:--</p>
                             </div>
                         </div>
-                        <div class="volume-control">
-                            <i class="material-icons" id="volumeButton">volume_up</i>
-                            <div id="volWrapper">
-                                <div style="display: none; opacity: 0" class="plus-minus">
-                                    <i class="material-icons" id="volDown">remove</i>
-                                    <i class="material-icons" id="volUp">add</i>
-                                </div>
-                                <div class="vol-bar">
-                                    <div class="vol-box" id="vol1"></div>
-                                    <div class="vol-box" id="vol2"></div>
-                                    <div class="vol-box" id="vol3"></div>
-                                    <div class="vol-box" id="vol4"></div>
-                                    <div class="vol-box" id="vol5"></div>
-                                    <div class="vol-box" id="vol6"></div>
-                                    <div class="vol-box" id="vol7"></div>
-                                    <div class="vol-box" id="vol8"></div>
-                                    <div class="vol-box" id="vol9"></div>
-                                    <div class="vol-box" id="vol10"></div>
+                        <div class="volume-control"> <!--Temporary-->
+                            <div class="vol-wrap">
+                                <i class="material-icons" id="volumeButton">volume_up</i>
+                                <div id="volWrapper" class="seek-bar-wrapper">
+                                    <div class="vol-bar">
+                                        <div id="volFill" class="fill"></div>
+                                        <div id="volHandle" class="handle"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </center>
         </div>
         <script src="./assets/js/jquery-3.3.1.min.js"></script>
         <script src="./assets/js/music.js"></script>

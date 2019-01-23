@@ -39,8 +39,7 @@
     },
     "win": {
       "target": [
-        "nsis",
-        "portable"
+        "nsis"
       ],
       "icon": "assets/image/icon.ico",
       "publisherName": "projsh_"

@@ -1,4 +1,6 @@
 # Audiation
+![Build Status](https://travis-ci.org/projsh/audiation.svg?branch=master)(https://travis-ci.org/projsh/audiation)
+
 Open-source music player built with Electron. Currently in beta, but useable.
 
 # Features
@@ -9,6 +11,7 @@ Open-source music player built with Electron. Currently in beta, but useable.
   - ID3 tag support
   - Custom volume controls
   - **Linux only:** MPRIS support (thanks Victor)
+
 ## Planned Features
   - Multiple source support
   - Playlist creation
@@ -17,7 +20,6 @@ Open-source music player built with Electron. Currently in beta, but useable.
   - Customisable Settings
   - Song list contains artist, album, duration column
   
-
 # How to run
 You can either use the executables provided or build it yourself.
 

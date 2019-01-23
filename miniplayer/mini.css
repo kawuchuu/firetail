@@ -11,8 +11,9 @@ body {
 .metadata {
     display: flex;
     align-items: center;
-    width: 315px;
+    width: 345px;
     -webkit-app-region: drag;
+    height: 120px;
 }
 
 .song-title {
@@ -65,6 +66,10 @@ body {
     position: relative;
 }
 
+.seek-bar-wrapper {
+    width: 220px
+}
+
 .top-section {
     display: flex;
 }
@@ -106,4 +111,8 @@ body {
     height: 95px;
     border-top: 2px solid #2d2d2d;
     box-shadow: 0px -2px 20px rgba(0,0,0,.3);
+}
+
+.song-duration {
+    margin: 0 15px 0 15px !important
 }

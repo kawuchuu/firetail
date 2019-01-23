@@ -83,7 +83,6 @@ const {
     app
 } = require('electron').remote;
 const path = require('path');
-
 var os = require('os');
 var fs = require('fs');
 var id3 = require('jsmediatags');
@@ -869,16 +868,36 @@ $('#seekWrapper').mouseleave(function() {
     }
 })
 
-$('#volWrapper').mouseover(function() {
+$('#volWrapper').mouseover(function () {
     if (currentlyPlaying === true) {
         $('#volHandle').addClass('handle-hover');
     }
 })
 
-$('#volWrapper').mouseleave(function() {
+$('#volWrapper').mouseleave(function () {
     if (currentlyPlaying === true) {
         if (!volMouseDown === false) return;
         $('#volHandle').removeClass('handle-hover');
+    }
+})
+
+$('#volumeButton').click(function () {
+    switch(isMuted) {
+        case false:
+            isMuted = true;
+            muteSaveVol = audio.volume;
+            audio.volume = 0;
+            currentVol = audio.volume;
+            volWidth = volFillBar.style.width;
+            volFillBar.style.width = 0;
+            $(this).text('volume_off');
+            break;
+        case true:
+            isMuted = false;
+            audio.volume = muteSaveVol;
+            currentVol = audio.volume;
+            volFillBar.style.width = volWidth;
+            $(this).text('volume_up')
     }
 })
 
@@ -1062,9 +1081,15 @@ function clamp(min, val, max) {
 }
 
 function seekGetP(e) {
-    seekP = (e.clientX - seekBar.offsetLeft) / seekBar.clientWidth;
+    seekP = (e.clientX - seekBar.getBoundingClientRect().x) / seekBar.clientWidth;
     seekP = clamp(0, seekP, 1);
     return seekP;
+}
+
+function volGetP(e) {
+    volP = (e.clientX - volBar.getBoundingClientRect().x) / volBar.clientWidth;
+    volP = clamp(0, volP, 1);
+    return volP;
 }
 
 seekBarWrapper.addEventListener('mousedown', function (e) {
@@ -1076,6 +1101,23 @@ seekBarWrapper.addEventListener('mousedown', function (e) {
         $('#seekHandle').addClass('handle-hover');
     }
 });
+
+volWrapper.addEventListener('mousedown', function (e) {
+    if (currentlyPlaying === true) {
+        volMouseDown = true;
+        volP = volGetP(e);
+        volFillBar.style.width = volP * 100 + '%';
+        $('#volHandle').addClass('handle-hover');
+        if (audio.volume == 0) {
+            isMuted = true;
+            $('#volumeButton').text('volume_off');
+        } else {
+            isMuted = false;
+            $('#volumeButton').text('volume_up');
+        }
+        muteSaveVol = audio.volume;
+    }
+})
 
 window.addEventListener('mousemove', function (e) {
     if (seekMouseDown == false && volMouseDown == false) return;
@@ -1093,6 +1135,12 @@ window.addEventListener('mousemove', function (e) {
             }
             $('#songDurationTime').html(`${minutes}:${seconds}`);
         }
+        if (volMouseDown == true) {
+            volP = volGetP(e);
+            volFillBar.style.width = volP * 100 + '%';
+            audio.volume = volP * 1
+            currentVol = audio.volume;
+        }
     }
 });
 
@@ -1107,109 +1155,23 @@ window.addEventListener('mouseup', function (e) {
             $('#seekHandle').removeClass('handle-hover');
             seekBarTrack();
         }
+        if (volMouseDown == true) {
+            if (audio.volume == 0) {
+                isMuted = true
+                $('#volumeButton').text('volume_off');
+            } else {
+                isMuted = false;
+                $('#volumeButton').text('volume_up');
+            }
+            volMouseDown = false;
+            volFillBar.style.width = volP * 100 + '%';
+            audio.volume = volP * 1
+            currentVol = audio.volume;
+            $('#volHandle').removeClass('handle-hover');
+            if (isMuted == true && audio.volume != 0) {
+                isMuted = false;
+                $('#volumeButton').text('volume_up');
+            }
+        }
     }
 });
-var volNum = 8;
-var volDec = .8;
-var volMuteCon = false;
-upDownVol();
-
-function upDownVol() {
-    if (volNum == 1) {
-        muteSaveVol = 0.1;
-    }
-    if (volNum == 11) volNum = volNum - 1;
-    if (volNum == -1) {
-        volNum = volNum + 1;
-    }
-    if (volNum == 10) {
-        volDec = 1;
-    } else {
-        volDec = parseFloat(`0.${volNum}`);
-    }
-    if (audio) {
-        audio.volume = volDec;
-    }
-    $('.vol-box').css({
-        background: '#3d3d3d'
-    })
-    for (i = 0; i < volNum; i++) {
-        $(`#vol${i + 1}`).css({
-            background: '#9a07df'
-        })
-    };
-    currentVol = volDec;
-}
-$('.vol-box').mousedown(function() {
-    if (isMuted == true) {
-        muteButton()
-    }
-    volNum = $(this).attr('id').substr(3);
-    upDownVol();
-})
-
-$('#volWrapper').mouseover(function() {
-    $('.vol-bar').css({
-        bottom: '11px'
-    });
-    /*$('.plus-minus').show();
-    $('.plus-minus').css({
-        opacity: 1
-    })*/
-    $('.vol-box').addClass('vol-change')
-})
-
-$('#volWrapper').mouseleave(function() {
-    $('.vol-bar').css({
-        bottom: '0'
-    })
-    /*$('.plus-minus').css({
-        opacity: 0
-    })
-    setTimeout(() => {
-        $('.plus-minus').hide();
-    }, 200)*/
-    $('.vol-box').removeClass('vol-change')
-})
-
-$('#volUp').click(function() {
-    if (volNum == 0) {
-        muteButton();
-    } else {
-        volNum++;
-    }
-    upDownVol();
-})
-
-$('#volDown').click(function() {
-    if (volNum == 1) {
-        muteButton()
-    }
-    volNum = volNum - 1;
-    upDownVol();
-})
-var mutedFromButton = false;
-$('#volumeButton').click(function() {
-    muteButton();
-})
-
-function muteButton() {
-    switch (isMuted) {
-        case false:
-            isMuted = true;
-            if (volNum == 10) {
-                muteSaveVol = 10;
-            } else {
-                muteSaveVol = parseInt(`${audio.volume}`.substr(2));
-            }            
-            volNum = 0;
-            $('#volumeButton').text('volume_off');
-            upDownVol();
-            break;
-        case true:
-            volNum = muteSaveVol;
-            $('#volumeButton').text('volume_up');
-            upDownVol();
-            isMuted = false;
-    }
-}
