@@ -1,5 +1,5 @@
 # Audiation
-![Build Status](https://travis-ci.org/projsh/audiation.svg?branch=master)(https://travis-ci.org/projsh/audiation)
+[![Build Status](https://travis-ci.org/projsh/audiation.svg?branch=master)](https://travis-ci.org/projsh/audiation)
 
 Open-source music player built with Electron. Currently in beta, but useable.
 
