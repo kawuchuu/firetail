@@ -19,11 +19,12 @@ body {
 .song-title {
     font-size: 18px;
     line-height: 22px;
-    font-family: 'Dosis Bold', 'Dosis', sans-serif;
+    font-family: 'Dosis', sans-serif;
     width: 200px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    font-weight: bold;
 }
 
 .song-artist {

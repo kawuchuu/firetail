@@ -37,10 +37,6 @@
         </div>
         <div class="play-type" id="playType">
             <div class="play-type-wrapper">
-                <div class="logo-bottom">
-                    <img id="headerIcon" src="./assets/svg/main-logo-white.svg">
-                    <p id="betaTag">BETA</p>
-                </div>
                 <button id="newPlay" class="button-active">
                     <i class="material-icons">library_music</i>Library</button>
                 <div class="type-separator"></div>
@@ -80,8 +76,6 @@
                             <i class="material-icons close-button" id="effectsClose">close</i>
                             <h1>Effects</h1>
                             <div class="effect-controls">
-                                <p>This feature is still in development.<br>WARNING: SOME EFFECTS MAY DAMAGE YOUR HEARING.
-                                    CONTINUE AT YOUR OWN RISK.</p>
                                 <div id="gainControl">
                                     <p>Gain</p>
                                     <input type="number" value="1" min="0" max="100" id="gainInput">
@@ -91,6 +85,8 @@
                                     <input type="number" value="5" min="0" max="100" id="reverbInput">
                                     <button id="reverbEnable">Enable</button>
                                 </div>
+                                <p>This feature is still in development.<br>WARNING: SOME EFFECTS MAY DAMAGE YOUR HEARING.
+                                    CONTINUE AT YOUR OWN RISK.</p>
                             </div>
                         </div>
                     </div>
@@ -100,10 +96,16 @@
                 <div id="newContentWrapper">
                     <div class="shadow-hide"></div>
                     <div class="top-bar">
-                        <h2 id="songsTab" class="tab-active">Songs</h2>
-                        <h2 id="artistsTab">Artists</h2>
-                        <h2 id="albumsTab">Albums</h2>
-                        <h2 id="playlistsTab">Playlists</h2>
+                        <div class="logo-bottom">
+                            <img id="headerIcon" src="./assets/svg/main-logo-white.svg">
+                            <p id="betaTag">BETA</p>
+                        </div>
+                        <div class="top-bar-wrapper">
+                            <h2 id="songsTab" class="tab-active">Songs</h2>
+                            <h2 id="artistsTab">Artists</h2>
+                            <h2 id="albumsTab">Albums</h2>
+                            <h2 id="playlistsTab">Playlists</h2>
+                        </div>
                     </div>
                     <ul id="songsPage" class="active-tab">
                         <div class="list-wrapper"></div>
@@ -151,7 +153,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="volume-control"> <!--Temporary-->
+                        <div class="volume-control">
                             <div class="vol-wrap">
                                 <i class="material-icons" id="volumeButton">volume_up</i>
                                 <div id="volWrapper" class="seek-bar-wrapper">

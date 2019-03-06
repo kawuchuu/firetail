@@ -143,7 +143,7 @@ if (process.platform === 'linux') {
         top: '0'
     });
     $('#playType').css({
-        paddingTop: '15px'
+        paddingTop: '67px'
     })
     $('.shadow-hide').css({
         top: '0'
@@ -154,6 +154,9 @@ if (process.platform === 'linux') {
     $('#effectsMenu').css({
         top: 0,
         height: '100%'
+    })
+    $('.play-type-wrapper').css({
+        height: 'calc(100% - 184px)'
     })
 }
 
@@ -168,7 +171,7 @@ if (process.platform === 'darwin') {
         top: '20px'
     });
     $('#playType').css({
-        paddingTop: '35px'
+        paddingTop: '87px'
     })
     $('.shadow-hide').css({
         top: '20px'
@@ -179,6 +182,9 @@ if (process.platform === 'darwin') {
     $('#effectsMenu').css({
         top: '22px',
         height: 'calc(100% - 22px)'
+    })
+    $('.play-type-wrapper').css({
+        height: 'calc(100% - 204px'
     })
 }
 

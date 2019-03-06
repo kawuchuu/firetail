@@ -4,7 +4,8 @@
 }
 
 @font-face {
-    font-family: 'Dosis Bold';
+    font-family: 'Dosis';
+    font-weight: bold;
     src: url('../fonts/Dosis-Bold.otf') format('opentype')
 }
 
@@ -90,9 +91,8 @@ h1.header-heading {
     width: 50px;
     text-align: center;
     vertical-align: middle;
-    margin-right: 10px;
+    margin-right: 80px;
     position: relative;
-    margin-left: 25px;
 }
 
 #betaTag {
@@ -120,7 +120,7 @@ h1.header-heading {
 button {
     background: #7f00b9;
     color: #fff;
-    font-family: 'Dosis Bold', 'Dosis', sans-serif;
+    font-family: 'Dosis', sans-serif;
     font-weight: bold;
     width: auto;
     height: 40px;
@@ -311,7 +311,7 @@ div.new-nowplaying i:hover {
 
 #playType {
     display: inline-block;
-    padding-top: 40px;
+    padding-top: 97px;
     vertical-align: top;
     position: fixed;
     z-index: 9;
@@ -322,9 +322,15 @@ div.new-nowplaying i:hover {
     box-shadow: 1px 0px 20px rgba(0,0,0,.3);
 }
 
+.logo-bottom {
+    position: fixed;
+    z-index: 10;
+}
+
 .play-type-wrapper {
-    height: calc(100% - 135px);
+    height: calc(100% - 210px);
     overflow-y: auto;
+    padding: 20px 0 10px 0;
 }
 
 .play-type-wrapper::-webkit-scrollbar {
@@ -417,7 +423,7 @@ div.type-separator {
 #settingsContent p {
     font-size: 42px;
     text-align: center;
-    font-family: 'Dosis Bold', 'Dosis', sans-serif;
+    font-family: 'Dosis', sans-serif;
 }
 
 #audiationVer {
@@ -481,7 +487,7 @@ div.type-separator {
 
 h1#songTitle {
     font-size: 18px;
-    font-family: 'Dosis Bold', 'Dosis', sans-serif;
+    font-family: 'Dosis', sans-serif;
     margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -544,21 +550,25 @@ button i {
 .top-bar {
     margin-top: 0;
     padding: 10px;
-    padding-left: 40px;
+    padding-left: 20px;
     width: 100%;
     background-color: #1e1e1e;
     border-bottom: 2px solid #2d2d2d;
     height: 45px;
     position: fixed;
-    left: 175px;
     top: 30px;
-    z-index: 8;
+    z-index: 9;
     box-shadow: 0px 1px 20px rgba(0,0,0,.3);
-    font-family: 'Dosis Bold', 'Dosis', sans-serrif;
-    display: flex;
+    font-family: 'Dosis', sans-serrif;
 }
 
-.top-bar h2 {
+.top-bar-wrapper {
+    display: flex;
+    position: relative;
+    left: 175px;
+}
+
+.top-bar-wrapper h2 {
     margin: 14px 17px 0 17px;
     font-size: 18px;
     opacity: .65;
@@ -566,7 +576,7 @@ button i {
     text-transform: uppercase;
 }
 
-.top-bar h2:hover {
+.top-bar-wrapper h2:hover {
     opacity: .9;
 }
 
@@ -739,7 +749,7 @@ button i {
 }
 
 h1 {
-    font-family: 'Dosis Bold', 'Dosis', sans-serif;
+    font-family: 'Dosis', sans-serif;
 }
 
 .close-button {
@@ -761,4 +771,13 @@ h1 {
     outline: none;
     border: 2px solid #2d2d2d;
     border-radius: 20px;
+    padding: 5px 10px 5px 10px;
+}
+
+input {
+    font-family: 'Dosis', sans-serrif !important;
+}
+
+.effect-controls button {
+    margin: 5px;
 }
