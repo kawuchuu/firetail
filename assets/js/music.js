@@ -567,7 +567,6 @@ $('#shuffleButton').click(function() {
 $('.tb-close').click(function() {
     app.exit();
 });
-
 $('.tb-maximize').click(function() {
     var window = remote.getCurrentWindow();
     if (!window.isMaximized()) {
@@ -576,7 +575,29 @@ $('.tb-maximize').click(function() {
         window.unmaximize();
     }
 });
-var window = remote.getCurrentWindow();
+
+function maximizeWindow() {
+    var window = remote.getCurrentWindow();
+    if (!window.isMaximized()) {
+        $('.tb-unmaximize').hide()
+        $('.tb-ismaximize').show();
+        $('#noDrag').show();
+    } else {
+        $('.tb-unmaximize').show()
+        $('.tb-ismaximize').hide();
+        $('#noDrag').hide();
+    }
+}
+
+maximizeWindow();
+
+ipc.on('maximizeWindow', () => {
+    maximizeWindow();
+})
+
+ipc.on('unmaximizeWindow', () => {
+    maximizeWindow();
+})
 
 window.addEventListener('blur', () => {
     $('.title-bar').css({
@@ -599,7 +620,6 @@ window.addEventListener('focus', () => {
 $('.tb-minimize').click(function() {
     var window = remote.getCurrentWindow();
     window.minimize();
-
 })
 
 window.onkeydown = function (e) {
@@ -626,12 +646,6 @@ document.addEventListener("keydown", function (e) {
             })*/
     }
 });
-
-if (process.platform != 'linux') {
-    globalShortcut.register('MediaPlayPause', resumeButton);
-    globalShortcut.register('MediaPreviousTrack', previousSong);
-    globalShortcut.register('MediaNextTrack', nextSong);
-}
 
 function noSongPlaying() {
     if (currentlyPlaying === false) {

@@ -1,4 +1,4 @@
-const {app, BrowserWindow, dialog} = require('electron');
+const {app, BrowserWindow, globalShortcut} = require('electron');
 const path = require('path');
 const url = require('url');
 
@@ -56,17 +56,33 @@ function createMainWindow() {
         });
     }
 
-    ipc.on('playpause', (event, arg) => {
+    if (process.platform != 'linux') {
+        globalShortcut.register('MediaPlayPause', resumeButton);
+        globalShortcut.register('MediaPreviousTrack', previousSong);
+        globalShortcut.register('MediaNextTrack', nextSong);
+    }
+
+    function resumeButton() {
         win.webContents.send("playpause");
+    }
+    function previousSong() {
+        win.webContents.send("previous");
+    }
+    function nextSong() {
+        win.webContents.send("next");
+    }
+
+    ipc.on('playpause', (event, arg) => {
+        resumeButton();
     });
     ipc.on('play', (event, arg) => {
         win.webContents.send("play");
     });
     ipc.on('next', (event, arg) => {
-        win.webContents.send("next");
+        nextSong()
     })
     ipc.on('previous', (event, arg) => {
-        win.webContents.send("previous");
+        previousSong();
     })
     ipc.on('shuffle', (event) => {
         win.webContents.send("shuffle");
@@ -83,6 +99,12 @@ function createMainWindow() {
     ipc.on('seek-time-main', (event, arg) => {
         win.webContents.send('seek-time-main', arg)
     });
+    win.on('maximize', () => {
+        win.webContents.send('maximizeWindow');
+    })
+    win.on('unmaximize', () => {
+        win.webContents.send('unmaximizeWindow');
+    })
     win.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),
         protocol: 'file:',
@@ -140,7 +162,7 @@ function createMiniPlayer() {
     });
     ipc.on('play-mini', () => {
         win.webContents.send('play-mini')
-    })
+    });
 }
 
 function createWindows() {

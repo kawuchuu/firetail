@@ -16,29 +16,34 @@
         <div class="title-bar">
             <div id="noDrag"></div>
             <div class="title-bar-wrapper" style="display: none">
-                <center>
-                    <div class="tb-button tb-minimize">
-                        <svg id="TitleBarMinimize" width="12" height="12" viewBox="0 0 12 12">
-                            <rect fill="#ffffff" width="10" height="1" x="1" y="6"></rect>
-                        </svg>
-                    </div>
-                    <div class="tb-button tb-maximize">
-                        <svg id="TitleBarMaximize" width="12" height="12" viewBox="0 0 12 12">
-                            <rect width="9" height="9" x="1.5" y="1.5" fill="none" stroke="#ffffff"></rect>
-                        </svg>
-                    </div>
-                    <div class="tb-button tb-close">
-                        <svg id="TitleBarClose" width="12" height="12" viewBox="0 0 12 12">
-                            <polygon fill="#ffffff" fill-rule="evenodd" points="11 1.576 6.583 6 11 10.424 10.424 11 6 6.583 1.576 11 1 10.424 5.417 6 1 1.576 1.576 1 6 5.417 10.424 1"></polygon>
-                        </svg>
-                    </div>
-                </center>
+                <div class="tb-button tb-minimize">
+                    <svg id="TitleBarMinimize" width="12" height="12" viewBox="0 0 12 12">
+                        <rect fill="#ffffff" width="10" height="1" x="1" y="6"></rect>
+                    </svg>
+                </div>
+                <div class="tb-button tb-maximize tb-ismaximize">
+                    <svg id="TitleBarMaximize" width="12" height="12" viewBox="0 0 12 12">
+                        <rect width="9" height="9" x="1.5" y="1.5" fill="none" stroke="#ffffff"></rect>
+                    </svg>
+                </div>
+                <div class="tb-button tb-maximize tb-unmaximize">
+                    <svg width='10' height='10' viewBox='0 0 11 11' fill='none'>
+                        <path d='M11 8.798H8.798V11H0V2.202h2.202V0H11v8.798zm-3.298-5.5h-6.6v6.6h6.6v-6.6zM9.9 1.1H3.298v1.101h5.5v5.5h1.1v-6.6z' fill='#fff'/>
+                    </svg>
+                </div>
+                <div class="tb-button tb-close">
+                    <svg id="TitleBarClose" width="12" height="12" viewBox="0 0 12 12">
+                        <polygon fill="#ffffff" fill-rule="evenodd" points="11 1.576 6.583 6 11 10.424 10.424 11 6 6.583 1.576 11 1 10.424 5.417 6 1 1.576 1.576 1 6 5.417 10.424 1"></polygon>
+                    </svg>
+                </div>
             </div>
         </div>
         <div class="play-type" id="playType">
             <div class="play-type-wrapper">
                 <button id="newPlay" class="button-active">
                     <i class="material-icons">library_music</i>Library</button>
+                <button id="playlistsButton">
+                    <i class="material-icons">playlist_play</i>Playlists</button>
                 <div class="type-separator"></div>
                 <div id="extraButtons">
                     <button id="refreshFiles">
@@ -98,13 +103,13 @@
                     <div class="top-bar">
                         <div class="logo-bottom">
                             <img id="headerIcon" src="./assets/svg/main-logo-white.svg">
+                            <div class="icon-text">Audiation</div>
                             <p id="betaTag">BETA</p>
                         </div>
                         <div class="top-bar-wrapper">
                             <h2 id="songsTab" class="tab-active">Songs</h2>
                             <h2 id="artistsTab">Artists</h2>
                             <h2 id="albumsTab">Albums</h2>
-                            <h2 id="playlistsTab">Playlists</h2>
                         </div>
                     </div>
                     <ul id="songsPage" class="active-tab">
@@ -115,9 +120,6 @@
                     </div>
                     <div class="placeholder-message" id="albumsPage">
                         <p>This is a placeholder message for the albums page.</p>
-                    </div>
-                    <div class="placeholder-message" id="playlistsPage">
-                        <p>This is a placeholder message for the playlists page.</p>
                     </div>
                     <!--<div class="list-push"></div>-->
                 </div>

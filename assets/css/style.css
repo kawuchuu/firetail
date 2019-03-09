@@ -40,39 +40,37 @@ html, body {
 .title-bar {
     -webkit-app-region: drag;
     width: 100%;
-    height: 32px;
+    height: 30px;
     margin: 0;
     position: fixed;
     z-index: 12;
     background: #1e1e1e;
     border-bottom: 2px solid #2d2d2d;
-    transition: .15s;
 }
 
 .title-bar-wrapper {
-    float: right;
-    -webkit-app-region: no-drag;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 
 .tb-button {
-    width: 43px;
-    height: 32px;
-    display: inline-block;
+    -webkit-app-region: no-drag;
+    width: 46px;
+    height: 30px;
     margin: 0;
-    transition: .2s;
-}
-
-.tb-button svg {
-    position: relative;
-    top: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .tb-button:hover {
     background: rgb(37, 37, 37);
+    opacity: 1 !important;
 }
 
 .tb-close:hover {
-    background: #ff0000;
+    background: #E81123;
 }
 
 h1.header-heading {
@@ -88,23 +86,35 @@ h1.header-heading {
 
 #headerIcon {
     display: inline-block;
-    width: 50px;
+    width: 35px;
     text-align: center;
-    vertical-align: middle;
-    margin-right: 80px;
-    position: relative;
+    margin: 0 10px 0 0;
 }
 
 #betaTag {
-    text-align: center;
-    font-size: 9px;
-    font-family: 'Bahnschrift', 'Dosis', sans-serif;
-    margin-top: 0;
-    opacity: .65;
+    font-size: 10px;
+    padding: 2px 4px 2px 4px;
+    border: solid 2px #cccccc;
+    color: #cccccc;
+    border-radius: 20px;
+    margin: 0px 10px 0px 10px;
     position: relative;
-    transform: translateY(-15px);
-    left: 0;
-    margin-left: 0;
+    top: 1px;
+    font-weight: bold;
+}
+
+.icon-text {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.logo-bottom {
+    position: fixed;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    top: 35px;
 }
 
 .header-beta {
@@ -123,7 +133,7 @@ button {
     font-family: 'Dosis', sans-serif;
     font-weight: bold;
     width: auto;
-    height: 40px;
+    height: 37px;
     padding-left: 15px;
     padding-right: 15px;
     border: none;
@@ -133,11 +143,12 @@ button {
     outline: none;
     cursor: pointer;
     transition: .2s;
-    font-size: 18px;
+    font-size: 17px;
     margin-left: 10px;
     margin-right: 10px;
     text-align: left;
     overflow: hidden;
+    display: flex;
 }
 
 button:hover, .button-active {
@@ -163,7 +174,7 @@ button:hover, .button-active {
     display: flex;
     align-items: center;
     border-radius: 999px;
-    height: 5px;
+    height: 4px;
     transition: .15s;
     z-index: 5
 }
@@ -178,7 +189,7 @@ button:hover, .button-active {
 }
 
 .fill {
-    height: 5px;
+    height: 4px;
     background: linear-gradient(to right, #9a07df, #c500bb);
     border-radius: 10000px; 
     transition: .1s;
@@ -190,7 +201,7 @@ button:hover, .button-active {
     background: #ae00ff;
     border-radius: 11111px;
     margin-left: -5px;
-    transform: scale(1.75);
+    transform: scale(1.5);
     transition: all .1s;
     box-shadow: 0px 2px 15px rgba(174, 0, 255, 0.65)
 }
@@ -225,21 +236,21 @@ ul {
     font-size: 22px;
     position: fixed;
     padding: 0;
-    height: calc(100% - 183px);
+    height: calc(100% - 169px);
     margin: 0;
     white-space: nowrap;
     background: #1a1a1a;
-    margin-top: 21px;
+    margin-top: 7px;
     width: 100%;
     overflow-y: scroll;
 }
 
 li {
     border-bottom: 1px solid #2d2d2d;
-    padding: 0 0 5px 0;
+    padding: 0 0 7px 0;
     overflow: hidden;
     position: relative;
-    height: 35px;
+    height: 30px;
     margin-left: 192px;
 }
 
@@ -263,7 +274,7 @@ p.new-song-title {
 }
 
 .results-link p {
-    font-size: 16px;
+    font-size: 15px;
     width: 100%;
 }
 
@@ -311,7 +322,7 @@ div.new-nowplaying i:hover {
 
 #playType {
     display: inline-block;
-    padding-top: 97px;
+    padding-top: 82px;
     vertical-align: top;
     position: fixed;
     z-index: 9;
@@ -322,13 +333,8 @@ div.new-nowplaying i:hover {
     box-shadow: 1px 0px 20px rgba(0,0,0,.3);
 }
 
-.logo-bottom {
-    position: fixed;
-    z-index: 10;
-}
-
 .play-type-wrapper {
-    height: calc(100% - 210px);
+    height: calc(100% - 199px);
     overflow-y: auto;
     padding: 20px 0 10px 0;
 }
@@ -349,6 +355,7 @@ div.new-nowplaying i:hover {
     transform: translateX(7px);
     cursor: pointer;
     position: relative;
+    bottom: 2px;
 }
 
 .play-pause:hover {
@@ -483,10 +490,11 @@ div.type-separator {
     min-width: 25px;
     max-width: 25px;
     text-align: center;
+    font-size: 14px;
 }
 
 h1#songTitle {
-    font-size: 18px;
+    font-size: 16px;
     font-family: 'Dosis', sans-serif;
     margin: 0;
     overflow: hidden;
@@ -502,7 +510,7 @@ h1#songTitle {
 #artist {
     margin: 0;
     opacity: .75;
-    font-size: 14px;
+    font-size: 12px;
     display: block;
     text-overflow: ellipsis;
     line-height: 18px;
@@ -545,16 +553,16 @@ button i {
     vertical-align: top;
     position: relative;
     margin-right: 12px;
+    font-size: 22px !important;
 }
 
 .top-bar {
     margin-top: 0;
-    padding: 10px;
-    padding-left: 20px;
+    padding: 10px 10px 10px 15px;
     width: 100%;
     background-color: #1e1e1e;
     border-bottom: 2px solid #2d2d2d;
-    height: 45px;
+    height: 30px;
     position: fixed;
     top: 30px;
     z-index: 9;
@@ -565,12 +573,13 @@ button i {
 .top-bar-wrapper {
     display: flex;
     position: relative;
-    left: 175px;
+    left: 200px;
+    bottom: 8px;
 }
 
 .top-bar-wrapper h2 {
     margin: 14px 17px 0 17px;
-    font-size: 18px;
+    font-size: 16px;
     opacity: .65;
     transition: .2s;
     text-transform: uppercase;
@@ -581,7 +590,7 @@ button i {
 }
 
 .tab-active {
-    font-size: 24px !important;
+    font-size: 20px !important;
     opacity: 1 !important;
     margin: 10px 17px 0 17px !important;
 }
@@ -591,7 +600,7 @@ button i {
     background-color: #1e1e1e;
     border-bottom: 2px solid #2d2d2d;
     position: fixed;
-    height: 65px;
+    height: 50px;
     top: 30px;
     width: 20px;
     left: 190px;
@@ -618,7 +627,7 @@ button i {
 #noDrag {
     -webkit-app-region: no-drag;
     width: 100%;
-    height: 2px;
+    height: 4px;
     position: fixed;
 }
 
@@ -657,7 +666,6 @@ button i {
     display: flex;
     align-items: center;
     border-radius: 999px;
-    cursor: pointer; 
     height: 5px;
     transition: .15s;
     margin-right: 15px;
@@ -701,7 +709,7 @@ button i {
 }
 
 .placeholder-message {
-    margin: 50px 0 0 210px;
+    margin: 40px 0 0 210px;
 }
 
 .vol-change {
