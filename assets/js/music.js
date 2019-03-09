@@ -143,20 +143,23 @@ if (process.platform === 'linux') {
         top: '0'
     });
     $('#playType').css({
-        paddingTop: '67px'
+        paddingTop: '52px'
     })
     $('.shadow-hide').css({
         top: '0'
     });
     $('#songsPage').css({
-        height: 'calc(100% - 153px)'
+        height: 'calc(100% - 140px)'
     })
     $('#effectsMenu').css({
         top: 0,
         height: '100%'
     })
     $('.play-type-wrapper').css({
-        height: 'calc(100% - 184px)'
+        height: 'calc(100% - 169px)'
+    })
+    $('.logo-bottom').css({
+        top: '6px'
     })
 }
 
@@ -171,7 +174,7 @@ if (process.platform === 'darwin') {
         top: '20px'
     });
     $('#playType').css({
-        paddingTop: '87px'
+        paddingTop: '72px'
     })
     $('.shadow-hide').css({
         top: '20px'
@@ -184,7 +187,10 @@ if (process.platform === 'darwin') {
         height: 'calc(100% - 22px)'
     })
     $('.play-type-wrapper').css({
-        height: 'calc(100% - 204px'
+        height: 'calc(100% - 189px)'
+    })
+    $('.logo-bottom').css({
+        top: '26px'
     })
 }
 
