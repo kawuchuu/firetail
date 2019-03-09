@@ -76,6 +76,7 @@ var albumArt;
 var AudioContext = window.AudioContext;
 var audioCtx = new AudioContext();
 var gain;
+var theme = 'dark';
 remote = require('electron').remote;
 const {
     globalShortcut,
@@ -88,6 +89,7 @@ var fs = require('fs');
 var id3 = require('jsmediatags');
 var ipc = require('electron').ipcRenderer;
 var drpc = require('discord-rpc');
+var settings = require('electron-settings')
 var ver = '1.1b';
 
 $('#audiationVer').text(`Audiation v.${ver}`);
@@ -97,6 +99,16 @@ $('#audiationVer').dblclick(function() {
 $('#volFill').css({
     width: '100%'
 })
+
+if (settings.has('theme') == false) {
+    settings.set('theme', 'dark')
+}
+
+if (settings.get('theme') == 'light') {
+    theme = 'light';
+    $('html').addClass('light');
+    $('#lightSwitch').prop('checked', true)
+}
 
 ipc.on('playpause', (event, arg) => {
     resumeButton()
@@ -127,7 +139,12 @@ $(document).ready(function() {
             document.body.style.cursor = 'default'
         }, 250)
     }, 250);
-})
+});
+
+if (theme == 'light') {
+    document.getElementById('songPicture').style.background = 'url(assets/svg/no_image_light.svg)';
+    document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image_light.svg)';
+}
 
 if (process.platform === 'win32') {
     $('.title-bar-wrapper').show();
@@ -151,7 +168,7 @@ if (process.platform === 'linux') {
     $('#songsPage').css({
         height: 'calc(100% - 140px)'
     })
-    $('#effectsMenu').css({
+    $('.menu').css({
         top: 0,
         height: '100%'
     })
@@ -182,7 +199,7 @@ if (process.platform === 'darwin') {
     $('#songsPage').css({
         height: 'calc(100% - 173px)'
     })
-    $('#effectsMenu').css({
+    $('.menu').css({
         top: '22px',
         height: 'calc(100% - 22px)'
     })
@@ -273,9 +290,15 @@ function songActiveReset() {
     $(`.play-pause`).css({
         opacity: 0
     })
-    $('.results-link').css({
-        color: '#fff'
-    })
+    if (theme == 'light') {
+        $('.results-link').css({
+            color: '#3d3d3d'
+        })
+    } else {
+        $('.results-link').css({
+            color: '#fff'
+        })
+    }
 }
 
 function shuffle(array) {
@@ -573,6 +596,19 @@ $('#shuffleButton').click(function() {
 $('.tb-close').click(function() {
     app.exit();
 });
+
+$('.tb-close').mouseover(() => {
+    $('#TitleBarClose polygon').css({
+        fill: '#fff'
+    })
+})
+
+$('.tb-close').mouseleave(() => {
+    $('#TitleBarClose polygon').css({
+        fill: ''
+    })
+})
+
 $('.tb-maximize').click(function() {
     var window = remote.getCurrentWindow();
     if (!window.isMaximized()) {
@@ -606,18 +642,30 @@ ipc.on('unmaximizeWindow', () => {
 })
 
 window.addEventListener('blur', () => {
-    $('.title-bar').css({
-        background: '#222222'
-    });
+    if (theme == 'light') {
+        $('.title-bar').css({
+            background: '#f5f5f5'
+        });
+    } else {
+        $('.title-bar').css({
+            background: '#222222'
+        });
+    }
     $('.tb-button').css({
         opacity: .5
     })
 })
 
 window.addEventListener('focus', () => {
-    $('.title-bar').css({
-        background: '#1e1e1e'
-    });
+    if (theme == 'light') {
+        $('.title-bar').css({
+            background: '#ffffff'
+        });
+    } else {
+        $('.title-bar').css({
+            background: '#1e1e1e'
+        });
+    }
     $('.tb-button').css({
         opacity: 1
     })
@@ -673,31 +721,46 @@ $("#settingsClose").click(function() {
     $("#settings").hide();
 });
 
+var menuOpened;
+
 function navOpen() {
-    $('#effectsMenu').show();
+    $(`#${menuOpened}Menu`).show();
     setTimeout(() => {
-        $('#effectsMenu').css({
+        $(`#${menuOpened}Menu`).css({
             opacity: 1
         })
     }, 1);
 }
 
 function navClose() {
-    $('#effectsMenu').css({
+    $('#effectsMenu, #settingsMenu').css({
         opacity: 0
     })
     setTimeout(() => {
-        $('#effectsMenu').hide();
+        $('#effectsMenu, #settingsMenu').hide();
     }, 250);
 }
 
-$('#effectsButton').click(function () {
+$('#effectsButton, #settingsButton').click(function () {
+    menuOpened = this.id.substr(0, this.id.length - 6);
     navOpen();
 })
 
-$('#effectsClose').click(function () {
+$('#effectsClose, #settingsClose').click(function () {
     navClose();
 });
+
+$('#lightSwitch').click(() => {
+    if (theme == 'light') {
+        settings.set('theme', 'dark')
+    } else {
+        settings.set('theme', 'light')
+    }
+    setTimeout(() => {
+        app.relaunch();
+        app.exit(0)
+    }, 500);
+})
 
 $('#miniPlayerButton').click(() => {
     remote.getCurrentWindow().hide();
@@ -737,7 +800,7 @@ function findSong() {
                 audio = new Audio(`${os.homedir}/Music/Audiation/${newFileChosen}`);
                 source = audioCtx.createMediaElementSource(audio);
                 gain = audioCtx.createGain();
-                source.connect(gain).connect(audioCtx.destination);
+                source.connect(gain).connect(audioCtx.destination)
             } else {
                 audio.src = `${os.homedir}/Music/Audiation/${newFileChosen}`
             }
@@ -782,7 +845,7 @@ function impulseGet() {
     ajaxRequest.send();
 }
 var reverbEnabled = false;
-$('#reverbEnable').click(function() {
+$('#reverbSwitch').click(function() {
     switch(reverbEnabled) {
         case false:
             source.connect(convolverGain);
@@ -800,13 +863,27 @@ $('#reverbEnable').click(function() {
             reverbEnabled = false;
     }
 })
+var gainEnabled = false;
+$('#gainSwitch').click(() => {
+    switch(gainEnabled) {
+        case false:
+            gain.gain.value = gainInput
+            gainEnabled = true;
+            break;
+        case true:
+            gain.gain.value = 1;
+            gainEnabled = false;
+    }
+})
 
 var gainInput = 1;
 $('#gainInput').change(function() {
     if ($(this).val() >= 100) $(this).val(100);
     if ($(this).val() <= 0) $(this).val(0);
     gainInput = $(this).val();
-    gain.gain.value = gainInput;
+    if (gainEnabled == true) {
+        gain.gain.value = gainInput;
+    }
 })
 
 var reverbInput = 1;
@@ -1017,9 +1094,15 @@ function seekBarTrack() {
                     document.getElementById('songPictureBlur').style.background = `url(${albumArt})`
 
                 } else {
-                    document.getElementById('songPicture').style.background = 'url(assets/svg/no_image.svg)';
-                    document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image.svg)';
-                    albumArt = 'assets/svg/no_image.svg'
+                    if (theme == 'light') {
+                        document.getElementById('songPicture').style.background = 'url(assets/svg/no_image_light.svg)';
+                        document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image_light.svg)';
+                        albumArt = 'assets/svg/no_image_light.svg'
+                    } else {
+                        document.getElementById('songPicture').style.background = 'url(assets/svg/no_image.svg)';
+                        document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image.svg)';
+                        albumArt = 'assets/svg/no_image.svg'
+                    }
                 }
                 $('h1#songTitle').text(Title);
                 $('#artist').text(`${artist}`);
@@ -1048,8 +1131,16 @@ function seekBarTrack() {
             onError: function (tag) {
                 $('#songTitle').text(newFileName);
                 $('#artist').text('Unknown Artist');
-                document.getElementById('songPicture').style.background = 'url(assets/svg/no_image.svg)';
-                document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image.svg)';
+                var testLight = 'assets/svg/no_image.svg';
+                if (theme == 'light') {
+                    document.getElementById('songPicture').style.background = 'url(assets/svg/no_image_light.svg)';
+                    document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image_light.svg)';
+                    testLight = 'assets/svg/no_image_light.svg'
+                } else {
+                    document.getElementById('songPicture').style.background = 'url(assets/svg/no_image.svg)';
+                    document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image.svg)';
+                    testLight = 'assets/svg/no_image.svg'
+                }
                 $('title').text(`${newFileName}`);
                 Title = newFileName;
                 artist = 'Unknown Artist'
@@ -1058,7 +1149,7 @@ function seekBarTrack() {
                     'title': newFileName,
                     'artist': 'Unknown Artist',
                     'album': 'Unknown Album',
-                    'art': 'assets/svg/no_image.svg'
+                    'art': testLight
                 }
                 ipc.send('tag-info', tagInfo)
             }

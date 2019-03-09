@@ -11,9 +11,9 @@
 
 html, body {
     margin: 0;
-    background: #1a1a1a;
+    background: var(--bg);
     font-family: 'Dosis', Arial, Helvetica, sans-serif !important;
-    color: #fff;
+    color: var(--text);
     user-select: none;
     height: 100%;
     white-space: nowrap;
@@ -21,15 +21,43 @@ html, body {
     text-overflow: ellipsis;
 }
 
+:root {
+    --bg: #1a1a1a;
+    --text: #ffffff;
+    --fg-bg: #1e1e1e;
+    --bd: #2d2d2d;
+    --li-hv: #212121;
+    --logo: 1;
+    --switch: #3d3d3d;
+}
+
+html.light {
+    --bg: #f5f5f5;
+    --text: #3d3d3d;
+    --fg-bg: #ffffff;
+    --bd: #cccccc;
+    --li-hv: #dddddd;
+    --logo: 0.25;
+    --switch: #cccccc;
+}
+
+#TitleBarMinimize rect, .tb-unmaximize svg path, #TitleBarClose {
+    fill: var(--text)
+}
+
+#TitleBarMaximize rect {
+    stroke: var(--text)
+}
+
 ::-webkit-scrollbar {
     background: transparent;
     width: 10px;
-    box-shadow: -1px 0px 20px rgba(0,0,0,.3);
+    box-shadow: -1px 0px 20px rgba(0,0,0,.15);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #1a1a1a;
-    border: 2px solid #2d2d2d;
+    background: var(--bg);
+    border: 2px solid var(--bd);
     border-radius: 10px;
 }
 
@@ -44,8 +72,8 @@ html, body {
     margin: 0;
     position: fixed;
     z-index: 12;
-    background: #1e1e1e;
-    border-bottom: 2px solid #2d2d2d;
+    background: var(--fg-bg);
+    border-bottom: 2px solid var(--bd);
 }
 
 .title-bar-wrapper {
@@ -65,7 +93,7 @@ html, body {
 }
 
 .tb-button:hover {
-    background: rgb(37, 37, 37);
+    background: var(--li-hv);
     opacity: 1 !important;
 }
 
@@ -80,7 +108,7 @@ h1.header-heading {
     margin-top: 5px;
     margin-bottom: 5px;
     font-size: 18px;
-    color: #fff;
+    color: var(--text);
     display: inline-block;
 }
 
@@ -89,13 +117,15 @@ h1.header-heading {
     width: 35px;
     text-align: center;
     margin: 0 10px 0 0;
+    filter: brightness(var(--logo));
 }
 
 #betaTag {
     font-size: 10px;
     padding: 2px 4px 2px 4px;
-    border: solid 2px #cccccc;
-    color: #cccccc;
+    border: solid 2px var(--text);
+    color: var(--text);
+    opacity: .75;
     border-radius: 20px;
     margin: 0px 10px 0px 10px;
     position: relative;
@@ -170,7 +200,7 @@ button:hover, .button-active {
 .seek-bar {
     margin: 10px;
     width: 95%;
-    background: #2d2d2d;
+    background: var(--bd);
     display: flex;
     align-items: center;
     border-radius: 999px;
@@ -239,14 +269,14 @@ ul {
     height: calc(100% - 169px);
     margin: 0;
     white-space: nowrap;
-    background: #1a1a1a;
+    background: var(--bg);
     margin-top: 7px;
     width: 100%;
     overflow-y: scroll;
 }
 
 li {
-    border-bottom: 1px solid #2d2d2d;
+    border-bottom: 1px solid var(--bd);
     padding: 0 0 7px 0;
     overflow: hidden;
     position: relative;
@@ -255,7 +285,7 @@ li {
 }
 
 li:hover {
-    background: #212121;
+    background: var(--li-hv);
 }
 
 .open-file-browser {
@@ -326,11 +356,11 @@ div.new-nowplaying i:hover {
     vertical-align: top;
     position: fixed;
     z-index: 9;
-    background: #1e1e1e;
-    border-right: 2px solid #2d2d2d;
+    background: var(--fg-bg);
+    border-right: 2px solid var(--bd);
     height: 100%;
     width: 190px;
-    box-shadow: 1px 0px 20px rgba(0,0,0,.3);
+    box-shadow: 1px 0px 20px rgba(0,0,0,.15);
 }
 
 .play-type-wrapper {
@@ -440,10 +470,6 @@ div.type-separator {
     margin: 10px;
 }
 
-#settingsClose {
-    margin-top: 25px;
-}
-
 #songPicture {
     min-width: 55px;
     min-height: 55px;
@@ -499,8 +525,6 @@ h1#songTitle {
     margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
-    /*padding-top: 15px;*/
-    text-shadow: 0px 0px 10px #1d1d1d;
     display: block;
     line-height: 22px;
     white-space: nowrap;
@@ -521,8 +545,8 @@ div.new-nowplaying {
     height: 85px !important;
     min-height: 85px !important;
     margin-top: 15px;
-    background: #1e1e1e;
-    border-top: 2px solid #2d2d2d;
+    background: var(--fg-bg);
+    border-top: 2px solid var(--bd);
     position: fixed;
     overflow: visible !important;
     overflow-y: visible !important;
@@ -530,12 +554,12 @@ div.new-nowplaying {
     bottom: 0px;
     transition: .2s ease-in-out;
     z-index: 9;
-    box-shadow: 0px -1px 20px rgba(0,0,0,.3);
+    box-shadow: 0px -1px 20px rgba(0,0,0,.15);
 }
 
 #controls {
     overflow: hidden;
-    background: #1e1e1e;
+    background: var(--fg-bg);
     width: 40%;
     height: auto;
     z-index: 15
@@ -560,13 +584,13 @@ button i {
     margin-top: 0;
     padding: 10px 10px 10px 15px;
     width: 100%;
-    background-color: #1e1e1e;
-    border-bottom: 2px solid #2d2d2d;
+    background-color: var(--fg-bg);
+    border-bottom: 2px solid var(--bd);
     height: 30px;
     position: fixed;
     top: 30px;
     z-index: 9;
-    box-shadow: 0px 1px 20px rgba(0,0,0,.3);
+    box-shadow: 0px 1px 20px rgba(0,0,0,.15);
     font-family: 'Dosis', sans-serrif;
 }
 
@@ -597,8 +621,8 @@ button i {
 
 .shadow-hide {
     z-index: 10;
-    background-color: #1e1e1e;
-    border-bottom: 2px solid #2d2d2d;
+    background-color: var(--fg-bg);
+    border-bottom: 2px solid var(--bd);
     position: fixed;
     height: 50px;
     top: 30px;
@@ -662,11 +686,11 @@ button i {
 .vol-bar {
     margin: 10px;
     width: 85px;
-    background: #2d2d2d;
+    background: var(--bd);
     display: flex;
     align-items: center;
     border-radius: 999px;
-    height: 5px;
+    height: 4px;
     transition: .15s;
     margin-right: 15px;
     margin-left: 5px;
@@ -716,17 +740,17 @@ button i {
     height: 30px;
 }
 
-#effectsMenu {
+.menu {
     position: fixed;
-    top: 34px;
+    top: 32px;
     z-index: 11;
     opacity: 0;
     transition: .2s;
     width: 100%;
-    height: calc(100% - 34px);
+    height: calc(100% - 32px);
 }
 
-.effects-bg {
+.menu-bg {
     position: fixed;
     background: rgba(0, 0, 0, .45);
     height: 100%;
@@ -735,7 +759,7 @@ button i {
     z-index: 12;
 }
 
-.effects-parent {
+.menu-parent {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -745,19 +769,20 @@ button i {
     height: 100%;
 }
 
-.effects-menu {
+.main-menu {
     width: 650px;
     height: 300px;
-    background: #1e1e1e;
+    background: var(--fg-bg);
     border-radius: 10px;
 }
 
-.effects-margin {
-    margin: 30px;
+.menu-margin {
+    margin: 20px 20px 0 30px;
 }
 
 h1 {
     font-family: 'Dosis', sans-serif;
+    margin: 0 0 10px 0;
 }
 
 .close-button {
@@ -767,25 +792,90 @@ h1 {
     cursor: pointer;
 }
 
-.effect-controls {
+.menu-controls {
     position: relative;
-    max-height: 180px;
+    max-height: 229px;
     overflow-y: auto;
 }
 
-.effect-controls input[type=number] {
-    background: #141414;
-    color: #fff;
+input[type=number] {
+    background: var(--bg);
+    color: var(--text);
     outline: none;
-    border: 2px solid #2d2d2d;
+    border: 2px solid var(--bd);
     border-radius: 20px;
     padding: 5px 10px 5px 10px;
+    width: 180px;
 }
 
 input {
     font-family: 'Dosis', sans-serrif !important;
 }
 
-.effect-controls button {
+.menu-controls button {
     margin: 5px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 45px;
+    height: 22px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--switch);
+    transition: .2s;
+}
+  
+.switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 4px;
+    bottom: 4px;
+    background: #ffffffb4;
+    transition: .2s;
+}
+
+input:checked + .switch-slider {
+    background: #7f00b9;
+}
+
+input:checked + .switch-slider:before {
+    transform: translateX(23px);
+    box-shadow: 0px 1px 10px rgba(0,0,0,.2)
+}
+
+.switch-slider.round {
+    border-radius: 34px;
+}
+  
+.switch-slider.round:before {
+    border-radius: 50%;
+}
+
+.label-switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 50%;
+}
+
+.label-switch p {
+    margin-right: 15px;
+    font-weight: bold;
 }

@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/7zip-bin/-/7zip-bin-4.1.0.tgz#33eff662a5c39c0c2061170cc003c5120743fff0"
   integrity sha512-AsnBZN3a8/JcNt+KPkGGODaA4c7l3W5+WpeKgGSbstSLxqWtTXqd1ieJGBQ8IFCtRg8DmmKUcSkIkUc0A4p3YA==
 
-"@types/node@^8.0.24":
-  version "8.10.39"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.39.tgz#e7e87ad00364dd7bc485c940926345b8ec1a26ca"
-  integrity sha512-rE7fktr02J8ybFf6eysife+WF+L4sAHWzw09DgdCebEu+qDwMvv4zl6Bc+825ttGZP73kCKxa3dhJOoGJ8+5mA==
+"@types/node@^10.12.18":
+  version "10.12.30"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.30.tgz#4c2b4f0015f214f8158a347350481322b3b29b2f"
+  integrity sha512-nsqTN6zUcm9xtdJiM9OvOJ5EF0kOI8f1Zuug27O/rgtxCRJHGqncSWfCMZUP852dCKPsDsYXGvBhxfRjDBkF5Q==
 
 ajv-keywords@^3.2.0:
   version "3.2.0"
@@ -312,6 +312,11 @@ cliui@^4.0.0:
     strip-ansi "^4.0.0"
     wrap-ansi "^2.0.0"
 
+clone@^2.1.1:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
+  integrity sha1-G39Ln1kfHo+DZwQBYANFoCiHQ18=
+
 code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
@@ -583,12 +588,20 @@ electron-publish@20.38.5:
     lazy-val "^1.0.3"
     mime "^2.4.0"
 
-electron@^3.0.9:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-3.1.1.tgz#983492f0eb25740d1ba1da47712b16139ebc6d17"
-  integrity sha512-ZamfKY9xp8P6/prtBbhOoOsdCaqyArr7GOmgJuBgWY95ZW5nJVP5aA5lLTh8IeVSW1/IM1KyKYPTrTS/RGercQ==
+electron-settings@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/electron-settings/-/electron-settings-3.2.0.tgz#01461e153f95b6f18adbe0c360c70898eb0f43c3"
+  integrity sha512-7U+vDKd5Gch4Z9K6FjGq80eB3Anwz2GuPc2h/6hOiuvZrS1w+UNPcAA0oAU8G1s9sWAVEadCsr4ZJR6J4iTdzA==
   dependencies:
-    "@types/node" "^8.0.24"
+    clone "^2.1.1"
+    jsonfile "^4.0.0"
+
+electron@^4.0.8:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-4.0.8.tgz#b7998b16543d2094f081757a0c5afdb8875ea510"
+  integrity sha512-FOBJIHkuv8wc15N+ZyqwDzPavYVu5CHMBEf14jHDWv7QW2vkEIpJjVK+PIT31kfZfvjsIP0j2wvA/FBsiqB7pw==
+  dependencies:
+    "@types/node" "^10.12.18"
     electron-download "^4.1.0"
     extract-zip "^1.0.3"
 
