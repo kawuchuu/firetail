@@ -1,8 +1,10 @@
 const {app, BrowserWindow, globalShortcut} = require('electron');
 const path = require('path');
 const url = require('url');
+var settings = require('electron-settings')
 
 var frameStyle;
+var bg;
 var ipc = require('electron').ipcMain
 
 if (process.platform === 'linux') {
@@ -11,13 +13,19 @@ if (process.platform === 'linux') {
     frameStyle = false;
 }
 
+if (settings.theme == 'light') {
+    bg = '#f5f5f5';
+} else {
+    bg = '#1f1f1f';
+}
+
 function createMainWindow() {
     var win = new BrowserWindow({
         width: 885, 
         height: 655,
         icon: './assets/image/audiation-main-logo.png', 
         frame: frameStyle,
-        backgroundColor: '#1f1f1f',
+        backgroundColor: bg,
         titleBarStyle: 'hidden',
         show: false,
         title: 'Audiation'

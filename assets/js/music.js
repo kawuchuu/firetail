@@ -133,12 +133,15 @@ $(document).ready(function() {
     setTimeout(function() {
         $('#loadCover').css({
             opacity: 0
+        });
+        $('.main-content').css({
+            transform: 'scale(1)'
         })
         setTimeout(function() {
             $('#loadCover').hide();
             document.body.style.cursor = 'default'
         }, 250)
-    }, 250);
+    }, 500);
 });
 
 if (theme == 'light') {
@@ -211,7 +214,7 @@ if (process.platform === 'darwin') {
     })
 }
 
-$('.list-wrapper').html('<p style="text-align: center">Loading...');
+$('.list-wrapper').html('<p style="text-align: center; font-weight: bold; margin-left: 150px;">Loading...');
 
 remote.getCurrentWindow().setMinimumSize(720, 525);
 document.addEventListener('dragover', event => event.preventDefault())
@@ -340,9 +343,9 @@ function loadFiles() {
         });
         if (s.length === 0) {
             if (process.platform === 'win32') {
-                $('.list-wrapper').html('<p style="text-align: center">No valid audio files found in the Audiation folder.<br><a class="open-file-browser">Click here</a> to open the Audiation folder.')
+                $('.list-wrapper').html('<p style="text-align: center; font-weight: bold; margin-left: 175px;">No valid audio files found in the Audiation folder.<br><a class="open-file-browser">Click here</a> to open the Audiation folder.')
             } else {
-                $('.list-wrapper').html('<p style="text-align: center">No valid audio files found in the Audiation folder.<br>Please add supported audio files to the folder.')
+                $('.list-wrapper').html('<p style="text-align: center; font-weight: bold; margin-left: 175px;">No valid audio files found in the Audiation folder.<br>Please add supported audio files to the folder.')
             }
             return $('.open-file-browser').click(function() {
                 require('child_process').exec(`start "" "${os.homedir}\\Music\\Audiation`)
@@ -440,7 +443,7 @@ $('#openFileBrowser').click(function() {
 
 $('#refreshFiles').click(function() {
     if (reloading == false) {
-        $('.list-wrapper').html('<p style="text-align: center">Loading...');
+        $('.list-wrapper').html('<p style="text-align: center; font-weight: bold; margin-left: 150px;">Loading...');
         reloading = true
         setTimeout(loadFiles, 50)    
     }

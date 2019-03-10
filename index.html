@@ -11,8 +11,10 @@
                 }
             </script>
     </head>
-    <body style="transition-duration: .2s; cursor: progress">
-        <div id="loadCover" style="transition-duration: .2s; height: 100%; width: 100%; z-index: 12; position: fixed; background: #1f1f1f; opacity: 1"></div>
+    <body style="transition-duration: .2s;">
+        <div id="loadCover" style="z-index: 20; width: 100%; height: 100%; position: fixed; background: linear-gradient(130deg, #7F00B9, #BE0096); transition: .2s; display: flex; justify-content: center; align-items: center;">
+            <img id="loadIcon" src="./assets/svg/audiation-menu.svg" style="height: 150px">
+        </div>
         <div class="title-bar">
             <div id="noDrag"></div>
             <div class="title-bar-wrapper" style="display: none">
@@ -38,158 +40,162 @@
                 </div>
             </div>
         </div>
-        <div class="play-type" id="playType">
-            <div class="play-type-wrapper">
-                <button id="newPlay" class="button-active">
-                    <i class="material-icons">library_music</i>Library</button>
-                <button id="playlistsButton">
-                    <i class="material-icons">playlist_play</i>Playlists</button>
-                <div class="type-separator"></div>
-                <div id="extraButtons">
-                    <button id="refreshFiles">
-                        <i class="material-icons">refresh</i>Refresh</button>
-                    <button id="openFileBrowser" style="display: none !important">
-                        <i class="material-icons">folder</i>Folder</button>
-                    <button id="settingsButton">
-                        <i class="material-icons">settings</i>Settings</button>
-                    <button id="effectsButton">
-                        <i class="material-icons">blur_on</i>Effects</button>
-                        <button id="miniPlayerButton">
-                            <i class="material-icons">branding_watermark</i>
-                            Mini Player
-                        </button>
-                    <button style="display: none !important" id="openDevTools">
-                        <i class="material-icons">code</i>Dev Tools</button>
-                </div>
-            </div>
-        </div>
-        <div class="app-content">
-            <div id="settingsMenu" class="menu" style="display: none">
-                <div class="menu-bg"></div>
-                <div class="menu-parent">
-                    <div class="main-menu">
-                        <div class="menu-margin">
-                            <i class="material-icons close-button" id="settingsClose">close</i>
-                            <h1>Settings</h1>
-                            <div class="menu-controls">
-                                <div id="gainControl">
-                                    <div class="label-switch">
-                                        <p>Light Theme (restart)</p>
-                                        <label class="switch">
-                                            <input id="lightSwitch" type="checkbox">
-                                            <span class="switch-slider round"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        <div class="main-content">
+            <div class="cover-top"></div>
+            <div class="cover-bottom"></div>
+            <div class="play-type" id="playType">
+                <div class="play-type-wrapper">
+                    <button id="newPlay" class="button-active">
+                        <i class="material-icons">library_music</i>Library</button>
+                    <button id="playlistsButton">
+                        <i class="material-icons">playlist_play</i>Playlists</button>
+                    <div class="type-separator"></div>
+                    <div id="extraButtons">
+                        <button id="refreshFiles">
+                            <i class="material-icons">refresh</i>Refresh</button>
+                        <button id="openFileBrowser" style="display: none !important">
+                            <i class="material-icons">folder</i>Folder</button>
+                        <button id="settingsButton">
+                            <i class="material-icons">settings</i>Settings</button>
+                        <button id="effectsButton">
+                            <i class="material-icons">blur_on</i>Effects</button>
+                            <button id="miniPlayerButton">
+                                <i class="material-icons">branding_watermark</i>
+                                Mini Player
+                            </button>
+                        <button style="display: none !important" id="openDevTools">
+                            <i class="material-icons">code</i>Dev Tools</button>
                     </div>
                 </div>
             </div>
-            <div id="effectsMenu" class="menu" style="display: none">
-                <div class="menu-bg"></div>
-                <div class="menu-parent">
-                    <div class="main-menu">
-                        <div class="menu-margin">
-                            <i class="material-icons close-button" id="effectsClose">close</i>
-                            <h1>Effects</h1>
-                            <div class="menu-controls">
-                                <div id="gainControl">
-                                    <div class="label-switch">
-                                        <p>Gain</p>
-                                        <label class="switch">
-                                            <input id="gainSwitch" type="checkbox">
-                                            <span class="switch-slider round"></span>
-                                        </label>
-                                    </div>
-                                    <input type="number" value="1" min="0" max="100" id="gainInput">
-                                </div>
-                                <div id="reverbControl">
-                                    <div class="label-switch">
-                                        <p>Reverb Gain</p>
-                                        <label class="switch">
-                                            <input id="reverbSwitch" type="checkbox">
-                                            <span class="switch-slider round"></span>
-                                        </label>
-                                    </div>
-                                    <input type="number" value="5" min="0" max="100" id="reverbInput">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="newContent">
-                <div id="newContentWrapper">
-                    <div class="shadow-hide"></div>
-                    <div class="top-bar">
-                        <div class="logo-bottom">
-                            <img id="headerIcon" src="./assets/svg/main-logo-white.svg">
-                            <div class="icon-text">Audiation</div>
-                            <p id="betaTag">BETA</p>
-                        </div>
-                        <div class="top-bar-wrapper">
-                            <h2 id="songsTab" class="tab-active">Songs</h2>
-                            <h2 id="artistsTab">Artists</h2>
-                            <h2 id="albumsTab">Albums</h2>
-                        </div>
-                    </div>
-                    <ul id="songsPage" class="active-tab">
-                        <div class="list-wrapper"></div>
-                    </ul>
-                    <div class="placeholder-message" id="artistsPage">
-                        <p>This is a placeholder message for the artists page.</p>
-                    </div>
-                    <div class="placeholder-message" id="albumsPage">
-                        <p>This is a placeholder message for the albums page.</p>
-                    </div>
-                    <!--<div class="list-push"></div>-->
-                </div>
-            </div>
-                <div class="new-nowplaying">
-                    <div class="np-wrapper">
-                        <div class="metadata">
-                            <div id="songPicture"></div>
-                            <div style="display: none;" id="songPictureBlur"></div>
-                            <div class="title-artist">
-                                <h1 id="songTitle"></h1>
-                                <p id="artist"></p>
-                            </div>
-                        </div>
-                        <div id="controls">
-                            <div id="controlsWrapper">
-                                <div class="np-buttons">
-                                    <i class="material-icons" id="shuffleButton">shuffle</i>
-                                    <i class="material-icons" id="backwardButton">skip_previous</i>
-                                    <i class="material-icons" id="pauseButton">play_arrow</i>
-                                    <i class="material-icons" id="forwardButton">skip_next</i>
-                                    <i class="material-icons" id="repeatButton">repeat</i>
-                                </div>
-                                <div class="seek-time-wrap">
-                                    <p class="song-duration" id="songDurationTime">-:--</p>
-                                    <div id="seekWrapper" class="seek-bar-wrapper">
-                                        <div class="seek-bar">
-                                            <div id="seekFill" class="fill"></div>
-                                            <div id="seekHandle" class="handle"></div>
+            <div class="app-content">
+                <div id="settingsMenu" class="menu" style="display: none">
+                    <div class="menu-bg"></div>
+                    <div class="menu-parent">
+                        <div class="main-menu">
+                            <div class="menu-margin">
+                                <i class="material-icons close-button" id="settingsClose">close</i>
+                                <h1>Settings</h1>
+                                <div class="menu-controls">
+                                    <div id="gainControl">
+                                        <div class="label-switch">
+                                            <p>Light Theme (restart)</p>
+                                            <label class="switch">
+                                                <input id="lightSwitch" type="checkbox">
+                                                <span class="switch-slider round"></span>
+                                            </label>
                                         </div>
                                     </div>
-                                    <p class="song-duration" id="songDurationLength">-:--</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="volume-control">
-                            <div class="vol-wrap">
-                                <i class="material-icons" id="volumeButton">volume_up</i>
-                                <div id="volWrapper" class="seek-bar-wrapper">
-                                    <div class="vol-bar">
-                                        <div id="volFill" class="fill"></div>
-                                        <div id="volHandle" class="handle"></div>
+                    </div>
+                </div>
+                <div id="effectsMenu" class="menu" style="display: none">
+                    <div class="menu-bg"></div>
+                    <div class="menu-parent">
+                        <div class="main-menu">
+                            <div class="menu-margin">
+                                <i class="material-icons close-button" id="effectsClose">close</i>
+                                <h1>Effects</h1>
+                                <div class="menu-controls">
+                                    <div id="gainControl">
+                                        <div class="label-switch">
+                                            <p>Gain</p>
+                                            <label class="switch">
+                                                <input id="gainSwitch" type="checkbox">
+                                                <span class="switch-slider round"></span>
+                                            </label>
+                                        </div>
+                                        <input type="number" value="1" min="0" max="100" id="gainInput">
+                                    </div>
+                                    <div id="reverbControl">
+                                        <div class="label-switch">
+                                            <p>Reverb Gain</p>
+                                            <label class="switch">
+                                                <input id="reverbSwitch" type="checkbox">
+                                                <span class="switch-slider round"></span>
+                                            </label>
+                                        </div>
+                                        <input type="number" value="5" min="0" max="100" id="reverbInput">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div id="newContent">
+                    <div id="newContentWrapper">
+                        <div class="shadow-hide"></div>
+                        <div class="top-bar">
+                            <div class="logo-bottom">
+                                <img id="headerIcon" src="./assets/svg/audiation-menu.svg">
+                                <div class="icon-text">Audiation</div>
+                                <p id="betaTag">BETA</p>
+                            </div>
+                            <div class="top-bar-wrapper">
+                                <h2 id="songsTab" class="tab-active">Songs</h2>
+                                <h2 id="artistsTab">Artists</h2>
+                                <h2 id="albumsTab">Albums</h2>
+                            </div>
+                        </div>
+                        <ul id="songsPage" class="active-tab">
+                            <div class="list-wrapper"></div>
+                        </ul>
+                        <div class="placeholder-message" id="artistsPage">
+                            <p>This is a placeholder message for the artists page.</p>
+                        </div>
+                        <div class="placeholder-message" id="albumsPage">
+                            <p>This is a placeholder message for the albums page.</p>
+                        </div>
+                        <!--<div class="list-push"></div>-->
+                    </div>
+                </div>
+                    <div class="new-nowplaying">
+                        <div class="np-wrapper">
+                            <div class="metadata">
+                                <div id="songPicture"></div>
+                                <div style="display: none;" id="songPictureBlur"></div>
+                                <div class="title-artist">
+                                    <h1 id="songTitle"></h1>
+                                    <p id="artist"></p>
+                                </div>
+                            </div>
+                            <div id="controls">
+                                <div id="controlsWrapper">
+                                    <div class="np-buttons">
+                                        <i class="material-icons" id="shuffleButton">shuffle</i>
+                                        <i class="material-icons" id="backwardButton">skip_previous</i>
+                                        <i class="material-icons" id="pauseButton">play_arrow</i>
+                                        <i class="material-icons" id="forwardButton">skip_next</i>
+                                        <i class="material-icons" id="repeatButton">repeat</i>
+                                    </div>
+                                    <div class="seek-time-wrap">
+                                        <p class="song-duration" id="songDurationTime">-:--</p>
+                                        <div id="seekWrapper" class="seek-bar-wrapper">
+                                            <div class="seek-bar">
+                                                <div id="seekFill" class="fill"></div>
+                                                <div id="seekHandle" class="handle"></div>
+                                            </div>
+                                        </div>
+                                        <p class="song-duration" id="songDurationLength">-:--</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="volume-control">
+                                <div class="vol-wrap">
+                                    <i class="material-icons" id="volumeButton">volume_up</i>
+                                    <div id="volWrapper" class="seek-bar-wrapper">
+                                        <div class="vol-bar">
+                                            <div id="volFill" class="fill"></div>
+                                            <div id="volHandle" class="handle"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
         </div>
         <script src="./assets/js/jquery-3.3.1.min.js"></script>
         <script src="./assets/js/music.js"></script>
