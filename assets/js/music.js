@@ -181,6 +181,9 @@ if (process.platform === 'linux') {
     $('.logo-bottom').css({
         top: '6px'
     })
+    $('.cover-top').css({
+        top: '-20px'
+    })
 }
 
 if (process.platform === 'darwin') {
@@ -211,6 +214,9 @@ if (process.platform === 'darwin') {
     })
     $('.logo-bottom').css({
         top: '26px'
+    })
+    $('.cover-top').css({
+        top: '-20px'
     })
 }
 
