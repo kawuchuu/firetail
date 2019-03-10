@@ -834,6 +834,7 @@ var convolverGain = audioCtx.createGain();
 var convolver = audioCtx.createConvolver();
 var masterGain = audioCtx.createGain();
 var masterCompression = audioCtx.createDynamicsCompressor();
+var impulseData = [];
 
 function impulseGet() {
     convolver = audioCtx.createConvolver();
@@ -841,7 +842,7 @@ function impulseGet() {
     ajaxRequest.open('GET', './assets/impulse/SteinmanHall.wav', true);
     ajaxRequest.responseType = 'arraybuffer';
     ajaxRequest.onload = function () {
-        var impulseData = ajaxRequest.response;
+        impulseData = ajaxRequest.response;
         audioCtx.decodeAudioData(impulseData, function (buffer) {
             conBuffer = buffer;
             convolver.buffer = conBuffer;
@@ -854,21 +855,24 @@ function impulseGet() {
     ajaxRequest.send();
 }
 var reverbEnabled = false;
+var reverbFirst = true;
 $('#reverbSwitch').click(function() {
-    switch(reverbEnabled) {
-        case false:
+    if (reverbEnabled == false) {
+        if (reverbFirst == true) {
             source.connect(convolverGain);
             source.connect(masterGain);
             masterGain.connect(masterCompression);
             masterCompression.connect(audioCtx.destination);
             impulseGet();
             convolver.disconnect();
-            $(this).text('Disable')
             reverbEnabled = true;
-            break;
-        case true:
+            reverbFirst = false;
+        } else {
+            masterCompression.connect(audioCtx.destination);
+            reverbEnabled = true;
+        }
+    } else {
             masterCompression.disconnect(audioCtx.destination);
-            $(this).text('Enable')
             reverbEnabled = false;
     }
 })
