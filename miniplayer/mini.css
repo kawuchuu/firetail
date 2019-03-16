@@ -3,9 +3,31 @@ body {
     overflow: hidden;
 }
 
+:root {
+    --bg: #1a1a1a;
+    --text: #ffffff;
+    --fg-bg: #1e1e1e;
+    --bd: #2d2d2d;
+    --li-hv: #212121;
+    --logo: 1;
+    --switch: #3d3d3d;
+    --ext: #171717;
+}
+
+html.light {
+    --bg: #f5f5f5;
+    --text: #3d3d3d;
+    --fg-bg: #ffffff;
+    --bd: #cccccc;
+    --li-hv: #dddddd;
+    --logo: 0.25;
+    --switch: #cccccc;
+    --ext: #ebebeb;
+}
+
 .album-art {
-    height: 120px;
-    width: 120px;
+    height: 90px;
+    width: 90px;
 }
 
 .metadata {
@@ -13,7 +35,7 @@ body {
     align-items: center;
     width: 345px;
     -webkit-app-region: drag;
-    height: 120px;
+    height: 90px;
 }
 
 .song-title {
@@ -77,8 +99,8 @@ body {
 
 .extra-buttons {
     width: 40px;
-    height: 120px;
-    background: #171717;
+    height: 90px;
+    background: var(--ext);
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -86,6 +108,7 @@ body {
 
 .extra-buttons svg {
     padding: 13px;
+    fill: var(--text)
 }
 
 .extra-buttons i {
@@ -106,12 +129,12 @@ body {
 }
 
 .bottom-section {
-    background: #1e1e1e;
+    background: var(--fg-bg);
     position: relative;
     z-index: 2;
     height: 95px;
-    border-top: 2px solid #2d2d2d;
-    box-shadow: 0px -2px 20px rgba(0,0,0,.3);
+    border-top: 2px solid var(--bd);
+    box-shadow: 0px -2px 20px rgba(0,0,0,.15);
 }
 
 .song-duration {

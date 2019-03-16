@@ -1,5 +1,6 @@
 var ipc = require('electron').ipcRenderer;
 var remote = require('electron').remote;
+var settings = require('electron-settings')
 var tagInfo;
 var seekTimeInfo;
 var seekBar = document.querySelector('.seek-bar');
@@ -11,6 +12,13 @@ var currentlyPlaying = false;
 var shuffleEnabled = false;
 var repeatEnabled = false;
 var paused = false;
+var theme = 'dark';
+
+if (settings.get('theme') == 'light') {
+    theme = 'light';
+    $('html').addClass('light');
+    document.getElementById('art').src = '../assets/svg/no_image_light.svg'
+}
 
 function resumeButton() {
     switch(paused) {
@@ -99,8 +107,13 @@ ipc.on('tag-info', (event, arg) => {
     $('#miniResume').text('pause')
     $('.song-title').text(tagInfo.title);
     $('.song-artist').text(tagInfo.artist)
-    if (tagInfo.art == "assets/svg/no_image.svg") tagInfo.art = "../assets/svg/no_image.svg"
-    document.getElementById('art').src = tagInfo.art
+    if (tagInfo.art == "assets/svg/no_image.svg") {
+        tagInfo.art = "../assets/svg/no_image.svg";
+    } else if (tagInfo.art == "assets/svg/no_image_light.svg") {
+        tagInfo.art = "../assets/svg/no_image_light.svg";
+    }
+    document.getElementById('art').src = tagInfo.art;
+    paused = false;
 })
 
 ipc.on('switch-windows', () => {
@@ -112,14 +125,14 @@ $('#closeMini').click(() => {
     ipc.send('switch-windows-full');
 })
 
-$('#favoriteMini').click(() => {
+/*$('#favoriteMini').click(() => {
     if($('#favoriteMini').text() == 'favorite_border') {
         $('#favoriteMini').text('favorite')
     }
     else {
         $('#favoriteMini').text('favorite_border')
     }
-})
+})*/
 
 $('#minimizeMini').click(() => {
     remote.getCurrentWindow().minimize();
