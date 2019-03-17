@@ -135,6 +135,12 @@ if (process.platform == 'linux') {
     mprisPlayer.on("previous", (event, arg) => {
         previousSong();
     })
+    mprisPlayer.canPlay = true;
+    mprisPlayer.canPause = false;
+    mprisPlayer.canControl = false;
+    mprisPlayer.canGoNext = false;
+    mprisPlayer.canGoPrevious = false;
+    mprisPlayer.canSeek = false;
 }
 
 ipc.on('playpause', (event, arg) => {
@@ -842,6 +848,14 @@ function findSong() {
             }
             audio.currentTime = 0;
             audio.play();
+            if (process.platform == 'linux') {
+                mprisPlayer.canPlay = true;
+                mprisPlayer.canPause = true;
+                mprisPlayer.canControl = true;
+                mprisPlayer.canGoNext = true;
+                mprisPlayer.canGoPrevious = true;
+                mprisPlayer.canSeek = true;
+            }
         } catch (err) {
             console.error(err);
             //dialog.showErrorBox('Error', err)
