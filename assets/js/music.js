@@ -1109,7 +1109,6 @@ ipc.on('seek-time-main', (event, arg) => {
 
 var tmp = require('tmp');
 var tmpobj = tmp.dirSync();
-var del = require('del');
 var dataUrl;
 var tmpFile;
 var directory = tmpobj.name;
