@@ -135,7 +135,7 @@ if (process.platform == 'linux') {
     mprisPlayer.on("previous", (event, arg) => {
         previousSong();
     })
-    mprisPlayer.canPlay = true;
+    mprisPlayer.canPlay = false;
     mprisPlayer.canPause = false;
     mprisPlayer.canControl = false;
     mprisPlayer.canGoNext = false;
