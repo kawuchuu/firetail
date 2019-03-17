@@ -94,7 +94,7 @@ var ver = '1.1b';
 
 if (process.platform == 'linux') {
     var mpris = require('mpris-service');
-    let mprisPlayer = new mpris({
+    var mprisPlayer = new mpris({
         name: 'audiation',
         identity: 'Audiation',
         supportedInterfaces: ['player']
