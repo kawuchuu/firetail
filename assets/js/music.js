@@ -126,6 +126,9 @@ if (process.platform == 'linux') {
     mprisPlayer.on("play", (event, arg) => {
         resumeButton();
     });
+    mprisPlayer.on("pause", (event, arg) => {
+        resumeButton();
+    });
     mprisPlayer.on("next", (event, arg) => {
         nextSong();
     })
@@ -1178,11 +1181,13 @@ function seekBarTrack() {
                     if (theme == 'light') {
                         document.getElementById('songPicture').style.background = 'url(assets/svg/no_image_light.svg)';
                         document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image_light.svg)';
-                        albumArt = 'assets/svg/no_image_light.svg'
+                        albumArt = 'assets/svg/no_image_light.svg';
+                        dataUrl = 'assets/svg/no_image_light.svg'
                     } else {
                         document.getElementById('songPicture').style.background = 'url(assets/svg/no_image.svg)';
                         document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image.svg)';
                         albumArt = 'assets/svg/no_image.svg'
+                        dataUrl = 'assets/svg/no_image.svg'
                     }
                 }
                 $('h1#songTitle').text(Title);
@@ -1206,7 +1211,7 @@ function seekBarTrack() {
                     'title': Title,
                     'artist': artist,
                     'album': album,
-                    'art': albumArt
+                    'art': dataUrl
                 }
                 ipc.send('tag-info', tagInfo);
             },
