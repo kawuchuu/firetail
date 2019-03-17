@@ -1161,13 +1161,19 @@ function seekBarTrack() {
                         base64String += String.fromCharCode(tag.tags.picture.data[i]);
                     }
                     dataUrl = 'data:' + tag.tags.picture.format + ';base64,' + btoa(base64String);
-                    tmpFile = tmp.tmpNameSync({template: 'tmp-XXXXXX'});
-                    fs.writeFile(`${tmpobj.name}/${tmpFile}.jpg`, btoa(base64String), 'base64', function(err) {
-                        if (err) console.error(err);
-                        albumArt = `${tmpobj.name}/${tmpFile}.jpg`;
+                    if (process.platform == 'linux') {
+                        tmpFile = tmp.tmpNameSync({template: 'tmp-XXXXXX'});
+                        fs.writeFile(`${tmpobj.name}/${tmpFile}.jpg`, btoa(base64String), 'base64', function(err) {
+                            if (err) console.error(err);
+                            albumArt = `${tmpobj.name}/${tmpFile}.jpg`;
+                            document.getElementById('songPicture').style.background = `url(${albumArt})`
+                            document.getElementById('songPictureBlur').style.background = `url(${albumArt})`
+                        })
+                    } else {
+                        albumArt = dataUrl
                         document.getElementById('songPicture').style.background = `url(${albumArt})`
                         document.getElementById('songPictureBlur').style.background = `url(${albumArt})`
-                    })
+                    }
                 } else {
                     if (theme == 'light') {
                         document.getElementById('songPicture').style.background = 'url(assets/svg/no_image_light.svg)';
