@@ -17,14 +17,15 @@
   "dependencies": {
     "discord-rpc": "^3.0.1",
     "electron-settings": "^3.2.0",
-    "jsmediatags": "^3.8.1"
+    "jsmediatags": "^3.8.1",
+    "tmp": "^0.0.33"
   },
   "devDependencies": {
     "electron": "^4.0.8",
     "electron-builder": "^20.38.5"
   },
   "optionalDependencies": {
-    "mpris-service": "^1.1.4"
+    "mpris-service": "^2.0.0"
   },
   "build": {
     "appId": "com.projsh.audiation",

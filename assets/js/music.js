@@ -92,6 +92,15 @@ var drpc = require('discord-rpc');
 var settings = require('electron-settings')
 var ver = '1.1b';
 
+if (process.platform == 'linux') {
+    var mpris = require('mpris-service');
+    let mprisPlayer = new mpris({
+        name: 'audiation',
+        identity: 'Audiation',
+        supportedInterfaces: ['player']
+    });
+}
+
 $('#audiationVer').text(`Audiation v.${ver}`);
 $('#audiationVer').dblclick(function() {
     $('#openDevTools').show();
@@ -108,6 +117,21 @@ if (settings.get('theme') == 'light') {
     theme = 'light';
     $('html').addClass('light');
     $('#lightSwitch').prop('checked', true)
+}
+
+if (process.platform == 'linux') {
+    mprisPlayer.on('playpause', (event, arg) => {
+        resumeButton()
+    });
+    mprisPlayer.on("play", (event, arg) => {
+        resumeButton();
+    });
+    mprisPlayer.on("next", (event, arg) => {
+        nextSong();
+    })
+    mprisPlayer.on("previous", (event, arg) => {
+        previousSong();
+    })
 }
 
 ipc.on('playpause', (event, arg) => {
@@ -603,7 +627,7 @@ $('#shuffleButton').click(function() {
 })
 
 $('.tb-close').click(function() {
-    app.exit();
+    appExit();
 });
 
 $('.tb-close').mouseover(() => {
@@ -767,7 +791,7 @@ $('#lightSwitch').click(() => {
     }
     setTimeout(() => {
         app.relaunch();
-        app.exit(0)
+        appExit();
     }, 500);
 })
 
@@ -944,7 +968,9 @@ function resumeButton() {
             $(`#pauseButton, #${highlightSong} i`).text('play_arrow');
             $('title').text('Audiation');
             toolbarPlay();
-            ipc.send('playbackstatus', 'Paused');
+            if (process.platform == 'linux') {
+                mprisPlayer.playbackStatus = 'Paused';
+            }
             $('#songPicture').addClass('song-picture-decrease');
             $('#songPictureBlur').addClass('song-blur-hidden');
             break;
@@ -964,7 +990,9 @@ function resumeButton() {
                 $('title').text(`${artist} - ${Title}`)
             }
             toolbarPause();
-            ipc.send('mprisplaybackstatus', 'Playing');
+            if (process.platform == 'linux') {
+                mprisPlayer.playbackStatus = 'Playing';
+            }
             $('#songPicture').removeClass('song-picture-decrease');
             $('#songPictureBlur').removeClass('song-blur-hidden');
     }
@@ -1079,6 +1107,37 @@ ipc.on('seek-time-main', (event, arg) => {
     audio.addEventListener('timeupdate', seekTimeUpdate);
 })
 
+var tmp = require('tmp');
+var tmpobj = tmp.dirSync();
+var del = require('del');
+var dataUrl;
+var tmpFile;
+var directory = tmpobj.name;
+
+function clearTempFiles() {
+    fs.readdir(directory, (err, files) => {
+        if (err) throw err;
+        for (const file of files) {
+            fs.unlink(path.join(directory, file), err => {
+                if (err) throw err;
+            });
+        }
+    });
+}
+
+setInterval(clearTempFiles, 60000);
+
+function appExit() {
+    clearTempFiles()
+    setTimeout(() => {
+        app.exit();
+    }, 500)
+}
+
+window.onbeforeunload = (i) => {
+    appExit();
+}
+
 function seekBarTrack() {
     new id3.Reader(`${os.homedir}/Music/Audiation/${newFileChosen}`)
         .setTagsToRead(['title', 'artist', 'picture', 'album'])
@@ -1102,10 +1161,14 @@ function seekBarTrack() {
                     for (var i = 0; i < tag.tags.picture.data.length; i++) {
                         base64String += String.fromCharCode(tag.tags.picture.data[i]);
                     }
-                    albumArt = 'data:' + tag.tags.picture.format + ';base64,' + btoa(base64String);
-                    document.getElementById('songPicture').style.background = `url(${albumArt})`
-                    document.getElementById('songPictureBlur').style.background = `url(${albumArt})`
-
+                    dataUrl = 'data:' + tag.tags.picture.format + ';base64,' + btoa(base64String);
+                    tmpFile = tmp.tmpNameSync({template: 'tmp-XXXXXX'});
+                    fs.writeFile(`${tmpobj.name}/${tmpFile}.jpg`, btoa(base64String), 'base64', function(err) {
+                        if (err) console.error(err);
+                        albumArt = `${tmpobj.name}/${tmpFile}.jpg`;
+                        document.getElementById('songPicture').style.background = `url(${albumArt})`
+                        document.getElementById('songPictureBlur').style.background = `url(${albumArt})`
+                    })
                 } else {
                     if (theme == 'light') {
                         document.getElementById('songPicture').style.background = 'url(assets/svg/no_image_light.svg)';
@@ -1124,22 +1187,23 @@ function seekBarTrack() {
                 } else {
                     $('title').text(`${artist} - ${Title}`)
                 }
-
-                //Update mpris stuff
-                ipc.send('mpris-update', ["metadata", {
-                    'xesam:title': Title,
-                    'xesam:artist': artist,
-                    'xesam:album': album,
-                    'mpris:artURL': albumArt
-                }]);
-                ipc.send('mpris-update', ["playbackStatus", "Playing"]);
+                if (process.platform == 'linux') {
+                    mprisPlayer.metadata =  {
+                        'xesam:title': Title,
+                        'xesam:artist': artist,
+                        'xesam:album': album,
+                        'mpris:trackid': mprisPlayer.objectPath('track/0'),
+                        'mpris:artUrl': `file://${tmpobj.name}/${tmpFile}.jpg`
+                    };
+                    mprisPlayer.playbackStatus = 'Playing';
+                }
                 var tagInfo = {
                     'title': Title,
                     'artist': artist,
                     'album': album,
                     'art': albumArt
                 }
-                ipc.send('tag-info', tagInfo)
+                ipc.send('tag-info', tagInfo);
             },
             onError: function (tag) {
                 $('#songTitle').text(newFileName);
@@ -1157,7 +1221,17 @@ function seekBarTrack() {
                 $('title').text(`${newFileName}`);
                 Title = newFileName;
                 artist = 'Unknown Artist'
-                album = 'Unknown Album'
+                album = 'Unknown Album';
+                if (process.platform == 'linux') {
+                    mprisPlayer.metadata =  {
+                        'xesam:title': Title,
+                        'xesam:artist': artist,
+                        'xesam:album': album,
+                        'mpris:trackid': mprisPlayer.objectPath('track/0'),
+                        'mpris:artUrl': ''
+                    };
+                    mprisPlayer.playbackStatus = 'Playing';
+                }
                 var tagInfo = {
                     'title': newFileName,
                     'artist': 'Unknown Artist',

@@ -30,40 +30,6 @@ function createMainWindow() {
         show: false,
         title: 'Audiation'
     });
-
-    //thank you victor :)
-    if (process.platform == 'linux') {
-        var mpris = require('mpris-service');
-        let mprisPlayer = new mpris({
-            name: 'audiation',
-            identity: 'Audiation'
-        });
-    
-        ipc.on('mpris-update', (event, arg) => {
-            console.log("mpris-update event triggered");
-            if (arg[0] == "metadata" && arg[1]["mpris:trackid"] == null) {
-                arg[1]["mpris:trackid"] = mprisPlayer.objectPath('track/0'); //because we can't do this in the renderer
-                console.log(arg[1]);
-            }
-            mprisPlayer[arg[0]] = arg[1];
-        });
-        mprisPlayer.on('playpause', () => {
-            win.webContents.send("playpause");
-        });
-        mprisPlayer.on('play', () => {
-            win.webContents.send("play");
-        });
-        mprisPlayer.on('next', () => {
-            win.webContents.send("next");
-        })
-        mprisPlayer.on('previous', () => {
-            win.webContents.send("previous");
-        })
-        ipc.on('mprisplaybackstatus', (event, arg) => {
-            mprisPlayer.playbackStatus = arg;
-        });
-    }
-
     if (process.platform != 'linux') {
         globalShortcut.register('MediaPlayPause', resumeButton);
         globalShortcut.register('MediaPreviousTrack', previousSong);
