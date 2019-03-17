@@ -1,6 +1,6 @@
 /**
  * Audiation - An Open-source music player, built with Electron.
- * Copyright (c) projsh_ 2018
+ * Copyright (c) projsh_ 2019
  * 
  * This project is under the terms of the GNU General Public Licence (v.3.0).
  * 
@@ -90,7 +90,7 @@ var id3 = require('jsmediatags');
 var ipc = require('electron').ipcRenderer;
 var drpc = require('discord-rpc');
 var settings = require('electron-settings')
-var ver = '1.1b';
+var ver = '0.2.0';
 
 if (process.platform == 'linux') {
     var mpris = require('mpris-service');
