@@ -41,6 +41,12 @@
             </div>
         </div>
         <div class="main-content">
+            <div class="restart-container">
+                <div class="restart-label">
+                    <div class="restart-text">Changes will be applied after you restart.</div>
+                    <div class="restart-button">RESTART</div>
+                </div>
+            </div>
             <div class="cover-top"></div>
             <div class="cover-bottom"></div>
             <div class="play-type" id="playType">
@@ -76,20 +82,30 @@
                             <div class="menu-margin">
                                 <i class="material-icons close-button" id="settingsClose">close</i>
                                 <h1>Settings</h1>
-                                <div class="restart-container">
-                                    <div class="restart-label">
-                                        <div class="restart-text">Changes will be applied after you restart.</div>
-                                        <div class="restart-button">RESTART</div>
-                                    </div>
-                                </div>
                                 <div class="menu-controls">
                                     <div>
                                         <div class="label-switch">
-                                            <p>Light Theme</p>
+                                            <div>
+                                                <p>Light Theme</p>
+                                                <div class="switch-desc">Audiation's light theme</div>        
+                                            </div>
                                             <label class="switch">
                                                 <input id="lightSwitch" type="checkbox">
                                                 <span class="switch-slider round"></span>
                                             </label>
+                                        </div>
+                                        <div class="label-switch">
+                                            <div>
+                                                <p>Discord Rich Presence</p>
+                                                <div class="switch-desc">Sets currently playing song as your Discord status.</div>        
+                                            </div>
+                                            <label class="switch">
+                                                <input id="discordSwitch" type="checkbox">
+                                                <span class="switch-slider round"></span>
+                                            </label>
+                                        </div>
+                                        <div class="audiation-version">
+                                            <div id="audiationVer">Audiation</div>
                                         </div>
                                     </div>
                                 </div>

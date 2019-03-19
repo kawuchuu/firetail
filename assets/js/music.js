@@ -77,6 +77,8 @@ var AudioContext = window.AudioContext;
 var audioCtx = new AudioContext();
 var gain;
 var theme = 'dark';
+var menuOpen = false;
+var noSong = false;
 remote = require('electron').remote;
 const {
     globalShortcut,
@@ -90,7 +92,7 @@ var id3 = require('jsmediatags');
 var ipc = require('electron').ipcRenderer;
 var drpc = require('discord-rpc');
 var settings = require('electron-settings')
-var ver = '0.2.0';
+var ver = '0.2.1';
 
 if (process.platform == 'linux') {
     var mpris = require('mpris-service');
@@ -101,7 +103,7 @@ if (process.platform == 'linux') {
     });
 }
 
-$('#audiationVer').text(`Audiation v.${ver}`);
+$('#audiationVer').text(`v.${ver}`);
 $('#audiationVer').dblclick(function() {
     $('#openDevTools').show();
 })
@@ -117,6 +119,45 @@ if (settings.get('theme') == 'light') {
     theme = 'light';
     $('html').addClass('light');
     $('#lightSwitch').prop('checked', true)
+}
+
+var clientId = '535619653762940948';
+const rpc = new drpc.Client({ transport: 'ipc' })
+
+if (settings.get('discordrpc') == true) {
+    async function rpcSetActivity() {
+        if (!rpc) {
+            return;
+        }
+        if (pauseButtonActive == true) {
+            rpcIsPaused = '\u23f8'
+        } else {
+            rpcIsPaused = '\u25b6'
+        }
+        if (currentlyPlaying == false) {
+            rpcIsIdle = true;
+            rpcTitle = `${rpcIsPaused} Idle`
+        } else {
+            rpcIsIdle = false;
+            rpcTitle = `${rpcIsPaused} ${Title}`
+        }
+        rpc.setActivity({
+            details: rpcTitle,
+            largeImageKey: 'large-key',
+            largeImageText: 'Audiation',
+            state: artist
+        });
+    }
+    
+    rpc.on('ready', () => {
+        rpcSetActivity();
+        setInterval(() => {
+            rpcSetActivity();
+        }, 2500)
+    });
+    
+    rpc.login({ clientId }).catch(console.error);
+    $('#discordSwitch').prop('checked', true)
 }
 
 if (process.platform == 'linux') {
@@ -411,9 +452,6 @@ function loadFiles() {
             fName = f.split('.');
             fileName = f.slice(0, -fName[fName.length - 1].length - 1);
             $('.list-wrapper').append(`<li class="results-link" id="${i}"><i class="material-icons play-pause" style="opacity: 0;">play_arrow</i><p class="new-song-title">${fileName}`);
-            if (currentlyPlaying === true) {
-                songActive();
-            }
             /*$(`#${i}`).mouseover(function() {
                 console.log(i)
             })*/
@@ -471,7 +509,19 @@ function loadFiles() {
         allFilesList = fileSongListStore;
         shuffleOrder.forEach((f, i) => {
             shuffleList.push(fileSongListStore.indexOf(f));
-        })
+        });
+        if (currentlyPlaying === true) {
+            searchSongs = fileSongListStore.indexOf(newFileChosen);
+            if (searchSongs != -1) {
+                highlightSong = searchSongs;
+                currentSongPlaying = searchSongs;
+                songActive()
+            } else {
+                highlightSong = null;
+                currentSongPlaying = null;
+                noSong = true;
+            }
+        }
     });
     reloading = false;
 }
@@ -489,6 +539,10 @@ $('#refreshFiles').click(function() {
 });
 
 function previousSong() {
+    if (noSong == true) {
+        currentSongPlaying = 0;
+        highlightSong = 0;
+    }
     shuffleCheck = false;
     if (currentlyPlaying == true) {
         audioStop();
@@ -561,6 +615,12 @@ function nextSong() {
         highlightSong = shuffleList[currentSongPlaying];
     } else {
         highlightSong = currentSongPlaying;
+    }
+    if (noSong == true) {
+        currentSongPlaying = 0;
+        highlightSong = 0;
+        newFileChosen = allFilesList[currentSongPlaying];
+        newFileName = newFileChosen.slice(0, -fName[fName.length -1].length - 1);    
     }
     $(`#${highlightSong} i`).text('volume_up');
     $('#pauseButton').text('pause')
@@ -729,17 +789,6 @@ document.addEventListener("keydown", function (e) {
                 resumeButton();
             }
             break;
-        /*case 116:
-            dialog.showMessageBox(remote.getCurrentWindow(), {
-                type: 'info',
-                buttons: ['OK', 'Cancel'],
-                title: 'Reload',
-                message: 'Reloading will prevent media keys from functioning.'
-            }, function (i) {
-                if (i === 0) {
-                    location.reload();
-                }
-            })*/
     }
 });
 
@@ -755,17 +804,25 @@ function noSongPlaying() {
 
 noSongPlaying();
 
-$('#settingsButton').click(function() {
-    $('#settings').show();
-})
+function restartMenuSwitch() {
+    $('.restart-container').css('bottom', '-55px')
+    setTimeout(() => {
+        restartMessageCompact();
+        $('.restart-container').css('bottom', 0)
+    }, 200)
+}
 
 $("#settingsClose").click(function() {
-    $("#settings").hide();
+    navClose();
 });
 
 var menuOpened;
 
 function navOpen() {
+    menuOpen = true;
+    if (restartRequired == true) {
+        restartMenuSwitch();
+    }
     $(`#${menuOpened}Menu`).show();
     setTimeout(() => {
         $(`#${menuOpened}Menu`).css({
@@ -775,6 +832,10 @@ function navOpen() {
 }
 
 function navClose() {
+    menuOpen = false;
+    if (restartRequired == true) {
+        restartMenuSwitch();
+    }
     $('#effectsMenu, #settingsMenu').css({
         opacity: 0
     })
@@ -792,21 +853,44 @@ $('#effectsClose, #settingsClose').click(function () {
     navClose();
 });
 
+var restartRequired = false;
+
 $('#lightSwitch').click(() => {
-    if (theme == 'light') {
-        settings.set('theme', 'dark')
+    if (settings.get('theme') == 'light') {
+        settings.set('theme', 'dark');
     } else {
-        settings.set('theme', 'light')
+        settings.set('theme', 'light');
     }
-    $('.restart-label').css({
-        bottom: '0'
-    });
+    $('.restart-container').css('bottom', 0);
+    restartRequired = true;
 })
+
+$('#discordSwitch').click(() => {
+    if (settings.get('discordrpc') == true) {
+        settings.set('discordrpc', false)
+    } else {
+        settings.set('discordrpc', true)
+    }
+    $('.restart-container').css('bottom', 0);
+    restartRequired = true;
+})
+
+function restartMessageCompact() {
+    if (menuOpen == false) {
+        $('.restart-container, .restart-label').addClass('rs-compact');
+    } else {
+        $('.restart-container, .restart-label').removeClass('rs-compact');
+    }
+}
 
 $('.restart-button').click(() => {
     setTimeout(() => {
         app.relaunch();
-        appExit();
+        if (process.platform == 'linux') {
+            appExit();
+        } else {
+            app.exit();
+        }
     }, 500);
 })
 
@@ -1147,7 +1231,9 @@ function clearTempFiles() {
     });
 }
 
-setInterval(clearTempFiles, 60000);
+if (process.platform == 'linux') {
+    setInterval(clearTempFiles, 60000);
+}
 
 function appExit() {
     clearTempFiles()
@@ -1157,7 +1243,9 @@ function appExit() {
 }
 
 window.onbeforeunload = (i) => {
-    appExit();
+    if (process.platform == 'linux') {
+        appExit();
+    }
 }
 
 function seekBarTrack() {
@@ -1273,42 +1361,6 @@ function seekBarTrack() {
         })
     audio.addEventListener('timeupdate', seekTimeUpdate);
 }
-
-var clientId = '535619653762940948';
-const rpc = new drpc.Client({ transport: 'ipc' })
-
-async function rpcSetActivity() {
-    if (!rpc) {
-        return;
-    }
-    if (pauseButtonActive == true) {
-        rpcIsPaused = '\u23f8'
-    } else {
-        rpcIsPaused = '\u25b6'
-    }
-    if (currentlyPlaying == false) {
-        rpcIsIdle = true;
-        rpcTitle = `${rpcIsPaused} Idle`
-    } else {
-        rpcIsIdle = false;
-        rpcTitle = `${rpcIsPaused} ${Title}`
-    }
-    rpc.setActivity({
-        details: rpcTitle,
-        largeImageKey: 'large-key',
-        largeImageText: 'Audiation',
-        state: artist
-    });
-}
-
-rpc.on('ready', () => {
-    rpcSetActivity();
-    setInterval(() => {
-        rpcSetActivity();
-    }, 2500)
-})
-
-rpc.login({ clientId }).catch(console.error)
 
 function clamp(min, val, max) {
     return Math.min(Math.max(min, val), max);
