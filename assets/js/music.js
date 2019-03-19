@@ -798,6 +798,12 @@ $('#lightSwitch').click(() => {
     } else {
         settings.set('theme', 'light')
     }
+    $('.restart-label').css({
+        bottom: '0'
+    });
+})
+
+$('.restart-button').click(() => {
     setTimeout(() => {
         app.relaunch();
         appExit();

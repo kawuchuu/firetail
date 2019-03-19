@@ -902,3 +902,39 @@ input:checked + .switch-slider:before {
     bottom: -10px;
     height: 95px;
 }
+
+.restart-container {
+    display: flex;
+    justify-content: center;
+}
+
+.restart-label {
+    position: absolute;
+    bottom: -55px;
+    width: 380px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--fg-bg);
+    padding: 10px 15px;
+    border-radius: 5px 5px 0 0;
+    border: solid 2px var(--bd);
+    border-bottom: none;
+    box-shadow: 0px -1px 20px rgba(0,0,0,.15);
+    transition: .2s;
+}
+
+.restart-text {
+    margin-right: 10px;
+}
+
+.restart-button {
+    color: #c464f1;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.restart-button:hover {
+    opacity: .5;
+}
