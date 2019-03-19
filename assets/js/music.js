@@ -542,6 +542,7 @@ function previousSong() {
     if (noSong == true) {
         currentSongPlaying = 0;
         highlightSong = 0;
+        noSong = false;
     }
     shuffleCheck = false;
     if (currentlyPlaying == true) {
@@ -620,7 +621,8 @@ function nextSong() {
         currentSongPlaying = 0;
         highlightSong = 0;
         newFileChosen = allFilesList[currentSongPlaying];
-        newFileName = newFileChosen.slice(0, -fName[fName.length -1].length - 1);    
+        newFileName = newFileChosen.slice(0, -fName[fName.length -1].length - 1); 
+        noSong = false;   
     }
     $(`#${highlightSong} i`).text('volume_up');
     $('#pauseButton').text('pause')
