@@ -1,11 +1,12 @@
-const {app, BrowserWindow, globalShortcut} = require('electron');
+const {app, BrowserWindow, globalShortcut, Menu} = require('electron');
 const path = require('path');
 const url = require('url');
 var settings = require('electron-settings')
 
 var frameStyle;
 var bg;
-var ipc = require('electron').ipcMain
+var ipc = require('electron').ipcMain;
+var resume;
 
 if (process.platform === 'linux') {
     frameStyle = true;
@@ -17,7 +18,7 @@ if (settings.theme == 'light') {
     bg = '#f5f5f5';
 } else {
     bg = '#1f1f1f';
-}
+};
 
 function createMainWindow() {
     var win = new BrowserWindow({
@@ -91,7 +92,101 @@ function createMainWindow() {
     win.on('closed', (i) => {
         app.exit();
     })
-    
+    if (process.platform == 'darwin') {
+        app.setAboutPanelOptions({
+            applicationName: 'Audiation',
+            applicationVersion: require('./package.json').version,
+            copyright: 'Copyright © 2019 projsh_',
+            version: require('./package.json').version
+        })
+        const appMenu = [
+            {
+                label: app.getName(),
+                submenu: [
+                    { role: 'about' },
+                    { type: 'separator' },
+                    {
+                        label: 'Preferences',
+                        accelerator: 'Cmd+,',
+                        click() {
+                            win.webContents.send('preferences')
+                        }
+                    },
+                    { type: 'separator' },
+                    { role: 'hide' },
+                    { role: 'hideothers' },
+                    { role: 'unhide' },
+                    { type: 'separator' },
+                    { role: 'quit' }
+                ]
+            },
+            {
+                label: 'Playback',
+                submenu: [
+                    {
+                        label: 'Play / Pause',
+                        accelerator: 'Space',
+                        click() {
+                            resumeButton()
+                        }
+                    },
+                    { type: 'separator' },
+                    {
+                        label: 'Next',
+                        accelerator: 'Cmd+Right',
+                        click() {
+                            nextSong()
+                        }
+                    },
+                    {
+                        label: 'Previous',
+                        accelerator: 'Cmd+Left',
+                        click() {
+                            previousSong()
+                        }
+                    },
+                    { type: 'separator' },
+                    {
+                        label: 'Shuffle',
+                        accelerator: 'Cmd+S',
+                        click() {
+                            win.webContents.send("shuffle");
+                        }
+                    },
+                    {
+                        label: 'Repeat',
+                        accelerator: 'Cmd+R',
+                        click() {
+                            win.webContents.send("repeat");
+                        }
+                    }
+                ]
+            },
+            {
+                role: 'editMenu'
+            },
+            {
+                role: 'window',
+                submenu: [
+                    { role: 'close' },
+                    { role: 'minimize' },
+                    { role: 'zoom' },
+                    { type: 'separator' },
+                    {
+                        label: 'Toggle Mini Player',
+                        accelerator: 'Cmd+Shift+M',
+                        click() {
+                            win.webContents.send('toggle-mp')
+                        }
+                    },
+                    { type: 'separator' },
+                    { role: 'front' }
+                ]
+            }
+        ]
+        const menu = Menu.buildFromTemplate(appMenu);
+        Menu.setApplicationMenu(menu)
+    }
 }
 
 function createMiniPlayer() {
@@ -139,6 +234,9 @@ function createMiniPlayer() {
     });
     ipc.on('mini-bg', (event, arg) => {
         win.webContents.send('mini-bg', arg)
+    });
+    ipc.on('shortcut-close', () => {
+        win.webContents.send('shortcut-close')
     });
 }
 

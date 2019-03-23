@@ -210,6 +210,21 @@ ipc.on("shuffle", (event, arg) => {
 })
 ipc.on('repeat', (event, arg) => {
     enableRepeat();
+});
+ipc.on('preferences', () => {
+    menuOpened = 'settings';
+    navOpen();
+});
+var mpOpen = false;
+ipc.on('toggle-mp', () => {
+    if (mpOpen == false) {
+        remote.getCurrentWindow().hide();
+        ipc.send('switch-windows-mini');
+        mpOpen = true;
+    } else {
+        ipc.send('shortcut-close');
+        mpOpen = false;
+    }
 })
 
 $(document).ready(function() {
@@ -286,7 +301,7 @@ if (process.platform === 'darwin') {
         top: '20px'
     });
     $('#songsPage').css({
-        height: 'calc(100% - 173px)'
+        height: 'calc(100% - 158px)'
     })
     $('.menu').css({
         top: '22px',

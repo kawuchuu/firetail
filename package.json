@@ -1,5 +1,5 @@
 {
-  "name": "audiation",
+  "name": "Audiation",
   "version": "0.2.2",
   "description": "Audio Player",
   "author": {
@@ -30,7 +30,7 @@
   "build": {
     "appId": "com.projsh.audiation",
     "productName": "Audiation",
-    "copyright": "Copyright © 2018 projsh_",
+    "copyright": "Copyright © 2019 projsh_",
     "mac": {
       "category": "public.app-category.music",
       "target": "dmg",

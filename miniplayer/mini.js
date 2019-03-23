@@ -139,6 +139,11 @@ ipc.on('switch-windows', () => {
 $('#closeMini').click(() => {
     remote.getCurrentWindow().hide();
     ipc.send('switch-windows-full');
+});
+
+ipc.on('shortcut-close', () => {
+    remote.getCurrentWindow().hide();
+    ipc.send('switch-windows-full');
 })
 
 /*$('#favoriteMini').click(() => {
