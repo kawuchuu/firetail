@@ -781,7 +781,7 @@ button i {
 }
 
 .menu-margin {
-    margin: 20px 20px 0 30px;
+    margin: 15px 20px 0 25px;
 }
 
 h1 {
@@ -789,21 +789,10 @@ h1 {
     margin: 0 0 10px 0;
 }
 
-.close-button {
-    position: relative;
-    float: right;
-    font-size: 28px !important;
-    cursor: pointer;
-}
-
-.close-button:hover {
-    opacity: .5;
-}
-
 .menu-controls {
     position: relative;
     max-height: 229px;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .menu-controls::-webkit-scrollbar {
@@ -833,6 +822,7 @@ input {
     display: inline-block;
     width: 45px;
     height: 22px;
+    transition: .2s;
 }
 
 .switch input {
@@ -882,17 +872,22 @@ input:checked + .switch-slider:before {
     border-radius: 50%;
 }
 
-.label-switch {
+.label-switch, .menu-submenu-button {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 350px;
 }
 
-.label-switch p {
+.label-switch p, .menu-submenu-button p {
     margin-right: 15px;
     font-weight: bold;
     margin-bottom: 5px;
+}
+
+.switch-disabled {
+    opacity: .5 !important;
+    cursor: not-allowed !important;
 }
 
 .main-content {
@@ -979,4 +974,119 @@ input:checked + .switch-slider:before {
     font-size: 13px;
     opacity: .75;
     margin-bottom: 5px;
+    max-width: 275px;
+    word-break: normal;
+    white-space: normal;
+}
+
+.submenu {
+    position: absolute;
+    left: 110%;
+    top: 0;
+    transition: .25s;
+    width: 100%;
+    height: 100%;
+}
+
+.submenu.hidden {
+    left: 0 !important;
+}
+
+.menu-first {
+    position: relative;
+    right: 0;
+    transition: .25s;
+}
+
+.menu-first, .submenu {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.menu-first.hidden {
+    right: 100% !important;
+}
+
+.menu-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 400px;
+}
+
+.menu-heading {
+    font-size: 28px;
+    font-weight: bold;
+    position: relative;
+    right: 25px;
+    transition: .25s
+}
+
+.menu-arrow {
+    font-size: 26px !important;
+    position: relative;
+    right: 10px;
+    opacity: 0;
+    transition: .25s;
+}
+
+.menu-heading.hidden {
+    right: 10px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.menu-arrow.hidden {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.mtitle-button {
+    display: flex;
+    align-content: center;
+    width: 30%;
+    height: 36px;
+    position: relative;
+    transition: .25s;
+    top: 0;
+}
+
+.mtitle-button.hidden {
+    top: 5px;
+}
+
+.mtitle-button.hidden:hover {
+    opacity: .5;
+}
+
+.submenu-title {
+    font-size: 24px;
+    font-weight: bold;
+    width: 40%;
+    text-align: center;
+    opacity: 0;
+    transition: .25s;
+}
+
+.submenu-title.hidden {
+    opacity: 1;
+}
+
+.close-btn-flex {
+    width: 30%;
+    text-align: right;
+}
+
+.close-button {
+    font-size: 28px !important;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    opacity: .5;
+}
+
+.menu-submenu-button:hover {
+    opacity: .5;
+    cursor: pointer;
 }

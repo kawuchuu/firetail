@@ -80,19 +80,24 @@
                     <div class="menu-parent">
                         <div class="main-menu">
                             <div class="menu-margin">
-                                <i class="material-icons close-button" id="settingsClose">close</i>
-                                <h1>Settings</h1>
+                                <div class="menu-title">
+                                    <div class="mtitle-button">
+                                        <i class="material-icons menu-arrow">keyboard_arrow_left</i>
+                                        <div class="menu-heading main">Settings</div>
+                                    </div>
+                                    <div class="submenu-title">Appearance</div>
+                                    <div class="close-btn-flex">
+                                        <i class="material-icons close-button" id="settingsClose">close</i>
+                                    </div>
+                                </div>
                                 <div class="menu-controls">
-                                    <div>
-                                        <div class="label-switch">
+                                    <div class="menu-first">
+                                        <div class="menu-submenu-button" id="appearanceSubButton">
                                             <div>
-                                                <p>Light Theme</p>
-                                                <div class="switch-desc">Audiation's light theme</div>        
+                                                <p>Appearance</p>
+                                                <div class="switch-desc">Appearance settings</div>        
                                             </div>
-                                            <label class="switch">
-                                                <input id="lightSwitch" type="checkbox">
-                                                <span class="switch-slider round"></span>
-                                            </label>
+                                            <i class="material-icons">keyboard_arrow_right</i>
                                         </div>
                                         <div class="label-switch">
                                             <div>
@@ -108,6 +113,28 @@
                                             <div id="audiationVer">Audiation</div>
                                         </div>
                                     </div>
+                                    <div class="submenu appearance" id="appearanceSubmenu">
+                                        <div class="label-switch">
+                                            <div>
+                                                <p>Light Theme</p>
+                                                <div class="switch-desc">Audiation's light theme</div>        
+                                            </div>
+                                            <label class="switch">
+                                                <input id="lightSwitch" type="checkbox">
+                                                <span class="switch-slider round"></span>
+                                            </label>
+                                        </div>
+                                        <div class="label-switch">
+                                            <div>
+                                                <p>Mini Player Background</p>
+                                                <div class="switch-desc">Sets mini player's blurred background to the song's album art</div>        
+                                            </div>
+                                            <label class="switch">
+                                                <input id="miniBgSwitch" type="checkbox" checked>
+                                                <span class="switch-slider round"></span>
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -118,8 +145,15 @@
                     <div class="menu-parent">
                         <div class="main-menu">
                             <div class="menu-margin">
-                                <i class="material-icons close-button" id="effectsClose">close</i>
-                                <h1>Effects</h1>
+                                <div class="menu-title">
+                                    <div class="mtitle-button">
+                                        <i class="material-icons menu-arrow">keyboard_arrow_left</i>
+                                        <div class="menu-heading main">Effects</div>
+                                    </div>
+                                    <div class="close-btn-flex">
+                                        <i class="material-icons close-button" id="settingsClose">close</i>
+                                    </div>
+                                </div>
                                 <div class="menu-controls">
                                     <div id="gainControl">
                                         <div class="label-switch">

@@ -28,6 +28,8 @@ html.light {
 .album-art {
     height: 90px;
     width: 90px;
+    position: relative;
+    z-index: 2;
 }
 
 .metadata {
@@ -47,6 +49,7 @@ html.light {
     white-space: nowrap;
     text-overflow: ellipsis;
     font-weight: bold;
+    padding: 0 10px 0 20px;
 }
 
 .song-artist {
@@ -57,12 +60,15 @@ html.light {
     white-space: nowrap;
     text-overflow: ellipsis;
     line-height: 18px;
+    padding: 0 10px 0 20px;
 }
 
 .meta-text {
-    margin: 0 10px 0 20px;
     width: 190px;
     text-overflow: ellipsis;
+    position: relative;
+    z-index: 2;
+    text-shadow: 0px 1px 5px rgba(0,0,0,.45)
 }
 
 .controls {
@@ -104,6 +110,8 @@ html.light {
     display: flex;
     justify-content: center;
     flex-direction: column;
+    position: relative;
+    z-index: 2;
 }
 
 .extra-buttons svg {
@@ -139,4 +147,22 @@ html.light {
 
 .song-duration {
     margin: 0 15px 0 15px !important
+}
+
+.blur-bg {
+    position: fixed;
+    width: 255px;
+    height: 90px;
+    left: 90px;
+    filter: blur(25px);
+    z-index: 1;
+    transform: scale(1.4);
+    opacity: .65;
+}
+
+.album-bg {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
 }

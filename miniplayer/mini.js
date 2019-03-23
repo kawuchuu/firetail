@@ -32,6 +32,14 @@ function resumeButton() {
     }
 }
 
+ipc.on('mini-bg', (event, arg) => {
+    if (arg == false) {
+        $('.blur-bg').hide();
+    } else {
+        $('.blur-bg').show();
+    }
+})
+
 $('#miniResume').click(() => {
     ipc.send('playpause');
 })
@@ -106,13 +114,21 @@ ipc.on('tag-info', (event, arg) => {
     currentlyPlaying = true;
     $('#miniResume').text('pause')
     $('.song-title').text(tagInfo.title);
-    $('.song-artist').text(tagInfo.artist)
+    $('.song-artist').text(tagInfo.artist);
+    var noImage = false;
     if (tagInfo.art == "assets/svg/no_image.svg") {
         tagInfo.art = "../assets/svg/no_image.svg";
+        noImage = true;
     } else if (tagInfo.art == "assets/svg/no_image_light.svg") {
         tagInfo.art = "../assets/svg/no_image_light.svg";
-    }
+        noImage = true;
+    };
     document.getElementById('art').src = tagInfo.art;
+    if (noImage == false) {
+        $('.album-bg').css('background-image', `url(${tagInfo.art})`)
+    } else {
+        $('.album-bg').css('background-image', '')
+    }
     paused = false;
 })
 
@@ -219,4 +235,9 @@ window.onbeforeunload = (i) => {
     remote.getCurrentWindow().hide();
     ipc.send('switch-windows-full');
     i.returnValue = false;
+}
+
+if (theme == 'light') {
+    $('.blur-bg').hide();
+    $('.meta-text').css('text-shadow', 'none')
 }

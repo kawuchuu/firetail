@@ -92,7 +92,7 @@ var id3 = require('jsmediatags');
 var ipc = require('electron').ipcRenderer;
 var drpc = require('discord-rpc');
 var settings = require('electron-settings')
-var ver = '0.2.1';
+var ver = '0.2.2';
 
 if (process.platform == 'linux') {
     var mpris = require('mpris-service');
@@ -118,7 +118,15 @@ if (settings.has('theme') == false) {
 if (settings.get('theme') == 'light') {
     theme = 'light';
     $('html').addClass('light');
-    $('#lightSwitch').prop('checked', true)
+    $('#lightSwitch').prop('checked', true);
+    $('#miniBgSwitch').prop('checked', false);
+    $('#miniBgSwitch').prop('disabled', true);
+    $('#miniBgSwitch').parent().addClass('switch-disabled');
+}
+
+if (settings.get('mini-player-bg') == false) {
+    ipc.send('mini-bg', false)
+    $('#miniBgSwitch').prop('checked', false)
 }
 
 var clientId = '535619653762940948';
@@ -157,7 +165,8 @@ if (settings.get('discordrpc') == true) {
     });
     
     rpc.login({ clientId }).catch(console.error);
-    $('#discordSwitch').prop('checked', true)
+    $('#discordSwitch').prop('checked', true);
+    console.log('Discord RPC has been enabled.')
 }
 
 if (process.platform == 'linux') {
@@ -814,10 +823,6 @@ function restartMenuSwitch() {
     }, 200)
 }
 
-$("#settingsClose").click(function() {
-    navClose();
-});
-
 var menuOpened;
 
 function navOpen() {
@@ -853,6 +858,9 @@ $('#effectsButton, #settingsButton').click(function () {
 
 $('#effectsClose, #settingsClose').click(function () {
     navClose();
+    setTimeout(() => {
+        $(`#${getSubId}, .menu-first, .menu-heading, .menu-arrow, .submenu-title, .mtitle-button`).removeClass('hidden');
+    }, 250)
 });
 
 var restartRequired = false;
@@ -860,8 +868,18 @@ var restartRequired = false;
 $('#lightSwitch').click(() => {
     if (settings.get('theme') == 'light') {
         settings.set('theme', 'dark');
+        if (settings.get('mini-player-bg') == false) {
+            $('#miniBgSwitch').prop('checked', false);
+        } else {
+            $('#miniBgSwitch').prop('checked', true);
+        }
+        $('#miniBgSwitch').prop('disabled', false);
+        $('#miniBgSwitch').parent().removeClass('switch-disabled');
     } else {
         settings.set('theme', 'light');
+        $('#miniBgSwitch').prop('checked', false);
+        $('#miniBgSwitch').prop('disabled', true);
+        $('#miniBgSwitch').parent().addClass('switch-disabled');
     }
     $('.restart-container').css('bottom', 0);
     restartRequired = true;
@@ -875,6 +893,30 @@ $('#discordSwitch').click(() => {
     }
     $('.restart-container').css('bottom', 0);
     restartRequired = true;
+});
+
+$('#miniBgSwitch').click(() => {
+    if (settings.get('mini-player-bg') == true) {
+        settings.set('mini-player-bg', false);
+        ipc.send('mini-bg', false);
+    } else {
+        settings.set('mini-player-bg', true);
+        ipc.send('mini-bg', true);
+    }
+})
+
+var subMenuList = {
+    'appearanceSubButton': 'appearanceSubmenu'
+}
+var getSubId;
+$('.menu-submenu-button').click(function() {
+    getSubId = $(this).attr('id');
+    getSubId = subMenuList[getSubId];
+    $(`#${getSubId}, .menu-first, .menu-heading, .menu-arrow, .submenu-title, .mtitle-button`).addClass('hidden');
+})
+
+$('.mtitle-button').click(() => {
+    $(`#${getSubId}, .menu-first, .menu-heading, .menu-arrow, .submenu-title, .mtitle-button`).removeClass('hidden');
 })
 
 function restartMessageCompact() {
@@ -953,6 +995,7 @@ function findSong() {
             //dialog.showErrorBox('Error', err)
             audioStop();
         }
+        getSongInfo();
         audio.volume = currentVol;
         seekBarTrack();
         toolbarPause();
@@ -961,6 +1004,119 @@ function findSong() {
         currentlyPlaying = false;
         audioStop();
     }
+}
+
+function getSongInfo() {
+    new id3.Reader(`${os.homedir}/Music/Audiation/${newFileChosen}`)
+        .setTagsToRead(['title', 'artist', 'picture', 'album'])
+        .read({
+            onSuccess: function (tag) {
+                artist = tag.tags.artist;
+                Title = tag.tags.title;
+                album = tag.tags.album;
+                newTags = tag;
+                if (!tag.tags.artist) {
+                    artist = 'Unknown Artist'
+                }
+                if (!tag.tags.album) {
+                    album = 'Unknown Album'
+                }
+                if (!tag.tags.title) {
+                    Title = newFileName;
+                }
+                var base64String = '';
+                if (tag.tags.picture) {
+                    for (var i = 0; i < tag.tags.picture.data.length; i++) {
+                        base64String += String.fromCharCode(tag.tags.picture.data[i]);
+                    }
+                    dataUrl = 'data:' + tag.tags.picture.format + ';base64,' + btoa(base64String);
+                    if (process.platform == 'linux') {
+                        tmpFile = tmp.tmpNameSync({template: 'tmp-XXXXXX'});
+                        fs.writeFile(`${tmpobj.name}/${tmpFile}.jpg`, btoa(base64String), 'base64', function(err) {
+                            if (err) console.error(err);
+                            albumArt = `${tmpobj.name}/${tmpFile}.jpg`;
+                            document.getElementById('songPicture').style.background = `url(${albumArt})`
+                            document.getElementById('songPictureBlur').style.background = `url(${albumArt})`
+                        })
+                    } else {
+                        albumArt = dataUrl
+                        document.getElementById('songPicture').style.background = `url(${albumArt})`
+                        document.getElementById('songPictureBlur').style.background = `url(${albumArt})`
+                    }
+                } else {
+                    if (theme == 'light') {
+                        document.getElementById('songPicture').style.background = 'url(assets/svg/no_image_light.svg)';
+                        document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image_light.svg)';
+                        albumArt = 'assets/svg/no_image_light.svg';
+                        dataUrl = 'assets/svg/no_image_light.svg'
+                    } else {
+                        document.getElementById('songPicture').style.background = 'url(assets/svg/no_image.svg)';
+                        document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image.svg)';
+                        albumArt = 'assets/svg/no_image.svg'
+                        dataUrl = 'assets/svg/no_image.svg'
+                    }
+                }
+                $('h1#songTitle').text(Title);
+                $('#artist').text(`${artist}`);
+                if (!tag.tags.artist) {
+                    $('title').text(`${newFileName}`);
+                } else {
+                    $('title').text(`${artist} - ${Title}`)
+                }
+                if (process.platform == 'linux') {
+                    mprisPlayer.metadata =  {
+                        'xesam:title': Title,
+                        'xesam:artist': artist,
+                        'xesam:album': album,
+                        'mpris:trackid': mprisPlayer.objectPath('track/0'),
+                        'mpris:artUrl': `file://${tmpobj.name}/${tmpFile}.jpg`
+                    };
+                    mprisPlayer.playbackStatus = 'Playing';
+                }
+                var tagInfo = {
+                    'title': Title,
+                    'artist': artist,
+                    'album': album,
+                    'art': dataUrl
+                }
+                ipc.send('tag-info', tagInfo);
+            },
+            onError: function (tag) {
+                $('#songTitle').text(newFileName);
+                $('#artist').text('Unknown Artist');
+                var testLight = 'assets/svg/no_image.svg';
+                if (theme == 'light') {
+                    document.getElementById('songPicture').style.background = 'url(assets/svg/no_image_light.svg)';
+                    document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image_light.svg)';
+                    testLight = 'assets/svg/no_image_light.svg'
+                } else {
+                    document.getElementById('songPicture').style.background = 'url(assets/svg/no_image.svg)';
+                    document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image.svg)';
+                    testLight = 'assets/svg/no_image.svg'
+                }
+                $('title').text(`${newFileName}`);
+                Title = newFileName;
+                artist = 'Unknown Artist'
+                album = 'Unknown Album';
+                if (process.platform == 'linux') {
+                    mprisPlayer.metadata =  {
+                        'xesam:title': Title,
+                        'xesam:artist': artist,
+                        'xesam:album': album,
+                        'mpris:trackid': mprisPlayer.objectPath('track/0'),
+                        'mpris:artUrl': ''
+                    };
+                    mprisPlayer.playbackStatus = 'Playing';
+                }
+                var tagInfo = {
+                    'title': newFileName,
+                    'artist': 'Unknown Artist',
+                    'album': 'Unknown Album',
+                    'art': testLight
+                }
+                ipc.send('tag-info', tagInfo)
+            }
+    })
 }
 
 var convolverGain = audioCtx.createGain();
@@ -1251,116 +1407,6 @@ window.onbeforeunload = (i) => {
 }
 
 function seekBarTrack() {
-    new id3.Reader(`${os.homedir}/Music/Audiation/${newFileChosen}`)
-        .setTagsToRead(['title', 'artist', 'picture', 'album'])
-        .read({
-            onSuccess: function (tag) {
-                artist = tag.tags.artist;
-                Title = tag.tags.title;
-                album = tag.tags.album;
-                newTags = tag;
-                if (!tag.tags.artist) {
-                    artist = 'Unknown Artist'
-                }
-                if (!tag.tags.album) {
-                    album = 'Unknown Album'
-                }
-                if (!tag.tags.title) {
-                    Title = newFileName;
-                }
-                var base64String = '';
-                if (tag.tags.picture) {
-                    for (var i = 0; i < tag.tags.picture.data.length; i++) {
-                        base64String += String.fromCharCode(tag.tags.picture.data[i]);
-                    }
-                    dataUrl = 'data:' + tag.tags.picture.format + ';base64,' + btoa(base64String);
-                    if (process.platform == 'linux') {
-                        tmpFile = tmp.tmpNameSync({template: 'tmp-XXXXXX'});
-                        fs.writeFile(`${tmpobj.name}/${tmpFile}.jpg`, btoa(base64String), 'base64', function(err) {
-                            if (err) console.error(err);
-                            albumArt = `${tmpobj.name}/${tmpFile}.jpg`;
-                            document.getElementById('songPicture').style.background = `url(${albumArt})`
-                            document.getElementById('songPictureBlur').style.background = `url(${albumArt})`
-                        })
-                    } else {
-                        albumArt = dataUrl
-                        document.getElementById('songPicture').style.background = `url(${albumArt})`
-                        document.getElementById('songPictureBlur').style.background = `url(${albumArt})`
-                    }
-                } else {
-                    if (theme == 'light') {
-                        document.getElementById('songPicture').style.background = 'url(assets/svg/no_image_light.svg)';
-                        document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image_light.svg)';
-                        albumArt = 'assets/svg/no_image_light.svg';
-                        dataUrl = 'assets/svg/no_image_light.svg'
-                    } else {
-                        document.getElementById('songPicture').style.background = 'url(assets/svg/no_image.svg)';
-                        document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image.svg)';
-                        albumArt = 'assets/svg/no_image.svg'
-                        dataUrl = 'assets/svg/no_image.svg'
-                    }
-                }
-                $('h1#songTitle').text(Title);
-                $('#artist').text(`${artist}`);
-                if (!tag.tags.artist) {
-                    $('title').text(`${newFileName}`);
-                } else {
-                    $('title').text(`${artist} - ${Title}`)
-                }
-                if (process.platform == 'linux') {
-                    mprisPlayer.metadata =  {
-                        'xesam:title': Title,
-                        'xesam:artist': artist,
-                        'xesam:album': album,
-                        'mpris:trackid': mprisPlayer.objectPath('track/0'),
-                        'mpris:artUrl': `file://${tmpobj.name}/${tmpFile}.jpg`
-                    };
-                    mprisPlayer.playbackStatus = 'Playing';
-                }
-                var tagInfo = {
-                    'title': Title,
-                    'artist': artist,
-                    'album': album,
-                    'art': dataUrl
-                }
-                ipc.send('tag-info', tagInfo);
-            },
-            onError: function (tag) {
-                $('#songTitle').text(newFileName);
-                $('#artist').text('Unknown Artist');
-                var testLight = 'assets/svg/no_image.svg';
-                if (theme == 'light') {
-                    document.getElementById('songPicture').style.background = 'url(assets/svg/no_image_light.svg)';
-                    document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image_light.svg)';
-                    testLight = 'assets/svg/no_image_light.svg'
-                } else {
-                    document.getElementById('songPicture').style.background = 'url(assets/svg/no_image.svg)';
-                    document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image.svg)';
-                    testLight = 'assets/svg/no_image.svg'
-                }
-                $('title').text(`${newFileName}`);
-                Title = newFileName;
-                artist = 'Unknown Artist'
-                album = 'Unknown Album';
-                if (process.platform == 'linux') {
-                    mprisPlayer.metadata =  {
-                        'xesam:title': Title,
-                        'xesam:artist': artist,
-                        'xesam:album': album,
-                        'mpris:trackid': mprisPlayer.objectPath('track/0'),
-                        'mpris:artUrl': ''
-                    };
-                    mprisPlayer.playbackStatus = 'Playing';
-                }
-                var tagInfo = {
-                    'title': newFileName,
-                    'artist': 'Unknown Artist',
-                    'album': 'Unknown Album',
-                    'art': testLight
-                }
-                ipc.send('tag-info', tagInfo)
-            }
-        })
     audio.addEventListener('timeupdate', seekTimeUpdate);
 }
 

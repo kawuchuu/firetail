@@ -137,6 +137,9 @@ function createMiniPlayer() {
     ipc.on('play-mini', () => {
         win.webContents.send('play-mini')
     });
+    ipc.on('mini-bg', (event, arg) => {
+        win.webContents.send('mini-bg', arg)
+    });
 }
 
 function createWindows() {
