@@ -948,7 +948,9 @@ $('.restart-button').click(() => {
         if (process.platform == 'linux') {
             appExit();
         } else {
-            app.exit();
+            setTimeout(() => {
+                app.quit();
+            }, 10)
         }
     }, 500);
 })
@@ -1411,7 +1413,7 @@ if (process.platform == 'linux') {
 function appExit() {
     clearTempFiles()
     setTimeout(() => {
-        app.exit();
+        app.quit();
     }, 500)
 }
 
