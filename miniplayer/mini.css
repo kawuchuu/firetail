@@ -11,7 +11,7 @@ body {
     --li-hv: #212121;
     --logo: 1;
     --switch: #3d3d3d;
-    --ext: #171717;
+    --ext: #17171757;
 }
 
 html.light {
@@ -110,8 +110,10 @@ html.light {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    position: relative;
+    position: absolute;
     z-index: 2;
+    overflow: hidden;
+    right: 0;
 }
 
 .extra-buttons svg {

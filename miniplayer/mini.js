@@ -126,8 +126,14 @@ ipc.on('tag-info', (event, arg) => {
     document.getElementById('art').src = tagInfo.art;
     if (noImage == false) {
         $('.album-bg').css('background-image', `url(${tagInfo.art})`)
+        if (theme == 'dark') {
+            $('.extra-buttons').css('background', '#17171757')
+        }
     } else {
         $('.album-bg').css('background-image', '')
+        if (theme == 'dark') {
+            $('.extra-buttons').css('background', '#171717')
+        }
     }
     paused = false;
 })
