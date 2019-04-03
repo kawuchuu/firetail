@@ -92,6 +92,12 @@ function createMainWindow() {
     win.on('closed', (i) => {
         app.exit();
     })
+    /*ipc.on('ondragstart', (event, filePath) => {
+        event.sender.startDrag({
+            file: filePath,
+            icon: './assets/image/temp-ic.png'
+        })
+    });*/
     if (process.platform == 'darwin') {
         app.setAboutPanelOptions({
             applicationName: 'Audiation',

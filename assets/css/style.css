@@ -188,13 +188,9 @@ button:hover, .button-active {
     transform: scale(1.05)
 }
 
-.button-active:hover {
-    background: linear-gradient(to right, #9a07df, #c500bb) !important
-}
-
 .button-active {
     cursor: default;
-    background: linear-gradient(to right, #9a07df, #c500bb)
+    background: #c300ff
 }
 
 .seek-bar {
@@ -364,9 +360,9 @@ div.new-nowplaying i:hover {
 }
 
 .play-type-wrapper {
-    height: calc(100% - 199px);
+    height: calc(100% - 179px);
     overflow-y: auto;
-    padding: 20px 0 10px 0;
+    padding: 0 0 30px 0;
 }
 
 .play-type-wrapper::-webkit-scrollbar {
@@ -732,7 +728,7 @@ button i {
     display: inherit !important;
 }
 
-.placeholder-message, #songsPage {
+.placeholder-message, #songsPage, #playlistsPage {
     display: none;
 }
 
@@ -1089,4 +1085,62 @@ input:checked + .switch-slider:before {
 .menu-submenu-button:hover {
     opacity: .5;
     cursor: pointer;
+}
+
+.context-menu {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    width: auto;
+    height: auto;
+    background: var(--fg-bg);
+    border: 2px solid var(--bd);
+    border-radius: 5px;
+    box-shadow: 0px 1px 20px rgba(0,0,0,.15);
+}
+
+.context-list {
+    display: flex;
+    width: auto;
+    flex-flow: column;
+}
+
+.context-item {
+    width: auto;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    padding: 5px;
+    vertical-align: middle;
+}
+
+.context-item:hover {
+    background: var(--li-hv);
+}
+
+.context-separator {
+    width: auto;
+    border: 1px solid var(--bd); 
+}
+
+.warning-message {
+    font-size: 12px;
+    opacity: .75;
+    position: relative;
+    left: 205px;
+    width: 500px;
+}
+
+#clearPlaylists {
+    color: #c464f1;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 55px;
+    position: relative;
+}
+
+.warning-wrap {
+    display: flex;
+    align-items: center;
 }

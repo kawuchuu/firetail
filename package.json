@@ -17,6 +17,7 @@
   "dependencies": {
     "discord-rpc": "^3.0.1",
     "electron-settings": "^3.2.0",
+    "fs-extra": "^7.0.1",
     "jsmediatags": "^3.8.1",
     "tmp": "^0.0.33"
   },

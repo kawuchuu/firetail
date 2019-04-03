@@ -51,9 +51,9 @@
             <div class="cover-bottom"></div>
             <div class="play-type" id="playType">
                 <div class="play-type-wrapper">
-                    <button id="newPlay" class="button-active">
+                    <button id="libraryButton" class="button-active">
                         <i class="material-icons">library_music</i>Library</button>
-                    <button id="playlistsButton">
+                    <button id="playlistsTab">
                         <i class="material-icons">playlist_play</i>Playlists</button>
                     <div class="type-separator"></div>
                     <div id="extraButtons">
@@ -75,6 +75,11 @@
                 </div>
             </div>
             <div class="app-content">
+                <div class="context-menu" id="contextMenu">
+                    <div class="context-list">
+                        <div class="context-item" id="addSongPlaylist">Add to playlist</div>
+                    </div>
+                </div>
                 <div id="settingsMenu" class="menu" style="display: none">
                     <div class="menu-bg"></div>
                     <div class="menu-parent">
@@ -204,7 +209,9 @@
                         <div class="placeholder-message" id="albumsPage">
                             <p>This is a placeholder message for the albums page.</p>
                         </div>
-                        <!--<div class="list-push"></div>-->
+                        <ul id="playlistsPage">
+                            <div class="list-wrapper"></div>
+                        </ul>
                     </div>
                 </div>
                     <div class="new-nowplaying">

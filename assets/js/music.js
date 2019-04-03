@@ -87,7 +87,7 @@ const {
 } = require('electron').remote;
 const path = require('path');
 var os = require('os');
-var fs = require('fs');
+var fs = require('fs-extra');
 var id3 = require('jsmediatags');
 var ipc = require('electron').ipcRenderer;
 var drpc = require('discord-rpc');
@@ -423,11 +423,27 @@ function shuffle(array) {
 
 var fileextentions = ['mp3', 'm4a', 'wav', 'ogg', '3gp', 'aac', 'flac', 'webm', 'raw']
 var reloading;
-
+var ctxMenu;
+var xPosition;
+var yPosition;
+var playlistList = {};
+var clickedSong;
+var tab = 'songs';
 function loadFiles() {
     reloading = true;
     if (!fs.existsSync(`${os.homedir}/Music/Audiation`)) {
         fs.mkdirSync(`${os.homedir}/Music/Audiation`);
+    }
+    if (!fs.existsSync(`${app.getPath('userData')}/playlists.json`)) {
+        fs.writeJson(`${app.getPath('userData')}/playlists.json`, ({
+            'playlist1': []
+        }), err => {
+            if (err) return console.error(err)
+        });
+    } else {
+        fs.readJson(`${app.getPath('userData')}/playlists.json`, (err, file) => {
+            playlistList = file.playlist1;
+        });
     }
     s = [];
     allFilesList = [];
@@ -457,78 +473,47 @@ function loadFiles() {
         }
         fileTotal = s.length - 1;
         $('.list-wrapper').html('');
-        s.forEach((f, i) => {
-            function playSong() {
-                currentSongPlaying = i;
-                highlightSong = i;
-                songActiveReset();
-                newFileChosen = f;
-                newFileName = f.slice(0, -fName[fName.length - 1].length - 1);
-                if (currentlyPlaying === true) {
-                    audioStop();
-                }
-                $('#pauseButton').text('pause')
-                findSong();
-                songActive();
-            }
-            fileSongListStore.push(f);
-            allFilesList.push(f);
-            fName = f.split('.');
-            fileName = f.slice(0, -fName[fName.length - 1].length - 1);
-            $('.list-wrapper').append(`<li class="results-link" id="${i}"><i class="material-icons play-pause" style="opacity: 0;">play_arrow</i><p class="new-song-title">${fileName}`);
-            /*$(`#${i}`).mouseover(function() {
-                console.log(i)
-            })*/
-            $(`#${i} p`).dblclick(function() {
-                shuffleCheck = false;
-                if (shuffleEnabled == true) {
-                    shuffleCheck = true;
-                    shuffleEnableFirst = true;
-                }
-                playSong();
+        if (tab == 'songs') {
+            s.forEach((f, i) => {
+                forEachFile(f, i);
             });
-            $(`#${i} i`).click(function() {
-                shuffleCheck = false;
-                if (shuffleEnabled == true) {
-                    shuffleCheck = true;
-                    shuffleEnableFirst = true;
-                }
-                if (currentlyPlaying === true && $(`#${i}`).attr('id') === `#${highlightSong}`.substr(1)) {
-                    resumeButton();
-                } else {
-                    playSong()
-                    $(`#${i} i`).text('pause');
-                }
+        }
+        if (tab == 'playlists') {
+            $(`#${tab}Page .list-wrapper`).append(`<div class="warning-wrap"><p class="warning-message">This feature is very new and incomplete. It's currently very basic and broken.</p><div id="clearPlaylists">CLEAR PLAYLIST</div></div>`)
+            $('#clearPlaylists').click(() => {
+                playlistList = [];
+                fs.writeJson(`${app.getPath('userData')}/playlists.json`, ({'playlist1': []}) , err => {
+                    if (err) return console.error(err)
+                });
+                $('#libraryButton').click();
             })
-            $(`#${i}`).mouseover(function() {
-                $(`#${i} i`).css({
-                    opacity: 1,
-                })
-            })
-            $(`#${i} i`).mouseover(function() {
-                if (highlightSong == i && pauseButtonActive == false) {
-                    $(`#${i} i`).text('pause');
-                }
-            })
-            $(`#${i}`).mouseleave(function() {
-                if (highlightSong !== i) {
-                    $(`#${i} i`).css({
-                        opacity: 0
-                    })
-                    $(`#${i} i`).text('play_arrow');
-                }
-            })
-            $(`#${i} i`).mouseleave(function() {
-                if (highlightSong == i) {
-                    $(`#${i} i`).css({
-                        opacity: 1,
-                    })
-                    if (pauseButtonActive == false) {
-                        $(`#${i} i`).text('volume_up')
-                    }
-                }
-            })
+            playlistList.forEach((f, i) => {
+                forEachFile(f, i);
+            });
+        }
+        $('body').on("contextmenu", "li.results-link", function(e) {
+            ctxMenu = document.getElementById('contextMenu')
+            if (e.pageX + ctxMenu.offsetWidth >= window.innerWidth) {
+                xPosition = e.pageX - ctxMenu.offsetWidth;
+            } else {
+                xPosition = e.pageX;
+            }
+            if (e.pageY + ctxMenu.offsetHeight >= window.innerHeight) {
+                yPosition = e.pageY - ctxMenu.offsetHeight;
+            } else {
+                yPosition = e.pageY;
+            }
+            clickedSong = e.currentTarget.id;
+            $('.context-menu').css({
+                display: 'block',
+                left: xPosition + 'px',
+                top: yPosition + 'px'
+            });
+            return false;
         });
+        $('html').click(() => {
+            $('.context-menu').hide();
+        })
         shuffleOrder = shuffle(allFilesList);
         allFilesList = fileSongListStore;
         shuffleOrder.forEach((f, i) => {
@@ -549,10 +534,95 @@ function loadFiles() {
     });
     reloading = false;
 }
+
+function forEachFile(f, i) {
+    function playSong() {
+        currentSongPlaying = i;
+        highlightSong = i;
+        songActiveReset();
+        newFileChosen = f;
+        newFileName = f.slice(0, -fName[fName.length - 1].length - 1);
+        if (currentlyPlaying === true) {
+            audioStop();
+        }
+        $('#pauseButton').text('pause')
+        findSong();
+        songActive();
+    }
+    fileSongListStore.push(f);
+    allFilesList.push(f);
+    fName = f.split('.');
+    fileName = f.slice(0, -fName[fName.length - 1].length - 1);
+    $(`#${tab}Page .list-wrapper`).append(`<li draggable="true" class="results-link" id="${i}"><i class="material-icons play-pause" style="opacity: 0;">play_arrow</i><p class="new-song-title">${fileName}`);
+    $(`#${i} p`).dblclick(function() {
+        shuffleCheck = false;
+        if (shuffleEnabled == true) {
+            shuffleCheck = true;
+            shuffleEnableFirst = true;
+        }
+        playSong();
+    });
+    $(`#${i} i`).click(function() {
+        shuffleCheck = false;
+        if (shuffleEnabled == true) {
+            shuffleCheck = true;
+            shuffleEnableFirst = true;
+        }
+        if (currentlyPlaying === true && $(`#${i}`).attr('id') === `#${highlightSong}`.substr(1)) {
+            resumeButton();
+        } else {
+            playSong()
+            $(`#${i} i`).text('pause');
+        }
+    })
+    $(`#${i}`).mouseover(function() {
+        $(`#${i} i`).css({
+            opacity: 1,
+        })
+    })
+    $(`#${i} i`).mouseover(function() {
+        if (highlightSong == i && pauseButtonActive == false) {
+            $(`#${i} i`).text('pause');
+        }
+    })
+    $(`#${i}`).mouseleave(function() {
+        if (highlightSong !== i) {
+            $(`#${i} i`).css({
+                opacity: 0
+            })
+            $(`#${i} i`).text('play_arrow');
+        }
+    })
+    $(`#${i} i`).mouseleave(function() {
+        if (highlightSong == i) {
+            $(`#${i} i`).css({
+                opacity: 1,
+            })
+            if (pauseButtonActive == false) {
+                $(`#${i} i`).text('volume_up')
+            }
+        }
+    })
+    document.getElementById(i).ondragstart = (event) => {
+        event.preventDefault()
+        ipc.send('ondragstart', null);
+    }
+}
+
 loadFiles();
 $('#openFileBrowser').click(function() {
     require('child_process').exec(`start "" "${os.homedir}\\Music\\Audiation`)
 });
+
+var addSong;
+$('#addSongPlaylist').click(() => {
+    addSong = fileSongListStore[clickedSong];
+    if (playlistList.indexOf(addSong) != -1) return;
+    playlistList.push(addSong);
+    fs.writeJson(`${app.getPath('userData')}/playlists.json`, ({'playlist1': playlistList}) , err => {
+        if (err) return console.error(err)
+    });
+})
 
 $('#refreshFiles').click(function() {
     if (reloading == false) {
@@ -1222,13 +1292,38 @@ $('#pauseButton').click(function() {
     resumeButton()
 })
 
+function buttonActive(e) {
+    $('.play-type-wrapper button').removeClass('button-active');
+    $('.play-type-wrapper button').prop('disabled', false)
+    $(`#${e}`).addClass('button-active');
+    $(`#${e}`).prop('disabled', true);
+    console.log(e)
+}
+
 var tabSection = 'songs'
-$('.top-bar h2').click(function() {
+$('#libraryButton').click(() => {
+    $('.top-bar h2').show();
+    $(`#playlistsPage`).removeClass('active-tab');
+    tabSection = 'songs'
+    $(`#songsPage`).addClass('active-tab');
+    tab = 'songs';
+    loadFiles();
+    buttonActive('libraryButton');
+})
+
+$('.top-bar h2, #playlistsTab').click(function() {
     $(`#${tabSection}Page`).removeClass('active-tab');
     tabSection = $(this).attr('id').substr(0, $(this).attr('id').length - 3);
     $(`#${tabSection}Page`).addClass('active-tab');
-    $('.top-bar h2').removeClass('tab-active');
-    $(this).addClass('tab-active')
+    if ($(this).attr('id') == 'playlistsTab') {
+        tab = 'playlists';
+        loadFiles();
+        buttonActive('playlistsTab');
+        $('.top-bar h2').hide();
+    } else {
+        $('.top-bar h2').removeClass('tab-active');
+        $(this).addClass('tab-active')
+    }
 })
 
 function resumeButton() {
