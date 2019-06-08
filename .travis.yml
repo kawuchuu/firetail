@@ -38,7 +38,7 @@ after_success:
        mv Firetail*.AppImage firetail.AppImage
        wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
        bash upload.sh firetail.AppImage*
-       bash upload.sh Firetail*.deb*
+       bash upload.sh firetail*.deb*
     else
        wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
        bash upload.sh Firetail*.dmg*

@@ -10,9 +10,9 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build:win": "electron-builder --win",
-    "build:linux": "electron-builder --linux",
-    "build:mac": "electron-builder --mac"
+    "build:win": "electron-builder --win --publish=never",
+    "build:linux": "electron-builder --linux --publish=never",
+    "build:mac": "electron-builder --mac --publish=never"
   },
   "dependencies": {
     "chokidar": "^2.1.6",
