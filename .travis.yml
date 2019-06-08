@@ -35,13 +35,13 @@ after_success:
   - |
     cd dist
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-       mv Audiation*.AppImage audiation.AppImage
+       mv Firetail*.AppImage firetail.AppImage
        wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-       bash upload.sh audiation.AppImage*
-       bash upload.sh audiation*.deb*
+       bash upload.sh Firetail.AppImage*
+       bash upload.sh Firetail*.deb*
     else
        wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-       bash upload.sh Audiation*.dmg*
+       bash upload.sh Firetail*.dmg*
     fi
 
 branches:
