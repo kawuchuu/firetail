@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html class="fire">
     <head>
-        <title>Audiation</title>
+        <title>Firetail</title>
         <link rel="stylesheet" href="./assets/css/style.css">
         <link href="./assets/fonts/material/material-icons.css" rel="stylesheet">
         <script>
@@ -11,9 +11,14 @@
                 }
             </script>
     </head>
-    <body style="transition-duration: .2s;">
-        <div id="loadCover" style="z-index: 20; width: 100%; height: 100%; position: fixed; background: linear-gradient(130deg, #7F00B9, #BE0096); transition: .2s; display: flex; justify-content: center; align-items: center;">
-            <img id="loadIcon" src="./assets/svg/audiation-menu.svg" style="height: 150px">
+    <body>
+        <div style="opacity: 0; position: fixed; z-index: -1">
+            <span class="material-icons-rounded">minimize</span>
+            <span class="material-icons-outlined">minimize</span>
+        </div>
+        <div id="loadCover" style="z-index: 20; width: 100%; height: 100%; position: fixed; background: linear-gradient(130deg, #ff9100, #b92500); transition: .2s; display: flex; justify-content: center; align-items: center;">
+            <img id="loadIcon" src="./assets/svg/firetail-menu.svg" style="height: 150px">
+            <div style="display:none;" class="createLibraryMsg">Creating Library...</div>
         </div>
         <div class="title-bar">
             <div id="noDrag"></div>
@@ -53,17 +58,15 @@
                 <div class="play-type-wrapper">
                     <button id="libraryButton" class="button-active">
                         <i class="material-icons">library_music</i>Library</button>
-                    <button id="playlistsTab">
+                    <button id="playlistsTab" disabled>
                         <i class="material-icons">playlist_play</i>Playlists</button>
                     <div class="type-separator"></div>
                     <div id="extraButtons">
                         <button id="refreshFiles">
                             <i class="material-icons">refresh</i>Refresh</button>
-                        <button id="openFileBrowser" style="display: none !important">
-                            <i class="material-icons">folder</i>Folder</button>
                         <button id="settingsButton">
                             <i class="material-icons">settings</i>Settings</button>
-                        <button id="effectsButton">
+                        <button style="display: none" id="effectsButton">
                             <i class="material-icons">blur_on</i>Effects</button>
                             <button id="miniPlayerButton">
                                 <i class="material-icons">branding_watermark</i>
@@ -86,9 +89,11 @@
                         <div class="main-menu">
                             <div class="menu-margin">
                                 <div class="menu-title">
-                                    <div class="mtitle-button">
-                                        <i class="material-icons menu-arrow">keyboard_arrow_left</i>
-                                        <div class="menu-heading main">Settings</div>
+                                    <div class="mtitle-btn">
+                                        <div class="mtitle-button">
+                                            <i class="material-icons menu-arrow">keyboard_arrow_left</i>
+                                            <div class="menu-heading main">Settings</div>
+                                        </div>
                                     </div>
                                     <div class="submenu-title">Appearance</div>
                                     <div class="close-btn-flex">
@@ -96,50 +101,8 @@
                                     </div>
                                 </div>
                                 <div class="menu-controls">
-                                    <div class="menu-first">
-                                        <div class="menu-submenu-button" id="appearanceSubButton">
-                                            <div>
-                                                <p>Appearance</p>
-                                                <div class="switch-desc">Appearance settings</div>        
-                                            </div>
-                                            <i class="material-icons">keyboard_arrow_right</i>
-                                        </div>
-                                        <div class="label-switch">
-                                            <div>
-                                                <p>Discord Rich Presence</p>
-                                                <div class="switch-desc">Sets currently playing song as your Discord status.</div>        
-                                            </div>
-                                            <label class="switch">
-                                                <input id="discordSwitch" type="checkbox">
-                                                <span class="switch-slider round"></span>
-                                            </label>
-                                        </div>
-                                        <div class="audiation-version">
-                                            <div id="audiationVer">Audiation</div>
-                                        </div>
-                                    </div>
-                                    <div class="submenu appearance" id="appearanceSubmenu">
-                                        <div class="label-switch">
-                                            <div>
-                                                <p>Light Theme</p>
-                                                <div class="switch-desc">Audiation's light theme</div>        
-                                            </div>
-                                            <label class="switch">
-                                                <input id="lightSwitch" type="checkbox">
-                                                <span class="switch-slider round"></span>
-                                            </label>
-                                        </div>
-                                        <div class="label-switch">
-                                            <div>
-                                                <p>Mini Player Background</p>
-                                                <div class="switch-desc">Sets mini player's blurred background to the song's album art</div>        
-                                            </div>
-                                            <label class="switch">
-                                                <input id="miniBgSwitch" type="checkbox" checked>
-                                                <span class="switch-slider round"></span>
-                                            </label>
-                                        </div>
-                                    </div>
+                                    <div class="disable-interact"></div>
+                                    <div class="menu-list main" id="menuMain"></div>
                                 </div>
                             </div>
                         </div>
@@ -153,7 +116,7 @@
                                 <div class="menu-title">
                                     <div class="mtitle-button">
                                         <i class="material-icons menu-arrow">keyboard_arrow_left</i>
-                                        <div class="menu-heading main">Effects</div>
+                                        <div class="menu-heading">Effects</div>
                                     </div>
                                     <div class="close-btn-flex">
                                         <i class="material-icons close-button" id="settingsClose">close</i>
@@ -190,8 +153,8 @@
                         <div class="shadow-hide"></div>
                         <div class="top-bar">
                             <div class="logo-bottom">
-                                <img id="headerIcon" src="./assets/svg/audiation-menu.svg">
-                                <div class="icon-text">Audiation</div>
+                                <img draggable="false" id="headerIcon" src="./assets/svg/firetail-menu.svg">
+                                <div class="icon-text">Firetail</div>
                                 <p id="betaTag">BETA</p>
                             </div>
                             <div class="top-bar-wrapper">

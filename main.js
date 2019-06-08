@@ -24,12 +24,15 @@ function createMainWindow() {
     var win = new BrowserWindow({
         width: 885, 
         height: 655,
-        icon: './assets/image/audiation-main-logo.png', 
+        icon: './assets/image/icon.png', 
         frame: frameStyle,
         backgroundColor: bg,
         titleBarStyle: 'hidden',
         show: false,
-        title: 'Audiation'
+        title: 'Firetail',
+        webPreferences: {
+            nodeIntegration: true
+        }
     });
     if (process.platform != 'linux') {
         globalShortcut.register('MediaPlayPause', resumeButton);
@@ -100,7 +103,7 @@ function createMainWindow() {
     });*/
     if (process.platform == 'darwin') {
         app.setAboutPanelOptions({
-            applicationName: 'Audiation',
+            applicationName: 'Firetail',
             applicationVersion: require('./package.json').version,
             copyright: 'Copyright © 2019 projsh_',
             version: require('./package.json').version
@@ -197,15 +200,18 @@ function createMainWindow() {
 
 function createMiniPlayer() {
     var win = new BrowserWindow({
-        width: 385, 
-        height: 185,
-        icon: './assets/image/audiation-main-logo.png', 
+        width: 355, 
+        height: 157,
+        icon: './assets/image/icon.png', 
         frame: false,
         backgroundColor: bg,
         show: false,
         title: 'Mini Player',
         alwaysOnTop: true,
-        resizable: false
+        resizable: false,
+        webPreferences: {
+            nodeIntegration: true
+        }    
     });
 
     win.loadURL(url.format({
@@ -238,8 +244,8 @@ function createMiniPlayer() {
     ipc.on('play-mini', () => {
         win.webContents.send('play-mini')
     });
-    ipc.on('mini-bg', (event, arg) => {
-        win.webContents.send('mini-bg', arg)
+    ipc.on('setting-change', (event, arg) => {
+        win.webContents.send('setting-change', arg)
     });
     ipc.on('shortcut-close', () => {
         win.webContents.send('shortcut-close')

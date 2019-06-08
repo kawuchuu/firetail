@@ -26,8 +26,8 @@ html.light {
 }
 
 .album-art {
-    height: 90px;
-    width: 90px;
+    height: 80px;
+    width: 80px;
     position: relative;
     z-index: 2;
 }
@@ -35,9 +35,9 @@ html.light {
 .metadata {
     display: flex;
     align-items: center;
-    width: 345px;
+    width: 295px;
     -webkit-app-region: drag;
-    height: 90px;
+    height: 80px;
 }
 
 .song-title {
@@ -50,6 +50,16 @@ html.light {
     text-overflow: ellipsis;
     font-weight: bold;
     padding: 0 10px 0 20px;
+}
+
+.meta-text.bg, .extra-buttons.bg {
+    color: #ffffff !important;
+    text-shadow: 0px 1px 5px rgba(0,0,0,.45)
+}
+
+.extra-buttons svg.bg {
+    fill: #ffffff !important;
+    text-shadow: 0px 1px 5px rgba(0,0,0,.45)
 }
 
 .song-artist {
@@ -68,7 +78,6 @@ html.light {
     text-overflow: ellipsis;
     position: relative;
     z-index: 2;
-    text-shadow: 0px 1px 5px rgba(0,0,0,.45)
 }
 
 .controls {
@@ -78,7 +87,7 @@ html.light {
 }
 
 .controls i {
-    margin: 15px;
+    margin: 10px 10px 5px 10px;
     transition: .2s;
 }
 
@@ -105,7 +114,7 @@ html.light {
 
 .extra-buttons {
     width: 40px;
-    height: 90px;
+    height: 80px;
     background: var(--ext);
     display: flex;
     justify-content: center;
@@ -131,31 +140,31 @@ html.light {
 }
 
 .seek-bar {
-    width: 220px
+    width: 175px
 }
 
 .controls i:hover {
-    color: #c464f1 !important;
+    color: var(--hl-txt) !important;
 }
 
 .bottom-section {
     background: var(--fg-bg);
     position: relative;
     z-index: 2;
-    height: 95px;
+    height: 75px;
     border-top: 2px solid var(--bd);
     box-shadow: 0px -2px 20px rgba(0,0,0,.15);
 }
 
 .song-duration {
-    margin: 0 15px 0 15px !important
+    margin: 0 5px !important
 }
 
 .blur-bg {
     position: fixed;
-    width: 255px;
-    height: 90px;
-    left: 90px;
+    width: 245px;
+    height: 58px;
+    left: 70px;
     filter: blur(25px);
     z-index: 1;
     transform: scale(1.4);
