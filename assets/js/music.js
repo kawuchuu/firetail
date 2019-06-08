@@ -122,7 +122,8 @@ $('#volFill').css({
 })
 
 if (settings.has('theme') == false) {
-    settings.set('theme', 'dark')
+    settings.set('theme', 'dark');
+    themeSelect('dark')
 } else {
     themeSelect(settings.get('theme'))
 }
@@ -142,7 +143,8 @@ if (settings.has('icon-style') == false) {
 }
 
 if (settings.has('colour-accent') == false) {
-    settings.set('colour-accent', 'fire');
+    settings.set('colour-accent', 'firetail');
+    colouraccentSelect('firetail')
 } else {
     colouraccentSelect(settings.get('colour-accent'))
 }
