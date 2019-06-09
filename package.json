@@ -4,15 +4,15 @@
   "description": "Audio Player",
   "author": {
     "name": "projsh_",
-    "email": "projsh@users.noreply.github.com"
+    "email": "projshdev@gmail.com"
   },
-  "repository": "https://github.com/projsh/firetail",
+  "repository": "https://github.com/projsh/firetail.git",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build:win": "electron-builder --win --publish=never",
-    "build:linux": "electron-builder --linux --publish=never",
-    "build:mac": "electron-builder --mac --publish=never"
+    "build:win": "electron-builder --win",
+    "build:linux": "electron-builder --linux",
+    "build:mac": "electron-builder --mac"
   },
   "dependencies": {
     "chokidar": "^2.1.6",
@@ -68,6 +68,13 @@
         "Icon": "firetail",
         "Terminal": "false"
       }
-    }
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "projsh",
+        "releaseType": "draft"
+      }
+    ]
   }
 }
