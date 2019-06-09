@@ -24,12 +24,7 @@ before_install:
   - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get install libdbus-1-dev -y; fi
 
 script:
-  - |
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-       yarn run build:linux
-    else
-       yarn run build:mac
-    fi
+  - yarn release
 
 after_success:
   - |
