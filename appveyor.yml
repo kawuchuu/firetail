@@ -5,5 +5,5 @@ install:
   - npm i -g yarn
   - yarn install
 
-build:
+build_script:
   - yarn release
