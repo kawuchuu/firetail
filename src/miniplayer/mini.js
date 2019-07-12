@@ -4,7 +4,6 @@ var settings = require('electron-settings')
 var tagInfo;
 var seekTimeInfo;
 var seekBar = document.querySelector('.seek-bar');
-var volBar = document.querySelector('.vol-bar');
 var seekBarWrapper = document.querySelector('#seekWrapper');
 var seekFillBar = seekBar.querySelector('#seekFill');
 var seekMouseDown = false;
@@ -17,7 +16,7 @@ var theme = 'dark';
 if (settings.get('theme') == 'light') {
     theme = 'light';
     $('html').addClass('light');
-    document.getElementById('art').src = '../assets/svg/no_image_light.svg'
+    document.getElementById('art').src = '/assets/no_image_light.svg'
 }
 
 function resumeButton() {
@@ -37,14 +36,10 @@ var blurEnabled = true;
 function blurBg(i) {
     if (i == false) {
         $('.blur-bg').hide();
-        $('.meta-text, .extra-buttons, .extra-buttons svg').removeClass('bg');
-        $('.meta-text').css('text-shadow', 'none');
-        $('body').css('background', '');
+        $('.meta-text, .extra-buttons, html').removeClass('bg');
     } else {
         $('.blur-bg').show();
-        $('.meta-text, .extra-buttons, .extra-buttons svg').addClass('bg')
-        $('.meta-text').css('text-shadow', '');
-        $('body').css('background', '#1a1a1a');
+        $('.meta-text, .extra-buttons, html').addClass('bg');
     }
     blurEnabled = settings.get('mini-player-bg');
 }
@@ -56,9 +51,9 @@ ipc.on('setting-change', (event, arg) => {
             $('html').attr('class', `${arg[1]} ${settings.get('colour-accent')}`);
             bgImage = $('.album-art').attr('src');
             if (theme == 'light' && bgImage.includes('no_image')) {
-                $('.album-art').attr('src', '../assets/svg/no_image_light.svg');
+                $('.album-art').attr('src', '/no_image_light.svg');
             } else if (bgImage.includes('no_image')) {
-                $('.album-art').attr('src', '../assets/svg/no_image.svg');
+                $('.album-art').attr('src', '/assets/no_image.svg');
             }
             break;
         case "mini-bg":
@@ -102,13 +97,15 @@ function enableShuffle() {
         case true:
             shuffleEnabled = false;
             $('#miniShuffle').css({
-                color: '#ffffff'
+                color: 'var(--text)',
+                'text-shadow': 'none'
             });
             break;
         case false:
             shuffleEnabled = true;
             $('#miniShuffle').css({
-                color: '#c464f1'
+                color: 'var(--hl-txt)',
+                'text-shadow': '0px 2px 15px var(--glow)'
             });
     }
 }
@@ -118,13 +115,15 @@ function enableRepeat() {
         case true:
             repeatEnabled = false;
             $('#miniRepeat').css({
-                color: '#ffffff'
+                color: 'var(--text)',
+                'text-shadow': 'none'
             });
         break;
         case false:
             repeatEnabled = true;
             $('#miniRepeat').css({
-                color: '#c464f1'
+                color: 'var(--hl-txt)',
+                'text-shadow': '0px 2px 15px var(--glow)'
             });
     }
 }
@@ -161,39 +160,24 @@ ipc.on('tag-info', (event, arg) => {
     $('.song-title').text(tagInfo.title);
     $('.song-artist').text(tagInfo.artist);
     var noImage = false;
-    if (tagInfo.art == "assets/svg/no_image.svg") {
-        tagInfo.art = "../assets/svg/no_image.svg";
+    if (tagInfo.art == "../../assets/no_image.svg") {
+        tagInfo.art = "../../assets/no_image.svg";
         noImage = true;
-    } else if (tagInfo.art == "assets/svg/no_image_light.svg") {
-        tagInfo.art = "../assets/svg/no_image_light.svg";
+    } else if (tagInfo.art == "../../assets/no_image_light.svg") {
+        tagInfo.art = "../../assets/no_image_light.svg";
         noImage = true;
     };
     document.getElementById('art').src = tagInfo.art;
     if (noImage == false) {
         $('.album-bg').css('background-image', `url(${tagInfo.art})`)
         if (blurEnabled == true) {
-            if (theme == 'dark') {
-                $('.extra-buttons').css('background', '#17171757')
-            } else {
-                $('.extra-buttons').css('background', '#17171757')
-                blurBg(true);
-            }
+            blurBg(true);
         } else {
-            if (theme == 'dark') {
-                $('.extra-buttons').css('background', '#171717')
-            } else {
-                $('.extra-buttons').css('background', '#ebebeb');
-                blurBg(false);
-            }
+            blurBg(false)
         }
     } else {
         $('.album-bg').css('background-image', '')
-        if (theme == 'dark') {
-            $('.extra-buttons').css('background', '#171717')
-        } else {
-            $('.extra-buttons').css('background', '#ebebeb');
-            blurBg(false);
-        }
+        blurBg(false);
     }
     paused = false;
 })
@@ -211,15 +195,6 @@ ipc.on('shortcut-close', () => {
     remote.getCurrentWindow().hide();
     ipc.send('switch-windows-full');
 })
-
-/*$('#favoriteMini').click(() => {
-    if($('#favoriteMini').text() == 'favorite_border') {
-        $('#favoriteMini').text('favorite')
-    }
-    else {
-        $('#favoriteMini').text('favorite_border')
-    }
-})*/
 
 $('#minimizeMini').click(() => {
     remote.getCurrentWindow().minimize();

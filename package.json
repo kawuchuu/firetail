@@ -1,6 +1,6 @@
 {
   "name": "firetail",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Audio Player",
   "author": {
     "name": "projsh_",
@@ -18,7 +18,8 @@
     "electron-settings": "^3.2.0",
     "fs-extra": "^8.0.1",
     "jsmediatags": "^3.8.1",
-    "tmp": "^0.0.33"
+    "tmp": "^0.0.33",
+    "markdown-it": "^9.0.0"
   },
   "devDependencies": {
     "electron": "^4.2.2",
@@ -54,6 +55,10 @@
         },
         {
           "target": "deb",
+          "arch": "x64"
+        },
+        {
+          "target": "pacman",
           "arch": "x64"
         }
       ],

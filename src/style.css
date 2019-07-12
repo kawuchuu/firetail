@@ -1,12 +1,12 @@
 @font-face {
     font-family: 'Dosis';
-    src: url('../fonts/Dosis-Regular.otf') format('opentype')
+    src: url('../assets/Dosis-Regular.otf') format('opentype')
 }
 
 @font-face {
     font-family: 'Dosis';
     font-weight: bold;
-    src: url('../fonts/Dosis-Bold.otf') format('opentype')
+    src: url('../assets/Dosis-Bold.otf') format('opentype')
 }
 
 html, body {
@@ -25,7 +25,7 @@ html.dark {
     --bg: #1a1a1a;
     --text: #ffffff;
     --fg-bg: #1e1e1e;
-    --bd: #2d2d2d;
+    --bd: #3a3a3a;
     --li-hv: #212121;
     --logo: 1;
     --switch: #3d3d3d;
@@ -35,7 +35,7 @@ html.light {
     --bg: #f5f5f5;
     --text: #3d3d3d;
     --fg-bg: #ffffff;
-    --bd: #cccccc;
+    --bd: #b4b4b4;
     --li-hv: #dddddd;
     --logo: 0.25;
     --switch: #cccccc;
@@ -46,9 +46,10 @@ html.audiation {
     --btn-hover: #ae00ff;
     --btn-active: #c300ff;
     --handle: #c500bb;
-    --glow: rgba(149, 47, 196, 0.65);
+    --glow: rgba(149, 47, 196, 0.4);
     --grad: linear-gradient(to right, #9a07df, #c500bb);
     --hl-txt: #c464f1;
+    --hl-op: #c464f123;
 }
 
 html.firetail {
@@ -56,9 +57,10 @@ html.firetail {
     --btn-hover: #d46000;
     --btn-active: #d66000;
     --handle: #ff9100;
-    --glow: rgba(196, 82, 47, 0.65);
+    --glow: rgba(196, 82, 47, 0.4);
     --grad: linear-gradient(to right, #b92500, #ff9100);
     --hl-txt: #df5a25;
+    --hl-op: #df5a2523;
 }
 
 html.nature {
@@ -66,9 +68,21 @@ html.nature {
     --btn-hover: #2dbd02;
     --btn-active: #2cb900;
     --handle: #47bf00;
-    --glow: rgba(59, 179, 27, 0.65);
+    --glow: rgba(59, 179, 27, 0.4);
     --grad: linear-gradient(to right, #154a00, #47bf00);
     --hl-txt: #3a9a01;
+    --hl-op: #399a0123;
+}
+
+html.aqua {
+    --btn: #007973;
+    --btn-hover: #00b7af;
+    --btn-active: #00b7af;
+    --handle: #00ded4;
+    --glow: rgba(27, 179, 170, 0.4);
+    --grad: linear-gradient(to right, #00524f, #00ded4);
+    --hl-txt: #01b9b1;
+    --hl-op: #019a8723;
 }
 
 #TitleBarMinimize rect, .tb-unmaximize svg path, #TitleBarClose {
@@ -185,15 +199,37 @@ h1.header-heading {
     font-size: 14px;
 }
 
-button {
+button.new {
+    background: transparent;
+    color: var(--text);
+    font-family: 'Dosis', sans-serif;
+    font-weight: bold;
+    width: auto;
+    height: 37px;
+    padding: 0;
+    border: 2px solid var(--bd);
+    border-radius: 7px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    outline: none;
+    cursor: pointer;
+    transition: .2s;
+    font-size: 17px;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: left;
+    overflow: hidden;
+    display: flex;
+}
+
+button.old {
     background: var(--btn);
     color: #fff;
     font-family: 'Dosis', sans-serif;
     font-weight: bold;
     width: auto;
     height: 37px;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 0;
     border: none;
     border-radius: 3px;
     margin-top: 20px;
@@ -209,18 +245,41 @@ button {
     display: flex;
 }
 
-button.round {
-    border-radius: 7px;
+button.new:hover, button.new.button-active {
+    background: var(--hl-op);
+    transition: .2s;
+    box-shadow: 0px 2px 15px var(--glow);
+    transform: scale(1.05);
+    color: var(--hl-txt);
+    border: 2px solid var(--hl-txt);
 }
 
-button:hover, .button-active {
+button.new.button-active {
+    cursor: default;
+    background: var(--hl-op);
+    color: var(--hl-txt);
+    border: 2px solid var(--hl-txt);
+    box-shadow: 0px 2px 15px var(--glow);
+}
+
+button.new:active {
+    opacity: .8;
+    transform: scale(1);
+    transition: .1s;
+    color: var(--hl-txt);
+    border: 2px solid var(--hl-txt);
+    box-shadow: 0px 2px 15px var(--glow);
+    background: var(--hl-op);
+}
+
+button.old:hover, button.old.button-active {
     background: var(--btn-hover);
     transition: .2s;
     box-shadow: 0px 2px 15px var(--glow);
     transform: scale(1.05)
 }
 
-button.button-active {
+button.old.button-active {
     cursor: default;
     background: var(--btn-active) !important;
 }
@@ -303,11 +362,12 @@ ul#songsPage {
 
 li.results-link {
     border-bottom: 1px solid var(--bd);
-    padding: 0 0 7px 0;
     overflow: hidden;
     position: relative;
-    height: 30px;
+    height: 35px;
     margin-left: 192px;
+    display: flex;
+    align-items: center;
 }
 
 li:hover {
@@ -317,14 +377,9 @@ li:hover {
 p.new-song-title {
     margin: 0;
     padding: 0;
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 40px;
+    line-height: 35px;
     transform: translateX(15px);
-}
-
-.results-link p {
-    font-size: 15px;
+    font-size: 14px;
     width: 100%;
 }
 
@@ -342,6 +397,7 @@ div.new-nowplaying i {
 
 div.new-nowplaying i:hover {
     color: var(--hl-txt) !important;
+    transform: scale(1.2);
 }
 
 #newContent {
@@ -395,16 +451,15 @@ div.new-nowplaying i:hover {
 .play-pause {
     font-size: 24px !important;
     padding: 0;
-    vertical-align: middle;
-    transform: translateX(7px);
+    padding-left: 7px;
     cursor: pointer;
-    position: relative;
-    bottom: 2px;
     opacity: 0;
 }
 
 .play-pause:hover {
     opacity: .65 !important;
+    color: var(--hl-txt) !important;
+    transform: scale(1.2);
 }
 
 #new {
@@ -419,11 +474,11 @@ div.new-nowplaying i:hover {
 }
 
 div.type-separator {
-    width: 140px !important;
-    height: 3px;
+    width: 160px !important;
+    height: 2px;
     background: var(--bd);
     margin: 15px;
-    margin-left: 25px;
+    margin-left: 15px;
     margin-top: 20px;
     border-radius: 10px;
 }
@@ -493,19 +548,57 @@ div.type-separator {
     left: 0;
     border-radius: 3px;
     z-index: 2;
-    transition: .15s;
-    transition-property: background, transform;
-    background: url(../svg/no_image.svg);
+    transition: .3s;
+    transition-property: transform;
+    background: url(../assets/no_image.svg);
     background-position: center !important;
     background-size: cover !important;
 }
 
+#songPictureBlur {
+    width: 55px;
+    height: 55px;
+    margin: 15px;
+    left: 0;
+    top: 2px;
+    position: fixed;
+    border-radius: 3px;
+    transform: scale(1.05);
+    z-index: 1;
+    opacity: .5;
+    filter: blur(5px);
+    background: url(../assets/no_image.svg);
+    background-position: center !important;
+    background-size: cover !important;
+    transition: .3s;
+    transition-property: opacity, transform;
+}
+
+.song-picture-decrease {
+    transform: scale(.85);
+}
+
+.song-blur-hidden {
+    opacity: 0 !important;
+    transition: .3s !important;
+    transform: scale(.85) !important;
+}
+
 .np-buttons i {
     position: relative;
-    overflow: hidden;
     z-index: 10;
     margin: 10px;
 }
+
+.np-buttons i:active, .play-pause:active, #volumeButton:active, .controls i:active, .mtitle-button.hidden:active, #settingsClose:active, .extra-buttons i:active {
+    transform: scale(1) !important;
+    color: var(--hl-txt);
+    opacity: .75;
+}
+
+/* .mtitle-button.hidden:active {
+    transform: scale(0.9) !important;
+} */
 
 .np-buttons {
     width: 100%;
@@ -593,7 +686,7 @@ div.new-nowplaying {
 button i {
     vertical-align: top;
     position: relative;
-    margin-right: 12px;
+    margin: 0 15px;
     font-size: 22px !important;
 }
 
@@ -711,34 +804,6 @@ button i {
     transition: .15s;
     margin-right: 15px;
     margin-left: 5px;
-}
-
-#songPictureBlur {
-    width: 55px;
-    height: 55px;
-    margin: 15px;
-    left: 0;
-    top: 2px;
-    position: fixed;
-    border-radius: 3px;
-    transform: scale(1.05);
-    z-index: 1;
-    opacity: .5;
-    filter: blur(5px);
-    background: url(../svg/no_image.svg);
-    background-position: center !important;
-    background-size: cover !important;
-    transition: .15s;
-    transition-property: background, opacity, transform;
-}
-
-.song-picture-decrease, .song-blur-hidden {
-    transform: scale(.85);
-}
-
-.song-blur-hidden {
-    opacity: 0 !important;
-    transition: .15s;
 }
 
 .active-tab {
@@ -945,7 +1010,7 @@ input:checked + .switch-slider:before {
     height: 95px;
 }
 
-.restart-container {
+.restart-container, .err-container {
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -956,7 +1021,7 @@ input:checked + .switch-slider:before {
     width: 100%;
 }
 
-.restart-label {
+.restart-label, .err-label {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -972,7 +1037,7 @@ input:checked + .switch-slider:before {
     position: relative;
 }
 
-.restart-text {
+.restart-text, .err-text {
     margin-right: 10px;
 }
 
@@ -1004,7 +1069,7 @@ input:checked + .switch-slider:before {
 
 .switch-desc {
     font-size: 13px;
-    opacity: .75;
+    opacity: .85;
     margin-bottom: 10px;
     max-width: 275px;
     word-break: normal;
@@ -1015,7 +1080,7 @@ input:checked + .switch-slider:before {
     position: absolute;
     top: 0;
     transform: none;
-    transition: .3s cubic-bezier(0,0,0,1);
+    transition: .25s cubic-bezier(0,0,0,1);
     transition-property: transform, filter;
     width: 100%;
     height: 100%;
@@ -1042,7 +1107,7 @@ input:checked + .switch-slider:before {
     padding: 10px 15px;
     background: var(--fg-bg);
     border-bottom: solid 2px var(--bd);
-    box-shadow: 0px 1px 20px rgba(0,0,0,.15);
+    box-shadow: 0px 1px 5px rgba(0,0,0,.15);
     position: relative;
     z-index: 8
 }
@@ -1052,7 +1117,7 @@ input:checked + .switch-slider:before {
     font-weight: bold;
     position: relative;
     right: 25px;
-    transition: .3s;
+    transition: .25s;
     transition-property: right, transform, font-size, opacity;
     transform: none;
 }
@@ -1062,7 +1127,7 @@ input:checked + .switch-slider:before {
     position: relative;
     right: 10px;
     opacity: 0;
-    transition: .3s;
+    transition: .25s;
     transition-property: right, font-size, opacity;
     bottom: 0;
 }
@@ -1088,7 +1153,7 @@ input:checked + .switch-slider:before {
     display: flex;
     align-items: center;
     position: relative;
-    transition: .3s;
+    transition: .25s;
     top: 0;
     width: 90px;
     transition-property: top;
@@ -1099,7 +1164,8 @@ input:checked + .switch-slider:before {
 }
 
 .mtitle-button.hidden:hover {
-    color: var(--hl-txt);
+    color: var(--hl-txt) !important;
+    transform: scale(1.075);
     cursor: pointer;
 }
 
@@ -1109,7 +1175,7 @@ input:checked + .switch-slider:before {
     width: 40%;
     text-align: center;
     opacity: 0;
-    transition: .3s;
+    transition: .25s;
     position: relative;
     transition-property: opacity, font-size;
 }
@@ -1130,12 +1196,20 @@ input:checked + .switch-slider:before {
 }
 
 .close-button:hover {
-    color: var(--hl-txt)
+    color: var(--hl-txt) !important;
+    transform: scale(1.2);
 }
 
 .menu-submenu-button:hover {
     background: var(--li-hv);
+    color: var(--hl-txt);
     cursor: pointer;
+}
+
+.menu-submenu-button:active {
+    background: var(--li-hv);
+    color: var(--hl-txt);
+    opacity: .5;
 }
 
 .context-menu {
@@ -1221,7 +1295,8 @@ input:checked + .switch-slider:before {
 #playlistsTab:hover {
     transform: none;
     box-shadow: none;
-    background: var(--btn)
+    color: var(--text);
+    border: solid 2px var(--bd);
 }
 
 #artistsTab:hover, #albumsTab:hover {
@@ -1249,7 +1324,7 @@ input:checked + .switch-slider:before {
 
 .about-ver {
     font-size: 12px;
-    opacity: .75;
+    opacity: .85;
     margin-left: 5px;
     transform: translateY(-3px)
 }
@@ -1257,6 +1332,7 @@ input:checked + .switch-slider:before {
 .about-others div {
     font-size: 12px;
     margin-top: 5px;
+    opacity: .85;
 }
 
 .name-ver {
@@ -1329,6 +1405,9 @@ input:checked + .switch-slider:before {
 
 .select-styled:active, .select-styled.active {
     background-color: var(--li-hv);
+}
+
+.select-styled.active {
     border-radius: 15px 15px 0 0;
 }
 
@@ -1375,4 +1454,32 @@ input:checked + .switch-slider:before {
     height: 100%;
     z-index: 19;
     display: none;
+}
+
+#changelog {
+    width: 415px;
+    word-break: normal;
+    white-space: normal;
+}
+
+#changelog h2 {
+    margin: 10px 0;
+}
+
+#changelog h2:not(:first-child) {
+    margin: 30px 0 10px 0;
+}
+
+#changelog ul {
+    margin: 10px 0;
+    padding-left: 25px;
+}
+
+#changelog li, #changelog p {
+    font-size: 14px;
+    opacity: .85;
+}
+
+#changelog li:hover {
+    background: transparent;
 }

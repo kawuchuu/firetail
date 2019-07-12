@@ -2,9 +2,9 @@
 <html class="fire">
     <head>
         <title>Mini Player</title>
-        <link rel="stylesheet" href="../assets/css/style.css">
+        <link rel="stylesheet" href="../style.css">
         <link rel="stylesheet" href="./mini.css">
-        <link href="../assets/fonts/material/material-icons.css" rel="stylesheet">
+        <link href="../../assets/material/material-icons.css" rel="stylesheet">
         <script>
             if (typeof module === 'object') {
                 window.module = module;
@@ -17,10 +17,11 @@
         <div class="content">
             <div class="top-section">
                 <div class="metadata">
+                    <div class="fade"></div>
                     <div class="blur-bg">
                         <div class="album-bg"></div>
                     </div>
-                    <img class="album-art" id="art" src="../assets/svg/no_image.svg">
+                    <img class="album-art" id="art" src="../../assets/no_image.svg">
                     <div class="meta-text">
                         <div class="song-title"></div>
                         <div class="song-artist"></div>        
@@ -28,9 +29,7 @@
                 </div>
                 <div class="extra-buttons">
                     <i id="closeMini" class="material-icons">fullscreen</i>
-                    <svg id="minimizeMini" width="15" height="15" viewBox="0 0 12 12">
-                        <rect width="10" height="2" x="1" y="6"></rect>
-                    </svg>
+                    <i id="minimizeMini" class="material-icons">minimize</i>
                 </div>
             </div>
             <div class="bottom-section">
@@ -52,7 +51,7 @@
                     <p class="song-duration" id="songDurationLength">-:--</p>
                 </div>
             </div>
-            <script src="../assets/js/jquery-3.3.1.min.js"></script>
+            <script src="../../assets/jquery-3.3.1.min.js"></script>
             <script src="./mini.js"></script>
         </div>
     </body>

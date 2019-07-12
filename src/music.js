@@ -1,5 +1,6 @@
+'use strict';
 /**
- * Firetail - An Open-source music player, built with Electron.
+ * Firetail - Open-source music player, built with Electron.
  * Copyright (c) projsh_ 2019
  * 
  * This project is under the terms of the GNU General Public Licence (v.3.0).
@@ -20,7 +21,7 @@
  * 
  * Steinman Hall impulse response credit: http://www.echothief.com/
  * 
- * Original Repo: https://github.com/projsh/firetail
+ * Repo: https://github.com/projsh/firetail
  */
 
 var audio;
@@ -79,21 +80,24 @@ var gain;
 var theme = 'dark';
 var menuOpen = false;
 var noSong = false;
-remote = require('electron').remote;
+var remote = require('electron').remote;
+var bgImage;
+var fName;
 const {
     globalShortcut,
     dialog,
     app
 } = require('electron').remote;
 const path = require('path');
-var os = require('os');
-var fs = require('fs-extra');
-var id3 = require('jsmediatags');
-var ipc = require('electron').ipcRenderer;
-var drpc = require('discord-rpc');
-var settings = require('electron-settings')
-var ver = require('./package.json').version;
-var chokidar = require('chokidar');
+const os = require('os');
+const fs = require('fs-extra');
+const id3 = require('jsmediatags');
+const ipc = require('electron').ipcRenderer;
+const drpc = require('discord-rpc');
+const settings = require('electron-settings')
+var ver = require('../package.json').version;
+const chokidar = require('chokidar');
+const md = require('markdown-it')();
 
 function isDev() {
     return process.mainModule.filename.indexOf('app.asar') === -1;
@@ -123,9 +127,9 @@ $('#volFill').css({
 
 if (settings.has('theme') == false) {
     settings.set('theme', 'dark');
-    themeSelect('dark')
+    themeSelect('dark');
 } else {
-    themeSelect(settings.get('theme'))
+    themeSelect(settings.get('theme'));
 }
 
 if (!settings.get('mini-player-bg')) {
@@ -133,7 +137,7 @@ if (!settings.get('mini-player-bg')) {
 }
 
 if (settings.get('mini-player-bg') == false) {
-    ipc.send('mini-bg', false)
+    ipc.send('mini-bg', false);
 }
 
 if (settings.has('icon-style') == false) {
@@ -147,6 +151,13 @@ if (settings.has('colour-accent') == false) {
     colouraccentSelect('firetail')
 } else {
     colouraccentSelect(settings.get('colour-accent'))
+}
+
+if (settings.has('button-style') == false) {
+    settings.set('button-style', 'new');
+    buttonStyleSelect('new')
+} else {
+    buttonStyleSelect(settings.get('button-style'))
 }
 
 if (settings.has('audio-effects') == false) {
@@ -206,19 +217,19 @@ if (settings.get('discordrpc') == true) {
 }
 
 if (process.platform == 'linux') {
-    mprisPlayer.on('playpause', (event, arg) => {
+    mprisPlayer.on('playpause', () => {
         resumeButton()
     });
-    mprisPlayer.on("play", (event, arg) => {
+    mprisPlayer.on("play", () => {
         resumeButton();
     });
-    mprisPlayer.on("pause", (event, arg) => {
+    mprisPlayer.on("pause", () => {
         resumeButton();
     });
-    mprisPlayer.on("next", (event, arg) => {
+    mprisPlayer.on("next", () => {
         nextSong();
     })
-    mprisPlayer.on("previous", (event, arg) => {
+    mprisPlayer.on("previous", () => {
         previousSong();
     })
     mprisPlayer.canPlay = false;
@@ -261,11 +272,11 @@ ipc.on('toggle-mp', () => {
         ipc.send('shortcut-close');
         mpOpen = false;
     }
-})
+});
 
 if (theme == 'light') {
-    document.getElementById('songPicture').style.background = 'url(assets/svg/no_image_light.svg)';
-    document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image_light.svg)';
+    document.getElementById('songPicture').style.background = 'url(../assets/no_image_light.svg)';
+    document.getElementById('songPictureBlur').style.background = 'url(../assets/no_image_light.svg)';
 }
 
 if (process.platform === 'win32') {
@@ -283,32 +294,32 @@ if (process.platform === 'linux') {
     });
     $('#playType').css({
         paddingTop: '52px'
-    })
+    });
     $('.shadow-hide').css({
         top: '0'
     });
     $('#songsPage').css({
         height: 'calc(100% - 140px)'
-    })
+    });
     $('.menu').css({
         top: 0,
         height: '100%'
-    })
+    });
     $('.play-type-wrapper').css({
         height: 'calc(100% - 169px)'
-    })
+    });
     $('.logo-bottom').css({
         top: '6px'
-    })
+    });
     $('.cover-top').css({
         top: '-20px'
-    })
+    });
 }
 
 if (process.platform === 'darwin') {
     $('.title-bar').css({
         height: '20px'
-    })
+    });
     $('.app-content').css({
         marginTop: '50px'
     });
@@ -317,53 +328,53 @@ if (process.platform === 'darwin') {
     });
     $('#playType').css({
         paddingTop: '72px'
-    })
+    });
     $('.shadow-hide').css({
         top: '20px'
     });
     $('#songsPage').css({
         height: 'calc(100% - 158px)'
-    })
+    });
     $('.menu').css({
         top: '22px',
         height: 'calc(100% - 22px)'
-    })
+    });
     $('.play-type-wrapper').css({
         height: 'calc(100% - 189px)'
-    })
+    });
     $('.logo-bottom').css({
         top: '26px'
-    })
+    });
     $('.cover-top').css({
         top: '-20px'
-    })
+    });
 }
 
 $('.list-wrapper').html('<p style="text-align: center; font-weight: bold; margin-left: 150px;">Loading...');
 
 remote.getCurrentWindow().setMinimumSize(720, 525);
-document.addEventListener('dragover', event => event.preventDefault())
-document.addEventListener('drop', event => event.preventDefault())
+document.addEventListener('dragover', event => event.preventDefault());
+document.addEventListener('drop', event => event.preventDefault());
 document.querySelector('img').draggable = false;
 
 function toolbarPlay() {
     remote.getCurrentWindow().setThumbarButtons([{
             tooltip: 'Previous',
-            icon: path.join(__dirname, '/assets/image/skipprevious_white.png'),
+            icon: path.join(__dirname, '../assets/skipprevious_white.png'),
             click() {
-                previousSong()
+                previousSong();
             }
         },
         {
             tooltip: 'Play',
-            icon: path.join(__dirname, '/assets/image/play_arrow_white.png'),
+            icon: path.join(__dirname, '../assets/play_arrow_white.png'),
             click() {
                 resumeButton();
             }
         },
         {
             tooltip: 'Skip',
-            icon: path.join(__dirname, '/assets/image/skipnext_white.png'),
+            icon: path.join(__dirname, '../assets/skipnext_white.png'),
             click() {
                 nextSong()
             }
@@ -374,21 +385,21 @@ function toolbarPlay() {
 function toolbarPause() {
     remote.getCurrentWindow().setThumbarButtons([{
             tooltip: 'Previous',
-            icon: path.join(__dirname, '/assets/image/skipprevious_white.png'),
+            icon: path.join(__dirname, '../assets/skipprevious_white.png'),
             click() {
                 previousSong()
             }
         },
         {
             tooltip: 'Pause',
-            icon: path.join(__dirname, '/assets/image/pause_white.png'),
+            icon: path.join(__dirname, '../assets/pause_white.png'),
             click() {
                 resumeButton();
             }
         },
         {
             tooltip: 'Skip',
-            icon: path.join(__dirname, '/assets/image/skipnext_white.png'),
+            icon: path.join(__dirname, '../assets/skipnext_white.png'),
             click() {
                 nextSong()
             }
@@ -489,50 +500,65 @@ function removeLoader() {
 }
 
 function loadFiles() {
+    songMetadata = {};
     $('.createLibraryMsg').show();
-    directories.forEach((r, t) => {
-        readdir(r, (err, files) => {
-            if (err) console.error(err);
-            fileextentions.forEach((e) => {
-                sortFileExt[e] = files.filter(f => f.split(".").pop() === e);
-                s = s.concat(sortFileExt[e]);
-                s.sort(function (a, b) {
-                    if (a.toLowerCase() < b.toLowerCase()) return -1;
-                    if (a.toLowerCase() > b.toLowerCase()) return 1;
-                    return 0;
-                });
+    fs.pathExists(`${os.homedir}/Music/Audiation`, (err, exists) => {
+        if (err) throw err;
+        if (exists == false) {
+            fs.mkdir(`${os.homedir}/Music/Audiation`, (err) => {
+                if (err) throw err;
             });
-            var amount = 0;
-            s.forEach((f, i) => {
-                new Promise((resolve) => {
-                    new id3.Reader(f)
-                        .setTagsToRead(['title', 'artist', 'album'])
-                        .read({
-                            onSuccess: function (tag) {
-                                songData = {
-                                    'title': tag.tags.title,
-                                    'artist': tag.tags.artist,
-                                    'album': tag.tags.album
+        };
+        directories.forEach((r, t) => {
+            readdir(r, (err, files) => {
+                if (err) console.error(err);
+                if (files.length < 1) {
+                    iconStyleSelect(settings.get('icon-style'))
+                    removeLoader();
+                    reloading = false;
+                    return $('.list-wrapper').html(`<p style="font-weight: bold; margin-left: 215px;">Please add some files to the<br>following directory:<br>${os.homedir}/Music/Audiation`);
+                } 
+                fileextentions.forEach((e) => {
+                    sortFileExt[e] = files.filter(f => f.split(".").pop() === e);
+                    s = s.concat(sortFileExt[e]);
+                    s.sort(function (a, b) {
+                        if (a.toLowerCase() < b.toLowerCase()) return -1;
+                        if (a.toLowerCase() > b.toLowerCase()) return 1;
+                        return 0;
+                    });
+                });
+                var amount = 0;
+                s.forEach((f, i) => {
+                    new Promise((resolve) => {
+                        new id3.Reader(f)
+                            .setTagsToRead(['title', 'artist', 'album'])
+                            .read({
+                                onSuccess: function (tag) {
+                                    songData = {
+                                        'title': tag.tags.title,
+                                        'artist': tag.tags.artist,
+                                        'album': tag.tags.album
+                                    }
+                                    resolve(songData);
+                                },
+                                onError: function (err) {
+                                    resolve('{}');
                                 }
-                                resolve(songData);
-                            },
-                            onError: function (err) {
-                                resolve('{}');
-                            }
-                        })
-                }).then((e) => {
-                    songMetadata[f] = e;
-                    fs.writeJson(`${app.getPath('userData')}/library.json`, songMetadata);
-                    amount++;
-
-                    if (amount == s.length) {
-                        console.log('FINISHED, CALLING LISTFILES');
-                        listFiles();
-                    };
+                            })
+                    }).then((e) => {
+                        songMetadata[f] = e;
+                        fs.writeJson(`${app.getPath('userData')}/library.json`, songMetadata);
+                        amount++;
+    
+                        if (amount == s.length) {
+                            console.log('FINISHED, CALLING LISTFILES');
+                            listFiles();
+                        };
+                    })
                 })
-            })
+            });
         });
-    })
+    });
 }
 var newList;
 var list;
@@ -559,7 +585,7 @@ function watcherAdd(f) {
             })
     }).then((i) => {
         for (i = 0; i < fileextentions.length; i++) {
-            ext = f.split(".").pop() === fileextentions[i];
+            var ext = f.split(".").pop() === fileextentions[i];
             if (ext == true) break;
             if (i + 1 == fileextentions.length) {
                 return;
@@ -577,8 +603,8 @@ function watcherAdd(f) {
 function unlinkFile(path) {
     console.log('WATCHER UNLINK FOR FILE ' + path)
     working = true;
-    for (i = 0; i < fileextentions.length; i++) {
-        ext = path.split(".").pop() === fileextentions[i];
+    for (var i = 0; i < fileextentions.length; i++) {
+        var ext = path.split(".").pop() === fileextentions[i];
         if (ext == true) break;
         if (i + 1 == fileextentions.length) {
             return;
@@ -596,7 +622,7 @@ if (settings.get('auto-refresh') == true) {
         persistent: true,
         ignoreInitial: true
     });
-    
+
     watcher.on('add', path => watcherAdd(path));
     watcher.on('unlink', path => unlinkFile(path));
 }
@@ -614,6 +640,15 @@ function listFiles() {
         } else {
             new Promise((resolve) => {
                 fs.readJson(`${app.getPath('userData')}/library.json`, (err, file) => {
+                    if (file.length <= 10) {
+                        iconStyleSelect(settings.get('icon-style'))
+                        removeLoader();
+                        fs.unlink(`${app.getPath('userData')}/library.json`, (err) => {
+                            if (err) throw err;
+                        });
+                        reloading = false;
+                        return $('.list-wrapper').html(`<p style="font-weight: bold; margin-left: 215px;">Please add some files to the<br>following directory:<br>${os.homedir}/Music/Audiation`);    
+                    }
                     songMetadata = file;
                     list = Object.entries(file).map(e => [e[0]])
                     newList = [];
@@ -637,6 +672,7 @@ function listFiles() {
                 shuffleOrder.forEach((f, i) => {
                     shuffleList.push(fileSongListStore.indexOf(f));
                 });
+                var searchSongs;
                 if (currentlyPlaying === true) {
                     searchSongs = fileSongListStore.indexOf(newFileChosen);
                     if (searchSongs != -1) {
@@ -668,12 +704,22 @@ function forEachFile(f, i) {
         } else {
             newFileName = newFileName.substr(newFileName.lastIndexOf('/') + 1);
         }
-        if (currentlyPlaying === true) {
-            audioStop();
-        }
-        $('#pauseButton').text('pause')
-        findSong();
-        songActive();
+        fs.exists(newFileChosen, (exists) => {
+            if (exists == false) {
+                $('.err-container').css('bottom', '0px');
+                setTimeout(() => {
+                    $('.err-container').css('bottom', '');
+                }, 3000);
+                audioStop();
+            } else {
+                if (currentlyPlaying === true) {
+                    audioStop();
+                }
+                $('#pauseButton').text('pause')
+                findSong();
+                songActive();
+            }
+        })
     }
     fileSongListStore.push(f);
     allFilesList.push(f);
@@ -796,16 +842,26 @@ function previousSong() {
     } else {
         newFileName = newFileName.substr(newFileName.lastIndexOf('/') + 1);
     }
-    if (shuffleEnabled == true) {
-        highlightSong = shuffleList[currentSongPlaying];
-    } else {
-        highlightSong = currentSongPlaying;
-    }
-    $(`#${highlightSong} i`).text('volume_up');
-    $('#pauseButton').text('pause')
-    songActive();
-    findSong();
-    ipc.send('play-mini')
+    fs.exists(newFileChosen, (exists) => {
+        if (exists == false) {
+            $('.err-container').css('bottom', '0px');
+            setTimeout(() => {
+                $('.err-container').css('bottom', '');
+            }, 3000);
+            audioStop();
+        } else {
+            if (shuffleEnabled == true) {
+                highlightSong = shuffleList[currentSongPlaying];
+            } else {
+                highlightSong = currentSongPlaying;
+            }
+            $(`#${highlightSong} i`).text('volume_up');
+            $('#pauseButton').text('pause')
+            songActive();
+            findSong();
+            ipc.send('play-mini')
+        }
+    });
 }
 
 function nextSong() {
@@ -843,28 +899,38 @@ function nextSong() {
     } else {
         newFileName = newFileName.substr(newFileName.lastIndexOf('/') + 1);
     }
-    if (shuffleEnabled == true) {
-        highlightSong = shuffleList[currentSongPlaying];
-    } else {
-        highlightSong = currentSongPlaying;
-    }
-    if (noSong == true) {
-        currentSongPlaying = 0;
-        highlightSong = 0;
-        newFileChosen = allFilesList[currentSongPlaying];
-        newFileName = newFileChosen.slice(0, -fName[fName.length - 1].length - 1);
-        if (process.platform == 'win32') {
-            newFileName = newFileName.substr(newFileName.lastIndexOf('\\') + 1);
+    fs.exists(newFileChosen, (exists) => {
+        if (exists == false) {
+            $('.err-container').css('bottom', '0px');
+            setTimeout(() => {
+                $('.err-container').css('bottom', '');
+            }, 3000);
+            audioStop();
         } else {
-            newFileName = newFileName.substr(newFileName.lastIndexOf('/') + 1);
+            if (shuffleEnabled == true) {
+                highlightSong = shuffleList[currentSongPlaying];
+            } else {
+                highlightSong = currentSongPlaying;
+            }
+            if (noSong == true) {
+                currentSongPlaying = 0;
+                highlightSong = 0;
+                newFileChosen = allFilesList[currentSongPlaying];
+                newFileName = newFileChosen.slice(0, -fName[fName.length - 1].length - 1);
+                if (process.platform == 'win32') {
+                    newFileName = newFileName.substr(newFileName.lastIndexOf('\\') + 1);
+                } else {
+                    newFileName = newFileName.substr(newFileName.lastIndexOf('/') + 1);
+                }
+                noSong = false;
+            }
+            $(`#${highlightSong} i`).text('volume_up');
+            $('#pauseButton').text('pause')
+            songActive();
+            findSong();
+            ipc.send('play-mini')
         }
-        noSong = false;
-    }
-    $(`#${highlightSong} i`).text('volume_up');
-    $('#pauseButton').text('pause')
-    songActive();
-    findSong();
-    ipc.send('play-mini')
+    });
 }
 
 $('#backwardButton').click(function () {
@@ -888,7 +954,8 @@ function enableShuffle() {
         case true:
             shuffleEnabled = false;
             $('#shuffleButton').css({
-                color: 'var(--text)'
+                color: 'var(--text)',
+                'text-shadow': 'none'
             });
             shuffleWait = true;
             shuffleEnableFirst = false;
@@ -897,7 +964,8 @@ function enableShuffle() {
         case false:
             shuffleEnabled = true;
             $('#shuffleButton').css({
-                color: 'var(--hl-txt)'
+                color: 'var(--hl-txt)',
+                'text-shadow': '0px 2px 15px var(--glow)'
             });
             shuffleWait = true;
             shuffleEnableFirst = true;
@@ -911,13 +979,15 @@ function enableRepeat() {
         case true:
             repeatEnabled = false;
             $('#repeatButton').css({
-                color: 'var(--text)'
+                color: 'var(--text)',
+                'text-shadow': 'none'
             });
             break;
         case false:
             repeatEnabled = true;
             $('#repeatButton').css({
-                color: 'var(--hl-txt)'
+                color: 'var(--hl-txt)',
+                'text-shadow': '0px 2px 15px var(--glow)'
             });
             shuffleEnableFirst = false;
     }
@@ -1054,14 +1124,16 @@ var subMenuList = {
     'appearanceSubButton': 'appearanceSubmenu',
     'aboutSubButton': 'aboutSubmenu',
     'experimentSubButton': 'experimentSubmenu',
-    'generalSubButton': 'generalSubmenu'
+    'generalSubButton': 'generalSubmenu',
+    'changelogSubButton': 'changelogSubmenu'
 }
 
 var linkBack = {
     'appearanceSubmenu': 'menuMain',
     'aboutSubmenu': 'menuMain',
-    'experimentSubmenu': 'aboutSubmenu',
-    'generalSubmenu': 'menuMain'
+    'experimentSubmenu': 'generalSubmenu',
+    'generalSubmenu': 'menuMain',
+    'changelogSubmenu': 'aboutSubmenu'
 }
 
 var menuTitle = {
@@ -1069,207 +1141,242 @@ var menuTitle = {
     'appearanceSubmenu': 'Appearance',
     'aboutSubmenu': 'About',
     'experimentSubmenu': 'Experiments',
-    'generalSubmenu': 'General'
+    'generalSubmenu': 'General',
+    'changelogSubmenu': 'Changelog'
 }
 
 var licenseInfo = "This project is under the terms of the GNU General Public Licence (v.3.0)"
 
-var experimentSettings = [
-    {
-        info: {
-            title: 'Experiments'
+var experimentSettings = [{
+    info: {
+        title: 'Experiments'
+    },
+    controls: [{
+            customHTML: '<div style="word-break: normal; font-size: 14px; white-space: normal;"><span style="font-weight: bold">WARNING: </span>These features are experimental/incomplete and may break at anytime. Proceed with caution!</div>'
         },
-        controls: [
-            {
-                customHTML: '<div style="word-break: normal; font-size: 14px; white-space: normal;"><span style="font-weight: bold">WARNING: </span>These features are experimental/incomplete and may break at anytime. Proceed with caution!</div>'
-            },
-            {
-                switch: {
-                    title: 'Auto-refresh list',
-                    desc: "Automatically refreshes list when a song is added, changed or removed",
-                    id: 'autoRefreshToggle'
-                }
-            },
-            {
-                switch: {
-                    title: 'Audio Effects',
-                    desc: "Adds a panel to control audio effects.",
-                    id: 'audioEffectsToggle'
-                }
+        {
+            switch: {
+                title: 'Auto-refresh list',
+                desc: "Automatically refreshes list when a song is added, changed or removed",
+                id: 'autoRefreshToggle'
             }
-        ]
-    }
-]
-
-var aboutSettings = [
-    {
-        info: {
-            title: 'About'
         },
-        controls: [
-            {
-                customHTML: `<div class="about-firetail"><img draggable="false" src="assets/image/icon.png"><div class="about-name"><div class="name-ver"><h2>Firetail</h2><div class="about-ver">v.${ver}</div></div><div class="about-others"><div>Copyright &copy; projsh_ 2019</div><div>${licenseInfo}`
-            },
-            {
-                subButton: {
-                    title: 'Experiments',
-                    id: 'experimentSubButton',
-                    icon: 'bug_report'
-                }
+        {
+            switch: {
+                title: 'Audio Effects',
+                desc: "Adds a panel to control audio effects.",
+                id: 'audioEffectsToggle'
             }
-        ]
-    }
-]
+        }
+    ]
+}]
 
-var appearanceSettings = [
-    {
-        info: {
-            title: 'Appearance'
+var aboutSettings = [{
+    info: {
+        title: 'About'
+    },
+    controls: [{
+            customHTML: `<div class="about-firetail"><img draggable="false" src="../assets/icon.png"><div class="about-name"><div class="name-ver"><h2>Firetail</h2><div class="about-ver">v.${ver}</div></div><div class="about-others"><div>Copyright &copy; projsh_ 2019</div><div>${licenseInfo}`
         },
-        controls: [
-            {
-                select: {
-                    title: 'Theme',
-                    desc: "Sets theme to your choice.",
-                    id: 'themeSelect',
-                    options: [
-                        {
-                            option: {
-                                title: 'Dark',
-                                value: 'dark'
-                            }
-                        },
-                        {
-                            option: {
-                                title: 'Light',
-                                value: 'light'
-                            }
+        {
+            subButton: {
+                title: 'Changelog',
+                id: 'changelogSubButton',
+                icon: 'notes'
+            }
+        }
+    ]
+}]
+
+var changelogSettings = [{
+    info: {
+        title: 'Changelog'
+    },
+    controls: [
+        {
+            customHTML: `<div id="changelog"></div>`
+        }
+    ]
+}]
+
+var appearanceSettings = [{
+    info: {
+        title: 'Appearance'
+    },
+    controls: [{
+            select: {
+                title: 'Theme',
+                desc: "Sets theme to your choice.",
+                id: 'themeSelect',
+                options: [{
+                        option: {
+                            title: 'Dark',
+                            value: 'dark'
                         }
-                    ]
-                }
-            },
-            {
-                select: {
-                    title: 'Colour Accent',
-                    desc: 'Sets colour accent to your choice.',
-                    id: 'colouraccentSelect',
-                    options: [
-                        {
-                            option: {
-                                title: 'Firetail',
-                                value: 'firetail'
-                            }
-                        },
-                        {
-                            option: {
-                                title: 'Audiation',
-                                value: 'audiation'
-                            }
-                        },
-                        {
-                            option: {
-                                title: 'Nature',
-                                value: 'nature'
-                            }
+                    },
+                    {
+                        option: {
+                            title: 'Light',
+                            value: 'light'
                         }
-                    ]
-                }
-            },
-            {
-                select: {
-                    title: 'Icon Style',
-                    desc: 'Sets icon style to your choice',
-                    id: 'iconStyleSelect',
-                    options: [
-                        {
-                            option: {
-                                title: 'Filled',
-                                value: 'filled'
-                            }
-                        },
-                        {
-                            option: {
-                                title: 'Rounded',
-                                value: 'rounded'
-                            }
-                        },
-                        {
-                            option: {
-                                title: 'Outlined',
-                                value: 'outlined'
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                switch: {
-                    title: 'Mini Player Background',
-                    desc: "Sets mini player's blurred background to the song's album art",
-                    id: 'miniBgToggle',
-                    toggled: true
-                }
+                    }
+                ]
             }
-        ]
-    }
-]
-
-var generalSettings = [
-    {
-        info: {
-            title: 'General'
         },
-        controls: [
-            {
-                switch: {
-                    title: 'Discord Rich Presence',
-                    desc: "Sets currently playing song as your Discord status",
-                    id: 'discordToggle'
-                }
+        {
+            select: {
+                title: 'Colour Accent',
+                desc: 'Sets colour accent to your choice.',
+                id: 'colouraccentSelect',
+                options: [{
+                        option: {
+                            title: 'Firetail',
+                            value: 'firetail'
+                        }
+                    },
+                    {
+                        option: {
+                            title: 'Audiation',
+                            value: 'audiation'
+                        }
+                    },
+                    {
+                        option: {
+                            title: 'Nature',
+                            value: 'nature'
+                        }
+                    },
+                    {
+                        option: {
+                            title: 'Aqua',
+                            value: 'aqua'
+                        }
+                    }
+                ]
             }
-        ]
-    }
-]
+        },
+        {
+            select: {
+                title: 'Icon Style',
+                desc: 'Sets icon style to your choice',
+                id: 'iconStyleSelect',
+                options: [
+                    {
+                        option: {
+                            title: 'Filled',
+                            value: 'filled'
+                        }
+                    },
+                    {
+                        option: {
+                            title: 'Rounded',
+                            value: 'rounded'
+                        }
+                    },
+                    {
+                        option: {
+                            title: 'Outlined',
+                            value: 'outlined'
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            select: {
+                title: 'Button Style',
+                desc: 'Sets button style to your choice',
+                id: 'buttonStyleSelect',
+                options: [
+                    {
+                        option: {
+                            title: 'New',
+                            value: 'new'
+                        }
+                    },
+                    {
+                        option: {
+                            title: 'Old',
+                            value: 'old'
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            switch: {
+                title: 'Mini Player Background',
+                desc: "Sets mini player's background to the song's album art",
+                id: 'miniBgToggle',
+                toggled: true
+            }
+        }
+    ]
+}]
 
-var settingsMenu = [
-    {
-        controls: [
-            {
-                subButton: {
-                    title: 'General',
-                    id: 'generalSubButton',
-                    icon: 'settings'
-                }
-            },
-            {
-                subButton: {
-                    title: 'Appearance',
-                    id: 'appearanceSubButton',
-                    icon: 'palette'
-                }
-            },
-            {
-                subButton: {
-                    title: 'About',
-                    id: 'aboutSubButton',
-                    icon: 'info'
-                }
+var generalSettings = [{
+    info: {
+        title: 'General'
+    },
+    controls: [
+        {
+            subButton: {
+                title: 'Experiments',
+                id: 'experimentSubButton',
+                icon: 'bug_report'
             }
-        ]
-    }
-]
+        },
+        {
+            switch: {
+                title: 'Discord Rich Presence',
+                desc: "Sets currently playing song as your Discord status",
+                id: 'discordToggle'
+            }
+        }
+    ]
+}]
+
+var settingsMenu = [{
+    info: {
+        title: 'Settings'
+    },
+    controls: [{
+            subButton: {
+                title: 'General',
+                id: 'generalSubButton',
+                icon: 'settings'
+            }
+        },
+        {
+            subButton: {
+                title: 'Appearance',
+                id: 'appearanceSubButton',
+                icon: 'palette'
+            }
+        },
+        {
+            subButton: {
+                title: 'About',
+                id: 'aboutSubButton',
+                icon: 'info'
+            }
+        }
+    ]
+}]
 
 var settingsPage = {
     'appearanceSubButton': appearanceSettings,
     'aboutSubButton': aboutSettings,
     'experimentSubButton': experimentSettings,
-    'generalSubButton': generalSettings
+    'generalSubButton': generalSettings,
+    'changelogSubButton': changelogSettings
 }
 
 var selectOptions = {
     'iconStyleSelect': 'icon-style',
     'colouraccentSelect': 'colour-accent',
-    'themeSelect': 'theme'
+    'themeSelect': 'theme',
+    'buttonStyleSelect': 'button-style'
 }
 
 function createSwitch(i) {
@@ -1277,7 +1384,7 @@ function createSwitch(i) {
 }
 
 function createSubmenuButton(i) {
-    return `<div class="menu-submenu-button" id="${i.id}"><div class="subbutton-name"><i class="material-icons">${i.icon}</i><p>${i.title}</p></div><i class="material-icons">keyboard_arrow_right</i></div>`
+    return `<div class="menu-submenu-button" id="${i.id}"><div class="subbutton-name"><i class="material-icons material-icons-${settings.get('icon-style')}">${i.icon}</i><p>${i.title}</p></div><i class="material-icons">keyboard_arrow_right</i></div>`
 }
 
 function createSelectList(i) {
@@ -1292,10 +1399,15 @@ function createSelectList(i) {
         }
         addOption += `<option ${selected} value="${optionInfo.value}">${optionInfo.title}</option>`
     })
-    return `<div class="select-list"><div><p>${i.title}</p><div class="switch-desc">${i.desc}</div></div><div class="select-container"><select id="${i.id}">${addOption}</select></div></div>`
+    return `<div class="select-list" id="${i.id}List"><div><p>${i.title}</p><div class="switch-desc">${i.desc}</div></div><div class="select-container"><select id="${i.id}">${addOption}</select></div></div>`
 }
 
 var switches = [];
+var options = [];
+var id;
+var optionInfo;
+var topElement;
+
 function createSettingsMenu(e, o) {
     switches = [];
     options = [];
@@ -1303,7 +1415,7 @@ function createSettingsMenu(e, o) {
         e[0].controls.forEach((f, i) => {
             var newControl;
             var buttonType = Object.keys(f)[0];
-            switch(buttonType) {
+            switch (buttonType) {
                 case 'switch':
                     newControl = createSwitch(e[0].controls[i].switch);
                     switches.push(e[0].controls[i].switch.id)
@@ -1325,7 +1437,7 @@ function createSettingsMenu(e, o) {
             }
         })
         resolve(e)
-    }).then(() => {
+    }).then((e) => {
         $('.menu-submenu-button').click(function () {
             if (transition == true) return;
             transition = true;
@@ -1337,8 +1449,15 @@ function createSettingsMenu(e, o) {
             setTimeout(() => {
                 createSettingsMenu(getMenu)
                 findMenu('next');
-            }, 20)
+            }, 10)
         });
+        if (e[0].info.title == 'Changelog') { 
+            fs.readFile("./assets/changelog.md", "UTF8", (err, data) => {
+                if (err) { throw err };
+                let result = md.render(data);
+                $('#changelog').append(result);
+            });
+        }
         if (settings.get('mini-player-bg') == false) {
             $('#miniBgToggle').prop('checked', false)
         } else {
@@ -1360,9 +1479,10 @@ function createSettingsMenu(e, o) {
             })
         });
         //thanks: https://codepen.io/wallaceerick/pen/ctsCz
-        $('select').each(function() {
-            var $this = $(this), numberOfOptions = $(this).children('option').length;
-            $this.addClass('select-hidden'); 
+        $('select').each(function () {
+            var $this = $(this),
+                numberOfOptions = $(this).children('option').length;
+            $this.addClass('select-hidden');
             $this.wrap('<div class="select"></div>');
             $this.after('<div class="select-styled"></div>');
             var $styledSelect = $this.next('div.select-styled');
@@ -1380,17 +1500,24 @@ function createSettingsMenu(e, o) {
                 }).appendTo($list);
             }
             var $listItems = $list.children('li');
-            $styledSelect.click(function(e) {
-                e.stopPropagation();
+            $styledSelect.click(function (a) {
+                $('.disable-interact').show();
+                a.stopPropagation();
                 $('div.select-styled.active').not(this).each(() => {
                     $(this).removeClass('active').next('ul.select-options').hide();
                 });
                 $(this).toggleClass('active').next('ul.select-options').toggle();
+                let menuList = document.getElementById(activeMenu);
+                let parent = $(this).parents().eq(2);
+                parent = parent.attr('id');
+                parent = document.getElementById(parent);
+                if (parent.getBoundingClientRect().top - menuList.getBoundingClientRect().top + parent.clientHeight >= menuList.clientHeight) {
+                    menuList.scrollTop = parent.scrollHeight;
+                };
                 topElement = this.parentElement.getBoundingClientRect().top;
                 $('.select-options').css('top', `${topElement + 30}px`);
-                $('.disable-interact').show();
             });
-            $listItems.click(function(e) {
+            $listItems.click(function (e) {
                 e.stopPropagation();
                 $styledSelect.text($(this).text()).removeClass('active');
                 $this.val($(this).attr('rel'));
@@ -1398,7 +1525,7 @@ function createSettingsMenu(e, o) {
                 $list.hide();
                 window[$this.attr('id')]($this.val());
             });
-            $(document).click(function() {
+            $(document).click(function () {
                 $styledSelect.removeClass('active');
                 $('.disable-interact').hide();
                 $list.hide();
@@ -1413,7 +1540,7 @@ function createSettingsMenu(e, o) {
 var menuOpened;
 
 function iconStyleSelect(i) {
-    switch(i) {
+    switch (i) {
         case "filled":
             $('.material-icons').removeClass('material-icons-rounded');
             $('.material-icons').removeClass('material-icons-outlined');
@@ -1424,7 +1551,7 @@ function iconStyleSelect(i) {
             break;
         case "outlined":
             $('.material-icons').addClass('material-icons-outlined');
-            $('.material-icons').removeClass('material-icons-rounded');    
+            $('.material-icons').removeClass('material-icons-rounded');
     }
     settings.set('icon-style', `${i}`);
     ipc.send('setting-change', ['icon-style', i])
@@ -1434,6 +1561,21 @@ function colouraccentSelect(i) {
     $('html').attr('class', `${theme} ${i}`);
     settings.set('colour-accent', i)
     ipc.send('setting-change', ['colour-accent', i])
+}
+
+function buttonStyleSelect(i) {
+    var buttonRemove;
+    switch(i) {
+        case "new":
+            buttonRemove = 'old'
+            break;
+        case "old":
+            buttonRemove = 'new'
+            break;
+    }
+    $('button').removeClass(buttonRemove);
+    $('button').addClass(i);
+    settings.set('button-style', i)
 }
 
 function autoRefreshToggle() {
@@ -1489,7 +1631,7 @@ $('#effectsClose, #settingsClose').click(function () {
         $('.menu-heading.main').text('Settings');
         activeMenu = 'menuMain';
         getSubId = 'menuMain';
-    }, 300);
+    }, 250);
 });
 
 var restartRequired = false;
@@ -1509,9 +1651,9 @@ function themeSelect(i) {
     }
     bgImage = $('#songPicture').css('background-image');
     if (theme == 'light' && bgImage.includes('no_image')) {
-        $('#songPicture, #songPictureBlur').css('background-image', 'url(./assets/svg/no_image_light.svg)');
+        $('#songPicture, #songPictureBlur').css('background-image', 'url(../assets/no_image_light.svg)');
     } else if (bgImage.includes('no_image')) {
-        $('#songPicture, #songPictureBlur').css('background-image', 'url(./assets/svg/no_image.svg)');
+        $('#songPicture, #songPictureBlur').css('background-image', 'url(../assets/no_image.svg)');
     }
     ipc.send('setting-change', ['theme', i])
 }
@@ -1561,13 +1703,13 @@ function findMenu(i) {
                 $('.submenu-title').text(`${menuTitle[getSubId]}`);
                 setTimeout(() => {
                     transition = false;
-                }, 300)
+                }, 250)
             } else {
                 $('.menu-heading.main').text(menuTitle[activeMenu]);
                 $('.submenu-title').text(menuTitle[getSubId]);
                 setTimeout(() => {
                     transition = false;
-                }, 300)
+                }, 250)
             }
             activeMenu = getSubId;
             $(`#${activeMenu}`).removeClass('right');
@@ -1577,7 +1719,7 @@ function findMenu(i) {
             setTimeout(() => {
                 $(`#${previousMenu}`).remove();
                 transition = false;
-            }, 300);
+            }, 250);
             activeMenu = getSubId;
             $(`#${activeMenu}`).removeClass('left');
             break;
@@ -1594,7 +1736,7 @@ $('.mtitle-button').click(() => {
         $(`.menu-heading, .menu-arrow, .submenu-title, .mtitle-button`).removeClass('hidden');
         setTimeout(() => {
             transition = false;
-        }, 300)
+        }, 250)
     }
     getSubId = linkBack[activeMenu];
     $('.menu-heading.main').text(menuTitle[linkBack[getSubId]]);
@@ -1677,134 +1819,89 @@ function findSong() {
                 mprisPlayer.canSeek = true;
             }
         } catch (err) {
-            console.error(err);
-            //dialog.showErrorBox('Error', err)
-            audioStop();
+            throw err;
         }
         getSongInfo();
         audio.volume = currentVol;
         seekBarTrack();
         toolbarPause();
     } catch (err) {
-        console.error(err.stack)
-        currentlyPlaying = false;
-        audioStop();
+        throw err;
     }
 }
 
+var img;
+var tagInfo;
+let readingNewSong = false;
+
 function getSongInfo() {
-    new id3.Reader(newFileChosen)
-        .setTagsToRead(['title', 'artist', 'picture', 'album'])
-        .read({
-            onSuccess: function (tag) {
-                artist = tag.tags.artist;
-                Title = tag.tags.title;
-                album = tag.tags.album;
-                newTags = tag;
-                if (!tag.tags.artist) {
-                    artist = 'Unknown Artist'
-                }
-                if (!tag.tags.album) {
-                    album = 'Unknown Album'
-                }
-                if (!tag.tags.title) {
-                    Title = newFileName;
-                }
-                var base64String = '';
-                if (tag.tags.picture) {
-                    for (var i = 0; i < tag.tags.picture.data.length; i++) {
-                        base64String += String.fromCharCode(tag.tags.picture.data[i]);
-                    }
-                    dataUrl = 'data:' + tag.tags.picture.format + ';base64,' + btoa(base64String);
-                    if (process.platform == 'linux') {
-                        tmpFile = tmp.tmpNameSync({
-                            template: 'tmp-XXXXXX'
-                        });
-                        fs.writeFile(`${tmpobj.name}/${tmpFile}.jpg`, btoa(base64String), 'base64', function (err) {
-                            if (err) console.error(err);
-                            albumArt = `${tmpobj.name}/${tmpFile}.jpg`;
-                            document.getElementById('songPicture').style.background = `url(${albumArt})`
-                            document.getElementById('songPictureBlur').style.background = `url(${albumArt})`
-                        })
-                    } else {
-                        albumArt = dataUrl
-                        document.getElementById('songPicture').style.background = `url(${albumArt})`
-                        document.getElementById('songPictureBlur').style.background = `url(${albumArt})`
-                    }
-                } else {
-                    if (theme == 'light') {
-                        document.getElementById('songPicture').style.background = 'url(assets/svg/no_image_light.svg)';
-                        document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image_light.svg)';
-                        albumArt = 'assets/svg/no_image_light.svg';
-                        dataUrl = 'assets/svg/no_image_light.svg'
-                    } else {
-                        document.getElementById('songPicture').style.background = 'url(assets/svg/no_image.svg)';
-                        document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image.svg)';
-                        albumArt = 'assets/svg/no_image.svg'
-                        dataUrl = 'assets/svg/no_image.svg'
-                    }
-                }
-                $('h1#songTitle').text(Title);
-                $('#artist').text(`${artist}`);
-                if (!tag.tags.artist) {
-                    $('title').text(`${newFileName}`);
-                } else {
-                    $('title').text(`${artist} - ${Title}`)
-                }
-                if (process.platform == 'linux') {
-                    mprisPlayer.metadata = {
-                        'xesam:title': Title,
-                        'xesam:artist': artist,
-                        'xesam:album': album,
-                        'mpris:trackid': mprisPlayer.objectPath('track/0'),
-                        'mpris:artUrl': `file://${tmpobj.name}/${tmpFile}.jpg`
-                    };
-                    mprisPlayer.playbackStatus = 'Playing';
-                }
-                var tagInfo = {
-                    'title': Title,
-                    'artist': artist,
-                    'album': album,
-                    'art': dataUrl
-                }
-                ipc.send('tag-info', tagInfo);
-            },
-            onError: function (tag) {
-                $('#songTitle').text(newFileName);
-                $('#artist').text('Unknown Artist');
-                var testLight = 'assets/svg/no_image.svg';
-                if (theme == 'light') {
-                    document.getElementById('songPicture').style.background = 'url(assets/svg/no_image_light.svg)';
-                    document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image_light.svg)';
-                    testLight = 'assets/svg/no_image_light.svg'
-                } else {
-                    document.getElementById('songPicture').style.background = 'url(assets/svg/no_image.svg)';
-                    document.getElementById('songPictureBlur').style.background = 'url(assets/svg/no_image.svg)';
-                    testLight = 'assets/svg/no_image.svg'
-                }
-                $('title').text(`${newFileName}`);
-                Title = newFileName;
-                artist = 'Unknown Artist'
-                album = 'Unknown Album';
-                if (process.platform == 'linux') {
-                    mprisPlayer.metadata = {
-                        'xesam:title': Title,
-                        'xesam:artist': artist,
-                        'xesam:album': album,
-                        'mpris:trackid': mprisPlayer.objectPath('track/0'),
-                        'mpris:artUrl': ''
-                    };
-                    mprisPlayer.playbackStatus = 'Playing';
-                }
-                var tagInfo = {
-                    'title': newFileName,
-                    'artist': 'Unknown Artist',
-                    'album': 'Unknown Album',
-                    'art': testLight
-                }
-                ipc.send('tag-info', tagInfo)
+    if (theme == 'light') {
+        document.getElementById('songPicture').style.background = 'url(../assets/no_image_light.svg)';
+        document.getElementById('songPictureBlur').style.background = 'url(../assets/no_image_light.svg)';
+    } else {
+        document.getElementById('songPicture').style.background = 'url(../assets/no_image.svg)';
+        document.getElementById('songPictureBlur').style.background = 'url(../assets/no_image.svg)';
+    }
+    var metadata = songMetadata[newFileChosen];
+    Title = metadata.title;
+    album = metadata.album;
+    artist = metadata.artist;
+    if (Title == undefined) Title = newFileName;
+    if (album == undefined) album = 'Unknown Album';
+    if (artist == undefined) artist = 'Unknown Artist';
+    $('h1#songTitle').text(Title);
+    $('#artist').text(`${artist}`);
+    if (artist == 'Unknown Artist') {
+        $('title').text(`${newFileName}`);
+    } else {
+        $('title').text(`${artist} - ${Title}`)
+    }
+    if (theme == 'light') {
+        dataUrl = '../../assets/no_image_light.svg'
+    } else {
+        dataUrl = '../../assets/no_image.svg'
+    }
+    tagInfo = {
+        'title': Title,
+        'artist': artist,
+        'album': album,
+        'art': dataUrl
+    }
+    ipc.send('tag-info', tagInfo)
+    var imgWorker = new Worker('./img-worker.js');
+    imgWorker.postMessage(newFileChosen);
+    imgWorker.onmessage = function(e) {
+        if (readingNewSong == true) return;
+        readingNewSong = true;
+        img = e.data;
+        if (img == null) {
+            if (theme == 'light') {
+                document.getElementById('songPicture').style.background = 'url(../assets/no_image_light.svg)';
+                document.getElementById('songPictureBlur').style.background = 'url(../assets/no_image_light.svg)';
+                albumArt = '../assets/no_image_light.svg';
+                dataUrl = '../../assets/no_image_light.svg';
+                readingNewSong = false;
+            } else {
+                document.getElementById('songPicture').style.background = 'url(../assets/no_image.svg)';
+                document.getElementById('songPictureBlur').style.background = 'url(../assets/no_image.svg)';
+                albumArt = '../assets/no_image.svg';
+                dataUrl = '../../assets/no_image.svg';
+                readingNewSong = false;
             }
-        })
+        } else {
+            document.getElementById('songPicture').style.background = `url(${img})`
+            document.getElementById('songPictureBlur').style.background = `url(${img})`;
+            readingNewSong = false;
+            dataUrl = img;
+        }
+        tagInfo = {
+            'title': Title,
+            'artist': artist,
+            'album': album,
+            'art': dataUrl
+        }
+        ipc.send('tag-info', tagInfo);
+    }
 }
 
 var convolverGain = audioCtx.createGain();
@@ -1816,7 +1913,7 @@ var impulseData = [];
 function impulseGet() {
     convolver = audioCtx.createConvolver();
     ajaxRequest = new XMLHttpRequest();
-    ajaxRequest.open('GET', './assets/impulse/SteinmanHall.wav', true);
+    ajaxRequest.open('GET', '/assets/SteinmanHall.wav', true);
     ajaxRequest.responseType = 'arraybuffer';
     ajaxRequest.onload = function () {
         impulseData = ajaxRequest.response;
@@ -2125,6 +2222,8 @@ window.onbeforeunload = (i) => {
         appExit();
     }
 }
+var seekP;
+var volP;
 
 function seekBarTrack() {
     audio.addEventListener('timeupdate', seekTimeUpdate);
@@ -2207,6 +2306,7 @@ window.addEventListener('mouseup', function (e) {
             seekFillBar.style.width = seekP * 100 + '%';
             audio.currentTime = seekP * audio.duration;
             seekBarTrack();
+            $('#seekHandle').removeClass('handle-hover');
         }
         if (volMouseDown == true) {
             if (audio.volume == 0) {
@@ -2224,6 +2324,7 @@ window.addEventListener('mouseup', function (e) {
                 isMuted = false;
                 $('#volumeButton').text('volume_up');
             }
+            $('#volHandle').removeClass('handle-hover');
         }
     }
 });

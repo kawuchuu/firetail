@@ -22,16 +22,17 @@ if (settings.theme == 'light') {
 
 function createMainWindow() {
     var win = new BrowserWindow({
-        width: 885, 
-        height: 655,
-        icon: './assets/image/icon.png', 
+        width: 770, 
+        height: 560,
+        icon: './assets/icon.png', 
         frame: frameStyle,
         backgroundColor: bg,
         titleBarStyle: 'hidden',
         show: false,
         title: 'Firetail',
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
+            nodeIntegrationInWorker: true
         }
     });
     if (process.platform != 'linux') {
@@ -84,7 +85,7 @@ function createMainWindow() {
         win.webContents.send('unmaximizeWindow');
     })
     win.loadURL(url.format({
-        pathname: path.join(__dirname, 'index.html'),
+        pathname: path.join(__dirname, './src/main.html'),
         protocol: 'file:',
         slashes: true
     }))
@@ -200,9 +201,9 @@ function createMainWindow() {
 
 function createMiniPlayer() {
     var win = new BrowserWindow({
-        width: 355, 
-        height: 157,
-        icon: './assets/image/icon.png', 
+        width: 315, 
+        height: 147,
+        icon: './assets/icon.png', 
         frame: false,
         backgroundColor: bg,
         show: false,
@@ -215,7 +216,7 @@ function createMiniPlayer() {
     });
 
     win.loadURL(url.format({
-        pathname: path.join(__dirname, './miniplayer/index.html'),
+        pathname: path.join(__dirname, './src/miniplayer/mini.html'),
         protocol: 'file:',
         slashes: true
     }))

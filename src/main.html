@@ -2,8 +2,8 @@
 <html class="fire">
     <head>
         <title>Firetail</title>
-        <link rel="stylesheet" href="./assets/css/style.css">
-        <link href="./assets/fonts/material/material-icons.css" rel="stylesheet">
+        <link rel="stylesheet" href="./style.css">
+        <link href="../assets/material/material-icons.css" rel="stylesheet">
         <script>
             if (typeof module === 'object') {
                     window.module = module;
@@ -17,7 +17,7 @@
             <span class="material-icons-outlined">minimize</span>
         </div>
         <div id="loadCover" style="z-index: 20; width: 100%; height: 100%; position: fixed; background: linear-gradient(130deg, #ff9100, #b92500); transition: .2s; display: flex; justify-content: center; align-items: center;">
-            <img id="loadIcon" src="./assets/svg/firetail-menu.svg" style="height: 150px">
+            <img id="loadIcon" src="../assets/firetail-menu.svg" style="height: 150px">
             <div style="display:none;" class="createLibraryMsg">Creating Library...</div>
         </div>
         <div class="title-bar">
@@ -52,27 +52,32 @@
                     <div class="restart-button">RESTART</div>
                 </div>
             </div>
+            <div class="err-container">
+                <div class="err-label">
+                    <div class="err-text">Failed to play track. Try refreshing the list.</div>
+                </div>
+            </div>
             <div class="cover-top"></div>
             <div class="cover-bottom"></div>
             <div class="play-type" id="playType">
                 <div class="play-type-wrapper">
-                    <button id="libraryButton" class="button-active">
+                    <button id="libraryButton" class="new button-active">
                         <i class="material-icons">library_music</i>Library</button>
-                    <button id="playlistsTab" disabled>
+                    <button id="playlistsTab" class="new" disabled>
                         <i class="material-icons">playlist_play</i>Playlists</button>
                     <div class="type-separator"></div>
                     <div id="extraButtons">
-                        <button id="refreshFiles">
+                        <button id="refreshFiles" class="new">
                             <i class="material-icons">refresh</i>Refresh</button>
-                        <button id="settingsButton">
+                        <button id="settingsButton" class="new">
                             <i class="material-icons">settings</i>Settings</button>
-                        <button style="display: none" id="effectsButton">
+                        <button style="display: none" class="new" id="effectsButton">
                             <i class="material-icons">blur_on</i>Effects</button>
-                            <button id="miniPlayerButton">
+                            <button id="miniPlayerButton" class="new">
                                 <i class="material-icons">branding_watermark</i>
                                 Mini Player
                             </button>
-                        <button style="display: none !important" id="openDevTools">
+                        <button style="display: none !important" class="new" id="openDevTools">
                             <i class="material-icons">code</i>Dev Tools</button>
                     </div>
                 </div>
@@ -153,7 +158,7 @@
                         <div class="shadow-hide"></div>
                         <div class="top-bar">
                             <div class="logo-bottom">
-                                <img draggable="false" id="headerIcon" src="./assets/svg/firetail-menu.svg">
+                                <img draggable="false" id="headerIcon" src="../assets/firetail-menu.svg">
                                 <div class="icon-text">Firetail</div>
                                 <p id="betaTag">BETA</p>
                             </div>
@@ -223,7 +228,7 @@
                     </div>
             </div>
         </div>
-        <script src="./assets/js/jquery-3.3.1.min.js"></script>
-        <script src="./assets/js/music.js"></script>
+        <script src="../assets/jquery-3.3.1.min.js"></script>
+        <script src="./music.js"></script>
     </body>
 </html>
