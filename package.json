@@ -35,16 +35,16 @@
     "mac": {
       "category": "public.app-category.music",
       "target": "dmg",
-      "icon": "assets/image/icon.icns"
+      "icon": "assets/icon.icns"
     },
     "dmg": {
-      "icon": "assets/image/icon.icns"
+      "icon": "assets/icon.icns"
     },
     "win": {
       "target": [
         "nsis"
       ],
-      "icon": "assets/image/icon.ico",
+      "icon": "assets/icon.ico",
       "publisherName": "projsh_"
     },
     "linux": {
@@ -55,10 +55,6 @@
         },
         {
           "target": "deb",
-          "arch": "x64"
-        },
-        {
-          "target": "pacman",
           "arch": "x64"
         }
       ],
