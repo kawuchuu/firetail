@@ -1452,7 +1452,7 @@ function createSettingsMenu(e, o) {
             }, 10)
         });
         if (e[0].info.title == 'Changelog') { 
-            fs.readFile("./assets/changelog.md", "UTF8", (err, data) => {
+            fs.readFile(`${app.getAppPath()}/assets/changelog.md`, "UTF8", (err, data) => {
                 if (err) { throw err };
                 let result = md.render(data);
                 $('#changelog').append(result);
