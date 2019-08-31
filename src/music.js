@@ -108,9 +108,12 @@ if (isDev()) {
     $('#openDevTools').show();
 }
 
+let mpris;
+let mprisPlayer;
+
 if (process.platform == 'linux') {
-    let mpris = require('mpris-service');
-    let mprisPlayer = new mpris({
+    mpris = require('mpris-service');
+    mprisPlayer = new mpris({
         name: 'firetail',
         identity: 'Firetail',
         supportedInterfaces: ['player']
