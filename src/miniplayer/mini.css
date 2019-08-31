@@ -161,18 +161,20 @@ html.light {
 
 .blur-bg {
     position: fixed;
-    width: 315px;
+    width: 325px;
     height: 230px;
     z-index: 1;
-    background: var(--ext)
+    background: var(--ext);
+    filter: blur(10px);
 }
 
 .album-bg {
-    width: 100%;
+    width: 110%;
     height: 130%;
     background-size: cover;
     background-position: center;
     opacity: .35;
+    transform: translateX(-20px);
 }
 
 .fade {

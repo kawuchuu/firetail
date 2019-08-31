@@ -1,3 +1,10 @@
+## 0.4.0
+- New library management system (iTunes-like)
+- Reset library buttons
+- Forward / reverse 10 seconds using arrow keys
+- Effects panel works again
+- Minor UI tweaks
+
 ## 0.3.1
 - Huge amount of bug fixes
 - Redesigned mini player

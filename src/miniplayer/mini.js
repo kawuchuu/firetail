@@ -45,6 +45,7 @@ function blurBg(i) {
 }
 
 ipc.on('setting-change', (event, arg) => {
+    console.log(arg[0]);
     switch(arg[0]) {
         case "theme":
             theme = arg[1];
@@ -63,6 +64,7 @@ ipc.on('setting-change', (event, arg) => {
             $('html').attr('class', `${theme} ${arg[1]}`);
             break;
         case "icon-style":
+            console.log('run');
             switch(arg[1]) {
                 case "filled":
                     $('.material-icons').removeClass('material-icons-rounded');

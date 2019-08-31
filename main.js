@@ -28,7 +28,7 @@ function createMainWindow() {
         frame: frameStyle,
         backgroundColor: bg,
         titleBarStyle: 'hidden',
-        show: false,
+        //show: false,
         title: 'Firetail',
         webPreferences: {
             nodeIntegration: true,
@@ -50,6 +50,18 @@ function createMainWindow() {
     function nextSong() {
         win.webContents.send("next");
     }
+
+    let contents = win.webContents;
+    contents.on("crashed", () => {
+        console.log('Renderer has crashed!');
+        setTimeout(() => {
+            win.loadURL(url.format({
+                pathname: path.join(__dirname, './src/crash.html'),
+                protocol: 'file:',
+                slashes: true
+            }));
+        }, 200)
+    });
 
     ipc.on('playpause', (event, arg) => {
         resumeButton();
@@ -88,11 +100,11 @@ function createMainWindow() {
         pathname: path.join(__dirname, './src/main.html'),
         protocol: 'file:',
         slashes: true
-    }))
+    }));
     win.setMenuBarVisibility(false);
-    win.once('ready-to-show', () => {
+    /* win.once('ready-to-show', () => {
         win.show();
-    })
+    }) */
     win.on('closed', (i) => {
         app.exit();
     })
@@ -215,6 +227,8 @@ function createMiniPlayer() {
         }    
     });
 
+    if (app.isPackaged == false) win.setResizable(true);
+
     win.loadURL(url.format({
         pathname: path.join(__dirname, './src/miniplayer/mini.html'),
         protocol: 'file:',
@@ -228,28 +242,28 @@ function createMiniPlayer() {
         win.webContents.send('switch-windows');
     })
     ipc.on('seek-time-mini', (event, arg) => {
-        win.webContents.send('seek-time', arg)
+        win.webContents.send('seek-time', arg);
     })
     ipc.on('is-playing', (event, arg) => {
-        win.webContents.send('is-playing', arg)
+        win.webContents.send('is-playing', arg);
     })
     ipc.on('shuffle-enable', () => {
-        win.webContents.send('shuffle-enable')
+        win.webContents.send('shuffle-enable');
     });
     ipc.on('repeat-enable', () => {
-        win.webContents.send('repeat-enable')
+        win.webContents.send('repeat-enable');
     });
     ipc.on('play-pause-mini', () => {
         win.webContents.send("play-pause-mini");
     });
     ipc.on('play-mini', () => {
-        win.webContents.send('play-mini')
+        win.webContents.send('play-mini');
     });
     ipc.on('setting-change', (event, arg) => {
-        win.webContents.send('setting-change', arg)
+        win.webContents.send('setting-change', arg);
     });
     ipc.on('shortcut-close', () => {
-        win.webContents.send('shortcut-close')
+        win.webContents.send('shortcut-close');
     });
 }
 
