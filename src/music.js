@@ -24,65 +24,65 @@
  * Repo: https://github.com/projsh/firetail
  */
 
-var audio;
-var currentlyPlaying = false;
-var fileTotal;
-var newFileChosen;
-var newFileName;
-var fileName;
-var pauseButtonActive = false;
-var currentSongPlaying;
-var allFilesList = [];
-var repeatEnabled = false;
-var artist;
-var album;
-var Title;
-var tags;
-var shuffleEnabled = false;
-var shuffleOrder = [];
-var fileSongListStore = [];
-var fileAudio;
-var songTitleName;
-var durationSongLength;
-var durationSeconds;
-var durationMinutes;
-var seconds;
-var minutes;
-var seekBar = document.querySelector('.seek-bar');
-var volBar = document.querySelector('.vol-bar');
-var seekBarWrapper = document.querySelector('#seekWrapper');
-var seekFillBar = seekBar.querySelector('#seekFill');
-var audioLength = document.querySelector('#songDuration');
-var volFillBar = volBar.querySelector('#volFill');
-var volWrapper = document.querySelector('#volWrapper')
-var seekMouseDown = false;
-var volMouseDown = false;
-var p;
-var s = [];
-var previousDuration;
-var sortFileExt = {};
-var shuffleList = [];
-var shuffleCheck = false;
-var shuffleWait = false;
-var shuffleCurrent;
-var highlightSong;
-var currentVol = 1;
-var muteSaveVol;
-var volWidth;
-var isMuted = false;
-var shuffleEnableFirst = false;
-var shuffleDisableFirst = false;
-var checkForShuffle = false;
-var albumArt;
-var AudioContext = window.AudioContext;
-var audioCtx = new AudioContext();
-var gain;
-var theme = 'dark';
-var menuOpen = false;
-var noSong = false;
-var remote = require('electron').remote;
-var bgImage;
-var fName;
+let audio;
+let currentlyPlaying = false;
+let fileTotal;
+let newFileChosen;
+let newFileName;
+let fileName;
+let pauseButtonActive = false;
+let currentSongPlaying;
+let allFilesList = [];
+let repeatEnabled = false;
+let artist;
+let album;
+let Title;
+let tags;
+let shuffleEnabled = false;
+let shuffleOrder = [];
+let fileSongListStore = [];
+let fileAudio;
+let songTitleName;
+let durationSongLength;
+let durationSeconds;
+let durationMinutes;
+let seconds;
+let minutes;
+let seekBar = document.querySelector('.seek-bar');
+let volBar = document.querySelector('.vol-bar');
+let seekBarWrapper = document.querySelector('#seekWrapper');
+let seekFillBar = seekBar.querySelector('#seekFill');
+let audioLength = document.querySelector('#songDuration');
+let volFillBar = volBar.querySelector('#volFill');
+let volWrapper = document.querySelector('#volWrapper')
+let seekMouseDown = false;
+let volMouseDown = false;
+let p;
+let s = [];
+let previousDuration;
+let sortFileExt = {};
+let shuffleList = [];
+let shuffleCheck = false;
+let shuffleWait = false;
+let shuffleCurrent;
+let highlightSong;
+let currentVol = 1;
+let muteSaveVol;
+let volWidth;
+let isMuted = false;
+let shuffleEnableFirst = false;
+let shuffleDisableFirst = false;
+let checkForShuffle = false;
+let albumArt;
+let AudioContext = window.AudioContext;
+let audioCtx = new AudioContext();
+let gain;
+let theme = 'dark';
+let menuOpen = false;
+let noSong = false;
+let remote = require('electron').remote;
+let bgImage;
+let fName;
 const {
     globalShortcut,
     dialog,
@@ -92,10 +92,10 @@ const path = require('path');
 const os = require('os');
 const fs = require('fs-extra');
 const id3 = require('jsmediatags');
-const ipc = require('electron').ipcRenderer;
+var ipc = require('electron').ipcRenderer;
 const drpc = require('discord-rpc');
 const settings = require('electron-settings')
-var ver = require('../package.json').version;
+let ver = require('../package.json').version;
 const chokidar = require('chokidar');
 const md = require('markdown-it')();
 
@@ -109,8 +109,8 @@ if (isDev()) {
 }
 
 if (process.platform == 'linux') {
-    var mpris = require('mpris-service');
-    var mprisPlayer = new mpris({
+    let mpris = require('mpris-service');
+    let mprisPlayer = new mpris({
         name: 'firetail',
         identity: 'Firetail',
         supportedInterfaces: ['player']
@@ -173,13 +173,16 @@ if (settings.get('audio-effects') == true) {
     $('#effectsButton').show();
 }
 
-var clientId = '586510014211031040';
+let clientId = '586510014211031040';
 const rpc = new drpc.Client({
     transport: 'ipc'
 })
 
 if (settings.get('discordrpc') == true) {
     async function rpcSetActivity() {
+        let rpcIsIdle;
+        let rpcIsPaused;
+        let rpcTitle;
         if (!rpc) {
             return;
         }
@@ -262,7 +265,7 @@ ipc.on('preferences', () => {
     menuOpened = 'settings';
     navOpen();
 });
-var mpOpen = false;
+let mpOpen = false;
 ipc.on('toggle-mp', () => {
     if (mpOpen == false) {
         remote.getCurrentWindow().hide();
@@ -426,7 +429,7 @@ function songActiveReset() {
 }
 
 function shuffle(array) {
-    var currentIndex = array.length,
+    let currentIndex = array.length,
         temporaryValue, randomIndex;
     while (0 !== currentIndex) {
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -439,6 +442,7 @@ function shuffle(array) {
 }
 
 $('body').on("contextmenu", "li.results-link", function (e) {
+    $('.context-menu').show();
     ctxMenu = document.getElementById('contextMenu')
     if (e.pageX + ctxMenu.offsetWidth >= window.innerWidth) {
         xPosition = e.pageX - ctxMenu.offsetWidth;
@@ -452,7 +456,6 @@ $('body').on("contextmenu", "li.results-link", function (e) {
     }
     clickedSong = e.currentTarget.id;
     $('.context-menu').css({
-        display: 'block',
         left: xPosition + 'px',
         top: yPosition + 'px'
     });
@@ -462,17 +465,17 @@ $('html').click(() => {
     $('.context-menu').hide();
 })
 
-var fileextentions = ['mp3', 'm4a', 'wav', 'ogg', '3gp', 'aac', 'flac', 'webm', 'raw']
-var reloading;
-var ctxMenu;
-var xPosition;
-var yPosition;
-var playlistList = {};
-var clickedSong;
-var songMetadata = {};
-var songData = {}
-var tab = 'songs';
-var directories = [`${os.homedir}/Music/Audiation`];
+let fileextentions = ['mp3', 'm4a', 'wav', 'ogg', '3gp', 'aac', 'flac', 'webm', 'raw']
+let reloading;
+let ctxMenu;
+let xPosition;
+let yPosition;
+let playlistList = {};
+let clickedSong;
+let songMetadata = {};
+let songData = {}
+let tab = 'songs';
+let directories = [`${os.homedir}/Music/Audiation`];
 
 function readdir(dir, cb) {
     fs.readdir(dir, function (err, files) {
@@ -499,70 +502,65 @@ function removeLoader() {
     }, 250)
 }
 
-function loadFiles() {
-    songMetadata = {};
-    $('.createLibraryMsg').show();
-    fs.pathExists(`${os.homedir}/Music/Audiation`, (err, exists) => {
-        if (err) throw err;
-        if (exists == false) {
-            fs.mkdir(`${os.homedir}/Music/Audiation`, (err) => {
-                if (err) throw err;
-            });
-        };
-        directories.forEach((r, t) => {
-            readdir(r, (err, files) => {
-                if (err) console.error(err);
-                if (files.length < 1) {
-                    iconStyleSelect(settings.get('icon-style'))
-                    removeLoader();
-                    reloading = false;
-                    return $('.list-wrapper').html(`<p style="font-weight: bold; margin-left: 215px;">Please add some files to the<br>following directory:<br>${os.homedir}/Music/Audiation`);
-                } 
-                fileextentions.forEach((e) => {
-                    sortFileExt[e] = files.filter(f => f.split(".").pop() === e);
-                    s = s.concat(sortFileExt[e]);
-                    s.sort(function (a, b) {
-                        if (a.toLowerCase() < b.toLowerCase()) return -1;
-                        if (a.toLowerCase() > b.toLowerCase()) return 1;
-                        return 0;
-                    });
-                });
-                var amount = 0;
-                s.forEach((f, i) => {
-                    new Promise((resolve) => {
-                        new id3.Reader(f)
-                            .setTagsToRead(['title', 'artist', 'album'])
-                            .read({
-                                onSuccess: function (tag) {
-                                    songData = {
-                                        'title': tag.tags.title,
-                                        'artist': tag.tags.artist,
-                                        'album': tag.tags.album
-                                    }
-                                    resolve(songData);
-                                },
-                                onError: function (err) {
-                                    resolve('{}');
-                                }
-                            })
-                    }).then((e) => {
-                        songMetadata[f] = e;
-                        fs.writeJson(`${app.getPath('userData')}/library.json`, songMetadata);
-                        amount++;
-    
-                        if (amount == s.length) {
-                            console.log('FINISHED, CALLING LISTFILES');
-                            listFiles();
-                        };
-                    })
-                })
-            });
-        });
-    });
+let dragList = document.querySelector(".list-wrapper");
+dragList.ondragover = () => {
+    $('.drag-border').show();
 }
-var newList;
-var list;
-var working = false;
+dragList.ondragleave = () => {
+    $('.drag-border').hide();
+}
+
+let dragFiles;
+dragList.ondrop = (e) => {
+    e.preventDefault();
+    $('.drag-border').hide();
+    dragFiles = e.dataTransfer.files;
+    let fileWkr = new Worker('./files.js');
+    fileWkr.postMessage([dragFiles, songMetadata, app.getPath('userData')]);
+    $('.sync-status').css('opacity', 1);
+    $('.sync-status i').text('autorenew');
+    let oneSong = 'files';
+    if (dragFiles.length == 1) {
+        oneSong = 'file'
+    }
+    $('#addMsg').text(`Importing ${dragFiles.length} ${oneSong} to library...`);
+    $('.sync-status').addClass('visible');
+    $('.sync-status i').addClass('spin');
+    fileWkr.onmessage = function(e) {
+        if (e.data == 0) {
+            $('.sync-status i').text('cancel');
+            $('#addMsg').text('No songs were imported');
+            console.log(`No audio files were imported`);
+        } else {
+            let oneSong = 'songs';
+            if (e.data == 1) {
+                oneSong = 'song'
+            }    
+            $('.sync-status i').text('done');
+            $('#addMsg').text(`Imported ${e.data} ${oneSong}!`);
+            console.log(`Imported ${e.data} ${oneSong}`);
+            listFiles();
+        }
+        fileWkr.terminate();
+        $('.sync-status i').removeClass('spin');
+        setTimeout(() => {
+            $('.sync-status').css('opacity', 0);
+            setTimeout(() => {
+                $('.sync-status').removeClass('visible');
+            }, 250)
+        }, 2000);
+    }
+}
+
+$('#deleteFromLibrary').click(() => {
+    delete songMetadata[allFilesList[clickedSong]];
+    fs.writeJsonSync(`${app.getPath('userData')}/library.json`, songMetadata);
+    listFiles();
+})
+
+let newList;
+let list;
+let working = false;
 
 function watcherAdd(f) {
     console.log('WATCHER ADD FOR FILE ' + f)
@@ -585,7 +583,7 @@ function watcherAdd(f) {
             })
     }).then((i) => {
         for (i = 0; i < fileextentions.length; i++) {
-            var ext = f.split(".").pop() === fileextentions[i];
+            let ext = f.split(".").pop() === fileextentions[i];
             if (ext == true) break;
             if (i + 1 == fileextentions.length) {
                 return;
@@ -603,8 +601,8 @@ function watcherAdd(f) {
 function unlinkFile(path) {
     console.log('WATCHER UNLINK FOR FILE ' + path)
     working = true;
-    for (var i = 0; i < fileextentions.length; i++) {
-        var ext = path.split(".").pop() === fileextentions[i];
+    for (let i = 0; i < fileextentions.length; i++) {
+        let ext = path.split(".").pop() === fileextentions[i];
         if (ext == true) break;
         if (i + 1 == fileextentions.length) {
             return;
@@ -636,7 +634,10 @@ function listFiles() {
     shuffleList = [];
     new Promise(() => {
         if (!fs.existsSync(`${app.getPath('userData')}/library.json`)) {
-            loadFiles();
+            iconStyleSelect(settings.get('icon-style'))
+            removeLoader();
+            reloading = false;
+            return $('.list-wrapper').html(`<p style="font-weight: bold; margin-left: 215px;">Please drag some files here.`);
         } else {
             new Promise((resolve) => {
                 fs.readJson(`${app.getPath('userData')}/library.json`, (err, file) => {
@@ -647,7 +648,6 @@ function listFiles() {
                             if (err) throw err;
                         });
                         reloading = false;
-                        return $('.list-wrapper').html(`<p style="font-weight: bold; margin-left: 215px;">Please add some files to the<br>following directory:<br>${os.homedir}/Music/Audiation`);    
                     }
                     songMetadata = file;
                     list = Object.entries(file).map(e => [e[0]])
@@ -658,9 +658,16 @@ function listFiles() {
                     resolve(newList)
                 });
             }).then((a) => {
-                a.sort(function (a, b) {
-                    if (a.toLowerCase() < b.toLowerCase()) return -1;
-                    if (a.toLowerCase() > b.toLowerCase()) return 1;
+                a.sort(function (x, b) {
+                    if (process.platform == 'win32') {
+                        x = x.substr(x.lastIndexOf('\\') + 1);
+                        b = b.substr(b.lastIndexOf('\\') + 1);
+                    } else {
+                        x = x.substr(x.lastIndexOf('/') + 1);
+                        b = b.substr(b.lastIndexOf('/') + 1);
+                    }
+                    if (x.toLowerCase() < b.toLowerCase()) return -1;
+                    if (x.toLowerCase() > b.toLowerCase()) return 1;
                     return 0;
                 });
                 $('.list-wrapper').html('');
@@ -672,7 +679,7 @@ function listFiles() {
                 shuffleOrder.forEach((f, i) => {
                     shuffleList.push(fileSongListStore.indexOf(f));
                 });
-                var searchSongs;
+                let searchSongs;
                 if (currentlyPlaying === true) {
                     searchSongs = fileSongListStore.indexOf(newFileChosen);
                     if (searchSongs != -1) {
@@ -687,6 +694,7 @@ function listFiles() {
                 }
                 iconStyleSelect(settings.get('icon-style'))
                 removeLoader();
+
             })
         }
     })
@@ -782,7 +790,7 @@ function forEachFile(f, i) {
 
 listFiles();
 
-var addSong;
+let addSong;
 $('#addSongPlaylist').click(() => {
     addSong = fileSongListStore[clickedSong];
     if (playlistList.indexOf(addSong) != -1) return;
@@ -1019,7 +1027,7 @@ $('.tb-close').mouseleave(() => {
 })
 
 $('.tb-maximize').click(function () {
-    var window = remote.getCurrentWindow();
+    let window = remote.getCurrentWindow();
     if (!window.isMaximized()) {
         window.maximize();
     } else {
@@ -1028,7 +1036,7 @@ $('.tb-maximize').click(function () {
 });
 
 function maximizeWindow() {
-    var window = remote.getCurrentWindow();
+    let window = remote.getCurrentWindow();
     if (!window.isMaximized()) {
         $('.tb-unmaximize').hide()
         $('.tb-ismaximize').show();
@@ -1082,7 +1090,7 @@ window.addEventListener('focus', () => {
 })
 
 $('.tb-minimize').click(function () {
-    var window = remote.getCurrentWindow();
+    let window = remote.getCurrentWindow();
     window.minimize();
 })
 
@@ -1097,6 +1105,27 @@ document.addEventListener("keydown", function (e) {
                 resumeButton();
             }
             break;
+        case 37:
+            audio.currentTime = audio.currentTime - 10;
+            break;
+            /* case 38:
+                if (audio.volume >= 1) return;
+                let volLengthUp = parseFloat(volFillBar.style.width.substr(0, volFillBar.style.width.length - 1));
+                console.log(volLengthUp);
+                volFillBar.style.width = volLengthUp + 10 + '%';
+                audio.volume = audio.volume + 0.1;
+                currentVol = audio.volume;
+                break; */
+        case 39:
+            audio.currentTime = audio.currentTime + 10;
+            break;
+            /* case 40:
+                if (audio.volume <= 0) return;
+                let volLengthDown = parseFloat(volFillBar.style.width.substr(0, volFillBar.style.width.length - 1));
+                volFillBar.style.width = volLengthDown - 10 + '%';
+                audio.volume = audio.volume - 0.1;
+                currentVol = audio.volume;
+                break; */
     }
 });
 
@@ -1120,7 +1149,7 @@ function restartMenuSwitch() {
     }, 200)
 }
 
-var subMenuList = {
+let subMenuList = {
     'appearanceSubButton': 'appearanceSubmenu',
     'aboutSubButton': 'aboutSubmenu',
     'experimentSubButton': 'experimentSubmenu',
@@ -1128,7 +1157,7 @@ var subMenuList = {
     'changelogSubButton': 'changelogSubmenu'
 }
 
-var linkBack = {
+let linkBack = {
     'appearanceSubmenu': 'menuMain',
     'aboutSubmenu': 'menuMain',
     'experimentSubmenu': 'generalSubmenu',
@@ -1136,7 +1165,7 @@ var linkBack = {
     'changelogSubmenu': 'aboutSubmenu'
 }
 
-var menuTitle = {
+let menuTitle = {
     'menuMain': 'Settings',
     'appearanceSubmenu': 'Appearance',
     'aboutSubmenu': 'About',
@@ -1145,9 +1174,9 @@ var menuTitle = {
     'changelogSubmenu': 'Changelog'
 }
 
-var licenseInfo = "This project is under the terms of the GNU General Public Licence (v.3.0)"
+let licenseInfo = "This project is under the terms of the GNU General Public Licence (v.3.0)"
 
-var experimentSettings = [{
+let experimentSettings = [{
     info: {
         title: 'Experiments'
     },
@@ -1171,7 +1200,7 @@ var experimentSettings = [{
     ]
 }]
 
-var aboutSettings = [{
+let aboutSettings = [{
     info: {
         title: 'About'
     },
@@ -1188,18 +1217,16 @@ var aboutSettings = [{
     ]
 }]
 
-var changelogSettings = [{
+let changelogSettings = [{
     info: {
         title: 'Changelog'
     },
-    controls: [
-        {
-            customHTML: `<div id="changelog"></div>`
-        }
-    ]
+    controls: [{
+        customHTML: `<div id="changelog"></div>`
+    }]
 }]
 
-var appearanceSettings = [{
+let appearanceSettings = [{
     info: {
         title: 'Appearance'
     },
@@ -1260,8 +1287,7 @@ var appearanceSettings = [{
                 title: 'Icon Style',
                 desc: 'Sets icon style to your choice',
                 id: 'iconStyleSelect',
-                options: [
-                    {
+                options: [{
                         option: {
                             title: 'Filled',
                             value: 'filled'
@@ -1287,8 +1313,7 @@ var appearanceSettings = [{
                 title: 'Button Style',
                 desc: 'Sets button style to your choice',
                 id: 'buttonStyleSelect',
-                options: [
-                    {
+                options: [{
                         option: {
                             title: 'New',
                             value: 'new'
@@ -1314,12 +1339,11 @@ var appearanceSettings = [{
     ]
 }]
 
-var generalSettings = [{
+let generalSettings = [{
     info: {
         title: 'General'
     },
-    controls: [
-        {
+    controls: [{
             subButton: {
                 title: 'Experiments',
                 id: 'experimentSubButton',
@@ -1332,11 +1356,18 @@ var generalSettings = [{
                 desc: "Sets currently playing song as your Discord status",
                 id: 'discordToggle'
             }
+        },
+        {
+            button: {
+                title: 'Reset Library',
+                desc: "Resets your library back to first install.",
+                id: 'resetLibrary'
+            }
         }
     ]
 }]
 
-var settingsMenu = [{
+let settingsMenu = [{
     info: {
         title: 'Settings'
     },
@@ -1364,7 +1395,7 @@ var settingsMenu = [{
     ]
 }]
 
-var settingsPage = {
+let settingsPage = {
     'appearanceSubButton': appearanceSettings,
     'aboutSubButton': aboutSettings,
     'experimentSubButton': experimentSettings,
@@ -1372,7 +1403,7 @@ var settingsPage = {
     'changelogSubButton': changelogSettings
 }
 
-var selectOptions = {
+let selectOptions = {
     'iconStyleSelect': 'icon-style',
     'colouraccentSelect': 'colour-accent',
     'themeSelect': 'theme',
@@ -1388,9 +1419,9 @@ function createSubmenuButton(i) {
 }
 
 function createSelectList(i) {
-    var addOption;
+    let addOption;
     i.options.forEach((f) => {
-        var selected = '';
+        let selected = '';
         optionInfo = f.option;
         if (selectOptions[i.id]) {
             if (settings.get(selectOptions[i.id]) == optionInfo.value) {
@@ -1402,19 +1433,23 @@ function createSelectList(i) {
     return `<div class="select-list" id="${i.id}List"><div><p>${i.title}</p><div class="switch-desc">${i.desc}</div></div><div class="select-container"><select id="${i.id}">${addOption}</select></div></div>`
 }
 
-var switches = [];
-var options = [];
-var id;
-var optionInfo;
-var topElement;
+function createRegularButton(i) {
+return `<div class="menu-regular-button" id="${i.id}"><div><p>${i.title}</p><div class="switch-desc">${i.desc}</div>`
+}
+
+let switches = [];
+let options = [];
+let id;
+let optionInfo;
+let topElement;
 
 function createSettingsMenu(e, o) {
     switches = [];
     options = [];
     new Promise((resolve) => {
         e[0].controls.forEach((f, i) => {
-            var newControl;
-            var buttonType = Object.keys(f)[0];
+            let newControl;
+            let buttonType = Object.keys(f)[0];
             switch (buttonType) {
                 case 'switch':
                     newControl = createSwitch(e[0].controls[i].switch);
@@ -1428,7 +1463,11 @@ function createSettingsMenu(e, o) {
                     newControl = `<div class="customHTML">${e[0].controls[i].customHTML}</div>`;
                     break;
                 case 'select':
-                    newControl = createSelectList(e[0].controls[i].select)
+                    newControl = createSelectList(e[0].controls[i].select);
+                    break;
+                case 'button':
+                    newControl = createRegularButton(e[0].controls[i].button);
+                    switches.push(e[0].controls[i].button.id)
             }
             if (o) {
                 $(`#menuMain`).append(newControl);
@@ -1445,15 +1484,17 @@ function createSettingsMenu(e, o) {
             if (subMenuList[getSubId] == activeMenu) return;
             getSubId = subMenuList[getSubId];
             $('.menu-controls').append(`<div class="menu-list main right" id="${getSubId}"></div>`);
-            var getMenu = settingsPage[$(this).attr('id')];
+            let getMenu = settingsPage[$(this).attr('id')];
             setTimeout(() => {
                 createSettingsMenu(getMenu)
                 findMenu('next');
-            }, 10)
+            }, 15)
         });
-        if (e[0].info.title == 'Changelog') { 
+        if (e[0].info.title == 'Changelog') {
             fs.readFile(`${app.getAppPath()}/assets/changelog.md`, "UTF8", (err, data) => {
-                if (err) { throw err };
+                if (err) {
+                    throw err
+                };
                 let result = md.render(data);
                 $('#changelog').append(result);
             });
@@ -1474,23 +1515,22 @@ function createSettingsMenu(e, o) {
         }
         switches.forEach((f, i) => {
             $(`#${f}`).click(() => {
-                console.log(f)
                 window[f]();
             })
         });
         //thanks: https://codepen.io/wallaceerick/pen/ctsCz
         $('select').each(function () {
-            var $this = $(this),
+            let $this = $(this),
                 numberOfOptions = $(this).children('option').length;
             $this.addClass('select-hidden');
             $this.wrap('<div class="select"></div>');
             $this.after('<div class="select-styled"></div>');
-            var $styledSelect = $this.next('div.select-styled');
+            let $styledSelect = $this.next('div.select-styled');
             $styledSelect.text($this.children('option').eq(0).text());
-            var $list = $('<ul />', {
+            let $list = $('<ul />', {
                 'class': 'select-options'
             }).insertAfter($styledSelect);
-            for (var i = 0; i < numberOfOptions; i++) {
+            for (let i = 0; i < numberOfOptions; i++) {
                 if ($this.children('option').eq(i).attr('selected')) {
                     $styledSelect.text($this.children('option').eq(i).text());
                 }
@@ -1499,7 +1539,7 @@ function createSettingsMenu(e, o) {
                     rel: $this.children('option').eq(i).val()
                 }).appendTo($list);
             }
-            var $listItems = $list.children('li');
+            let $listItems = $list.children('li');
             $styledSelect.click(function (a) {
                 $('.disable-interact').show();
                 a.stopPropagation();
@@ -1537,7 +1577,7 @@ function createSettingsMenu(e, o) {
     });
 }
 
-var menuOpened;
+let menuOpened;
 
 function iconStyleSelect(i) {
     switch (i) {
@@ -1564,8 +1604,8 @@ function colouraccentSelect(i) {
 }
 
 function buttonStyleSelect(i) {
-    var buttonRemove;
-    switch(i) {
+    let buttonRemove;
+    switch (i) {
         case "new":
             buttonRemove = 'old'
             break;
@@ -1612,7 +1652,7 @@ function navClose() {
     })
     setTimeout(() => {
         $('#effectsMenu, #settingsMenu').hide();
-        $('.menu-controls').html('<div class="disable-interact"></div><div class="menu-list main" id="menuMain"></div>')
+        $('#settingsMenu .menu-controls').html('<div class="disable-interact"></div><div class="menu-list main" id="menuMain"></div>')
     }, 250);
 }
 
@@ -1634,7 +1674,7 @@ $('#effectsClose, #settingsClose').click(function () {
     }, 250);
 });
 
-var restartRequired = false;
+let restartRequired = false;
 
 function themeSelect(i) {
     theme = i;
@@ -1688,11 +1728,19 @@ function miniBgToggle() {
     }
 }
 
-var activeMenu = 'menuMain';
-var transition = false;
+function resetLibrary() {
+    fs.unlink(`${app.getPath('userData')}/library.json`, (err) => {
+        if (err) throw err;
+        songMetadata = {};
+        listFiles();
+    });
+}
 
-var getSubId;
-var previousMenu;
+let activeMenu = 'menuMain';
+let transition = false;
+
+let getSubId;
+let previousMenu;
 
 function findMenu(i) {
     switch (i) {
@@ -1783,10 +1831,11 @@ function audioStop() {
     $('div.play-button, select, div.play-type').show();
     pauseButtonActive = false;
 }
-var firstPlay = true;
-var source;
+let firstPlay = true;
+let source;
 
 function findSong() {
+    if (imgWorker) imgWorker.terminate();
     try {
         if (audio) {
             audio.removeEventListener('timeupdate', seekTimeUpdate);
@@ -1830,9 +1879,10 @@ function findSong() {
     }
 }
 
-var img;
-var tagInfo;
+let img;
+let tagInfo;
 let readingNewSong = false;
+let imgWorker;
 
 function getSongInfo() {
     if (theme == 'light') {
@@ -1842,7 +1892,7 @@ function getSongInfo() {
         document.getElementById('songPicture').style.background = 'url(../assets/no_image.svg)';
         document.getElementById('songPictureBlur').style.background = 'url(../assets/no_image.svg)';
     }
-    var metadata = songMetadata[newFileChosen];
+    let metadata = songMetadata[newFileChosen];
     Title = metadata.title;
     album = metadata.album;
     artist = metadata.artist;
@@ -1868,9 +1918,9 @@ function getSongInfo() {
         'art': dataUrl
     }
     ipc.send('tag-info', tagInfo)
-    var imgWorker = new Worker('./img-worker.js');
+    imgWorker = new Worker('./img-worker.js');
     imgWorker.postMessage(newFileChosen);
-    imgWorker.onmessage = function(e) {
+    imgWorker.onmessage = function (e) {
         if (readingNewSong == true) return;
         readingNewSong = true;
         img = e.data;
@@ -1901,24 +1951,25 @@ function getSongInfo() {
             'art': dataUrl
         }
         ipc.send('tag-info', tagInfo);
+        imgWorker.terminate();
     }
 }
 
-var convolverGain = audioCtx.createGain();
-var convolver = audioCtx.createConvolver();
-var masterGain = audioCtx.createGain();
-var masterCompression = audioCtx.createDynamicsCompressor();
-var impulseData = [];
+let convolverGain = audioCtx.createGain();
+let convolver = audioCtx.createConvolver();
+let masterGain = audioCtx.createGain();
+let masterCompression = audioCtx.createDynamicsCompressor();
+let impulseData = [];
 
 function impulseGet() {
     convolver = audioCtx.createConvolver();
-    ajaxRequest = new XMLHttpRequest();
-    ajaxRequest.open('GET', '/assets/SteinmanHall.wav', true);
+    let ajaxRequest = new XMLHttpRequest();
+    ajaxRequest.open('GET', '../assets/SteinmanHall.wav', true);
     ajaxRequest.responseType = 'arraybuffer';
     ajaxRequest.onload = function () {
         impulseData = ajaxRequest.response;
         audioCtx.decodeAudioData(impulseData, function (buffer) {
-            conBuffer = buffer;
+            let conBuffer = buffer;
             convolver.buffer = conBuffer;
             convolver.normalize = true;
             convolverGain.gain.value = 5;
@@ -1928,8 +1979,8 @@ function impulseGet() {
     }
     ajaxRequest.send();
 }
-var reverbEnabled = false;
-var reverbFirst = true;
+let reverbEnabled = false;
+let reverbFirst = true;
 $('#reverbSwitch').click(function () {
     if (reverbEnabled == false) {
         if (reverbFirst == true) {
@@ -1950,7 +2001,7 @@ $('#reverbSwitch').click(function () {
         reverbEnabled = false;
     }
 })
-var gainEnabled = false;
+let gainEnabled = false;
 $('#gainSwitch').click(() => {
     switch (gainEnabled) {
         case false:
@@ -1963,7 +2014,7 @@ $('#gainSwitch').click(() => {
     }
 })
 
-var gainInput = 1;
+let gainInput = 1;
 $('#gainInput').change(function () {
     if ($(this).val() >= 100) $(this).val(100);
     if ($(this).val() <= 0) $(this).val(0);
@@ -1973,7 +2024,7 @@ $('#gainInput').change(function () {
     }
 })
 
-var reverbInput = 1;
+let reverbInput = 1;
 $('#reverbInput').change(function () {
     if ($(this).val() >= 100) $(this).val(100);
     if ($(this).val() <= 0) $(this).val(0);
@@ -1982,7 +2033,7 @@ $('#reverbInput').change(function () {
 })
 
 $('#openDevTools').click(function () {
-    var remote = require('electron').remote;
+    let remote = require('electron').remote;
     remote.getCurrentWindow().toggleDevTools();
 })
 
@@ -1998,7 +2049,7 @@ function buttonActive(e) {
     console.log(e)
 }
 
-var tabSection = 'songs'
+let tabSection = 'songs'
 $('#libraryButton').click(() => {
     $('.top-bar h2').show();
     $(`#playlistsPage`).removeClass('active-tab');
@@ -2133,7 +2184,7 @@ function audioDuration() {
 }
 
 function seekTimeUpdate() {
-    var p = audio.currentTime / audio.duration;
+    let p = audio.currentTime / audio.duration;
     seekFillBar.style.width = p * 100 + '%';
     if (audio.currentTime === audio.duration) {
         switch (repeatEnabled) {
@@ -2146,7 +2197,7 @@ function seekTimeUpdate() {
                 break;
         }
     }
-    var songLength = parseInt(audio.currentTime);
+    let songLength = parseInt(audio.currentTime);
     minutes = Math.floor(songLength / 60);
     seconds = Math.floor(songLength / 1);
     while (seconds >= 60) {
@@ -2164,7 +2215,7 @@ function seekTimeUpdate() {
         durationMinutes = '-'
         durationSeconds = '--'
     }
-    var seekTimeMini = {
+    let seekTimeMini = {
         'currentTimeString': `${minutes}:${seconds}`,
         'songDurationString': `${durationMinutes}:${durationSeconds}`,
         'currentTimeValue': audio.currentTime,
@@ -2182,11 +2233,11 @@ ipc.on('seek-time-main', (event, arg) => {
     audio.addEventListener('timeupdate', seekTimeUpdate);
 })
 
-var tmp = require('tmp');
-var tmpobj = tmp.dirSync();
-var dataUrl;
-var tmpFile;
-var directory = tmpobj.name;
+let tmp = require('tmp');
+let tmpobj = tmp.dirSync();
+let dataUrl;
+let tmpFile;
+let directory = tmpobj.name;
 
 function clearTempFiles() {
     fs.readdir(directory, (err, files) => {
@@ -2222,8 +2273,8 @@ window.onbeforeunload = (i) => {
         appExit();
     }
 }
-var seekP;
-var volP;
+let seekP;
+let volP;
 
 function seekBarTrack() {
     audio.addEventListener('timeupdate', seekTimeUpdate);

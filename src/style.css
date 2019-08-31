@@ -707,16 +707,53 @@ button i {
 .top-bar-wrapper {
     display: flex;
     position: relative;
+    justify-content: space-between;
+}
+
+.top-bar-buttons {
+    display: flex;
+    position: relative;
     left: 200px;
     bottom: 8px;
 }
 
-.top-bar-wrapper h2 {
+.top-bar-buttons h2 {
     margin: 14px 17px 0 17px;
     font-size: 16px;
     opacity: .65;
     transition: .2s;
     text-transform: uppercase;
+}
+
+.sync-status {
+    transform: translate(-40px, -2px);
+    display: flex;
+    align-items: center;
+    display: none;
+    transition: .25s;
+    opacity: 0;
+}
+
+.sync-status.visible {
+    display: flex;
+}
+
+.sync-status i.spin {
+    animation: iconSpin 3s infinite linear;
+}
+
+@keyframes iconSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#addMsg {
+    font-weight: bold;
+    margin-left: 10px;
 }
 
 .top-bar-wrapper h2:hover {
@@ -830,6 +867,16 @@ button i {
     transition: .2s;
     width: 100%;
     height: calc(100% - 32px);
+    transform: none;
+}
+
+@keyframes slideIn {
+    from {
+        transform: scale(0.95)
+    }
+    to {
+        transform: scale(1);
+    }
 }
 
 .menu-bg {
@@ -849,6 +896,7 @@ button i {
     z-index: 13;
     width: 100%;
     height: 100%;
+    animation: slideIn .2s;
 }
 
 .main-menu {
@@ -949,13 +997,26 @@ input:checked + .switch-slider:before {
     border-radius: 50%;
 }
 
-.label-switch, .menu-submenu-button {
+.label-switch, .menu-submenu-button, .menu-regular-button {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 410px;
     padding: 5px 20px;
     background: var(--bg);
+}
+
+.menu-controls.effect div:not(:first-child) {
+    border-top: solid 1px var(--bd);
+}
+
+.menu-controls.effect div {
+    padding-bottom: 10px;
+}
+
+.label-switch.effect div {
+    display: flex;
+    flex-direction: column;
 }
 
 .subbutton-name {
@@ -967,16 +1028,16 @@ input:checked + .switch-slider:before {
     margin-right: 20px;
 }
 
-.label-switch:not(:last-child), .menu-submenu-button:not(:last-child), .customHTML:not(:last-child), .select-list:not(:last-child) {
+.label-switch:not(:last-child), .menu-submenu-button:not(:last-child), .customHTML:not(:last-child), .select-list:not(:last-child), .menu-regular-button:not(:last-child) {
     border-bottom: solid 1px var(--bd)
 }
 
-.label-switch p, .menu-submenu-button p, .select-list p {
+.label-switch p, .menu-submenu-button p, .select-list p, .menu-regular-button p {
     margin: 10px 0;
     font-weight: bold;
 }
 
-.label-switch p, .select-list p {
+.label-switch p, .select-list p, .menu-regular-button p {
     margin: 10px 0 2px 0;
 }
 
@@ -1200,13 +1261,13 @@ input:checked + .switch-slider:before {
     transform: scale(1.2);
 }
 
-.menu-submenu-button:hover {
+.menu-submenu-button:hover, .menu-regular-button:hover {
     background: var(--li-hv);
     color: var(--hl-txt);
     cursor: pointer;
 }
 
-.menu-submenu-button:active {
+.menu-submenu-button:active, .menu-regular-button:active {
     background: var(--li-hv);
     color: var(--hl-txt);
     opacity: .5;
@@ -1216,12 +1277,12 @@ input:checked + .switch-slider:before {
     display: none;
     position: fixed;
     z-index: 10;
-    width: auto;
+    min-width: 150px;
     height: auto;
-    background: var(--fg-bg);
+    background: var(--bg);
     border: 2px solid var(--bd);
     border-radius: 5px;
-    box-shadow: 0px 1px 20px rgba(0,0,0,.15);
+    box-shadow: 0px 1px 5px rgba(0,0,0,.15);
 }
 
 .context-list {
@@ -1230,12 +1291,16 @@ input:checked + .switch-slider:before {
     flex-flow: column;
 }
 
+.context-list div:last-child {
+    margin-bottom: 5px;
+}
+
 .context-item {
     width: auto;
     height: 20px;
     line-height: 20px;
-    font-size: 14px;
-    padding: 5px;
+    font-size: 12px;
+    padding: 5px 5px 0px 5px;
     vertical-align: middle;
 }
 
@@ -1245,7 +1310,8 @@ input:checked + .switch-slider:before {
 
 .context-separator {
     width: auto;
-    border: 1px solid var(--bd); 
+    border: 1px solid var(--bd);
+    margin-top: 5px;
 }
 
 .warning-message {
@@ -1482,4 +1548,16 @@ input:checked + .switch-slider:before {
 
 #changelog li:hover {
     background: transparent;
+}
+
+.drag-border {
+    margin-left: 192px;
+    height: calc(100% - 173px);
+    width: calc(100% - 209px);
+    position: fixed;
+    border: dashed 2px var(--hl-txt);
+    z-index: 10;
+    pointer-events: none;
+    display: none;
+    background: var(--hl-op);
 }
