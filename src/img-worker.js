@@ -1,35 +1,44 @@
 onmessage = function(e) {
     var albumArt;
     var base64String = '';
-    var newFileChosen = e.data;
+    var newFileChosen = e.data[0];
     var tmpFile;
     var dataUrl;
     var id3 = require('jsmediatags');
+    let tmp = require('tmp');
+    let fs = require('fs-extra');
+    let tmpobj = e.data[1];
     new id3.Reader(newFileChosen)
     .setTagsToRead(['picture'])
     .read({
         onSuccess: function (tag) {
-            if (tag.tags.picture) {
-                for (var i = 0; i < tag.tags.picture.data.length; i++) {
-                    base64String += String.fromCharCode(tag.tags.picture.data[i]);
-                }
-                dataUrl = 'data:' + tag.tags.picture.format + ';base64,' + btoa(base64String);
-                if (process.platform == 'linux') {
-                    tmpFile = tmp.tmpNameSync({
-                        template: 'tmp-XXXXXX'
-                    });
-                    fs.writeFile(`${tmpobj.name}/${tmpFile}.jpg`, btoa(base64String), 'base64', function (err) {
-                        if (err) console.error(err);
-                        albumArt = `${tmpobj.name}/${tmpFile}.jpg`;
-                    })
+            new Promise((resolve) => {
+                if (tag.tags.picture) {
+                    for (var i = 0; i < tag.tags.picture.data.length; i++) {
+                        base64String += String.fromCharCode(tag.tags.picture.data[i]);
+                    }
+                    dataUrl = 'data:' + tag.tags.picture.format + ';base64,' + btoa(base64String);
+                    if (process.platform == 'linux') {
+                        tmpFile = tmp.tmpNameSync({
+                            template: 'tmp-XXXXXX'
+                        });
+                        fs.writeFile(`${tmpobj}/${tmpFile}.jpg`, btoa(base64String), 'base64', function (err) {
+                            if (err) console.error(err);
+                            albumArt = `${tmpobj}/${tmpFile}.jpg`;
+                            resolve(true)
+                        })
+                    } else {
+                        albumArt = dataUrl;
+                        resolve(true)
+                    }
                 } else {
-                    albumArt = dataUrl;
+                    albumArt = null;
+                    resolve(true);
                 }
-            } else {
-                albumArt = null;
-            }
-            postMessage(albumArt);
-            id3 = null;
+            }).then(() => {
+                postMessage(albumArt);
+                id3 = null;
+            });
         },
         onError: function (tag) {
             postMessage(null);

@@ -99,11 +99,13 @@ let ver = require('../package.json').version;
 const chokidar = require('chokidar');
 const md = require('markdown-it')();
 
+let prerelease = true;
+
 function isDev() {
     return process.mainModule.filename.indexOf('app.asar') === -1;
 }
 
-if (isDev()) {
+if (isDev() || prerelease == true) {
     ver = ver + " DEV";
     $('#openDevTools').show();
 }
@@ -320,6 +322,7 @@ if (process.platform === 'linux') {
     $('.cover-top').css({
         top: '-20px'
     });
+    $('.drag-border').css('height', 'calc(100% - 143px)');
 }
 
 if (process.platform === 'darwin') {
@@ -1922,7 +1925,7 @@ function getSongInfo() {
     }
     ipc.send('tag-info', tagInfo)
     imgWorker = new Worker('./img-worker.js');
-    imgWorker.postMessage(newFileChosen);
+    imgWorker.postMessage([newFileChosen, tmpobj.name]);
     imgWorker.onmessage = function (e) {
         if (readingNewSong == true) return;
         readingNewSong = true;
@@ -1933,12 +1936,14 @@ function getSongInfo() {
                 document.getElementById('songPictureBlur').style.background = 'url(../assets/no_image_light.svg)';
                 albumArt = '../assets/no_image_light.svg';
                 dataUrl = '../../assets/no_image_light.svg';
+                img = `${app.getAppPath()}/assets/no_image_light.png`;
                 readingNewSong = false;
             } else {
                 document.getElementById('songPicture').style.background = 'url(../assets/no_image.svg)';
                 document.getElementById('songPictureBlur').style.background = 'url(../assets/no_image.svg)';
                 albumArt = '../assets/no_image.svg';
                 dataUrl = '../../assets/no_image.svg';
+                img = `${app.getAppPath()}/assets/no_image.png`;
                 readingNewSong = false;
             }
         } else {
@@ -1946,6 +1951,20 @@ function getSongInfo() {
             document.getElementById('songPictureBlur').style.background = `url(${img})`;
             readingNewSong = false;
             dataUrl = img;
+        }
+        if (process.platform == 'linux') {
+            document.getElementById('songPicture').style.background = `url(${img})`
+            document.getElementById('songPictureBlur').style.background = `url(${img})`;
+            readingNewSong = false;
+            dataUrl = img;
+            mprisPlayer.metadata = {
+                'xesam:title': Title,
+                'xesam:artist': artist,
+                'xesam:album': album,
+                'mpris:trackid': mprisPlayer.objectPath('track/0'),
+                'mpris:artUrl': img
+            };
+            mprisPlayer.playbackStatus = 'Playing';
         }
         tagInfo = {
             'title': Title,
