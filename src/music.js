@@ -96,7 +96,6 @@ var ipc = require('electron').ipcRenderer;
 const drpc = require('discord-rpc');
 const settings = require('electron-settings')
 let ver = require('../package.json').version;
-const chokidar = require('chokidar');
 const md = require('markdown-it')();
 
 let prerelease = true;
@@ -163,19 +162,6 @@ if (settings.has('button-style') == false) {
     buttonStyleSelect('new')
 } else {
     buttonStyleSelect(settings.get('button-style'))
-}
-
-if (settings.has('audio-effects') == false) {
-    settings.set('audio-effects', false);
-    $('#effectsButton').hide();
-}
-
-if (settings.has('auto-refresh') == false) {
-    settings.set('auto-refresh', false);
-}
-
-if (settings.get('audio-effects') == true) {
-    $('#effectsButton').show();
 }
 
 let clientId = '586510014211031040';
@@ -567,69 +553,6 @@ $('#deleteFromLibrary').click(() => {
 let newList;
 let list;
 let working = false;
-
-function watcherAdd(f) {
-    console.log('WATCHER ADD FOR FILE ' + f)
-    working = true;
-    new Promise((resolve) => {
-        new id3.Reader(f)
-            .setTagsToRead(['title', 'artist', 'album'])
-            .read({
-                onSuccess: function (tag) {
-                    songData = {
-                        'title': tag.tags.title,
-                        'artist': tag.tags.artist,
-                        'album': tag.tags.album
-                    }
-                    resolve(songData);
-                },
-                onError: function (err) {
-                    resolve('{}');
-                }
-            })
-    }).then((i) => {
-        for (i = 0; i < fileextentions.length; i++) {
-            let ext = f.split(".").pop() === fileextentions[i];
-            if (ext == true) break;
-            if (i + 1 == fileextentions.length) {
-                return;
-            }
-        };
-        songMetadata[f] = i
-        fs.writeJsonSync(`${app.getPath('userData')}/library.json`, songMetadata);
-        console.log('Finished adding to library!');
-        $('.list-wrapper').html('Loading...');
-        listFiles();
-
-    });
-}
-
-function unlinkFile(path) {
-    console.log('WATCHER UNLINK FOR FILE ' + path)
-    working = true;
-    for (let i = 0; i < fileextentions.length; i++) {
-        let ext = path.split(".").pop() === fileextentions[i];
-        if (ext == true) break;
-        if (i + 1 == fileextentions.length) {
-            return;
-        }
-    };
-    delete songMetadata[path];
-    fs.writeJsonSync(`${app.getPath('userData')}/library.json`, songMetadata);
-    console.log('Finished removing from library!');
-    $('.list-wrapper').html('Loading...');
-    listFiles()
-}
-
-if (settings.get('auto-refresh') == true) {
-    const watcher = chokidar.watch(directories, {
-        persistent: true,
-        ignoreInitial: true
-    });
-
-    watcher.on('add', path => watcherAdd(path));
-    watcher.on('unlink', path => unlinkFile(path));
-}
 
 function listFiles() {
     reloading = false;
@@ -1158,7 +1081,6 @@ function restartMenuSwitch() {
 let subMenuList = {
     'appearanceSubButton': 'appearanceSubmenu',
     'aboutSubButton': 'aboutSubmenu',
-    'experimentSubButton': 'experimentSubmenu',
     'generalSubButton': 'generalSubmenu',
     'changelogSubButton': 'changelogSubmenu'
 }
@@ -1166,7 +1088,6 @@ let subMenuList = {
 let linkBack = {
     'appearanceSubmenu': 'menuMain',
     'aboutSubmenu': 'menuMain',
-    'experimentSubmenu': 'generalSubmenu',
     'generalSubmenu': 'menuMain',
     'changelogSubmenu': 'aboutSubmenu'
 }
@@ -1175,36 +1096,11 @@ let menuTitle = {
     'menuMain': 'Settings',
     'appearanceSubmenu': 'Appearance',
     'aboutSubmenu': 'About',
-    'experimentSubmenu': 'Experiments',
     'generalSubmenu': 'General',
     'changelogSubmenu': 'Changelog'
 }
 
 let licenseInfo = "This project is under the terms of the GNU General Public Licence (v.3.0)"
-
-let experimentSettings = [{
-    info: {
-        title: 'Experiments'
-    },
-    controls: [{
-            customHTML: '<div style="word-break: normal; font-size: 14px; white-space: normal;"><span style="font-weight: bold">WARNING: </span>These features are experimental/incomplete and may break at anytime. Proceed with caution!</div>'
-        },
-        {
-            switch: {
-                title: 'Auto-refresh list',
-                desc: "Automatically refreshes list when a song is added, changed or removed",
-                id: 'autoRefreshToggle'
-            }
-        },
-        {
-            switch: {
-                title: 'Audio Effects',
-                desc: "Adds a panel to control audio effects.",
-                id: 'audioEffectsToggle'
-            }
-        }
-    ]
-}]
 
 let aboutSettings = [{
     info: {
@@ -1349,13 +1245,7 @@ let generalSettings = [{
     info: {
         title: 'General'
     },
-    controls: [{
-            subButton: {
-                title: 'Experiments',
-                id: 'experimentSubButton',
-                icon: 'bug_report'
-            }
-        },
+    controls: [
         {
             switch: {
                 title: 'Discord Rich Presence',
@@ -1404,7 +1294,6 @@ let settingsMenu = [{
 let settingsPage = {
     'appearanceSubButton': appearanceSettings,
     'aboutSubButton': aboutSettings,
-    'experimentSubButton': experimentSettings,
     'generalSubButton': generalSettings,
     'changelogSubButton': changelogSettings
 }
@@ -1513,12 +1402,6 @@ function createSettingsMenu(e, o) {
         if (settings.get('discordrpc') == true) {
             $('#discordToggle').prop('checked', true);
         }
-        if (settings.get('audio-effects') == true) {
-            $('#audioEffectsToggle').prop('checked', true);
-        }
-        if (settings.get('auto-refresh') == true) {
-            $('#autoRefreshToggle').prop('checked', true);
-        }
         switches.forEach((f, i) => {
             $(`#${f}`).click(() => {
                 window[f]();
@@ -1622,16 +1505,6 @@ function buttonStyleSelect(i) {
     $('button').removeClass(buttonRemove);
     $('button').addClass(i);
     settings.set('button-style', i)
-}
-
-function autoRefreshToggle() {
-    if (settings.get('auto-refresh') == true) {
-        settings.set('auto-refresh', false)
-    } else {
-        settings.set('auto-refresh', true);
-    }
-    $('.restart-container').css('bottom', 0);
-    restartRequired = true;
 }
 
 function navOpen() {
