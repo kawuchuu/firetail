@@ -667,7 +667,14 @@ function forEachFile(f, i) {
     } else {
         fileName = fileName.substr(fileName.lastIndexOf('/') + 1);
     }
-    $(`#${tab}Page .list-wrapper`).append(`<li draggable="true" class="results-link" id="${i}"><i class="material-icons play-pause" style="opacity: 0;">play_arrow</i><p class="new-song-title">${fileName}`);
+    let songInfo = songMetadata[f];
+    let title = songInfo.title;
+    let artist = songInfo.artist;
+    let songArtTitle = `${artist} - ${title}`
+    if (!artist || !title) {
+        songArtTitle = fileName;
+    }
+    $(`#${tab}Page .list-wrapper`).append(`<li draggable="true" class="results-link" id="${i}"><i class="material-icons play-pause" style="opacity: 0;">play_arrow</i><p class="new-song-title">${songArtTitle}`);
     $(`#${i} p`).dblclick(function () {
         shuffleCheck = false;
         if (shuffleEnabled == true) {
@@ -1764,6 +1771,7 @@ let readingNewSong = false;
 let imgWorker;
 
 function getSongInfo() {
+    if (process.platform == 'linux') clearTempFiles();
     if (theme == 'light') {
         document.getElementById('songPicture').style.background = 'url(../assets/no_image_light.svg)';
         document.getElementById('songPictureBlur').style.background = 'url(../assets/no_image_light.svg)';
@@ -1835,7 +1843,7 @@ function getSongInfo() {
                 'xesam:artist': artist,
                 'xesam:album': album,
                 'mpris:trackid': mprisPlayer.objectPath('track/0'),
-                'mpris:artUrl': img
+                'mpris:artUrl': `file://${img}`
             };
             mprisPlayer.playbackStatus = 'Playing';
         }
@@ -2143,10 +2151,6 @@ function clearTempFiles() {
             });
         }
     });
-}
-
-if (process.platform == 'linux') {
-    setInterval(clearTempFiles, 60000);
 }
 
 function appExit() {

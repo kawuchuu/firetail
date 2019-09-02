@@ -1,9 +1,18 @@
-## 0.4.0
+## 0.4.0 (pre-release)
+**IMPLEMENTED:**
 - New library management system (iTunes-like)
-- Reset library buttons
 - Forward / reverse 10 seconds using arrow keys
 - Effects panel works again
 - Minor UI tweaks
+- MPRIS works again for Linux systems
+
+**IN DEVELOPMENT:**
+- Song list now displays information about each song such as artist, album and song name instead of the file name
+
+**PLANNED:**
+- Re-introduce playlists
+- Implement artist / albums tabs
+- Support Media Controls for Windows
 
 ## 0.3.1
 - Huge amount of bug fixes
