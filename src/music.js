@@ -80,9 +80,11 @@ let gain;
 let theme = 'dark';
 let menuOpen = false;
 let noSong = false;
-let remote = require('electron').remote;
+const remote = require('electron').remote;
 let bgImage;
 let fName;
+let runonce = false;
+let firstrun = true;
 const {
     globalShortcut,
     dialog,
@@ -92,10 +94,10 @@ const path = require('path');
 const os = require('os');
 const fs = require('fs-extra');
 const id3 = require('jsmediatags');
-var ipc = require('electron').ipcRenderer;
+const ipc = require('electron').ipcRenderer;
 const drpc = require('discord-rpc');
 const settings = require('electron-settings')
-let ver = require('../package.json').version;
+let ver = app.getVersion();
 const md = require('markdown-it')();
 
 let prerelease = true;
@@ -144,6 +146,10 @@ if (settings.get('mini-player-bg') == false) {
     ipc.send('mini-bg', false);
 }
 
+if (settings.has('sidemenu') == false) {
+    settings.set('sidemenu', false);
+}
+
 if (settings.has('icon-style') == false) {
     settings.set('icon-style', 'filled');
 } else {
@@ -157,11 +163,12 @@ if (settings.has('colour-accent') == false) {
     colouraccentSelect(settings.get('colour-accent'))
 }
 
-if (settings.has('button-style') == false) {
-    settings.set('button-style', 'new');
-    buttonStyleSelect('new')
-} else {
-    buttonStyleSelect(settings.get('button-style'))
+if (settings.has('last-song') == false) {
+    settings.set('last-song', null);
+}
+
+if (settings.has('last-song-time') == false) {
+    settings.set('last-song-time', null);
 }
 
 let clientId = '586510014211031040';
@@ -211,27 +218,31 @@ if (settings.get('discordrpc') == true) {
 }
 
 if (process.platform == 'linux') {
-    mprisPlayer.on('playpause', () => {
-        resumeButton()
-    });
-    mprisPlayer.on("play", () => {
-        resumeButton();
-    });
-    mprisPlayer.on("pause", () => {
-        resumeButton();
-    });
-    mprisPlayer.on("next", () => {
-        nextSong();
-    })
-    mprisPlayer.on("previous", () => {
-        previousSong();
-    })
-    mprisPlayer.canPlay = false;
-    mprisPlayer.canPause = false;
-    mprisPlayer.canControl = false;
-    mprisPlayer.canGoNext = false;
-    mprisPlayer.canGoPrevious = false;
-    mprisPlayer.canSeek = false;
+    try {
+        mprisPlayer.on('playpause', () => {
+            resumeButton()
+        });
+        mprisPlayer.on("play", () => {
+            resumeButton();
+        });
+        mprisPlayer.on("pause", () => {
+            resumeButton();
+        });
+        mprisPlayer.on("next", () => {
+            nextSong();
+        })
+        mprisPlayer.on("previous", () => {
+            previousSong();
+        })
+        mprisPlayer.canPlay = false;
+        mprisPlayer.canPause = false;
+        mprisPlayer.canControl = false;
+        mprisPlayer.canGoNext = false;
+        mprisPlayer.canGoPrevious = false;
+        mprisPlayer.canSeek = false;
+    } catch(err) {
+        '*poop* uh oh'
+    }
 }
 
 ipc.on('playpause', (event, arg) => {
@@ -281,7 +292,7 @@ if (process.platform === 'win32') {
 if (process.platform === 'linux') {
     $('.title-bar').hide();
     $('.app-content').css({
-        marginTop: '30px'
+        marginTop: '0'
     });
     $('.top-bar').css({
         top: '0'
@@ -293,7 +304,7 @@ if (process.platform === 'linux') {
         top: '0'
     });
     $('#songsPage').css({
-        height: 'calc(100% - 140px)'
+        height: 'calc(100% - 138px)'
     });
     $('.menu').css({
         top: 0,
@@ -468,6 +479,7 @@ let songMetadata = {};
 let songData = {}
 let tab = 'songs';
 let directories = [`${os.homedir}/Music/Audiation`];
+let touch = false;
 
 function readdir(dir, cb) {
     fs.readdir(dir, function (err, files) {
@@ -481,6 +493,17 @@ function join(dir) {
     };
 }
 
+window.addEventListener('touchstart', () => {
+    touch = true;
+    $('li.results-link').addClass('nohover');
+})
+
+window.addEventListener('touchend', () => {
+    setTimeout(() => {
+        touch = false;
+    },5)
+})
+
 function removeLoader() {
     $('#loadCover').css({
         opacity: 0
@@ -491,7 +514,7 @@ function removeLoader() {
     setTimeout(function () {
         $('#loadCover').hide();
         document.body.style.cursor = 'default';
-    }, 250)
+    }, 250);
 }
 
 let dragList = document.querySelector(".list-wrapper");
@@ -603,6 +626,10 @@ function listFiles() {
                 a.forEach((f, i) => {
                     forEachFile(f, i);
                 })
+                firstrun = false;
+                if (settings.get('sidemenu') == true) {
+                    $('#playType, li.results-link').addClass('closed');
+                }
                 shuffleOrder = shuffle(allFilesList);
                 allFilesList = fileSongListStore;
                 shuffleOrder.forEach((f, i) => {
@@ -623,14 +650,13 @@ function listFiles() {
                 }
                 iconStyleSelect(settings.get('icon-style'))
                 removeLoader();
-
             })
         }
     })
 }
 
 function forEachFile(f, i) {
-    function playSong() {
+    function playSong(e) {
         currentSongPlaying = i;
         highlightSong = i;
         songActiveReset();
@@ -653,7 +679,11 @@ function forEachFile(f, i) {
                     audioStop();
                 }
                 $('#pauseButton').text('pause')
-                findSong();
+                if (e == false) {
+                    findSong(false);
+                } else {
+                    findSong();
+                }
                 songActive();
             }
         })
@@ -676,6 +706,16 @@ function forEachFile(f, i) {
     }
     $(`#${tab}Page .list-wrapper`).append(`<li draggable="true" class="results-link" id="${i}"><i class="material-icons play-pause" style="opacity: 0;">play_arrow</i><p class="new-song-title">${songArtTitle}`);
     $(`#${i} p`).dblclick(function () {
+        if (touch) return; 
+        shuffleCheck = false;
+        if (shuffleEnabled == true) {
+            shuffleCheck = true;
+            shuffleEnableFirst = true;
+        }
+        playSong();
+    });
+    $(`#${i} p`).click(function () {
+        if (!touch) return; 
         shuffleCheck = false;
         if (shuffleEnabled == true) {
             shuffleCheck = true;
@@ -722,6 +762,12 @@ function forEachFile(f, i) {
         event.preventDefault()
         ipc.send('ondragstart', null);
     }
+    if (firstrun == true) {
+        if (settings.get('last-song') == f) {
+            runonce = true;
+            playSong(false);
+        }
+    }
 }
 
 listFiles();
@@ -749,7 +795,14 @@ $('#refreshFiles').click(function () {
     }
 });
 
+let waitSpam;
+
 function previousSong() {
+    if (waitSpam == true) return;
+    waitSpam = true;
+    setTimeout(() => {
+        waitSpam = false;
+    }, 100);
     if (noSong == true) {
         currentSongPlaying = 0;
         highlightSong = 0;
@@ -809,6 +862,11 @@ function previousSong() {
 }
 
 function nextSong() {
+    if (waitSpam == true) return;
+    waitSpam = true;
+    setTimeout(() => {
+        waitSpam = false;
+    }, 100);
     shuffleCheck = false;
     if (currentlyPlaying === true) {
         audioStop();
@@ -947,7 +1005,7 @@ $('#shuffleButton').click(function () {
 })
 
 $('.tb-close').click(function () {
-    appExit();
+    window.close();
 });
 
 $('.tb-close').mouseover(() => {
@@ -1036,6 +1094,10 @@ window.onkeydown = function (e) {
 
 document.addEventListener("keydown", function (e) {
     switch (e.which) {
+        case 82:
+            if (e.ctrlKey == true) {
+                reload = true;
+            }
         case 32:
             if (currentlyPlaying) {
                 resumeButton();
@@ -1085,259 +1147,87 @@ function restartMenuSwitch() {
     }, 200)
 }
 
-let subMenuList = {
-    'appearanceSubButton': 'appearanceSubmenu',
-    'aboutSubButton': 'aboutSubmenu',
-    'generalSubButton': 'generalSubmenu',
-    'changelogSubButton': 'changelogSubmenu'
-}
+$('#closeSidemenu').click(() => {
+    if (settings.get('sidemenu') == false) {
+        $('#playType, li.results-link').addClass('closed');
+        settings.set('sidemenu', true);
+    } else {
+        $('#playType, li.results-link').removeClass('closed');
+        settings.set('sidemenu', false);
+    }
+})
 
-let linkBack = {
-    'appearanceSubmenu': 'menuMain',
-    'aboutSubmenu': 'menuMain',
-    'generalSubmenu': 'menuMain',
-    'changelogSubmenu': 'aboutSubmenu'
-}
+let getSettings;
+let generalSettings;
+let appearanceSettings;
+let aboutSettings;
+let changelogSettings;
+let opensourceSettings;
+let settingsMenu;
+let subMenuList
+let linkBack
+let menuTitle
+let settingsPage
+let selectOptions;
+let settingsListGet = {};
 
-let menuTitle = {
-    'menuMain': 'Settings',
-    'appearanceSubmenu': 'Appearance',
-    'aboutSubmenu': 'About',
-    'generalSubmenu': 'General',
-    'changelogSubmenu': 'Changelog'
-}
+fs.readJSON('src/settingsconfig.json', (err, file) => {
+    getSettings = file;
+    settingsMenu = getSettings.settingsMenu;
+    generalSettings = getSettings.generalSettings;
+    appearanceSettings = getSettings.appearanceSettings;
+    aboutSettings = getSettings.aboutSettings;
+    aboutSettings[0].controls[0].customHTML = `<div class="about-firetail"><img draggable="false" src="../assets/icon.png"><div class="about-name"><div class="name-ver"><h2>Firetail</h2><div class="about-ver">${ver}</div></div><div class="about-others"><div>Copyright &copy; projsh_ 2019</div><div>This project is under the terms of the GNU General Public Licence (v.3.0)`
+    changelogSettings = getSettings.changelogSettings;
+    opensourceSettings = getSettings.opensourceSettings;
+    subMenuList = {
+        'appearanceSubButton': 'appearanceSubmenu',
+        'aboutSubButton': 'aboutSubmenu',
+        'generalSubButton': 'generalSubmenu',
+        'changelogSubButton': 'changelogSubmenu',
+        'opensourceSubButton': 'opensourceSubmenu'
+    }
+    linkBack = {
+        'appearanceSubmenu': 'menuMain',
+        'aboutSubmenu': 'menuMain',
+        'generalSubmenu': 'menuMain',
+        'changelogSubmenu': 'aboutSubmenu',
+        'opensourceSubmenu': 'aboutSubmenu'
+    }
+    menuTitle = {
+        'menuMain': 'Settings',
+        'appearanceSubmenu': 'Appearance',
+        'aboutSubmenu': 'About',
+        'generalSubmenu': 'General',
+        'changelogSubmenu': 'Changelog',
+        'opensourceSubmenu': 'Open Source Software'
+    }
+    settingsPage = {
+        'appearanceSubButton': appearanceSettings,
+        'aboutSubButton': aboutSettings,
+        'generalSubButton': generalSettings,
+        'changelogSubButton': changelogSettings,
+        'opensourceSubButton': opensourceSettings
+    }
+    selectOptions = {
+        'iconStyleSelect': 'icon-style',
+        'colouraccentSelect': 'colour-accent',
+        'themeSelect': 'theme'
+    }
+});
 
-let licenseInfo = "This project is under the terms of the GNU General Public Licence (v.3.0)"
-
-let aboutSettings = [{
-    info: {
-        title: 'About'
-    },
-    controls: [{
-            customHTML: `<div class="about-firetail"><img draggable="false" src="../assets/icon.png"><div class="about-name"><div class="name-ver"><h2>Firetail</h2><div class="about-ver">v.${ver}</div></div><div class="about-others"><div>Copyright &copy; projsh_ 2019</div><div>${licenseInfo}`
-        },
-        {
-            subButton: {
-                title: 'Changelog',
-                id: 'changelogSubButton',
-                icon: 'notes'
-            }
-        }
-    ]
-}]
-
-let changelogSettings = [{
-    info: {
-        title: 'Changelog'
-    },
-    controls: [{
-        customHTML: `<div id="changelog"></div>`
-    }]
-}]
-
-let appearanceSettings = [{
-    info: {
-        title: 'Appearance'
-    },
-    controls: [{
-            select: {
-                title: 'Theme',
-                desc: "Sets theme to your choice.",
-                id: 'themeSelect',
-                options: [{
-                        option: {
-                            title: 'Dark',
-                            value: 'dark'
-                        }
-                    },
-                    {
-                        option: {
-                            title: 'Light',
-                            value: 'light'
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            select: {
-                title: 'Colour Accent',
-                desc: 'Sets colour accent to your choice.',
-                id: 'colouraccentSelect',
-                options: [{
-                        option: {
-                            title: 'Firetail',
-                            value: 'firetail'
-                        }
-                    },
-                    {
-                        option: {
-                            title: 'Audiation',
-                            value: 'audiation'
-                        }
-                    },
-                    {
-                        option: {
-                            title: 'Nature',
-                            value: 'nature'
-                        }
-                    },
-                    {
-                        option: {
-                            title: 'Aqua',
-                            value: 'aqua'
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            select: {
-                title: 'Icon Style',
-                desc: 'Sets icon style to your choice',
-                id: 'iconStyleSelect',
-                options: [{
-                        option: {
-                            title: 'Filled',
-                            value: 'filled'
-                        }
-                    },
-                    {
-                        option: {
-                            title: 'Rounded',
-                            value: 'rounded'
-                        }
-                    },
-                    {
-                        option: {
-                            title: 'Outlined',
-                            value: 'outlined'
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            select: {
-                title: 'Button Style',
-                desc: 'Sets button style to your choice',
-                id: 'buttonStyleSelect',
-                options: [{
-                        option: {
-                            title: 'New',
-                            value: 'new'
-                        }
-                    },
-                    {
-                        option: {
-                            title: 'Old',
-                            value: 'old'
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            switch: {
-                title: 'Mini Player Background',
-                desc: "Sets mini player's background to the song's album art",
-                id: 'miniBgToggle',
-                toggled: true
-            }
-        }
-    ]
-}]
-
-let generalSettings = [{
-    info: {
-        title: 'General'
-    },
-    controls: [
-        {
-            switch: {
-                title: 'Discord Rich Presence',
-                desc: "Sets currently playing song as your Discord status",
-                id: 'discordToggle'
-            }
-        },
-        {
-            button: {
-                title: 'Reset Library',
-                desc: "Resets your library back to first install.",
-                id: 'resetLibrary'
-            }
-        }
-    ]
-}]
-
-let settingsMenu = [{
-    info: {
-        title: 'Settings'
-    },
-    controls: [{
-            subButton: {
-                title: 'General',
-                id: 'generalSubButton',
-                icon: 'settings'
-            }
-        },
-        {
-            subButton: {
-                title: 'Appearance',
-                id: 'appearanceSubButton',
-                icon: 'palette'
-            }
-        },
-        {
-            subButton: {
-                title: 'About',
-                id: 'aboutSubButton',
-                icon: 'info'
-            }
-        }
-    ]
-}]
-
-let settingsPage = {
-    'appearanceSubButton': appearanceSettings,
-    'aboutSubButton': aboutSettings,
-    'generalSubButton': generalSettings,
-    'changelogSubButton': changelogSettings
-}
-
-let selectOptions = {
-    'iconStyleSelect': 'icon-style',
-    'colouraccentSelect': 'colour-accent',
-    'themeSelect': 'theme',
-    'buttonStyleSelect': 'button-style'
-}
-
-function createSwitch(i) {
-    return `<div class="label-switch"><div><p>${i.title}</p><div class="switch-desc">${i.desc}</div></div><label class="switch"><input id="${i.id}" type="checkbox"><span class="switch-slider round"></span></label></div>`
-}
-
-function createSubmenuButton(i) {
-    return `<div class="menu-submenu-button" id="${i.id}"><div class="subbutton-name"><i class="material-icons material-icons-${settings.get('icon-style')}">${i.icon}</i><p>${i.title}</p></div><i class="material-icons">keyboard_arrow_right</i></div>`
-}
-
-function createSelectList(i) {
-    let addOption;
-    i.options.forEach((f) => {
-        let selected = '';
-        optionInfo = f.option;
-        if (selectOptions[i.id]) {
-            if (settings.get(selectOptions[i.id]) == optionInfo.value) {
-                selected = 'selected'
-            }
-        }
-        addOption += `<option ${selected} value="${optionInfo.value}">${optionInfo.title}</option>`
-    })
-    return `<div class="select-list" id="${i.id}List"><div><p>${i.title}</p><div class="switch-desc">${i.desc}</div></div><div class="select-container"><select id="${i.id}">${addOption}</select></div></div>`
-}
-
-function createRegularButton(i) {
-return `<div class="menu-regular-button" id="${i.id}"><div><p>${i.title}</p><div class="switch-desc">${i.desc}</div>`
-}
+$('.menu-bg').click(() => {
+    navClose();
+    setTimeout(() => {
+        $(`.menu-heading, .menu-arrow, .submenu-title, .mtitle-button`).removeClass('hidden');
+        $('.menu-list').removeClass('left');
+        $('.menu-list').addClass('right');
+        $('#menuMain').removeClass('right');
+        $('.menu-heading.main').text('Settings');
+        activeMenu = 'menuMain';
+        getSubId = 'menuMain';
+    }, 250);
+})
 
 let switches = [];
 let options = [];
@@ -1349,35 +1239,22 @@ function createSettingsMenu(e, o) {
     switches = [];
     options = [];
     new Promise((resolve) => {
-        e[0].controls.forEach((f, i) => {
-            let newControl;
-            let buttonType = Object.keys(f)[0];
-            switch (buttonType) {
-                case 'switch':
-                    newControl = createSwitch(e[0].controls[i].switch);
-                    switches.push(e[0].controls[i].switch.id)
-                    break;
-                case 'subButton':
-                    newControl = createSubmenuButton(e[0].controls[i].subButton);
-                    id = e[0].controls[i].subButton.id;
-                    break;
-                case 'customHTML':
-                    newControl = `<div class="customHTML">${e[0].controls[i].customHTML}</div>`;
-                    break;
-                case 'select':
-                    newControl = createSelectList(e[0].controls[i].select);
-                    break;
-                case 'button':
-                    newControl = createRegularButton(e[0].controls[i].button);
-                    switches.push(e[0].controls[i].button.id)
-            }
-            if (o) {
-                $(`#menuMain`).append(newControl);
+        let selectNames = Object.entries(selectOptions).map(e => [e[0]]);
+        for (let i = 0; i < Object.keys(selectOptions).length; i++) {
+            settingsListGet[selectOptions[selectNames[i]]] = settings.get(selectOptions[selectNames[i]]);
+        }
+        let settingsGenerate = new Worker('./settingspage.js');
+        settingsGenerate.postMessage([e, o, settings.get('icon-style'), selectOptions, settingsListGet]);
+        settingsGenerate.onmessage = function(g) {
+            if (g.data[2] == true) {
+                $(`#menuMain`).append(g.data[0]);
             } else {
-                $(`#${getSubId}`).append(newControl);
+                $(`#${getSubId}`).append(g.data[0]);
             }
-        })
-        resolve(e)
+            switches = g.data[1];
+            resolve(e);
+            settingsGenerate.terminate();
+        }
     }).then((e) => {
         $('.menu-submenu-button').click(function () {
             if (transition == true) return;
@@ -1392,13 +1269,16 @@ function createSettingsMenu(e, o) {
                 findMenu('next');
             }, 15)
         });
-        if (e[0].info.title == 'Changelog') {
-            fs.readFile(`${app.getAppPath()}/assets/changelog.md`, "UTF8", (err, data) => {
+        if (e[0].info.title == 'Changelog' || e[0].info.title == 'Open Source Software') {
+            let mdfile;
+            if (e[0].info.title == 'Changelog') mdfile = 'changelog';
+            if (e[0].info.title == 'Open Source Software') mdfile = 'ossoftware';
+            fs.readFile(`${app.getAppPath()}/assets/${mdfile}.md`, "UTF8", (err, data) => {
                 if (err) {
                     throw err
                 };
                 let result = md.render(data);
-                $('#changelog').append(result);
+                $(`#${mdfile}`).append(result);
             });
         }
         if (settings.get('mini-player-bg') == false) {
@@ -1497,21 +1377,6 @@ function colouraccentSelect(i) {
     $('html').attr('class', `${theme} ${i}`);
     settings.set('colour-accent', i)
     ipc.send('setting-change', ['colour-accent', i])
-}
-
-function buttonStyleSelect(i) {
-    let buttonRemove;
-    switch (i) {
-        case "new":
-            buttonRemove = 'old'
-            break;
-        case "old":
-            buttonRemove = 'new'
-            break;
-    }
-    $('button').removeClass(buttonRemove);
-    $('button').addClass(i);
-    settings.set('button-style', i)
 }
 
 function navOpen() {
@@ -1720,8 +1585,8 @@ function audioStop() {
 let firstPlay = true;
 let source;
 
-function findSong() {
-    if (imgWorker) imgWorker.terminate();
+function findSong(e) {
+    if (albumImg) albumImg.terminate();
     try {
         if (audio) {
             audio.removeEventListener('timeupdate', seekTimeUpdate);
@@ -1745,13 +1610,21 @@ function findSong() {
             }
             audio.currentTime = 0;
             audio.play();
+            if (e == false) {
+                resumeButton();
+            }
+            settings.set('last-song', newFileChosen)
             if (process.platform == 'linux') {
-                mprisPlayer.canPlay = true;
-                mprisPlayer.canPause = true;
-                mprisPlayer.canControl = true;
-                mprisPlayer.canGoNext = true;
-                mprisPlayer.canGoPrevious = true;
-                mprisPlayer.canSeek = true;
+                try {
+                    mprisPlayer.canPlay = true;
+                    mprisPlayer.canPause = true;
+                    mprisPlayer.canControl = true;
+                    mprisPlayer.canGoNext = true;
+                    mprisPlayer.canGoPrevious = true;
+                    mprisPlayer.canSeek = true;
+                } catch(err) {
+                    'stinky'
+                }
             }
         } catch (err) {
             throw err;
@@ -1760,6 +1633,7 @@ function findSong() {
         audio.volume = currentVol;
         seekBarTrack();
         toolbarPause();
+        settings.set('last-song-time', 0);
     } catch (err) {
         throw err;
     }
@@ -1768,7 +1642,7 @@ function findSong() {
 let img;
 let tagInfo;
 let readingNewSong = false;
-let imgWorker;
+let albumImg;
 
 function getSongInfo() {
     if (process.platform == 'linux') clearTempFiles();
@@ -1805,9 +1679,9 @@ function getSongInfo() {
         'art': dataUrl
     }
     ipc.send('tag-info', tagInfo)
-    imgWorker = new Worker('./img-worker.js');
-    imgWorker.postMessage([newFileChosen, tmpobj.name]);
-    imgWorker.onmessage = function (e) {
+    albumImg = new Worker('./albumart.js');
+    albumImg.postMessage([newFileChosen, tmpobj.name]);
+    albumImg.onmessage = function (e) {
         if (readingNewSong == true) return;
         readingNewSong = true;
         img = e.data;
@@ -1838,14 +1712,18 @@ function getSongInfo() {
             document.getElementById('songPictureBlur').style.background = `url(${img})`;
             readingNewSong = false;
             dataUrl = img;
-            mprisPlayer.metadata = {
-                'xesam:title': Title,
-                'xesam:artist': artist,
-                'xesam:album': album,
-                'mpris:trackid': mprisPlayer.objectPath('track/0'),
-                'mpris:artUrl': `file://${img}`
-            };
-            mprisPlayer.playbackStatus = 'Playing';
+            try {
+                mprisPlayer.metadata = {
+                    'xesam:title': Title,
+                    'xesam:artist': artist,
+                    'xesam:album': album,
+                    'mpris:trackid': mprisPlayer.objectPath('track/0'),
+                    'mpris:artUrl': `file://${img}`
+                };
+                mprisPlayer.playbackStatus = 'Playing';
+            } catch(err) {
+                'poop hahahahahahaha'
+            }
         }
         tagInfo = {
             'title': Title,
@@ -1854,7 +1732,7 @@ function getSongInfo() {
             'art': dataUrl
         }
         ipc.send('tag-info', tagInfo);
-        imgWorker.terminate();
+        albumImg.terminate();
     }
 }
 
@@ -1867,7 +1745,7 @@ let impulseData = [];
 function impulseGet() {
     convolver = audioCtx.createConvolver();
     let ajaxRequest = new XMLHttpRequest();
-    ajaxRequest.open('GET', '../assets/SteinmanHall.wav', true);
+    ajaxRequest.open('GET', '../assets/subway.wav', true);
     ajaxRequest.responseType = 'arraybuffer';
     ajaxRequest.onload = function () {
         impulseData = ajaxRequest.response;
@@ -1875,7 +1753,7 @@ function impulseGet() {
             let conBuffer = buffer;
             convolver.buffer = conBuffer;
             convolver.normalize = true;
-            convolverGain.gain.value = 5;
+            convolverGain.gain.value = 1;
             convolverGain.connect(convolver);
             convolver.connect(masterGain);
         });
@@ -1920,7 +1798,7 @@ $('#gainSwitch').click(() => {
 let gainInput = 1;
 $('#gainInput').change(function () {
     if ($(this).val() >= 100) $(this).val(100);
-    if ($(this).val() <= 0) $(this).val(0);
+    if ($(this).val() <= 0) $(this).val(1);
     gainInput = $(this).val();
     if (gainEnabled == true) {
         gain.gain.value = gainInput;
@@ -1929,8 +1807,8 @@ $('#gainInput').change(function () {
 
 let reverbInput = 1;
 $('#reverbInput').change(function () {
-    if ($(this).val() >= 100) $(this).val(100);
-    if ($(this).val() <= 0) $(this).val(0);
+    if ($(this).val() >= 100) $(this).val(10);
+    if ($(this).val() <= 0) $(this).val(1);
     reverbInput = $(this).val();
     convolverGain.gain.value = reverbInput;
 })
@@ -1978,7 +1856,7 @@ $('#libraryButton').click(() => {
     }
 }) */
 
-function resumeButton() {
+function resumeButton(f) {
     if (currentlyPlaying == false) {
         pauseButtonActive = true;
         currentSongPlaying = 0;
@@ -1998,7 +1876,11 @@ function resumeButton() {
             $('title').text('Firetail');
             toolbarPlay();
             if (process.platform == 'linux') {
-                mprisPlayer.playbackStatus = 'Paused';
+                try {
+                    mprisPlayer.playbackStatus = 'Paused';
+                } catch(err) {
+                    'poopies'
+                }
             }
             $('#songPicture').addClass('song-picture-decrease');
             $('#songPictureBlur').addClass('song-blur-hidden');
@@ -2020,7 +1902,11 @@ function resumeButton() {
             }
             toolbarPause();
             if (process.platform == 'linux') {
-                mprisPlayer.playbackStatus = 'Playing';
+                try {
+                    mprisPlayer.playbackStatus = 'Playing';
+                } catch(err) {
+                    'funny poopies alalalala hahaha'
+                }
             }
             $('#songPicture').removeClass('song-picture-decrease');
             $('#songPictureBlur').removeClass('song-blur-hidden');
@@ -2074,19 +1960,25 @@ $('#volumeButton').click(function () {
     }
 })
 
-function audioDuration() {
-    durationSongLength = parseInt(audio.duration);
-    durationMinutes = Math.floor(durationSongLength / 60);
-    durationSeconds = Math.floor(durationSongLength / 1);
-    while (durationSeconds >= 60) {
-        durationSeconds = durationSeconds - 60;
+function timeFormat(s) {
+    var min = Math.floor(s / 60);
+    var sec = Math.floor(s - (min * 60));
+    if (sec < 10){ 
+        sec = `0${sec}`;
     }
-    if (durationSeconds > -1 && durationSeconds < 10) {
-        durationSeconds = ('0' + durationSeconds).slice(-2);
-    }
+    return `${min}:${sec}`;
 }
 
+let duration;
+let timeNow;
+
 function seekTimeUpdate() {
+    if (isNaN(audio.duration) == true) {
+        document.getElementById('songDurationLength').innerHTML = `-:--`
+    } else {
+        duration = timeFormat(audio.duration);
+        document.getElementById('songDurationLength').innerHTML = duration
+    }
     let p = audio.currentTime / audio.duration;
     seekFillBar.style.width = p * 100 + '%';
     if (audio.currentTime === audio.duration) {
@@ -2101,26 +1993,11 @@ function seekTimeUpdate() {
         }
     }
     let songLength = parseInt(audio.currentTime);
-    minutes = Math.floor(songLength / 60);
-    seconds = Math.floor(songLength / 1);
-    while (seconds >= 60) {
-        seconds = seconds - 60;
-    }
-    if (seconds > -1 && seconds < 10) {
-        seconds = ('0' + seconds).slice(-2);
-    }
-    audioDuration();
-
-    document.getElementById('songDurationTime').innerHTML = `${minutes}:${seconds}`
-    document.getElementById('songDurationLength').innerHTML = `${durationMinutes}:${durationSeconds}`
-    if (isNaN(durationMinutes) == true) {
-        document.getElementById('songDurationLength').innerHTML = `-:--`
-        durationMinutes = '-'
-        durationSeconds = '--'
-    }
+    timeNow = timeFormat(songLength);
+    document.getElementById('songDurationTime').innerHTML = timeNow
     let seekTimeMini = {
-        'currentTimeString': `${minutes}:${seconds}`,
-        'songDurationString': `${durationMinutes}:${durationSeconds}`,
+        'currentTimeString': timeNow,
+        'songDurationString': duration,
         'currentTimeValue': audio.currentTime,
         'songDurationValue': audio.duration
     }
@@ -2157,26 +2034,48 @@ function appExit() {
     if (process.platform == 'linux') {
         clearTempFiles()
         setTimeout(() => {
-            app.quit();
+            app.exit();
         }, 500)
     } else {
-        app.quit();
+        app.exit();
     }
 }
 
+let reload = false;
+
 window.onbeforeunload = (i) => {
-    if (pauseButtonActive == false) {
-        resumeButton()
-    }
-    if (process.platform == 'linux') {
-        appExit();
+    settings.set('last-song-time', audio.currentTime);
+    if (reload == true) {
+        location.reload();
+    } else {
+        remote.getCurrentWindow().minimize();
+        setTimeout(() => {
+            remote.getCurrentWindow().hide();
+        }, 150)
+        i.returnValue = false;    
     }
 }
+
 let seekP;
 let volP;
 
+ipc.on('exit-time', () => {
+    if (currentlyPlaying) {
+        ipc.send('last-song-time', audio.currentTime);
+    } else {
+        ipc.send('last-song-time');
+    }
+})
+
 function seekBarTrack() {
     audio.addEventListener('timeupdate', seekTimeUpdate);
+    if (runonce == true) {
+        audio.currentTime = settings.get('last-song-time')
+        duration = timeFormat(audio.duration);
+        seekFillBar.style.width = seekP * 100 + '%';
+        document.querySelector('#songDurationTime').innerHTML = duration;
+        runonce = false
+    }
 }
 
 function clamp(min, val, max) {
@@ -2195,18 +2094,32 @@ function volGetP(e) {
     return volP;
 }
 
-seekBarWrapper.addEventListener('mousedown', function (e) {
+function mousetouchdown(e) {
     if (currentlyPlaying === true) {
+        if (e.touch) {
+            e = e.touches[0]
+        }
         seekMouseDown = true;
         seekP = seekGetP(e);
         seekFillBar.style.width = seekP * 100 + '%';
         audio.removeEventListener('timeupdate', seekTimeUpdate);
         $('#seekHandle').addClass('handle-hover');
     }
+}
+
+seekBarWrapper.addEventListener('mousedown', function (e) {
+    mousetouchdown(e);
 });
 
-volWrapper.addEventListener('mousedown', function (e) {
+seekBarWrapper.addEventListener('touchstart', function (e) {
+    mousetouchdown(e);
+});
+
+function voltouchmousedown(e) {
     if (currentlyPlaying === true) {
+        if (e.touches) {
+            e = e.touches[0]
+        }
         volMouseDown = true;
         volP = volGetP(e);
         volFillBar.style.width = volP * 100 + '%';
@@ -2220,12 +2133,23 @@ volWrapper.addEventListener('mousedown', function (e) {
         }
         muteSaveVol = audio.volume;
     }
+}
+
+volWrapper.addEventListener('mousedown', function (e) {
+    voltouchmousedown(e)
 })
 
-window.addEventListener('mousemove', function (e) {
+volWrapper.addEventListener('touchstart', function (e) {
+    voltouchmousedown(e)
+})
+
+function mousetouchmove(e) {
     if (seekMouseDown == false && volMouseDown == false) return;
     if (currentlyPlaying === true) {
         if (seekMouseDown == true) {
+            if (e.touches) {
+                e = e.touches[0]
+            }
             seekP = seekGetP(e);
             seekFillBar.style.width = seekP * 100 + '%';
             minutes = Math.floor((seekP * audio.duration) / 60);
@@ -2239,26 +2163,45 @@ window.addEventListener('mousemove', function (e) {
             $('#songDurationTime').html(`${minutes}:${seconds}`);
         }
         if (volMouseDown == true) {
+            if (e.touches) {
+                e = e.touches[0]
+            }
             volP = volGetP(e);
             volFillBar.style.width = volP * 100 + '%';
             audio.volume = volP * 1
             currentVol = audio.volume;
         }
     }
+}
+
+window.addEventListener('mousemove', function (e) {
+    $('li.results-link').removeClass('nohover');
+    mousetouchmove(e)
 });
 
-window.addEventListener('mouseup', function (e) {
+window.addEventListener('touchmove', function (e) {
+    mousetouchmove(e)
+});
+
+function mousetouchup(e) {
     if (seekMouseDown == false && volMouseDown == false) return;
     if (currentlyPlaying === true) {
         if (seekMouseDown == true) {
+            if (e.changedTouches) {
+                e = e.changedTouches[0]
+            }        
             seekMouseDown = false;
             seekP = seekGetP(e);
             seekFillBar.style.width = seekP * 100 + '%';
             audio.currentTime = seekP * audio.duration;
+            settings.set('last-song-time', audio.currentTime);
             seekBarTrack();
             $('#seekHandle').removeClass('handle-hover');
         }
         if (volMouseDown == true) {
+            if (e.touches) {
+                e = e.touches[0]
+            }
             if (audio.volume == 0) {
                 isMuted = true
                 $('#volumeButton').text('volume_off');
@@ -2277,4 +2220,12 @@ window.addEventListener('mouseup', function (e) {
             $('#volHandle').removeClass('handle-hover');
         }
     }
+}
+
+window.addEventListener('mouseup', function (e) {
+    mousetouchup(e);
+});
+
+window.addEventListener('touchend', function (e) {
+    mousetouchup(e);
 });

@@ -9,6 +9,11 @@
     src: url('../assets/Dosis-Bold.otf') format('opentype')
 }
 
+@font-face {
+    font-family: 'Questrial';
+    src: url('../assets/Questrial-Regular.ttf') format('truetype');
+}
+
 html, body {
     margin: 0;
     background: var(--bg);
@@ -158,8 +163,9 @@ h1.header-heading {
     display: inline-block;
     width: 35px;
     text-align: center;
-    margin: 0 10px 0 0;
+    margin: 0 7px 0 10px;
     filter: brightness(var(--logo));
+    transform: translateY(-3px);
 }
 
 #betaTag {
@@ -176,8 +182,9 @@ h1.header-heading {
 }
 
 .icon-text {
-    font-weight: bold;
+    font-family: 'Questrial';
     font-size: 20px;
+    font-weight: bold;
 }
 
 .logo-bottom {
@@ -186,7 +193,7 @@ h1.header-heading {
     display: flex;
     align-items: center;
     height: 40px;
-    top: 35px;
+    top: 37px;
 }
 
 .header-beta {
@@ -208,7 +215,7 @@ button.new {
     height: 37px;
     padding: 0;
     border: 2px solid var(--bd);
-    border-radius: 7px;
+    border-radius: 10px;
     margin-top: 20px;
     margin-bottom: 10px;
     outline: none;
@@ -220,6 +227,7 @@ button.new {
     text-align: left;
     overflow: hidden;
     display: flex;
+    user-select: none;
 }
 
 button.old {
@@ -306,7 +314,7 @@ button.old.button-active {
 
 .fill {
     height: 4px;
-    background: var(--grad);
+    background: var(--hl-txt);
     border-radius: 10000px; 
     transition: .1s;
 }
@@ -314,7 +322,7 @@ button.old.button-active {
 .handle {
     width: 0px;
     height: 0px;
-    background: var(--handle);
+    background: var(--hl-txt);
     border-radius: 11111px;
     margin-left: -5px;
     transform: scale(1.5);
@@ -327,7 +335,7 @@ button.old.button-active {
 }
 
 .handle-hover {
-    background-color: var(--handle) !important;
+    background-color: var(--hl-txt) !important;
     width: 8px !important;
     height: 8px !important;
     transition: all .1s !important;
@@ -351,11 +359,11 @@ ul#songsPage {
     font-size: 22px;
     position: fixed;
     padding: 0;
-    height: calc(100% - 168px);
+    height: calc(100% - 170px);
     margin: 0;
     white-space: nowrap;
     background: var(--bg);
-    margin-top: 6px;
+    margin-top: 36px;
     width: 100%;
     overflow-y: scroll;
 }
@@ -365,13 +373,19 @@ li.results-link {
     overflow: hidden;
     position: relative;
     height: 35px;
-    margin-left: 192px;
+    margin-left: 202px;
     display: flex;
     align-items: center;
+    transition: .25s;
+    transition-property: margin-left;
 }
 
 li:hover {
     background: var(--li-hv);
+}
+
+li.nohover:hover {
+    background: none;
 }
 
 p.new-song-title {
@@ -385,7 +399,7 @@ p.new-song-title {
 
 div.new-nowplaying i {
     font-size: 26px;
-    margin: 0 12px 5px 12px;
+    margin: 0 12px 7px 12px;
     position: relative;
     cursor: pointer;
 }
@@ -395,9 +409,10 @@ div.new-nowplaying i {
     position: relative;
 }
 
-div.new-nowplaying i:hover {
+div.new-nowplaying i:hover, #closeSidemenu:hover {
     color: var(--hl-txt) !important;
     transform: scale(1.2);
+    cursor: pointer;
 }
 
 #newContent {
@@ -429,14 +444,27 @@ div.new-nowplaying i:hover {
     background: var(--fg-bg);
     border-right: 2px solid var(--bd);
     height: 100%;
-    width: 190px;
-    box-shadow: 1px 0px 20px rgba(0,0,0,.15);
+    width: 200px;
+    box-shadow: 1px 0px 5px rgba(0,0,0,.15);
+    transition: .25s;
+    transition-property: transform;
+}
+
+#playType.closed {
+    transform: translateX(-202px);
+}
+
+li.results-link.closed {
+    margin-left: 0;
 }
 
 .play-type-wrapper {
     height: calc(100% - 179px);
     overflow-y: auto;
     padding: 0 0 30px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .play-type-wrapper::-webkit-scrollbar {
@@ -444,8 +472,8 @@ div.new-nowplaying i:hover {
 }
 
 #playType button {
-    width: 150px;
-    margin-left: 20px;
+    width: 155px;
+    height: 40px;
 }
 
 .play-pause {
@@ -468,18 +496,16 @@ div.new-nowplaying i:hover {
 }
 
 .app-content {
-    margin-top: 60px;
+    margin-top: 32px;
     position: relative;
-    padding-bottom: 82px;
 }
 
 div.type-separator {
     width: 160px !important;
     height: 2px;
     background: var(--bd);
-    margin: 15px;
-    margin-left: 15px;
-    margin-top: 20px;
+    margin: 15px 10px;
+    margin-bottom: 8px;
     border-radius: 10px;
 }
 
@@ -563,10 +589,10 @@ div.type-separator {
     top: 2px;
     position: fixed;
     border-radius: 3px;
-    transform: scale(1.05);
+    transform: scale(0.95);
     z-index: 1;
-    opacity: .5;
-    filter: blur(5px);
+    opacity: .65;
+    filter: blur(8px);
     background: url(../assets/no_image.svg);
     background-position: center !important;
     background-size: cover !important;
@@ -590,7 +616,7 @@ div.type-separator {
     margin: 10px;
 }
 
-.np-buttons i:active, .play-pause:active, #volumeButton:active, .controls i:active, .mtitle-button.hidden:active, #settingsClose:active, .extra-buttons i:active {
+.np-buttons i:active, .play-pause:active, #volumeButton:active, .controls i:active, .mtitle-button.hidden:active, #settingsClose:active, .extra-buttons i:active, #miniPlayerButton:active, #closeSidemenu:active {
     transform: scale(1) !important;
     color: var(--hl-txt);
     opacity: .75;
@@ -617,6 +643,7 @@ div.type-separator {
 
 .title-artist {
     overflow: hidden;
+    margin-left: 5px;
 }
 
 .song-duration {
@@ -662,7 +689,7 @@ div.new-nowplaying {
     display: block;
     bottom: 0px;
     z-index: 9;
-    box-shadow: 0px -1px 20px rgba(0,0,0,.15);
+    box-shadow: 0px -1px 5px rgba(0,0,0,.15);
 }
 
 #controls {
@@ -698,9 +725,8 @@ button i {
     border-bottom: 2px solid var(--bd);
     height: 30px;
     position: fixed;
-    top: 30px;
     z-index: 9;
-    box-shadow: 0px 1px 20px rgba(0,0,0,.15);
+    box-shadow: 0px 1px 5px rgba(0,0,0,.15);
     font-family: 'Dosis', sans-serrif;
 }
 
@@ -886,6 +912,7 @@ button i {
     width: 100%;
     transition: .25s;
     z-index: 12;
+    top: 0;
 }
 
 .menu-parent {
@@ -893,19 +920,20 @@ button i {
     align-items: center;
     justify-content: center;
     position: relative;
-    z-index: 13;
     width: 100%;
     height: 100%;
-    animation: slideIn .2s;
 }
 
 .main-menu {
     width: 450px;
     height: 300px;
     background: var(--bg);
-    border-radius: 10px;
+    border-radius: 20px;
     border: solid 2px var(--bd);
     overflow: hidden;
+    z-index: 13;
+    box-shadow: 0px 2px 10px rgba(0,0,0,.3);
+    animation: slideIn .2s;
 }
 
 .menu-margin {
@@ -1132,7 +1160,7 @@ input:checked + .switch-slider:before {
     font-size: 13px;
     opacity: .85;
     margin-bottom: 10px;
-    max-width: 275px;
+    max-width: 220px;
     word-break: normal;
     white-space: normal;
 }
@@ -1151,13 +1179,26 @@ input:checked + .switch-slider:before {
     overflow-x: hidden;
 }
 
+.menu-list div {
+    animation: appear .2s;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+ 
 .menu-list.right {
     transform: translateX(105%);
 }
 
 .menu-list.left {
     transform: translateX(-15%);
-    filter: brightness(.5)
+    filter: brightness(.75)
 }
 
 .menu-title {
@@ -1358,6 +1399,10 @@ input:checked + .switch-slider:before {
     cursor: not-allowed;
 }
 
+#playlistsTab {
+    margin-top: 10px;
+}
+
 #playlistsTab:hover {
     transform: none;
     box-shadow: none;
@@ -1381,7 +1426,7 @@ input:checked + .switch-slider:before {
 
 .about-firetail img {
     height: 50px;
-    margin-right: 10px;
+    margin-right: 20px;
 }
 
 .about-name h2 {
@@ -1392,7 +1437,8 @@ input:checked + .switch-slider:before {
     font-size: 12px;
     opacity: .85;
     margin-left: 5px;
-    transform: translateY(-3px)
+    transform: translateY(-3px);
+    font-family: 'Dosis'
 }
 
 .about-others div {
@@ -1404,6 +1450,8 @@ input:checked + .switch-slider:before {
 .name-ver {
     display: flex;
     align-items: flex-end;
+    font-family: 'Questrial';
+    font-weight: bold;
 }
 
 .select-list {
@@ -1471,6 +1519,7 @@ input:checked + .switch-slider:before {
 
 .select-styled:active, .select-styled.active {
     background-color: var(--li-hv);
+    box-shadow: 0px 1px 5px rgba(0,0,0,.15);
 }
 
 .select-styled.active {
@@ -1493,6 +1542,8 @@ input:checked + .switch-slider:before {
     border: 2px solid var(--bd);
     border-top: none;
     width: 176px;
+    box-shadow: 0px 1px 5px rgba(0,0,0,.15);
+    border-radius: 0 0 15px 15px;
 }
 
 .select-options li {
@@ -1503,6 +1554,10 @@ input:checked + .switch-slider:before {
 
 .select-options li:not(:first-child) {
     border-top: solid 1px var(--bd);
+}
+
+.select-options li:last-child {
+    border-radius: 0 0 15px 15px;
 }
 
 .select-options li:hover {
@@ -1522,42 +1577,47 @@ input:checked + .switch-slider:before {
     display: none;
 }
 
-#changelog {
+#changelog, #ossoftware {
     width: 415px;
     word-break: normal;
     white-space: normal;
 }
 
-#changelog h2 {
+#changelog h2, #ossoftware h2 {
     margin: 10px 0;
 }
 
-#changelog h2:not(:first-child) {
+#changelog h2:not(:first-child), #ossoftware h2:not(:first-child) {
     margin: 30px 0 10px 0;
 }
 
-#changelog ul {
+#changelog ul, #ossoftware ul {
     margin: 10px 0;
     padding-left: 25px;
 }
 
-#changelog li, #changelog p {
+#changelog li, #changelog p, #ossoftware li, #ossoftware p {
     font-size: 14px;
     opacity: .85;
 }
 
-#changelog li:hover {
+#changelog li:hover, #ossoftware li:hover {
     background: transparent;
 }
 
 .drag-border {
-    margin-left: 192px;
-    height: calc(100% - 173px);
-    width: calc(100% - 209px);
+    margin-left: 202px;
+    height: calc(100% - 175px);
+    width: calc(100% - 219px);
     position: fixed;
     border: dashed 2px var(--hl-txt);
     z-index: 10;
     pointer-events: none;
     display: none;
     background: var(--hl-op);
+}
+
+#miniPlayerButton {
+    margin-bottom: 0;
+    font-size: 20px;
 }

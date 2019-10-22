@@ -67,20 +67,35 @@
                         <i class="material-icons">playlist_play</i>Playlists</button>
                     <div class="type-separator"></div>
                     <div id="extraButtons">
-                        <button id="settingsButton" class="new">
-                            <i class="material-icons">settings</i>Settings</button>
-                        <button class="new" id="effectsButton">
-                            <i class="material-icons">blur_on</i>Effects</button>
-                            <button id="miniPlayerButton" class="new">
-                                <i class="material-icons">branding_watermark</i>
-                                Mini Player
-                            </button>
                         <button style="display: none !important" class="new" id="openDevTools">
                             <i class="material-icons">code</i>Dev Tools</button>
+                        <button class="new" id="effectsButton">
+                            <i class="material-icons">blur_on</i>Effects</button>        
+                        <button id="settingsButton" class="new">
+                            <i class="material-icons">settings</i>Settings</button>
                     </div>
                 </div>
             </div>
             <div class="app-content">
+                <div class="top-bar">
+                    <div class="logo-bottom">
+                        <i id="closeSidemenu" class="material-icons">menu</i>
+                        <img draggable="false" id="headerIcon" src="../assets/firetail-menu.svg">
+                        <div class="icon-text">Firetail</div>
+                        <p id="betaTag">BETA</p>
+                    </div>
+                    <div class="top-bar-wrapper">
+                        <div class="top-bar-buttons">
+                            <h2 id="songsTab" class="tab-active">Songs</h2>
+                            <h2 id="artistsTab">Artists</h2>
+                            <h2 id="albumsTab">Albums</h2>
+                        </div>
+                        <div class="sync-status">
+                            <i class="material-icons spin">autorenew</i>
+                            <div id="addMsg">Adding to library...</div>
+                        </div>
+                    </div>
+                </div>
                 <div class="context-menu" id="contextMenu">
                     <div class="context-list">
                         <div class="context-item" id="addSongPlaylist">Add to playlist</div>
@@ -88,7 +103,6 @@
                     </div>
                 </div>
                 <div id="settingsMenu" class="menu" style="display: none">
-                    <div class="menu-bg"></div>
                     <div class="menu-parent">
                         <div class="main-menu">
                             <div class="menu-margin">
@@ -110,11 +124,12 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="menu-bg"></div>
                     </div>
                 </div>
                 <div id="effectsMenu" class="menu" style="display: none">
-                    <div class="menu-bg"></div>
                     <div class="menu-parent">
+                        <div class="menu-bg"></div>
                         <div class="main-menu">
                             <div class="menu-margin">
                                 <div class="menu-title">
@@ -131,7 +146,7 @@
                                         <div class="label-switch effect">
                                             <div>
                                                 <p>Gain</p>
-                                                <input type="number" value="1" min="0" max="100" id="gainInput">
+                                                <input type="number" value="1" min="1" max="100" id="gainInput">
                                             </div>
                                             <label class="switch">
                                                 <input id="gainSwitch" type="checkbox">
@@ -142,8 +157,8 @@
                                     <div id="reverbControl">
                                         <div class="label-switch effect">
                                             <div>
-                                                <p>Reverb Gain</p>
-                                                <input type="number" value="5" min="0" max="100" id="reverbInput">        
+                                                <p>Reverb</p>
+                                                <input type="number" value="1" min="1" max="10" id="reverbInput">        
                                             </div>
                                             <label class="switch">
                                                 <input id="reverbSwitch" type="checkbox">
@@ -157,26 +172,7 @@
                     </div>
                 </div>
                 <div id="newContent">
-                    <div id="newContentWrapper">
-                        <div class="shadow-hide"></div>
-                        <div class="top-bar">
-                            <div class="logo-bottom">
-                                <img draggable="false" id="headerIcon" src="../assets/firetail-menu.svg">
-                                <div class="icon-text">Firetail</div>
-                                <p id="betaTag">BETA</p>
-                            </div>
-                            <div class="top-bar-wrapper">
-                                <div class="top-bar-buttons">
-                                    <h2 id="songsTab" class="tab-active">Songs</h2>
-                                    <h2 id="artistsTab">Artists</h2>
-                                    <h2 id="albumsTab">Albums</h2>
-                                </div>
-                                <div class="sync-status">
-                                    <i class="material-icons spin">autorenew</i>
-                                    <div id="addMsg">Adding to library...</div>
-                                </div>
-                            </div>
-                        </div>
+                    <div id="newContentWrapper">                        
                         <ul id="songsPage" class="active-tab">
                             <div class="drag-border"></div>
                             <div class="list-wrapper"></div>
@@ -233,6 +229,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <i id="miniPlayerButton" class="material-icons">open_in_new</i>
                             </div>
                         </div>
                     </div>

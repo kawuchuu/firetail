@@ -5,13 +5,19 @@
 - Effects panel works again
 - Minor UI tweaks
 - MPRIS works again for Linux systems
+- More efficient way of loading setting panels
+- Display last session's final song when Firetail is launched
+- Hide side panel
 
 **IN DEVELOPMENT:**
 - Song list now displays information about each song such as artist, album and song name instead of the file name
+- Better touch screen support
 
 **PLANNED:**
 - Re-introduce playlists
 - Implement artist / albums tabs
+
+**CANCELLED:**
 - Support Media Controls for Windows
 
 ## 0.3.1

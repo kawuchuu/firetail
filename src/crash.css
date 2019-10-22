@@ -52,13 +52,19 @@ html.dark {
     filter: brightness(2);
 }
 
+.text h1 {
+    font-family: 'Questrial';
+    font-weight: bolder;
+}
+
 .text {
     margin: 0px 30px 0px 40px;
 }
 
 .text p {
     opacity: .75;
-    font-size: 18px; 
+    font-size: 18px;
+    font-family: 'Dosis'
 }
 
 button {

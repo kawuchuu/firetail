@@ -1,4 +1,4 @@
-const {app, BrowserWindow, globalShortcut, Menu} = require('electron');
+const {app, BrowserWindow, globalShortcut, Menu, Tray} = require('electron');
 const path = require('path');
 const url = require('url');
 var settings = require('electron-settings')
@@ -6,7 +6,7 @@ var settings = require('electron-settings')
 var frameStyle;
 var bg;
 var ipc = require('electron').ipcMain;
-var resume;
+var mini = false;
 
 if (process.platform === 'linux') {
     frameStyle = true;
@@ -20,6 +20,8 @@ if (settings.theme == 'light') {
     bg = '#1f1f1f';
 };
 
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
+
 function createMainWindow() {
     var win = new BrowserWindow({
         width: 770, 
@@ -28,13 +30,32 @@ function createMainWindow() {
         frame: frameStyle,
         backgroundColor: bg,
         titleBarStyle: 'hidden',
-        //show: false,
+        show: false,
         title: 'Firetail',
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true
         }
     });
+    tray = new Tray('./assets/tray.png');
+    const contextMenu = Menu.buildFromTemplate([
+        { label: "Open", id: "open", click: () => {
+            if (mini == false) {
+                win.show();
+            }
+        }},
+        { label: 'Quit Firetail',  id: 'exit', click: () => { closeWin() } }
+    ])
+    tray.setContextMenu(contextMenu);
+    tray.setToolTip('Firetail')
+    tray.on('click', function() {
+        if (mini == false) {
+            win.show();
+        }
+    });
+    function closeWin() {
+        win.webContents.send('exit-time');
+    }
     if (process.platform != 'linux') {
         globalShortcut.register('MediaPlayPause', resumeButton);
         globalShortcut.register('MediaPreviousTrack', previousSong);
@@ -83,6 +104,7 @@ function createMainWindow() {
     })
     ipc.on('switch-windows-full', () => {
         win.webContents.send('switch-windows');
+        mini = false;
     });
     ipc.on('remove-audio-listener', () => {
         win.webContents.send('remove-audio-listener')
@@ -90,6 +112,12 @@ function createMainWindow() {
     ipc.on('seek-time-main', (event, arg) => {
         win.webContents.send('seek-time-main', arg)
     });
+    ipc.on('last-song-time', (event, arg) => {
+        if (arg) {
+            settings.set('last-song-time', arg);
+        }
+        app.exit();
+    })
     win.on('maximize', () => {
         win.webContents.send('maximizeWindow');
     })
@@ -102,18 +130,12 @@ function createMainWindow() {
         slashes: true
     }));
     win.setMenuBarVisibility(false);
-    /* win.once('ready-to-show', () => {
+    win.once('ready-to-show', () => {
         win.show();
-    }) */
+    })
     win.on('closed', (i) => {
         app.exit();
     })
-    /*ipc.on('ondragstart', (event, filePath) => {
-        event.sender.startDrag({
-            file: filePath,
-            icon: './assets/image/temp-ic.png'
-        })
-    });*/
     if (process.platform == 'darwin') {
         app.setAboutPanelOptions({
             applicationName: 'Firetail',
@@ -240,6 +262,7 @@ function createMiniPlayer() {
     });
     ipc.on('switch-windows-mini', () => {
         win.webContents.send('switch-windows');
+        mini = true;
     })
     ipc.on('seek-time-mini', (event, arg) => {
         win.webContents.send('seek-time', arg);
