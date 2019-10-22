@@ -26,7 +26,7 @@ function createMainWindow() {
     var win = new BrowserWindow({
         width: 770, 
         height: 560,
-        icon: './assets/icon.png', 
+        icon: 'assets/icon.png', 
         frame: frameStyle,
         backgroundColor: bg,
         titleBarStyle: 'hidden',
@@ -37,7 +37,8 @@ function createMainWindow() {
             nodeIntegrationInWorker: true
         }
     });
-    tray = new Tray('./assets/tray.png');
+    let iconpath = path.join(__dirname, './assets/tray.png')
+    tray = new Tray(iconpath);
     const contextMenu = Menu.buildFromTemplate([
         { label: "Open", id: "open", click: () => {
             if (mini == false) {

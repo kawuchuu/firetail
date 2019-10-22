@@ -8,6 +8,9 @@ matrix:
         - ELECTRON_CACHE=$HOME/.cache/electron
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
         - ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true
+        - RELEASE_NAME="continuous"
+        - RELEASE_TITLE="Continuous build"
+        - is_prerelease="true"
     - os: linux
       language: node_js
       node_js: "10"
