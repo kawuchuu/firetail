@@ -8,9 +8,6 @@ install:
   - npm i -g yarn
   - yarn install
 
-environment:
-  REPO_SLUG: projsh/firetail
-
 build_script:
   - yarn release
 
