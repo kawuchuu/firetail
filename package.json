@@ -39,6 +39,9 @@
     "dmg": {
       "icon": "assets/icon.icns"
     },
+    "nsis": {
+      "artifactName": "Firetail-Setup-${version}.${ext}"
+    },
     "win": {
       "target": [
         "nsis"
