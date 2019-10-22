@@ -1171,7 +1171,7 @@ let settingsPage
 let selectOptions;
 let settingsListGet = {};
 
-fs.readJSON('src/settingsconfig.json', (err, file) => {
+fs.readJSON(path.join(__dirname, './settingsconfig.json'), (err, file) => {
     getSettings = file;
     settingsMenu = getSettings.settingsMenu;
     generalSettings = getSettings.generalSettings;
