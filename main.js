@@ -8,7 +8,15 @@ var bg;
 var ipc = require('electron').ipcMain;
 var mini = false;
 
-if (process.platform === 'linux') {
+if (!settings.has('title-bar')) {
+    if (process.platform == 'linux') {
+        settings.set('title-bar', 'native');
+    } else if (process.platform == 'win32') {
+        settings.set('title-bar', 'custom');
+    }
+}
+
+if (settings.get('title-bar') == 'native') {
     frameStyle = true;
 } else {
     frameStyle = false;
@@ -21,6 +29,7 @@ if (settings.theme == 'light') {
 };
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
+app.commandLine.appendSwitch('force-color-profile', 'srgb');
 
 function createMainWindow() {
     var win = new BrowserWindow({
@@ -57,11 +66,11 @@ function createMainWindow() {
     function closeWin() {
         win.webContents.send('exit-time');
     }
-    if (process.platform != 'linux') {
+    /* if (process.platform != 'linux') {
         globalShortcut.register('MediaPlayPause', resumeButton);
         globalShortcut.register('MediaPreviousTrack', previousSong);
         globalShortcut.register('MediaNextTrack', nextSong);
-    }
+    } */
 
     function resumeButton() {
         win.webContents.send("playpause");

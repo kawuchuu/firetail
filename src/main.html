@@ -4,14 +4,16 @@
         <title>Firetail</title>
         <link rel="stylesheet" href="./style.css">
         <link href="../assets/material/material-icons.css" rel="stylesheet">
+        <link href="" rel="stylesheet" id="customCSS">
         <script>
             if (typeof module === 'object') {
-                    window.module = module;
-                    module = undefined;
-                }
-            </script>
+                window.module = module;
+                module = undefined;
+            }
+        </script>
     </head>
     <body>
+        <div class="border"></div>
         <div style="opacity: 0; position: fixed; z-index: -1">
             <span class="material-icons-rounded">minimize</span>
             <span class="material-icons-outlined">minimize</span>
@@ -175,13 +177,21 @@
                     <div id="newContentWrapper">                        
                         <ul id="songsPage" class="active-tab">
                             <div class="drag-border"></div>
+                            <div class="tab-title">
+                                <i id="albumArtistBack" class="material-icons">arrow_back</i>
+                                <div class="album-image"></div>
+                                <div class="tab-title-text">
+                                    <h2>All Songs</h2>
+                                    <div id="songCountNum">0 Songs</div>
+                                </div>
+                            </div>
                             <div class="list-wrapper"></div>
                         </ul>
                         <div class="placeholder-message" id="artistsPage">
-                            <p>This is a placeholder message for the artists page.</p>
+                            <div class="artist-album-list" id="artistList"></div>
                         </div>
                         <div class="placeholder-message" id="albumsPage">
-                            <p>This is a placeholder message for the albums page.</p>
+                            <div class="artist-album-list" id="albumList"></div>
                         </div>
                         <ul id="playlistsPage">
                             <div class="list-wrapper"></div>

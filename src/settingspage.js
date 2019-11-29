@@ -3,7 +3,11 @@ onmessage = (a) => {
     let settingsListGet = a.data[4];
     let iconstyle = a.data[2];
     function createSwitch(i) {
-        return `<div class="label-switch"><div><p>${i.title}</p><div class="switch-desc">${i.desc}</div></div><label class="switch"><input id="${i.id}" type="checkbox"><span class="switch-slider round"></span></label></div>`
+        if (i.id == "nativeToggle" && process.platform == "darwin") {
+            return;
+        } else {
+            return `<div class="label-switch"><div><p>${i.title}</p><div class="switch-desc">${i.desc}</div></div><label class="switch"><input id="${i.id}" type="checkbox"><span class="switch-slider round"></span></label></div>`
+        }
     }
 
     function createSubmenuButton(i) {
@@ -28,6 +32,9 @@ onmessage = (a) => {
 
     function createRegularButton(i) {
         return `<div class="menu-regular-button" id="${i.id}"><div><p>${i.title}</p><div class="switch-desc">${i.desc}</div>`
+    }
+    function createFileChoose(i) {
+        return `<div class="file-choose" id="${i.id}List"><div><p>${i.title}</p><div class="switch-desc">${i.desc}</div></div><label class="file-label" for="${i.id}">Choose File</label><input type="file" style="display: none;" id="${i.id}"></div>`
     }
     let e = a.data[0];
     let o;
@@ -62,7 +69,10 @@ onmessage = (a) => {
                 break;
             case 'button':
                 newControl = createRegularButton(e[0].controls[i].button);
-                switches.push(e[0].controls[i].button.id)
+                switches.push(e[0].controls[i].button.id);
+                break;
+            case 'file':
+                newControl = createFileChoose(e[0].controls[i].file);
         }
         if (o) {
             firstMenu = true;

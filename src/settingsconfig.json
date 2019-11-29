@@ -38,10 +38,17 @@
                 }
             },
             {
-                "button": {
-                    "title": "Reset Library",
-                    "desc": "Resets your library back to first install.",
-                    "id": "resetLibrary"
+                "subButton": {
+                    "title": "Library",
+                    "id": "librarySubButton",
+                    "icon": "library_music"
+                }
+            },
+            {
+                "subButton": {
+                    "title": "Advanced",
+                    "id": "advancedSubButton",
+                    "icon": "warning"
                 }
             }
         ]
@@ -59,6 +66,12 @@
                             "option": {
                                 "title": "Dark",
                                 "value": "dark"
+                            }
+                        },
+                        {
+                            "option": {
+                                "title": "Black",
+                                "value": "black"
                             }
                         },
                         {
@@ -130,6 +143,14 @@
             },
             {
                 "switch": {
+                    "title": "Native Title Bar",
+                    "desc": "Sets Firetail's title bar to a native title bar (enabled by default on Linux).",
+                    "id": "nativeToggle",
+                    "toggled": false
+                }
+            },
+            {
+                "switch": {
                     "title": "Mini Player Background",
                     "desc": "Sets mini player's background to the song's album art",
                     "id": "miniBgToggle",
@@ -154,7 +175,7 @@
         },
         {
             "subButton": {
-                "title": "Open Source Software",
+                "title": "Open Source Software & Credits",
                 "id": "opensourceSubButton",
                 "icon": "code"
             }
@@ -171,10 +192,52 @@
     }],
     "opensourceSettings": [{
         "info": {
-            "title": "Open Source Software"
+            "title": "OSS & Credits"
         },
         "controls": [{
             "customHTML": "<div id=\"ossoftware\"></div>"
         }]
+    }],
+    "advancedSettings": [{
+        "info": {
+            "title": "Advanced"
+        },
+        "controls": [
+            {
+                "file": {
+                    "title": "Custom CSS",
+                    "desc": "Sets custom CSS",
+                    "id": "cssFile"
+                }
+            },
+            {
+                "button": {
+                    "title": "Clear Custom CSS",
+                    "desc": "Removes the custom CSS file from Firetail. Does not remove from system.",
+                    "id": "clearCSS"
+                }
+            }
+        ]
+    }],
+    "librarySettings": [{
+        "info": {
+            "title": "Library"
+        },
+        "controls": [
+            {
+                "button": {
+                    "title": "Reset Library",
+                    "desc": "Resets your library back to first install.",
+                    "id": "resetLibrary"
+                }
+            },
+            {
+                "file": {
+                    "title": "Add Files to Library",
+                    "desc": "Manually add files to your music library",
+                    "id": "libraryFile"
+                }
+            }
+        ]
     }]
 }

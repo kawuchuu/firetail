@@ -169,9 +169,9 @@ ipc.on('tag-info', (event, arg) => {
         tagInfo.art = "../../assets/no_image_light.svg";
         noImage = true;
     };
-    document.getElementById('art').src = tagInfo.art;
+    document.getElementById('art').src = `http://localhost:5673/${tagInfo.art}.jpg`;
     if (noImage == false) {
-        $('.album-bg').css('background-image', `url(${tagInfo.art})`)
+        $('.album-bg').css('background-image', `url('http://localhost:5673/${tagInfo.art}.jpg')`)
         if (blurEnabled == true) {
             blurBg(true);
         } else {

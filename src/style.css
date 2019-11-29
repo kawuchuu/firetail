@@ -26,13 +26,23 @@ html, body {
     text-overflow: ellipsis;
 }
 
+html.black {
+    --bg: #000000;
+    --text: #dfdfdf;
+    --fg-bg: #000000;
+    --bd: #272727;
+    --li-hv: #080808;
+    --logo: 0.9;
+    --switch: #1f1f1f;
+}
+
 html.dark {
-    --bg: #1a1a1a;
-    --text: #ffffff;
+    --bg: #181818;
+    --text: #dfdfdf;
     --fg-bg: #1e1e1e;
     --bd: #3a3a3a;
     --li-hv: #212121;
-    --logo: 1;
+    --logo: 0.9;
     --switch: #3d3d3d;
 }
 
@@ -213,6 +223,7 @@ button.new {
     font-weight: bold;
     width: auto;
     height: 37px;
+    min-height: 37px;
     padding: 0;
     border: 2px solid var(--bd);
     border-radius: 10px;
@@ -365,11 +376,11 @@ ul#songsPage {
     background: var(--bg);
     margin-top: 36px;
     width: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 li.results-link {
-    border-bottom: 1px solid var(--bd);
+    border-top: 1px solid var(--bd);
     overflow: hidden;
     position: relative;
     height: 35px;
@@ -378,6 +389,10 @@ li.results-link {
     align-items: center;
     transition: .25s;
     transition-property: margin-left;
+}
+
+li.results-link:last-child {
+    border-bottom: 1px solid var(--bd);
 }
 
 li:hover {
@@ -409,7 +424,7 @@ div.new-nowplaying i {
     position: relative;
 }
 
-div.new-nowplaying i:hover, #closeSidemenu:hover {
+div.new-nowplaying i:hover, #closeSidemenu:hover, #albumArtistBack:hover {
     color: var(--hl-txt) !important;
     transform: scale(1.2);
     cursor: pointer;
@@ -426,7 +441,6 @@ div.new-nowplaying i:hover, #closeSidemenu:hover {
 
 .list-wrapper {
     position: relative;
-    height: 100%;
 }
 
 #newContentWrapper {
@@ -503,6 +517,7 @@ li.results-link.closed {
 div.type-separator {
     width: 160px !important;
     height: 2px;
+    min-height: 2px;
     background: var(--bd);
     margin: 15px 10px;
     margin-bottom: 8px;
@@ -616,7 +631,9 @@ div.type-separator {
     margin: 10px;
 }
 
-.np-buttons i:active, .play-pause:active, #volumeButton:active, .controls i:active, .mtitle-button.hidden:active, #settingsClose:active, .extra-buttons i:active, #miniPlayerButton:active, #closeSidemenu:active {
+.np-buttons i:active, .play-pause:active, #volumeButton:active, .controls i:active,
+.mtitle-button.hidden:active, #settingsClose:active, .extra-buttons i:active,
+#miniPlayerButton:active, #closeSidemenu:active, #albumArtistBack:active {
     transform: scale(1) !important;
     color: var(--hl-txt);
     opacity: .75;
@@ -878,7 +895,7 @@ button i {
 }
 
 .placeholder-message {
-    margin: 40px 0 0 210px;
+    margin: 52px 0 0 202px;
 }
 
 .vol-change {
@@ -974,7 +991,7 @@ input {
     position: relative;
     display: inline-block;
     width: 45px;
-    height: 22px;
+    height: 20px;
     transition: .2s;
 }
 
@@ -991,30 +1008,36 @@ input {
     left: 0;
     right: 0;
     bottom: 0;
-    background: var(--switch);
     transition: .2s;
+    border: solid 2px var(--bd);
 }
 
 .switch-slider:before {
     position: absolute;
     content: "";
-    height: 14px;
-    width: 14px;
+    height: 10px;
+    width: 10px;
     left: 4px;
     bottom: 4px;
-    background: #ffffffb4;
     transition: .2s;
-    box-shadow: 0px 1px 10px rgba(0,0,0,.2)
+    transform: translate(-1px, 1px);
+    border: solid 2px var(--text);
+    box-sizing: border-box;
 }
 
 input:checked + .switch-slider {
-    background: var(--btn);
-    box-shadow: 0px 2px 15px var(--glow);
+    background: var(--hl-op);
+    box-shadow: 0px 2px 8px var(--glow);
+    border: solid 2px var(--btn-hover);
 }
 
 input:checked + .switch-slider:before {
-    transform: translateX(23px);
-    background: #ffffffe8;
+    transform: translate(27px, 1px);
+    background: var(--btn-active);
+    border: solid 2px var(--btn-active);
+    box-sizing: border-box;
+    width: 2px;
+    border-radius: 10px;
 }
 
 .switch-slider.round {
@@ -1025,7 +1048,7 @@ input:checked + .switch-slider:before {
     border-radius: 50%;
 }
 
-.label-switch, .menu-submenu-button, .menu-regular-button {
+.label-switch, .menu-submenu-button, .menu-regular-button, .file-choose {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1056,16 +1079,16 @@ input:checked + .switch-slider:before {
     margin-right: 20px;
 }
 
-.label-switch:not(:last-child), .menu-submenu-button:not(:last-child), .customHTML:not(:last-child), .select-list:not(:last-child), .menu-regular-button:not(:last-child) {
+.label-switch:not(:last-child), .menu-submenu-button:not(:last-child), .customHTML:not(:last-child), .select-list:not(:last-child), .menu-regular-button:not(:last-child), .file-choose:not(:last-child)  {
     border-bottom: solid 1px var(--bd)
 }
 
-.label-switch p, .menu-submenu-button p, .select-list p, .menu-regular-button p {
+.label-switch p, .menu-submenu-button p, .select-list p, .menu-regular-button p, .file-choose p {
     margin: 10px 0;
     font-weight: bold;
 }
 
-.label-switch p, .select-list p, .menu-regular-button p {
+.label-switch p, .select-list p, .menu-regular-button p, .file-choose p {
     margin: 10px 0 2px 0;
 }
 
@@ -1394,26 +1417,6 @@ input:checked + .switch-slider:before {
     color: #ffffff;
 }
 
-#playlistsTab, #artistsTab, #albumsTab {
-    opacity: .35;
-    cursor: not-allowed;
-}
-
-#playlistsTab {
-    margin-top: 10px;
-}
-
-#playlistsTab:hover {
-    transform: none;
-    box-shadow: none;
-    color: var(--text);
-    border: solid 2px var(--bd);
-}
-
-#artistsTab:hover, #albumsTab:hover {
-    opacity: .35;
-}
-
 .customHTML {
     padding: 5px 20px;
 }
@@ -1454,7 +1457,7 @@ input:checked + .switch-slider:before {
     font-weight: bold;
 }
 
-.select-list {
+.select-list, .file-choose {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1620,4 +1623,170 @@ input:checked + .switch-slider:before {
 #miniPlayerButton {
     margin-bottom: 0;
     font-size: 20px;
+}
+
+.border {
+    position: fixed;
+    width: calc(100% - 2px);
+    height: calc(100% - 2px);
+    border: solid 1px var(--btn-hover);
+    z-index: 99;
+    pointer-events: none;
+    display: none;
+}
+
+.file-label {
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    border: 2px solid var(--bd);
+    border-radius: 20px;
+    padding: 5px 10px 5px 10px;
+    width: 100px;
+    margin-right: 10px;
+    font-family: 'Dosis', Arial, sans-serif !important;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: .2s;
+    transform: none;
+}
+
+.file-label:hover {
+    background: var(--hl-op);
+    transition: .2s;
+    box-shadow: 0px 2px 15px var(--glow);
+    transform: scale(1.05);
+    color: var(--hl-txt);
+    border: 2px solid var(--hl-txt);
+}
+
+.file-label:active {
+    opacity: .8;
+    transform: scale(1);
+    transition: .1s;
+    color: var(--hl-txt);
+    border: 2px solid var(--hl-txt);
+    box-shadow: 0px 2px 15px var(--glow);
+    background: var(--hl-op);
+}
+
+.artist-album-list {
+    padding: 20px;
+    height: calc(100vh - 211px);
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    overflow-y: auto;
+    justify-content: center;
+}
+
+.artist-item h3 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.artist-item {
+    width: 185px;
+    height: 40px;
+    background: var(--fg-bg);
+    border: solid 2px var(--bd);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 10px;
+    padding: 10px;
+    box-shadow: 0px 1px 5px rgba(0,0,0,.15);
+}
+
+.artist-item:hover, .album-item:hover {
+    background: var(--li-hv);
+    transform: scale(1.03)
+}
+
+.artist-item:active, .album-item:active {
+    background: var(--fg-bg);
+    opacity: .5;
+    transform: scale(1)
+}
+
+.tab-title {
+    margin-left: 215px;
+    width: calc(100% - 250px);
+    height: 90px;
+    display: flex;
+    align-items: center;
+
+}
+
+.tab-title-text {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-left: 15px;
+    width: calc(100% - 75px);
+}
+
+#albumArtistBack {
+    visibility: hidden;
+}
+
+.tab-title h2 {
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#songCountNum {
+    opacity: .8;
+    font-size: 16px;
+}
+
+.album-item {
+    width: 150px;
+    height: 195px;
+    background: var(--fg-bg);
+    border: solid 2px var(--bd);
+    border-radius: 10px;
+    box-shadow: 0px 1px 5px rgba(0,0,0,.15);
+    margin: 10px 10px;
+}
+
+.album-text-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    pointer-events: none;
+}
+
+.album-item-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 8px 8px 0 0;
+    background-image: none;
+    background-size: cover;
+    pointer-events: none;
+}
+
+.album-text-flex h3 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+}
+
+.album-image {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+    min-height: 80px;
+    background-image: none;
+    background-size: cover;
+    margin-left: 10px;
+    border-radius: 5px;
+    display: none;
 }

@@ -15,6 +15,7 @@
   "dependencies": {
     "discord-rpc": "^3.0.1",
     "electron-settings": "^3.2.0",
+    "express": "^4.17.1",
     "fs-extra": "^8.1.0",
     "jsmediatags": "^3.8.1",
     "markdown-it": "^9.0.0",
@@ -22,10 +23,14 @@
   },
   "devDependencies": {
     "electron": "^4.2.2",
-    "electron-builder": "^20.40.2"
+    "electron-builder": "^21.2.0"
   },
   "optionalDependencies": {
-    "mpris-service": "^2.1.0"
+    "mpris-service": "^2.1.0",
+    "@nodert-win10/windows.foundation": "^0.2.96",
+    "@nodert-win10/windows.media": "^0.2.96",
+    "@nodert-win10/windows.media.playback": "^0.2.96",
+    "@nodert-win10/windows.storage.streams": "^0.2.96"
   },
   "build": {
     "appId": "com.projsh.firetail",

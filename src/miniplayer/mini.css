@@ -17,6 +17,16 @@ body {
     --fade: linear-gradient(transparent, rgba(0,0,0,.65));
 }
 
+html.black {
+    --bg: #000000;
+    --text: #dfdfdf;
+    --fg-bg: #030303;
+    --bd: #272727;
+    --li-hv: #080808;
+    --logo: 1;
+    --switch: #1f1f1f;
+}
+
 html.light {
     --bg: #f5f5f5;
     --text: #3d3d3d;
