@@ -24,10 +24,10 @@ cache:
     - $HOME/.cache/electron-builder
 
 before_install:
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get install libdbus-1-dev -y; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get install libdbus-1-dev -y; npm i -g electron-builder; fi
 
 script:
-  - yarn release
+  - electron-builder
 
 after_success:
   - |

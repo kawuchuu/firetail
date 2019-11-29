@@ -6,10 +6,11 @@ environment:
 
 install:
   - npm i -g yarn
+  - npm i -g electron-builder
   - yarn install
 
 build_script:
-  - yarn release
+  - electron-builder
 
 deploy_script:
 - ps: >-
