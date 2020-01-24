@@ -8,6 +8,12 @@ var bg;
 var ipc = require('electron').ipcMain;
 var mini = false;
 
+if (settings.get('title-bar') == 'native') {
+    frameStyle = true;
+} else {
+    frameStyle = false;
+}
+
 if (settings.theme == 'light') {
     bg = '#f5f5f5';
 } else {
@@ -18,23 +24,12 @@ app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 app.commandLine.appendSwitch('force-color-profile', 'srgb');
 
 function createMainWindow() {
-    if (!settings.has('title-bar')) {
-        if (process.platform == 'linux') {
-            settings.set('title-bar', 'native');
-        } else if (process.platform == 'win32') {
-            settings.set('title-bar', 'custom');
-        }
-    }
-    
-    if (settings.get('title-bar') == 'native') {
-        frameStyle = true;
-    } else {
-        frameStyle = false;
-    }
     var win = new BrowserWindow({
         width: 770, 
         height: 560,
-        icon: 'assets/icon.png', 
+        minWidth: 650,
+        minHeight: 375,
+        icon: 'assets/icon.ico', 
         frame: frameStyle,
         backgroundColor: bg,
         titleBarStyle: 'hidden',

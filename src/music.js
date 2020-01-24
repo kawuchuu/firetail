@@ -435,7 +435,7 @@ if (process.platform === 'darwin') {
     });
 }
 
-$('.list-wrapper').html('<p style="text-align: center; font-weight: bold; margin-left: 150px;">Loading...');
+//$('.list-wrapper').html('<p style="text-align: center; font-weight: bold; margin-left: 150px;">Loading...');
 
 remote.getCurrentWindow().setMinimumSize(720, 525);
 document.addEventListener('dragover', event => event.preventDefault());
@@ -494,6 +494,7 @@ function toolbarPause() {
 toolbarPlay();
 
 function songActive() {
+    if (currentScreenList.indexOf(newFileChosen) == -1) return songActiveReset();
     $(`#${highlightSong}`).addClass('song-active')
     $(`#${highlightSong} i`).addClass('song-opac');
     if (pauseButtonActive === false) {
@@ -511,16 +512,7 @@ function songActiveReset() {
 }
 
 function shuffle(array) {
-    let currentIndex = array.length,
-        temporaryValue, randomIndex;
-    while (0 !== currentIndex) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
-    return array;
+    return array.sort(() => Math.random() - 0.5);
 }
 
 $('body').on("contextmenu", "li.results-link", function (e) {
@@ -659,14 +651,12 @@ $('#deleteFromLibrary').click(() => {
 let newList;
 let list;
 let working = false;
+let currentScreenList;
 
 function listFiles(g) {
     reloading = false;
     s = [];
-    allFilesList = [];
-    shuffleOrder = [];
-    fileSongListStore = [];
-    shuffleList = [];
+    currentScreenList = [];
     if (g == 'FTREGULAR') {
         keepSongList = [];
         tabTitle = 'All Songs';
@@ -677,7 +667,7 @@ function listFiles(g) {
             iconStyleSelect(settings.get('icon-style'))
             removeLoader();
             reloading = false;
-            return $('.list-wrapper').html(`<p style="font-weight: bold; margin-left: 215px;">Please drag some files here.`);
+            //return $('.list-wrapper').html(`<p style="font-weight: bold; margin-left: 215px;">Please drag some files here.`);
         } else {
             new Promise((resolve) => {
                 fs.readJson(`${app.getPath('userData')}/library.json`, (err, file) => {
@@ -710,7 +700,7 @@ function listFiles(g) {
                     if (x.toLowerCase() > b.toLowerCase()) return 1;
                     return 0;
                 });
-                $('.list-wrapper').html('');
+                //$('.list-wrapper').html('');
                 a.forEach((f, i) => {
                     forEachFile(f, i, g);
                 });
@@ -725,14 +715,9 @@ function listFiles(g) {
                 if (settings.get('sidemenu') == true) {
                     $('#playType, li.results-link').addClass('closed');
                 }
-                shuffleOrder = shuffle(allFilesList);
-                allFilesList = fileSongListStore;
-                shuffleOrder.forEach((f, i) => {
-                    shuffleList.push(fileSongListStore.indexOf(f));
-                });
                 let searchSongs;
-                if (currentlyPlaying === true) {
-                    searchSongs = fileSongListStore.indexOf(newFileChosen);
+                /* if (currentlyPlaying === true) {
+                    searchSongs = currentScreenList.indexOf(newFileChosen);
                     if (searchSongs != -1) {
                         highlightSong = searchSongs;
                         currentSongPlaying = searchSongs;
@@ -745,7 +730,7 @@ function listFiles(g) {
                             console.log('nosong')
                         }
                     }
-                }
+                } */
                 iconStyleSelect(settings.get('icon-style'))
                 removeLoader();
                 countNum = 0;
@@ -759,6 +744,21 @@ let countNum = 0;
 function forEachFile(f, i, a) {
     let simNum = countNum;
     function playSong(e) {
+        allFilesList = [];
+        shuffleOrder = [];
+        fileSongListStore = [];
+        shuffleList = [];
+        let tempKeepSongs = [];
+        currentScreenList.forEach(f => {
+            tempKeepSongs.push(f);
+        })
+        shuffleOrder = shuffle(currentScreenList);
+        allFilesList = tempKeepSongs;
+        fileSongListStore = tempKeepSongs;
+        currentScreenList = tempKeepSongs;
+        shuffleOrder.forEach((f, i) => {
+            shuffleList.push(currentScreenList.indexOf(f));
+        });
         currentSongPlaying = simNum;
         highlightSong = simNum;
         songActiveReset();
@@ -794,8 +794,9 @@ function forEachFile(f, i, a) {
     let artist = songInfo.artist;
     let album = songInfo.album;
     if (a == 'FTREGULAR' || artist == a || album == a) {
-        fileSongListStore.push(f);
-        allFilesList.push(f);
+        /* fileSongListStore.push(f);
+        allFilesList.push(f); */
+        currentScreenList.push(f);
         if (a == 'FTREGULAR') {
             keepSongList.push(f);
         }
@@ -807,11 +808,17 @@ function forEachFile(f, i, a) {
             fileName = fileName.substr(fileName.lastIndexOf('/') + 1);
         }
         let title = songInfo.title;
-        let songArtTitle = `${artist} - ${title}`
-        if (!artist || !title) {
-            songArtTitle = fileName;
+        if (!artist) {
+            artist = 'Unknown Artist';
         }
-        $(`#${tab}Page .list-wrapper`).append(`<li draggable="true" class="results-link" id="${simNum}"><i class="material-icons play-pause" style="opacity: 0;">play_arrow</i><p class="new-song-title">${songArtTitle}`);
+        if (!title) {
+            title = fileName;
+        }
+        if (!album) {
+            album = 'Unknown Album';
+        }
+        $(`#${tab}Page .list-wrapper`).append(`<li draggable="true" class="results-link" id="${simNum}"><i class="material-icons play-pause" style="opacity: 0;">play_arrow</i>`);
+        $(`#${tab}Page .list-wrapper #${simNum}`).append(`<div class="artist-title-album"><p class="list-title">${title}</p><p class="list-artist">${artist}</p><p class="list-album">${album}</p>`)
         $(`#${simNum} p`).dblclick(function () {
             if (touch) return; 
             shuffleCheck = false;
@@ -905,6 +912,7 @@ $('#refreshFiles').click(function () {
 });
 
 let waitSpam;
+let lastPlayedSong = 0;
 
 function previousSong() {
     if (waitSpam == true) return;
@@ -2093,7 +2101,7 @@ async function listAlbums() {
         albumCheckName[formatAlbum] = getAlbum;
         if (usedAlbum.indexOf(getAlbum) == -1) {
             usedAlbum.push(getAlbum);
-            $('#albumList').append(`<div class="album-item" id="album-${formatAlbum}"><div class="album-item-img" style="background-image: url('http://localhost:5673/${findAlbum}.jpg"></div><div class="album-text-flex"><h3>${getAlbum}</h3></div></div>`);
+            $('#albumList').append(`<div class="album-item" id="album-${formatAlbum}"><div class="album-item-img" style="background-image: url('http://localhost:5673/${findAlbum}.jpg');"></div><div class="album-text-flex"><h3>${getAlbum}</h3></div></div>`);
         }
     }
     let albumName = 'FTREGULAR';
