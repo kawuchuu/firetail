@@ -1,10 +1,23 @@
 const fs = require('fs').promises;
+const fsconst = require('fs').constants;
 
 onmessage = async (message) => {
     let userData = message.data.userData;
+    let check = new Promise(resolve => {
+        fs.access(`${userData}/library.json`, fsconst.F_OK | fsconst.W_OK, (err) => {
+            if (err) {
+                console.error(err);
+                return postMessage(false);
+            } else {
+                resolve();
+            }
+        });
+    });
+    await check;
     fs.readFile(`${userData}/library.json`, (err) => {
         if (err) {
             console.error(err);
+            return postMessage(false);
         }
     }).then(async (file) => {
         file = JSON.parse(file.toString());
@@ -39,11 +52,15 @@ onmessage = async (message) => {
                     'id': numCount
                 });
                 if (artistsUsed.indexOf(artist) == -1) {
-                    artistList.push({'artist': artist});
+                    artistList.push({
+                        'artist': artist
+                    });
                     artistsUsed.push(artist);
                 };
                 if (albumsUsed.indexOf(album) == -1) {
-                    albumList.push({'album': album});
+                    albumList.push({
+                        'album': album
+                    });
                     albumsUsed.push(album);
                 };
                 numCount++;
@@ -52,5 +69,5 @@ onmessage = async (message) => {
         });
         let list = await genList;
         postMessage(list);
-    })
+    });
 }

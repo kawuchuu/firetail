@@ -1,6 +1,7 @@
 const app = require('electron').remote.app;
 const path = require('path');
 const Vue = require('vue/dist/vue');
+const fs = require('fs');
 
 let list = new Worker('./ftmodules/list.js');
 let imgServer = new Worker('./ftmodules/server.js');
@@ -107,6 +108,14 @@ let listItems = new Vue({
 list.postMessage({'userData': app.getPath('userData')});
 
 list.onmessage = async (message) => {
+    if (message.data == false) {
+        listItems.songList = [];
+        document.querySelector('.load-spinner').style.display = 'none';
+        listTitle.list.count = "0 songs"
+        return document.querySelector('.no-songs-found').style.display = 'block';
+    } else {
+        document.querySelector('.no-songs-found').style.display = 'none';
+    }
     artistList = message.data[1];
     albumList = message.data[2];
     message = message.data[0];
@@ -718,4 +727,12 @@ let albums = new Vue({
     data: {
         albumList: []
     }
+})
+
+/* top bar button shit */
+document.querySelector('#nuke').addEventListener('click', () => {
+    fs.unlink(app.getPath('userData') + '/library.json', (err) => {
+        if (err) console.error(err);
+        list.postMessage({'userData': app.getPath('userData')});
+    });
 })

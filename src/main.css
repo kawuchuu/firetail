@@ -365,6 +365,7 @@ button i {
     display: flex;
     align-items: center;
     cursor: pointer;
+    margin-left: 20px;
 }
 
 .top-button:hover {
@@ -381,6 +382,10 @@ button i {
     margin-left: 5px;
     font-weight: bold;
     font-size: 14px;
+}
+
+.top-button-container {
+    display: flex;
 }
 
 /* Side bar */
@@ -820,6 +825,13 @@ div.section {
 .empty-space {
     width: 31px;
     height: 24px;
+}
+
+.no-songs-found {
+    display: none;
+    opacity: .8;
+    font-size: 16px;
+    padding: 20px 0 0 45px;
 }
 
 /* Artist & album tabs */

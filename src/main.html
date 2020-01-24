@@ -18,6 +18,10 @@
                     </div>
                     <div class="nav-top-buttons">
                         <div class="top-button-container">
+                            <label class="top-button" id="nuke">
+                                <i class="material-icons-rounded">delete</i>
+                                <span>Nuke Library</span>
+                            </label>
                             <input type="file" id="addFiles" accept="audio/*" multiple style="display: none">
                             <label class="top-button" for="addFiles">
                                 <i class="material-icons-rounded">add</i>
@@ -69,6 +73,7 @@
                 <div class="list-wrapper">
                     <div class="load-spinner"></div>
                     <list-item v-for="item in songList" v-bind:song="item" v-bind:key="item.id"></list-item>
+                    <div class="no-songs-found">No songs have been imported. Click Add Songs to import songs into Firetail.</div>
                 </div>
             </ul>
         </div>

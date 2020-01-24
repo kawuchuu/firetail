@@ -1,5 +1,5 @@
 const id3 = require('jsmediatags');
-const fs = require('fs').promises;
+const fs = require('fs');
 const fsconst = require('fs').constants;
 
 onmessage = async function(e) {
@@ -8,8 +8,21 @@ onmessage = async function(e) {
     let songNum = [];
     let notValid = 0;
     let songMetadata;
-    fs.readFile(`${appPath}/library.json`, (err) => {
-        if (err) console.error(err);
+    let check = new Promise(resolve => {
+        fs.access(`${appPath}/library.json`, fsconst.F_OK | fsconst.W_OK, (err) => {
+            if (err) {
+                fs.appendFile(`${appPath}/library.json`, '{}', (err) => {
+                    if (err) console.error(err);
+                    resolve();
+                })
+            } else {
+                resolve();
+            }
+        });
+    })
+    await check;
+    fs.promises.readFile(`${appPath}/library.json`, (err) => {
+        if (err) console.log(err);
     }).then(async file => {
         songMetadata = JSON.parse(file.toString());
         let validate = new Promise((resolve) => {
@@ -40,7 +53,7 @@ onmessage = async function(e) {
                             if (tag.tags.picture && tag.tags.album) {
                                 let mName = tag.tags.album.replace(/[.:<>"*?/{}()|[\]\\]/g, "_");
                                 let base64String = '';
-                                fs.access(`${appPath}/Cache/${mName}.jpg`, fsconst.F_OK | fsconst.W_OK, (err) => {
+                                fs.promises.access(`${appPath}/Cache/${mName}.jpg`, fsconst.F_OK | fsconst.W_OK, (err) => {
                                     if (err) {
                                         if (err.code == 'ENOENT') {
                                             for (i = 0; i < tag.tags.picture.data.length; i++) {
