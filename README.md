@@ -3,7 +3,7 @@
 
 Open-source music player built with Electron. Currently in beta, but useable.
 
-## 0.4.0 (pre-release)
+## 0.5.0 (pre-release)
 This project is currently in the middle of being rewritten. It is currently unstable.
   
 # Running / building

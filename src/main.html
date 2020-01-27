@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html class="dark firetail">
 <head>
-    <title>Firetail 0.4.0</title>
+    <title>Firetail</title>
     <link rel="stylesheet" href="main.css">
     <link href="../assets/material/material-icons.css" rel="stylesheet">
 </head>
 <body>
+    <input type="file" id="addFiles" accept="audio/*" multiple style="display: none">
     <div class="app">
         <div class="app-top-bar">
             <div class="top-bar">
@@ -22,7 +23,6 @@
                                 <i class="material-icons-rounded">delete</i>
                                 <span>Nuke Library</span>
                             </label>
-                            <input type="file" id="addFiles" accept="audio/*" multiple style="display: none">
                             <label class="top-button" for="addFiles">
                                 <i class="material-icons-rounded">add</i>
                                 <span>Add Songs</span>
@@ -86,6 +86,12 @@
             <div class="albums-container artists-albums-container">
                 <album-item v-for="item in albumList" v-bind:album="item" v-bind:key="item.album"></album-item>
             </div>
+        </div>
+        <div class="playlists-list" id="playlistsTab">
+            <div class="playlists-container artists-albums-container">
+                <h1 style="margin: 75px 0 0 210px">playlists lol</h1>
+<!--                 <playlist-item v-for="item in playlistList" v-bind:playlist="item" v-bind:key="item"></playlist-item>
+ -->            </div>
         </div>
         <div class="album-page"></div>
         <div class="app-playing-bar">

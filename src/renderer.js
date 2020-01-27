@@ -15,13 +15,16 @@ let currentListViewing = 'Songs';
 let lastView = 'Songs';
 let currentlyPlaying = false;
 let repeatEnabled = false;
+let ver = app.getVersion();
 
 imgServer.postMessage(app.getPath('userData'));
+
+document.title = `Firetail ${ver}`
 
 /* Song List */
 Vue.component('list-item', {
     props: ['song'],
-    template: `<li v-on:mouseover="hover" v-on:mouseleave="leave" class="results-link"><i v-on:click="play(true)" v-on:mouseover="hover(true)" v-on:mouseleave="leave" class="material-icons-rounded play-pause" style="opacity: 0;">play_arrow</i><div v-on:dblclick="play" class="artist-title-album"><p class="list-title">{{ song.title }}</p><p class="list-artist">{{song.artist}}</p><p class="list-album">{{song.album}}</p></div></li>`,
+    template: `<li v-on:mouseover="hover" v-on:mouseleave="leave" class="results-link"><i v-on:click="play(true)" v-on:mouseover="hover(true)" v-on:mouseleave="leave" class="material-icons-rounded play-pause" style="opacity: 0;">play_arrow</i><div v-on:dblclick="play" class="artist-title-album"><p class="list-title">{{ song.title }}</p><p class="list-artist" v-on:click="artist">{{song.artist}}</p><p class="list-album" v-on:click="album">{{song.album}}</p></div></li>`,
     methods: {
         play(btn) {
             compareListOrder = [];
@@ -72,6 +75,12 @@ Vue.component('list-item', {
                 }
             }
             this.$el.childNodes[0].style.opacity = 0;
+        },
+        artist() {
+            getArtist(allSongs[this.$vnode.key].artist);
+        },
+        album() {
+            getAlbum(allSongs[this.$vnode.key].album);
         }
     }
 });
@@ -562,7 +571,10 @@ Vue.component('side-buttons', {
             this.$el.classList.add('active');
             document.querySelector('.item-sidebar.active .active-indicator').style.display = 'block';
             document.querySelector('.track-list').style.display = 'none';
-            document.querySelector('.artist-album-list').style.display = 'none';
+            let tabs = document.querySelectorAll('.artist-album-list');
+            tabs.forEach(f => {
+                f.style.display = 'none';
+            });
             if (tabClicked != 'songsTab') {
                 document.querySelector(`#${tabClicked} .artists-albums-container`).style.display = 'flex';
                 document.querySelector(`#${tabClicked}`).style.display = 'block';
@@ -669,24 +681,43 @@ fileWorker.onmessage = async (metadata) => {
 }
 
 /* Artists page */
+let getArtist = artistClicked => {
+    listItems.songList = [];
+    allSongs.forEach(f => {
+        if (f.artist == artistClicked) {
+            listItems.songList.push(f);
+        }
+    });
+    currentListViewing = `artist-${artistClicked}`;
+    listTitle.list.title = artistClicked;
+    document.querySelector('.artist-album-list').style.display = 'none';
+    document.querySelector(`#songsTab`).style.display = 'flex';
+    updateListOrder('album');
+    document.querySelector('.songs-page').scroll(0,0);
+}
+
+let getAlbum = albumClicked => {
+    listItems.songList = [];
+    allSongs.forEach(f => {
+        if (f.album == albumClicked) {
+            listItems.songList.push(f);
+        }
+    });
+    currentListViewing = `album-${albumClicked}`;
+    listTitle.list.title = albumClicked;
+    document.querySelector('.artist-album-list').style.display = 'none';
+    document.querySelector('.albums-container').style.display = 'none';
+    document.querySelector(`#songsTab`).style.display = 'flex';
+    updateListOrder('title');
+    document.querySelector('.songs-page').scroll(0,0);
+}
+
 Vue.component('artist-item', {
     props: ['artist'],
     template: '<div v-on:click="click" class="artist-item"><h3>{{ artist.artist }}</h3></div>',
     methods: {
         click() {
-            let artistClicked = this.$vnode.key;
-            listItems.songList = [];
-            allSongs.forEach(f => {
-                if (f.artist == artistClicked) {
-                    listItems.songList.push(f);
-                }
-            });
-            currentListViewing = `artist-${artistClicked}`;
-            listTitle.list.title = artistClicked;
-            document.querySelector('.artist-album-list').style.display = 'none';
-            document.querySelector(`#songsTab`).style.display = 'flex';
-            updateListOrder('album');
-            document.querySelector('.songs-page').scroll(0,0);
+            getArtist(this.$vnode.key);
         }
     }
 });
@@ -704,20 +735,7 @@ Vue.component('album-item', {
     template: '<div v-on:click="click" class="artist-item"><h3>{{ album.album }}</h3></div>',
     methods: {
         click() {
-            let albumClicked = this.$vnode.key;
-            listItems.songList = [];
-            allSongs.forEach(f => {
-                if (f.album == albumClicked) {
-                    listItems.songList.push(f);
-                }
-            });
-            currentListViewing = `album-${albumClicked}`;
-            listTitle.list.title = albumClicked;
-            document.querySelector('.artist-album-list').style.display = 'none';
-            document.querySelector('.albums-container').style.display = 'none';
-            document.querySelector(`#songsTab`).style.display = 'flex';
-            updateListOrder('title');
-            document.querySelector('.songs-page').scroll(0,0);
+            getAlbum(this.$vnode.key);
         }
     }
 });
@@ -735,4 +753,16 @@ document.querySelector('#nuke').addEventListener('click', () => {
         if (err) console.error(err);
         list.postMessage({'userData': app.getPath('userData')});
     });
-})
+});
+
+/* Playlists */
+let playlists = new Vue({
+    el: '.playlists-container',
+    data: {
+        playlistList: []
+    }
+});
+
+Vue.component('playlist-item', {
+    props: ['playlist']
+});

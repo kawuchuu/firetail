@@ -380,7 +380,6 @@ button i {
 .top-button span {
     margin-top: 4px;
     margin-left: 5px;
-    font-weight: bold;
     font-size: 14px;
 }
 
@@ -467,10 +466,14 @@ button i {
     margin: 0 18px 0 14px;
 }
 
+.item-sidebar.active span {
+    font-weight: bold;
+}
+
 .item-sidebar span {
     font-size: 17px;
-    font-weight: bold;
     line-height: 1;
+    transform: translateY(1px);
 }
 
 /* Playing bar */
@@ -754,6 +757,18 @@ li.nohover:hover {
     padding-top: 12px;
     padding-bottom: 9px;
     padding-right: 40px;
+    cursor: pointer;
+}
+
+.list-artist:hover, .list-album:hover {
+    color: var(--hl-txt);
+    text-decoration: underline;
+}
+
+.list-artist:active, .list-album:active {
+    color: var(--hl-txt);
+    text-decoration: underline;
+    opacity: .8;
 }
 
 .play-pause {
@@ -775,11 +790,10 @@ li.nohover:hover {
 }
 
 .tab-title {
-    width: calc(100% - 250px);
+    width: calc(100% - 40px);
     height: 90px;
     display: flex;
     align-items: center;
-
 }
 
 .tab-title-text {
@@ -787,7 +801,7 @@ li.nohover:hover {
     justify-content: center;
     flex-direction: column;
     margin-left: 22px;
-    width: calc(100% - 75px);
+    width: calc(100% - 40px);
 }
 
 #albumArtistBack {
@@ -796,6 +810,7 @@ li.nohover:hover {
 
 .tab-title h2 {
     margin: 0;
+    margin-bottom: 4px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -815,6 +830,21 @@ li.nohover:hover {
     z-index: 3;
     background: var(--bg);
     font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.list-section .list-artist:hover, .list-section .list-album:hover {
+    color: var(--text);
+    text-decoration: none;
+    cursor: default;
+    opacity: 1;
+}
+
+.list-section .list-artist:active, .list-section .list-album:active {
+    color: var(--text);
+    text-decoration: none;
+    opacity: 1;
 }
 
 div.section {
@@ -855,11 +885,14 @@ div.section {
     text-overflow: ellipsis;
     white-space: nowrap;
     pointer-events: none;
+    font-weight: normal;
+    line-height: 2;
+    font-size: 16px;
 }
 
 .artist-item {
-    width: 165px;
-    height: 40px;
+    width: 150px;
+    height: 25px;
     background: var(--fg-bg);
     border: solid 2px var(--bd);
     border-radius: 10px;
@@ -869,15 +902,18 @@ div.section {
     margin: 10px 10px;
     padding: 10px;
     box-shadow: 0px 1px 5px rgba(0,0,0,.15);
+    cursor: pointer;
 }
 
 .artist-item:hover, .album-item:hover {
     background: var(--li-hv);
-    transform: scale(1.03)
+    transform: scale(1.03);
+    color: var(--hl-txt)
 }
 
 .artist-item:active, .album-item:active {
     background: var(--fg-bg);
     opacity: .5;
-    transform: scale(1)
+    transform: scale(1);
+    color: var(--hl-txt);
 }
