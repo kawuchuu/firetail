@@ -8,7 +8,7 @@ var bg;
 var ipc = require('electron').ipcMain;
 var mini = false;
 
-if (settings.get('title-bar') == 'native') {
+/*if (settings.get('title-bar') == 'native') {
     frameStyle = true;
 } else {
     frameStyle = false;
@@ -18,7 +18,7 @@ if (settings.theme == 'light') {
     bg = '#f5f5f5';
 } else {
     bg = '#1f1f1f';
-};
+};*/
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 app.commandLine.appendSwitch('force-color-profile', 'srgb');
@@ -30,8 +30,8 @@ function createMainWindow() {
         minWidth: 650,
         minHeight: 375,
         icon: 'assets/icon.ico', 
-        frame: frameStyle,
-        backgroundColor: bg,
+        frame: true,
+        backgroundColor: '#1f1f1f',
         titleBarStyle: 'hidden',
         show: false,
         title: 'Firetail',
