@@ -7,7 +7,24 @@
 </head>
 <body>
     <input type="file" id="addFiles" accept="audio/*" multiple style="display: none">
+    <div class="panel">
+        <div class="panel-win hidden">
+            <div class="title">
+                <div style="width: 35%"></div>
+                <h3 v-bind:title="title">{{title}}</h3>
+                <div style="width: 35%; text-align: right">
+                    <i v-on:click="closePanel" class="material-icons-rounded">close</i>
+                </div>
+            </div>
+            <div class="panel-content"></div>
+        </div>
+    </div>
     <div class="app">
+        <div class="context-menu">
+            <div class="context-list">
+                <ctx-item v-for="item in ctxList" v-bind:list="item" v-bind:key="item.id"></ctx-item>
+            </div>
+        </div>
         <div class="app-top-bar">
             <div class="top-bar">
                 <div class="top-bar-inner-container">
@@ -19,14 +36,7 @@
                     </div>
                     <div class="nav-top-buttons">
                         <div class="top-button-container">
-                            <label class="top-button" id="nuke">
-                                <i class="material-icons-rounded">delete</i>
-                                <span>Nuke Library</span>
-                            </label>
-                            <label class="top-button" for="addFiles">
-                                <i class="material-icons-rounded">add</i>
-                                <span>Add Songs</span>
-                            </label>
+                            <top-buttons v-for="item in button" v-bind:button="item" v-bind:key="item.id"></top-buttons>
                         </div>
                     </div>
                 </div>
@@ -77,21 +87,25 @@
                 </div>
             </ul>
         </div>
-        <div class="artist-album-list" id="artistsTab">
+        <div class="artist-album-list pages" id="artistsTab">
             <div class="artists-container artists-albums-container">
                 <artist-item v-for="item in artistList" v-bind:artist="item" v-bind:key="item.artist"></artist-item>
             </div>
         </div>
-        <div class="artist-album-list" id="albumsTab">
+        <div class="artist-album-list pages" id="albumsTab">
             <div class="albums-container artists-albums-container">
                 <album-item v-for="item in albumList" v-bind:album="item" v-bind:key="item.album"></album-item>
             </div>
         </div>
-        <div class="playlists-list" id="playlistsTab">
+        <div class="panel-msg" v-bind:msg="msg">
+            <i class="material-icons-rounded">{{msg.icon}}</i>
+            <h2>{{msg.title}}</h2>
+            <p>{{msg.desc}}</p>
+        </div>
+        <div class="playlists-list pages" id="playlistsTab">
             <div class="playlists-container artists-albums-container">
-                <h1 style="margin: 75px 0 0 210px">playlists lol</h1>
-<!--                 <playlist-item v-for="item in playlistList" v-bind:playlist="item" v-bind:key="item"></playlist-item>
- -->            </div>
+                <playlist-item v-for="item in playlistList" v-bind:playlist="item" v-bind:key="item.id"></playlist-item>
+            </div>
         </div>
         <div class="album-page"></div>
         <div class="app-playing-bar">
@@ -130,13 +144,12 @@
                                 </div>
                             </div>
                         </div>
-    <!--                     <i id="miniPlayerButton" class="material-icons-rounded">open_in_new</i>
-     -->                </div>
+                        <i id="miniPlayerButton" class="material-icons-rounded">open_in_new</i>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-<!--     <script src="../assets/vue.js"></script>
- -->    <script src="./renderer.js"></script>
+    <script src="./renderer.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 <html class="firetail dark">
     <head>
         <title>Firetail Crash</title>
-        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="./main.css">
         <link rel="stylesheet" href="./crash.css">
         <link href="../assets/material/material-icons.css" rel="stylesheet">
     </head>
@@ -12,15 +12,17 @@
             <div class="text">
                 <h1>Welp, that ain't good.</h1>
                 <p>Unfortunately, Firetail has crashed.</p>
-                <button id="restart" onclick="restart()">
-                    <i class="material-icons">refresh</i>Restart Firetail
-                </button>
+                <div id="restart" class="button" onclick="restart()">
+                    <i class="material-icons">refresh</i>
+                    <span>Restart Firetail</span>
+                </div>
             </div>
         </div>
         <script>
             function transition() {
                 setTimeout(() => {
-                    document.getElementById('restart').style.transition = "0.2s";                }, 200)
+                    document.querySelector('#restart').style.transition = "0.2s"
+                }, 200)
             }
             let win = require('electron').remote.getCurrentWindow();
             let url = require('url');

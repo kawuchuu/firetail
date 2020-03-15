@@ -5,6 +5,7 @@ const fs = require('fs');
 
 let list = new Worker('./ftmodules/list.js');
 let imgServer = new Worker('./ftmodules/server.js');
+let addPlaylist = new Worker('./ftmodules/addplaylist.js');
 let audio;
 let allSongs = [];
 let currentSong;
@@ -22,9 +23,11 @@ imgServer.postMessage(app.getPath('userData'));
 document.title = `Firetail ${ver}`
 
 /* Song List */
+let highlightedSongs = [];
+let hlLastClick = 0;
 Vue.component('list-item', {
     props: ['song'],
-    template: `<li v-on:mouseover="hover" v-on:mouseleave="leave" class="results-link"><i v-on:click="play(true)" v-on:mouseover="hover(true)" v-on:mouseleave="leave" class="material-icons-rounded play-pause" style="opacity: 0;">play_arrow</i><div v-on:dblclick="play" class="artist-title-album"><p class="list-title">{{ song.title }}</p><p class="list-artist" v-on:click="artist">{{song.artist}}</p><p class="list-album" v-on:click="album">{{song.album}}</p></div></li>`,
+    template: `<li v-on:mouseover="hover" v-on:click="highlight" v-on:mouseleave="leave" v-on:contextmenu="ctxMenu($event); highlight($event);" class="results-link"><i v-on:click="play(true)" v-on:mouseover="hover(true)" v-on:mouseleave="leave" class="material-icons-rounded play-pause" style="opacity: 0;">play_arrow</i><div v-on:dblclick="play" class="artist-title-album"><p class="list-title">{{ song.title }}</p><p class="list-artist"><span v-on:click="artist">{{song.artist}}</span></p><p class="list-album"><span v-on:click="album">{{song.album}}</span></p></div></li>`,
     methods: {
         play(btn) {
             compareListOrder = [];
@@ -81,9 +84,92 @@ Vue.component('list-item', {
         },
         album() {
             getAlbum(allSongs[this.$vnode.key].album);
+        },
+        highlight(e) {
+            let newClick = listItems.songList.indexOf(this.song);
+            let allElements = document.querySelectorAll('.results-link');
+            if (e.type != 'contextmenu' && !e.ctrlKey) {
+                document.querySelectorAll('.results-link').forEach(f => {
+                    f.classList.remove('highlight')
+                })
+            } else if (e.type == 'contextmenu' && highlightedSongs.indexOf(newClick) != -1) {
+                return;
+            } else if (!e.ctrlKey) {
+                document.querySelectorAll('.results-link').forEach(f => {
+                    f.classList.remove('highlight')
+                })
+            }
+            if (!e.ctrlKey) {
+                highlightedSongs = [];
+            }
+            if (!e.shiftKey) {
+                highlightedSongs.push(newClick);
+                hlLastClick = listItems.songList.indexOf(this.song);
+                this.$el.classList.add('highlight');
+            } else {
+                listItems.songList.forEach((item, index) => {
+                    if (hlLastClick < newClick) {
+                        if (index <= newClick && index >= hlLastClick) {
+                            highlightedSongs.push(index);
+                        }
+                    } else {
+                        if (index >= newClick && index <= hlLastClick) {
+                            highlightedSongs.push(index);
+                        }
+                    }
+                })
+                highlightedSongs.forEach(f => {
+                    allElements[f].classList.add('highlight');
+                });
+            }
+        },
+        ctxMenu(e) {
+            openCtx(e, 'song', this.$vnode.key);
         }
     }
 });
+
+document.addEventListener('click', (e) => {
+    if (e.target.classList[0] == 'tab-title') {
+        let allElements = document.querySelectorAll('.results-link');
+        if (highlightedSongs.length != 0) {
+            highlightedSongs.forEach(f => {
+                allElements[f].classList.remove('highlight');
+            });
+        }
+        highlightedSongs = [];
+        hlLastClick = 0;
+    }
+    document.querySelector('.context-menu').style.display = 'none'
+})
+
+let itemClicked;
+
+let openCtx = (e, type, item) => {
+    ctxMenu = document.querySelector('.context-menu');
+    ctxMenu.style.display = 'block'
+    if (e.pageX + ctxMenu.offsetWidth >= window.innerWidth) {
+        xPosition = e.pageX - ctxMenu.offsetWidth;
+    } else {
+        xPosition = e.pageX;
+    }
+    if (e.pageY + ctxMenu.offsetHeight >= window.innerHeight) {
+        yPosition = e.pageY - ctxMenu.offsetHeight;
+    } else {
+        yPosition = e.pageY;
+    }
+    switch(type) {
+        case "song":
+            ctxItems.ctxList = ctxListSong;
+            break;
+        case "playlist":
+            ctxItems.ctxList = ctxListPlaylist;
+            break;
+    }
+    itemClicked = item;
+    ctxMenu.style.left = xPosition + 'px';
+    ctxMenu.style.top = yPosition + 'px';
+}
 
 let updateActive = (btn) => {
     try {
@@ -96,7 +182,7 @@ let updateActive = (btn) => {
         let el = document.querySelector('.list-wrapper').childNodes[currentSongIndex + 2];
         el.classList.add('active');
         el.childNodes[0].id = 'active';
-        if (btn == true) {
+        if (btn) {
             el.childNodes[0].textContent = 'pause';
         } else {
             el.childNodes[0].textContent = 'volume_up';
@@ -114,10 +200,10 @@ let listItems = new Vue({
     }
 });
 
-list.postMessage({'userData': app.getPath('userData')});
+list.postMessage({'userData': app.getPath('userData'), 'playlist': null});
 
 list.onmessage = async (message) => {
-    if (message.data == false) {
+    if (!message.data) {
         listItems.songList = [];
         document.querySelector('.load-spinner').style.display = 'none';
         listTitle.list.count = "0 songs"
@@ -127,23 +213,23 @@ list.onmessage = async (message) => {
     }
     artistList = message.data[1];
     albumList = message.data[2];
-    message = message.data[0];
+    songs = message.data[0];
     allSongs = [];
-    message.forEach(f => {
+    songs.forEach(f => {
         allSongs.push(f);
     });
     artists.artistList = sortArray(artistList, 'artist');
     albums.albumList = sortArray(albumList, 'album');
-    listItems.songList = message;
+    listItems.songList = songs;
     compareListOrder = [];
     nonCurrentView = [];
     updateListOrder('artist');
-    if (currentlyPlaying == true) {
+    if (currentlyPlaying) {
         listItems.songList.forEach(f => {
             compareListOrder.push(f.id);
             nonCurrentView.push(f);
         });
-        if (shuffleEnabled == true) {
+        if (shuffleEnabled) {
             shuffle(nonCurrentView);
             compareListOrder = [];
             nonCurrentView.forEach(f => {
@@ -175,6 +261,14 @@ let shuffle = (array) => {
 }
 
 let updateListOrder = async (sortBy, compUpdate) => {
+    let allElements = document.querySelectorAll('.results-link');
+    if (highlightedSongs.length != 0) {
+        highlightedSongs.forEach(f => {
+            allElements[f].classList.remove('highlight');
+        });
+    }
+    highlightedSongs = [];
+    hlLastClick = 0;
     let bruhbruh = new Promise(resolve => {
         let sortByOrder = {};
         listItems.songList.forEach(f => {
@@ -565,19 +659,51 @@ Vue.component('side-buttons', {
     template: '<div class="item-sidebar" v-on:click="click"><div class="active-indicator"></div><i class="material-icons-rounded">{{ button.icon }}</i><span>{{ button.name }}</span></div>',
     methods: {
         click(e) {
+            // everything here will be rewritten soon, i know it's awful
+            document.querySelector('.panel-msg').style.display = 'none';
             let tabClicked = this.$vnode.key;
             document.querySelector('.item-sidebar.active .active-indicator').style.display = 'none';
             document.querySelector('.item-sidebar.active').classList.remove('active')
             this.$el.classList.add('active');
             document.querySelector('.item-sidebar.active .active-indicator').style.display = 'block';
             document.querySelector('.track-list').style.display = 'none';
-            let tabs = document.querySelectorAll('.artist-album-list');
+            let tabs = document.querySelectorAll('.pages');
             tabs.forEach(f => {
                 f.style.display = 'none';
             });
-            if (tabClicked != 'songsTab') {
+            topButtons.button = [
+                {name: 'Nuke Library', id: 'nuke', for: null, icon: 'delete'},
+                {name: 'Add Songs', id: 'addFiles', for: 'addFiles', icon: 'add'}
+            ]
+            if (tabClicked != 'songsTab' && tabClicked != 'settingsTab') {
                 document.querySelector(`#${tabClicked} .artists-albums-container`).style.display = 'flex';
                 document.querySelector(`#${tabClicked}`).style.display = 'block';
+                topButtons.button = [];
+            }
+            if (tabClicked == 'playlistsTab') {
+                panelMsg.msg.icon = 'playlist_play',
+                panelMsg.msg.title = 'No Playlists Found',
+                panelMsg.msg.desc = 'Click Create Playlist to get started!'
+                playlists.playlistList = [];
+                fs.promises.readFile(`${app.getPath('userData')}/playlist.json`, (err) => {
+                    if (err) {
+                        console.error(err);
+                        document.querySelector('.panel-msg').style.display = 'flex';
+                    }
+                }).then(file => {
+                    try {
+                        let getPlaylists = JSON.parse(file.toString());
+                        if (Object.keys(getPlaylists).length == 0) {
+                            document.querySelector('.panel-msg').style.display = 'flex';
+                        }
+                        playlists.playlistList = getPlaylists;
+                    } catch(err) {
+                        document.querySelector('.panel-msg').style.display = 'flex';
+                    }
+                })
+                topButtons.button = [
+                    {name: 'Create Playlist', id: 'createPlaylist', for: null, icon: 'playlist_add'}
+                ]
             }
             if (tabClicked == 'songsTab' && nonCurrentView != listItems.songList) {
                 document.querySelector(`#songsTab`).style.display = 'flex';
@@ -589,6 +715,13 @@ Vue.component('side-buttons', {
                 })
                 updateListOrder('artist');
                 document.querySelector('.songs-page').scroll(0,0);
+            }
+            if (tabClicked == 'settingsTab') {
+                panelMsg.msg.icon = 'settings',
+                panelMsg.msg.title = 'Settings Unavailable',
+                panelMsg.msg.desc = 'Settings will return in a later update! Stay tuned...'
+                document.querySelector('.panel-msg').style.display = 'flex';
+                topButtons.button = [];
             }
         }
     },
@@ -673,7 +806,7 @@ fileWorker.onmessage = async (metadata) => {
         } else {
             songAddInfo.addInfo = `Added ${message} songs to your library`
         }
-        list.postMessage({'userData': app.getPath('userData')});
+        list.postMessage({'userData': app.getPath('userData'), 'playlist': null});
         setTimeout(() => {
             document.querySelector('.add-songs-notify').style.display = 'none';
         }, 2000)
@@ -707,6 +840,26 @@ let getAlbum = albumClicked => {
     listTitle.list.title = albumClicked;
     document.querySelector('.artist-album-list').style.display = 'none';
     document.querySelector('.albums-container').style.display = 'none';
+    document.querySelector(`#songsTab`).style.display = 'flex';
+    updateListOrder('title');
+    document.querySelector('.songs-page').scroll(0,0);
+}
+
+let getSpecificPlaylist = (playlistClicked, songs) => {
+    listItems.songList = [];
+    songs.forEach(f => {
+        allSongs.forEach(a => {
+            if (listItems.songList.indexOf(a) != -1) return;
+            if (a.file == f) {
+                console.log(listItems.songList.indexOf(a.file))
+                listItems.songList.push(a);
+            }
+        })
+    })
+    currentListViewing = `playlist-${playlistClicked}`;
+    listTitle.list.title = playlists.playlistList[playlistClicked].name;
+    document.querySelector('.playlists-list').style.display = 'none';
+    document.querySelector('.playlists-container').style.display = 'none';
     document.querySelector(`#songsTab`).style.display = 'flex';
     updateListOrder('title');
     document.querySelector('.songs-page').scroll(0,0);
@@ -747,15 +900,132 @@ let albums = new Vue({
     }
 })
 
+let panel = {
+    open(wpanel) {
+        switch(wpanel) {
+            case "createPlaylist":
+                ftpanel.title = 'Create Playlist';
+                playlistCreateMenu = new createPlaylist({
+                    methods: {
+                        create() {
+                            createPlaylistWkr.postMessage([this.plName, app.getPath('userData')]);
+                        }
+                    },
+                    data: {
+                        plName: 'My Playlist'
+                    }
+                });
+                panel.mounted = playlistCreateMenu;
+                playlistCreateMenu.$mount('.panel-content');
+                break;
+            case 'addPL':
+                ftpanel.title = 'Add to Playlist'
+                addPLex = new addPL({
+                    data: {
+                        loaded: false,
+                        plList: []
+                    },
+                    created() {
+                        fs.promises.readFile(`${app.getPath('userData')}/playlist.json`, (err) => {
+                            if (err) {
+                                console.error(err);
+                            }
+                        }).then(file => {
+                            let getPlaylists = JSON.parse(file.toString());
+                            this.plList = getPlaylists;
+                        });
+                    }
+                })
+                panel.mounted = addPLex;
+                addPLex.$mount('.panel-content');
+        }
+        document.querySelector('.panel').classList.remove('hidden');
+        document.querySelector('.panel').classList.add('open');
+        document.querySelector('.panel-win').classList.remove('hidden');
+    },
+    close() {
+        document.querySelector('.panel').classList.remove('open');
+        document.querySelector('.panel').classList.add('hidden');
+        document.querySelector('.panel-win').classList.add('hidden');
+        setTimeout(() => {
+            panel.mounted.$destroy;
+            document.querySelector('.panel-content').innerHTML = '';
+        }, 200)
+    },
+    mounted: null
+}
+
 /* top bar button shit */
-document.querySelector('#nuke').addEventListener('click', () => {
-    fs.unlink(app.getPath('userData') + '/library.json', (err) => {
-        if (err) console.error(err);
-        list.postMessage({'userData': app.getPath('userData')});
-    });
+
+Vue.component('top-buttons', {
+    props: ['button'],
+    template: `<label class="top-button" v-bind:for="checkFor" v-on:click="click"><i class="material-icons-rounded">{{button.icon}}</i><span>{{button.name}}</span></label>`,
+    computed: {
+        checkFor(item) {
+            if (item.button.for != null) {
+                return item.button.for;
+            }
+        }
+    },
+    methods: {
+        click() {
+            switch(this.button.id) {
+                case 'nuke':
+                    fs.unlink(app.getPath('userData') + '/library.json', (err) => {
+                        if (err) console.error(err);
+                        list.postMessage({'userData': app.getPath('userData'), 'playlist': false});
+                    });
+                    break;
+                case 'createPlaylist':
+                    panel.open('createPlaylist');
+                    break;
+            }
+        }
+    }
 });
 
+let topButtons = new Vue({
+    el: '.top-button-container',
+    data: {
+        button: [
+            {name: 'Nuke Library', id: 'nuke', for: null, icon: 'delete'},
+            {name: 'Add Songs', id: 'addFiles', for: 'addFiles', icon: 'add'}
+        ]
+    }
+});
+
+let ftpanel = new Vue({
+    el: '.panel',
+    data: {
+        title: 'Panel Title'
+    },
+    methods: {
+        closePanel() {
+            panel.close();
+        }
+    }
+})
+
 /* Playlists */
+Vue.component('playlist-item', {
+    props: ['playlist'],
+    computed: {
+        bg() {
+            return `background-image: url('${this.playlist.image}')`
+        }
+    },
+    template: `<div v-on:contextmenu="ctxMenu" class="playlist-item"><div class="playlist-item-inner-container" v-on:click="click"><div class="playlist-image" v-bind:style="bg"></div><span class="playlist-name">{{ playlist.name }}</span></div></div>`,
+    methods: {
+        click() {
+            console.log(this.playlist.id)
+            getSpecificPlaylist(this.playlist.id, this.playlist.files);
+        },
+        ctxMenu(e) {
+            openCtx(e, 'playlist', this.$vnode.key)
+        }
+    }
+});
+
 let playlists = new Vue({
     el: '.playlists-container',
     data: {
@@ -763,6 +1033,141 @@ let playlists = new Vue({
     }
 });
 
-Vue.component('playlist-item', {
-    props: ['playlist']
+let createPlaylist = Vue.extend({
+    template: 
+    `<div class="panel-content">
+        <div class="playlist-create-flex"><div class="playlist-create-img"></div>
+            <div>
+                <div class="input-label">Title</div>
+                <input type="text" v-model="plName" @input="$emit('input', $event.target.value)" placeholder="My Playlist">
+                <div class="input-label">Description</div>
+                <textarea class="long-text" placeholder="Write a lovely description about your playlist here..."></textarea>
+            </div>
+        </div>
+        <div class="button-right">
+            <div v-on:click="create" class="button"><span>Create</span></div>
+        </div>
+    </div>`
 });
+
+let createPlaylistWkr = new Worker('./ftmodules/createplaylist.js');
+
+createPlaylistWkr.onmessage = () => {
+    document.querySelector('.panel-msg').style.display = 'none';
+    fs.promises.readFile(`${app.getPath('userData')}/playlist.json`, (err) => {
+        if (err) {
+            console.error(err);
+            document.querySelector('.panel-msg').style.display = 'flex';
+        }
+    }).then(file => {
+        try {
+            let getPlaylists = JSON.parse(file.toString());
+            if (Object.keys(getPlaylists).length == 0) {
+                document.querySelector('.panel-msg').style.display = 'flex';
+            }
+            playlists.playlistList = getPlaylists;
+        } catch(err) {
+            document.querySelector('.panel-msg').style.display = 'flex';
+        }
+    });
+    panel.close();
+}
+
+/* Context menu */
+Vue.component('ctx-item', {
+    props: ['list'],
+    template: '<div class="context-item" v-on:click="click">{{ list.name }}</div>',
+    methods: {
+        click() {
+            switch(this.list.id) {
+                case "addPlaylist":
+                    panel.open('addPL');
+                    break;
+                case "removePlaylist":
+                    document.querySelector('.panel-msg').style.display = 'none';
+                    fs.promises.readFile(`${app.getPath('userData')}/playlist.json`, (err) => {
+                        if (err) {
+                            console.error(err);
+                        }
+                    }).then(file => {
+                        let getPlaylists = JSON.parse(file.toString());
+                        delete getPlaylists[itemClicked];
+                        let formattedMetadata = JSON.stringify(getPlaylists);
+                        fs.writeFile(`${app.getPath('userData')}/playlist.json`, formattedMetadata, err => {
+                            if (err) console.error(err);
+                            postMessage(true);
+                        });
+                        if (Object.keys(getPlaylists).length == 0) {
+                            document.querySelector('.panel-msg').style.display = 'flex';
+                        }
+                        playlists.playlistList = getPlaylists;
+                    });
+                    break;
+            }
+        }
+    }
+});
+
+ctxListSong = [
+    {name: 'Add to playlist', id: 'addPlaylist'},
+    {name: 'Remove from library', id: 'removeFromLibrary'}
+]
+
+ctxListPlaylist = [
+    {name: 'Edit Playlist', id: 'editPlaylist'},
+    {name: 'Remove Playlist', id: 'removePlaylist'}
+]
+
+let ctxItems = new Vue({
+    el: '.context-list',
+    data: {
+        ctxList: ctxListSong
+    }
+})
+
+let addPL = Vue.extend({
+    template:
+    `<div class="panel-content">
+        <pl-list v-for="item in plList" v-bind:playlist="item" v-bind:key="item.id"></pl-list>
+    </div>`
+})
+
+Vue.component('pl-list', {
+    props: ['playlist'],
+    computed: {
+        bg() {
+            return `background-image: url('${this.playlist.image}')`;
+        }
+    },
+    template:
+    `<div v-on:click="add" class="addPl-item">
+        <div class="addPl-img" v-bind:style="bg">
+        </div>
+        <span>{{playlist.name}}</span>
+    </div>`,
+    methods: {
+        add() {
+            let filesToAdd = [];
+            highlightedSongs.forEach(f => {
+                filesToAdd.push(listItems.songList[f].file);
+            });
+            console.log(filesToAdd);
+            addPlaylist.postMessage([filesToAdd, this.playlist.id, app.getPath('userData')])
+        }
+    }
+});
+
+addPlaylist.onmessage = () => {
+    panel.close();
+}
+
+let panelMsg = new Vue({
+    el: '.panel-msg',
+    data: {
+        msg: {
+            icon: 'playlist_play',
+            title: 'No Playlists Found',
+            desc: 'Click Create Playlist to get started!'
+        }
+    }
+})

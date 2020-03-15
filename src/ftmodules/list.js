@@ -49,6 +49,7 @@ onmessage = async (message) => {
                     'title': title,
                     'artist': artist,
                     'album': album,
+                    'songId': file[value].id,
                     'id': numCount
                 });
                 if (artistsUsed.indexOf(artist) == -1) {

@@ -1,8 +1,7 @@
 body {
-    color: white;
     display: flex;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     justify-content: center;
     align-items: center;
     animation: fade .3s;
@@ -17,27 +16,6 @@ body {
     }
 }
 
-html.firetail {
-    --btn: #b92500;
-    --btn-hover: #d46000;
-    --btn-active: #d66000;
-    --handle: #ff9100;
-    --glow: rgba(196, 82, 47, 0.4);
-    --grad: linear-gradient(to right, #b92500, #ff9100);
-    --hl-txt: #df5a25;
-    --hl-op: #df5a2523;
-}
-
-html.dark {
-    --bg: #1a1a1a;
-    --text: #ffffff;
-    --fg-bg: #1e1e1e;
-    --bd: #3a3a3a;
-    --li-hv: #212121;
-    --logo: 1;
-    --switch: #3d3d3d;
-}
-
 .content {
     display: flex;
     align-items: center;
@@ -50,6 +28,7 @@ html.dark {
     background-size: cover;
     background-repeat: no-repeat;
     filter: brightness(2);
+    opacity: .9;
 }
 
 .text h1 {
@@ -64,43 +43,5 @@ html.dark {
 .text p {
     opacity: .75;
     font-size: 18px;
-    font-family: 'Dosis'
-}
-
-button {
-    background: transparent;
-    color: var(--text);
-    font-family: 'Dosis', sans-serif;
-    font-weight: bold;
-    width: 175px;
-    height: 37px;
-    padding: 0;
-    border: 2px solid var(--bd);
-    border-radius: 7px;
-    outline: none;
-    cursor: pointer;
-    font-size: 17px;
-    text-align: left;
-    overflow: hidden;
-    display: flex;
-    transition-property: transform border background color;
-}
-
-button:hover {
-    background: var(--hl-op);
-    transition: .2s;
-    box-shadow: 0px 2px 15px var(--glow);
-    transform: scale(1.05);
-    color: var(--hl-txt);
-    border: 2px solid var(--hl-txt);
-}
-
-button:active {
-    opacity: .8;
-    transform: scale(1);
-    transition: .1s;
-    color: var(--hl-txt);
-    border: 2px solid var(--hl-txt);
-    box-shadow: 0px 2px 15px var(--glow);
-    background: var(--hl-op);
+    font-family: 'Overpass'
 }

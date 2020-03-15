@@ -47,7 +47,8 @@ onmessage = async function(e) {
                             songData = {
                                 'title': tag.tags.title,
                                 'artist': tag.tags.artist,
-                                'album': tag.tags.album
+                                'album': tag.tags.album,
+                                'id': i
                             }
                             songMetadata[songNum[i]] = songData;
                             if (tag.tags.picture && tag.tags.album) {
@@ -75,7 +76,7 @@ onmessage = async function(e) {
                             resolve(true);
                         },
                         onError: function () {
-                            songMetadata[songNum[i]] = {};
+                            songMetadata[songNum[i]] = {'id': i};
                             resolve(true);
                         }
                     });
