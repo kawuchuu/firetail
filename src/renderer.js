@@ -103,9 +103,15 @@ Vue.component('list-item', {
                 highlightedSongs = [];
             }
             if (!e.shiftKey) {
-                highlightedSongs.push(newClick);
+                let index = highlightedSongs.indexOf(newClick);
+                if (index != -1) {
+                    highlightedSongs.splice(index);
+                    this.$el.classList.remove('highlight');
+                } else {
+                    highlightedSongs.push(newClick);
+                    this.$el.classList.add('highlight');
+                }
                 hlLastClick = listItems.songList.indexOf(this.song);
-                this.$el.classList.add('highlight');
             } else {
                 listItems.songList.forEach((item, index) => {
                     if (hlLastClick < newClick) {
@@ -696,7 +702,12 @@ Vue.component('side-buttons', {
                         if (Object.keys(getPlaylists).length == 0) {
                             document.querySelector('.panel-msg').style.display = 'flex';
                         }
-                        playlists.playlistList = getPlaylists;
+                        let plArray = [];
+                        Object.keys(getPlaylists).forEach(f => {
+                            plArray.push(getPlaylists[f]);
+                        })
+                        plArray = sortArray(plArray, 'name');
+                        playlists.playlistList = plArray;
                     } catch(err) {
                         document.querySelector('.panel-msg').style.display = 'flex';
                     }
@@ -932,7 +943,12 @@ let panel = {
                             }
                         }).then(file => {
                             let getPlaylists = JSON.parse(file.toString());
-                            this.plList = getPlaylists;
+                            let plArray = [];
+                            Object.keys(getPlaylists).forEach(f => {
+                                plArray.push(getPlaylists[f]);
+                            })
+                            plArray = sortArray(plArray, 'name');
+                            this.plList = plArray;
                         });
                     }
                 })
@@ -1018,7 +1034,7 @@ Vue.component('playlist-item', {
     methods: {
         click() {
             console.log(this.playlist.id)
-            getSpecificPlaylist(this.playlist.id, this.playlist.files);
+            getSpecificPlaylist(playlists.playlistList.indexOf(this.playlist), this.playlist.files);
         },
         ctxMenu(e) {
             openCtx(e, 'playlist', this.$vnode.key)
@@ -1065,7 +1081,12 @@ createPlaylistWkr.onmessage = () => {
             if (Object.keys(getPlaylists).length == 0) {
                 document.querySelector('.panel-msg').style.display = 'flex';
             }
-            playlists.playlistList = getPlaylists;
+            let plArray = [];
+            Object.keys(getPlaylists).forEach(f => {
+                plArray.push(getPlaylists[f]);
+            })
+            plArray = sortArray(plArray, 'name');
+            playlists.playlistList = plArray;
         } catch(err) {
             document.querySelector('.panel-msg').style.display = 'flex';
         }
@@ -1100,7 +1121,12 @@ Vue.component('ctx-item', {
                         if (Object.keys(getPlaylists).length == 0) {
                             document.querySelector('.panel-msg').style.display = 'flex';
                         }
-                        playlists.playlistList = getPlaylists;
+                        let plArray = [];
+                        Object.keys(getPlaylists).forEach(f => {
+                            plArray.push(getPlaylists[f]);
+                        })
+                        plArray = sortArray(plArray, 'name');
+                        playlists.playlistList = plArray;
                     });
                     break;
             }

@@ -51,6 +51,7 @@ html.dark {
     --li-hv: #212121;
     --logo: 0.9;
     --switch: #3d3d3d;
+    --hl: #252525;
 }
 
 html.light {
@@ -1046,7 +1047,7 @@ div.section {
 }
 
 .highlight {
-    background: var(--li-hv);
+    background: var(--hl);
 }
 
 /* Artist & album tabs */
