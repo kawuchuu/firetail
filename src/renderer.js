@@ -933,7 +933,6 @@ let panel = {
                 ftpanel.title = 'Add to Playlist'
                 addPLex = new addPL({
                     data: {
-                        loaded: false,
                         plList: []
                     },
                     created() {
@@ -954,6 +953,56 @@ let panel = {
                 })
                 panel.mounted = addPLex;
                 addPLex.$mount('.panel-content');
+                break;
+            case "editPL":
+                ftpanel.title = 'Edit Playlist'
+                let editPL = new editPlaylist({
+                    data: {
+                        plName: 'Playlist Title',
+                        desc: 'Playlist Desc'
+                    },
+                    created() {
+                        let plID = itemClicked;
+                        fs.promises.readFile(`${app.getPath('userData')}/playlist.json`, (err) => {
+                            if (err) {
+                                console.error(err);
+                            }
+                        }).then(file => {
+                            let pl = JSON.parse(file.toString());
+                            let plItem = pl[plID];
+                            console.log(plItem)
+                            this.plName = plItem.name;
+                        });
+                    },
+                    methods: {
+                        edit() {
+                            fs.promises.readFile(`${app.getPath('userData')}/playlist.json`, (err) => {
+                                if (err) {
+                                    console.error(err);
+                                }
+                            }).then(file => {
+                                let pl = JSON.parse(file.toString());
+                                pl[itemClicked].name = this.plName;
+                                fs.promises.writeFile(`${app.getPath('userData')}/playlist.json`, JSON.stringify(pl), (err) => {
+                                    if (err) console.error(err);
+                                }).then(() => {
+                                    panel.close();
+                                    if (Object.keys(pl).length == 0) {
+                                        document.querySelector('.panel-msg').style.display = 'flex';
+                                    }
+                                    let plArray = [];
+                                    Object.keys(pl).forEach(f => {
+                                        plArray.push(pl[f]);
+                                    })
+                                    plArray = sortArray(plArray, 'name');
+                                    playlists.playlistList = plArray;
+                                });
+                            })
+                        }
+                    }
+                })
+                panel.mounted = editPL;
+                editPL.$mount('.panel-content')
         }
         document.querySelector('.panel').classList.remove('hidden');
         document.querySelector('.panel').classList.add('open');
@@ -1066,6 +1115,23 @@ let createPlaylist = Vue.extend({
     </div>`
 });
 
+let editPlaylist = Vue.extend({
+    template: 
+    `<div class="panel-content">
+        <div class="playlist-create-flex"><div class="playlist-create-img"></div>
+            <div>
+                <div class="input-label">Title</div>
+                <input type="text" v-model="plName" @input="$emit('input', $event.target.value)" placeholder="My Playlist">
+                <div class="input-label">Description</div>
+                <textarea class="long-text" placeholder="Write a lovely description about your playlist here..."></textarea>
+            </div>
+        </div>
+        <div class="button-right">
+            <div v-on:click="edit" class="button"><span>Edit</span></div>
+        </div>
+    </div>`
+});
+
 let createPlaylistWkr = new Worker('./ftmodules/createplaylist.js');
 
 createPlaylistWkr.onmessage = () => {
@@ -1129,6 +1195,8 @@ Vue.component('ctx-item', {
                         playlists.playlistList = plArray;
                     });
                     break;
+                case "editPlaylist":
+                    panel.open('editPL');
             }
         }
     }
