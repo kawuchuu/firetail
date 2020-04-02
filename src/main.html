@@ -89,11 +89,13 @@
         </div>
         <div class="artist-album-list pages" id="artistsTab">
             <div class="artists-container artists-albums-container">
+                <div class="load-spinner artist-spinner"></div>
                 <artist-item v-for="item in artistList" v-bind:artist="item" v-bind:key="item.artist"></artist-item>
             </div>
         </div>
         <div class="artist-album-list pages" id="albumsTab">
             <div class="albums-container artists-albums-container">
+                <div class="load-spinner album-spinner"></div>
                 <album-item v-for="item in albumList" v-bind:album="item" v-bind:key="item.album"></album-item>
             </div>
         </div>
@@ -104,6 +106,7 @@
         </div>
         <div class="playlists-list pages" id="playlistsTab">
             <div class="playlists-container artists-albums-container">
+                <div class="load-spinner playlist-spinner"></div>
                 <playlist-item v-for="item in playlistList" v-bind:playlist="item" v-bind:key="item.id"></playlist-item>
             </div>
         </div>

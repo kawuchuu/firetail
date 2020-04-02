@@ -695,7 +695,8 @@ button i {
     left: 0;
     border-radius: 3px;
     z-index: 2;
-    background: url('../assets/no_image.svg');
+    background-image: url('../assets/no_image.svg');
+    background-color: var(--bg);
     background-position: center !important;
     background-size: cover !important;
     transition: .1s;
@@ -1067,7 +1068,7 @@ div.section {
     padding: 10px;
 }
 
-.artist-item h3 {
+.artist-item h3, .album-item .album-title {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -1075,9 +1076,10 @@ div.section {
     font-weight: normal;
     line-height: 2;
     font-size: 16px;
+    margin: 0;
 }
 
-.artist-item {
+.artist-item, .album-item {
     width: 150px;
     height: 25px;
     background: var(--fg-bg);
@@ -1090,6 +1092,37 @@ div.section {
     padding: 10px;
     box-shadow: 0px 1px 5px rgba(0,0,0,.15);
     cursor: pointer;
+}
+
+.album-item {
+    width: 200px;
+    height: 40px;
+    justify-content: flex-start;
+}
+
+.album-item .album-cover {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    background-color: var(--bg);
+    background-size: cover;
+    border-radius: 5px;
+    margin-right: 15px;
+    opacity: 0;
+    transition: .2s;
+}
+
+.album-item div {
+    width: 140px;
+}
+
+.album-artist-name {
+    margin: 0;
+    font-size: 13px;
+    opacity: .4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .artist-item:hover, .album-item:hover {
@@ -1133,7 +1166,8 @@ div.section {
 }
 
 .playlist-image {
-    background-image: url('http://localhost:56743/001.jpg');
+    background-image: url('../assets/no_image.svg');
+    background-color: var(--fg-bg);
     width: 140px;
     height: 140px;
     background-size: cover;
@@ -1161,7 +1195,8 @@ div.section {
 .playlist-create-img {
     width: 135px;
     height: 135px;
-    background: url(../assets/no_image.svg);
+    background-image: url(../assets/no_image.svg);
+    background-color: var(--fg-bg);
     border-radius: 5px;
     margin-right: 40px;
 }

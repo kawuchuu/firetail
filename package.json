@@ -20,7 +20,8 @@
     "jsmediatags": "^3.8.1",
     "markdown-it": "^9.0.0",
     "node-id3": "^0.1.13",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-async-computed": "^3.8.2"
   },
   "devDependencies": {
     "electron": "^8.1.1",

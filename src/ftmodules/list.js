@@ -52,15 +52,16 @@ onmessage = async (message) => {
                     'songId': file[value].id,
                     'id': numCount
                 });
-                if (artistsUsed.indexOf(artist) == -1) {
+                if (artistsUsed.indexOf(artist) == -1 && artist != "Unknown Artist") {
                     artistList.push({
                         'artist': artist
                     });
                     artistsUsed.push(artist);
                 };
-                if (albumsUsed.indexOf(album) == -1) {
+                if (albumsUsed.indexOf(album) == -1 && album != "Unknown Album") {
                     albumList.push({
-                        'album': album
+                        'album': album,
+                        'artist': artist
                     });
                     albumsUsed.push(album);
                 };

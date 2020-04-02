@@ -25,11 +25,10 @@ app.commandLine.appendSwitch('force-color-profile', 'srgb');
 
 function createMainWindow() {
     var win = new BrowserWindow({
-        width: 770, 
-        height: 560,
+        width: 970, 
+        height: 600,
         minWidth: 650,
-        minHeight: 375,
-        icon: 'assets/icon.ico', 
+        minHeight: 375, 
         frame: true,
         backgroundColor: '#1f1f1f',
         titleBarStyle: 'hidden',
@@ -40,6 +39,19 @@ function createMainWindow() {
             nodeIntegrationInWorker: true
         }
     });
+    if (!app.isPackaged) {
+        switch(process.platform) {
+            case "win32":
+                win.setIcon('./assets/icon.ico');
+                break;
+            case "linux":
+                win.setIcon('./assets/firetail-idea.png');
+                break;
+            case "darwin":
+                win.setIcon('./assets/icon.icns');
+                break;
+        }
+    }
     let iconpath = path.join(__dirname, './assets/tray.png')
     tray = new Tray(iconpath);
     const contextMenu = Menu.buildFromTemplate([

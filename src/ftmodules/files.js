@@ -52,7 +52,7 @@ onmessage = async function(e) {
                             }
                             songMetadata[songNum[i]] = songData;
                             if (tag.tags.picture && tag.tags.album) {
-                                let mName = tag.tags.album.replace(/[.:<>"*?/{}()|[\]\\]/g, "_");
+                                let mName = tag.tags.album.replace(/[.:<>"*?/{}()'|[\]\\]/g, "_");
                                 let base64String = '';
                                 fs.promises.access(`${appPath}/Cache/${mName}.jpg`, fsconst.F_OK | fsconst.W_OK, (err) => {
                                     if (err) {

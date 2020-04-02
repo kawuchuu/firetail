@@ -4,3 +4,4 @@ node_modules/
 old-theme/
 dist/
 electron-builder.env
+yarn-error.log
