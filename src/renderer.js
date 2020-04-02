@@ -695,7 +695,7 @@ Vue.component('side-buttons', {
                 topButtons.button = [];
             }*/
             artists.artistList = [];
-            albums.albumList = [];
+            //albums.albumList = [];
             playlists.playlistList = [];
             document.querySelector('.panel-msg').style.display = 'none';
             let tabClicked = this.$vnode.key;
