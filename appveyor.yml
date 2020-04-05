@@ -7,6 +7,7 @@ environment:
   nodejs_version: "12.13.0"
 
 install:
+  - ps: Install-Product node $env:nodejs_version
   - npm i -g yarn
   - npm i -g electron-builder
   - yarn install
