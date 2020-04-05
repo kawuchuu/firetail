@@ -22,6 +22,7 @@ if (settings.theme == 'light') {
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 app.commandLine.appendSwitch('force-color-profile', 'srgb');
+app.commandLine.appendSwitch('disable-features', 'HardwareMediaKeyHandling');
 
 function createMainWindow() {
     var win = new BrowserWindow({

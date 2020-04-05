@@ -1,6 +1,6 @@
 {
   "name": "firetail",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Audio Player",
   "author": {
     "name": "projsh_",
@@ -13,22 +13,24 @@
     "release": "build"
   },
   "dependencies": {
-    "discord-rpc": "^3.0.1",
+    "discord-rpc": "^3.1.0",
     "electron-settings": "^3.2.0",
     "express": "^4.17.1",
-    "fs-extra": "^8.1.0",
     "jsmediatags": "^3.8.1",
     "markdown-it": "^9.0.0",
-    "node-id3": "^0.1.13",
     "vue": "^2.6.11",
     "vue-async-computed": "^3.8.2"
   },
   "devDependencies": {
-    "electron": "^8.1.1",
+    "electron": "^8.2.0",
     "electron-builder": "^21.2.0"
   },
   "optionalDependencies": {
-    "mpris-service": "^2.1.0"
+    "mpris-service": "^2.1.0",
+    "@nodert-win10-au/windows.foundation": "^0.4.4",
+    "@nodert-win10-au/windows.media": "^0.4.4",
+    "@nodert-win10-au/windows.media.playback": "^0.4.4",
+    "@nodert-win10-au/windows.storage.streams": "^0.4.4"
   },
   "build": {
     "appId": "com.projsh.firetail",

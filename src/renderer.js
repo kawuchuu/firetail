@@ -4,6 +4,7 @@ const Vue = require('vue/dist/vue');
 const asyncComputed = require('vue-async-computed');
 Vue.use(asyncComputed)
 const fs = require('fs');
+const drpc = require('discord-rpc');
 
 let list = new Worker('./ftmodules/list.js');
 let imgServer = new Worker('./ftmodules/server.js');
@@ -20,9 +21,83 @@ let currentlyPlaying = false;
 let repeatEnabled = false;
 let ver = app.getVersion();
 
+let Controls;
+let MediaPlaybackType;
+let MediaPlaybackStatus;
+let SystemMediaTransportControlsButton;
+let BackgroundMediaPlayer;
+let RandomAccessStreamReference;
+let Uri;
+
+if (process.platform == 'win32') {
+    MediaPlaybackStatus = require('@nodert-win10-au/windows.media').MediaPlaybackStatus;
+    MediaPlaybackType = require('@nodert-win10-au/windows.media').MediaPlaybackType;
+    SystemMediaTransportControlsButton = require('@nodert-win10-au/windows.media').SystemMediaTransportControlsButton;
+    BackgroundMediaPlayer = require('@nodert-win10-au/windows.media.playback').BackgroundMediaPlayer;
+    RandomAccessStreamReference = require('@nodert-win10-au/windows.storage.streams').RandomAccessStreamReference;
+    Uri = require('@nodert-win10-au/windows.foundation').Uri;
+    Controls = BackgroundMediaPlayer.current.systemMediaTransportControls;
+    Controls.isChannelDownEnabled = false;
+    Controls.isChannelUpEnabled = false;
+    Controls.isFastForwardEnabled = false;
+    Controls.isNextEnabled = true;
+    Controls.isPauseEnabled = true;
+    Controls.isPlayEnabled = true;
+    Controls.isPreviousEnabled = true;
+    Controls.isRecordEnabled = false;
+    Controls.isRewindEnabled = false;
+    Controls.isStopEnabled = false;
+    Controls.playbackStatus = MediaPlaybackStatus.closed;
+    Controls.displayUpdater.type = MediaPlaybackType.music;
+
+    Controls.on('buttonpressed', (sender, args) => {
+        switch(args.button) {
+            case SystemMediaTransportControlsButton.play:
+                playPause(false)
+                break;
+            case SystemMediaTransportControlsButton.pause:
+                playPause(true)
+                break;
+            case SystemMediaTransportControlsButton.next:
+                skipSong('next')
+                break;
+            case SystemMediaTransportControlsButton.previous:
+                skipSong('prev');
+                break;
+            default:
+                break;
+        }
+    })    
+}
+
 imgServer.postMessage(app.getPath('userData'));
 
-document.title = `Firetail ${ver}`
+document.title = `Firetail ${ver}`;
+
+let clientId = '586510014211031040';
+const rpc = new drpc.Client({
+    transport: 'ipc'
+});
+
+rpc.login({clientId}).catch(err => {
+    console.error(err);
+})
+
+let setActivity = (details, smallImg, smallImgTxt, state, songdur) => {
+    rpc.setActivity({
+        details: details,
+        largeImageKey: '051-large',
+        largeImageText: `Firetail ${ver} by projsh_`,
+        smallImageKey: smallImg,
+        smallImageText: smallImgTxt,
+        state: state,
+        startTimestamp: songdur
+    })
+}
+
+rpc.on('ready', () => {
+    setActivity('Not Playing...', 'pause', 'Paused', '  ', null);
+})
 
 /* Song List */
 let highlightedSongs = [];
@@ -349,6 +424,7 @@ let playSong = async (songId) => {
     let songFile = allSongs[songId].file;
     let songTitle = allSongs[songId].title;
     let songArtist = allSongs[songId].artist;
+    let songAlbum = allSongs[songId].album;
     if (audio) {
         audio.removeEventListener('timeupdate', timeUpdate);
         audio.src = songFile;        
@@ -361,6 +437,14 @@ let playSong = async (songId) => {
     audio.addEventListener('timeupdate', timeUpdate)
     songInfo.title = songTitle;
     songInfo.artist = songArtist;
+    setActivity(songTitle, 'play', 'Playing', `by ${songArtist}`, Date.now());
+    if (process.platform == 'win32') {
+        Controls.playbackStatus = MediaPlaybackStatus.playing;
+        Controls.displayUpdater.musicProperties.title = songTitle;
+        Controls.displayUpdater.musicProperties.artist = songArtist;
+        Controls.displayUpdater.musicProperties.albumTitle = songAlbum;
+        Controls.displayUpdater.update();
+    }
     let albumName = allSongs[songId].album.replace(/[.:<>"*?/{}()'|[\]\\]/g, "_");
     let img = `http://localhost:56743/${albumName}.jpg`
     new Promise(resolve => {
@@ -380,6 +464,10 @@ let playSong = async (songId) => {
         }
         artTimeout = setTimeout(() => {
             albumArtEl.style.backgroundImage = "url('" + img.replace(/[']/g, "\\'") + "')";
+            if (process.platform == 'win32') {
+                Controls.displayUpdater.thumbnail = RandomAccessStreamReference.createFromUri(new Uri(`http://localhost:56743/${albumName}.jpg`));
+                Controls.displayUpdater.update();
+            }
         }, 200)
     });
 }
@@ -534,6 +622,7 @@ new Vue({
 })
 
 let playPause = (pause, listbtn) => {
+    let psong = allSongs[currentSong];
     if (pause == true) {
         playPauseButton.paused = true;
         playPauseButton.icon = 'play_arrow';
@@ -544,6 +633,10 @@ let playPause = (pause, listbtn) => {
         } catch(err) {
             'doesnt exist'
         }
+        if (process.platform == 'win32') {
+            Controls.playbackStatus = MediaPlaybackStatus.paused;
+        }
+        setActivity(psong.title, 'pause', 'Paused', `by ${psong.artist}`, null);
         audio.pause();
     } else {
         playPauseButton.paused = false;
@@ -555,6 +648,11 @@ let playPause = (pause, listbtn) => {
         } catch(err) {
             'doesnt exist'
         }
+        if (process.platform == 'win32') {
+            Controls.playbackStatus = MediaPlaybackStatus.playing;
+        }
+        let curDate = new Date;
+        setActivity(psong.title, 'play', 'Playing', `by ${psong.artist}`, Math.round((curDate.getTime() / 1000) - audio.currentTime));
         audio.play();
     }
 }
@@ -628,6 +726,9 @@ function mousetouchup(e) {
             seekP = seekGetP(e);
             seekFillBar.style.width = seekP * 100 + '%';
             audio.currentTime = seekP * audio.duration;
+            let psong = allSongs[currentSong];
+            let curDate = new Date();
+            setActivity(psong.title, 'play', 'Playing', `by ${psong.artist}`, Math.round((curDate.getTime() / 1000) - audio.currentTime));
             audio.addEventListener('timeupdate', timeUpdate);
             document.querySelector('#seekHandle').classList.remove('handle-hover')
         }
