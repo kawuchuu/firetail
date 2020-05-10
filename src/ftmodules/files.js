@@ -54,14 +54,17 @@ onmessage = async function(e) {
                             if (tag.tags.picture && tag.tags.album) {
                                 let mName = tag.tags.album.replace(/[.:<>"*?/{}()'|[\]\\]/g, "_");
                                 let base64String = '';
-                                fs.promises.access(`${appPath}/Cache/${mName}.jpg`, fsconst.F_OK | fsconst.W_OK, (err) => {
+                                if (!fs.existsSync(`${appPath}/images`)){
+                                    fs.mkdirSync(`${appPath}/images`);
+                                }
+                                fs.promises.access(`${appPath}/images/${mName}.jpg`, fsconst.F_OK | fsconst.W_OK, (err) => {
                                     if (err) {
                                         if (err.code == 'ENOENT') {
                                             for (i = 0; i < tag.tags.picture.data.length; i++) {
                                                 base64String += String.fromCharCode(tag.tags.picture.data[i]);
                                             }
                                             dataUrl = 'data:' + tag.tags.picture.format + ';base64,' + btoa(base64String);
-                                            fs.writeFile(`${appPath}/Cache/${mName}.jpg`, btoa(base64String), 'base64', function (err) {
+                                            fs.writeFile(`${appPath}/images/${mName}.jpg`, btoa(base64String), 'base64', function (err) {
                                                 if (err) console.error(err);
                                                 albumArt = mName;
                                                 resolve(true)

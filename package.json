@@ -26,23 +26,19 @@
     "electron-builder": "^21.2.0"
   },
   "optionalDependencies": {
-    "mpris-service": "^2.1.0",
     "@nodert-win10-au/windows.foundation": "^0.4.4",
     "@nodert-win10-au/windows.media": "^0.4.4",
     "@nodert-win10-au/windows.media.playback": "^0.4.4",
-    "@nodert-win10-au/windows.storage.streams": "^0.4.4"
+    "@nodert-win10-au/windows.storage.streams": "^0.4.4",
+    "mpris-service": "^2.1.0"
   },
   "build": {
     "appId": "com.projsh.firetail",
     "productName": "Firetail",
-    "copyright": "Copyright © 2019 projsh_",
+    "copyright": "Copyright © 2020 projsh_",
     "mac": {
       "category": "public.app-category.music",
-      "target": "dmg",
-      "icon": "assets/icon.icns"
-    },
-    "dmg": {
-      "icon": "assets/icon.icns"
+      "target": "dmg"
     },
     "nsis": {
       "artifactName": "Firetail-Setup-${version}.${ext}",

@@ -1,0 +1,183 @@
+/* Small window */
+@media screen and (max-width: 650px) {
+    .app-side-bar {
+        display: none;
+    }
+
+    .songs-page {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .list-album {
+        display: none;
+    }
+
+    .results-link {
+        height: 60px !important;
+    }
+
+    .play-pause {
+        display: none !important;
+    }
+
+    .artist-title-album {
+        align-items: unset;
+        flex-direction: column;
+        justify-content: center;
+        padding-left: 25px;
+    }
+
+    .list-title {
+        margin-left: 0;
+        width: auto;
+        padding-top: 5px;
+        padding-bottom: 0;
+        font-size: 16px;
+    }
+
+    .list-artist {
+        width: auto;
+        padding-top: 10px;
+        padding-bottom: 0px;
+        padding-right: 0px;
+        margin: 0;
+        opacity: .7;
+    }
+
+    .list-section {
+        display: none;
+    }
+
+    .top-button span {
+        display: none;
+    }
+
+    .app-name {
+        display: none;
+    }
+
+    .tab-title-text {
+        margin-left: 0;
+    }
+
+    .playing-bar {
+        z-index: 3;
+        transition: .3s cubic-bezier(.36,.07,.19,.97);
+        transition-property: height;
+    }
+
+    .playing-bar.visible {
+        height: 100vh;
+    }
+
+    .playing-bar-inner-container {
+        margin: 0;
+        flex-direction: column;
+        opacity: 0;
+        transition: .3s cubic-bezier(.36,.07,.19,.97);
+        transition-property: opacity;
+        pointer-events: none;
+    }
+
+    .playing-bar-inner-container.visible {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .song-info {
+        height: 100% !important;
+        width: 100% !important;
+        flex-direction: column;
+    }
+
+    .song-album-art {
+        min-width: unset;
+        max-width: 320px;
+        max-height: 320px;
+        width: 80%;
+        height: 80%;
+        margin-right: 0;
+        margin-top: 25px;
+        border-radius: 10px;
+        clear: both;
+        background-size: contain !important;
+        background-repeat: no-repeat;
+    }
+
+    .title-artist {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 25px;
+    }
+
+    .song-title {
+        font-size: 24px;
+    }
+
+    .song-artist {
+        font-size: 16px;
+    }
+
+    .volume-control {
+        display: none;
+    }
+
+    .track-controls-inner-container {
+        flex-direction: column-reverse;
+    }
+
+    .track-controls {
+        width: 100%;
+        height: 275px;
+    }
+
+    .control-buttons i {
+        font-size: 45px;
+    }
+
+    #playPauseBtn {
+        font-size: 55px;
+    }
+
+    #shuffleButton {
+        font-size: 25px;
+        margin-right: 15px;
+    }
+
+    #repeatButton {
+        font-size: 25px;
+        margin-left: 15px;
+    }
+
+    .control-buttons {
+        display: flex;
+        align-items: center;
+    }
+
+    #songDurationTime {
+        transform: translate(40px, 15px);
+        text-align: left;
+    }
+
+    #songDurationLength {
+        transform: translate(-40px, 15px);
+        text-align: right;
+    }
+
+    .top-controls {
+        display: flex;
+    }
+
+    .playing-bar-hidden {
+        display: flex;
+        transition: .3s cubic-bezier(.36,.07,.19,.97);
+    }
+
+    .playing-bar-hidden.visible {
+        opacity: 0;
+        pointer-events: none;
+    }
+}

@@ -79,6 +79,8 @@ html.firetail {
     --glow: rgba(196, 82, 47, 0.4);
     --hl-txt: #df5a25;
     --hl-op: #df5a251a;
+    --gradient1: #e74e8e;
+    --gradient2: #ef9135;
 }
 
 html.nature {
@@ -219,7 +221,7 @@ button i {
 .control-buttons i:active, .play-pause:active, #volumeButton:active, .controls i:active,
 .mtitle-button.hidden:active, #settingsClose:active, .extra-buttons i:active,
 #miniPlayerButton:active, #closeSidemenu:active, #albumArtistBack:active, .tab-buttons div:active, .top-button:active,
-.title i:active {
+.title i:active, .playing-bar-hidden i:active, .top-controls i:active {
     transform: scale(1) !important;
     color: var(--hl-txt);
     opacity: .75;
@@ -775,7 +777,7 @@ button i {
 
 .fill {
     height: 4px;
-    background: var(--hl-txt);
+    background: linear-gradient(to right, var(--gradient1), var(--gradient2));
     border-radius: 10000px;
     transition: .1s;
 }
@@ -783,7 +785,7 @@ button i {
 .handle {
     width: 0px;
     height: 0px;
-    background: var(--hl-txt);
+    background: var(--gradient2);
     border-radius: 11111px;
     margin-left: -5px;
     transform: scale(1.5);
@@ -791,7 +793,6 @@ button i {
 }
 
 .handle-hover {
-    background-color: var(--hl-txt) !important;
     width: 8px !important;
     height: 8px !important;
     transition: all .1s !important;
@@ -816,7 +817,7 @@ button i {
     padding: 5px;
 }
 
-.control-buttons i:hover, #closeSidemenu:hover, #albumArtistBack:hover {
+.control-buttons i:hover, #closeSidemenu:hover, #albumArtistBack:hover, .playing-bar-hidden i:hover, .top-controls i:hover {
     color: var(--hl-txt) !important;
     transform: scale(1.2);
     cursor: pointer;
@@ -864,6 +865,45 @@ button i {
     color: var(--hl-txt);
     background: var(--hl-op);
     border-radius: 30px;
+}
+
+.top-controls {
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100% - 30px);
+    padding: 15px;
+    display: none;
+}
+
+.hide-np, .show-np {
+    width: 30%;
+}
+
+.hide-np i, .show-np i {
+    font-size: 28px;
+}
+
+.top-controls span, .small-np-meta {
+    width: 40%;
+    text-align: center;
+}
+
+.playing-bar-hidden {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    height: 85px;
+    padding: 0 15px;
+    position: absolute;
+    width: calc(100% - 30px);
+}
+
+.small-np-meta .song-title {
+    font-size: 18px;
+}
+
+.small-np-meta .song-artist {
+    font-size: 14px;
 }
 
 /* Track list */
@@ -1166,7 +1206,7 @@ div.section {
 }
 
 .playlist-image {
-    background-image: url('../assets/no_image.svg');
+    background-image: url('../assets/no_album.svg');
     background-color: var(--fg-bg);
     width: 140px;
     height: 140px;
@@ -1195,7 +1235,7 @@ div.section {
 .playlist-create-img {
     width: 135px;
     height: 135px;
-    background-image: url(../assets/no_image.svg);
+    background-image: url('../assets/no_album.svg');
     background-color: var(--fg-bg);
     border-radius: 5px;
     margin-right: 40px;

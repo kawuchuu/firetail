@@ -1,38 +1,28 @@
-const {app, BrowserWindow, globalShortcut, Menu, Tray} = require('electron');
+const {app, BrowserWindow, Menu, Tray} = require('electron');
 const path = require('path');
 const url = require('url');
-var settings = require('electron-settings')
+const express = require('express');
 
-var frameStyle;
-var bg;
-var ipc = require('electron').ipcMain;
-var mini = false;
-
-/*if (settings.get('title-bar') == 'native') {
-    frameStyle = true;
-} else {
-    frameStyle = false;
-}
-
-if (settings.theme == 'light') {
-    bg = '#f5f5f5';
-} else {
-    bg = '#1f1f1f';
-};*/
+let imgServer = express();
+imgServer.use(express.static(`${app.getPath('userData')}/images/`));
+console.log(`${app.getPath('userData')}/images/`)
+imgServer.listen(56743, 'localhost', (err) => {
+    if (err) return console.log(err);
+    console.log('Image server running on: http://localhost:56743');
+});
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 app.commandLine.appendSwitch('force-color-profile', 'srgb');
 app.commandLine.appendSwitch('disable-features', 'HardwareMediaKeyHandling');
 
 function createMainWindow() {
-    var win = new BrowserWindow({
+    let win = new BrowserWindow({
         width: 970, 
         height: 600,
         minWidth: 650,
-        minHeight: 375, 
+        minHeight: 375,
         frame: true,
         backgroundColor: '#1f1f1f',
-        titleBarStyle: 'hidden',
         show: false,
         title: 'Firetail',
         webPreferences: {
@@ -48,20 +38,19 @@ function createMainWindow() {
             case "linux":
                 win.setIcon('./assets/firetail-idea.png');
                 break;
-            case "darwin":
-                win.setIcon('./assets/icon.icns');
-                break;
         }
     }
-    let iconpath = path.join(__dirname, './assets/tray.png')
+    let icon = './assets/tray.png';
+    if (process.platform == 'darwin') {
+        icon = './assets/status-iconTemplate.png' ;
+    }
+    let iconpath = path.join(__dirname, icon)
     tray = new Tray(iconpath);
     const contextMenu = Menu.buildFromTemplate([
         { label: "Open", id: "open", click: () => {
-            if (mini == false) {
-                win.show();
-            }
+            win.show();
         }},
-        { label: 'Quit Firetail',  id: 'exit', click: () => { closeWin() } }
+        { label: 'Quit Firetail',  id: 'exit', click: () => { app.exit(0); } }
     ])
     tray.setContextMenu(contextMenu);
     tray.setToolTip('Firetail')
@@ -70,24 +59,6 @@ function createMainWindow() {
             win.show();
         }
     });
-    function closeWin() {
-        win.webContents.send('exit-time');
-    }
-    /* if (process.platform != 'linux') {
-        globalShortcut.register('MediaPlayPause', resumeButton);
-        globalShortcut.register('MediaPreviousTrack', previousSong);
-        globalShortcut.register('MediaNextTrack', nextSong);
-    } */
-
-    function resumeButton() {
-        win.webContents.send("playpause");
-    }
-    function previousSong() {
-        win.webContents.send("previous");
-    }
-    function nextSong() {
-        win.webContents.send("next");
-    }
 
     let contents = win.webContents;
     contents.on("crashed", () => {
@@ -100,47 +71,6 @@ function createMainWindow() {
             }));
         }, 200)
     });
-
-    ipc.on('playpause', (event, arg) => {
-        resumeButton();
-    });
-    ipc.on('play', (event, arg) => {
-        win.webContents.send("play");
-    });
-    ipc.on('next', (event, arg) => {
-        nextSong()
-    })
-    ipc.on('previous', (event, arg) => {
-        previousSong();
-    })
-    ipc.on('shuffle', (event) => {
-        win.webContents.send("shuffle");
-    })
-    ipc.on('repeat', (event) => {
-        win.webContents.send("repeat");
-    })
-    ipc.on('switch-windows-full', () => {
-        win.webContents.send('switch-windows');
-        mini = false;
-    });
-    ipc.on('remove-audio-listener', () => {
-        win.webContents.send('remove-audio-listener')
-    });
-    ipc.on('seek-time-main', (event, arg) => {
-        win.webContents.send('seek-time-main', arg)
-    });
-    ipc.on('last-song-time', (event, arg) => {
-        if (arg) {
-            settings.set('last-song-time', arg);
-        }
-        app.exit();
-    })
-    win.on('maximize', () => {
-        win.webContents.send('maximizeWindow');
-    })
-    win.on('unmaximize', () => {
-        win.webContents.send('unmaximizeWindow');
-    })
     win.loadURL(url.format({
         pathname: path.join(__dirname, './src/main.html'),
         protocol: 'file:',
@@ -148,19 +78,26 @@ function createMainWindow() {
     }));
     win.setMenuBarVisibility(false);
     win.once('ready-to-show', () => {
+        if (app.commandLine.hasSwitch('enable-mobile-ui')) {
+            win.webContents.executeJavaScript(`document.head.innerHTML += '<link rel="stylesheet" href="./mobile.css">'`);
+            win.setMinimumSize(416, 375);
+        }
+        if (app.commandLine.hasSwitch('enable-light-theme')) {
+            win.webContents.executeJavaScript(`document.querySelector('html').classList.replace('dark', 'light')`)
+        }
         win.show();
     })
     win.on('closed', (i) => {
         app.exit();
-    })
+    });
     if (process.platform == 'darwin') {
         app.setAboutPanelOptions({
             applicationName: 'Firetail',
             applicationVersion: require('./package.json').version,
-            copyright: 'Copyright © 2019 projsh_',
+            copyright: 'Copyright © 2020 projsh_',
             version: require('./package.json').version
         })
-        const appMenu = [
+        let appMenu = [
             {
                 label: app.getName(),
                 submenu: [
@@ -188,7 +125,7 @@ function createMainWindow() {
                         label: 'Play / Pause',
                         accelerator: 'Space',
                         click() {
-                            resumeButton()
+                            win.webContents.send('msg', ['playpause']);
                         }
                     },
                     { type: 'separator' },
@@ -196,14 +133,14 @@ function createMainWindow() {
                         label: 'Next',
                         accelerator: 'Cmd+Right',
                         click() {
-                            nextSong()
+                            win.webContents.send('msg', ['skip']);
                         }
                     },
                     {
                         label: 'Previous',
                         accelerator: 'Cmd+Left',
                         click() {
-                            previousSong()
+                            win.webContents.send('msg', ['prev']);
                         }
                     },
                     { type: 'separator' },
@@ -211,14 +148,14 @@ function createMainWindow() {
                         label: 'Shuffle',
                         accelerator: 'Cmd+S',
                         click() {
-                            win.webContents.send("shuffle");
+                            win.webContents.send('msg', ['shuffle']);
                         }
                     },
                     {
                         label: 'Repeat',
                         accelerator: 'Cmd+R',
                         click() {
-                            win.webContents.send("repeat");
+                            win.webContents.send('msg', ['repeat']);
                         }
                     }
                 ]
@@ -233,24 +170,31 @@ function createMainWindow() {
                     { role: 'minimize' },
                     { role: 'zoom' },
                     { type: 'separator' },
+                    { role: 'front' },
+                    { type: 'separator' },
                     {
-                        label: 'Toggle Mini Player',
-                        accelerator: 'Cmd+Shift+M',
+                        label: 'Toggle Dev Tools',
+                        accelerator: 'Cmd+Alt+I',
                         click() {
-                            win.webContents.send('toggle-mp')
+                            win.webContents.toggleDevTools();
                         }
                     },
-                    { type: 'separator' },
-                    { role: 'front' }
+                    {
+                        label: 'Reload Firetail',
+                        accelerator: 'Cmd+Alt+R',
+                        click() {
+                            win.webContents.reload();
+                        }
+                    }
                 ]
             }
         ]
-        const menu = Menu.buildFromTemplate(appMenu);
+        let menu = Menu.buildFromTemplate(appMenu);
         Menu.setApplicationMenu(menu)
     }
 }
 
-function createMiniPlayer() {
+/* function createMiniPlayer() {
     var win = new BrowserWindow({
         width: 315, 
         height: 147,
@@ -274,42 +218,10 @@ function createMiniPlayer() {
         slashes: true
     }))
     win.setMenuBarVisibility(false);
-    ipc.on('tag-info', (event, arg) => {
-        win.webContents.send('tag-info', arg);
-    });
-    ipc.on('switch-windows-mini', () => {
-        win.webContents.send('switch-windows');
-        mini = true;
-    })
-    ipc.on('seek-time-mini', (event, arg) => {
-        win.webContents.send('seek-time', arg);
-    })
-    ipc.on('is-playing', (event, arg) => {
-        win.webContents.send('is-playing', arg);
-    })
-    ipc.on('shuffle-enable', () => {
-        win.webContents.send('shuffle-enable');
-    });
-    ipc.on('repeat-enable', () => {
-        win.webContents.send('repeat-enable');
-    });
-    ipc.on('play-pause-mini', () => {
-        win.webContents.send("play-pause-mini");
-    });
-    ipc.on('play-mini', () => {
-        win.webContents.send('play-mini');
-    });
-    ipc.on('setting-change', (event, arg) => {
-        win.webContents.send('setting-change', arg);
-    });
-    ipc.on('shortcut-close', () => {
-        win.webContents.send('shortcut-close');
-    });
-}
-
+} */
 function createWindows() {
     createMainWindow();
-    createMiniPlayer();
+    //createMiniPlayer();
 }
 
 app.on('ready', createWindows);

@@ -5,14 +5,13 @@
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1080 1080"
 	 style="enable-background:new 0 0 1080 1080;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:none;stroke:url(#SVGID_1_);stroke-width:45;stroke-miterlimit:10;}
+	.st0{fill:none;stroke:url(#SVGID_1_);stroke-width:55;stroke-miterlimit:10;}
 </style>
 <sodipodi:namedview  bordercolor="#666666" borderopacity="1" gridtolerance="10" guidetolerance="10" id="namedview3805" inkscape:current-layer="Layer_1" inkscape:cx="300.07509" inkscape:cy="885.46554" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-height="1006" inkscape:window-maximized="1" inkscape:window-width="1920" inkscape:window-x="0" inkscape:window-y="0" inkscape:zoom="0.73981481" objecttolerance="10" pagecolor="#ffffff" showgrid="false">
 	</sodipodi:namedview>
-<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="401.5127" y1="795.2596" x2="687.9517" y2="299.1326">
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="554.9357" y1="852.2784" x2="554.9357" y2="257.364">
 	<stop  offset="0" style="stop-color:#EF9135"/>
 	<stop  offset="1" style="stop-color:#E74E8E"/>
 </linearGradient>
-<path class="st0" d="M736.1,497.2L581,291.5v398.1l-1.3,12.4c-5.5,51.9-48.3,92.3-100.4,93.5c-0.9,0-1.7,0-2.6,0
-	c-57.6,0-104.3-43.6-104.3-97.4c0-53.8,46.7-97.4,104.3-97.4c48.4,0,94.7,23,104.3,73.5"/>
+<path class="st0" d="M741.9,508.3l-155-177.6v388c0,58.6-47.5,106.1-106.1,106.1s-106.1-47.5-106.1-106.1s47.5-106.1,106.1-106.1"/>
 </svg>

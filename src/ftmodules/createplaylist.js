@@ -30,7 +30,7 @@ onmessage = async (plName) => {
         let plID = getRandomInt(100000000, 999999999);
         playlistFile[plID] = {
             name: plName,
-            image: '../assets/no_image.svg',
+            image: '../assets/no_album.svg',
             files: [],
             id: plID
         };

@@ -13,6 +13,16 @@ onmessage = async (message) => {
             }
         });
     });
+    fs.access(`${userData}/playlist.json`, fsconst.F_OK | fsconst.W_OK, (err) => {
+        if (err) {
+            fs.appendFile(`${userData}/playlist.json`, '{}', (err) => {
+                if (err) console.error(err);
+                resolve();
+            })
+        } else {
+            resolve();
+        }
+    });
     await check;
     fs.readFile(`${userData}/library.json`, (err) => {
         if (err) {

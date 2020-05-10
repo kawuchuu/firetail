@@ -1,4 +1,6 @@
 const app = require('electron').remote.app;
+const win = require('electron').remote.getCurrentWebContents();
+const remote = require('electron').remote;
 const path = require('path');
 const Vue = require('vue/dist/vue');
 const asyncComputed = require('vue-async-computed');
@@ -17,6 +19,7 @@ let compareListOrder = [];
 let nonCurrentView = [];
 let currentListViewing = 'Songs';
 let lastView = 'Songs';
+let curPlayTabTitle = 'All Songs'
 let currentlyPlaying = false;
 let repeatEnabled = false;
 let ver = app.getVersion();
@@ -99,12 +102,40 @@ rpc.on('ready', () => {
     setActivity('Not Playing...', 'pause', 'Paused', '  ', null);
 })
 
+//ipc
+let ipc = require('electron').ipcRenderer;
+ipc.on('msg', (event, args) => {
+    let msgType = args[0];
+    let data = args[1];
+    switch(msgType) {
+        case "playpause":
+            if (playPauseButton.paused == true) {
+                playPause(false);
+            } else {
+                playPause(true);
+            }
+            break;
+        case "skip":
+            skipSong('next');
+            break;
+        case "prev":
+            skipSong('prev');
+            break;
+        case "shuffle":
+            document.querySelector('#shuffleButton').click();
+            break;
+        case "repeat":
+            document.querySelector('#repeatButton').click();
+            break;
+    }
+})
+
 /* Song List */
 let highlightedSongs = [];
 let hlLastClick = 0;
 Vue.component('list-item', {
     props: ['song'],
-    template: `<li v-on:mouseover="hover" v-on:click="highlight" v-on:mouseleave="leave" v-on:contextmenu="ctxMenu($event); highlight($event);" class="results-link"><i v-on:click="play(true)" v-on:mouseover="hover(true)" v-on:mouseleave="leave" class="material-icons-rounded play-pause" style="opacity: 0;">play_arrow</i><div v-on:dblclick="play(false)" class="artist-title-album"><p class="list-title">{{ song.title }}</p><p class="list-artist"><span v-on:click="artist">{{song.artist}}</span></p><p class="list-album"><span v-on:click="album">{{song.album}}</span></p></div></li>`,
+    template: `<li v-on:mouseover="hover" v-on:click="highlight" v-on:mouseleave="leave" v-on:contextmenu="ctxMenu($event); highlight($event);" class="results-link"><i v-on:click="play(true)" v-on:mouseover="hover(true)" v-on:mouseleave="leave" class="material-icons-outlined play-pause" style="opacity: 0;">play_arrow</i><div v-on:dblclick="play(false)" class="artist-title-album"><p class="list-title">{{ song.title }}</p><p class="list-artist"><span v-on:click="artist">{{song.artist}}</span></p><p class="list-album"><span v-on:click="album">{{song.album}}</span></p></div></li>`,
     methods: {
         play(btn) {
             compareListOrder = [];
@@ -123,6 +154,7 @@ Vue.component('list-item', {
                 }
                 return;
             }
+            npTitle.list.title = curPlayTabTitle;
             currentSong = this.$vnode.key;
             currentSongIndex = listItems.songList.indexOf(allSongs[currentSong]);
             if (shuffleEnabled) {
@@ -205,9 +237,21 @@ Vue.component('list-item', {
                     allElements[f].classList.add('highlight');
                 });
             }
+            newHighlight = [];
+            highlightedSongs.forEach(f => {
+                if (newHighlight.indexOf(f) == -1) {
+                    newHighlight.push(f);
+                }
+            });
+            highlightedSongs = newHighlight;
         },
         ctxMenu(e) {
-            openCtx(e, 'song', this.$vnode.key);
+            if (currentListViewing == 'Songs') {
+                openCtx(e, 'song', this.$vnode.key);
+            }
+            if (currentListViewing.startsWith('playlist')) {
+                openCtx(e, 'playlistSong', this.$vnode.key);
+            }
         }
     }
 });
@@ -248,6 +292,8 @@ let openCtx = (e, type, item) => {
         case "playlist":
             ctxItems.ctxList = ctxListPlaylist;
             break;
+        case "playlistSong":
+            ctxItems.ctxList = ctxPlaylistItems;
     }
     itemClicked = item;
     ctxMenu.style.left = xPosition + 'px';
@@ -353,26 +399,29 @@ let updateListOrder = async (sortBy, compUpdate) => {
     }
     highlightedSongs = [];
     hlLastClick = 0;
-    let bruhbruh = new Promise(resolve => {
-        let sortByOrder = {};
-        listItems.songList.forEach(f => {
-            if (sortByOrder[f[sortBy]] == undefined) {
-                sortByOrder[f[sortBy]] = [];
-            } 
-            sortByOrder[f[sortBy]].push(f);
-        });
-        let sortKeys = simpleSort(Object.keys(sortByOrder));
-        let finalSongArray = [];
-        sortKeys.forEach(f => {
-            sortByOrder[f] = sortArray(sortByOrder[f], 'title');
-            sortByOrder[f].forEach(f => {
-                finalSongArray.push(f);
+    let bruhbruh
+    if (sortBy) {
+        bruhbruh = new Promise(resolve => {
+            let sortByOrder = {};
+            listItems.songList.forEach(f => {
+                if (sortByOrder[f[sortBy]] == undefined) {
+                    sortByOrder[f[sortBy]] = [];
+                } 
+                sortByOrder[f[sortBy]].push(f);
+            });
+            let sortKeys = simpleSort(Object.keys(sortByOrder));
+            let finalSongArray = [];
+            sortKeys.forEach(f => {
+                sortByOrder[f] = sortArray(sortByOrder[f], 'title');
+                sortByOrder[f].forEach(f => {
+                    finalSongArray.push(f);
+                })
             })
-        })
-        listItems.songList = finalSongArray;
-        resolve(true);
-    });
-    await bruhbruh;
+            listItems.songList = finalSongArray;
+            resolve(true);
+        });
+        await bruhbruh;
+    }
     let usePlural = 'songs';
     if (listItems.songList.length == 1) {
         usePlural = 'song'
@@ -437,6 +486,8 @@ let playSong = async (songId) => {
     audio.addEventListener('timeupdate', timeUpdate)
     songInfo.title = songTitle;
     songInfo.artist = songArtist;
+    songInfoSmallNp.title = songTitle;
+    songInfoSmallNp.artist = songArtist;
     setActivity(songTitle, 'play', 'Playing', `by ${songArtist}`, Date.now());
     if (process.platform == 'win32') {
         Controls.playbackStatus = MediaPlaybackStatus.playing;
@@ -476,8 +527,16 @@ let playSong = async (songId) => {
 let songInfo = new Vue({
     el: ".song-info",
     data: {
-        title: 'Song Title',
-        artist: 'Song Artist'
+        title: 'No song playing',
+        artist: ''
+    }
+});
+
+let songInfoSmallNp = new Vue({
+    el: ".small-np-meta",
+    data: {
+        title: 'No song playing',
+        artist: ''
     }
 });
 
@@ -766,7 +825,7 @@ new Vue({
 /* Tabs */
 Vue.component('side-buttons', {
     props: ['button'],
-    template: '<div class="item-sidebar" v-on:click="click"><div class="active-indicator"></div><i class="material-icons-rounded">{{ button.icon }}</i><span>{{ button.name }}</span></div>',
+    template: '<div class="item-sidebar" v-on:click="click"><div class="active-indicator"></div><i class="material-icons-outlined">{{ button.icon }}</i><span>{{ button.name }}</span></div>',
     methods: {
         click() {
             // everything here will be rewritten soon, i know it's awful
@@ -814,6 +873,7 @@ Vue.component('side-buttons', {
                     document.querySelector(`#songsTab`).style.display = 'flex';
                     currentListViewing = 'Songs';
                     listTitle.list.title = 'All Songs';
+                    curPlayTabTitle = 'All Songs';
                     listItems.songList = [];
                     allSongs.forEach(f => {
                         listItems.songList.push(f);
@@ -931,6 +991,15 @@ let listTitle = new Vue({
     }
 })
 
+let npTitle = new Vue({
+    el: '.top-controls span',
+    data: {
+        list: {
+            'title': 'All Songs'
+        }
+    }
+})
+
 /* Add songs */
 let songAddInfo = new Vue({
     el: '.add-songs-notify',
@@ -964,6 +1033,7 @@ let addSongs = async (files) => {
 fileWorker.onmessage = async (metadata) => {
     if (metadata.data[1] == false) {
         document.querySelector('.notify-progbar').style.width = (metadata.data[0] / progressTotal) * 100 + '%';
+        remote.getCurrentWindow().setProgressBar(metadata.data[0] / progressTotal);
         return;
     }
     setTimeout(() => {
@@ -977,6 +1047,7 @@ fileWorker.onmessage = async (metadata) => {
         } else {
             songAddInfo.addInfo = `Added ${message} songs to your library`
         }
+        remote.getCurrentWindow().setProgressBar(0);
         list.postMessage({'userData': app.getPath('userData'), 'playlist': null});
         setTimeout(() => {
             document.querySelector('.add-songs-notify').style.display = 'none';
@@ -994,6 +1065,7 @@ let getArtist = artistClicked => {
     });
     currentListViewing = `artist-${artistClicked}`;
     listTitle.list.title = artistClicked;
+    curPlayTabTitle = artistClicked;
     document.querySelector('.artist-album-list').style.display = 'none';
     document.querySelector(`#songsTab`).style.display = 'flex';
     updateListOrder('album');
@@ -1009,6 +1081,7 @@ let getAlbum = albumClicked => {
     });
     currentListViewing = `album-${albumClicked}`;
     listTitle.list.title = albumClicked;
+    curPlayTabTitle = albumClicked;
     document.querySelector('.artist-album-list').style.display = 'none';
     document.querySelector('.albums-container').style.display = 'none';
     document.querySelector(`#songsTab`).style.display = 'flex';
@@ -1017,6 +1090,7 @@ let getAlbum = albumClicked => {
 }
 
 let getSpecificPlaylist = (playlistClicked, songs) => {
+    console.log(playlistClicked);
     listItems.songList = [];
     songs.forEach(f => {
         allSongs.forEach(a => {
@@ -1029,6 +1103,7 @@ let getSpecificPlaylist = (playlistClicked, songs) => {
     })
     currentListViewing = `playlist-${playlistClicked}`;
     listTitle.list.title = playlists.playlistList[playlistClicked].name;
+    curPlayTabTitle = playlists.playlistList[playlistClicked].name;
     document.querySelector('.playlists-list').style.display = 'none';
     document.querySelector('.playlists-container').style.display = 'none';
     document.querySelector(`#songsTab`).style.display = 'flex';
@@ -1064,7 +1139,7 @@ Vue.component('album-item', {
                     if (response.ok) {
                         img = `http://localhost:56743/${this.album.album.replace(/[.:<>"*?/{}()'|[\]\\]/g, "_").replace(/[ ]/g, "%20")}.jpg`;
                     } else {
-                        img = '../assets/no_image.svg';
+                        img = '../assets/no_album.svg';
                     }
                     resolve();
                 })
@@ -1204,7 +1279,7 @@ let panel = {
 
 Vue.component('top-buttons', {
     props: ['button'],
-    template: `<label class="top-button" v-bind:for="checkFor" v-on:click="click"><i class="material-icons-rounded">{{button.icon}}</i><span>{{button.name}}</span></label>`,
+    template: `<label class="top-button" v-bind:for="checkFor" v-on:click="click"><i class="material-icons-outlined">{{button.icon}}</i><span>{{button.name}}</span></label>`,
     computed: {
         checkFor(item) {
             if (item.button.for != null) {
@@ -1251,6 +1326,7 @@ let ftpanel = new Vue({
     }
 })
 
+let curPlaylist;
 /* Playlists */
 Vue.component('playlist-item', {
     props: ['playlist'],
@@ -1262,8 +1338,9 @@ Vue.component('playlist-item', {
     template: `<div v-on:contextmenu="ctxMenu" class="playlist-item"><div class="playlist-item-inner-container" v-on:click="click"><div class="playlist-image" v-bind:style="bg"></div><span class="playlist-name">{{ playlist.name }}</span></div></div>`,
     methods: {
         click() {
-            console.log(this.playlist.id)
+            curPlaylist = this.playlist.id;
             getSpecificPlaylist(playlists.playlistList.indexOf(this.playlist), this.playlist.files);
+
         },
         ctxMenu(e) {
             openCtx(e, 'playlist', this.$vnode.key)
@@ -1377,6 +1454,31 @@ Vue.component('ctx-item', {
                     break;
                 case "editPlaylist":
                     panel.open('editPL');
+                    break;
+                case "rmSongPlaylist":
+                    fs.promises.readFile(`${app.getPath('userData')}/playlist.json`, (err) => {
+                        if (err) {
+                            console.error(err);
+                        }
+                    }).then(file => {
+                        file = JSON.parse(file.toString());
+                        let testCurFiles = [];
+                        listItems.songList.forEach((f, i) => {
+                            if (highlightedSongs.indexOf(i) == -1) {
+                                testCurFiles.push(f.file);
+                            }
+                        });
+                        console.log(file[curPlaylist]);
+                        file[curPlaylist].files = testCurFiles;
+                        let playlistIndex = playlists.playlistList.indexOf(file[curPlaylist]);
+                        console.log(playlistIndex)
+                        playlists.playlistList[playlistIndex].files = testCurFiles;
+                        let formattedMetadata = JSON.stringify(file);
+                        fs.writeFile(`${app.getPath('userData')}/playlist.json`, formattedMetadata, err => {
+                            if (err) console.error(err);
+                            getSpecificPlaylist(playlistIndex, testCurFiles);
+                        });
+                    })
             }
         }
     }
@@ -1390,6 +1492,11 @@ ctxListSong = [
 ctxListPlaylist = [
     {name: 'Edit Playlist', id: 'editPlaylist'},
     {name: 'Remove Playlist', id: 'removePlaylist'}
+]
+
+ctxPlaylistItems = [
+    {name: 'Remove from playlist', id: 'rmSongPlaylist'},
+    {name: 'Remove from library', id: 'removeFromLibrary'}
 ]
 
 let ctxItems = new Vue({
@@ -1445,3 +1552,46 @@ let panelMsg = new Vue({
         }
     }
 })
+
+let customLog = (msg, style) => {
+    return console.log(`%c${msg}`, `font-family: ${style}`);
+}
+
+let detach = false;
+
+win.on('devtools-opened', () => {
+    if (!detach) {
+        win.closeDevTools();
+        detach = true;
+        win.openDevTools({mode: 'detach'});
+        return;
+    }
+    detach = false;
+    customLog('Hold up!', 'color: #df5a25; font-size: 72px; font-weight: bold; -webkit-text-stroke: 2px black');
+    customLog("Pasting anything in here could potentially harm your computer.", "font-size: 22px; color: red; font-weight: bold");
+    customLog("Unless you absolutely understand what you're doing, you should close this window.", "font-size: 16px");
+    customLog("If you do understand what you're doing, you may want to hide those network errors! They're usually not important and clog up the console. Click the little cog icon and disable 'Hide network'.", "font-size: 16px");
+})
+
+/* mobile-like ui shit */
+new Vue({
+    el: '.show-np i',
+    methods: {
+        click() {
+            document.querySelector('.playing-bar-hidden').classList.add('visible');
+            document.querySelector('.playing-bar').classList.add('visible');
+            document.querySelector('.playing-bar-inner-container').classList.add('visible');
+        }
+    }
+});
+
+new Vue({
+    el: '.hide-np i',
+    methods: {
+        click() {
+            document.querySelector('.playing-bar-hidden').classList.remove('visible');
+            document.querySelector('.playing-bar').classList.remove('visible');
+            document.querySelector('.playing-bar-inner-container').classList.remove('visible');
+        }
+    }
+});
