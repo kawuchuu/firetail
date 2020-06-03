@@ -12,16 +12,13 @@ onmessage = async (message) => {
                 resolve();
             }
         });
-    });
-    fs.access(`${userData}/playlist.json`, fsconst.F_OK | fsconst.W_OK, (err) => {
-        if (err) {
-            fs.appendFile(`${userData}/playlist.json`, '{}', (err) => {
-                if (err) console.error(err);
-                resolve();
-            })
-        } else {
-            resolve();
-        }
+        fs.access(`${userData}/playlist.json`, fsconst.F_OK | fsconst.W_OK, (err) => {
+            if (err) {
+                fs.appendFile(`${userData}/playlist.json`, '{}', (err) => {
+                    if (err) console.error(err);
+                })
+            }
+        });
     });
     await check;
     fs.readFile(`${userData}/library.json`, (err) => {

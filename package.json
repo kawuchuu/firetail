@@ -18,6 +18,7 @@
     "express": "^4.17.1",
     "jsmediatags": "^3.8.1",
     "markdown-it": "^9.0.0",
+    "sharp": "^0.25.3",
     "vue": "^2.6.11",
     "vue-async-computed": "^3.8.2"
   },

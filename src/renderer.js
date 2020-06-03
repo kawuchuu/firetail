@@ -1166,6 +1166,10 @@ let albums = new Vue({
     }
 })
 
+let playlistImageEl;
+
+let edPl = new Worker('./ftmodules/editplaylist.js');
+
 let panel = {
     open(wpanel) {
         switch(wpanel) {
@@ -1174,15 +1178,21 @@ let panel = {
                 playlistCreateMenu = new createPlaylist({
                     methods: {
                         create() {
-                            createPlaylistWkr.postMessage([this.plName, app.getPath('userData')]);
+                            let img = "../assets/no_album.svg"
+                            if (playlistImageEl != "") {
+                                img = playlistImageEl;
+                            }
+                            createPlaylistWkr.postMessage([this.plName, app.getPath('userData'), img, this.plDesc]);
                         }
                     },
                     data: {
-                        plName: 'My Playlist'
+                        plName: 'My Playlist',
+                        plDesc: ''
                     }
                 });
                 panel.mounted = playlistCreateMenu;
                 playlistCreateMenu.$mount('.panel-content');
+                playlistImageEl = '';
                 break;
             case 'addPL':
                 ftpanel.title = 'Add to Playlist'
@@ -1214,7 +1224,7 @@ let panel = {
                 let editPL = new editPlaylist({
                     data: {
                         plName: 'Playlist Title',
-                        desc: 'Playlist Desc'
+                        plDesc: 'Playlist Desc'
                     },
                     created() {
                         let plID = itemClicked;
@@ -1227,37 +1237,43 @@ let panel = {
                             let plItem = pl[plID];
                             console.log(plItem)
                             this.plName = plItem.name;
+                            this.plDesc = plItem.desc;
+                            if (plItem.image != '../assets/no_album.svg') {
+                                document.querySelector('.playlist-create-img').style.backgroundImage = `url('http://localhost:56743/${plID}.png')`;
+                            }
                         });
                     },
                     methods: {
                         edit() {
-                            fs.promises.readFile(`${app.getPath('userData')}/playlist.json`, (err) => {
-                                if (err) {
-                                    console.error(err);
+                            let plName = this.plName;
+                            let plDesc = this.plDesc;
+                            edPl.postMessage([playlistImageEl, itemClicked, app.getPath('userData'), plName, plDesc]);
+                            edPl.onmessage = plD => {
+                                console.log('jjjj')
+                                let pl = plD.data;
+                                panel.close();
+                                if (Object.keys(pl).length == 0) {
+                                    document.querySelector('.panel-msg').style.display = 'flex';
                                 }
-                            }).then(file => {
-                                let pl = JSON.parse(file.toString());
-                                pl[itemClicked].name = this.plName;
-                                fs.promises.writeFile(`${app.getPath('userData')}/playlist.json`, JSON.stringify(pl), (err) => {
-                                    if (err) console.error(err);
-                                }).then(() => {
-                                    panel.close();
-                                    if (Object.keys(pl).length == 0) {
-                                        document.querySelector('.panel-msg').style.display = 'flex';
-                                    }
-                                    let plArray = [];
-                                    Object.keys(pl).forEach(f => {
-                                        plArray.push(pl[f]);
-                                    })
-                                    plArray = sortArray(plArray, 'name');
-                                    playlists.playlistList = plArray;
-                                });
-                            })
+                                let plArray = [];
+                                Object.keys(pl).forEach(f => {
+                                    plArray.push(pl[f]);
+                                })
+                                plArray = sortArray(plArray, 'name');
+                                playlists.playlistList = plArray;
+                            }
                         }
                     }
                 })
                 panel.mounted = editPL;
-                editPL.$mount('.panel-content')
+                editPL.$mount('.panel-content');
+                playlistImageEl = '';
+                break;
+            case "blm":
+                ftpanel.title = '#BlackLivesMatter';
+                let blmPanel = new blm();
+                panel.mounted = blmPanel;
+                blmPanel.$mount('.panel-content');
         }
         document.querySelector('.panel').classList.remove('hidden');
         document.querySelector('.panel').classList.add('open');
@@ -1332,7 +1348,11 @@ Vue.component('playlist-item', {
     props: ['playlist'],
     computed: {
         bg() {
-            return `background-image: url('${this.playlist.image}')`
+            if (this.playlist.image == '../assets/no_album.svg') {
+                return `background-image: url('${this.playlist.image}')`;
+            } else {
+                return `background-image: url('http://localhost:56743/${this.playlist.id}.png')`;
+            }
         }
     },
     template: `<div v-on:contextmenu="ctxMenu" class="playlist-item"><div class="playlist-item-inner-container" v-on:click="click"><div class="playlist-image" v-bind:style="bg"></div><span class="playlist-name">{{ playlist.name }}</span></div></div>`,
@@ -1358,12 +1378,16 @@ let playlists = new Vue({
 let createPlaylist = Vue.extend({
     template: 
     `<div class="panel-content">
-        <div class="playlist-create-flex"><div class="playlist-create-img"></div>
+        <div class="playlist-create-flex">
+            <div>
+                <label for="addPlaylistImage" class="playlist-image-label">Add image</label>
+                <div class="playlist-create-img"></div>
+            </div>
             <div>
                 <div class="input-label">Title</div>
                 <input type="text" v-model="plName" @input="$emit('input', $event.target.value)" placeholder="My Playlist">
                 <div class="input-label">Description</div>
-                <textarea class="long-text" placeholder="Write a lovely description about your playlist here..."></textarea>
+                <textarea class="long-text" v-model="plDesc" @input="$emit('textarea', $event.target.value)" placeholder="Write a lovely description about your playlist here..."></textarea>
             </div>
         </div>
         <div class="button-right">
@@ -1375,12 +1399,16 @@ let createPlaylist = Vue.extend({
 let editPlaylist = Vue.extend({
     template: 
     `<div class="panel-content">
-        <div class="playlist-create-flex"><div class="playlist-create-img"></div>
+        <div class="playlist-create-flex">
+            <div>
+                <label for="addPlaylistImage" class="playlist-image-label">Add image</label>
+                <div class="playlist-create-img"></div>
+            </div>
             <div>
                 <div class="input-label">Title</div>
                 <input type="text" v-model="plName" @input="$emit('input', $event.target.value)" placeholder="My Playlist">
                 <div class="input-label">Description</div>
-                <textarea class="long-text" placeholder="Write a lovely description about your playlist here..."></textarea>
+                <textarea class="long-text" v-model="plDesc" @input="$emit('textarea', $event.target.value)" placeholder="Write a lovely description about your playlist here..."></textarea>
             </div>
         </div>
         <div class="button-right">
@@ -1388,6 +1416,31 @@ let editPlaylist = Vue.extend({
         </div>
     </div>`
 });
+
+let blm = Vue.extend({
+    template: 
+    `<div class="panel-content">
+        <div style="padding: 0 15px;">
+            <p style="margin:0;">The death of George Floyd is unfortunately one example of many acts of police brutality towards black people. It's heartbreaking to see these disgusting acts of racism is still happening in 2020. 
+            The lack of justice, equality and human rights for the black community is disgusting and must be changed.</p>
+            <p>Although I don't have a real platform and my voice is miniscule, I hope this message will reach someone in this world. I stand with George Floyd and the black community.</p>
+            <p>projsh_</p>
+        </div>
+    </div>`
+});
+
+document.querySelector('.blm').onclick = () => {
+    panel.open('blm')
+}
+
+document.querySelector('#addPlaylistImage').addEventListener('change', (el) => {
+    let reader = new FileReader();
+    reader.onload = function() {
+        playlistImageEl = Buffer.from(this.result, 'hex');
+        document.querySelector('.playlist-create-img').style.backgroundImage = `url('${el.target.files[0].path.replace(/[\\]/g, "/")}')`;
+    }
+    reader.readAsArrayBuffer(el.target.files[0]);
+})
 
 let createPlaylistWkr = new Worker('./ftmodules/createplaylist.js');
 
@@ -1435,6 +1488,9 @@ Vue.component('ctx-item', {
                         }
                     }).then(file => {
                         let getPlaylists = JSON.parse(file.toString());
+                        if (getPlaylists[itemClicked] != '../assets/no_album.svg') {
+                            fs.unlinkSync(getPlaylists[itemClicked].image);
+                        }
                         delete getPlaylists[itemClicked];
                         let formattedMetadata = JSON.stringify(getPlaylists);
                         fs.writeFile(`${app.getPath('userData')}/playlist.json`, formattedMetadata, err => {
@@ -1517,7 +1573,11 @@ Vue.component('pl-list', {
     props: ['playlist'],
     computed: {
         bg() {
-            return `background-image: url('${this.playlist.image}')`;
+            if (this.playlist.image == '../assets/no_album.svg') {
+                return `background-image: url('${this.playlist.image}')`;
+            } else {
+                return `background-image: url('http://localhost:56743/${this.playlist.id}.png')`;
+            }
         }
     },
     template:
