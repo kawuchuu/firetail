@@ -44,4 +44,3 @@ after_success:
 branches:
   only:
   - master
-  - pre-release
