@@ -73,6 +73,58 @@ if (process.platform == 'win32') {
     })    
 }
 
+let keyboardControl = () => {
+    document.onkeydown = (evt) => {
+        switch(event.keyCode) {
+            case 32:
+                evt.preventDefault();
+                if (playPauseButton.paused == true) {
+                    playPause(false);
+                } else {
+                    playPause(true);
+                }
+                break;
+            case 37:
+                evt.preventDefault();
+                if (evt.ctrlKey) {
+                    skipSong('prev');
+                } else {
+                    if (evt.shiftKey) {
+                        audio.currentTime -= 20;
+                    } else {
+                        audio.currentTime -= 5;
+                    }
+                }
+                break;
+            case 39:
+                evt.preventDefault();
+                if (evt.ctrlKey) {
+                    skipSong('next');
+                } else {
+                    if (evt.shiftKey) {
+                        audio.currentTime += 20;
+                    } else {
+                        audio.currentTime += 5;
+                    }
+                }
+                break;
+            case 82:
+                if (evt.ctrlKey && evt.shiftKey) {
+                    evt.preventDefault();
+                    document.querySelector('#repeatButton').click();
+                }
+                break;
+            case 83:
+                if (evt.ctrlKey && evt.shiftKey) {
+                    evt.preventDefault();
+                    document.querySelector('#shuffleButton').click();
+                }
+        }
+    }
+}
+
+keyboardControl();
+
 imgServer.postMessage(app.getPath('userData'));
 
 document.title = `Firetail ${ver}`;
@@ -130,14 +182,40 @@ ipc.on('msg', (event, args) => {
     }
 })
 
+let touch = false;
+
+window.addEventListener('touchstart', () => {
+    touch = true;
+})
+
+window.addEventListener('touchend', () => {
+    setTimeout(() => {
+        touch = false;
+    },5)
+})
+
+let commandInput = new Vue({
+    el: '#commandInput',
+    methods: {
+        focus() {
+            console.log('focus')
+            document.onkeydown = null;
+        },
+        unfocus() {
+            keyboardControl();
+        }
+    }
+})
+
 /* Song List */
 let highlightedSongs = [];
 let hlLastClick = 0;
 Vue.component('list-item', {
     props: ['song'],
-    template: `<li v-on:mouseover="hover" v-on:click="highlight" v-on:mouseleave="leave" v-on:contextmenu="ctxMenu($event); highlight($event);" class="results-link"><i v-on:click="play(true)" v-on:mouseover="hover(true)" v-on:mouseleave="leave" class="material-icons-outlined play-pause" style="opacity: 0;">play_arrow</i><div v-on:dblclick="play(false)" class="artist-title-album"><p class="list-title">{{ song.title }}</p><p class="list-artist"><span v-on:click="artist">{{song.artist}}</span></p><p class="list-album"><span v-on:click="album">{{song.album}}</span></p></div></li>`,
+    template: `<li v-on:mouseover="hover" v-on:click="highlight" v-on:mouseleave="leave" v-on:contextmenu="ctxMenu($event); highlight($event);" class="results-link"><i v-on:click="play(true)" v-on:mouseover="hover(true)" v-on:mouseleave="leave" class="material-icons-outlined play-pause" style="opacity: 0;">play_arrow</i><div v-on:dblclick="play(false)" v-on:click="play(false, true)" class="artist-title-album"><p class="list-title">{{ song.title }}</p><p class="list-artist"><span v-on:click="artist">{{song.artist}}</span></p><p class="list-album"><span v-on:click="album">{{song.album}}</span></p></div></li>`,
     methods: {
-        play(btn) {
+        play(btn, isTouch) {
+            if (isTouch && !touch) return;
             compareListOrder = [];
             nonCurrentView = [];
             listItems.songList.forEach(f => {
@@ -476,6 +554,7 @@ let playSong = async (songId) => {
     let songAlbum = allSongs[songId].album;
     if (audio) {
         audio.removeEventListener('timeupdate', timeUpdate);
+        audio.addEventListener('ended', onEnd);
         audio.src = songFile;        
     } else {
         audio = new Audio(songFile);
@@ -483,7 +562,8 @@ let playSong = async (songId) => {
     currentlyPlaying = true;
     audio.play();
     playPause(false, true);
-    audio.addEventListener('timeupdate', timeUpdate)
+    audio.addEventListener('timeupdate', timeUpdate);
+    audio.addEventListener('ended', onEnd);
     songInfo.title = songTitle;
     songInfo.artist = songArtist;
     songInfoSmallNp.title = songTitle;
@@ -540,6 +620,17 @@ let songInfoSmallNp = new Vue({
     }
 });
 
+let onEnd = () => {
+    if (repeatEnabled == true) {
+        audio.currentTime = 0;
+        setTimeout(() => {
+            audio.play();
+        }, 10)
+    } else {
+        skipSong('next');
+    }
+}
+
 /* Controls */
 let timeUpdate = () => {
     if (isNaN(audio.duration) == true) {
@@ -553,15 +644,6 @@ let timeUpdate = () => {
     let songLength = parseInt(audio.currentTime);
     timeNow = timeFormat(songLength);
     document.getElementById('songDurationTime').innerHTML = timeNow;
-    if (repeatEnabled == true && audio.currentTime >= audio.duration - 0.1) {
-        audio.currentTime = 0;
-        setTimeout(() => {
-            audio.play();
-        }, 10)
-    }
-    if (audio.currentTime === audio.duration) {
-        skipSong('next');
-    }
 }
 
 let shuffleEnabled = false;
@@ -731,10 +813,10 @@ function clamp(min, val, max) {
     return Math.min(Math.max(min, val), max);
 }
 
-function seekGetP(e) {
-    seekP = (e.clientX - seekBar.getBoundingClientRect().x) / seekBar.clientWidth;
-    seekP = clamp(0, seekP, 1);
-    return seekP;
+function getP(e, el) {
+    pBar = (e.clientX - el.getBoundingClientRect().x) / el.clientWidth;
+    pBar = clamp(0, pBar, 1);
+    return pBar;
 }
 
 function mousetouchdown(e) {
@@ -743,8 +825,8 @@ function mousetouchdown(e) {
             e = e.touches[0]
         }
         seekMouseDown = true;
-        seekP = seekGetP(e);
-        seekFillBar.style.width = seekP * 100 + '%';
+        pBar = getP(e, seekBar);
+        seekFillBar.style.width = pBar * 100 + '%';
         audio.removeEventListener('timeupdate', timeUpdate);
         document.querySelector('#seekHandle').classList.add('handle-hover')
     }
@@ -758,10 +840,10 @@ function mousetouchmove(e) {
             if (e.touches) {
                 e = e.touches[0]
             }
-            seekP = seekGetP(e);
-            seekFillBar.style.width = seekP * 100 + '%';
-            minutes = Math.floor((seekP * audio.duration) / 60);
-            seconds = Math.floor((seekP * audio.duration) / 1);
+            pBar = getP(e, seekBar);
+            seekFillBar.style.width = pBar * 100 + '%';
+            minutes = Math.floor((pBar * audio.duration) / 60);
+            seconds = Math.floor((pBar * audio.duration) / 1);
             while (seconds >= 60) {
                 seconds = seconds - 60;
             }
@@ -774,17 +856,17 @@ function mousetouchmove(e) {
 }
 
 function mousetouchup(e) {
+    seekFillBar.style.removeProperty('transition');
     if (!seekMouseDown) return;
-    seekFillBar.style.transition = '0.1s';
     if (currentlyPlaying) {
         if (seekMouseDown) {
             if (e.changedTouches) {
                 e = e.changedTouches[0]
             }
             seekMouseDown = false;
-            seekP = seekGetP(e);
-            seekFillBar.style.width = seekP * 100 + '%';
-            audio.currentTime = seekP * audio.duration;
+            pBar = getP(e, seekBar);
+            seekFillBar.style.width = pBar * 100 + '%';
+            audio.currentTime = pBar * audio.duration;
             let psong = allSongs[currentSong];
             let curDate = new Date();
             setActivity(psong.title, 'play', 'Playing', `by ${psong.artist}`, Math.round((curDate.getTime() / 1000) - audio.currentTime));
@@ -795,7 +877,7 @@ function mousetouchup(e) {
 }
 
 Vue.component('seekbar', {
-    template: `<div id="seekWrapper" v-on:mouseover="hover" v-on:mousedown="down" v-on:mouseleave="leave" class="seek-bar-inner-container"><div class="seek-bar"><div id="seekFill" class="fill"></div><div id="seekHandle" class="handle"></div></div></div>`,
+    template: `<div id="seekWrapper" v-on:mouseover="hover" v-on:mousedown="down" v-on:mouseleave="leave" v-on:touchstart="down" v-on:touchoff="leave" class="seek-bar-inner-container"><div class="seek-bar"><div id="seekFill" class="fill"></div><div id="seekHandle" class="handle"></div></div></div>`,
     methods: {
         down(e) {
             mousetouchdown(e);
@@ -814,7 +896,15 @@ window.addEventListener('mousemove', function (e) {
     mousetouchmove(e)
 });
 
+window.addEventListener('touchmove', function (e) {
+    mousetouchmove(e)
+});
+
 window.addEventListener('mouseup', function (e) {
+    mousetouchup(e);
+});
+
+window.addEventListener('touchend', function (e) {
     mousetouchup(e);
 });
 
@@ -1000,6 +1090,30 @@ let npTitle = new Vue({
     }
 })
 
+let tabTitle = document.querySelector('.tab-title');
+let giveSpace = false;
+
+document.querySelector('.songs-page').addEventListener('scroll', evt => {
+    let scrollTop = evt.target.scrollTop;
+    let scrollBy = 60;
+    if (giveSpace) {
+        scrollBy = 0;
+    }
+    if (scrollTop > scrollBy) {
+        tabTitle.style.height = '40px';
+        document.querySelector('.tab-title h2').style.fontSize = '20px';
+        document.querySelector('.tab-title h2').style.paddingTop = '26px';
+        document.querySelector('.tab-title-text div').style.opacity = 0;
+        giveSpace = true;
+    } else {
+        tabTitle.style.height = '90px';
+        document.querySelector('.tab-title h2').style.fontSize = '1.5em';
+        document.querySelector('.tab-title h2').style.paddingTop = '0px';
+        document.querySelector('.tab-title-text div').style.opacity = 0.8;
+        giveSpace = false
+    }
+})
+
 /* Add songs */
 let songAddInfo = new Vue({
     el: '.add-songs-notify',
@@ -1172,6 +1286,7 @@ let edPl = new Worker('./ftmodules/editplaylist.js');
 
 let panel = {
     open(wpanel) {
+        document.onkeydown = null;
         switch(wpanel) {
             case "createPlaylist":
                 ftpanel.title = 'Create Playlist';
@@ -1280,6 +1395,7 @@ let panel = {
         document.querySelector('.panel-win').classList.remove('hidden');
     },
     close() {
+        keyboardControl();
         document.querySelector('.panel').classList.remove('open');
         document.querySelector('.panel').classList.add('hidden');
         document.querySelector('.panel-win').classList.add('hidden');

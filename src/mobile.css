@@ -63,7 +63,7 @@
 
     .playing-bar {
         z-index: 3;
-        transition: .3s cubic-bezier(.36,.07,.19,.97);
+        transition: .5s cubic-bezier(0, 1, 0.35, 1);
         transition-property: height;
     }
 
@@ -75,7 +75,7 @@
         margin: 0;
         flex-direction: column;
         opacity: 0;
-        transition: .3s cubic-bezier(.36,.07,.19,.97);
+        transition: .5s cubic-bezier(0, 1, 0.35, 1);
         transition-property: opacity;
         pointer-events: none;
     }
@@ -173,7 +173,7 @@
 
     .playing-bar-hidden {
         display: flex;
-        transition: .3s cubic-bezier(.36,.07,.19,.97);
+        transition: .5s cubic-bezier(0, 1, 0.35, 1);
     }
 
     .playing-bar-hidden.visible {

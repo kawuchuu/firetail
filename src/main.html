@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="black firetail">
+<html class="dark firetail">
 <head>
     <title>Firetail</title>
     <link rel="stylesheet" href="main.css">
@@ -8,6 +8,11 @@
 <body>
     <input type="file" id="addFiles" accept="audio/*" multiple style="display: none">
     <input type="file" id="addPlaylistImage" accept="image/*" style="display: none">
+    <div class="keyboard-control">
+        <div class="control-container">
+            <input type="text" v-on:focus.native="focus" v-on:blur.native="unfocus" id="commandInput" placeholder="Type your command here...">
+        </div>
+    </div>
     <div class="panel">
         <div class="panel-win hidden">
             <div class="title">
@@ -66,20 +71,22 @@
         </div>
         <div class="track-list" id="songsTab">
             <ul class="songs-page">
-                <div class="tab-title">
-                    <i id="albumArtistBack" class="material-icons-outlined">arrow_back</i>
-                    <div class="album-image"></div>
-                    <div class="tab-title-text">
-                        <h2 v-bind:message="list">{{ list.title }}</h2>
-                        <div v-bind:message="list">{{ list.count }}</div>
+                <div class="sticky-top">
+                    <div class="tab-title">
+                        <i id="albumArtistBack" class="material-icons-outlined">arrow_back</i>
+                        <div class="album-image"></div>
+                        <div class="tab-title-text">
+                            <h2 v-bind:message="list">{{ list.title }}</h2>
+                            <div v-bind:message="list">{{ list.count }}</div>
+                        </div>
                     </div>
-                </div>
-                <div class="list-section">
-                    <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
-                    <div class="artist-title-album section">
-                        <p class="list-title">Title</p>
-                        <p class="list-artist">Artist</p>
-                        <p class="list-album">Album</p>
+                    <div class="list-section">
+                        <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
+                        <div class="artist-title-album section">
+                            <p class="list-title">Title</p>
+                            <p class="list-artist">Artist</p>
+                            <p class="list-album">Album</p>
+                        </div>
                     </div>
                 </div>
                 <div class="list-wrapper">
