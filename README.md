@@ -1,10 +1,14 @@
 # Firetail
 [![Build Status](https://travis-ci.org/projsh/firetail.svg?branch=master)](https://travis-ci.org/projsh/firetail) [![Build status](https://ci.appveyor.com/api/projects/status/2i89yhge8rj42i9v?svg=true)](https://ci.appveyor.com/project/projsh/firetail)
 
-Open-source music player built with Electron. Currently in beta, but useable.
+An open source music player. My own little passion project.
 
-## 0.5.2
-This project is currently in the middle of being rewritten. It is currently unstable.
+# Screenshots
+
+![](assets/screenshots/allsongs.png)
+![](assets/screenshots/playlists.png)
+
+[More screenshots](screenshots.md)
   
 # Running / building
 You can either use the executables provided or build it yourself.
