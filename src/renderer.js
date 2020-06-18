@@ -9,7 +9,6 @@ const fs = require('fs');
 const drpc = require('discord-rpc');
 
 let list = new Worker('./ftmodules/list.js');
-let imgServer = new Worker('./ftmodules/server.js');
 let addPlaylist = new Worker('./ftmodules/addplaylist.js');
 let audio;
 let allSongs = [];
@@ -24,64 +23,20 @@ let currentlyPlaying = false;
 let repeatEnabled = false;
 let ver = app.getVersion();
 
-let Controls;
-let MediaPlaybackType;
-let MediaPlaybackStatus;
-let SystemMediaTransportControlsButton;
-let BackgroundMediaPlayer;
-let RandomAccessStreamReference;
-let Uri;
-
-if (process.platform == 'win32') {
-    MediaPlaybackStatus = require('@nodert-win10-au/windows.media').MediaPlaybackStatus;
-    MediaPlaybackType = require('@nodert-win10-au/windows.media').MediaPlaybackType;
-    SystemMediaTransportControlsButton = require('@nodert-win10-au/windows.media').SystemMediaTransportControlsButton;
-    BackgroundMediaPlayer = require('@nodert-win10-au/windows.media.playback').BackgroundMediaPlayer;
-    RandomAccessStreamReference = require('@nodert-win10-au/windows.storage.streams').RandomAccessStreamReference;
-    Uri = require('@nodert-win10-au/windows.foundation').Uri;
-    Controls = BackgroundMediaPlayer.current.systemMediaTransportControls;
-    Controls.isChannelDownEnabled = false;
-    Controls.isChannelUpEnabled = false;
-    Controls.isFastForwardEnabled = false;
-    Controls.isNextEnabled = true;
-    Controls.isPauseEnabled = true;
-    Controls.isPlayEnabled = true;
-    Controls.isPreviousEnabled = true;
-    Controls.isRecordEnabled = false;
-    Controls.isRewindEnabled = false;
-    Controls.isStopEnabled = false;
-    Controls.playbackStatus = MediaPlaybackStatus.closed;
-    Controls.displayUpdater.type = MediaPlaybackType.music;
-
-    Controls.on('buttonpressed', (sender, args) => {
-        switch(args.button) {
-            case SystemMediaTransportControlsButton.play:
-                playPause(false)
-                break;
-            case SystemMediaTransportControlsButton.pause:
-                playPause(true)
-                break;
-            case SystemMediaTransportControlsButton.next:
-                skipSong('next')
-                break;
-            case SystemMediaTransportControlsButton.previous:
-                skipSong('prev');
-                break;
-            default:
-                break;
-        }
-    })    
-}
-
 let keyboardControl = () => {
     document.onkeydown = (evt) => {
         switch(event.keyCode) {
             case 32:
                 evt.preventDefault();
-                if (playPauseButton.paused == true) {
-                    playPause(false);
+                if (evt.ctrlKey) {
+                    document.querySelector('.commands-container').style.display = 'block';
+                    document.querySelector('#commandInput').focus();
                 } else {
-                    playPause(true);
+                    if (playPauseButton.paused == true) {
+                        playPause(false);
+                    } else {
+                        playPause(true);
+                    }
                 }
                 break;
             case 37:
@@ -90,9 +45,9 @@ let keyboardControl = () => {
                     skipSong('prev');
                 } else {
                     if (evt.shiftKey) {
-                        audio.currentTime -= 20;
+                        audio.currentTime = audio.currentTime - 20;
                     } else {
-                        audio.currentTime -= 5;
+                        audio.currentTime = audio.currentTime - 5;
                     }
                 }
                 break;
@@ -102,9 +57,9 @@ let keyboardControl = () => {
                     skipSong('next');
                 } else {
                     if (evt.shiftKey) {
-                        audio.currentTime += 20;
+                        audio.currentTime = audio.currentTime + 20;
                     } else {
-                        audio.currentTime += 5;
+                        audio.currentTime = audio.currentTime + 5;
                     }
                 }
                 break;
@@ -124,8 +79,6 @@ let keyboardControl = () => {
 }
 
 keyboardControl();
-
-imgServer.postMessage(app.getPath('userData'));
 
 document.title = `Firetail ${ver}`;
 
@@ -194,18 +147,78 @@ window.addEventListener('touchend', () => {
     },5)
 })
 
-let commandInput = new Vue({
-    el: '#commandInput',
+let commandCom = Vue.extend({
+    template:
+    `<div class="keyboard-control">
+        <div class="control-container">
+            <input type="text" v-on:focus="focus" v-on:blur="unfocus" v-on:input="input" v-on:keyup="doCommand" id="commandInput" v-model="commandInput" @input="$emit('input', $event.target.value)" placeholder="Type your command here...">
+        </div>
+    </div>`
+})
+
+let commands = new commandCom({
     methods: {
         focus() {
-            console.log('focus')
+            console.log(this.commandInput)
             document.onkeydown = null;
         },
         unfocus() {
             keyboardControl();
+        },
+        input() {
+            console.log(this.commandInput)
+        },
+        doCommand(e) {
+            if (e.keyCode == 27) {
+                e.preventDefault();
+                document.querySelector('.commands-container').style.display = 'none';
+                return
+            }
+            if (e.keyCode != 13) return;
+            let commandType = this.commandInput.split(':');
+            console.log(commandType);
+            switch(commandType[0]) {
+                case "artist":
+                    getArtist(commandType[1]);
+                    break;
+                case "album":
+                    console.log(commandType[1]);
+                    getAlbum(commandType[1]);
+                    break;
+                case "play":
+                    let artistSong = commandType[1].split(' - ');
+                    allSongs.forEach(f => {
+                        if (f.artist == artistSong[0] && f.title == artistSong[1]) {
+                            compareListOrder = [f.id];
+                            currentSong = f.id;
+                            currentSongIndex = 0;
+                            lastView = 'noview';
+                            document.querySelectorAll('.results-link').forEach(f => {
+                                f.classList.remove('active');
+                                f.childNodes[0].style.opacity = 0;
+                                f.childNodes[0].textContent = 'play_arrow';
+                                f.childNodes[0].id = '';
+                            });
+                            playSong(f.id);
+                        }
+                    });
+                break;
+                case "panel":
+                    panel.open(commandType[1]);
+                break;
+                default:
+                    
+            }
+            document.querySelector('.commands-container').style.display = 'none';
+            this.commandInput = ""
         }
+    },
+    data: {
+        commandInput: ""
     }
 })
+
+commands.$mount('.inner-commands')
 
 /* Song List */
 let highlightedSongs = [];
@@ -570,11 +583,7 @@ let playSong = async (songId) => {
     songInfoSmallNp.artist = songArtist;
     setActivity(songTitle, 'play', 'Playing', `by ${songArtist}`, Date.now());
     if (process.platform == 'win32') {
-        Controls.playbackStatus = MediaPlaybackStatus.playing;
-        Controls.displayUpdater.musicProperties.title = songTitle;
-        Controls.displayUpdater.musicProperties.artist = songArtist;
-        Controls.displayUpdater.musicProperties.albumTitle = songAlbum;
-        Controls.displayUpdater.update();
+        ipc.send('win-control', ["text", songTitle, songArtist, songAlbum]);
     }
     let albumName = allSongs[songId].album.replace(/[.:<>"*?/{}()'|[\]\\]/g, "_");
     let img = `http://localhost:56743/${albumName}.jpg`
@@ -596,8 +605,7 @@ let playSong = async (songId) => {
         artTimeout = setTimeout(() => {
             albumArtEl.style.backgroundImage = "url('" + img.replace(/[']/g, "\\'") + "')";
             if (process.platform == 'win32') {
-                Controls.displayUpdater.thumbnail = RandomAccessStreamReference.createFromUri(new Uri(`http://localhost:56743/${albumName}.jpg`));
-                Controls.displayUpdater.update();
+                ipc.send('win-control', ['thumb', albumName]);
             }
         }, 200)
     });
@@ -775,7 +783,7 @@ let playPause = (pause, listbtn) => {
             'doesnt exist'
         }
         if (process.platform == 'win32') {
-            Controls.playbackStatus = MediaPlaybackStatus.paused;
+            ipc.send('win-control', ['status', 'paused']);
         }
         setActivity(psong.title, 'pause', 'Paused', `by ${psong.artist}`, null);
         audio.pause();
@@ -790,7 +798,7 @@ let playPause = (pause, listbtn) => {
             'doesnt exist'
         }
         if (process.platform == 'win32') {
-            Controls.playbackStatus = MediaPlaybackStatus.playing;
+            ipc.send('win-control', ['status', 'playing']);
         }
         let curDate = new Date;
         setActivity(psong.title, 'play', 'Playing', `by ${psong.artist}`, Math.round((curDate.getTime() / 1000) - audio.currentTime));

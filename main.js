@@ -1,4 +1,4 @@
-const {app, BrowserWindow, Menu, Tray} = require('electron');
+const {app, BrowserWindow, Menu, Tray, ipcMain} = require('electron');
 const path = require('path');
 const url = require('url');
 const express = require('express');
@@ -11,32 +11,106 @@ imgServer.listen(56743, 'localhost', (err) => {
     console.log('Image server running on: http://localhost:56743');
 });
 
+let Controls;
+let MediaPlaybackType;
+let MediaPlaybackStatus;
+let SystemMediaTransportControlsButton;
+let BackgroundMediaPlayer;
+let RandomAccessStreamReference;
+let Uri;
+
+if (process.platform == 'win32') {
+    MediaPlaybackStatus = require('@nodert-win10-au/windows.media').MediaPlaybackStatus;
+    MediaPlaybackType = require('@nodert-win10-au/windows.media').MediaPlaybackType;
+    SystemMediaTransportControlsButton = require('@nodert-win10-au/windows.media').SystemMediaTransportControlsButton;
+    BackgroundMediaPlayer = require('@nodert-win10-au/windows.media.playback').BackgroundMediaPlayer;
+    RandomAccessStreamReference = require('@nodert-win10-au/windows.storage.streams').RandomAccessStreamReference;
+    Uri = require('@nodert-win10-au/windows.foundation').Uri;
+    Controls = BackgroundMediaPlayer.current.systemMediaTransportControls;
+    Controls.isChannelDownEnabled = false;
+    Controls.isChannelUpEnabled = false;
+    Controls.isFastForwardEnabled = false;
+    Controls.isNextEnabled = true;
+    Controls.isPauseEnabled = true;
+    Controls.isPlayEnabled = true;
+    Controls.isPreviousEnabled = true;
+    Controls.isRecordEnabled = false;
+    Controls.isRewindEnabled = false;
+    Controls.isStopEnabled = false;
+    Controls.playbackStatus = MediaPlaybackStatus.closed;
+    Controls.displayUpdater.type = MediaPlaybackType.music;
+
+    Controls.on('buttonpressed', (sender, args) => {
+        switch(args.button) {
+            case SystemMediaTransportControlsButton.play:
+                mainWin.webContents.send('msg', ['play']);
+                break;
+            case SystemMediaTransportControlsButton.pause:
+                mainWin.webContents.send('msg', ['pause']);
+                break;
+            case SystemMediaTransportControlsButton.next:
+                mainWin.webContents.send('msg', ['skip']);
+                break;
+            case SystemMediaTransportControlsButton.previous:
+                mainWin.webContents.send('msg', ['prev']);
+                break;
+            default:
+                break;
+        }
+    })
+    
+    ipcMain.on('win-control', (evt, arg) => {
+        switch(arg[0]) {
+            case "text":
+                Controls.playbackStatus = MediaPlaybackStatus.playing;
+                Controls.displayUpdater.musicProperties.title = arg[1];
+                Controls.displayUpdater.musicProperties.artist = arg[2];
+                Controls.displayUpdater.musicProperties.albumTitle = arg[3];
+            break;
+            case "thumb":
+                Controls.displayUpdater.thumbnail = RandomAccessStreamReference.createFromUri(new Uri(`http://localhost:56743/${arg[1]}.jpg`));
+            break;
+            case "status":
+                if (arg[1] == 'paused') {
+                    Controls.playbackStatus = MediaPlaybackStatus.paused;
+                } else {
+                    Controls.playbackStatus = MediaPlaybackStatus.playing;
+                }
+            break;
+        }
+        Controls.displayUpdater.update();
+    })
+}
+
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 app.commandLine.appendSwitch('force-color-profile', 'srgb');
 app.commandLine.appendSwitch('disable-features', 'HardwareMediaKeyHandling');
 
+let mainWin;
+
 function createMainWindow() {
-    let win = new BrowserWindow({
+    mainWin = new BrowserWindow({
         width: 970, 
         height: 600,
         minWidth: 650,
         minHeight: 375,
         frame: true,
-        backgroundColor: '#1f1f1f',
+        backgroundColor: '#181818',
         show: false,
         title: 'Firetail',
         webPreferences: {
             nodeIntegration: true,
-            nodeIntegrationInWorker: true
+            nodeIntegrationInWorker: true,
+            spellcheck: false
         }
     });
     if (!app.isPackaged) {
         switch(process.platform) {
             case "win32":
-                win.setIcon('./assets/icon.ico');
+                mainWin.setIcon('./assets/icon.ico');
                 break;
             case "linux":
-                win.setIcon('./assets/firetail-idea.png');
+                mainWin.setIcon('./assets/firetail-idea.png');
                 break;
         }
     }
@@ -48,7 +122,7 @@ function createMainWindow() {
     tray = new Tray(iconpath);
     const contextMenu = Menu.buildFromTemplate([
         { label: "Open", id: "open", click: () => {
-            win.show();
+            mainWin.show();
         }},
         { label: 'Quit Firetail',  id: 'exit', click: () => { app.exit(0); } }
     ])
@@ -56,38 +130,38 @@ function createMainWindow() {
     tray.setToolTip('Firetail')
     tray.on('click', function() {
         if (mini == false) {
-            win.show();
+            mainWin.show();
         }
     });
 
-    let contents = win.webContents;
+    let contents = mainWin.webContents;
     contents.on("crashed", () => {
         console.log('Renderer has crashed!');
         setTimeout(() => {
-            win.loadURL(url.format({
+            mainWin.loadURL(url.format({
                 pathname: path.join(__dirname, './src/crash.html'),
                 protocol: 'file:',
                 slashes: true
             }));
         }, 200)
     });
-    win.loadURL(url.format({
+    mainWin.loadURL(url.format({
         pathname: path.join(__dirname, './src/main.html'),
         protocol: 'file:',
         slashes: true
     }));
-    win.setMenuBarVisibility(false);
-    win.once('ready-to-show', () => {
+    mainWin.setMenuBarVisibility(false);
+    mainWin.once('ready-to-show', () => {
         if (app.commandLine.hasSwitch('enable-mobile-ui')) {
-            win.webContents.executeJavaScript(`document.head.innerHTML += '<link rel="stylesheet" href="./mobile.css">'`);
-            win.setMinimumSize(416, 375);
+            mainWin.webContents.executeJavaScript(`document.head.innerHTML += '<link rel="stylesheet" href="./mobile.css">'`);
+            mainWin.setMinimumSize(416, 375);
         }
         if (app.commandLine.hasSwitch('enable-light-theme')) {
-            win.webContents.executeJavaScript(`document.querySelector('html').classList.replace('dark', 'light')`)
+            mainWin.webContents.executeJavaScript(`document.querySelector('html').classList.replace('dark', 'light')`)
         }
-        win.show();
+        mainWin.show();
     })
-    win.on('closed', (i) => {
+    mainWin.on('closed', (i) => {
         app.exit();
     });
     if (process.platform == 'darwin') {
@@ -107,7 +181,7 @@ function createMainWindow() {
                         label: 'Preferences',
                         accelerator: 'Cmd+,',
                         click() {
-                            win.webContents.send('preferences')
+                            mainWin.webContents.send('preferences')
                         }
                     },
                     { type: 'separator' },
@@ -125,7 +199,7 @@ function createMainWindow() {
                         label: 'Play / Pause',
                         accelerator: 'Space',
                         click() {
-                            win.webContents.send('msg', ['playpause']);
+                            mainWin.webContents.send('msg', ['playpause']);
                         }
                     },
                     { type: 'separator' },
@@ -133,14 +207,14 @@ function createMainWindow() {
                         label: 'Next',
                         accelerator: 'Cmd+Right',
                         click() {
-                            win.webContents.send('msg', ['skip']);
+                            mainWin.webContents.send('msg', ['skip']);
                         }
                     },
                     {
                         label: 'Previous',
                         accelerator: 'Cmd+Left',
                         click() {
-                            win.webContents.send('msg', ['prev']);
+                            mainWin.webContents.send('msg', ['prev']);
                         }
                     },
                     { type: 'separator' },
@@ -148,14 +222,14 @@ function createMainWindow() {
                         label: 'Shuffle',
                         accelerator: 'Cmd+S',
                         click() {
-                            win.webContents.send('msg', ['shuffle']);
+                            mainWin.webContents.send('msg', ['shuffle']);
                         }
                     },
                     {
                         label: 'Repeat',
                         accelerator: 'Cmd+R',
                         click() {
-                            win.webContents.send('msg', ['repeat']);
+                            mainWin.webContents.send('msg', ['repeat']);
                         }
                     }
                 ]
@@ -176,14 +250,14 @@ function createMainWindow() {
                         label: 'Toggle Dev Tools',
                         accelerator: 'Cmd+Alt+I',
                         click() {
-                            win.webContents.toggleDevTools();
+                            mainWin.webContents.toggleDevTools();
                         }
                     },
                     {
                         label: 'Reload Firetail',
                         accelerator: 'Cmd+Alt+R',
                         click() {
-                            win.webContents.reload();
+                            mainWin.webContents.reload();
                         }
                     }
                 ]
@@ -194,34 +268,8 @@ function createMainWindow() {
     }
 }
 
-/* function createMiniPlayer() {
-    var win = new BrowserWindow({
-        width: 315, 
-        height: 147,
-        icon: './assets/icon.png', 
-        frame: false,
-        backgroundColor: bg,
-        show: false,
-        title: 'Mini Player',
-        alwaysOnTop: true,
-        resizable: false,
-        webPreferences: {
-            nodeIntegration: true
-        }    
-    });
-
-    if (app.isPackaged == false) win.setResizable(true);
-
-    win.loadURL(url.format({
-        pathname: path.join(__dirname, './src/miniplayer/mini.html'),
-        protocol: 'file:',
-        slashes: true
-    }))
-    win.setMenuBarVisibility(false);
-} */
 function createWindows() {
     createMainWindow();
-    //createMiniPlayer();
 }
 
 app.on('ready', createWindows);

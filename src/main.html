@@ -8,10 +8,8 @@
 <body>
     <input type="file" id="addFiles" accept="audio/*" multiple style="display: none">
     <input type="file" id="addPlaylistImage" accept="image/*" style="display: none">
-    <div class="keyboard-control">
-        <div class="control-container">
-            <input type="text" v-on:focus.native="focus" v-on:blur.native="unfocus" id="commandInput" placeholder="Type your command here...">
-        </div>
+    <div class="commands-container" style="display: none">
+        <div class="inner-commands"></div>
     </div>
     <div class="panel">
         <div class="panel-win hidden">

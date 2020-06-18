@@ -1,4 +1,4 @@
-version: 0.5.{build}
+version: 0.6.{build}
 skip_tags: true
 
 image: Visual Studio 2017
@@ -20,4 +20,4 @@ deploy_script:
 
     Start-FileDownload 'https://github.com/probonopd/uploadtool/raw/master/upload.sh'
     
-    sh -c "TRAVIS_BRANCH=$env:APPVEYOR_REPO_BRANCH TRAVIS_COMMIT=$env:APPVEYOR_REPO_COMMIT ./upload.sh /c/projects/firetail/dist/Firetail-Setup-0.5.2.exe 2>/dev/null"
+    sh -c "TRAVIS_BRANCH=$env:APPVEYOR_REPO_BRANCH TRAVIS_COMMIT=$env:APPVEYOR_REPO_COMMIT ./upload.sh /c/projects/firetail/dist/Firetail-Setup-0.6.0.exe 2>/dev/null"

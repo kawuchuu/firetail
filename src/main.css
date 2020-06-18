@@ -1,36 +1,12 @@
 /* Global */
 @font-face {
-    font-family: 'Dosis';
-    src: url('../assets/Dosis-Regular.otf') format('opentype')
-}
-
-@font-face {
-    font-family: 'Dosis';
-    font-weight: bold;
-    src: url('../assets/Dosis-Bold.otf') format('opentype')
-}
-
-@font-face {
-    font-family: 'Overpass';
-    src: url('../assets/overpass/Overpass-Regular.ttf') format('truetype')
-}
-
-@font-face {
-    font-family: 'Overpass';
-    font-weight: bold;
-    src: url('../assets/overpass/Overpass-Bold.ttf') format('truetype')
-}
-
-@font-face {
-    font-family: 'Overpass';
-    font-weight: lighter;
-    src: url('../assets/overpass/Overpass-Light.ttf') format('truetype')
-
-}
-
-@font-face {
     font-family: 'Questrial';
     src: url('../assets/Questrial-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../assets/Inter.ttf') format('truetype');
 }
 
 html.black {
@@ -130,15 +106,14 @@ body {
     margin: 0;
     background-color: var(--bg);
     color: var(--text);
-    font-family: 'Overpass', 'Dosis', Arial, Helvetica, sans-serif !important;
+    font-family: 'Inter', 'Overpass', 'Dosis', Arial, Helvetica, sans-serif !important;
     user-select: none;
-    line-height: 1;
 }
 
 button {
     background: transparent;
     color: var(--text);
-    font-family: 'Overpass', 'Dosis', sans-serif;
+    font-family: 'Inter', 'Overpass', 'Dosis', sans-serif;
     font-weight: bold;
     width: auto;
     height: 37px;
@@ -320,7 +295,7 @@ button i {
 .keyboard-control {
     width: 100%;
     height: 100%;
-    display: none;
+    display: flex;
     position: fixed;
     z-index: 5;
     justify-content: center;
@@ -333,17 +308,22 @@ button i {
 }
 
 .control-container input {
-    outline-color: var(--hl-txt);
+    outline: none;
     background: var(--fg-bg);
-    border: none;
+    border: 2px solid var(--fg-bg);
+    box-sizing: border-box;
     color: var(--text);
     width: 400px;
     height: 30px;
-    padding: 10px 15px;
-    font-family: 'Overpass', sans-serif;
+    padding: 22px 15px;
+    font-family: 'Inter', sans-serif;
     border-radius: 10px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, .15);
     pointer-events: all;
+}
+
+.control-container input:focus {
+    border: 2px solid var(--hl-txt);
 }
 
 /* panel */
@@ -461,7 +441,8 @@ button i {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 5px;
+    transform: translateX(-10px);
 }
 
 .button {
@@ -535,7 +516,7 @@ button i {
 
 .beta-tag {
     font-size: 10px;
-    padding: 4px 4px 2px 4px;
+    padding: 3px 4px;
     border: solid 2px var(--text);
     color: var(--text);
     opacity: .75;
@@ -593,7 +574,6 @@ button i {
 }
 
 .top-button span {
-    margin-top: 4px;
     margin-left: 5px;
     font-size: 14px;
 }
@@ -665,7 +645,7 @@ button i {
 }
 
 .active-indicator {
-    width: 4px;
+    width: 3px;
     height: 50px;
     background: var(--hl-txt);
     position: relative;
@@ -680,7 +660,7 @@ button i {
 }
 
 .item-sidebar.active i {
-    margin: 0 18px 0 14px;
+    margin: 0 18px 0 15px;
 }
 
 .item-sidebar.active span {
@@ -689,7 +669,6 @@ button i {
 
 .item-sidebar span {
     font-size: 17px;
-    line-height: 1;
     transform: translateY(1px);
 }
 
@@ -743,13 +722,12 @@ button i {
 
 .song-title {
     font-size: 15px;
-    font-family: 'Overpass', sans-serif;
-    margin-top: 3px;
-    margin-bottom: 6px;
+    font-family: 'Inter', 'Overpass', sans-serif;
+    margin-bottom: 3px;
     overflow: hidden;
     text-overflow: ellipsis;
     display: block;
-    line-height: 1;
+    line-height: 20px;
     white-space: nowrap;
     max-width: 350px;
     font-weight: bold
@@ -762,7 +740,7 @@ button i {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
-    line-height: 1;
+    line-height: 15px;
 }
 
 .track-controls {
@@ -808,12 +786,12 @@ button i {
     display: flex;
     align-items: center;
     border-radius: 999px;
-    height: 4px;
+    height: 3px;
     z-index: 5
 }
 
 .fill {
-    height: 4px;
+    height: 3px;
     background: linear-gradient(to right, var(--gradient1), var(--gradient2));
     border-radius: 10000px;
     transition: cubic-bezier(0, 1, 0.35, 1) .25s;
@@ -830,8 +808,8 @@ button i {
 }
 
 .handle-hover {
-    width: 8px !important;
-    height: 8px !important;
+    width: 7px !important;
+    height: 7px !important;
     transition: all .1s !important;
 }
 
@@ -892,7 +870,7 @@ button i {
     display: flex;
     align-items: center;
     border-radius: 999px;
-    height: 4px;
+    height: 3px;
     transition: .15s;
     margin-right: 15px;
     margin-left: 5px;
@@ -999,8 +977,7 @@ li.nohover:hover {
     padding-right: 40px !important;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding-top: 12px;
-    padding-bottom: 9px;
+    padding: 9px 0;
     pointer-events: none;
 }
 
@@ -1009,8 +986,7 @@ li.nohover:hover {
     width: 30%;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding-top: 12px;
-    padding-bottom: 9px;
+    padding: 9px 0;
     padding-right: 40px;
     pointer-events: none;
 }
@@ -1051,7 +1027,7 @@ li.nohover:hover {
 
 .tab-title {
     width: calc(100% - 40px);
-    height: 90px;
+    height: 105px;
     min-height: 20px;
     display: flex;
     align-items: center;
@@ -1082,6 +1058,7 @@ li.nohover:hover {
     top: 0;
     z-index: 4;
     background: var(--bg);
+    box-shadow: none;
 }
 
 #albumArtistBack {
@@ -1173,7 +1150,7 @@ div.section {
     white-space: nowrap;
     pointer-events: none;
     font-weight: normal;
-    line-height: 2;
+    line-height: 20px;
     font-size: 16px;
     margin: 0;
 }
@@ -1279,7 +1256,7 @@ div.section {
     margin-top: 15px;
     width: 160px;
     text-align: center;
-    line-height: 1.4;
+    line-height: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -1324,7 +1301,7 @@ div.section {
 .panel-content input[type="text"], .panel-content textarea {
     background: var(--fg-bg);
     color: var(--text);
-    font-family: 'Overpass';
+    font-family: 'Inter', 'Overpass';
     border: none;
     border-radius: 5px;
     padding: 10px 20px;
