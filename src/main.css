@@ -1033,7 +1033,7 @@ li.nohover:hover {
     align-items: center;
     position: sticky;
     top: 0;
-    transition: cubic-bezier(0, 1, 0.35, 1) .5s;
+    transition: cubic-bezier(0, 1, 0.35, 1) .5s;;
 }
 
 .tab-title-text {
@@ -1071,12 +1071,14 @@ li.nohover:hover {
     overflow: hidden;
     text-overflow: ellipsis;
     transition: cubic-bezier(0, 1, 0.35, 1) .5s;
+    transition-property: font-size, padding-top;
 }
 
 .tab-title-text div {
     opacity: .8;
     font-size: 16px;
     transition: cubic-bezier(0, 1, 0.35, 1) .5s;
+    transition-property: opacity;
 }
 
 .list-section {

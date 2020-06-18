@@ -1110,14 +1110,16 @@ document.querySelector('.songs-page').addEventListener('scroll', evt => {
     if (scrollTop > scrollBy) {
         tabTitle.style.height = '40px';
         document.querySelector('.tab-title h2').style.fontSize = '20px';
-        document.querySelector('.tab-title h2').style.paddingTop = '26px';
+        document.querySelector('.tab-title h2').style.paddingTop = '30px';
         document.querySelector('.tab-title-text div').style.opacity = 0;
+        document.querySelector('.sticky-top').style.boxShadow = '0px 2px 5px rgba(0,0,0,.15)';
         giveSpace = true;
     } else {
-        tabTitle.style.height = '90px';
+        tabTitle.style.height = '105px';
         document.querySelector('.tab-title h2').style.fontSize = '1.5em';
         document.querySelector('.tab-title h2').style.paddingTop = '0px';
         document.querySelector('.tab-title-text div').style.opacity = 0.8;
+        document.querySelector('.sticky-top').style.removeProperty('box-shadow');
         giveSpace = false
     }
 })
