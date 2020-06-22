@@ -120,6 +120,12 @@ ipc.on('msg', (event, args) => {
                 playPause(true);
             }
             break;
+        case "play":
+            playPause(false);
+            break;
+        case "pause":
+            playPause(true);
+            break;
         case "skip":
             skipSong('next');
             break;

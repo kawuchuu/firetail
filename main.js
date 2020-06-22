@@ -2,6 +2,7 @@ const {app, BrowserWindow, Menu, Tray, ipcMain} = require('electron');
 const path = require('path');
 const url = require('url');
 const express = require('express');
+const os = require('os');
 
 let imgServer = express();
 imgServer.use(express.static(`${app.getPath('userData')}/images/`));
@@ -18,69 +19,6 @@ let SystemMediaTransportControlsButton;
 let BackgroundMediaPlayer;
 let RandomAccessStreamReference;
 let Uri;
-
-if (process.platform == 'win32') {
-    MediaPlaybackStatus = require('@nodert-win10-au/windows.media').MediaPlaybackStatus;
-    MediaPlaybackType = require('@nodert-win10-au/windows.media').MediaPlaybackType;
-    SystemMediaTransportControlsButton = require('@nodert-win10-au/windows.media').SystemMediaTransportControlsButton;
-    BackgroundMediaPlayer = require('@nodert-win10-au/windows.media.playback').BackgroundMediaPlayer;
-    RandomAccessStreamReference = require('@nodert-win10-au/windows.storage.streams').RandomAccessStreamReference;
-    Uri = require('@nodert-win10-au/windows.foundation').Uri;
-    Controls = BackgroundMediaPlayer.current.systemMediaTransportControls;
-    Controls.isChannelDownEnabled = false;
-    Controls.isChannelUpEnabled = false;
-    Controls.isFastForwardEnabled = false;
-    Controls.isNextEnabled = true;
-    Controls.isPauseEnabled = true;
-    Controls.isPlayEnabled = true;
-    Controls.isPreviousEnabled = true;
-    Controls.isRecordEnabled = false;
-    Controls.isRewindEnabled = false;
-    Controls.isStopEnabled = false;
-    Controls.playbackStatus = MediaPlaybackStatus.closed;
-    Controls.displayUpdater.type = MediaPlaybackType.music;
-
-    Controls.on('buttonpressed', (sender, args) => {
-        switch(args.button) {
-            case SystemMediaTransportControlsButton.play:
-                mainWin.webContents.send('msg', ['play']);
-                break;
-            case SystemMediaTransportControlsButton.pause:
-                mainWin.webContents.send('msg', ['pause']);
-                break;
-            case SystemMediaTransportControlsButton.next:
-                mainWin.webContents.send('msg', ['skip']);
-                break;
-            case SystemMediaTransportControlsButton.previous:
-                mainWin.webContents.send('msg', ['prev']);
-                break;
-            default:
-                break;
-        }
-    })
-    
-    ipcMain.on('win-control', (evt, arg) => {
-        switch(arg[0]) {
-            case "text":
-                Controls.playbackStatus = MediaPlaybackStatus.playing;
-                Controls.displayUpdater.musicProperties.title = arg[1];
-                Controls.displayUpdater.musicProperties.artist = arg[2];
-                Controls.displayUpdater.musicProperties.albumTitle = arg[3];
-            break;
-            case "thumb":
-                Controls.displayUpdater.thumbnail = RandomAccessStreamReference.createFromUri(new Uri(`http://localhost:56743/${arg[1]}.jpg`));
-            break;
-            case "status":
-                if (arg[1] == 'paused') {
-                    Controls.playbackStatus = MediaPlaybackStatus.paused;
-                } else {
-                    Controls.playbackStatus = MediaPlaybackStatus.playing;
-                }
-            break;
-        }
-        Controls.displayUpdater.update();
-    })
-}
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 app.commandLine.appendSwitch('force-color-profile', 'srgb');
@@ -265,6 +203,68 @@ function createMainWindow() {
         ]
         let menu = Menu.buildFromTemplate(appMenu);
         Menu.setApplicationMenu(menu)
+    }
+    if (process.platform == 'win32' && os.release().substr(0,2) == "10") {
+        MediaPlaybackStatus = require('@nodert-win10-au/windows.media').MediaPlaybackStatus;
+        MediaPlaybackType = require('@nodert-win10-au/windows.media').MediaPlaybackType;
+        SystemMediaTransportControlsButton = require('@nodert-win10-au/windows.media').SystemMediaTransportControlsButton;
+        BackgroundMediaPlayer = require('@nodert-win10-au/windows.media.playback').BackgroundMediaPlayer;
+        RandomAccessStreamReference = require('@nodert-win10-au/windows.storage.streams').RandomAccessStreamReference;
+        Uri = require('@nodert-win10-au/windows.foundation').Uri;
+        Controls = BackgroundMediaPlayer.current.systemMediaTransportControls;
+        Controls.isChannelDownEnabled = false;
+        Controls.isChannelUpEnabled = false;
+        Controls.isFastForwardEnabled = false;
+        Controls.isNextEnabled = true;
+        Controls.isPauseEnabled = true;
+        Controls.isPlayEnabled = true;
+        Controls.isPreviousEnabled = true;
+        Controls.isRecordEnabled = false;
+        Controls.isRewindEnabled = false;
+        Controls.isStopEnabled = false;
+        Controls.playbackStatus = MediaPlaybackStatus.closed;
+        Controls.displayUpdater.type = MediaPlaybackType.music;
+    
+        Controls.on('buttonpressed', (sender, args) => {
+            switch(args.button) {
+                case SystemMediaTransportControlsButton.play:
+                    mainWin.webContents.send('msg', ['play']);
+                    break;
+                case SystemMediaTransportControlsButton.pause:
+                    mainWin.webContents.send('msg', ['pause']);
+                    break;
+                case SystemMediaTransportControlsButton.next:
+                    mainWin.webContents.send('msg', ['skip']);
+                    break;
+                case SystemMediaTransportControlsButton.previous:
+                    mainWin.webContents.send('msg', ['prev']);
+                    break;
+                default:
+                    break;
+            }
+        })
+        
+        ipcMain.on('win-control', (evt, arg) => {
+            switch(arg[0]) {
+                case "text":
+                    Controls.playbackStatus = MediaPlaybackStatus.playing;
+                    Controls.displayUpdater.musicProperties.title = arg[1];
+                    Controls.displayUpdater.musicProperties.artist = arg[2];
+                    Controls.displayUpdater.musicProperties.albumTitle = arg[3];
+                break;
+                case "thumb":
+                    Controls.displayUpdater.thumbnail = RandomAccessStreamReference.createFromUri(new Uri(`http://localhost:56743/${arg[1]}.jpg`));
+                break;
+                case "status":
+                    if (arg[1] == 'paused') {
+                        Controls.playbackStatus = MediaPlaybackStatus.paused;
+                    } else {
+                        Controls.playbackStatus = MediaPlaybackStatus.playing;
+                    }
+                break;
+            }
+            Controls.displayUpdater.update();
+        })
     }
 }
 
