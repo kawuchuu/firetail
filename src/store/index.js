@@ -1,7 +1,7 @@
 import { createStore } from 'vuex'
 import sort from '../modules/sort'
 
-export default createStore({
+const store = createStore({
     state: {
         paused: true,
         navs: [{
@@ -89,6 +89,11 @@ export default createStore({
                 state.currentTime = audio.currentTime
             }
         },
+        newAudioTime(state, newTime) {
+            if (audio) {
+                audio.currentTime = newTime
+            }
+        },
         audioDur(state) {
             if (audio) {
                 state.duration = audio.duration
@@ -124,15 +129,19 @@ export default createStore({
         playSong(context, songLoc) {
             audio.src = `local-resource://${songLoc}`
             audio.play()
-            audio.addEventListener('timeupdate', () => {
-                context.commit('timeUpdate', [audio.duration, audio.currentTime])
-            })
+            audio.addEventListener('timeupdate', timeUpdate)
             audio.addEventListener('pause', () => {
                 context.commit('updatePause')
             })
             audio.addEventListener('play', () => {
                 context.commit('updatePause')
             })
+        },
+        removeTimeUpdate() {
+            audio.removeEventListener('timeupdate', timeUpdate)
+        },
+        addTimeUpdate() {
+            audio.addEventListener('timeupdate', timeUpdate)
         },
         updateSongStore(context, library) {
             console.log(library)
@@ -143,4 +152,10 @@ export default createStore({
     }
 })
 
+export default store
+
 let audio = new Audio();
+
+let timeUpdate = () => {
+    store.commit('timeUpdate', [audio.duration, audio.currentTime])
+}

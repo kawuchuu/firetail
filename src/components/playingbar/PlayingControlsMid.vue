@@ -10,10 +10,10 @@
             </div>
             <div class="seek-time-inner-container">
                 <p class="song-duration" id="songDurationTime">{{ songCurrent }}</p>
-                <div id="seekWrapper" ref="seekBarWrapper" class="seek-bar-inner-container" @mousedown="down">
+                <div id="seekWrapper" ref="seekBarWrapper" class="seek-bar-inner-container" @mouseover="hover" @mouseleave="leave" @mousedown="down">
                     <div class="seek-bar" ref="seekBar">
                         <div id="seekFill" ref="seekFill" :style="fill" class="fill"></div>
-                        <div id="seekHandle" class="handle"></div>
+                        <div id="seekHandle" ref="handle" class="handle"></div>
                     </div>
                 </div>
                 <p class="song-duration" id="songDurationLength">{{ songDuration }}</p>
@@ -49,6 +49,7 @@ export default {
                     return time.timeFormat(state.duration)
                 }
             },
+            rawSongDuration: state => state.duration,
             songCurrent: state => {
                 if (typeof state.currentTime != 'number' || isNaN(state.currentTime)) {
                     return '-:--'
@@ -82,16 +83,28 @@ export default {
             window.removeEventListener('mousemove', this.move)
             window.removeEventListener('mouseup', this.up)
             if (!this.seekMouseDown) return
+            this.seekMouseDown = false
             this.$refs.seekFill.style.removeProperty('transition')
             let pBar = getP(evt, this.$refs.seekBar)
             this.$refs.seekFill.width = pBar * 100 + '%'
+            this.$store.dispatch('addTimeUpdate')
+            this.$store.commit('newAudioTime', pBar * this.rawSongDuration)
+            this.$refs.handle.classList.remove('handle-hover')
         },
         down(evt) {
             this.seekMouseDown = true
+            this.$store.dispatch('removeTimeUpdate')
             window.addEventListener('mousemove', this.move)
             window.addEventListener('mouseup', this.up)
             let pBar = getP(evt, this.$refs.seekBar)
             this.$refs.seekFill.style.width = pBar * 100 + '%'
+        },
+        hover() {
+            this.$refs.handle.classList.add('handle-hover')
+        },
+        leave() {
+            if (this.seekMouseDown) return
+            this.$refs.handle.classList.remove('handle-hover')
         }
     }
 }
