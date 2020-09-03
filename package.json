@@ -1,78 +1,54 @@
 {
-  "name": "firetail",
+  "name": "firetail-next",
   "version": "0.6.0",
-  "description": "Audio Player",
-  "author": {
-    "name": "projsh_",
-    "email": "projshdev@gmail.com"
-  },
-  "repository": "https://github.com/projsh/firetail.git",
-  "main": "main.js",
+  "private": true,
   "scripts": {
-    "start": "electron .",
-    "release": "build"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:serve": "vue-cli-service electron:serve",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps"
   },
+  "main": "background.js",
   "dependencies": {
-    "discord-rpc": "^3.1.0",
-    "electron-devtools-installer": "^3.1.1",
-    "electron-settings": "^3.2.0",
-    "express": "^4.17.1",
-    "jsmediatags": "^3.8.1",
-    "markdown-it": "^9.0.0",
-    "sharp": "^0.25.4",
-    "vue": "^2.6.11",
-    "vue-async-computed": "^3.8.2"
+    "core-js": "^3.6.5",
+    "vue": "^3.0.0-0",
+    "vue-router": "4.0.0-beta.9",
+    "vuex": "^4.0.0-0"
   },
   "devDependencies": {
-    "electron": "^8.5.0",
-    "electron-builder": "^21.2.0"
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0-0",
+    "babel-eslint": "^10.1.0",
+    "electron": "^10.1.1",
+    "electron-devtools-installer": "^3.1.1",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^7.0.0-0",
+    "vue-cli-plugin-electron-builder": "~2.0.0-rc.4",
+    "vue-devtools": "^5.1.4"
   },
-  "optionalDependencies": {
-    "@nodert-win10-au/windows.foundation": "^0.4.4",
-    "@nodert-win10-au/windows.media": "^0.4.4",
-    "@nodert-win10-au/windows.media.playback": "^0.4.4",
-    "@nodert-win10-au/windows.storage.streams": "^0.4.4",
-    "mpris-service": "^2.1.0"
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
   },
-  "build": {
-    "appId": "com.projsh.firetail",
-    "productName": "Firetail",
-    "copyright": "Copyright © 2020 projsh_",
-    "mac": {
-      "category": "public.app-category.music",
-      "target": "dmg"
-    },
-    "nsis": {
-      "artifactName": "Firetail-Setup-${version}.${ext}",
-      "uninstallDisplayName": "Firetail"
-    },
-    "win": {
-      "target": [
-        "nsis"
-      ],
-      "icon": "build/icon.ico",
-      "publisherName": "projsh_"
-    },
-    "linux": {
-      "target": [
-        {
-          "target": "AppImage",
-          "arch": "x64"
-        },
-        {
-          "target": "deb",
-          "arch": "x64"
-        }
-      ],
-      "category": "AudioVideo",
-      "executableName": "firetail",
-      "desktop": {
-        "Type": "Application",
-        "Name": "Firetail",
-        "Comment": "Audio Player",
-        "Icon": "firetail",
-        "Terminal": "false"
-      }
-    }
-  }
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }

@@ -1,27 +1,23 @@
 # Firetail
-[![Build Status](https://travis-ci.org/projsh/firetail.svg?branch=master)](https://travis-ci.org/projsh/firetail) [![Build status](https://ci.appveyor.com/api/projects/status/2i89yhge8rj42i9v?svg=true)](https://ci.appveyor.com/project/projsh/firetail)
 
-An open source music player. My own little passion project.
+This is the next version of Firetail, fully written using Vue rather than partially. This version is in very early stages and is only intended for development purposes. You will receive no support for this version quite yet.
 
-# Screenshots
+## Project setup
+```
+yarn install
+```
 
-![](assets/screenshots/allsongs.png)
-![](assets/screenshots/playlists.png)
+### Start
+```
+yarn electron:serve
+```
 
-[More screenshots](screenshots.md)
-  
-# Running / building
-You can either use the executables provided or build it yourself.
+### Build
+```
+yarn electron:build
+```
 
-## Run
-  1. `git clone https://github.com/projsh/firetail.git`
-  2. `cd firetail`
-  3. `yarn install`
-  4. `yarn start`
-
-## Build
-  1. `git clone https://github.com/projsh/firetail.git`
-  2. `cd firetail`
-  3. `yarn install`
-  4. `yarn global add electron-builder`
-  5. `yarn release`
+### Lints and fixes files
+```
+yarn lint
+```
