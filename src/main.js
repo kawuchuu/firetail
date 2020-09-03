@@ -11,8 +11,9 @@ mainApp.use(router)
 
 mainApp.mount("#app")
 router.replace('/')
-ipcRenderer.send('getlibrary')
 
-ipcRenderer.addListener('getlibrary', (event, library) => {
+ipcRenderer.addListener('library', (event, library) => {
     store.dispatch('updateSongStore', library)
 })
+
+ipcRenderer.send('library')

@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+        <input type="file" multiple accept="audio/*" id="addFiles" @change="addFiles" style="display: none;">
         <div class="cover" style="transition:.25s;transition-property:opacity;width: 100%;height: 100%;position: fixed;z-index: 11;background: linear-gradient(#e74e8e, #ef9135);display: none;justify-content: center;align-items: center;">
             <!-- generated svg, slightly modified -->
             <svg style="width:150px;height:150px;" viewBox="0 0 1080 1080">
@@ -29,6 +30,7 @@ import TopBar from './components/TopBar.vue'
 import SideBar from './components/sidebar/SideBar.vue'
 import PlayingBar from './components/playingbar/PlayingBar'
 import TopTitle from './components/TopTitle'
+import { ipcRenderer } from 'electron'
 
 export default {
     name: 'App',
@@ -37,9 +39,18 @@ export default {
         SideBar,
         PlayingBar,
         TopTitle,
+    },
+    methods: {
+        addFiles(evt) {
+            let files = []
+            Array.from(evt.target.files).forEach(f => {
+                files.push([f.path,f.name])
+            })
+            console.log(evt.target.files)
+            ipcRenderer.send('addToLibrary', files)
+        }
     }
 }
-
 </script>
 
 <style>

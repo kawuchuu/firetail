@@ -10,9 +10,9 @@
             </div>
             <div class="seek-time-inner-container">
                 <p class="song-duration" id="songDurationTime">{{ songCurrent }}</p>
-                <div id="seekWrapper" class="seek-bar-inner-container">
-                    <div class="seek-bar">
-                        <div id="seekFill" :style="fill" class="fill"></div>
+                <div id="seekWrapper" ref="seekBarWrapper" class="seek-bar-inner-container" @mousedown="down">
+                    <div class="seek-bar" ref="seekBar">
+                        <div id="seekFill" ref="seekFill" :style="fill" class="fill"></div>
                         <div id="seekHandle" class="handle"></div>
                     </div>
                 </div>
@@ -25,6 +25,16 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import time from '../../modules/timeformat'
+
+let clamp = (min, val, max) => {
+    return Math.min(Math.max(min, val), max);
+}
+
+let getP = (e, el) => {
+    let pBar = (e.clientX - el.getBoundingClientRect().x) / el.clientWidth;
+    pBar = clamp(0, pBar, 1);
+    return pBar;
+}
 
 export default {
     computed: {
@@ -55,8 +65,34 @@ export default {
             }
         })
     },
+    data() {
+        return {
+            seekMouseDown: false
+        }
+    },
     methods: {
-        ...mapActions(['playPause'])
+        ...mapActions(['playPause']),
+        move(evt) {
+            if (!this.seekMouseDown) return
+            this.$refs.seekFill.style.transition = 'none'
+            let pBar = getP(evt, this.$refs.seekBar)
+            this.$refs.seekFill.style.width = pBar * 100 + '%'
+        },
+        up(evt) {
+            window.removeEventListener('mousemove', this.move)
+            window.removeEventListener('mouseup', this.up)
+            if (!this.seekMouseDown) return
+            this.$refs.seekFill.style.removeProperty('transition')
+            let pBar = getP(evt, this.$refs.seekBar)
+            this.$refs.seekFill.width = pBar * 100 + '%'
+        },
+        down(evt) {
+            this.seekMouseDown = true
+            window.addEventListener('mousemove', this.move)
+            window.addEventListener('mouseup', this.up)
+            let pBar = getP(evt, this.$refs.seekBar)
+            this.$refs.seekFill.style.width = pBar * 100 + '%'
+        }
     }
 }
 </script>

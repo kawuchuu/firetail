@@ -2,6 +2,7 @@ module.exports = {
     pluginOptions: {
         electronBuilder: {
             nodeIntegration: true,
+            externals: ['better-sqlite3'],
             builderOptions: {
                 appId: "com.projsh.firetail",
                 productName: "Firetail",

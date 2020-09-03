@@ -8,6 +8,8 @@ import installExtension, {
     VUEJS_DEVTOOLS
 } from 'electron-devtools-installer'
 import fs from 'fs'
+import db from './modules/database'
+import files from './modules/files'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -94,6 +96,18 @@ async function createWindow() {
             let list = await genList;
             win.webContents.send('getlibrary', list);
         })
+    })
+
+    ipcMain.on('addToLibrary', async (event, locations) => {
+        let songs = await files.addFiles(locations)
+        db.addToLibrary(songs)
+        let library = db.getLibrary()
+        win.webContents.send('library', library)
+    })
+
+    ipcMain.on('library', async () => {
+        let library = db.getLibrary()
+        win.webContents.send('library', library)
     })
 
     win.on('ready-to-show', () => {

@@ -14,7 +14,7 @@ export default {
     props: ['song'],
     methods: {
         playSong() {
-            this.$store.dispatch('playSong', this.song.file)
+            this.$store.dispatch('playSong', this.song.path)
             this.$store.commit('songMetadata', [this.song.title, this.song.artist])
         }
     }

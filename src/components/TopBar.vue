@@ -7,9 +7,31 @@
                 <div class="app-name">Firetail</div>
                 <div class="beta-tag">Beta</div>
             </div>
+            <div class="nav-top-buttons">
+                <div class="top-button-container">
+                    <TopButtons v-for="item in button" v-bind:button="item" v-bind:key="item.id"></TopButtons>
+                </div>
+            </div>
         </div>
     </div>
 </template>
+
+<script>
+import TopButtons from './TopButtons'
+
+export default {
+    components: {
+        TopButtons
+    },
+    data() {
+        return {
+            button: [
+                {name: 'Add Songs', id: 'addFiles', for: 'addFiles', icon: 'add'}
+            ]
+        }
+    }
+}
+</script>
 
 <style scoped>
 .top-bar {

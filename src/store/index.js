@@ -136,7 +136,7 @@ export default createStore({
         },
         updateSongStore(context, library) {
             console.log(library)
-            let sortedLibrary = sort.sortArray(library[0], 'artist')
+            let sortedLibrary = sort.sortArray(library, 'artist')
             context.commit('mutUpdateSongStore', sortedLibrary)
             context.commit('updateScreenCountNum', sortedLibrary.length)
         }
