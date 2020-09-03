@@ -11,6 +11,9 @@
     <div class="commands-container" style="display: none">
         <div class="inner-commands"></div>
     </div>
+    <div class="search-container" style="display: none">
+        <div class="inner-search"></div>
+    </div>
     <div class="panel">
         <div class="panel-win hidden">
             <div class="title">
@@ -51,11 +54,7 @@
             <div class="side-bar">
                 <div class="side-bar-inner-container">
                     <div class="nav-buttons">
-                        <side-buttons v-for="item in section1" v-bind:button="item" v-bind:key="item.id"></side-buttons>
-                        <div class="type-separator"></div>
-                        <side-buttons v-for="item in section2" v-bind:button="item" v-bind:key="item.id"></side-buttons>
-                        <div class="type-separator"></div>
-                        <side-buttons v-for="item in section3" v-bind:button="item" v-bind:key="item.id"></side-buttons>
+                        <side-buttons v-for="item in navs" v-bind:button="item" v-bind:key="item.id"></side-buttons>
                     </div>
                 </div>
             </div>

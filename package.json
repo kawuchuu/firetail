@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "discord-rpc": "^3.1.0",
+    "electron-devtools-installer": "^3.1.1",
     "electron-settings": "^3.2.0",
     "express": "^4.17.1",
     "jsmediatags": "^3.8.1",
@@ -23,7 +24,7 @@
     "vue-async-computed": "^3.8.2"
   },
   "devDependencies": {
-    "electron": "^9.0.3",
+    "electron": "^8.5.0",
     "electron-builder": "^21.2.0"
   },
   "optionalDependencies": {
@@ -49,7 +50,7 @@
       "target": [
         "nsis"
       ],
-      "icon": "assets/icon.ico",
+      "icon": "build/icon.ico",
       "publisherName": "projsh_"
     },
     "linux": {

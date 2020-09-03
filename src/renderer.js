@@ -28,9 +28,12 @@ let keyboardControl = () => {
         switch(event.keyCode) {
             case 32:
                 evt.preventDefault();
-                if (evt.ctrlKey) {
+                if (evt.ctrlKey && evt.shiftKey) {
                     document.querySelector('.commands-container').style.display = 'block';
                     document.querySelector('#commandInput').focus();
+                } else if (evt.ctrlKey) {
+                    document.querySelector('.search-container').style.display = 'block';
+                    document.querySelector('#searchInput').focus();
                 } else {
                     if (playPauseButton.paused == true) {
                         playPause(false);
@@ -107,6 +110,23 @@ rpc.on('ready', () => {
     setActivity('Not Playing...', 'pause', 'Paused', '  ', null);
 })
 
+if (process.platform == 'win32' && require('os').release().substr(0,2) != "10") {
+    document.head.innerHTML += `<style>.material-icons-outlined {transform: translateY(10px)}`
+}
+
+let searchTest = query => {
+    let items = allSongs.filter(item => {
+        return item.title.toLowerCase().includes(query.toLowerCase());
+    });
+    console.log(items)
+    console.log(query)
+    listItems.songList = [];
+    items.forEach(f => {
+        listItems.songList.push(f);
+        updateListOrder("artist")
+    })
+}
+
 //ipc
 let ipc = require('electron').ipcRenderer;
 ipc.on('msg', (event, args) => {
@@ -162,6 +182,36 @@ let commandCom = Vue.extend({
     </div>`
 })
 
+let searchBox = Vue.extend({
+    template:
+    `<div class="keyboard-control">
+        <div class="control-container">
+            <input type="text" v-on:focus="focus" v-on:blur="unfocus" v-on:input="input" v-on:keyup="doSearch" id="searchInput" v-model="searchInput" @input="$emit('input', $event.target.value)" placeholder="Type your search query here...">
+        </div>
+    </div>`
+})
+
+let search = new searchBox({
+    methods: {
+        focus() {
+            console.log(this.searchInput)
+            document.onkeydown = null;
+        },
+        unfocus() {
+            keyboardControl();
+        },
+        input() {
+            console.log(this.searchInput)
+        },
+        doSearch() {
+            searchTest(this.searchInput);
+        }
+    },
+    data: {
+        searchInput: ""
+    }
+})
+
 let commands = new commandCom({
     methods: {
         focus() {
@@ -212,6 +262,8 @@ let commands = new commandCom({
                 case "panel":
                     panel.open(commandType[1]);
                 break;
+                case "search":
+                    searchTest(commandType[1]);
                 default:
                     
             }
@@ -225,6 +277,8 @@ let commands = new commandCom({
 })
 
 commands.$mount('.inner-commands')
+
+search.$mount('.inner-search')
 
 /* Song List */
 let highlightedSongs = [];
@@ -464,6 +518,17 @@ list.onmessage = async (message) => {
             });
         }
     }
+    fs.promises.readFile(`${app.getPath('userData')}/playlist.json`, (err) => {
+        if (err) {
+            console.error(err);
+        }
+    }).then(file => {
+        console.log('read! continuing...')
+            let getPlaylists = JSON.parse(file.toString());
+            Object.keys(getPlaylists).forEach(f => {
+                sideButtons.navs.push({name: getPlaylists[f].name})
+            })
+    })
     document.querySelector('.load-spinner').style.display = 'none';
 }
 
@@ -592,7 +657,7 @@ let playSong = async (songId) => {
         ipc.send('win-control', ["text", songTitle, songArtist, songAlbum]);
     }
     let albumName = allSongs[songId].album.replace(/[.:<>"*?/{}()'|[\]\\]/g, "_");
-    let img = `http://localhost:56743/${albumName}.jpg`
+    let img = `http://localhost:56743/${songArtist}${albumName}.jpg`
     new Promise(resolve => {
         let request = new XMLHttpRequest();
         request.open('GET', img, true);
@@ -611,7 +676,7 @@ let playSong = async (songId) => {
         artTimeout = setTimeout(() => {
             albumArtEl.style.backgroundImage = "url('" + img.replace(/[']/g, "\\'") + "')";
             if (process.platform == 'win32') {
-                ipc.send('win-control', ['thumb', albumName]);
+                ipc.send('win-control', ['thumb', `${songArtist}${albumName}`]);
             }
         }, 200)
     });
@@ -929,35 +994,30 @@ new Vue({
 /* Tabs */
 Vue.component('side-buttons', {
     props: ['button'],
-    template: '<div class="item-sidebar" v-on:click="click"><div class="active-indicator"></div><i class="material-icons-outlined">{{ button.icon }}</i><span>{{ button.name }}</span></div>',
+    template:
+    `<div v-if="button.type == 'large_button'" class="item-sidebar" v-on:click="click">
+        <div class="active-indicator"></div>
+        <i class="material-icons-outlined">{{ button.icon }}</i>
+        <span>{{ button.name }}</span>
+    </div>
+    <div class="list-subtitle" v-else-if="button.type == 'subtitle'">{{ button.name }}</div>
+    <div v-else class="item-sidebar playlist-sidename" v-on:click="click">
+        <div class="active-indicator"></div>
+        <span>{{ button.name }}</span>
+    </div>`,
+    mounted() {
+        if (this.button.type == 'subtitle') {
+            console.log(this.button.name)
+        }
+        console.log(this)
+        if (this.$vnode.key == 'songsTab') {
+            console.log(this)
+            this.$el.classList.add('active');
+            document.querySelector('.item-sidebar.active .active-indicator').style.display = 'block';
+        }
+    },
     methods: {
         click() {
-            // everything here will be rewritten soon, i know it's awful
-            /*
-            if (tabClicked != 'songsTab' && tabClicked != 'settingsTab') {
-                
-            }
-            if (tabClicked == 'playlistsTab') {
-                
-            }
-            if (tabClicked == 'songsTab') {
-                document.querySelector(`#songsTab`).style.display = 'flex';
-                currentListViewing = 'Songs';
-                listTitle.list.title = 'All Songs';
-                listItems.songList = [];
-                allSongs.forEach(f => {
-                    listItems.songList.push(f);
-                })
-                updateListOrder('artist');
-                document.querySelector('.songs-page').scroll(0,0);
-            }
-            if (tabClicked == 'settingsTab') {
-                panelMsg.msg.icon = 'settings',
-                panelMsg.msg.title = 'Settings Unavailable',
-                panelMsg.msg.desc = 'Settings will return in a later update! Stay tuned...'
-                document.querySelector('.panel-msg').style.display = 'flex';
-                topButtons.button = [];
-            }*/
             artists.artistList = [];
             //albums.albumList = [];
             playlists.playlistList = [];
@@ -1002,7 +1062,9 @@ Vue.component('side-buttons', {
                     break;
                 case "albumsTab":
                     document.querySelector('#albumsTab').scroll(0,0);
-                    document.querySelector('.album-spinner').style.display = 'block'
+                    if (albums.albumList.length == 0) {
+                        document.querySelector('.album-spinner').style.display = 'block';
+                    }
                     document.querySelector(`#albumsTab .artists-albums-container`).style.display = 'flex';
                     document.querySelector(`#albumsTab`).style.display = 'block';
                     setTimeout(() => {
@@ -1016,8 +1078,8 @@ Vue.component('side-buttons', {
                     document.querySelector('.playlist-spinner').style.display = 'block'
                     document.querySelector('#playlistsTab').style.display = 'block'
                     document.querySelector('.playlists-container').style.display = 'flex'
-                    panelMsg.msg.icon = 'playlist_play',
-                    panelMsg.msg.title = 'No Playlists Found',
+                    panelMsg.msg.icon = 'playlist_play'
+                    panelMsg.msg.title = 'No Playlists Found'
                     panelMsg.msg.desc = 'Click Create Playlist to get started!'
                     playlists.playlistList = [];
                     setTimeout(() => {
@@ -1028,6 +1090,7 @@ Vue.component('side-buttons', {
                                 document.querySelector('.panel-msg').style.display = 'flex';
                             }
                         }).then(file => {
+                            console.log('read! continuing...')
                             try {
                                 let getPlaylists = JSON.parse(file.toString());
                                 if (Object.keys(getPlaylists).length == 0) {
@@ -1050,20 +1113,13 @@ Vue.component('side-buttons', {
                         ]
                     }, 10)
                     break;
-                case "settingsTab":
-                    panelMsg.msg.icon = 'settings',
-                    panelMsg.msg.title = 'Settings Unavailable',
-                    panelMsg.msg.desc = 'Settings will return in a later update! Stay tuned...'
+                default:
+                    panelMsg.msg.icon = 'error_outline'
+                    panelMsg.msg.title = 'Panel Unavailable'
+                    panelMsg.msg.desc = `This panel (${this.button.name}) appears to be missing.`
                     document.querySelector('.panel-msg').style.display = 'flex';
                     topButtons.button = [];
-                    break;
             }
-        }
-    },
-    mounted() {
-        if (this.$vnode.key == 'songsTab') {
-            this.$el.classList.add('active');
-            document.querySelector('.item-sidebar.active .active-indicator').style.display = 'block';
         }
     }
 })
@@ -1071,16 +1127,16 @@ Vue.component('side-buttons', {
 let sideButtons = new Vue({
     el: '.nav-buttons',
     data: {
-        section1: [
-            {'icon': 'music_note', 'name': 'Songs', 'id': 'songsTab'},
-            {'icon': 'person', 'name': 'Artists', 'id': 'artistsTab'},
-            {'icon': 'album', 'name': 'Albums', 'id': 'albumsTab'}
-        ],
-        section2: [
-            {'icon': 'playlist_play', 'name': 'Playlists', 'id': 'playlistsTab'}
-        ],
-        section3: [
-            {'icon': 'settings', 'name': 'Settings', 'id': 'settingsTab'}
+        navs: [
+            {icon: 'home', name: 'Home', id: 'homeTab', type: 'large_button'},
+            {icon: 'settings', name: 'Settings', id: 'settingsTab', type: 'large_button'},
+            {name: 'Library', type: 'subtitle'},
+            {icon: 'favorite_border', name: 'Liked Songs', id: 'likedTab', type: 'large_button'},
+            {icon: 'music_note', name: 'All Songs', id: 'songsTab', type: 'large_button'},
+            {icon: 'person', name: 'Artists', id: 'artistsTab', type: 'large_button'},
+            {icon: 'album', name: 'Albums', id: 'albumsTab', type: 'large_button'},
+            {icon: 'playlist_play', name: 'Playlists', id: 'playlistsTab', type: 'large_button'},
+            {name: 'Playlists', type: 'subtitle'},
         ]
     }
 })
@@ -1265,9 +1321,9 @@ Vue.component('album-item', {
         async bg() {
             let img;
             let getImg = new Promise(resolve => {
-                fetch(`http://localhost:56743/${this.album.album.replace(/[.:<>"*?/{}()'|[\]\\]/g, "_").replace(/[ ]/g, "%20")}.jpg`).then(response => {
+                fetch(`http://localhost:56743/${this.album.artist.replace(/[.:<>"*?/{}()'|[\]\\]/g, "_").replace(/[ ]/g, "%20")}${this.album.album.replace(/[.:<>"*?/{}()'|[\]\\]/g, "_").replace(/[ ]/g, "%20")}.jpg`).then(response => {
                     if (response.ok) {
-                        img = `http://localhost:56743/${this.album.album.replace(/[.:<>"*?/{}()'|[\]\\]/g, "_").replace(/[ ]/g, "%20")}.jpg`;
+                        img = `http://localhost:56743/${this.album.artist.replace(/[.:<>"*?/{}()'|[\]\\]/g, "_").replace(/[ ]/g, "%20")}${this.album.album.replace(/[.:<>"*?/{}()'|[\]\\]/g, "_").replace(/[ ]/g, "%20")}.jpg`;
                     } else {
                         img = '../assets/no_album.svg';
                     }
@@ -1620,7 +1676,7 @@ Vue.component('ctx-item', {
                         }
                     }).then(file => {
                         let getPlaylists = JSON.parse(file.toString());
-                        if (getPlaylists[itemClicked] != '../assets/no_album.svg') {
+                        if (getPlaylists[itemClicked].image != '../assets/no_album.svg') {
                             fs.unlinkSync(getPlaylists[itemClicked].image);
                         }
                         delete getPlaylists[itemClicked];
@@ -1746,7 +1802,7 @@ let panelMsg = new Vue({
 })
 
 let customLog = (msg, style) => {
-    return console.log(`%c${msg}`, `font-family: ${style}`);
+    return console.log(`%c${msg}`, `${style}`);
 }
 
 let detach = false;

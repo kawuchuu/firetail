@@ -3,6 +3,7 @@ const path = require('path');
 const url = require('url');
 const express = require('express');
 const os = require('os');
+const { VUEJS_DEVTOOLS } = require('electron-devtools-installer');
 
 let imgServer = express();
 imgServer.use(express.static(`${app.getPath('userData')}/images/`));
@@ -268,8 +269,11 @@ function createMainWindow() {
     }
 }
 
+const { default: installExtension} = require('electron-devtools-installer');
 function createWindows() {
-    createMainWindow();
+    installExtension(VUEJS_DEVTOOLS).then(() => {
+        createMainWindow();
+    })
 }
 
 app.on('ready', createWindows);

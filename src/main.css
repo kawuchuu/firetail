@@ -5,8 +5,20 @@
 }
 
 @font-face {
+    font-family: 'Poppins';
+    src: url('../assets/Poppins-Medium.ttf') format('truetype');
+}
+
+@font-face {
     font-family: 'Inter';
-    src: url('../assets/Inter.ttf') format('truetype');
+    font-weight: normal;
+    src: url('../assets/Inter-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: bold;
+    src: url('../assets/Inter-SemiBold.ttf') format('truetype');
 }
 
 html.black {
@@ -20,11 +32,11 @@ html.black {
 }
 
 html.dark {
-    --bg: #181818;
+    --bg: #131313;
     --text: #dfdfdf;
     --fg-bg: #1e1e1e;
     --bd: #3a3a3a;
-    --li-hv: #212121;
+    --li-hv: #1d1d1d;
     --logo: 0.9;
     --switch: #3d3d3d;
     --hl: #252525;
@@ -509,9 +521,9 @@ button i {
 }
 
 .app-name {
-    font-family: 'Questrial';
-    font-size: 20px;
+    font-family: 'Inter';
     font-weight: bold;
+    font-size: 18px;
 }
 
 .beta-tag {
@@ -599,7 +611,7 @@ button i {
     flex-direction: column;
     align-items: center;
     overflow-y: auto;
-    height: calc(100% - 137px);
+    height: calc(100% - 139px);
 }
 
 .side-bar-inner-container::-webkit-scrollbar {
@@ -623,19 +635,17 @@ button i {
 .item-sidebar {
     display: flex;
     width: 180px;
-    height: 50px;
+    height: 40px;
     align-items: center;
     cursor: pointer;
 }
 
 .item-sidebar.active {
-    background-color: var(--hl-op);
     color: var(--hl-txt);
     cursor: default;
 }
 
 .item-sidebar:hover {
-    /* background-color: var(--hl-op); */
     color: var(--hl-txt)
 }
 
@@ -646,7 +656,7 @@ button i {
 
 .active-indicator {
     width: 3px;
-    height: 50px;
+    height: 30px;
     background: var(--hl-txt);
     position: relative;
     display: none;
@@ -655,12 +665,13 @@ button i {
 }
 
 .item-sidebar i {
-    margin: 0 18px;
+    margin: 0 16px;
     pointer-events: none;
+    font-size: 20px;
 }
 
 .item-sidebar.active i {
-    margin: 0 18px 0 15px;
+    margin: 0 16px 0 13px;
 }
 
 .item-sidebar.active span {
@@ -668,8 +679,32 @@ button i {
 }
 
 .item-sidebar span {
-    font-size: 17px;
+    font-size: 15px;
     transform: translateY(1px);
+}
+
+.list-subtitle {
+    font-size: 14px;
+    opacity: .75;
+    text-transform: uppercase;
+    margin: 15px 0 5px 16px;
+}
+
+.playlist-sidename {
+    height: 30px;
+}
+
+.playlist-sidename .active-indicator {
+    height: 20px;
+}
+
+.playlist-sidename span {
+    font-size: 14px;
+    margin-left: 16px
+}
+
+.playlist-sidename.active span {
+    margin-left: 13px
 }
 
 /* Playing bar */
