@@ -5,6 +5,7 @@
             <p class="list-title">Title</p>
             <p class="list-artist">Artist</p>
             <p class="list-album">Album</p>
+            <p class="list-duration">Duration</p>
         </div>
     </div>
     <div class="wrapper">
@@ -20,8 +21,12 @@ export default {
     components: {
         SongItem
     },
-    computed: mapState({
-        list: state => state.songStore
+    computed: mapState('audio', {
+        list: function(state) {
+            let thing = state.songStore
+            this.$store.commit('audio/updateCurrentList', thing)
+            return thing
+        }
     })
 }
 </script>

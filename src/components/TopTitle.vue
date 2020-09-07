@@ -14,7 +14,7 @@
 import { mapState } from 'vuex'
 
 export default {
-    computed: mapState({
+    computed: mapState('nav', {
         screenTitle: state => state.screenTitle,
         screenCountType: state => state.screenCountType,
         screenCountNum: state => state.screenCountNum

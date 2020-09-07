@@ -1,11 +1,12 @@
 <template>
-    <label class="top-button" :for="checkFor">
+    <label @click="click" class="top-button" :for="checkFor">
         <i class="material-icons-outlined">{{button.icon}}</i>
         <span>{{button.name}}</span>
     </label>
 </template>
 
 <script>
+import {ipcRenderer} from 'electron'
 export default {
     props: ['button'],
     computed: {
@@ -14,6 +15,15 @@ export default {
                 return
             }
             return item.button.for;
+        }
+    },
+    methods: {
+        click() {
+            switch(this.button.id) {
+                case "removeLibrary":
+                    ipcRenderer.send('deleteLibrary')
+                    break;
+            }
         }
     }
 }
@@ -39,9 +49,5 @@ export default {
 .top-button span {
     margin-left: 5px;
     font-size: 14px;
-}
-
-.top-button-container {
-    display: flex;
 }
 </style>

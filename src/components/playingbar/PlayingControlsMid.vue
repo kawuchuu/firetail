@@ -2,21 +2,21 @@
     <div class="track-controls">
         <div class="track-controls-inner-container">
             <div class="control-buttons">
-                <i class="material-icons-outlined" id="shuffleButton" title="Shuffle">shuffle</i>
-                <i class="material-icons-outlined" id="prevButton" title="Previous">skip_previous</i>
-                <i class="material-icons-outlined" id="playPauseBtn" title="Play/pause" @click="playPause">{{playPauseIcon}}</i>
-                <i class="material-icons-outlined" id="nextButton" title="Next">skip_next</i>
-                <i class="material-icons-outlined" id="repeatButton" title="Repeat">repeat</i>
+                <i class="material-icons-outlined" title="Shuffle">shuffle</i>
+                <i class="material-icons-outlined" title="Previous" @click="prev">skip_previous</i>
+                <i class="material-icons-outlined" title="Play/pause" @click="playPause">{{playPauseIcon}}</i>
+                <i class="material-icons-outlined" title="Next" @click="next">skip_next</i>
+                <i class="material-icons-outlined" title="Repeat">repeat</i>
             </div>
             <div class="seek-time-inner-container">
-                <p class="song-duration" id="songDurationTime">{{ songCurrent }}</p>
-                <div id="seekWrapper" ref="seekBarWrapper" class="seek-bar-inner-container" @mouseover="hover" @mouseleave="leave" @mousedown="down">
+                <p class="song-duration" >{{ songCurrent }}</p>
+                <div ref="seekBarWrapper" class="seek-bar-inner-container" @mouseover="hover" @mouseleave="leave" @mousedown="down">
                     <div class="seek-bar" ref="seekBar">
-                        <div id="seekFill" ref="seekFill" :style="fill" class="fill"></div>
-                        <div id="seekHandle" ref="handle" class="handle"></div>
+                        <div ref="seekFill" :style="fill" class="fill"></div>
+                        <div ref="handle" class="handle"></div>
                     </div>
                 </div>
-                <p class="song-duration" id="songDurationLength">{{ songDuration }}</p>
+                <p class="song-duration">{{ songDuration }}</p>
             </div>
         </div>
     </div>
@@ -38,16 +38,12 @@ let getP = (e, el) => {
 
 export default {
     computed: {
-        ...mapState({
+        ...mapState('audio', {
             fill: state => {
                 return `width: ${(state.currentTime / state.duration) * 100}%`
             },
             songDuration: state => {
-                if (typeof state.duration != 'number' || isNaN(state.duration)) {
-                    return '-:--'
-                } else {
-                    return time.timeFormat(state.duration)
-                }
+                return time.timeFormat(state.duration)
             },
             rawSongDuration: state => state.duration,
             songCurrent: state => {
@@ -68,11 +64,12 @@ export default {
     },
     data() {
         return {
-            seekMouseDown: false
+            seekMouseDown: false,
+            seekMouseOver: false
         }
     },
     methods: {
-        ...mapActions(['playPause']),
+        ...mapActions('audio', ['playPause']),
         move(evt) {
             if (!this.seekMouseDown) return
             this.$refs.seekFill.style.transition = 'none'
@@ -87,24 +84,34 @@ export default {
             this.$refs.seekFill.style.removeProperty('transition')
             let pBar = getP(evt, this.$refs.seekBar)
             this.$refs.seekFill.width = pBar * 100 + '%'
-            this.$store.dispatch('addTimeUpdate')
-            this.$store.commit('newAudioTime', pBar * this.rawSongDuration)
-            this.$refs.handle.classList.remove('handle-hover')
+            this.$store.dispatch('audio/addTimeUpdate')
+            this.$store.commit('audio/newAudioTime', pBar * this.rawSongDuration)
+            if (!this.seekMouseOver) {
+                this.$refs.handle.classList.remove('handle-hover')
+            }
         },
         down(evt) {
             this.seekMouseDown = true
-            this.$store.dispatch('removeTimeUpdate')
+            this.$store.dispatch('audio/removeTimeUpdate')
             window.addEventListener('mousemove', this.move)
             window.addEventListener('mouseup', this.up)
             let pBar = getP(evt, this.$refs.seekBar)
             this.$refs.seekFill.style.width = pBar * 100 + '%'
         },
         hover() {
+            this.seekMouseOver = true
             this.$refs.handle.classList.add('handle-hover')
         },
         leave() {
+            this.seekMouseOver = false
             if (this.seekMouseDown) return
             this.$refs.handle.classList.remove('handle-hover')
+        },
+        next() {
+            this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.queue.indexOf(this.$store.state.audio.currentSong) + 1])
+        },
+        prev() {
+            this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.queue.indexOf(this.$store.state.audio.currentSong) - 1])
         }
     }
 }

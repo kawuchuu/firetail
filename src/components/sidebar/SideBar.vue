@@ -17,7 +17,7 @@ export default {
         SideButtons
     },
     computed: {
-        ...mapState({
+        ...mapState('nav', {
             getNavs: state => state.navs,
         }),
     }

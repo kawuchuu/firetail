@@ -26,6 +26,7 @@ export default {
     data() {
         return {
             button: [
+                {name: 'Nuke Library (temp button)', id: 'removeLibrary', icon: 'delete'},
                 {name: 'Add Songs', id: 'addFiles', for: 'addFiles', icon: 'add'}
             ]
         }
@@ -86,5 +87,9 @@ export default {
     top: 1px;
     font-weight: bold;
     text-transform: uppercase
+}
+
+.top-button-container {
+    display: flex;
 }
 </style>

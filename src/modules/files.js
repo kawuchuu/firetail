@@ -1,4 +1,5 @@
 import * as metadata from 'music-metadata'
+import time from '../modules/timeformat'
 
 export default {
     async addFiles(songs) {
@@ -16,7 +17,7 @@ export default {
                 if (meta.common.title) metaObj['title'] = meta.common.title
                 if (meta.common.artist) metaObj['artist'] = meta.common.artist
                 if (meta.common.album) metaObj['album'] = meta.common.album
-                if (meta.format.duration) metaObj['duration'] = meta.format.duration
+                if (meta.format.duration) metaObj['duration'] = time.timeFormat(meta.format.duration)
                 toAdd.push(metaObj)
                 if (toAdd.length == songs.length) {
                     resolve(toAdd)

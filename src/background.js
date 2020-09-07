@@ -7,7 +7,6 @@ import {
 import installExtension, {
     VUEJS_DEVTOOLS
 } from 'electron-devtools-installer'
-import fs from 'fs'
 import db from './modules/database'
 import files from './modules/files'
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -40,63 +39,6 @@ async function createWindow() {
         }
     })
     win.setMenuBarVisibility(false)
-    ipcMain.on('getlibrary', () => {
-        fs.promises.readFile(`${app.getPath('userData')}/library.json`, err => {
-            if (err) throw err
-        }).then(async file => {
-            let library = JSON.parse(file.toString())
-            let listStart = Object.entries(library).map(e => [e[0]])
-            let genList = new Promise((resolve) => {
-                let songIndex = []
-                let numCount = 0
-                let artistList = []
-                let artistsUsed = []
-                let albumList = []
-                let albumsUsed = []
-                listStart.forEach((value) => {
-                    value = value[0]
-                    let fName = value.split('.')
-                    let fileName = value.slice(0, -fName[fName.length - 1].length - 1)
-                    if (process.platform == 'win32') {
-                        fileName = fileName.substr(fileName.lastIndexOf('\\') + 1)
-                    } else {
-                        fileName = fileName.substr(fileName.lastIndexOf('/') + 1);
-                    }
-                    let title = fileName;
-                    let artist = 'Unknown Artist';
-                    let album = 'Unknown Album';
-                    if (library[value].title) title = library[value].title;
-                    if (library[value].artist) artist = library[value].artist;
-                    if (library[value].album) album = library[value].album;
-                    songIndex.push({
-                        'file': value,
-                        'title': title,
-                        'artist': artist,
-                        'album': album,
-                        'songId': library[value].id,
-                        'id': numCount
-                    });
-                    if (artistsUsed.indexOf(artist) == -1 && artist != "Unknown Artist") {
-                        artistList.push({
-                            'artist': artist
-                        });
-                        artistsUsed.push(artist)
-                    }
-                    if (albumsUsed.indexOf(album) == -1 && album != "Unknown Album") {
-                        albumList.push({
-                            'album': album,
-                            'artist': artist
-                        });
-                        albumsUsed.push(album)
-                    }
-                    numCount++;
-                });
-                resolve([songIndex, artistList, albumList])
-            });
-            let list = await genList;
-            win.webContents.send('getlibrary', list);
-        })
-    })
 
     ipcMain.on('addToLibrary', async (event, locations) => {
         let songs = await files.addFiles(locations)
@@ -108,6 +50,11 @@ async function createWindow() {
     ipcMain.on('library', async () => {
         let library = db.getLibrary()
         win.webContents.send('library', library)
+    })
+
+    ipcMain.on('deleteLibrary', async () => {
+        db.deleteLibrary()
+        win.webContents.send('library', [])
     })
 
     win.on('ready-to-show', () => {

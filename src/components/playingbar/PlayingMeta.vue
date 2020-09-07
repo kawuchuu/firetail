@@ -13,7 +13,7 @@ import {mapState} from 'vuex'
 
 export default {
     computed: {
-        ...mapState({
+        ...mapState('audio', {
             title: state => state.songTitle,
             artist: state => state.songArtist
         })
