@@ -57,7 +57,6 @@ li.nohover:hover {
     width: calc(100% - 30px);
     font-size: 14px;
     align-items: center;
-    pointer-events: none;
 }
 
 .list-title {
@@ -82,6 +81,10 @@ li.nohover:hover {
     padding-right: 40px;
     pointer-events: none;
     white-space: nowrap;
+}
+
+.list-duration {
+    padding-right: 20px;
 }
 
 .list-duration {
@@ -119,16 +122,12 @@ li.nohover:hover {
     transform: scale(1.2);
 }
 
-.results-link.active {
-    color: var(--hl-txt);
+.results-link.active i {
+    opacity: 1;
 }
 
-.artist-title-album {
-    display: flex;
-    width: calc(100% - 30px);
-    font-size: 14px;
-    align-items: center;
-    pointer-events: none;
+.results-link.active {
+    color: var(--hl-txt);
 }
 
 .list-section {
