@@ -3,10 +3,10 @@
         <div class="list-section">
             <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
             <div class="artist-title-album section">
-                <p class="list-title">Title</p>
-                <p class="list-artist">Artist</p>
-                <p class="list-album">Album</p>
-                <p class="list-duration">Duration</p>
+                <p class="list-title">{{ $t('songList.listTitle') }}</p>
+                <p class="list-artist">{{ $t('songList.listArtist') }}</p>
+                <p class="list-album">{{ $t('songList.listAlbum') }}</p>
+                <p class="list-duration">{{ $t('songList.listDuration') }}</p>
             </div>
         </div>
         <div class="wrapper">

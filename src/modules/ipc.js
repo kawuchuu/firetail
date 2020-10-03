@@ -11,8 +11,7 @@ export default {
             win.send('library', library)
         })
         
-        ipcMain.on('library', async (event) => {
-            console.log(event.sender)
+        ipcMain.on('library', async () => {
             let library = db.getLibrary()
             win.send('library', library)
         })

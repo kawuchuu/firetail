@@ -18,6 +18,7 @@
 
 <script>
 import TopButtons from './TopButtons'
+import tr from '../translation'
 
 export default {
     components: {
@@ -27,9 +28,12 @@ export default {
         return {
             button: [
                 {name: 'Nuke Library (temp button)', id: 'removeLibrary', icon: 'delete'},
-                {name: 'Add Songs', id: 'addFiles', for: 'addFiles', icon: 'add'}
+                {name: tr.t('topBar.addSongs'), id: 'addFiles', for: 'addFiles', icon: 'add'}
             ]
         }
+    },
+    mounted() {
+        console.log(this)
     }
 }
 </script>

@@ -1,0 +1,32 @@
+{
+    "sidebar": {
+        "home": "Home",
+        "settings": "Settings",
+        "library": "Library",
+        "favourite": "Liked Songs",
+        "songs": "All Songs",
+        "artists": "Artists",
+        "albums": "Albums",
+        "playlists": "Playlists"
+    },
+    "router": {
+        "allSongs": "All Songs",
+        "artists": "Artists",
+        "unknown": "Component not found"
+    },
+    "topTitle": {
+        "countTypeSongs": "song | songs"
+    },
+    "songList": {
+        "listTitle": "Title",
+        "listArtist": "Artist",
+        "listAlbum": "Album",
+        "listDuration": "Duration"
+    },
+    "playingBar": {
+        "songTitleNotPlaying": "No song playing..."
+    },
+    "topBar": {
+        "addSongs": "Add Songs"
+    }
+}

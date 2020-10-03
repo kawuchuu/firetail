@@ -1,11 +1,12 @@
 import sort from '../../modules/sort'
 import store from '../index'
+import tr from '../../translation'
 
 const state = () => ({
     paused: true,
     currentTime: '-:--',
     duration: '-:--',
-    songTitle: 'No song playing...',
+    songTitle: tr.t('playingBar.songTitleNotPlaying'),
     songArtist: '',
     currentSong: null,
     queue: [],

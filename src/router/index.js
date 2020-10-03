@@ -4,6 +4,7 @@ import SongList from './components/songlist/SongList'
 import Unknown from './components/Unknown'
 import Artists from './components/Artists'
 import store from '../store'
+import tr from '../translation'
 
 Vue.use(VueRouter)
 
@@ -17,12 +18,12 @@ const router = new VueRouter({
         {
             path: '/artists',
             component: Artists,
-            name: 'Artists'
+            name: tr.t('router.artists')
         },
         {
             path: '/:pathMatch(.*)',
             component: Unknown,
-            name: 'Component not found'
+            name: tr.t('router.unknown')
         }
     ]
 })
