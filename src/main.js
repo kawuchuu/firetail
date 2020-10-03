@@ -1,16 +1,18 @@
-import { createApp } from 'vue'
+import Vue from 'vue'
 import VueApp from './App.vue'
 import store from './store'
 import router from './router'
+import i18n from './translation'
 import { ipcRenderer } from 'electron'
 
-const mainApp = createApp(VueApp)
+new Vue({
+    i18n,
+    router,
+    store,
+    render: h => h(VueApp)
+}).$mount('#app')
 
-mainApp.use(store)
-mainApp.use(router)
-
-mainApp.mount("#app")
-router.replace('/')
+router.replace({ path: '/', query: { name: 'All Songs' } })
 
 ipcRenderer.addListener('library', (event, library) => {
     library.forEach((f, i) => {

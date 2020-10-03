@@ -1,14 +1,13 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, ipcMain } from 'electron'
+import { app, protocol, BrowserWindow } from 'electron'
 import {
     createProtocol
 } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, {
     VUEJS_DEVTOOLS
 } from 'electron-devtools-installer'
-import db from './modules/database'
-import files from './modules/files'
+import ipc from './modules/ipc'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -38,24 +37,8 @@ async function createWindow() {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
         }
     })
+    ipc.start(win)
     win.setMenuBarVisibility(false)
-
-    ipcMain.on('addToLibrary', async (event, locations) => {
-        let songs = await files.addFiles(locations)
-        db.addToLibrary(songs)
-        let library = db.getLibrary()
-        win.webContents.send('library', library)
-    })
-
-    ipcMain.on('library', async () => {
-        let library = db.getLibrary()
-        win.webContents.send('library', library)
-    })
-
-    ipcMain.on('deleteLibrary', async () => {
-        db.deleteLibrary()
-        win.webContents.send('library', [])
-    })
 
     win.on('ready-to-show', () => {
         win.show()

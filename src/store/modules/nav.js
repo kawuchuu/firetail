@@ -1,7 +1,8 @@
+import i18n from '../../translation'
 const state = () => ({
     navs: [{
         icon: 'home',
-        name: 'Home',
+        name: i18n.t('home'),
         id: 'homeTab',
         type: 'large_button',
         link: '/home'
@@ -29,7 +30,7 @@ const state = () => ({
         name: 'All Songs',
         id: 'songsTab',
         type: 'large_button',
-        link: '/'
+        link: '/?name=All%20Songs'
     },
     {
         icon: 'person',
@@ -58,6 +59,9 @@ const state = () => ({
 const mutations = {
     updateScreenCountNum(state, num) {
         state.screenCountNum = num
+    },
+    updateScreenTitle(state, title) {
+        state.screenTitle = title
     }
 }
 

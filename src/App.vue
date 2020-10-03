@@ -61,7 +61,7 @@ body {
     margin: 0;
     background-color: var(--bg);
     color: var(--text);
-    font-family: 'Inter', 'Overpass', 'Dosis', Arial, Helvetica, sans-serif !important;
+    font-family: 'Inter', 'Noto Sans JP', 'Noto Sans SC', 'Noto Sans KR', 'Overpass', 'Dosis', Arial, Helvetica, sans-serif !important;
     user-select: none;
     -webkit-user-select: none;
 }
@@ -128,6 +128,42 @@ html.firetail {
     font-family: 'Inter';
     font-weight: bold;
     src: url('./assets/Inter-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Noto Sans JP';
+    font-weight: normal;
+    src: url('./assets/NotoSansJP-Regular.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans JP';
+    font-weight: bold;
+    src: url('./assets/NotoSansJP-Bold.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans SC';
+    font-weight: normal;
+    src: url('./assets/NotoSansSC-Regular.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans SC';
+    font-weight: bold;
+    src: url('./assets/NotoSansSC-Bold.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans KR';
+    font-weight: normal;
+    src: url('./assets/NotoSansKR-Regular.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans KR';
+    font-weight: bold;
+    src: url('./assets/NotoSansKR-Bold.otf') format('opentype');
 }
 
 .screen-container {

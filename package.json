@@ -16,23 +16,22 @@
     "better-sqlite3": "^7.1.0",
     "core-js": "^3.6.5",
     "music-metadata": "^7.0.2",
-    "vue": "^3.0.0-0",
-    "vue-router": "4.0.0-beta.9",
-    "vuex": "^4.0.0-0"
+    "vue": "^2.6.12",
+    "vue-i18n": "^8.21.1",
+    "vue-router": "^3.4.5",
+    "vuex": "^3.5.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0-0",
     "babel-eslint": "^10.1.0",
-    "electron": "^8.0.0",
-    "electron-devtools-installer": "^3.1.1",
+    "electron": "^9.0.0",
+    "electron-devtools-installer": "^3.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0-0",
+    "eslint-plugin-vue": "^6.2.2",
     "vue-cli-plugin-electron-builder": "~2.0.0-rc.4",
-    "vue-devtools": "^5.1.4"
+    "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
     "root": true,
@@ -40,7 +39,7 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/vue3-essential",
+      "plugin:vue/essential",
       "eslint:recommended"
     ],
     "parserOptions": {

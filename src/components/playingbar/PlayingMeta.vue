@@ -53,7 +53,6 @@ export default {
 
 .song-title {
     font-size: 15px;
-    font-family: 'Inter', 'Overpass', sans-serif;
     margin-bottom: 3px;
     overflow: hidden;
     text-overflow: ellipsis;

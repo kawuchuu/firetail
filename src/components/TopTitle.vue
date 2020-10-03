@@ -1,7 +1,7 @@
 <template>
     <div class="top-title">
-        <i class="material-icons-outlined" id="tabBackButton" style="cursor: pointer"
-            v-on:click="backBtn">arrow_back</i>
+        <!-- <i class="material-icons-outlined" id="tabBackButton" style="cursor: pointer"
+            v-on:click="backBtn">arrow_back</i> -->
         <div class="tab-album-art"></div>
         <div>
             <h1>{{ screenTitle }}</h1>

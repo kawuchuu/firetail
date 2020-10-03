@@ -3,7 +3,6 @@ import store from '../index'
 
 const state = () => ({
     paused: true,
-    songStore: [],
     currentTime: '-:--',
     duration: '-:--',
     songTitle: 'No song playing...',
@@ -15,7 +14,7 @@ const state = () => ({
 
 const mutations = {
     mutUpdateSongStore(state, library) {
-        state.songStore = library
+        state.currentList = library
     },
     audioTime(state) {
         if (audio) {
@@ -68,7 +67,7 @@ const actions = {
     },
     playSong(context, id) {
         let index = context.state.queue.indexOf(id)
-        let song = context.state.songStore[index]
+        let song = context.state.currentList[index]
         if (!audio.src) {
             audio.addEventListener('ended', () => {
                 context.dispatch('playSong', context.state.queue[context.state.queue.indexOf(context.state.currentSong) + 1])
