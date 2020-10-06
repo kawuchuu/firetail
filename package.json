@@ -24,7 +24,7 @@
     "vue-async-computed": "^3.8.2"
   },
   "devDependencies": {
-    "electron": "^8.5.0",
+    "electron": "^8.5.2",
     "electron-builder": "^21.2.0"
   },
   "optionalDependencies": {
