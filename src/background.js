@@ -39,7 +39,7 @@ async function createWindow() {
     })
     ipc.start(win)
     win.setMenuBarVisibility(false)
-    
+
     win.on('ready-to-show', () => {
         win.show()
     })

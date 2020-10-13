@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import SongList from './components/songlist/SongList'
+import SongList from './components/SongList'
 import Unknown from './components/Unknown'
 import Artists from './components/Artists'
 import store from '../store'
@@ -18,7 +18,13 @@ const router = new VueRouter({
         {
             path: '/artists',
             component: Artists,
-            name: tr.t('router.artists')
+            name: tr.t('router.artists'),
+            children: [
+                {
+                    path: '',
+                    component: SongList,
+                }
+            ]
         },
         {
             path: '/:pathMatch(.*)',
@@ -30,6 +36,19 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     console.log(to)
+    if (to.query.column && to.query.q) {
+        store.dispatch('audio/getSpecificSongs', {
+            column: to.query.column,
+            q: to.query.q
+        })
+    } else {
+        store.dispatch('audio/getAllSongs')
+    }
+    if (to.query.hideTop) {
+        store.commit('nav/updateTopVisible', false)
+    } else {
+        store.commit('nav/updateTopVisible', true)
+    }
     if (to.name != 'NoUpdate') {
         store.commit('nav/updateScreenTitle', to.name)
     } else {

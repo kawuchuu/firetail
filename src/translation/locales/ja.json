@@ -1,0 +1,32 @@
+{
+    "sidebar": {
+        "home": "家",
+        "settings": "設定",
+        "library": "ライブラリ",
+        "favourite": "お気に入り",
+        "songs": "曲",
+        "artists": "アーティスト",
+        "albums": "アルバム",
+        "playlists": "プレイリスト"
+    },
+    "router": {
+        "allSongs": "曲",
+        "artists": "アーティスト",
+        "unknown": "わからない"
+    },
+    "topTitle": {
+        "countTypeSongs": "曲"
+    },
+    "songList": {
+        "listTitle": "タイトル",
+        "listArtist": "アーティスト",
+        "listAlbum": "アルバム",
+        "listDuration": "限目"
+    },
+    "playingBar": {
+        "songTitleNotPlaying": "再生停止中..."
+    },
+    "topBar": {
+        "addSongs": "曲を追加する"
+    }
+}

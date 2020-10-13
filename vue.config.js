@@ -1,4 +1,10 @@
 module.exports = {
+    devServer: {
+        host: 'localhost',
+        watchOptions: {
+            poll: true
+        }
+    },
     pluginOptions: {
         electronBuilder: {
             nodeIntegration: true,

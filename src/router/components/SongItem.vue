@@ -48,9 +48,8 @@ export default {
     },
     methods: {
         playSong() {
-            console.log(this.$store.state.audio.currentList)
-            this.$store.dispatch('audio/processQueue')
-            this.$store.dispatch('audio/playSong', this.song.id)
+            this.$store.commit('audio/genNewQueue', this.$store.state.audio.currentList)
+            this.$store.dispatch('audio/playSong', this.song)
         },
         decidePlaySong() {
             if (this.song.id == this.$store.state.audio.currentSong) {

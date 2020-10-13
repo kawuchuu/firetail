@@ -1,6 +1,7 @@
 import sort from '../../modules/sort'
 import store from '../index'
 import tr from '../../translation'
+import { ipcRenderer } from 'electron'
 
 const state = () => ({
     paused: true,
@@ -9,14 +10,12 @@ const state = () => ({
     songTitle: tr.t('playingBar.songTitleNotPlaying'),
     songArtist: '',
     currentSong: null,
+    currentSongIndex: null,
     queue: [],
     currentList: []
 })
 
 const mutations = {
-    mutUpdateSongStore(state, library) {
-        state.currentList = library
-    },
     audioTime(state) {
         if (audio) {
             state.currentTime = audio.currentTime
@@ -48,13 +47,18 @@ const mutations = {
         }
     },
     updateCurrentSong(state, id) {
+        state.currentSongIndex = id
+    },
+    updateCurrentSongString(state, id) {
         state.currentSong = id
     },
-    updateQueue(state, newQueue) {
-        state.queue = newQueue
+    genNewQueue(state, songs) {
+        state.queue = songs
     },
     updateCurrentList(state, list) {
-        state.currentList = list
+        let sortedList = sort.sortArray(list, 'artist')
+        state.currentList = sortedList
+        this.commit('nav/updateScreenCountNum', list.length)
     }
 }
 
@@ -66,16 +70,15 @@ const actions = {
             audio.pause()
         }
     },
-    playSong(context, id) {
-        let index = context.state.queue.indexOf(id)
-        let song = context.state.currentList[index]
+    playSong(context, song) {
         if (!audio.src) {
             audio.addEventListener('ended', () => {
                 context.dispatch('playSong', context.state.queue[context.state.queue.indexOf(context.state.currentSong) + 1])
             })
         }
         audio.src = `local-resource://${song.path}`
-        context.commit('updateCurrentSong', id)
+        context.commit('updateCurrentSong', context.state.queue.indexOf(song))
+        context.commit('updateCurrentSongString', song.id)
         context.commit('songMetadata', [song.title, song.artist])
         audio.play()
         audio.addEventListener('timeupdate', timeUpdate)
@@ -92,17 +95,11 @@ const actions = {
     addTimeUpdate() {
         audio.addEventListener('timeupdate', timeUpdate)
     },
-    updateSongStore(context, library) {
-        let sortedLibrary = sort.sortArray(library, 'artist')
-        context.commit('mutUpdateSongStore', sortedLibrary)
-        this.commit('nav/updateScreenCountNum', sortedLibrary.length)
+    getAllSongs() {
+        ipcRenderer.send('library')
     },
-    processQueue(context) {
-        let doQueue = []
-        context.state.currentList.forEach(f => {
-            doQueue.push(f.id)
-        })
-        context.commit('updateQueue', doQueue)
+    getSpecificSongs(context, args) {
+        ipcRenderer.send('getSomeFromColumn', [args.column, args.q])
     }
 }
 

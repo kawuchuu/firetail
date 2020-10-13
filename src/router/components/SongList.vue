@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="root">
         <div class="list-section">
             <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
             <div class="artist-title-album section">
@@ -34,6 +34,10 @@ export default {
 </script>
 
 <style>
+.root {
+    width: 100%;
+}
+
 .results-link {
     border-bottom: 1px solid var(--bd);
     background: var(--bg);

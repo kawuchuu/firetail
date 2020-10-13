@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1"
+	 id="Layer_1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1080 1080"
+	 style="enable-background:new 0 0 1080 1080;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:url(#SVGID_1_);stroke-width:55;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:url(#SVGID_2_);stroke-width:55;stroke-miterlimit:10;}
+	.st2{fill:none;stroke:url(#SVGID_3_);stroke-width:55;stroke-miterlimit:10;}
+</style>
+<sodipodi:namedview  bordercolor="#666666" borderopacity="1" gridtolerance="10" guidetolerance="10" id="namedview3805" inkscape:current-layer="Layer_1" inkscape:cx="300.07509" inkscape:cy="885.46554" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-height="1006" inkscape:window-maximized="1" inkscape:window-width="1920" inkscape:window-x="0" inkscape:window-y="0" inkscape:zoom="0.73981481" objecttolerance="10" pagecolor="#ffffff" showgrid="false">
+	</sodipodi:namedview>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="309.7591" y1="1858.0166" x2="309.7591" y2="1858.0166" gradientTransform="matrix(-0.5 -0.866 -0.866 0.5 2273.9824 43.9661)">
+	<stop  offset="0" style="stop-color:#EF9135"/>
+	<stop  offset="1" style="stop-color:#E74E8E"/>
+</linearGradient>
+<path class="st0" d="M510,704.7"/>
+<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="1045.4639" y1="-428.5128" x2="1045.4639" y2="80.0349" gradientTransform="matrix(-1 0 0 -1 1400.1726 651.4872)">
+	<stop  offset="0" style="stop-color:#EF9135"/>
+	<stop  offset="1" style="stop-color:#E74E8E"/>
+</linearGradient>
+<path class="st1" d="M232.5,1080V884.8c0-52.8,22.8-102.5,61.7-134.3l192.9-157.8"/>
+<linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="559.6355" y1="271.4129" x2="559.6355" y2="654.4962" gradientTransform="matrix(0.7071 0.7071 -0.7071 0.7071 538.5453 -251.6352)">
+	<stop  offset="0" style="stop-color:#EF9135"/>
+	<stop  offset="1" style="stop-color:#E74E8E"/>
+</linearGradient>
+<ellipse transform="matrix(0.7071 -0.7071 0.7071 0.7071 -155.6025 567.2326)" class="st2" cx="606.9" cy="471.4" rx="164" ry="139.8"/>
+</svg>

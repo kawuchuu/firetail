@@ -1,3 +1,4 @@
+import { ipcRenderer } from 'electron'
 import tr from '../../translation'
 
 const state = () => ({
@@ -38,7 +39,7 @@ const state = () => ({
         name: tr.t('sidebar.artists'),
         id: 'artistsTab',
         type: 'large_button',
-        link: '/artists'
+        link: '/artists?hideTop=true&column=artist&q=Lena%20Raine'
     },
     {
         icon: 'album',
@@ -54,7 +55,9 @@ const state = () => ({
     ],
     screenTitle: '',
     screenCountType: tr.tc('topTitle.countTypeSongs', 0),
-    screenCountNum: 0
+    screenCountNum: 0,
+    showScreenTop: true,
+    artists: []
 })
 
 const mutations = {
@@ -63,11 +66,24 @@ const mutations = {
     },
     updateScreenTitle(state, title) {
         state.screenTitle = title
+    },
+    updateTopVisible(state, show) {
+        state.showScreenTop = show
+    },
+    updateArtists(state, artists) {
+        state.artists = artists
+    }
+}
+
+const actions = {
+    requestColumn(context, type) {
+        ipcRenderer.send('getSomeFromColumna', type)
     }
 }
 
 export default {
     namespaced: true,
     state,
-    mutations
+    mutations,
+    actions
 }

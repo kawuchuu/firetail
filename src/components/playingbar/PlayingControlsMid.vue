@@ -108,10 +108,10 @@ export default {
             this.$refs.handle.classList.remove('handle-hover')
         },
         next() {
-            this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.queue.indexOf(this.$store.state.audio.currentSong) + 1])
+            this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex + 1])
         },
         prev() {
-            this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.queue.indexOf(this.$store.state.audio.currentSong) - 1])
+            this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex - 1])
         }
     }
 }

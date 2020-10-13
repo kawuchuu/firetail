@@ -1,5 +1,5 @@
 <template>
-    <div class="top-title">
+    <div class="top-title" :style="show">
         <!-- <i class="material-icons-outlined" id="tabBackButton" style="cursor: pointer"
             v-on:click="backBtn">arrow_back</i> -->
         <div class="tab-album-art"></div>
@@ -17,7 +17,14 @@ export default {
     computed: mapState('nav', {
         screenTitle: state => state.screenTitle,
         screenCountType: state => state.screenCountType,
-        screenCountNum: state => state.screenCountNum
+        screenCountNum: state => state.screenCountNum,
+        show: state => {
+            if (state.showScreenTop) {
+                return 'display: flex'
+            } else {
+                return 'display: none'
+            }
+        }
     })
 }
 </script>

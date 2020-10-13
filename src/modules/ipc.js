@@ -16,9 +16,21 @@ export default {
             win.send('library', library)
         })
         
-        ipcMain.on('deleteLibrary', async () => {
+        ipcMain.on('deleteLibrary', () => {
             db.deleteLibrary()
             win.send('library', [])
+        })
+
+        ipcMain.on('getAllFromColumn', (event, column) => {
+            console.log(column)
+            let allColumn = db.getAllFromColumn(column)
+            win.send('getAllFromColumn', allColumn)
+        })
+
+        ipcMain.on('getSomeFromColumn', (event, args) => {
+            let someColumn = db.getSomeFromColumn(args[0], args[1])
+            console.log('working')
+            event.reply('library', someColumn)
         })
     }
 }

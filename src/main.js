@@ -12,14 +12,17 @@ new Vue({
     render: h => h(VueApp)
 }).$mount('#app')
 
-router.replace({ path: '/', query: { name: 'All Songs' } })
+router.replace({ path: '/', query: { name: i18n.t('sidebar.songs') } })
 
 ipcRenderer.addListener('library', (event, library) => {
-    library.forEach((f, i) => {
-        f['id'] = i
-    })
-    console.log(library)
-    store.dispatch('audio/updateSongStore', library)
+    store.commit('audio/updateCurrentList', library)
+})
+
+ipcRenderer.addListener('getAllFromColumn', (event, type) => {
+    if (type[0] == 'artist') {
+        store.commit('nav/updateArtists', type[1])
+    }
 })
 
 ipcRenderer.send('library')
+ipcRenderer.send('getAllFromColumn', 'artist')
