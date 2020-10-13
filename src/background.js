@@ -37,6 +37,11 @@ async function createWindow() {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
         }
     })
+    if (isDevelopment) {
+        win.setIcon(`${__dirname}/../public/icon.png`)
+    } else if (process.platform == 'linux') {
+        win.setIcon(`${__dirname}/icon.png`)
+    }
     ipc.start(win)
     win.setMenuBarVisibility(false)
 

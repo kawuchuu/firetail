@@ -33,10 +33,6 @@ module.exports = {
                         {
                             target: "AppImage",
                             arch: "x64"
-                        },
-                        {
-                            target: "deb",
-                            arch: "x64"
                         }
                     ],
                     category: "AudioVideo",
