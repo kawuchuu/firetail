@@ -10,9 +10,9 @@ module.exports = {
             nodeIntegration: true,
             externals: ['better-sqlite3'],
             builderOptions: {
-                appId: "com.projsh.firetail",
+                appId: "xyz.kawuchuu.firetail",
                 productName: "Firetail",
-                copyright: "Copyright © 2020 projsh_",
+                copyright: "Copyright © 2020 kawuchuu",
                 mac: {
                     category: "public.app-category.music",
                     target: "dmg"
@@ -26,7 +26,7 @@ module.exports = {
                         "nsis"
                     ],
                     icon: "assets/icon.ico",
-                    publisherName: "projsh_"
+                    publisherName: "kawuchuu"
                 },
                 linux: {
                     target: [
