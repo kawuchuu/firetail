@@ -1,6 +1,6 @@
 <template>
     <div class="artists-item">
-        <router-link :to="`?hideTop=true&column=artist&q=${encodeURIComponent(artist.artist)}`">
+        <router-link :to="`?hideTop=true&column=artist&q=${encodeURIComponent(artist.artist)}&view=artist_${encodeURIComponent(artist.artist)}`">
             <div class="artist-img"/>
             <span>{{ artist.artist }}</span>
         </router-link>
@@ -17,6 +17,11 @@ export default {
 .artists-item {
     height: 60px;
     border-bottom: solid 1px var(--bd);
+}
+
+.router-link-exact-active {
+    background-color: var(--li-hv);
+    cursor: default;
 }
 
 .artists-item a {

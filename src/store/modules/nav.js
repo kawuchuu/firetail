@@ -1,4 +1,5 @@
 import { ipcRenderer } from 'electron'
+import sort from '../../modules/sort'
 import tr from '../../translation'
 
 const state = () => ({
@@ -32,14 +33,14 @@ const state = () => ({
         name: tr.t('sidebar.songs'),
         id: 'songsTab',
         type: 'large_button',
-        link: `/?name=${encodeURIComponent(tr.t('sidebar.songs'))}`
+        link: `/?name=${encodeURIComponent(tr.t('sidebar.songs'))}&view=all`
     },
     {
         icon: 'person',
         name: tr.t('sidebar.artists'),
         id: 'artistsTab',
         type: 'large_button',
-        link: '/artists?hideTop=true&column=artist&q=Lena%20Raine'
+        link: '/artists?hideTop=true&column=artist&q=Lena%20Raine&view=artist_Lena%20Raine'
     },
     {
         icon: 'album',
@@ -57,7 +58,9 @@ const state = () => ({
     screenCountType: tr.tc('topTitle.countTypeSongs', 0),
     screenCountNum: 0,
     showScreenTop: true,
-    artists: []
+    artists: [],
+    currentView: 'all',
+    playingView: null
 })
 
 const mutations = {
@@ -71,7 +74,14 @@ const mutations = {
         state.showScreenTop = show
     },
     updateArtists(state, artists) {
-        state.artists = artists
+        let sortedArtists = sort.sortArray(artists, 'artist')
+        state.artists = sortedArtists
+    },
+    updateCurrentView(state, view) {
+        state.currentView = view
+    },
+    updatePlayingView(state, view) {
+        state.playingView = view
     }
 }
 

@@ -54,6 +54,8 @@ const mutations = {
     },
     genNewQueue(state, songs) {
         state.queue = songs
+        console.log(this)
+        this.commit('nav/updatePlayingView', this.state.nav.currentView)
     },
     updateCurrentList(state, list) {
         let sortedList = sort.sortArray(list, 'artist')
@@ -73,7 +75,7 @@ const actions = {
     playSong(context, song) {
         if (!audio.src) {
             audio.addEventListener('ended', () => {
-                context.dispatch('playSong', context.state.queue[context.state.queue.indexOf(context.state.currentSong) + 1])
+                context.dispatch('playSong', context.state.queue[context.state.currentSongIndex + 1])
             })
         }
         audio.src = `local-resource://${song.path}`

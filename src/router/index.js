@@ -44,6 +44,9 @@ router.beforeEach((to, from, next) => {
     } else {
         store.dispatch('audio/getAllSongs')
     }
+    if (to.query.view) {
+        store.commit('nav/updateCurrentView', to.query.view)
+    }
     if (to.query.hideTop) {
         store.commit('nav/updateTopVisible', false)
     } else {

@@ -23,9 +23,6 @@ export default {
             console.log(this)
             return this.$store.state.nav.artists
         }
-    },
-    mounted() {
-        this.$store.dispatch('nav/requestColumn', 'artist')
     }
 }
 </script>

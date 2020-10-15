@@ -15,25 +15,28 @@ export default {
     props: ['song'],
     computed: {
         isActive() {
-            if (this.song.id == this.$store.state.audio.currentSong) {
+            let view = this.$route.query.view
+            if (this.song.id == this.$store.state.audio.currentSong && view == this.$store.state.nav.playingView) {
                 return "active"
             } else {
                 return ""
             }
         },
         listIcon() {
-            if (this.song.id == this.$store.state.audio.currentSong && this.$store.state.audio.paused) {
+            let view = this.$route.query.view
+            if (this.song.id == this.$store.state.audio.currentSong && this.$store.state.audio.paused && view == this.$store.state.nav.playingView) {
                 return 'play_arrow'
-            } else if (this.song.id == this.$store.state.audio.currentSong && this.isIconHover) {
+            } else if (this.song.id == this.$store.state.audio.currentSong && this.isIconHover && view == this.$store.state.nav.playingView) {
                 return 'pause'
-            } else if (this.song.id == this.$store.state.audio.currentSong) {
+            } else if (this.song.id == this.$store.state.audio.currentSong && view == this.$store.state.nav.playingView) {
                 return 'volume_up'
             } else {
                 return 'play_arrow'
             }
         },
         listIconVisible() {
-            if (this.song.id == this.$store.state.audio.currentSong || this.isHover) {
+            let view = this.$route.query.view
+            if (this.song.id == this.$store.state.audio.currentSong && view == this.$store.state.nav.playingView || this.isHover) {
                 return 'opacity: 1'
             } else {
                 return 'opacity: 0'
@@ -52,7 +55,8 @@ export default {
             this.$store.dispatch('audio/playSong', this.song)
         },
         decidePlaySong() {
-            if (this.song.id == this.$store.state.audio.currentSong) {
+            let view = this.$route.query.view
+            if (this.song.id == this.$store.state.audio.currentSong && view == this.$store.state.nav.playingView) {
                 this.$store.dispatch('audio/playPause')
             } else {
                 this.playSong()

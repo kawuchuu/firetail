@@ -12,7 +12,7 @@ new Vue({
     render: h => h(VueApp)
 }).$mount('#app')
 
-router.replace({ path: '/', query: { name: i18n.t('sidebar.songs') } })
+router.replace({ path: '/', query: { name: i18n.t('sidebar.songs'), view: 'all' } })
 
 ipcRenderer.addListener('library', (event, library) => {
     store.commit('audio/updateCurrentList', library)
