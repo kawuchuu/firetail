@@ -38,8 +38,7 @@ export default {
 }
 
 .top-button:hover {
-    color: var(--hl-txt);
-    transform: scale(1.075);
+    opacity: 0.5;
 }
 
 .top-button i {

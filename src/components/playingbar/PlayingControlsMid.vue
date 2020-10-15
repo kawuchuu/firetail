@@ -209,8 +209,7 @@ export default {
 }
 
 .control-buttons i:hover, #closeSidemenu:hover, #albumArtistBack:hover, .playing-bar-hidden i:hover, .top-controls i:hover {
-    color: var(--hl-txt) !important;
-    transform: scale(1.2);
+    opacity: 0.5;
     cursor: pointer;
 }
 

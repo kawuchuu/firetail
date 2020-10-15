@@ -69,18 +69,26 @@ export default {
     cursor: pointer;
 }
 
-.router-link-active .item-sidebar{
+.router-link-active .item-sidebar {
     color: var(--hl-txt);
     cursor: default;
 }
 
+.router-link-active .item-sidebar:hover {
+    opacity: 1;
+}
+
 .item-sidebar:hover {
-    color: var(--hl-txt)
+    opacity: 0.5;
 }
 
 .item-sidebar:active {
     opacity: 0.75;
     color: var(--hl-txt)
+}
+
+.router-link-active .item-sidebar:active {
+    opacity: 1;
 }
 
 .active-indicator {

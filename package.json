@@ -15,6 +15,7 @@
   "dependencies": {
     "better-sqlite3": "^7.1.0",
     "core-js": "^3.6.5",
+    "express": "^4.17.1",
     "music-metadata": "^7.0.2",
     "vue": "^2.6.12",
     "vue-i18n": "^8.21.1",
