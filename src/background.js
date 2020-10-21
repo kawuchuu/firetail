@@ -9,6 +9,7 @@ import installExtension, {
 } from 'electron-devtools-installer'
 import ipc from './modules/ipc'
 const isDevelopment = process.env.NODE_ENV !== 'production'
+import imageServer from './modules/imgserver'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -22,6 +23,8 @@ protocol.registerSchemesAsPrivileged([{
         standard: true
     }
 }])
+
+imageServer(app.getPath('userData'))
 
 async function createWindow() {
     // Create the browser window.

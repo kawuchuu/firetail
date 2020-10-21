@@ -1,6 +1,6 @@
 <template>
     <div class="song-info">
-        <div class="song-album-art"></div>
+        <div class="song-album-art" :style="getImage"></div>
         <div class="title-artist">
             <div class="song-title">{{title}}</div>
             <div class="song-artist">{{artist}}</div>
@@ -16,7 +16,20 @@ export default {
         ...mapState('audio', {
             title: state => state.songTitle,
             artist: state => state.songArtist
-        })
+        }),
+        getImage() {
+            let song = this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex]
+            if (song) {
+                if (song.hasImage == 1) {
+                    let artistAlbum = `${song.artist}${song.album}`.replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')
+                    return `background-image: url('http://localhost:56741/${artistAlbum}.jpg')`
+                } else {
+                    return ''
+                }
+            } else {
+                return ''
+            }
+        }
     }
 }
 </script>

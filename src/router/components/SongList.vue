@@ -123,9 +123,7 @@ li.nohover:hover {
 }
 
 .play-pause:hover {
-    opacity: .65 !important;
-    color: var(--hl-txt) !important;
-    transform: scale(1.2);
+    opacity: .5 !important;
 }
 
 .results-link.active i {
@@ -145,7 +143,7 @@ li.nohover:hover {
     z-index: 3;
     background: var(--bg);
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     border-bottom: solid 1px var(--bd);
 }
 

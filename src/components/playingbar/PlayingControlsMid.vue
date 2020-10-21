@@ -2,11 +2,11 @@
     <div class="track-controls">
         <div class="track-controls-inner-container">
             <div class="control-buttons">
-                <i class="material-icons-outlined" title="Shuffle">shuffle</i>
-                <i class="material-icons-outlined" title="Previous" @click="prev">skip_previous</i>
-                <i class="material-icons-outlined" title="Play/pause" @click="playPause">{{playPauseIcon}}</i>
-                <i class="material-icons-outlined" title="Next" @click="next">skip_next</i>
-                <i class="material-icons-outlined" title="Repeat">repeat</i>
+                <i class="material-icons-outlined repeat-shuffle" title="Shuffle">shuffle</i>
+                <i class="material-icons-outlined skip-prev" title="Previous" @click="prev">skip_previous</i>
+                <i class="material-icons play-pause-icon" title="Play/pause" @click="playPause">{{playPauseIcon}}</i>
+                <i class="material-icons-outlined skip-prev" title="Next" @click="next">skip_next</i>
+                <i class="material-icons-outlined repeat-shuffle" title="Repeat">repeat</i>
             </div>
             <div class="seek-time-inner-container">
                 <p class="song-duration" >{{ songCurrent }}</p>
@@ -55,9 +55,9 @@ export default {
             },
             playPauseIcon: state => {
                 if (state.paused) {
-                    return 'play_arrow'
+                    return 'play_circle_filled'
                 } else {
-                    return 'pause'
+                    return 'pause_circle_filled'
                 }
             }
         })
@@ -101,11 +101,15 @@ export default {
         hover() {
             this.seekMouseOver = true
             this.$refs.handle.classList.add('handle-hover')
+            //this.$refs.seekBar.classList.add('hover')
+            //this.$refs.seekFill.classList.add('hover')
         },
         leave() {
             this.seekMouseOver = false
             if (this.seekMouseDown) return
             this.$refs.handle.classList.remove('handle-hover')
+            //this.$refs.seekBar.classList.remove('hover')
+            //this.$refs.seekFill.classList.remove('hover')
         },
         next() {
             this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex + 1])
@@ -141,7 +145,6 @@ export default {
     position: relative;
     align-items: center;
     justify-content: center;
-    margin-bottom: 8px;
 }
 
 .seek-bar-inner-container {
@@ -161,12 +164,16 @@ export default {
     display: flex;
     align-items: center;
     border-radius: 999px;
-    height: 3px;
+    height: 4px;
     z-index: 5
 }
 
+.seek-bar.hover, .fill.hover {
+    height: 5px;
+}
+
 .fill {
-    height: 3px;
+    height: 4px;
     background: linear-gradient(to right, var(--gradient1), var(--gradient2));
     border-radius: 10000px;
     transition: cubic-bezier(0, 1, 0.35, 1) .25s;
@@ -184,8 +191,8 @@ export default {
 }
 
 .handle-hover {
-    width: 7px !important;
-    height: 7px !important;
+    width: 10px !important;
+    height: 10px !important;
     transition: all .1s !important;
 }
 
@@ -202,10 +209,27 @@ export default {
     text-align: left;
 }
 
+.control-buttons {
+    display: flex;
+    align-items: center;
+    height: 36px;
+}
 
 .control-buttons i {
     margin: 5px;
     padding: 5px;
+}
+
+.play-pause-icon {
+    font-size: 38px;
+}
+
+.skip-prev {
+    font-size: 30px;
+}
+
+.repeat-shuffle {
+    font-size: 22px;
 }
 
 .control-buttons i:hover, #closeSidemenu:hover, #albumArtistBack:hover, .playing-bar-hidden i:hover, .top-controls i:hover {

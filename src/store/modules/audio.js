@@ -90,6 +90,7 @@ const actions = {
         audio.addEventListener('play', () => {
             context.commit('updatePause')
         })
+        updateMediaSession(song)
     },
     removeTimeUpdate() {
         audio.removeEventListener('timeupdate', timeUpdate)
@@ -109,6 +110,33 @@ let audio = new Audio();
 
 let timeUpdate = function() {
     store.commit('audio/timeUpdate', [audio.duration, audio.currentTime])
+}
+
+let updateMediaSession = song => {
+    let metadata = {
+        title: song.title,
+        artist: song.artist,
+        album: song.album,
+    }
+    if (song.hasImage == 1) {
+        let artistAlbum = `${song.artist}${song.album}`.replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')
+        metadata['artwork'] = [{src: `http://localhost:56741/${artistAlbum}.jpg`, sizes: '512x512', type: 'image/jpeg'}]
+    }
+    setSkipPrevButtons()
+    navigator.mediaSession.metadata = new window.MediaMetadata(metadata)
+}
+
+let skip = () => {
+    store.dispatch('audio/playSong', store.state.audio.queue[store.state.audio.currentSongIndex + 1])
+}
+
+let prev = () => {
+    store.dispatch('audio/playSong', store.state.audio.queue[store.state.audio.currentSongIndex - 1])
+}
+
+let setSkipPrevButtons = () => {
+    navigator.mediaSession.setActionHandler('previoustrack', prev);
+    navigator.mediaSession.setActionHandler('nexttrack', skip);
 }
 
 export default {

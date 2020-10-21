@@ -99,7 +99,7 @@ html.dark {
 }
 
 html.light {
-    --bg: #e9e9e9;
+    --bg: #f3f3f3;
     --bg-op: #a6a6a633;
     --text: #3d3d3d;
     --fg-bg: #ffffff;

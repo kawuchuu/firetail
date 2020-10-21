@@ -46,5 +46,6 @@ export default {
     margin: 0px 15px;
     background-color: var(--fg-bg);
     border-radius: 60px;
+    background-image: url('../../assets/no_artist.svg')
 }
 </style>
