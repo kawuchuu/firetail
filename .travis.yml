@@ -25,10 +25,10 @@ script:
 
 after_success:
   - |
-    cd dist
+    cd dist_electron
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
        wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-       bash upload.sh Firetail*.AppImage*
+       bash upload.sh Firetail*.AppImage
     else
        wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
        bash upload.sh Firetail*.dmg*
