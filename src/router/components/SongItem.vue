@@ -51,7 +51,9 @@ export default {
     },
     methods: {
         playSong() {
-            this.$store.commit('audio/genNewQueue', this.$store.state.audio.currentList)
+            let currentList = []
+            this.$store.state.audio.currentList.forEach(f => { currentList.push(f) })
+            this.$store.commit('audio/genNewQueue', currentList)
             this.$store.dispatch('audio/playSong', this.song)
         },
         decidePlaySong() {

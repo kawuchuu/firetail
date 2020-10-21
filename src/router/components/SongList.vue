@@ -25,9 +25,7 @@ export default {
     },
     computed: mapState('audio', {
         list: function(state) {
-            let thing = state.currentList
-            this.$store.commit('audio/updateCurrentList', thing)
-            return thing
+            return state.currentList
         }
     })
 }

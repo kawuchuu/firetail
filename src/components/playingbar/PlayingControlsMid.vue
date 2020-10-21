@@ -2,7 +2,7 @@
     <div class="track-controls">
         <div class="track-controls-inner-container">
             <div class="control-buttons">
-                <i class="material-icons-outlined repeat-shuffle" title="Shuffle">shuffle</i>
+                <i class="material-icons-outlined repeat-shuffle" title="Shuffle" @click="shuffle" :class="isShuffled">shuffle</i>
                 <i class="material-icons-outlined skip-prev" title="Previous" @click="prev">skip_previous</i>
                 <i class="material-icons play-pause-icon" title="Play/pause" @click="playPause">{{playPauseIcon}}</i>
                 <i class="material-icons-outlined skip-prev" title="Next" @click="next">skip_next</i>
@@ -58,6 +58,13 @@ export default {
                     return 'play_circle_filled'
                 } else {
                     return 'pause_circle_filled'
+                }
+            },
+            isShuffled: state => {
+                if (state.shuffled) {
+                    return 'active'
+                } else {
+                    return ''
                 }
             }
         })
@@ -116,6 +123,9 @@ export default {
         },
         prev() {
             this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex - 1])
+        },
+        shuffle() {
+            this.$store.commit('audio/doShuffle')
         }
     }
 }
@@ -232,8 +242,14 @@ export default {
     font-size: 22px;
 }
 
+.active {
+    background-color: var(--hl-op);
+    border-radius: 100px;
+    color: var(--hl-txt)
+}
+
 .control-buttons i:hover, #closeSidemenu:hover, #albumArtistBack:hover, .playing-bar-hidden i:hover, .top-controls i:hover {
-    opacity: 0.5;
+    opacity: 0.6;
     cursor: pointer;
 }
 

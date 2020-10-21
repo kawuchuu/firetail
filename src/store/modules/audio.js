@@ -12,7 +12,8 @@ const state = () => ({
     currentSong: null,
     currentSongIndex: null,
     queue: [],
-    currentList: []
+    currentList: [],
+    shuffled: false
 })
 
 const mutations = {
@@ -53,7 +54,11 @@ const mutations = {
         state.currentSong = id
     },
     genNewQueue(state, songs) {
-        state.queue = songs
+        if (state.shuffled) {
+            state.queue = sort.shuffle(songs)
+        } else {
+            state.queue = songs
+        }
         console.log(this)
         this.commit('nav/updatePlayingView', this.state.nav.currentView)
     },
@@ -61,6 +66,21 @@ const mutations = {
         let sortedList = sort.sortArray(list, 'artist')
         state.currentList = sortedList
         this.commit('nav/updateScreenCountNum', list.length)
+    },
+    doShuffle(state) {
+        let queue = state.queue
+        let currentSong = state.queue[state.currentSongIndex]
+        if (!state.shuffled) {
+            state.queue = sort.shuffle(queue)
+            state.shuffled = true
+        } else {
+            state.queue = sort.sortArray(queue, 'artist')
+            state.shuffled = false
+        }
+        if (store.state.nav.currentView == store.state.nav.playingView) {
+            state.currentList = sort.sortArray(state.currentList, 'artist')
+        }
+        state.currentSongIndex = state.queue.indexOf(currentSong)
     }
 }
 

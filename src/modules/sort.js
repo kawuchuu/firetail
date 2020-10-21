@@ -12,5 +12,8 @@ export default {
             if (a.toLowerCase() > b.toLowerCase()) return 1;
         }
         return array.sort(compare);
+    },
+    shuffle(array) {
+        return array.sort(() => Math.random() - 0.5);
     }
 }
