@@ -2,6 +2,7 @@
     <div class="root">
         <div class="list-section">
             <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
+            <i class="material-icons-outlined favourite-icon" style="visibility: hidden">favorite_border</i>
             <div class="artist-title-album section">
                 <p class="list-title">{{ $t('songList.listTitle') }}</p>
                 <p class="list-artist">{{ $t('songList.listArtist') }}</p>
@@ -58,7 +59,7 @@ li.nohover:hover {
 
 .artist-title-album {
     display: flex;
-    width: calc(100% - 30px);
+    width: calc(100% - 72px);
     font-size: 14px;
     align-items: center;
 }
@@ -112,15 +113,18 @@ li.nohover:hover {
     opacity: .8;
 }
 
+.results-link i, .list-section i {
+    padding: 0 7px;
+}
+
 .play-pause {
     font-size: 24px !important;
     padding: 0;
-    padding-left: 7px;
     cursor: pointer;
     opacity: 0;
 }
 
-.play-pause:hover {
+.play-pause:hover, .favourite-icon:hover {
     opacity: .5 !important;
 }
 
@@ -161,5 +165,10 @@ li.nohover:hover {
 div.section {
     font-size: 12px;
     opacity: .75;
+}
+
+.favourite-icon {
+    font-size: 20px;
+    cursor: pointer;
 }
 </style>

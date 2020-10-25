@@ -60,7 +60,8 @@ const state = () => ({
     showScreenTop: true,
     artists: [],
     currentView: 'all',
-    playingView: null
+    playingView: null,
+    favouriteSongs: []
 })
 
 const mutations = {
@@ -82,6 +83,9 @@ const mutations = {
     },
     updatePlayingView(state, view) {
         state.playingView = view
+    },
+    updateFavouriteSongs(state, ids) {
+        state.favouriteSongs = ids
     }
 }
 

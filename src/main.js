@@ -26,3 +26,12 @@ ipcRenderer.addListener('getAllFromColumn', (event, type) => {
 
 ipcRenderer.send('library')
 ipcRenderer.send('getAllFromColumn', 'artist')
+ipcRenderer.send('getFavourites')
+
+ipcRenderer.addListener('getFavourites', (event, ids) => {
+    let favs = []
+    ids.forEach(f => {
+        favs.push(f.id)
+    })
+    store.commit('nav/updateFavouriteSongs', favs)
+})

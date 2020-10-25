@@ -3,6 +3,7 @@ import {app} from 'electron'
 
 const db = new Database(`${app.getPath('userData')}/library.db`, {verbose: console.log})
 db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, album text, duration decimal, path text, id text, hasImage integer)').run()
+db.prepare('CREATE TABLE IF NOT EXISTS favourites (id text)').run()
 
 export default {
     addToLibrary(songs) {
@@ -16,6 +17,17 @@ export default {
             }
         })
         insertMany(songs)
+    },
+    addToFavourite(id) {
+        console.log(id)
+        db.prepare('INSERT INTO favourites (id) VALUES (?)').run(id)
+    },
+    removeFromFavourite(id) {
+        db.prepare(`DELETE FROM favourites WHERE id = ?`).run(id)
+    },
+    getFavourites() {
+        let rows = db.prepare('SELECT id FROM favourites').all()
+        return rows
     },
     getLibrary() {
         let rows = db.prepare('SELECT * FROM library').all()

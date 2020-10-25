@@ -32,5 +32,22 @@ export default {
             console.log('working')
             event.reply('library', someColumn)
         })
+
+        ipcMain.on('addFavourite', (event, id) => {
+            db.addToFavourite(id)
+            let favourites = db.getFavourites()
+            event.reply('getFavourites', favourites)
+        })
+
+        ipcMain.on('removeFavourite', (event, id) => {
+            db.removeFromFavourite(id)
+            let favourites = db.getFavourites()
+            event.reply('getFavourites', favourites)
+        })
+
+        ipcMain.on('getFavourites', event => {
+            let favourites = db.getFavourites()
+            event.reply('getFavourites', favourites)
+        })
     }
 }

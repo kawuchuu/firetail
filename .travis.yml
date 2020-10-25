@@ -31,7 +31,7 @@ after_success:
        bash upload.sh Firetail*.AppImage
     else
        wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-       bash upload.sh Firetail*.dmg*
+       bash upload.sh Firetail*.dmg
     fi
 
 branches:
