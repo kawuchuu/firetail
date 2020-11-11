@@ -1,4 +1,4 @@
-import {ipcMain} from 'electron'
+import {app, ipcMain, shell} from 'electron'
 import db from './database'
 import files from './files'
 
@@ -49,5 +49,23 @@ export default {
             let favourites = db.getFavourites()
             event.reply('getFavourites', favourites)
         })
+
+        ipcMain.handle('hasCustomLanguage', async event => {
+            if (app.commandLine.hasSwitch('lang')) {
+                let locale = app.commandLine.getSwitchValue('lang')
+                return locale
+            } else {
+                return false
+            }
+        })
+
+        ipcMain.on('openLink', (event, link) => {
+            shell.openExternal(link)
+        })
+
+        ipcMain.handle('getSpotifyDetails', event => {
+            return db.fetchSpotifyDetails()
+        })
+
     }
 }

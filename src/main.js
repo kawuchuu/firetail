@@ -3,6 +3,7 @@ import VueApp from './App.vue'
 import store from './store'
 import router from './router'
 import i18n from './translation'
+import AsyncComputed from 'vue-async-computed'
 import { ipcRenderer } from 'electron'
 
 new Vue({
@@ -11,6 +12,10 @@ new Vue({
     store,
     render: h => h(VueApp)
 }).$mount('#app')
+
+Vue.use(AsyncComputed)
+
+store.commit('audio/updateSpotifyToken')
 
 router.replace({ path: '/', query: { name: i18n.t('sidebar.songs'), view: 'all' } })
 

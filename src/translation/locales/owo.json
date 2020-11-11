@@ -1,0 +1,34 @@
+{
+    "sidebar": {
+        "home": "Hawme",
+        "settings": "Settings",
+        "library": "Wibwawy",
+        "favourite": "Wiked Songs",
+        "songs": "Aww Songs",
+        "artists": "Awtists",
+        "albums": "Awbums",
+        "playlists": "Pwaywists"
+    },
+    "router": {
+        "allSongs": "Aww Songs",
+        "artists": "Awtists",
+        "unknown": "Componyent nyot found"
+    },
+    "topTitle": {
+        "countTypeSongs": "song | songs"
+    },
+    "songList": {
+        "listTitle": "Titwe",
+        "listArtist": "Awtist",
+        "listAlbum": "Awbum",
+        "listDuration": "Duwation"
+    },
+    "playingBar": {
+        "songTitleNotPlaying": "Nyo songs pwaying..."
+    },
+    "topBar": {
+        "addSongs": "Add Songs",
+        "nuke": "Nyuke Wibwawy"
+    },
+    "appName": "Fwiretayl"
+}

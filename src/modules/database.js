@@ -4,6 +4,10 @@ import {app} from 'electron'
 const db = new Database(`${app.getPath('userData')}/library.db`, {verbose: console.log})
 db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, album text, duration decimal, path text, id text, hasImage integer)').run()
 db.prepare('CREATE TABLE IF NOT EXISTS favourites (id text)').run()
+db.prepare('CREATE TABLE IF NOT EXISTS spotify (clientID text, refreshToken text, clientAuth text, curValidToken text)').run()
+if (db.prepare('SELECT COUNT(*) FROM spotify').get()['COUNT(*)'] == 0) {
+    db.prepare('INSERT INTO spotify DEFAULT VALUES').run()
+}
 
 export default {
     addToLibrary(songs) {
@@ -44,5 +48,25 @@ export default {
     deleteLibrary() {
         db.prepare('DELETE FROM library').run()
         return []
+    },
+    fetchSpotifyDetails() {
+        let spotifyData = db.prepare('SELECT * FROM spotify').get()
+        return spotifyData
+    },
+    updateSpotifyClientIDField(value) {
+        let rows = db.prepare('UPDATE spotify SET (clientID)=?;').run(value)
+        return rows
+    },
+    updateSpotifyClientAuthField(value) {
+        let rows = db.prepare('UPDATE spotify SET (clientAuth)=?;').run(value)
+        return rows
+    },
+    updateSpotifyRefreshTokenField(value) {
+        let rows = db.prepare('UPDATE spotify SET (refreshToken)=?;').run(value)
+        return rows
+    },
+    updateSpotifyCurrentValidTokenField(value) {
+        let rows = db.prepare('UPDATE spotify SET (curValidToken)=?;').run(value)
+        return rows
     }
 }

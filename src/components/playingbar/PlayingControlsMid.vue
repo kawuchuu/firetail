@@ -10,10 +10,12 @@
             </div>
             <div class="seek-time-inner-container">
                 <p class="song-duration" >{{ songCurrent }}</p>
-                <div ref="seekBarWrapper" class="seek-bar-inner-container" @mouseover="hover" @mouseleave="leave" @mousedown="down">
+                <div ref="seekBarWrapper" class="seek-bar-inner-container" @mousemove="moveHover" @mouseover="hover" @mouseleave="leave" @mousedown="down">
                     <div class="seek-bar" ref="seekBar">
                         <div ref="seekFill" :style="fill" class="fill"></div>
+                        <div ref="seekFillHover" class="fill-hover"></div>
                         <div ref="handle" class="handle"></div>
+                        <div ref="hoverIndicate" class="seek-hover-indicate">{{ hoverIndicateNum }}</div>
                     </div>
                 </div>
                 <p class="song-duration">{{ songDuration }}</p>
@@ -72,7 +74,8 @@ export default {
     data() {
         return {
             seekMouseDown: false,
-            seekMouseOver: false
+            seekMouseOver: false,
+            hoverIndicateNum: '-:--'
         }
     },
     methods: {
@@ -82,6 +85,12 @@ export default {
             this.$refs.seekFill.style.transition = 'none'
             let pBar = getP(evt, this.$refs.seekBar)
             this.$refs.seekFill.style.width = pBar * 100 + '%'
+            this.$refs.seekFillHover.style.width = pBar * 100 + '%'
+            let seekBarWidth = this.$refs.seekBar.clientWidth
+            let getPosition = (pBar * 100 * seekBarWidth) / 100
+            let getHalfHoverIndicate = this.$refs.hoverIndicate.clientWidth / 2
+            this.hoverIndicateNum = time.timeFormat(pBar * this.rawSongDuration)
+            this.$refs.hoverIndicate.style.left = this.$refs.seekBar.getBoundingClientRect().left + getPosition - getHalfHoverIndicate + 'px'
         },
         up(evt) {
             window.removeEventListener('mousemove', this.move)
@@ -91,30 +100,54 @@ export default {
             this.$refs.seekFill.style.removeProperty('transition')
             let pBar = getP(evt, this.$refs.seekBar)
             this.$refs.seekFill.width = pBar * 100 + '%'
+            let seekBarWidth = this.$refs.seekBar.clientWidth
+            let getPosition = (pBar * 100 * seekBarWidth) / 100
+            let getHalfHoverIndicate = this.$refs.hoverIndicate.clientWidth / 2
+            this.$refs.hoverIndicate.style.left = this.$refs.seekBar.getBoundingClientRect().left + getPosition - getHalfHoverIndicate + 'px'
             this.$store.dispatch('audio/addTimeUpdate')
             this.$store.commit('audio/newAudioTime', pBar * this.rawSongDuration)
             if (!this.seekMouseOver) {
                 this.$refs.handle.classList.remove('handle-hover')
+                this.$refs.hoverIndicate.classList.remove('hover')
+                this.$refs.seekFillHover.classList.remove('hover')
             }
         },
         down(evt) {
+            let pBar = getP(evt, this.$refs.seekBar)
+            let seekBarWidth = this.$refs.seekBar.clientWidth
+            let getPosition = (pBar * 100 * seekBarWidth) / 100
+            let getHalfHoverIndicate = this.$refs.hoverIndicate.clientWidth / 2
+            this.hoverIndicateNum = time.timeFormat(pBar * this.rawSongDuration)
+            this.$refs.hoverIndicate.style.left = this.$refs.seekBar.getBoundingClientRect().left + getPosition - getHalfHoverIndicate + 'px'
             this.seekMouseDown = true
             this.$store.dispatch('audio/removeTimeUpdate')
             window.addEventListener('mousemove', this.move)
             window.addEventListener('mouseup', this.up)
-            let pBar = getP(evt, this.$refs.seekBar)
             this.$refs.seekFill.style.width = pBar * 100 + '%'
         },
         hover() {
             this.seekMouseOver = true
             this.$refs.handle.classList.add('handle-hover')
+            this.$refs.hoverIndicate.classList.add('hover')
+            this.$refs.seekFillHover.classList.add('hover')
             //this.$refs.seekBar.classList.add('hover')
             //this.$refs.seekFill.classList.add('hover')
+        },
+        moveHover(evt) {
+            let pBar = getP(evt, this.$refs.seekBar)
+            let seekBarWidth = this.$refs.seekBar.clientWidth
+            let getPosition = (pBar * 100 * seekBarWidth) / 100
+            let getHalfHoverIndicate = this.$refs.hoverIndicate.clientWidth / 2
+            this.hoverIndicateNum = time.timeFormat(pBar * this.rawSongDuration)
+            this.$refs.hoverIndicate.style.left = this.$refs.seekBar.getBoundingClientRect().left + getPosition - getHalfHoverIndicate + 'px'
+            this.$refs.seekFillHover.style.width = pBar * 100 + '%'
         },
         leave() {
             this.seekMouseOver = false
             if (this.seekMouseDown) return
             this.$refs.handle.classList.remove('handle-hover')
+            this.$refs.hoverIndicate.classList.remove('hover')
+            this.$refs.seekFillHover.classList.remove('hover')
             //this.$refs.seekBar.classList.remove('hover')
             //this.$refs.seekFill.classList.remove('hover')
         },
@@ -162,20 +195,22 @@ export default {
     padding-bottom: 3px;
     position: relative;
     z-index: 15;
-    width: 95%;
+    width: 100%;
     display: flex;
     justify-content: center;
+    cursor: pointer;
+
 }
 
 .seek-bar {
-    margin: 10px;
-    width: 95%;
+    margin: 10px 0px;
+    width: 100%;
     background: var(--bd);
     display: flex;
     align-items: center;
     border-radius: 999px;
     height: 4px;
-    z-index: 5
+    z-index: 5;
 }
 
 .seek-bar.hover, .fill.hover {
@@ -188,6 +223,15 @@ export default {
     border-radius: 10000px;
     transition: cubic-bezier(0, 1, 0.35, 1) .25s;
     width: 0%;
+    z-index: 2;
+}
+
+.fill-hover {
+    height: 4px;
+    background-color: #ffffff36;
+    border-radius: 10px;
+    position: absolute;
+    opacity: 0;
 }
 
 .handle {
@@ -198,6 +242,19 @@ export default {
     margin-left: -5px;
     transform: scale(1.5);
     transition: all .1s;
+    z-index: 3;
+}
+
+.seek-hover-indicate {
+    background: var(--bd);
+    border-radius: 5px;
+    transform: scale(0);
+    position: fixed;
+    transition: 0.1s;
+    transition-property: transform;
+    padding: 5px 10px;
+    left: 0;
+    pointer-events: none;
 }
 
 .handle-hover {
@@ -206,8 +263,16 @@ export default {
     transition: all .1s !important;
 }
 
+.seek-hover-indicate.hover  {
+    transform: scale(1) translateY(-30px);
+}
+
+.fill-hover.hover {
+    opacity: 1;
+}
+
 .song-duration {
-    margin: 0 5px;
+    margin: 0 20px;
     position: relative;
     min-width: 25px;
     max-width: 25px;
@@ -252,5 +317,4 @@ export default {
     opacity: 0.6;
     cursor: pointer;
 }
-
 </style>

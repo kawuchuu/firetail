@@ -15,6 +15,7 @@
                 <path class="st1" d="M450.4,710.8c-332.9,7.1-254.1-463.4-254.1-463.4c39.2,59.5,53.8,76.5,83.5,112.9c56.5,69,95.3,84.4,151.3,119.1c11.6,7.2,28.8,17.1,53.3,34.7c35.1,25.1,61.5,49,78.7,65.6"/>
             </svg>
         </div>
+        <Panel/>
         <TopBar/>
         <SideBar/>
         <div class="screen-container">
@@ -30,6 +31,7 @@ import TopBar from './components/TopBar.vue'
 import SideBar from './components/sidebar/SideBar.vue'
 import PlayingBar from './components/playingbar/PlayingBar'
 import TopTitle from './components/TopTitle'
+import Panel from './components/panel/Panel'
 import { ipcRenderer } from 'electron'
 
 export default {
@@ -39,6 +41,7 @@ export default {
         SideBar,
         PlayingBar,
         TopTitle,
+        Panel
     },
     methods: {
         addFiles(evt) {
@@ -173,5 +176,19 @@ html.firetail {
     margin-left: 182px;
     overflow: hidden;
     overflow-y: auto;
+}
+
+.load-spinner {
+    border: 2px solid transparent;
+    border-top: 2px solid var(--text);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

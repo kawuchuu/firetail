@@ -4,7 +4,7 @@
             <div class="app-info">
                 <i class="material-icons-outlined">menu</i>
                 <div class="firetail-icon"/>
-                <div class="app-name">Firetail</div>
+                <div class="app-name">{{ $t('appName') }}</div>
                 <div class="beta-tag">Beta</div>
             </div>
             <div class="nav-top-buttons">
@@ -27,8 +27,9 @@ export default {
     data() {
         return {
             button: [
-                {name: 'Nuke Library (temp button)', id: 'removeLibrary', icon: 'delete'},
-                {name: tr.t('topBar.addSongs'), id: 'addFiles', for: 'addFiles', icon: 'add'}
+                {name: tr.t('topBar.nuke'), id: 'removeLibrary', icon: 'delete'},
+                {name: tr.t('topBar.addSongs'), id: 'addFiles', for: 'addFiles', icon: 'add'},
+                {name: 'Spotify Test', id: 'test', icon: 'build'}
             ]
         }
     },
@@ -64,7 +65,6 @@ export default {
     background-image: url('../assets/firetail-menu.svg');
     background-size: cover;
     margin: 0 7px 0 10px;
-    transform: translateY(-2px);
     filter: brightness(var(--logo));
 }
 

@@ -13,7 +13,8 @@ const state = () => ({
     currentSongIndex: null,
     queue: [],
     currentList: [],
-    shuffled: false
+    shuffled: false,
+    spotifyActiveToken: ""
 })
 
 const mutations = {
@@ -81,6 +82,10 @@ const mutations = {
             state.currentList = sort.sortArray(state.currentList, 'artist')
         }
         state.currentSongIndex = state.queue.indexOf(currentSong)
+    },
+    async updateSpotifyToken(state) {
+        let details = await ipcRenderer.invoke('getSpotifyDetails')
+        state.spotifyActiveToken = details.curValidToken
     }
 }
 

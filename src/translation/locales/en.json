@@ -27,6 +27,8 @@
         "songTitleNotPlaying": "No song playing..."
     },
     "topBar": {
-        "addSongs": "Add Songs"
-    }
+        "addSongs": "Add Songs",
+        "nuke": "Nuke Library"
+    },
+    "appName": "Firetail"
 }

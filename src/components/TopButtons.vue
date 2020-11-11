@@ -7,6 +7,8 @@
 
 <script>
 import {ipcRenderer} from 'electron'
+import store from '../store'
+
 export default {
     props: ['button'],
     computed: {
@@ -23,6 +25,20 @@ export default {
                 case "removeLibrary":
                     ipcRenderer.send('deleteLibrary')
                     break;
+                case "test":
+                    this.$store.commit('panel/updatePanelProps', {
+                        topMsg: 'Spotify Integration',
+                        buttons: [
+                            {
+                                label: 'Next',
+                                onClick() {
+                                    store.commit('panel/updateActive', false)
+                                }
+                            }
+                        ]
+                    })
+                    this.$store.commit('panel/updatePanelComponent', 'SpotifyIntegration')
+                    this.$store.commit('panel/updateActive', true)
             }
         }
     }
