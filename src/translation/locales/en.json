@@ -28,7 +28,7 @@
     },
     "topBar": {
         "addSongs": "Add Songs",
-        "nuke": "Nuke Library"
+        "nuke": "Remove Library"
     },
     "appName": "Firetail"
 }

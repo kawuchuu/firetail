@@ -35,7 +35,7 @@ export default {
     overflow-y: auto;
     width: 250px;
     height: calc(100% - 139px);
-    z-index: 2;
+    z-index: 4;
 }
 .artists {
     display: flex;

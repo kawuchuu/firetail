@@ -3,6 +3,8 @@ import store from '../index'
 import tr from '../../translation'
 import { ipcRenderer } from 'electron'
 
+let audio = new Audio();
+
 const state = () => ({
     paused: true,
     currentTime: '-:--',
@@ -14,7 +16,9 @@ const state = () => ({
     queue: [],
     currentList: [],
     shuffled: false,
-    spotifyActiveToken: ""
+    repeat: false,
+    spotifyActiveToken: "",
+    volume: 1
 })
 
 const mutations = {
@@ -83,9 +87,23 @@ const mutations = {
         }
         state.currentSongIndex = state.queue.indexOf(currentSong)
     },
+    toggleRepeat(state) {
+        if (state.repeat) {
+            state.repeat = false
+        } else {
+            state.repeat = true
+        }
+    },
+    setVolume(state, vol) {
+        audio.volume = vol
+        state.volume = vol
+    },
     async updateSpotifyToken(state) {
         let details = await ipcRenderer.invoke('getSpotifyDetails')
         state.spotifyActiveToken = details.curValidToken
+    },
+    getNoSongs(state) {
+        state.currentList = []
     }
 }
 
@@ -100,7 +118,12 @@ const actions = {
     playSong(context, song) {
         if (!audio.src) {
             audio.addEventListener('ended', () => {
-                context.dispatch('playSong', context.state.queue[context.state.currentSongIndex + 1])
+                if (this.state.audio.repeat) {
+                    this.state.audio.currentTime = 0
+                    audio.play()
+                } else {
+                    context.dispatch('playSong', context.state.queue[context.state.currentSongIndex + 1])
+                }
             })
         }
         audio.src = `local-resource://${song.path}`
@@ -130,8 +153,6 @@ const actions = {
         ipcRenderer.send('getSomeFromColumn', [args.column, args.q])
     }
 }
-
-let audio = new Audio();
 
 let timeUpdate = function() {
     store.commit('audio/timeUpdate', [audio.duration, audio.currentTime])

@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import {ipcRenderer} from 'electron'
 import store from '../store'
 
 export default {
@@ -23,7 +22,7 @@ export default {
         click() {
             switch(this.button.id) {
                 case "removeLibrary":
-                    ipcRenderer.send('deleteLibrary')
+                    this.$store.commit('panel/showNewPrompt', {title: 'Remove Library', message: "Are you sure you want to remove your current library? Your music files will not be removed.", buttons: 'clearLibrary'})
                     break;
                 case "test":
                     this.$store.commit('panel/updatePanelProps', {

@@ -17,7 +17,6 @@
     "better-sqlite3": "^7.1.0",
     "core-js": "^3.6.5",
     "express": "^4.17.1",
-    "jimp": "^0.16.1",
     "music-metadata": "^7.0.2",
     "qs": "^6.9.4",
     "vue": "^2.6.12",
@@ -35,6 +34,8 @@
     "electron-devtools-installer": "^3.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "node-sass": "^5.0.0",
+    "sass-loader": "^10.1.0",
     "vue-cli-plugin-electron-builder": "~2.0.0-rc.4",
     "vue-template-compiler": "^2.6.11"
   },

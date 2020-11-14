@@ -12,9 +12,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-.button-right {
-    margin-left: 20px;
-}
-</style>

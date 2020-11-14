@@ -1,23 +1,26 @@
 <template>
     <div class="root">
-        <div class="list-section">
-            <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
-            <i class="material-icons-outlined favourite-icon" style="visibility: hidden">favorite_border</i>
-            <div class="artist-title-album section">
-                <p class="list-title">{{ $t('songList.listTitle') }}</p>
-                <p class="list-artist">{{ $t('songList.listArtist') }}</p>
-                <p class="list-album">{{ $t('songList.listAlbum') }}</p>
-                <p class="list-duration"><i class="material-icons-outlined">schedule</i></p>
-            </div>
+        <div class="blank" v-if="list.length == 0">
+            <i class="material-icons-outlined">person</i>
         </div>
-        <div class="wrapper">
-            <SongItem v-for="item in list" :song="item" :key="item.id"/>
+        <div v-else>
+            <div class="list-section">
+                <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
+                <i class="material-icons-outlined favourite-icon" style="visibility: hidden">favorite_border</i>
+                <div class="artist-title-album section">
+                    <p class="list-title">{{ $t('songList.listTitle') }}</p>
+                    <p class="list-duration"><i class="material-icons-outlined">schedule</i></p>
+                </div>
+            </div>
+            <div class="wrapper">
+                <SongItem v-for="item in list" :song="item" :key="item.id"/>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import SongItem from './SongItem'
+import SongItem from './SimpleSongItem'
 import { mapState } from 'vuex'
 
 export default {
@@ -32,9 +35,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .root {
     width: 100%;
+    height: 100%;
 }
 
 .artist-title-album {
@@ -47,7 +51,7 @@ export default {
 .list-title {
     margin: 0;
     margin-left: 14px;
-    width: calc(40% - 40px);
+    width: 100%;
     padding-right: 40px !important;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -56,8 +60,6 @@ export default {
     white-space: nowrap;
 }
 
-.list-artist,
-.list-album,
 .list-duration {
     width: calc(30% - 77px);
     overflow: hidden;
@@ -68,7 +70,7 @@ export default {
     white-space: nowrap;
 }
 
-.list-duration i {
+.artist-title-album .list-duration i {
     font-size: 18px;
     padding: 0 6px;
 }
@@ -93,14 +95,14 @@ export default {
     position: sticky;
 }
 
-.list-section .list-artist:hover, .list-section .list-album:hover, .list-section .list-duration:hover {
+.list-section .list-duration:hover {
     color: var(--text);
     text-decoration: none;
     cursor: default;
     opacity: 1;
 }
 
-.list-section .list-artist:active, .list-section .list-album:active, .list-section .list-duration:active {
+.list-section .list-duration:active {
     color: var(--text);
     text-decoration: none;
     opacity: 1;
@@ -111,9 +113,10 @@ div.section {
     opacity: .75;
 }
 
-.favourite-icon {
+.results-link .favourite-icon {
     font-size: 20px;
     cursor: pointer;
+    padding-right: 10px;
 }
 
 .play-pause {
@@ -124,6 +127,19 @@ div.section {
 }
 
 .results-link i, .list-section i {
-    padding: 0 7px;
+    padding: 0 5px 0 15px;
+}
+
+.blank {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+        font-size: 134px;
+        opacity: 0.25;
+    }
 }
 </style>

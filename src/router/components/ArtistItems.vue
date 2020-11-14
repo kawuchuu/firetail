@@ -18,7 +18,7 @@ export default {
             async getArtistImage() {
                 let token = this.spotifyToken
                 let artist = this.artist.artist
-                if (token == "") return
+                if (token == "" || token == null) return
                 let resp = await axios({
                     method: 'GET',
                     url: 'https://api.spotify.com/v1/search',

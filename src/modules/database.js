@@ -38,12 +38,16 @@ export default {
         return rows
     },
     getAllFromColumn(column) {
-        let rows = db.prepare(`SELECT DISTINCT ${column} FROM library`).all()
-        return [column, rows]
+        if (column == 'artist' || column == 'album') {
+            let rows = db.prepare(`SELECT DISTINCT ${column} FROM library`).all()
+            return [column, rows]
+        } else return []
     },
     getSomeFromColumn(column, query) {
-        let rows = db.prepare(`SELECT * FROM library WHERE ${column}='${query}'`).all()
-        return rows
+        if (column == 'artist' || column == 'album') {
+            let rows = db.prepare(`SELECT * FROM library WHERE ${column}='${query}'`).all()
+            return rows
+        } else return []
     },
     deleteLibrary() {
         db.prepare('DELETE FROM library').run()

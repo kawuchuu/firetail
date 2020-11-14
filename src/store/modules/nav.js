@@ -40,7 +40,7 @@ const state = () => ({
         name: tr.t('sidebar.artists'),
         id: 'artistsTab',
         type: 'large_button',
-        link: '/artists?hideTop=true&column=artist&q=Lena%20Raine&view=artist_Lena%20Raine'
+        link: '/artists?hideTop=true&view=artist_firetailnoselect'
     },
     {
         icon: 'album',

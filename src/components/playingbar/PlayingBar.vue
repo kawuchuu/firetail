@@ -2,17 +2,20 @@
     <div class="playing-bar">
         <PlayingMeta/>
         <PlayingControlsMid/>
+        <PlayingControlsRight/>
     </div>
 </template>
 
 <script>
 import PlayingMeta from './PlayingMeta'
 import PlayingControlsMid from './PlayingControlsMid'
+import PlayingControlsRight from './PlayingControlsRight'
 
 export default {
     components: {
         PlayingMeta,
-        PlayingControlsMid
+        PlayingControlsMid,
+        PlayingControlsRight
     }
 }
 </script>

@@ -6,7 +6,7 @@
                 <i class="material-icons-outlined skip-prev" title="Previous" @click="prev">skip_previous</i>
                 <i class="material-icons play-pause-icon" title="Play/pause" @click="playPause">{{playPauseIcon}}</i>
                 <i class="material-icons-outlined skip-prev" title="Next" @click="next">skip_next</i>
-                <i class="material-icons-outlined repeat-shuffle" title="Repeat">repeat</i>
+                <i class="material-icons-outlined repeat-shuffle" title="Repeat" @click="repeat" :class="isRepeat">repeat</i>
             </div>
             <div class="seek-time-inner-container">
                 <p class="song-duration" >{{ songCurrent }}</p>
@@ -64,6 +64,13 @@ export default {
             },
             isShuffled: state => {
                 if (state.shuffled) {
+                    return 'active'
+                } else {
+                    return ''
+                }
+            },
+            isRepeat: state => {
+                if (state.repeat) {
                     return 'active'
                 } else {
                     return ''
@@ -159,6 +166,9 @@ export default {
         },
         shuffle() {
             this.$store.commit('audio/doShuffle')
+        },
+        repeat() {
+            this.$store.commit('audio/toggleRepeat')
         }
     }
 }
@@ -272,7 +282,7 @@ export default {
 }
 
 .song-duration {
-    margin: 0 20px;
+    margin: 0 15px;
     position: relative;
     min-width: 25px;
     max-width: 25px;

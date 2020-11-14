@@ -1,3 +1,4 @@
+import { ipcRenderer } from "electron"
 import store from ".."
 
 const state = () => ({
@@ -42,6 +43,32 @@ const mutations = {
     },
     updatePreventLoad(state, name) {
         state.preventLoad.push(name)
+    },
+    showNewPrompt(state, content) {
+        let newProps = {
+            topMsg: content.title,
+            msg: content.message
+        }
+        if (content.buttons == 'clearLibrary') {
+            newProps['buttons'] = [
+                {
+                    label: 'Cancel',
+                    onClick() {
+                        store.commit('panel/updateActive', false)
+                    }
+                },
+                {
+                    label: 'OK',
+                    onClick() {
+                        ipcRenderer.send('deleteLibrary')
+                        store.commit('panel/updateActive', false)
+                    }
+                }
+            ]
+        }
+        state.currentPanelProps = newProps
+        state.currentPanelComponent = 'Prompt'
+        this.commit('panel/updateActive', true)
     }
 }
 

@@ -3,9 +3,10 @@
         <i class="material-icons-outlined play-pause" :style="listIconVisible" @click="decidePlaySong" @mouseover="listIconHover" @mouseleave="listIconHoverLeave">{{ listIcon }}</i>
         <i class="material-icons-outlined favourite-icon" @click="handleFavourite">{{ favouriteIcon }}</i>
         <div class="artist-title-album" @dblclick="playSong">
-            <p class="list-title">{{ song.title }}</p>
-            <p class="list-artist"><span>{{song.artist}}</span></p>
-            <p class="list-album"><span>{{song.album}}</span></p>
+            <div class="list-title">
+                <p>{{song.title}}</p>
+                <span>{{song.album}}</span>
+            </div>
             <p class="list-duration"><span>{{song.duration}}</span></p>
         </div>
     </li>
@@ -112,7 +113,7 @@ export default {
     background: var(--bg);
     overflow: hidden;
     position: relative;
-    height: 35px;
+    height: 55px;
     display: flex;
     align-items: center;
     transition: .25s;
@@ -128,7 +129,7 @@ li.nohover:hover {
 }
 
 .results-link i, .list-section i {
-    padding: 0 7px;
+    padding: 0 5px 0 15px;
 }
 
 .play-pause {
@@ -160,17 +161,28 @@ li.nohover:hover {
 .list-title {
     margin: 0;
     margin-left: 14px;
-    width: calc(40% - 40px);
+    width: 100%;
     padding-right: 40px !important;
     overflow: hidden;
     text-overflow: ellipsis;
     padding: 9px 0;
     pointer-events: none;
     white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    p {
+        margin: 0 0 5px;
+        font-size: 15px;
+    }
+
+    span {
+        font-size: 12px;
+        opacity: 0.75;
+    }
 }
 
-.list-artist,
-.list-album,
 .list-duration {
     width: calc(30% - 77px);
     overflow: hidden;
@@ -187,40 +199,9 @@ li.nohover:hover {
     padding-right: 20px;
 }
 
-.list-artist span, .list-album span {
-    pointer-events: all;
-}
-
-.list-artist span:hover, .list-album span:hover {
-    color: var(--hl-txt);
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.list-artist span:active, .list-album span:active {
-    color: var(--hl-txt);
-    text-decoration: underline;
-    opacity: .8;
-}
-
-.list-artist span, .list-album span {
-    pointer-events: all;
-}
-
-.list-artist span:hover, .list-album span:hover {
-    color: var(--hl-txt);
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.list-artist span:active, .list-album span:active {
-    color: var(--hl-txt);
-    text-decoration: underline;
-    opacity: .8;
-}
-
-.favourite-icon {
+.results-link .favourite-icon {
     font-size: 20px;
     cursor: pointer;
+    padding-right: 10px;
 }
 </style>

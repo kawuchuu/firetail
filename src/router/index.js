@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import SongList from './components/SongList'
+import SimpleSongList from './components/SimpleSongList/SimpleSongList'
 import Unknown from './components/Unknown'
 import Artists from './components/Artists'
 import store from '../store'
@@ -22,32 +23,33 @@ const router = new VueRouter({
             children: [
                 {
                     path: '',
-                    component: SongList,
+                    component: SimpleSongList,
                 }
             ]
         },
         {
             path: '/:pathMatch(.*)',
             component: Unknown,
-            name: tr.t('router.unknown')
+            name: 'Unknown'
         }
     ]
 })
 
 router.beforeEach((to, from, next) => {
-    console.log(to)
     if (to.query.column && to.query.q) {
         store.dispatch('audio/getSpecificSongs', {
             column: to.query.column,
             q: to.query.q
         })
+    } else if (to.query.view == 'artist_firetailnoselect') {
+        store.commit('audio/getNoSongs')
     } else {
         store.dispatch('audio/getAllSongs')
     }
     if (to.query.view) {
         store.commit('nav/updateCurrentView', to.query.view)
     }
-    if (to.query.hideTop) {
+    if (to.query.hideTop || to.name == 'Unknown') {
         store.commit('nav/updateTopVisible', false)
     } else {
         store.commit('nav/updateTopVisible', true)
