@@ -87,7 +87,7 @@ export default {
     display: flex;
     align-items: center;
     top: 0;
-    z-index: 3;
+    z-index: 11;
     background: var(--bg);
     text-transform: uppercase;
     letter-spacing: 1px;

@@ -2,6 +2,11 @@
     <div class="side-bar">
         <div class="side-bar-inner-container">
             <div class="nav-buttons">
+                <div class="app-info">
+                    <div class="firetail-icon"/>
+                    <div class="app-name">{{ $t('appName') }}</div>
+                    <div class="beta-tag">Beta</div>
+                </div>
                 <SideButtons v-for="item in getNavs" v-bind:button="item" v-bind:key="item.id"></SideButtons>
             </div>
         </div>
@@ -24,54 +29,50 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .side-bar {
-    width: 180px;
-    height: 100vh;
-    background: var(--fg-bg);
-    border-right: solid 2px var(--bd);
+    width: $sidebarwidth;
+    height: 100%;
+    background: #000;
     box-shadow: 1px 0px 5px rgba(0, 0, 0, .15);
-    position: fixed;
     z-index: 2;
 }
 
 .side-bar-inner-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
     overflow-y: auto;
-    height: calc(100% - 139px);
+    height: 100%;
 }
 
 .side-bar-inner-container::-webkit-scrollbar {
     display: none;
 }
 
+.nav-buttons {
+    padding: 12px;
+}
+
 .side-bar button {
-    width: 155px;
+    width: 100%;
     height: 40px;
     margin-top: 20px;
 }
 
-.type-separator {
-    width: 160px !important;
-    min-height: 1px;
-    background: var(--bd);
-    margin: 0 10px;
-    border-radius: 10px;
-}
-
 .item-sidebar {
     display: flex;
-    width: 180px;
-    height: 40px;
+    width: 100%;
+    height: 42px;
     align-items: center;
     cursor: pointer;
+    opacity: 0.75;
+    border-radius: 5px;
 }
 
 .router-link-active .item-sidebar {
-    color: var(--hl-txt);
+    opacity: 1;
     cursor: default;
+    background: rgba(255,255,255,.15);
 }
 
 .router-link-active .item-sidebar:hover {
@@ -79,12 +80,11 @@ export default {
 }
 
 .item-sidebar:hover {
-    opacity: 0.5;
+    opacity: 1;
 }
 
 .item-sidebar:active {
     opacity: 0.75;
-    color: var(--hl-txt)
 }
 
 .router-link-active .item-sidebar:active {
@@ -111,10 +111,6 @@ export default {
     font-size: 20px;
 }
 
-.router-link-active .item-sidebar i {
-    margin: 0 16px 0 13px;
-}
-
 .router-link-active .item-sidebar span {
     font-weight: bold;
 }
@@ -128,7 +124,7 @@ export default {
     font-size: 14px;
     opacity: .75;
     text-transform: uppercase;
-    margin: 15px 0 5px 16px;
+    margin: 30px 0 5px 16px;
 }
 
 .playlist-sidename {
@@ -146,5 +142,40 @@ export default {
 
 .playlist-sidename.active span {
     margin-left: 13px
+}
+
+.firetail-icon {
+    width: 35px;
+    height: 35px;
+    background-image: url('../../assets/firetail-menu.svg');
+    background-size: cover;
+    margin: 0 7px 0 0;
+    filter: brightness(var(--logo));
+}
+
+.app-info {
+    display: flex;
+    align-items: center;
+    margin: 5px 15px 15px;
+}
+
+.app-name {
+    font-family: 'Inter';
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.beta-tag {
+    font-size: 10px;
+    padding: 3px 4px;
+    border: solid 2px var(--text);
+    color: var(--text);
+    opacity: .75;
+    border-radius: 20px;
+    margin: 0px 10px 0px 10px;
+    position: relative;
+    top: 1px;
+    font-weight: bold;
+    text-transform: uppercase
 }
 </style>

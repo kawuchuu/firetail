@@ -16,21 +16,23 @@
             </svg>
         </div>
         <Panel/>
-        <TopBar/>
-        <SideBar/>
-        <div class="screen-container">
-            <TopTitle/>
-            <router-view/>
+        <div class="main-content-wrapper">
+            <SideBar/>
+            <div class="screen-container">
+                <TopBar/>
+                <div class="container" ref="container">
+                    <router-view/>
+                </div>
+            </div>
         </div>
         <PlayingBar/>
     </div>
 </template>
 
 <script>
-import TopBar from './components/TopBar.vue'
+import TopBar from './components/TopBar'
 import SideBar from './components/sidebar/SideBar.vue'
 import PlayingBar from './components/playingbar/PlayingBar'
-import TopTitle from './components/TopTitle'
 import Panel from './components/panel/Panel'
 import { ipcRenderer } from 'electron'
 
@@ -40,7 +42,6 @@ export default {
         TopBar,
         SideBar,
         PlayingBar,
-        TopTitle,
         Panel
     },
     methods: {
@@ -52,13 +53,36 @@ export default {
             console.log(evt.target.files)
             ipcRenderer.send('addToLibrary', files)
         }
+    },
+    mounted() {
+        this.$refs.container.addEventListener('scroll', e => {
+            this.$store.commit('nav/updateCurrentScroll', e.target.scrollTop)
+        })
     }
 }
 </script>
 
-<style>
+<style lang="scss">
 .st0{fill:none;stroke:#221f1f;stroke-width:55;}
 .st1{fill:none;stroke:#221f1f;stroke-width:55;stroke-miterlimit:10;}
+
+.main-content-wrapper {
+    display: flex;
+    height: calc(100vh - 85px);
+}
+
+.screen-container {
+    
+}
+
+.container {
+    overflow: hidden;
+    overflow-y: auto;
+    position: fixed;
+    width: calc(100% - #{$sidebarwidth});
+    height: calc(100% - 135px);
+    padding-top: 50px;
+}
 
 body {
     margin: 0;
@@ -91,7 +115,7 @@ a {
 html.dark {
     --bg: #131313;
     --bg-op: #181818ad;
-    --text: #dfdfdf;
+    --text: #ffffff;
     --fg-bg: #1e1e1e;
     --fg-bg-op: #25252584;
     --bd: #3a3a3a;
@@ -170,12 +194,7 @@ html.firetail {
 }
 
 .screen-container {
-    width: calc(100vw - 182px);
-    height: calc(100vh - 139px);
-    margin-top: 52px;
-    margin-left: 182px;
-    overflow: hidden;
-    overflow-y: auto;
+    
 }
 
 .load-spinner {

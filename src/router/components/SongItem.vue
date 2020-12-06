@@ -108,19 +108,18 @@ export default {
 
 <style lang="scss" scoped>
 .results-link {
-    border-bottom: 1px solid var(--bd);
-    background: var(--bg);
     overflow: hidden;
     position: relative;
-    height: 35px;
+    height: 42px;
     display: flex;
     align-items: center;
     transition: .25s;
     transition-property: margin-left;
+    border-radius: 5px;
 }
 
 li:hover {
-    background: var(--li-hv);
+    background: #ffffff18;
 }
 
 li.nohover:hover {
@@ -179,6 +178,7 @@ li.nohover:hover {
     padding-right: 40px;
     pointer-events: none;
     white-space: nowrap;
+    opacity: 0.7;
 }
 
 .list-duration {

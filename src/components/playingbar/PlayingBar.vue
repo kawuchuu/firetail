@@ -28,7 +28,7 @@ export default {
     width: 100vw;
     height: 85px;
     background-color: var(--fg-bg);
-    border-top: solid 2px var(--bd);
+    border-top: solid 1px var(--bd);
     box-shadow: 0px -1px 5px rgba(0, 0, 0, .15);
     display: flex;
     align-items: center;

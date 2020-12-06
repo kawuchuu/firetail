@@ -1,12 +1,6 @@
 <template>
     <div class="top-bar">
         <div class="inner">
-            <div class="app-info">
-                <i class="material-icons-outlined">menu</i>
-                <div class="firetail-icon"/>
-                <div class="app-name">{{ $t('appName') }}</div>
-                <div class="beta-tag">Beta</div>
-            </div>
             <div class="nav-top-buttons">
                 <div class="top-button-container">
                     <TopButtons v-for="item in button" v-bind:button="item" v-bind:key="item.id"></TopButtons>
@@ -39,61 +33,30 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .top-bar {
-    width: 100%;
+    width: calc(100% - #{$sidebarwidth});
     height: 50px;
-    background: var(--fg-bg);
-    border-bottom: var(--bd) 2px solid;
-    box-shadow: 0px 1px 5px rgba(0,0,0,.15);
+    background: transparent;
     position: fixed;
     z-index: 10;
     top: 0;
+    pointer-events: none;
 }
 
 .top-bar .inner {
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin: 0px 15px;
-}
-
-.firetail-icon {
-    width: 35px;
-    height: 35px;
-    background-image: url('../assets/firetail-menu.svg');
-    background-size: cover;
-    margin: 0 7px 0 10px;
-    filter: brightness(var(--logo));
-}
-
-.app-info {
-    display: flex;
-    align-items: center;
-}
-
-.app-name {
-    font-family: 'Inter';
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.beta-tag {
-    font-size: 10px;
-    padding: 3px 4px;
-    border: solid 2px var(--text);
-    color: var(--text);
-    opacity: .75;
-    border-radius: 20px;
-    margin: 0px 10px 0px 10px;
-    position: relative;
-    top: 1px;
-    font-weight: bold;
-    text-transform: uppercase
+    justify-content: flex-end;
+    margin-right: 20px;
 }
 
 .top-button-container {
     display: flex;
+    background: #000000b3;
+    padding: 10px 20px;
+    border-radius: 40px;
+    pointer-events: all;
 }
 </style>

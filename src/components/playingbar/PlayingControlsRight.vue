@@ -167,7 +167,8 @@ export default {
 
 .fill {
     height: 4px;
-    background: linear-gradient(to right, var(--gradient1), var(--gradient2));
+    //background: linear-gradient(to right, var(--gradient1), var(--gradient2));
+    background: var(--hl-txt);
     border-radius: 10000px;
     transition: cubic-bezier(0, 1, 0.35, 1) .25s;
     width: 0%;
@@ -185,7 +186,7 @@ export default {
 .handle {
     width: 0px;
     height: 0px;
-    background: var(--gradient2);
+    background: var(--hl-txt);
     border-radius: 11111px;
     margin-left: -5px;
     transform: scale(1.5);

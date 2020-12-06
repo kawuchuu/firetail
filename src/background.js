@@ -27,8 +27,10 @@ protocol.registerSchemesAsPrivileged([{
 async function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({
-        width: 1100,
-        height: 650,
+        width: 1350,
+        height: 750,
+        minWidth: 750,
+        minHeight: 400,
         show: false,
         backgroundColor: '#181818',
         title: 'Firetail Next',

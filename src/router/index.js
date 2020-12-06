@@ -6,7 +6,9 @@ import Unknown from './components/Unknown'
 import Artists from './components/Artists'
 import store from '../store'
 import tr from '../translation'
+import VirtualList from 'vue-virtual-scroll-list'
 
+Vue.component('VirtualList', VirtualList)
 Vue.use(VueRouter)
 
 const router = new VueRouter({

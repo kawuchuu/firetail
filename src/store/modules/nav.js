@@ -61,7 +61,8 @@ const state = () => ({
     artists: [],
     currentView: 'all',
     playingView: null,
-    favouriteSongs: []
+    favouriteSongs: [],
+    scrolled: 0
 })
 
 const mutations = {
@@ -86,6 +87,9 @@ const mutations = {
     },
     updateFavouriteSongs(state, ids) {
         state.favouriteSongs = ids
+    },
+    updateCurrentScroll(state, scrolled) {
+        state.scrolled = scrolled
     }
 }
 
