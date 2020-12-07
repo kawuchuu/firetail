@@ -63,7 +63,9 @@ const state = () => ({
     playingView: null,
     favouriteSongs: [],
     scrolled: 0,
-    playingBarColour: null
+    playingBarColour: null,
+    ver: 'unknown',
+    port: '0'
 })
 
 const mutations = {
@@ -94,6 +96,12 @@ const mutations = {
     },
     updatePlayingBarColour(state, colour) {
         state.playingBarColour = colour
+    },
+    updateVer(state, ver) {
+        state.ver = ver
+    },
+    updatePort(state, port) {
+        state.port = port
     }
 }
 

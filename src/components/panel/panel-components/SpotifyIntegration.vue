@@ -73,9 +73,10 @@ export default {
             let oldNum = this.active
             this.active++
             this.doShow(this.active, oldNum)
+            let port = this.$store.state.nav.port
             switch(action) {
                 case "wait":
-                    ipcRenderer.send('openLink', `http://localhost:56741/login?client_id=${this.clientID}&client_auth=${btoa(this.clientID + ':' + this.clientSecret)}`)
+                    ipcRenderer.send('openLink', `http://localhost:${port}/login?client_id=${this.clientID}&client_auth=${btoa(this.clientID + ':' + this.clientSecret)}`)
                     ipcRenderer.once('spotifyAuthFinish', () => {
                         this.nextButton()
                     })

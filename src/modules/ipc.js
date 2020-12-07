@@ -1,6 +1,7 @@
 import {app, ipcMain, shell} from 'electron'
 import db from './database'
 import files from './files'
+import server from './server'
 
 export default {
     start(win) {
@@ -65,6 +66,14 @@ export default {
 
         ipcMain.handle('getSpotifyDetails', event => {
             return db.fetchSpotifyDetails()
+        })
+
+        ipcMain.handle('getVersion', event => {
+            return app.getVersion()
+        })
+
+        ipcMain.handle('getPort', event => {
+            return server.server.address().port
         })
 
     }

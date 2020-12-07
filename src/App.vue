@@ -54,7 +54,11 @@ export default {
             ipcRenderer.send('addToLibrary', files)
         }
     },
-    mounted() {
+    async mounted() {
+        let port = await ipcRenderer.invoke('getPort')
+        this.$store.commit('nav/updatePort', port)
+        let ver = await ipcRenderer.invoke('getVersion')
+        document.title = `Firetail ${ver}`
         this.$refs.container.addEventListener('scroll', e => {
             this.$store.commit('nav/updateCurrentScroll', e.target.scrollTop)
         })

@@ -26,12 +26,13 @@ export default {
         getImage() {
             let song = this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex]
             if (song) {
+                let port = this.$store.state.nav.port
                 if (song.hasImage == 1) {
                     let artistAlbum = `${song.artist}${song.album}`.replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')
-                    Vibrant.from(`http://localhost:56741/${artistAlbum}.jpg`).getPalette((err, palette) => {
+                    Vibrant.from(`http://localhost:${port}/${artistAlbum}.jpg`).getPalette((err, palette) => {
                         this.$store.commit('nav/updatePlayingBarColour', palette.Vibrant.hex)
                     })
-                    return `background-image: url('http://localhost:56741/${artistAlbum}.jpg')`
+                    return `background-image: url('http://localhost:${port}/${artistAlbum}.jpg')`
                 } else {
                     this.$store.commit('nav/updatePlayingBarColour', null)
                     return ''

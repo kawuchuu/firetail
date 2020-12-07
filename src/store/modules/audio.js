@@ -165,8 +165,9 @@ let updateMediaSession = song => {
         album: song.album,
     }
     if (song.hasImage == 1) {
+        let port = store.state.nav.port
         let artistAlbum = `${song.artist}${song.album}`.replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')
-        metadata['artwork'] = [{src: `http://localhost:56741/${artistAlbum}.jpg`, sizes: '512x512', type: 'image/jpeg'}]
+        metadata['artwork'] = [{src: `http://localhost:${port}/${artistAlbum}.jpg`, sizes: '512x512', type: 'image/jpeg'}]
     }
     setSkipPrevButtons()
     navigator.mediaSession.metadata = new window.MediaMetadata(metadata)
