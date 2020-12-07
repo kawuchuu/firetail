@@ -8,12 +8,13 @@ matrix:
         - ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true
         - RELEASE_NAME="continuous"
         - RELEASE_TITLE="Continuous build"
-        - is_prerelease="true"
+        - UPLOADTOOL_ISPRERELEASE=true
     - os: linux
       language: node_js
       node_js: "12.14.1"
       env:
         - ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true
+        - UPLOADTOOL_ISPRERELEASE=true
 
 before_install:
   - if [ $TRAVIS_OS_NAME = linux ]; then npm i -g electron-builder; fi
