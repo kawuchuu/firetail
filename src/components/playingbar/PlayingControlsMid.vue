@@ -215,7 +215,7 @@ export default {
 .seek-bar {
     margin: 10px 0px;
     width: 100%;
-    background: var(--bd);
+    background: #ffffff23;
     display: flex;
     align-items: center;
     border-radius: 999px;

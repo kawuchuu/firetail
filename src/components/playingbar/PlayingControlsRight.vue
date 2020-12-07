@@ -153,7 +153,7 @@ export default {
 .vol-bar {
     margin: 10px 0px;
     width: 110px;
-    background: var(--bd);
+    background: #ffffff23;
     display: flex;
     align-items: center;
     border-radius: 999px;

@@ -62,7 +62,8 @@ const state = () => ({
     currentView: 'all',
     playingView: null,
     favouriteSongs: [],
-    scrolled: 0
+    scrolled: 0,
+    playingBarColour: null
 })
 
 const mutations = {
@@ -90,6 +91,9 @@ const mutations = {
     },
     updateCurrentScroll(state, scrolled) {
         state.scrolled = scrolled
+    },
+    updatePlayingBarColour(state, colour) {
+        state.playingBarColour = colour
     }
 }
 

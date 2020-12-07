@@ -9,6 +9,11 @@ let startServer = async (appLoc, win) => {
         if (err) mkdirSync(`${appLoc}/images/`)
     })
     let app = express()
+    app.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "X-Requested-With");
+        next();
+    });
     app.use(express.static(`${appLoc}/images/`))
     app.listen(56741, 'localhost', err => {
         if (err) return console.log(err)

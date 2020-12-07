@@ -1,5 +1,6 @@
 <template>
     <div class="song-info">
+        <div class="colour-bg" :style="getColour"></div>
         <div class="song-album-art" :style="getImage"></div>
         <div class="title-artist">
             <div class="song-title-fav">
@@ -14,6 +15,7 @@
 <script>
 import {mapState} from 'vuex'
 import {ipcRenderer} from 'electron'
+import * as Vibrant from 'node-vibrant'
 
 export default {
     computed: {
@@ -26,13 +28,23 @@ export default {
             if (song) {
                 if (song.hasImage == 1) {
                     let artistAlbum = `${song.artist}${song.album}`.replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')
+                    Vibrant.from(`http://localhost:56741/${artistAlbum}.jpg`).getPalette((err, palette) => {
+                        this.$store.commit('nav/updatePlayingBarColour', palette.Vibrant.hex)
+                    })
                     return `background-image: url('http://localhost:56741/${artistAlbum}.jpg')`
                 } else {
+                    this.$store.commit('nav/updatePlayingBarColour', null)
                     return ''
                 }
             } else {
+                this.$store.commit('nav/updatePlayingBarColour', null)
                 return ''
             }
+        },
+        getColour() {
+            let colour = this.$store.state.nav.playingBarColour
+            if (colour == null) return ''
+            return `background-color: ${colour}`
         },
         favouriteIcon() {
             if (this.$store.state.nav.favouriteSongs.indexOf(this.$store.state.audio.currentSong) != -1) {
@@ -135,5 +147,15 @@ export default {
     display: flex;
     align-items: center;
     margin-bottom: 5px;
+}
+
+.colour-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    transform: translateX(-15px);
+    opacity: 0.1;
+    transition: .1s;
 }
 </style>
