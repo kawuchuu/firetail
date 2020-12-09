@@ -29,4 +29,5 @@ jobs:
         run: |
           cd dist_electron
           wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+          chmod +x upload.sh
           ./upload.sh Firetail*.*
