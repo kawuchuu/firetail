@@ -21,11 +21,6 @@ jobs:
         run: |
           npm i
           npm run electron:build
-        
-      - name: Get upload tool
-        uses: wei/wget@v1
-        with:
-          args: -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
 
       - name: Release
         env:
@@ -35,4 +30,5 @@ jobs:
           TRAVIS_COMMIT: ${{ github.sha }}
           REPO_SLUG: kawuchuu/firetail
         run: |
+          curl https://github.com/probonopd/uploadtool/raw/master/upload.sh --output upload.sh
           bash upload.sh dist_electron/Firetail*.*
