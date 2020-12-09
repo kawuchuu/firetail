@@ -22,6 +22,11 @@ jobs:
           npm i
           npm run electron:build
         
+      - name: Get upload tool
+        uses: wei/wget@v1
+        with:
+          args: -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -29,7 +34,5 @@ jobs:
           TRAVIS_BRANCH: next
           TRAVIS_COMMIT: $GITHUB_SHA
         run: |
-          cd dist_electron
-          wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
           chmod +x upload.sh
-          ./upload.sh Firetail*.*
+          ./upload.sh dist_electron/Firetail*.*
