@@ -2,6 +2,10 @@ name: Continuous
 
 on: push
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -18,8 +22,8 @@ jobs:
           npm i
           npm run electron:build
         
-      - name: Update release
-        uses: johnwbyrd/update-release@v1.0.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          asset: dist_electron/Firetail*.*
+      - name: Release
+        run: |
+          cd dist_electron
+          wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+          ./upload.sh Firetail*.*
