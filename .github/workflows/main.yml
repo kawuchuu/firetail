@@ -32,6 +32,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           UPLOADTOOL_ISPRERELEASE: true
           TRAVIS_BRANCH: next
-          TRAVIS_COMMIT: $GITHUB_SHA
+          TRAVIS_COMMIT: ${{ github.sha }}
+          REPO_SLUG: kawuchuu/firetail
         run: |
           bash upload.sh dist_electron/Firetail*.*
