@@ -62,7 +62,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$currentGradColour: $hl-txt;
+$currentGradColour: $gradient1;
 $subColour: desaturate(darken($currentGradColour, 25%), 40%);
 
 .wrapper {

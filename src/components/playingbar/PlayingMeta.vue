@@ -1,7 +1,10 @@
 <template>
     <div class="song-info">
         <div class="colour-bg" :style="getColour"></div>
-        <div class="song-album-art" :style="getImage"></div>
+        <div class="large-album-art" :class="hoverShow" >
+            <div class="inner" :style="getImage"></div>
+        </div>
+        <div class="song-album-art" :style="getImage" @mouseover="hoverImage" @mouseleave="leaveImage"></div>
         <div class="title-artist">
             <div class="song-title-fav">
                 <div class="song-title">{{title}}</div>
@@ -61,6 +64,16 @@ export default {
             } else {
                 return ''
             }
+        },
+        hoverShow() {
+            let song = this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex]
+            if (!song) return ''
+            if (song.hasImage == 0) return ''
+            if (this.showLargeImage) {
+                return 'hover'
+            } else {
+                return ''
+            }
         }
     },
     methods: {
@@ -77,12 +90,23 @@ export default {
         },
         removeFromFavourites() {
             ipcRenderer.send('removeFavourite', this.$store.state.audio.currentSong)
+        },
+        hoverImage() {
+            this.showLargeImage = true
+        },
+        leaveImage() {
+            this.showLargeImage = false
+        }
+    },
+    data() {
+        return {
+            showLargeImage: false
         }
     }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .song-info {
     display: flex;
     align-items: center;
@@ -158,5 +182,51 @@ export default {
     transform: translateX(-15px);
     opacity: 0.1;
     transition: .1s;
+}
+
+.large-album-art {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    background: #000;
+    transform: translateY(-215px);
+    border-radius: 5px;
+    box-shadow: 0px 5px 10px rgba(0,0,0,.15);
+    pointer-events: none;
+    opacity: 0;
+    //transition: .15s;
+    border: solid 1px var(--bd);
+
+    .inner {
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+        background-color: #000;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        z-index: 2;
+        position: relative;
+        transition: .15s;
+    }
+}
+
+.large-album-art::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    transform: rotate(-45deg);
+    background: #000;
+    position: absolute;
+    bottom: -8px;
+    left: 18px;
+    border: solid 1px var(--bd);
+    border-radius: 2px;
+    box-shadow: 0px 5px 10px rgba(0,0,0,.15);
+    z-index: 1;
+}
+
+.large-album-art.hover {
+    opacity: 1;
 }
 </style>
