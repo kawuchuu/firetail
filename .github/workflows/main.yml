@@ -26,6 +26,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           UPLOADTOOL_ISPRERELEASE: true
+          TRAVIS_BRANCH: next
+          TRAVIS_COMMIT: $GITHUB_SHA
         run: |
           cd dist_electron
           wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
