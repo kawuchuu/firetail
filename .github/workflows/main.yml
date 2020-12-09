@@ -34,5 +34,4 @@ jobs:
           TRAVIS_BRANCH: next
           TRAVIS_COMMIT: $GITHUB_SHA
         run: |
-          chmod +x upload.sh
-          ./upload.sh dist_electron/Firetail*.*
+          bash upload.sh dist_electron/Firetail*.*
