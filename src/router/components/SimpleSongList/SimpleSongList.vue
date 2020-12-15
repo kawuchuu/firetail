@@ -4,6 +4,13 @@
             <i class="material-icons-outlined">person</i>
         </div>
         <div v-else>
+            <div class="actionsContainer">
+                <b>ACTIONS</b>
+                <div class="actionsButtons">
+                    <Button :button="{label: 'Play Random'}" @click.native="playRandom()"/>
+                    <Button :button="{label: 'Burn'}" @click.native="burn()"/>
+                </div>
+            </div>
             <div class="list-section">
                 <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
                 <i class="material-icons-outlined favourite-icon" style="visibility: hidden">favorite_border</i>
@@ -20,18 +27,43 @@
 </template>
 
 <script>
+import { ipcRenderer } from 'electron';
 import SongItem from './SimpleSongItem'
 import { mapState } from 'vuex'
+import Button from '@/components/Button.vue';
+
 
 export default {
     components: {
-        SongItem
+        SongItem,
+        Button
     },
     computed: mapState('audio', {
         list: function(state) {
             return state.currentList
+        },
+        burn: async function(state) {
+            let canBurn = await ipcRenderer.invoke('canBurn');
+            if (canBurn) {
+                let pathList = state.currentList.map(item => item.path);
+                
+                if (confirm(`Burn ${pathList.length} items to disc?`)) {
+                    //Start burning to disc
+                    let burnJobId = await ipcRenderer.invoke("burn", {
+                        files: pathList
+                    });
+                    console.log(`Starting burn job ${burnJobId}`);
+                }
+            } else {
+                alert("Burning a CD is not possible at this time");
+            }
         }
-    })
+    }),
+    methods: {
+        playRandom: () => {
+            alert("Play Random");
+        }
+    }
 }
 </script>
 
@@ -141,5 +173,9 @@ div.section {
         font-size: 134px;
         opacity: 0.25;
     }
+}
+
+.actionsContainer {
+    padding: 9px;
 }
 </style>

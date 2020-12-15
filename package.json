@@ -27,6 +27,7 @@
     "music-metadata": "^7.0.2",
     "node-vibrant": "^3.1.6",
     "qs": "^6.9.4",
+    "tmp": "^0.2.1",
     "vue": "^2.6.12",
     "vue-async-computed": "^3.9.0",
     "vue-i18n": "^8.21.1",
