@@ -40,3 +40,7 @@ ipcRenderer.addListener('getFavourites', (event, ids) => {
     })
     store.commit('nav/updateFavouriteSongs', favs)
 })
+
+ipcRenderer.on('playCustomSong', (event, args) => {
+    store.dispatch('audio/playSong', args, true)
+})

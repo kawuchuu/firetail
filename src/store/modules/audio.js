@@ -115,7 +115,7 @@ const actions = {
             audio.pause()
         }
     },
-    playSong(context, song) {
+    playSong(context, song, isCustom) {
         if (!audio.src) {
             audio.addEventListener('ended', () => {
                 if (this.state.audio.repeat) {
@@ -127,8 +127,13 @@ const actions = {
             })
         }
         audio.src = `local-resource://${song.path}`
-        context.commit('updateCurrentSong', context.state.queue.indexOf(song))
-        context.commit('updateCurrentSongString', song.id)
+        if (isCustom) {
+            context.commit('updateCurrentSong', 0)
+            context.commit('updateCurrentSongString', song.id)
+        } else {
+            context.commit('updateCurrentSong', context.state.queue.indexOf(song))
+            context.commit('updateCurrentSongString', song.id)
+        }
         context.commit('songMetadata', [song.title, song.artist])
         audio.play()
         audio.addEventListener('timeupdate', timeUpdate)

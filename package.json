@@ -1,7 +1,14 @@
 {
-  "name": "firetail-next",
-  "version": "0.7.0",
-  "private": true,
+  "name": "firetail",
+  "version": "0.7.0-snapshot",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kawuchuu/firetail/"
+  },
+  "description": "Audio Player",
+  "author": {
+    "name": "kawuchuu"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

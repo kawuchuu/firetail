@@ -51,7 +51,7 @@ export default {
             event.reply('getFavourites', favourites)
         })
 
-        ipcMain.handle('hasCustomLanguage', async event => {
+        ipcMain.handle('hasCustomLanguage', () => {
             if (app.commandLine.hasSwitch('lang')) {
                 let locale = app.commandLine.getSwitchValue('lang')
                 return locale
@@ -64,15 +64,17 @@ export default {
             shell.openExternal(link)
         })
 
-        ipcMain.handle('getSpotifyDetails', event => {
+        ipcMain.handle('getSpotifyDetails', () => {
             return db.fetchSpotifyDetails()
         })
 
-        ipcMain.handle('getVersion', event => {
-            return app.getVersion()
+        ipcMain.handle('getVersion', () => {
+            let ver = app.getVersion()
+            if (ver.endsWith('-snapshot')) return `${ver}`
+            else return ver 
         })
 
-        ipcMain.handle('getPort', event => {
+        ipcMain.handle('getPort', () => {
             return server.server.address().port
         })
 

@@ -10,6 +10,8 @@ import installExtension, {
 import ipc from './modules/ipc'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 import server from './modules/server'
+import { existsSync } from 'fs'
+import * as musicMetadata from 'music-metadata'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -40,6 +42,32 @@ async function createWindow() {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
         }
     })
+    //lock app
+    const getLock = app.requestSingleInstanceLock()
+    if (!getLock) {
+        app.quit()
+    } else {
+        app.on('second-instance', (event, args) => {
+            if (win) {
+                let lastElement = args[args.length - 1]
+                if (args.length > 1 && existsSync(lastElement) && lastElement != "dist_electron") {
+                    musicMetadata.parseFile(lastElement).then(meta => {
+                        let info = {
+                            title: meta.common.title,
+                            artist: meta.common.artist,
+                            album: meta.common.album,
+                            path: lastElement,
+                            hasImage: 0,
+                            id: 'customSong'
+                        }
+                        win.webContents.send('playCustomSong', info)
+                    })
+                }
+                if (win.isMinimized()) win.restore()
+                win.focus()
+            }
+        })
+    }
     server.startServer(app.getPath('userData'), win)
     if (isDevelopment) {
         win.setIcon(`${__dirname}/../public/icon.png`)
@@ -51,6 +79,20 @@ async function createWindow() {
 
     win.on('ready-to-show', () => {
         win.show()
+        let lastElement = process.argv[process.argv.length - 1]
+        if (process.argv.length > 1 && existsSync(lastElement) && lastElement != "dist_electron") {
+            musicMetadata.parseFile(lastElement).then(meta => {
+                let info = {
+                    title: meta.common.title,
+                    artist: meta.common.artist,
+                    album: meta.common.album,
+                    path: lastElement,
+                    hasImage: 0,
+                    id: 'customSong'
+                }
+                win.webContents.send('playCustomSong', info)
+            })
+        }
     })
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode

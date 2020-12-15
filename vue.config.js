@@ -33,7 +33,14 @@ module.exports = {
                         "nsis"
                     ],
                     icon: "assets/icon.ico",
-                    publisherName: "kawuchuu"
+                    publisherName: "kawuchuu",
+                    fileAssociations: [
+                        {
+                            ext: 'mp3',
+                            name: 'MP3',
+                            description: 'MP3 File'
+                        }
+                    ]
                 },
                 linux: {
                     target: [
