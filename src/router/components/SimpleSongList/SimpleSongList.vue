@@ -45,12 +45,18 @@ export default {
         burn: async function(state) {
             let canBurn = await ipcRenderer.invoke('canBurn');
             if (canBurn) {
-                let pathList = state.currentList.map(item => item.path);
-                
-                if (confirm(`Burn ${pathList.length} items to disc?`)) {
+                console.log(state.currentList);
+                if (confirm(`Burn ${state.currentList.length} items to disc?`)) {
                     //Start burning to disc
                     let burnJobId = await ipcRenderer.invoke("burn", {
-                        files: pathList
+                        items: state.currentList.map(item => {
+                            return {
+                                path: item.path,
+                                title: item.title,
+                                artist: item.artist
+                            }
+                        }),
+                        title: "CD" // In other views, replace this with the album name
                     });
                     console.log(`Starting burn job ${burnJobId}`);
                 }

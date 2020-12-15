@@ -23,7 +23,6 @@
     "axios": "^0.21.0",
     "better-sqlite3": "^7.1.0",
     "core-js": "^3.6.5",
-    "express": "^4.17.1",
     "music-metadata": "^7.0.2",
     "node-vibrant": "^3.1.6",
     "qs": "^6.9.4",

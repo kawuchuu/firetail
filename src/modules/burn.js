@@ -18,6 +18,10 @@ class Burn {
 
     async runJob() {
         this.sender.send("burnStarted", this.jobId);
+        this.sender.send("burnDescription", {
+            jobId: this.jobId,
+            description: `Preparing to burn...`
+        });
 
         //Transcode all the tracks
         tmp.dir({
@@ -29,35 +33,57 @@ class Burn {
                 return;
             }
 
-            console.log(`BURN: temporary directory: ${path}`);
-
-            //First, transcode all the files
-            let current = 0;
-            for (let file of this.options.files) {
-                await this.ffmpeg(file, `${path}/Track${current}.wav`);
-                current++;
+            try {
+                console.log(`BURN: temporary directory: ${path}`);
+    
+                //First, transcode all the files
+                let current = 0;
+                for (let file of this.options.items) {
+                    await this.ffmpeg(file.path, `${path}/Track${current}.wav`);
+                    current++;
+                }
+    
+                //Create a TOC file
+                let tocFile = [
+                    "CD_DA",
+                    "CD_TEXT {",
+                    "LANGUAGE_MAP {",
+                    "0:EN",
+                    "}",
+                    "LANGUAGE 0 {",
+                    `TITLE "${this.options.title}"`,
+                    "}",
+                    "}"
+                ]
+                for (let i = 0; i < this.options.items.length; i++) {
+                    let file = this.options.items[i];
+                    tocFile.push(`TRACK AUDIO`)
+                    tocFile.push("CD_TEXT {");
+                    tocFile.push("LANGUAGE 0 {");
+                    tocFile.push(`TITLE "${file.title}"`);
+                    tocFile.push(`ARRANGER "${file.artist}"`);
+                    tocFile.push(`COMPOSER "${file.artist}"`);
+                    tocFile.push(`PERFORMER "${file.artist}"`);
+                    tocFile.push(`SONGWRITER "${file.artist}"`);
+                    tocFile.push("}");
+                    tocFile.push("}");
+                    tocFile.push(`FILE "Track${i}.wav" 0`)
+                }
+                fs.writeFileSync(`${path}/contents.toc`, tocFile.join("\n"));
+    
+                console.log("BURN: TOC file written");
+    
+                //Burn files with cdrdao
+                let device = this.options.device || "/dev/sr0";
+                await this.cdrdao(device, path);
+        
+                //Burn job complete!
+                this.sender.send("burnComplete", this.jobId);
+            } catch {
+                this.sender.send("burnFailed", this.jobId);
+            } finally {
+                cleanup();
             }
-
-            //Create a TOC file
-            let tocFile = [
-                "CD_DA"
-            ]
-            for (let i = 0; i < this.options.files.length; i++) {
-                tocFile.push(`TRACK AUDIO`)
-                tocFile.push(`FILE "Track${i}.wav" 0`)
-            }
-            fs.writeFileSync(`${path}/contents.toc`, tocFile.join("\n"));
-
-            console.log("BURN: TOC file written");
-
-            //Burn files with cdrdao
-            let device = this.options.device || "/dev/sr0";
-            await this.cdrdao(device, path);
-
-            cleanup();
-
-            //Burn job complete!
-            this.sender.send("burnComplete", this.jobId);
         });
     }
 
@@ -90,9 +116,18 @@ class Burn {
                     console.log(line);
 
                     if (line.startsWith("Writing track")) {
+                        let parts = line.split(" ");
+                        this.sender.send("burnDescription", {
+                            jobId: this.jobId,
+                            description: `Burning Track ${parts[2]}`
+                        });
                         this.burnState = 1;
                     } else if (line.startsWith("Wrote ")) {
                         if (line.includes("blocks.")) {
+                            this.sender.send("burnDescription", {
+                                jobId: this.jobId,
+                                description: `Finalising CD`
+                            });
                             this.burnState = 2;
                         } else {
                             let parts = line.split(" ");
