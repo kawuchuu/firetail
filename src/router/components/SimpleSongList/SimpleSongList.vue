@@ -8,6 +8,13 @@
             </div>
         </div>
         <div class="root-wrapper">
+            <div v-show="isCDEnabled" class="actionsContainer">
+                <b>ACTIONS</b>
+                <div class="actionsButtons">
+                    <Button :button="{label: 'Play Random'}" @click.native="playRandom()"/>
+                    <Button :button="{label: 'Burn'}" @click.native="burn()"/>
+                </div>
+            </div>
             <div class="list-section" :class="currentScroll">
                 <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
                 <i class="material-icons-outlined favourite-icon" style="visibility: hidden">favorite_border</i>
@@ -25,13 +32,16 @@
 </template>
 
 <script>
+import { ipcRenderer } from 'electron';
 import SongItem from './SimpleSongItem'
 import { mapState } from 'vuex'
 import axios from 'axios'
+import Button from '@/components/Button.vue';
 
 export default {
     components: {
-        SongItem
+        SongItem,
+        Button
     },
     asyncComputed: {
         ...mapState('audio', {
@@ -63,7 +73,31 @@ export default {
                 } catch(err) {
                     return ''
                 }
-            }
+            },
+            burn: async function(state) {
+                if (process.platform == 'linux') {
+                    let canBurn = await ipcRenderer.invoke('canBurn');
+                    if (canBurn) {
+                        console.log(state.currentList);
+                        if (confirm(`Burn ${state.currentList.length} items to disc?`)) {
+                            //Start burning to disc
+                            let burnJobId = await ipcRenderer.invoke("burn", {
+                                items: state.currentList.map(item => {
+                                    return {
+                                        path: item.path,
+                                        title: item.title,
+                                        artist: item.artist
+                                    }
+                                }),
+                                title: "CD" // In other views, replace this with the album name
+                            });
+                            console.log(`Starting burn job ${burnJobId}`);
+                        }
+                    } else {
+                        alert("Burning a CD is not possible at this time");
+                    }
+                }
+            },
         }),
         ...mapState('nav', {
             screenCountNum: state => state.screenCountNum,
@@ -73,8 +107,14 @@ export default {
                 } else {
                     return ''
                 }
-            }
+            },
+            isCDEnabled: state => state.isCDBurnEnable
         })
+    },
+    methods: {
+        playRandom: () => {
+            alert("Play Random");
+        }
     }
 }
 </script>
@@ -219,5 +259,9 @@ div.section {
     background-image: url('../../../assets/no_artist.svg');
     border-radius: 100px;
     margin-right: 40px;
+}
+
+.actionsContainer {
+    padding: 9px;
 }
 </style>
