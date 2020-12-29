@@ -16,7 +16,7 @@ const state = () => ({
     queue: [],
     currentList: [],
     shuffled: false,
-    repeat: false,
+    repeat: 'off',
     spotifyActiveToken: "",
     volume: 1
 })
@@ -85,13 +85,24 @@ const mutations = {
         if (store.state.nav.currentView == store.state.nav.playingView) {
             state.currentList = sort.sortArray(state.currentList, 'artist')
         }
-        state.currentSongIndex = state.queue.indexOf(currentSong)
+        let index = state.queue.indexOf(currentSong)
+        state.queue.splice(index, 1)
+        state.queue.splice(0, 0, currentSong)
+        state.currentSongIndex = 0
     },
     toggleRepeat(state) {
-        if (state.repeat) {
-            state.repeat = false
-        } else {
-            state.repeat = true
+        switch(state.repeat) {
+            case 'off':
+                state.repeat = 'all'
+                break;
+            case 'all':
+                state.repeat = 'one'
+                break;
+            case 'one':
+                state.repeat = 'off'
+                break;
+            default:
+                state.repeat = 'off'
         }
     },
     setVolume(state, vol) {
@@ -104,6 +115,18 @@ const mutations = {
     },
     getNoSongs(state) {
         state.currentList = []
+    },
+    sortShuffleTop(state) {
+        let currentSong = state.queue[state.currentSongIndex]
+        let index = state.queue.indexOf(currentSong)
+        state.queue.splice(index, 1)
+        state.queue.splice(0, 0, currentSong)
+        state.currentSongIndex = 0
+    },
+    setStopState(state) {
+        state.songArtist = ''
+        state.songTitle = 'No song playing...'
+        state.queue = []
     }
 }
 
@@ -115,20 +138,39 @@ const actions = {
             audio.pause()
         }
     },
-    playSong(context, song) {
+    playSong(context, song, isCustom) {
+        if (song == null && context.state.repeat == 'off') {
+            context.commit('setStopState')
+            if (audio.src) {
+                audio.pause()
+                audio.src == ''
+                context.state.currentSong = null
+                context.state.currentSongIndex = null
+                context.state.currentTime = null
+                context.state.duration = null
+            }
+            return
+        }
         if (!audio.src) {
-            audio.addEventListener('ended', () => {
-                if (this.state.audio.repeat) {
-                    this.state.audio.currentTime = 0
+            audio.addEventListener('ended', () => {  
+                if (context.state.repeat == 'one') {
+                    context.state.currentTime = 0
                     audio.play()
+                } else if (context.state.repeat == 'all') {
+                    context.dispatch('playSong', context.state.queue[0])
                 } else {
                     context.dispatch('playSong', context.state.queue[context.state.currentSongIndex + 1])
                 }
             })
         }
         audio.src = `local-resource://${song.path}`
-        context.commit('updateCurrentSong', context.state.queue.indexOf(song))
-        context.commit('updateCurrentSongString', song.id)
+        if (isCustom) {
+            context.commit('updateCurrentSong', 0)
+            context.commit('updateCurrentSongString', song.id)
+        } else {
+            context.commit('updateCurrentSong', context.state.queue.indexOf(song))
+            context.commit('updateCurrentSongString', song.id)
+        }
         context.commit('songMetadata', [song.title, song.artist])
         audio.play()
         audio.addEventListener('timeupdate', timeUpdate)
@@ -165,8 +207,14 @@ let updateMediaSession = song => {
         album: song.album,
     }
     if (song.hasImage == 1) {
-        let artistAlbum = `${song.artist}${song.album}`.replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')
-        metadata['artwork'] = [{src: `http://localhost:56741/${artistAlbum}.jpg`, sizes: '512x512', type: 'image/jpeg'}]
+        let port = store.state.nav.port
+        let artistAlbum = ''
+        if (song.id == 'customSong') {
+            artistAlbum = song.customImage
+        } else {
+            artistAlbum = `http://localhost:${port}/${(song.artist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
+        }
+        metadata['artwork'] = [{src: artistAlbum, sizes: '512x512', type: 'image/jpeg'}]
     }
     setSkipPrevButtons()
     navigator.mediaSession.metadata = new window.MediaMetadata(metadata)

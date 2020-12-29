@@ -1,10 +1,14 @@
 <template>
     <div class="song-info">
-        <div class="song-album-art" :style="getImage"></div>
+        <div class="colour-bg" :style="getColour"></div>
+        <div class="large-album-art" :class="hoverShow" >
+            <div class="inner" :style="getImage"></div>
+        </div>
+        <div class="song-album-art" :style="getImage" @mouseover="hoverImage" @mouseleave="leaveImage"></div>
         <div class="title-artist">
             <div class="song-title-fav">
                 <div class="song-title">{{title}}</div>
-                <i class="material-icons-outlined favourite-icon" :class="isFavourite" @click="handleFavourite">{{ favouriteIcon }}</i>
+                <i class="material-icons-outlined favourite-icon" :class="[isFavourite, isInLibrary]" @click="handleFavourite">{{ favouriteIcon }}</i>
             </div>
             <div class="song-artist">{{artist}}</div>
         </div>
@@ -14,25 +18,49 @@
 <script>
 import {mapState} from 'vuex'
 import {ipcRenderer} from 'electron'
+import * as Vibrant from 'node-vibrant'
 
 export default {
     computed: {
         ...mapState('audio', {
             title: state => state.songTitle,
-            artist: state => state.songArtist
+            artist: state => state.songArtist,
+            isInLibrary: state => {
+                if (state.queue.length == 0 || state.queue[state.currentSongIndex].id == 'customSong') {
+                    return 'hide'
+                } else {
+                    ''
+                }
+            }
         }),
         getImage() {
             let song = this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex]
             if (song) {
+                let port = this.$store.state.nav.port
                 if (song.hasImage == 1) {
-                    let artistAlbum = `${song.artist}${song.album}`.replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')
-                    return `background-image: url('http://localhost:56741/${artistAlbum}.jpg')`
+                    let artistAlbum = ''
+                    if (song.id == 'customSong') {
+                        artistAlbum = song.customImage
+                    } else {
+                        artistAlbum = `http://localhost:${port}/${(song.artist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
+                    }
+                    Vibrant.from(artistAlbum).getPalette((err, palette) => {
+                        this.$store.commit('nav/updatePlayingBarColour', palette.Vibrant.hex)
+                    })
+                    return `background-image: url('${artistAlbum}')`
                 } else {
+                    this.$store.commit('nav/updatePlayingBarColour', null)
                     return ''
                 }
             } else {
+                this.$store.commit('nav/updatePlayingBarColour', null)
                 return ''
             }
+        },
+        getColour() {
+            let colour = this.$store.state.nav.playingBarColour
+            if (colour == null) return ''
+            return `background-color: ${colour}`
         },
         favouriteIcon() {
             if (this.$store.state.nav.favouriteSongs.indexOf(this.$store.state.audio.currentSong) != -1) {
@@ -45,6 +73,16 @@ export default {
             if (this.$store.state.nav.favouriteSongs.indexOf(this.$store.state.audio.currentSong) != -1) {
                 console.log('what')
                 return 'active'
+            } else {
+                return ''
+            }
+        },
+        hoverShow() {
+            let song = this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex]
+            if (!song) return ''
+            if (song.hasImage == 0) return ''
+            if (this.showLargeImage) {
+                return 'hover'
             } else {
                 return ''
             }
@@ -64,12 +102,23 @@ export default {
         },
         removeFromFavourites() {
             ipcRenderer.send('removeFavourite', this.$store.state.audio.currentSong)
+        },
+        hoverImage() {
+            this.showLargeImage = true
+        },
+        leaveImage() {
+            this.showLargeImage = false
+        }
+    },
+    data() {
+        return {
+            showLargeImage: false
         }
     }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .song-info {
     display: flex;
     align-items: center;
@@ -131,9 +180,69 @@ export default {
     color: var(--hl-txt)
 }
 
+.favourite-icon.hide {
+    display: none;
+}
+
 .song-title-fav {
     display: flex;
     align-items: center;
     margin-bottom: 5px;
+}
+
+.colour-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    transform: translateX(-15px);
+    opacity: 0.1;
+    transition: .1s;
+}
+
+.large-album-art {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    background: #000;
+    transform: translateY(-215px);
+    border-radius: 5px;
+    box-shadow: 0px 5px 10px rgba(0,0,0,.15);
+    pointer-events: none;
+    opacity: 0;
+    //transition: .15s;
+    border: solid 1px var(--bd);
+
+    .inner {
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+        background-color: #000;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        z-index: 2;
+        position: relative;
+        transition: .15s;
+    }
+}
+
+.large-album-art::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    transform: rotate(-45deg);
+    background: #000;
+    position: absolute;
+    bottom: -8px;
+    left: 18px;
+    border: solid 1px var(--bd);
+    border-radius: 2px;
+    box-shadow: 0px 5px 10px rgba(0,0,0,.15);
+    z-index: 1;
+}
+
+.large-album-art.hover {
+    opacity: 1;
 }
 </style>

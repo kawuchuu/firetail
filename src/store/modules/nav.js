@@ -61,7 +61,12 @@ const state = () => ({
     artists: [],
     currentView: 'all',
     playingView: null,
-    favouriteSongs: []
+    favouriteSongs: [],
+    scrolled: 0,
+    playingBarColour: null,
+    ver: 'unknown',
+    port: '0',
+    isCDBurnEnable: false,
 })
 
 const mutations = {
@@ -86,6 +91,24 @@ const mutations = {
     },
     updateFavouriteSongs(state, ids) {
         state.favouriteSongs = ids
+    },
+    updateCurrentScroll(state, scrolled) {
+        state.scrolled = scrolled
+    },
+    updatePlayingBarColour(state, colour) {
+        state.playingBarColour = colour
+    },
+    updateVer(state, ver) {
+        state.ver = ver
+    },
+    updatePort(state, port) {
+        state.port = port
+    },
+    addItemToNav(state, item) {
+        state.navs.push(item)
+    },
+    enableCDBurn(state) {
+        state.isCDBurnEnable = true
     }
 }
 

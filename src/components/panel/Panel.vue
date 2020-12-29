@@ -69,7 +69,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 @keyframes preventClick {
     from {
         pointer-events: all;
@@ -135,11 +135,11 @@ export default {
     max-width: 600px;
     width: 90%;
     max-height: 80%;
-    border-radius: 20px;
-    background-color: var(--bg);
+    border-radius: 10px;
+    background-color: #282828;
     z-index: 21;
     position: fixed;
-    border: solid 2px var(--bd);
+    //border: solid 2px var(--bd);
 }
 
 .top {
@@ -181,7 +181,7 @@ export default {
 .panel-bg {
     position: fixed;
     z-index: 20;
-    background-color: rgba(0,0,0,.7);
+    background-color: rgba(0,0,0,.8);
     width: 100%;
     height: 100%;
     /* backdrop-filter: blur(10px); */

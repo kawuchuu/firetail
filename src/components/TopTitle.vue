@@ -1,11 +1,11 @@
 <template>
-    <div class="top-title" :style="show">
-        <!-- <i class="material-icons-outlined" id="tabBackButton" style="cursor: pointer"
-            v-on:click="backBtn">arrow_back</i> -->
-        <div class="tab-album-art"></div>
-        <div>
-            <h1>{{ screenTitle }}</h1>
-            <p>{{ screenCountNum }} {{ screenCountType }}</p>
+    <div class="root">
+        <div class="top-title" :style="show">
+            <div class="tab-album-art"></div>
+            <div>
+                <h1>{{ screenTitle }}</h1>
+                <p>{{ screenCountNum }} {{ screenCountType }}</p>
+            </div>
         </div>
     </div>
 </template>
@@ -30,15 +30,21 @@ export default {
 </script>
 
 <style scoped>
+.root {
+    background-color: #000000;
+}
+
 .top-title {
     padding: 35px 45px;
     display: flex;
     align-items: center;
+    background: linear-gradient(#e74e8e, #e74e8ea6)
 }
 
 .top-title h1 {
-    font-size: 36px;
+    font-size: 64px;
     margin: 0;
+    letter-spacing: -2px;
 }
 
 .top-title i {
@@ -49,7 +55,7 @@ export default {
 
 .top-title p {
     margin: 0px;
-    margin-top: 10px;
+    margin-top: 5px;
     opacity: .75;
 }
 

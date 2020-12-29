@@ -40,15 +40,32 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .artists-item {
     height: 60px;
-    border-bottom: solid 1px var(--bd);
+    border-radius: 10px;
+}
+
+.artists-item a span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    opacity: 0.65;
 }
 
 .router-link-exact-active {
-    background-color: var(--li-hv);
+    background-color: #ffffff18;
+    border-radius: 10px;
     cursor: default;
+}
+
+.artists-item a.router-link-exact-active span {
+    opacity: 1;
+    font-weight: bold;
+}
+
+.artists-item a.router-link-exact-active div {
+    background-color: var(--bg)
 }
 
 .artists-item a {
@@ -58,20 +75,16 @@ export default {
 }
 
 .artists-item:hover {
-    background-color: var(--li-hv)
-}
-
-.artists-item a span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    a span {
+        opacity: 1;
+    }
 }
 
 .artist-img {
     min-width: 45px;
     min-height: 45px;
     margin: 0px 15px;
-    background-color: var(--fg-bg);
+    background-color: #1e1e1ebe;
     border-radius: 60px;
     background-image: url('../../assets/no_artist.svg');
     background-size: cover;

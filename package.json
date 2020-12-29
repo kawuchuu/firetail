@@ -1,7 +1,14 @@
 {
-  "name": "firetail-next",
-  "version": "0.6.0",
-  "private": true,
+  "name": "firetail",
+  "version": "0.7.0-snapshot",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kawuchuu/firetail/"
+  },
+  "description": "Audio Player",
+  "author": {
+    "name": "kawuchuu"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -16,13 +23,15 @@
     "axios": "^0.21.0",
     "better-sqlite3": "^7.1.0",
     "core-js": "^3.6.5",
-    "express": "^4.17.1",
     "music-metadata": "^7.0.2",
+    "node-vibrant": "^3.1.6",
     "qs": "^6.9.4",
+    "tmp": "^0.2.1",
     "vue": "^2.6.12",
     "vue-async-computed": "^3.9.0",
     "vue-i18n": "^8.21.1",
     "vue-router": "^3.4.5",
+    "vue-virtual-scroll-list": "^2.3.2",
     "vuex": "^3.5.1"
   },
   "devDependencies": {

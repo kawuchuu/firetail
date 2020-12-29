@@ -16,23 +16,26 @@
             </svg>
         </div>
         <Panel/>
-        <TopBar/>
-        <SideBar/>
-        <div class="screen-container">
-            <TopTitle/>
-            <router-view/>
+        <div class="main-content-wrapper">
+            <SideBar/>
+            <div class="screen-container">
+                <TopBar/>
+                <div class="container" ref="container">
+                    <router-view/>
+                </div>
+            </div>
         </div>
         <PlayingBar/>
     </div>
 </template>
 
 <script>
-import TopBar from './components/TopBar.vue'
+import TopBar from './components/TopBar'
 import SideBar from './components/sidebar/SideBar.vue'
 import PlayingBar from './components/playingbar/PlayingBar'
-import TopTitle from './components/TopTitle'
 import Panel from './components/panel/Panel'
 import { ipcRenderer } from 'electron'
+//import PluginComp from './PluginComp'
 
 export default {
     name: 'App',
@@ -40,7 +43,6 @@ export default {
         TopBar,
         SideBar,
         PlayingBar,
-        TopTitle,
         Panel
     },
     methods: {
@@ -52,13 +54,40 @@ export default {
             console.log(evt.target.files)
             ipcRenderer.send('addToLibrary', files)
         }
+    },
+    async mounted() {
+        let port = await ipcRenderer.invoke('getPort')
+        this.$store.commit('nav/updatePort', port)
+        let ver = await ipcRenderer.invoke('getVersion')
+        document.title = `Firetail ${ver}`
+        this.$refs.container.addEventListener('scroll', e => {
+            this.$store.commit('nav/updateCurrentScroll', e.target.scrollTop)
+        })
     }
 }
 </script>
 
-<style>
+<style lang="scss">
 .st0{fill:none;stroke:#221f1f;stroke-width:55;}
 .st1{fill:none;stroke:#221f1f;stroke-width:55;stroke-miterlimit:10;}
+
+.main-content-wrapper {
+    display: flex;
+    height: calc(100vh - 85px);
+}
+
+.screen-container {
+    
+}
+
+.container {
+    overflow: hidden;
+    overflow-y: auto;
+    position: fixed;
+    width: calc(100% - #{$sidebarwidth});
+    height: calc(100% - 135px);
+    padding-top: 50px;
+}
 
 body {
     margin: 0;
@@ -91,7 +120,7 @@ a {
 html.dark {
     --bg: #131313;
     --bg-op: #181818ad;
-    --text: #dfdfdf;
+    --text: #ffffff;
     --fg-bg: #1e1e1e;
     --fg-bg-op: #25252584;
     --bd: #3a3a3a;
@@ -101,11 +130,11 @@ html.dark {
     --hl: #252525;
 }
 
-html.light {
+html.panda {
     --bg: #f3f3f3;
     --bg-op: #a6a6a633;
     --text: #3d3d3d;
-    --fg-bg: #ffffff;
+    --fg-bg: #000000;
     --fg-bg-op: #ffffff84;
     --bd: #b4b4b4;
     --li-hv: #dddddd;
@@ -170,17 +199,12 @@ html.firetail {
 }
 
 .screen-container {
-    width: calc(100vw - 182px);
-    height: calc(100vh - 139px);
-    margin-top: 52px;
-    margin-left: 182px;
-    overflow: hidden;
-    overflow-y: auto;
+    
 }
 
 .load-spinner {
-    border: 2px solid transparent;
-    border-top: 2px solid var(--text);
+    border: 2px solid var(--text);
+    border-left: 2px solid transparent;
     border-radius: 50%;
     width: 30px;
     height: 30px;

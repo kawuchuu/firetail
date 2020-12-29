@@ -5,6 +5,13 @@ module.exports = {
             poll: true
         }
     },
+    css: {
+        loaderOptions: {
+            sass: {
+                additionalData: `@import "@/scss/_variables.scss";`
+            }
+        }
+    },
     pluginOptions: {
         electronBuilder: {
             nodeIntegration: true,
@@ -26,7 +33,14 @@ module.exports = {
                         "nsis"
                     ],
                     icon: "assets/icon.ico",
-                    publisherName: "kawuchuu"
+                    publisherName: "kawuchuu",
+                    fileAssociations: [
+                        {
+                            ext: 'mp3',
+                            name: 'MP3',
+                            description: 'MP3 File'
+                        }
+                    ]
                 },
                 linux: {
                     target: [

@@ -1,6 +1,8 @@
-import {app, ipcMain, shell} from 'electron'
+import { app, ipcMain, shell } from 'electron'
 import db from './database'
 import files from './files'
+import server from './server'
+import BurnJob from './burn'
 
 export default {
     start(win) {
@@ -10,12 +12,12 @@ export default {
             let library = db.getLibrary()
             win.send('library', library)
         })
-        
+
         ipcMain.on('library', async () => {
             let library = db.getLibrary()
             win.send('library', library)
         })
-        
+
         ipcMain.on('deleteLibrary', () => {
             db.deleteLibrary()
             win.send('library', [])
@@ -50,7 +52,7 @@ export default {
             event.reply('getFavourites', favourites)
         })
 
-        ipcMain.handle('hasCustomLanguage', async event => {
+        ipcMain.handle('hasCustomLanguage', () => {
             if (app.commandLine.hasSwitch('lang')) {
                 let locale = app.commandLine.getSwitchValue('lang')
                 return locale
@@ -63,9 +65,34 @@ export default {
             shell.openExternal(link)
         })
 
-        ipcMain.handle('getSpotifyDetails', event => {
+        ipcMain.handle('getSpotifyDetails', () => {
             return db.fetchSpotifyDetails()
         })
 
+        ipcMain.handle('getVersion', () => {
+            let ver = app.getVersion()
+            if (ver.endsWith('-snapshot')) return `${ver}`
+            else return ver
+        })
+
+        ipcMain.handle('getPort', () => {
+            return server.server.address().port
+        })
+
+        ipcMain.handle('canBurn', async event => {
+            return await BurnJob.canBurn();
+        });
+
+        ipcMain.handle('burn', (event, options) => {
+            console.log("burn job requested");
+
+            //TODO: make sure we're on Linux
+            if (process.platform === "linux") {
+                let burnJob = new BurnJob(options, event.sender);
+                return burnJob.id;
+            } else {
+                return null;
+            }
+        });
     }
 }

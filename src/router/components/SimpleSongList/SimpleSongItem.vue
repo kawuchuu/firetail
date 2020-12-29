@@ -109,8 +109,6 @@ export default {
 
 <style lang="scss" scoped>
 .results-link {
-    border-bottom: 1px solid var(--bd);
-    background: var(--bg);
     overflow: hidden;
     position: relative;
     height: 55px;
@@ -118,10 +116,11 @@ export default {
     align-items: center;
     transition: .25s;
     transition-property: margin-left;
+    border-radius: 5px;
 }
 
 li:hover {
-    background: var(--li-hv);
+    background: #ffffff18;
 }
 
 li.nohover:hover {
@@ -161,7 +160,7 @@ li.nohover:hover {
 .list-title {
     margin: 0;
     margin-left: 14px;
-    width: 100%;
+    width: calc(100% - 50px);
     padding-right: 40px !important;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -180,6 +179,9 @@ li.nohover:hover {
     span {
         font-size: 12px;
         opacity: 0.75;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
 
@@ -196,7 +198,6 @@ li.nohover:hover {
 .list-duration {
     width: 40px;
     text-align: right;
-    padding-right: 20px;
 }
 
 .results-link .favourite-icon {

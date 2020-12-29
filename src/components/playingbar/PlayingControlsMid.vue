@@ -1,12 +1,12 @@
 <template>
-    <div class="track-controls">
+    <div class="track-controls" :class="[queueNotEmpty, enableBtn]">
         <div class="track-controls-inner-container">
             <div class="control-buttons">
                 <i class="material-icons-outlined repeat-shuffle" title="Shuffle" @click="shuffle" :class="isShuffled">shuffle</i>
                 <i class="material-icons-outlined skip-prev" title="Previous" @click="prev">skip_previous</i>
                 <i class="material-icons play-pause-icon" title="Play/pause" @click="playPause">{{playPauseIcon}}</i>
                 <i class="material-icons-outlined skip-prev" title="Next" @click="next">skip_next</i>
-                <i class="material-icons-outlined repeat-shuffle" title="Repeat" @click="repeat" :class="isRepeat">repeat</i>
+                <i class="material-icons-outlined repeat-shuffle" title="Repeat" @click="repeat" :class="isRepeat">{{repeatIcon}}</i>
             </div>
             <div class="seek-time-inner-container">
                 <p class="song-duration" >{{ songCurrent }}</p>
@@ -15,7 +15,9 @@
                         <div ref="seekFill" :style="fill" class="fill"></div>
                         <div ref="seekFillHover" class="fill-hover"></div>
                         <div ref="handle" class="handle"></div>
-                        <div ref="hoverIndicate" class="seek-hover-indicate">{{ hoverIndicateNum }}</div>
+                        <div ref="hoverIndicate" class="seek-hover-indicate">
+                            <div class="num">{{ hoverIndicateNum }}</div>
+                        </div>
                     </div>
                 </div>
                 <p class="song-duration">{{ songDuration }}</p>
@@ -70,11 +72,28 @@ export default {
                 }
             },
             isRepeat: state => {
-                if (state.repeat) {
+                if (state.repeat != 'off') {
                     return 'active'
                 } else {
                     return ''
                 }
+            },
+            repeatIcon: state => {
+                if (state.repeat == 'one') {
+                    return 'repeat_one'
+                } else {
+                    return 'repeat'
+                }
+            },
+            queueNotEmpty: state => {
+                if (state.queue.length == 0) {
+                    return 'notplaying'
+                } else return ''
+            },
+            enableBtn: state => {
+                if (state.queue.length == 1 && state.queue[0].id == 'customSong') {
+                    return 'hide'
+                } else return ''
             }
         })
     },
@@ -159,10 +178,18 @@ export default {
             //this.$refs.seekFill.classList.remove('hover')
         },
         next() {
-            this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex + 1])
+            if (this.$store.state.audio.repeat != 'off' && this.$store.state.audio.currentSongIndex == this.$store.state.audio.queue.length - 1) {
+                this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[0])
+            } else {
+                this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex + 1])
+            }
         },
         prev() {
-            this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex - 1])
+            if (this.$store.state.audio.repeat != 'off' && this.$store.state.audio.currentSongIndex == 0) {
+                this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.queue.length - 1])
+            } else {
+                this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex - 1])
+            }
         },
         shuffle() {
             this.$store.commit('audio/doShuffle')
@@ -174,7 +201,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .track-controls {
     overflow: hidden;
     width: 40%;
@@ -215,7 +242,7 @@ export default {
 .seek-bar {
     margin: 10px 0px;
     width: 100%;
-    background: var(--bd);
+    background: #ffffff23;
     display: flex;
     align-items: center;
     border-radius: 999px;
@@ -229,7 +256,8 @@ export default {
 
 .fill {
     height: 4px;
-    background: linear-gradient(to right, var(--gradient1), var(--gradient2));
+    //background: linear-gradient(to right, var(--gradient1), var(--gradient2));
+    background: var(--hl-txt);
     border-radius: 10000px;
     transition: cubic-bezier(0, 1, 0.35, 1) .25s;
     width: 0%;
@@ -247,7 +275,7 @@ export default {
 .handle {
     width: 0px;
     height: 0px;
-    background: var(--gradient2);
+    background: var(--hl-txt);
     border-radius: 11111px;
     margin-left: -5px;
     transform: scale(1.5);
@@ -256,15 +284,48 @@ export default {
 }
 
 .seek-hover-indicate {
-    background: var(--bd);
+    background: #000000;
+    border: solid 1px var(--bd);
+    box-shadow: 0px 5px 10px rgba(0,0,0,.15);
     border-radius: 5px;
     transform: scale(0);
     position: fixed;
     transition: 0.1s;
     transition-property: transform;
-    padding: 5px 10px;
+    padding: 0px 10px;
     left: 0;
     pointer-events: none;
+    font-size: 14px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.seek-hover-indicate::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    transform: rotate(-45deg);
+    background: #000;
+    position: absolute;
+    bottom: -5px;
+    left: 17px;
+    border: solid 1px var(--bd);
+    border-radius: 2px;
+    box-shadow: 0px 5px 10px rgba(0,0,0,.15);
+    z-index: 1;
+}
+
+.num {
+    background: #000000;
+    z-index: 2;
+    position: relative;
+    height: 30px;
+    min-width: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .handle-hover {
@@ -274,7 +335,7 @@ export default {
 }
 
 .seek-hover-indicate.hover  {
-    transform: scale(1) translateY(-30px);
+    transform: scale(1) translateY(-35px);
 }
 
 .fill-hover.hover {
@@ -313,6 +374,11 @@ export default {
     font-size: 30px;
 }
 
+.track-controls.hide .skip-prev {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 .repeat-shuffle {
     font-size: 22px;
 }
@@ -326,5 +392,10 @@ export default {
 .control-buttons i:hover, #closeSidemenu:hover, #albumArtistBack:hover, .playing-bar-hidden i:hover, .top-controls i:hover {
     opacity: 0.6;
     cursor: pointer;
+}
+
+.track-controls.notplaying {
+    opacity: 0.35;
+    pointer-events: none;
 }
 </style>

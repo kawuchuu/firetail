@@ -49,6 +49,9 @@ export default {
     display: flex;
     align-items: center;
     cursor: pointer;
+}
+
+.top-button:not(:first-child) {
     margin-left: 20px;
 }
 
@@ -57,11 +60,11 @@ export default {
 }
 
 .top-button i {
-    font-size: 20px;
+    font-size: 17px;
 }
 
 .top-button span {
-    margin-left: 5px;
-    font-size: 14px;
+    margin-left: 10px;
+    font-size: 13px;
 }
 </style>

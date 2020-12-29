@@ -6,10 +6,29 @@ import Unknown from './components/Unknown'
 import Artists from './components/Artists'
 import store from '../store'
 import tr from '../translation'
+import VirtualList from 'vue-virtual-scroll-list'
 
-Vue.use(VueRouter)
+Vue.component('VirtualList', VirtualList)
 
-const router = new VueRouter({
+class VueRouterEx extends VueRouter {
+    constructor(options) {
+        super(options)
+        this.matcher
+        const {addRoutes} = this.matcher
+        const {routes} = options
+
+        this.routes = routes
+
+        this.matcher.addRoutes = newRoutes => {
+            this.routes.push(...newRoutes)
+            addRoutes(newRoutes)
+        }
+    }
+}
+
+Vue.use(VueRouterEx)
+
+const router = new VueRouterEx({
     routes: [
         {
             path: '/',
@@ -28,7 +47,7 @@ const router = new VueRouter({
             ]
         },
         {
-            path: '/:pathMatch(.*)',
+            path: '*',
             component: Unknown,
             name: 'Unknown'
         }

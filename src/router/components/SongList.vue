@@ -1,17 +1,34 @@
 <template>
     <div class="root">
-        <div class="list-section">
-            <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
-            <i class="material-icons-outlined favourite-icon" style="visibility: hidden">favorite_border</i>
-            <div class="artist-title-album section">
-                <p class="list-title">{{ $t('songList.listTitle') }}</p>
-                <p class="list-artist">{{ $t('songList.listArtist') }}</p>
-                <p class="list-album">{{ $t('songList.listAlbum') }}</p>
-                <p class="list-duration"><i class="material-icons-outlined">schedule</i></p>
+        <div class="bg-gradient"></div>
+        <div class="sticky-bg" ref="stickyBg" :class="currentScroll">
+            <div class="bg-inner">
+                <h3>All Songs</h3>
             </div>
         </div>
-        <div class="wrapper">
-            <SongItem v-for="item in list" :song="item" :key="item.id"/>
+        <div class="top-title" ref="topTitle">
+            <div class="tab-album-art"></div>
+            <div>
+                <h1>All Songs</h1>
+                <p>{{ screenCountNum }} songs</p>
+            </div>
+        </div>
+        <div class="root-wrapper">
+            <div class="list-gradient-fade"></div>
+            <div class="list-section" :class="currentScroll">
+                <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
+                <i class="material-icons-outlined favourite-icon" style="visibility: hidden">favorite_border</i>
+                <div class="artist-title-album section">
+                    <p class="list-title">{{ $t('songList.listTitle') }}</p>
+                    <p class="list-artist">{{ $t('songList.listArtist') }}</p>
+                    <p class="list-album">{{ $t('songList.listAlbum') }}</p>
+                    <p class="list-duration"><i class="material-icons-outlined">schedule</i></p>
+                </div>
+                <div class="sec-border"></div>
+            </div>
+            <div class="wrapper">
+                <SongItem v-for="item in list" :song="item" :key="item.id"/>
+            </div>
         </div>
     </div>
 </template>
@@ -24,17 +41,48 @@ export default {
     components: {
         SongItem
     },
-    computed: mapState('audio', {
-        list: function(state) {
-            return state.currentList
-        }
-    })
+    computed: {
+        ...mapState('audio', {
+            list: function(state) {
+                return state.currentList
+            }
+        }),
+        ...mapState('nav', {
+            screenCountNum: state => state.screenCountNum,
+            currentScroll: state => {
+                if (state.scrolled > 200) {
+                    return 'sticky'
+                } else {
+                    return ''
+                }
+            }
+        })
+    }
 }
 </script>
 
-<style scoped>
-.root {
+<style lang="scss" scoped>
+$currentGradColour: $gradient1;
+$subColour: desaturate(darken($currentGradColour, 25%), 40%);
+
+.wrapper {
+    padding: 5px 20px;
+}
+
+.bg-gradient {
+    position: absolute;
     width: 100%;
+    height: 450px;
+    background: linear-gradient($currentGradColour, transparent);
+    top: 0;
+    z-index: -1;
+}
+
+.list-gradient-fade {
+    width: 100%;
+    height: 300px;
+    position: absolute;
+    background: linear-gradient(#12121233, transparent);
 }
 
 .artist-title-album {
@@ -86,11 +134,17 @@ export default {
     align-items: center;
     top: 0;
     z-index: 3;
-    background: var(--bg);
     text-transform: uppercase;
     letter-spacing: 1px;
-    border-bottom: solid 1px var(--bd);
+    border-bottom: solid 1px #ffffff3f;
     position: sticky;
+    margin-bottom: 5px;
+    margin: 0px 20px;
+}
+
+.list-section.sticky {
+    margin: 0;
+    padding: 0px 20px;
 }
 
 .list-section .list-artist:hover, .list-section .list-album:hover, .list-section .list-duration:hover {
@@ -125,5 +179,52 @@ div.section {
 
 .results-link i, .list-section i {
     padding: 0 7px;
+}
+
+.top-title {
+    padding: 50px 70px;
+    display: flex;
+    align-items: center;
+    //background: linear-gradient(#e74e8e, #e74e8ea6)
+}
+
+.top-title h1 {
+    font-size: 64px;
+    margin: 0;
+    letter-spacing: -2px;
+}
+
+.top-title p {
+    margin: 0px;
+    margin-top: 5px;
+    opacity: .75;
+}
+
+.sticky-bg {
+    position: fixed;
+    top: 0;
+    height: 81px;
+    width: 100%;
+    background: $subColour;
+    z-index: 3;
+    opacity: 0;
+    transition: 0.15s;
+    transition-property: opacity;
+
+    .bg-inner {
+        height: 50px;
+        display: flex;
+        align-items: center;
+
+        h3 {
+            margin: 0 70px;
+            font-size: 24px;
+            letter-spacing: -1px;
+        }
+    }
+}
+
+.sticky-bg.sticky {
+    opacity: 1;
 }
 </style>

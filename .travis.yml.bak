@@ -1,0 +1,40 @@
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode9.2
+      language: node_js
+      node_js: "12.14.1"
+      env:
+        - ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true
+        - RELEASE_NAME="continuous"
+        - RELEASE_TITLE="Continuous build"
+        - UPLOADTOOL_ISPRERELEASE=true
+    - os: linux
+      language: node_js
+      node_js: "12.14.1"
+      env:
+        - ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true
+        - UPLOADTOOL_ISPRERELEASE=true
+
+before_install:
+  - if [ $TRAVIS_OS_NAME = linux ]; then npm i -g electron-builder; fi
+
+script:
+  - |
+    npm i
+    npm run electron:build
+
+after_success:
+  - |
+    cd dist_electron
+    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+       wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+       bash upload.sh Firetail*.AppImage
+    else
+       wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+       bash upload.sh Firetail*.dmg
+    fi
+
+branches:
+  only:
+  - next
