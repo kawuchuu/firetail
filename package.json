@@ -20,7 +20,7 @@
   },
   "main": "background.js",
   "dependencies": {
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "better-sqlite3": "^7.1.0",
     "core-js": "^3.6.5",
     "music-metadata": "^7.0.2",
