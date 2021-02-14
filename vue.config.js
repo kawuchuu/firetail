@@ -58,7 +58,8 @@ module.exports = {
                         Icon: "firetail",
                         Terminal: "false"
                     }
-                }
+                },
+                publish: null
             }
         }
     }
