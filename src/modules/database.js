@@ -58,7 +58,7 @@ export default {
     },
     getSomeFromColumn(column, query) {
         if (column == 'artist' || column == 'album') {
-            let rows = db.prepare(`SELECT * FROM library WHERE ${column}='${query}'`).all()
+            let rows = db.prepare(`SELECT * FROM library WHERE ${column} = ?`).all(query)
             return rows
         } else return []
     },
