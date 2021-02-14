@@ -4,6 +4,7 @@ import SongList from './components/SongList'
 import SimpleSongList from './components/SimpleSongList/SimpleSongList'
 import Unknown from './components/Unknown'
 import Artists from './components/Artists'
+import Albums from './components/Albums'
 import store from '../store'
 import tr from '../translation'
 import VirtualList from 'vue-virtual-scroll-list'
@@ -47,6 +48,17 @@ const router = new VueRouterEx({
             ]
         },
         {
+            path: '/albums',
+            component: Albums,
+            name: tr.t('router.albums'),
+            children: [
+                {
+                    path: '',
+                    component: SimpleSongList,
+                }
+            ]
+        },
+        {
             path: '*',
             component: Unknown,
             name: 'Unknown'
@@ -60,7 +72,7 @@ router.beforeEach((to, from, next) => {
             column: to.query.column,
             q: to.query.q
         })
-    } else if (to.query.view == 'artist_firetailnoselect') {
+    } else if (to.query.view == 'firetailnoselect') {
         store.commit('audio/getNoSongs')
     } else {
         store.dispatch('audio/getAllSongs')

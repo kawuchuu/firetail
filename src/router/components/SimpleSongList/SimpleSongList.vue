@@ -1,10 +1,20 @@
 <template>
-    <div class="root">
-        <div class="top-title" ref="topTitle">
-            <div class="tab-album-art" :style="getArtistImage"></div>
-            <div>
-                <h1>{{ list[0].artist }}</h1>
-                <p>{{ screenCountNum }} songs</p>
+    <div class="root" v-if="list.length > 0">
+        <div class="top-wrapper">
+            <div v-if="$route.path == '/artists'" class="top-title" ref="topTitle">
+                <div class="tab-album-art" :style="getArtistImage"></div>
+                <div>
+                    <h1>{{ list[0].artist }}</h1>
+                    <p>{{ screenCountNum }} songs</p>
+                </div>
+            </div>
+            <div v-else-if="$route.path == '/albums'" class="top-title" ref="topTitle">
+                <div class="tab-album-art album" :style="getAlbumImage"></div>
+                <div>
+                    <h1>{{ list[0].album }}</h1>
+                    <p v-if="list[0].year">{{ list[0].year }} • {{ screenCountNum }} songs</p>
+                    <p v-else>{{ screenCountNum }} songs</p>
+                </div>
             </div>
         </div>
         <div class="root-wrapper">
@@ -19,6 +29,7 @@
                 <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
                 <i class="material-icons-outlined favourite-icon" style="visibility: hidden">favorite_border</i>
                 <div class="artist-title-album section">
+                    <p class="list-tracknum">#</p>
                     <p class="list-title">{{ $t('songList.listTitle') }}</p>
                     <p class="list-duration"><i class="material-icons-outlined">schedule</i></p>
                 </div>
@@ -37,19 +48,45 @@ import SongItem from './SimpleSongItem'
 import { mapState } from 'vuex'
 import axios from 'axios'
 import Button from '@/components/Button.vue';
+import sort from '@/modules/sort'
 
 export default {
     components: {
         SongItem,
         Button
     },
-    asyncComputed: {
+    computed: {
         ...mapState('audio', {
             list: function(state) {
-                return state.currentList
+                if (this.$route.path == '/albums') {
+                    let doSort = state.currentList;
+                    doSort = sort.sortArray(doSort, 'title')
+                    doSort.sort(function (a, b) {
+                        return a.trackNum - b.trackNum;
+                    });
+                    return doSort
+                } else {
+                    return state.currentList
+                }
+            }
+        }),
+        ...mapState('nav', {
+            screenCountNum: state => state.screenCountNum,
+            currentScroll: state => {
+                if (state.scrolled > 200) {
+                    return 'sticky'
+                } else {
+                    return ''
+                }
             },
+            isCDEnabled: state => state.isCDBurnEnable
+        })
+    },
+    asyncComputed: {
+        ...mapState('audio', {
             spotifyToken: state => state.spotifyActiveToken,
             async getArtistImage() {
+                if (this.$route.path != '/artists') return;
                 try {
                     let token = this.spotifyToken
                     let artist = this.list[0].artist
@@ -71,6 +108,20 @@ export default {
                     console.log(img)
                     return `background-image: url('${img}')`
                 } catch(err) {
+                    return ''
+                }
+            },
+            async getAlbumImage() {
+                if (this.$route.path != '/albums') return;
+                let port = this.$store.state.nav.port
+                let song = this.$store.state.audio.currentList[0]
+                if (!song || !song.hasImage) return ''
+                if (song.hasImage == 1) {
+                    let artistAlbum = `http://localhost:${port}/${(song.artist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
+                    this.$store.commit('nav/updateAlbumViewCurrentArt', artistAlbum)
+                    return `background-image: url('${artistAlbum}')`
+                } else {
+                    this.$store.commit('nav/updateAlbumViewCurrentArt', '')
                     return ''
                 }
             },
@@ -98,17 +149,6 @@ export default {
                     }
                 }
             },
-        }),
-        ...mapState('nav', {
-            screenCountNum: state => state.screenCountNum,
-            currentScroll: state => {
-                if (state.scrolled > 200) {
-                    return 'sticky'
-                } else {
-                    return ''
-                }
-            },
-            isCDEnabled: state => state.isCDBurnEnable
         })
     },
     methods: {
@@ -146,13 +186,20 @@ $subColour: desaturate(darken($currentGradColour, 25%), 40%);
 .list-title {
     margin: 0;
     margin-left: 14px;
-    width: 100%;
+    width: calc(100% - 173px);
     padding-right: 40px !important;
     overflow: hidden;
     text-overflow: ellipsis;
     padding: 9px 0;
     pointer-events: none;
     white-space: nowrap;
+}
+
+.list-tracknum {
+    margin: 0 10px;
+    max-width: 20px;
+    width: 20px;
+    text-align: center;
 }
 
 .list-duration {
@@ -259,6 +306,11 @@ div.section {
     background-image: url('../../../assets/no_artist.svg');
     border-radius: 100px;
     margin-right: 40px;
+}
+
+.tab-album-art.album {
+    border-radius: 10px;
+    background-image: url('../../../assets/no_album.svg');
 }
 
 .actionsContainer {

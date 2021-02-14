@@ -12,6 +12,7 @@
     "router": {
         "allSongs": "All Songs",
         "artists": "Artists",
+        "albums": "Albums",
         "unknown": "Component not found"
     },
     "topTitle": {

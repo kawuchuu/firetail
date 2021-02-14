@@ -40,14 +40,14 @@ const state = () => ({
         name: tr.t('sidebar.artists'),
         id: 'artistsTab',
         type: 'large_button',
-        link: '/artists?hideTop=true&view=artist_firetailnoselect'
+        link: '/artists?hideTop=true&view=firetailnoselect'
     },
     {
         icon: 'album',
         name: tr.t('sidebar.albums'),
         id: 'albumsTab',
         type: 'large_button',
-        link: '/albums'
+        link: '/albums?hideTop=true&view=firetailnoselect'
     },
     {
         name: tr.t('sidebar.playlists'),
@@ -59,6 +59,7 @@ const state = () => ({
     screenCountNum: 0,
     showScreenTop: true,
     artists: [],
+    albums: [],
     currentView: 'all',
     playingView: null,
     favouriteSongs: [],
@@ -67,6 +68,7 @@ const state = () => ({
     ver: 'unknown',
     port: '0',
     isCDBurnEnable: false,
+    albumViewCurrentArt: ''
 })
 
 const mutations = {
@@ -82,6 +84,10 @@ const mutations = {
     updateArtists(state, artists) {
         let sortedArtists = sort.sortArray(artists, 'artist')
         state.artists = sortedArtists
+    },
+    updateAlbums(state, albums) {
+        let sortedAlbums = sort.sortArray(albums, 'album')
+        state.albums = sortedAlbums
     },
     updateCurrentView(state, view) {
         state.currentView = view
@@ -109,6 +115,9 @@ const mutations = {
     },
     enableCDBurn(state) {
         state.isCDBurnEnable = true
+    },
+    updateAlbumViewCurrentArt(state, url) {
+        state.albumViewCurrentArt = url
     }
 }
 

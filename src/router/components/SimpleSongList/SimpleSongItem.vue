@@ -3,9 +3,14 @@
         <i class="material-icons-outlined play-pause" :style="listIconVisible" @click="decidePlaySong" @mouseover="listIconHover" @mouseleave="listIconHoverLeave">{{ listIcon }}</i>
         <i class="material-icons-outlined favourite-icon" @click="handleFavourite">{{ favouriteIcon }}</i>
         <div class="artist-title-album" @dblclick="playSong">
+            <div v-if="$route.path == '/albums'">
+                <p v-if="song.trackNum !== 'null'" class="track-num">{{song.trackNum}}</p>
+                <p v-else class="track-num">-</p>
+            </div>
             <div class="list-title">
                 <p>{{song.title}}</p>
-                <span>{{song.album}}</span>
+                <span v-if="$route.path == '/artists'">{{song.album}}</span>
+                <span v-else-if="$route.path == '/albums'">{{song.artist}}</span>
             </div>
             <p class="list-duration"><span>{{song.duration}}</span></p>
         </div>
@@ -183,6 +188,15 @@ li.nohover:hover {
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+}
+
+.track-num {
+    margin: 0 10px;
+    font-size: 16px;
+    opacity: 0.5;
+    text-align: center;
+    max-width: 20px;
+    width: 20px;
 }
 
 .list-duration {

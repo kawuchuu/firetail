@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="app" @dragover="changeDrag($event, true)">
         <input type="file" multiple accept="audio/*" id="addFiles" @change="addFiles" style="display: none;">
         <div class="cover" style="transition:.25s;transition-property:opacity;width: 100%;height: 100%;position: fixed;z-index: 11;background: linear-gradient(#e74e8e, #ef9135);display: none;justify-content: center;align-items: center;">
             <!-- generated svg, slightly modified -->
@@ -14,6 +14,12 @@
                 <path class="st1" d="M152.8,211.5"/>
                 <path class="st1" d="M450.4,710.8c-332.9,7.1-254.1-463.4-254.1-463.4c39.2,59.5,53.8,76.5,83.5,112.9c56.5,69,95.3,84.4,151.3,119.1c11.6,7.2,28.8,17.1,53.3,34.7c35.1,25.1,61.5,49,78.7,65.6"/>
             </svg>
+        </div>
+        <div :class="showDragIndicator" @dragleave="changeDrag(false)" @drop="filesDropped" class="drag-indicator">
+            <div class="drag-msg">
+                <h1>Drop your music here!</h1>
+                <p>We're ready to import them!</p>
+            </div>
         </div>
         <Panel/>
         <div class="main-content-wrapper">
@@ -49,10 +55,41 @@ export default {
         addFiles(evt) {
             let files = []
             Array.from(evt.target.files).forEach(f => {
+                if (!f.type.startsWith('audio')) return;
                 files.push([f.path,f.name])
             })
             console.log(evt.target.files)
             ipcRenderer.send('addToLibrary', files)
+        },
+        changeDrag(evt, change) {
+            if (evt.preventDefault) {
+                evt.preventDefault();
+            }
+            this.isDraggedOver = change
+        },
+        filesDropped(evt) {
+            evt.preventDefault();
+            let files = []
+            Array.from(evt.dataTransfer.files).forEach(f => {
+                if (!f.type.startsWith('audio')) return;
+                files.push([f.path,f.name])
+            })
+            this.isDraggedOver = false
+            ipcRenderer.send('addToLibrary', files)
+        }
+    },
+    data() {
+        return {
+            isDraggedOver: false
+        }
+    },
+    computed: {
+        showDragIndicator() {
+            if (this.isDraggedOver) {
+                return 'dragactive'
+            } else {
+                return ''
+            }
         }
     },
     async mounted() {
@@ -78,6 +115,30 @@ export default {
 
 .screen-container {
     
+}
+
+.drag-indicator {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 20;
+    background: rgba(0,0,0,.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: 0.15s;
+
+    .drag-msg {
+        pointer-events: none;
+    }
+}
+
+.drag-indicator.dragactive {
+    opacity: 1;
+    pointer-events: all;
 }
 
 .container {

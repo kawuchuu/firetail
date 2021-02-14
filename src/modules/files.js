@@ -21,7 +21,10 @@ export default {
             let imgUsed = []
             songs.forEach(async f => {
                 let id =  randomString(10)
-                let meta = await metadata.parseFile(f[0])
+                let meta = await metadata.parseFile(f[0]).catch(err => {
+                    console.log(err);
+                })
+                if (!meta) return;
                 let metaObj = {
                     title: f[1],
                     artist: 'Unknown Artist',
@@ -29,11 +32,15 @@ export default {
                     duration: 0,
                     path: f[0],
                     id: id,
-                    hasImage: 0
+                    hasImage: 0,
+                    trackNum: null,
+                    year: null
                 }
                 if (meta.common.title) metaObj['title'] = meta.common.title
                 if (meta.common.artist) metaObj['artist'] = meta.common.artist
                 if (meta.common.album) metaObj['album'] = meta.common.album
+                if (meta.common.track) metaObj['trackNum'] = `${meta.common.track.no}`
+                if (meta.common.year) metaObj['year'] = `${meta.common.year}`
                 if (meta.format.duration) metaObj['duration'] = time.timeFormat(meta.format.duration)
                 let artistAlbum = `${meta.common.artist}${meta.common.album}`.replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')
                 if (meta.common.picture) {

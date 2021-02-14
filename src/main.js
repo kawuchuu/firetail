@@ -31,7 +31,12 @@ ipcRenderer.addListener('getAllFromColumn', (event, type) => {
 
 ipcRenderer.send('library')
 ipcRenderer.send('getAllFromColumn', 'artist')
+ipcRenderer.send('getAllFromColumnWithArtist')
 ipcRenderer.send('getFavourites')
+
+ipcRenderer.once('getAllWithColumnArtist', (event, args) => {
+    store.commit('nav/updateAlbums', args)
+})
 
 ipcRenderer.addListener('getFavourites', (event, ids) => {
     let favs = []

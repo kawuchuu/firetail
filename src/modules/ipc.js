@@ -79,7 +79,7 @@ export default {
             return server.server.address().port
         })
 
-        ipcMain.handle('canBurn', async event => {
+        ipcMain.handle('canBurn', async () => {
             return await BurnJob.canBurn();
         });
 
@@ -94,5 +94,15 @@ export default {
                 return null;
             }
         });
+
+        ipcMain.handle('getSomeFromMultiColumn', (event, args) => {
+            let columns = db.getSomeFromMultiColumn(args[0], args[1])
+            return columns
+        })
+
+        ipcMain.on('getAllFromColumnWithArtist', () => {
+            let albumWithArtist = db.getAllFromColumnWithArtist()
+            win.send('getAllWithColumnArtist', albumWithArtist)
+        })
     }
 }
