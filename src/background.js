@@ -105,6 +105,12 @@ async function createWindow() {
         win.show()
         openSong(process.argv[process.argv.length - 1])
     })
+    win.on('enter-full-screen', () => {
+        win.webContents.send('fullscreenUpdate', true)
+    })
+    win.on('leave-full-screen', () => {
+        win.webContents.send('fullscreenUpdate', false)
+    })
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
         await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)

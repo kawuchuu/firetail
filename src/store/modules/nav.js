@@ -68,7 +68,9 @@ const state = () => ({
     ver: 'unknown',
     port: '0',
     isCDBurnEnable: false,
-    albumViewCurrentArt: ''
+    albumViewCurrentArt: '',
+    fullscreen: false,
+    zenMoveMouseActive: false
 })
 
 const mutations = {
@@ -118,6 +120,15 @@ const mutations = {
     },
     updateAlbumViewCurrentArt(state, url) {
         state.albumViewCurrentArt = url
+    },
+    updateFullscreen(state, isFull) {
+        state.fullscreen = isFull
+        if (!isFull) {
+            state.zenMoveMouseActive = true
+        }
+    },
+    updateZenMouse(state, moved) {
+        state.zenMoveMouseActive = moved
     }
 }
 

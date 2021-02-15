@@ -22,6 +22,7 @@
             </div>
         </div>
         <Panel/>
+        <ZenMode v-if="isFullscreen"/>
         <div class="main-content-wrapper">
             <SideBar/>
             <div class="screen-container">
@@ -40,6 +41,7 @@ import TopBar from './components/TopBar'
 import SideBar from './components/sidebar/SideBar.vue'
 import PlayingBar from './components/playingbar/PlayingBar'
 import Panel from './components/panel/Panel'
+import ZenMode from './components/zen/ZenMode'
 import { ipcRenderer } from 'electron'
 //import PluginComp from './PluginComp'
 
@@ -49,7 +51,8 @@ export default {
         TopBar,
         SideBar,
         PlayingBar,
-        Panel
+        Panel,
+        ZenMode
     },
     methods: {
         addFiles(evt) {
@@ -90,6 +93,9 @@ export default {
             } else {
                 return ''
             }
+        },
+        isFullscreen() {
+            return this.$store.state.nav.fullscreen
         }
     },
     async mounted() {

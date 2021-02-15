@@ -73,3 +73,7 @@ ipcRenderer.once('enableCDBurn', () => {
 ipcRenderer.on('updatedSpotifyToken', () => {
     store.commit('audio/updateSpotifyToken')
 })
+
+ipcRenderer.on('fullscreenUpdate', (event, arg) => {
+    store.commit('nav/updateFullscreen', arg)
+})
