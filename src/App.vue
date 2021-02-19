@@ -74,9 +74,23 @@ export default {
             evt.preventDefault();
             let files = []
             Array.from(evt.dataTransfer.files).forEach(f => {
+                /* f = f.webkitGetAsEntry()
+                if (f.isDirectory) {
+                    let basePath = evt.dataTransfer.files[i].path
+                    let reader = f.createReader();
+                    reader.readEntries(entries => {
+                        entries.forEach(file => {
+                            files.push([`${basePath}/${file.name}`, file.name])
+                        })
+                    })
+                } else {
+                    if (!f.type.startsWith('audio')) return;
+                    files.push([f.path,f.name])
+                } */
                 if (!f.type.startsWith('audio')) return;
                 files.push([f.path,f.name])
             })
+            //console.log(files)
             this.isDraggedOver = false
             ipcRenderer.send('addToLibrary', files)
         }

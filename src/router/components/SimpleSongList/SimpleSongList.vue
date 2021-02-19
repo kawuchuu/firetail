@@ -3,17 +3,17 @@
         <div class="top-wrapper">
             <div v-if="$route.path == '/artists'" class="top-title" ref="topTitle">
                 <div class="tab-album-art" :style="getArtistImage"></div>
-                <div>
+                <div class="top-title-text">
                     <h1>{{ list[0].artist }}</h1>
-                    <p>{{ screenCountNum }} songs</p>
+                    <p>{{ screenCountNum }} {{ $tc('topTitle.countTypeSongs', parseInt(screenCountNum)) }}</p>
                 </div>
             </div>
             <div v-else-if="$route.path == '/albums'" class="top-title" ref="topTitle">
                 <div class="tab-album-art album" :style="getAlbumImage"></div>
-                <div>
+                <div class="top-title-text">
                     <h1>{{ list[0].album }}</h1>
-                    <p v-if="list[0].year">{{ list[0].year }} • {{ screenCountNum }} songs</p>
-                    <p v-else>{{ screenCountNum }} songs</p>
+                    <p v-if="list[0].year">{{ list[0].year }} • {{ screenCountNum }} {{ $tc('topTitle.countTypeSongs', parseInt(screenCountNum)) }}</p>
+                    <p v-else>{{ screenCountNum }} {{ $tc('topTitle.countTypeSongs', parseInt(screenCountNum)) }}</p>
                 </div>
             </div>
         </div>
@@ -284,9 +284,16 @@ div.section {
     //background: linear-gradient(#e74e8e, #e74e8ea6)
 }
 
+.top-title-text {
+    max-width: calc(100% - 200px);
+}
+
 .top-title h1 {
     font-size: 64px;
     margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     letter-spacing: -2px;
 }
 

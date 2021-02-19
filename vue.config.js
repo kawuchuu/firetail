@@ -22,7 +22,8 @@ module.exports = {
                 copyright: "Copyright © 2020 kawuchuu",
                 mac: {
                     category: "public.app-category.music",
-                    target: "dmg"
+                    target: "dmg",
+                    icon: "build/icon-macos.png"
                 },
                 nsis: {
                     artifactName: "Firetail-Setup-${version}.${ext}",
@@ -32,7 +33,7 @@ module.exports = {
                     target: [
                         "nsis"
                     ],
-                    icon: "assets/icon.ico",
+                    icon: "build/icon.ico",
                     publisherName: "kawuchuu",
                     fileAssociations: [
                         {
