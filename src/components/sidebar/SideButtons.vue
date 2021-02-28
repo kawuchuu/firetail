@@ -1,7 +1,7 @@
 <template>
     <router-link :to="button.link" v-if="button.type == 'large_button'">
         <div class="item-sidebar">
-            <i class="material-icons-outlined">{{ button.icon }}</i>
+            <i class="ft-icon">{{ button.icon }}</i>
             <span>{{ button.name }}</span>
         </div>
     </router-link>

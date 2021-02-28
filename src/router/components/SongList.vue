@@ -17,7 +17,7 @@
             <div class="list-gradient-fade"></div>
             <div class="list-section" :class="currentScroll">
                 <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
-                <i class="material-icons-outlined favourite-icon" style="visibility: hidden">favorite_border</i>
+                <i class="ft-icon favourite-icon" style="visibility: hidden">favourite</i>
                 <div class="artist-title-album section">
                     <p class="list-title">{{ $t('songList.listTitle') }}</p>
                     <p class="list-artist">{{ $t('songList.listArtist') }}</p>

@@ -2,11 +2,11 @@
     <div class="track-controls" :class="[queueNotEmpty, enableBtn]">
         <div class="track-controls-inner-container">
             <div class="control-buttons">
-                <i class="material-icons-outlined repeat-shuffle" title="Shuffle" @click="shuffle" :class="isShuffled">shuffle</i>
-                <i class="material-icons-outlined skip-prev" title="Previous" @click="prev">skip_previous</i>
-                <i class="material-icons play-pause-icon" title="Play/pause" @click="playPause">{{playPauseIcon}}</i>
-                <i class="material-icons-outlined skip-prev" title="Next" @click="next">skip_next</i>
-                <i class="material-icons-outlined repeat-shuffle" title="Repeat" @click="repeat" :class="isRepeat">{{repeatIcon}}</i>
+                <i class="ft-icon repeat-shuffle" title="Shuffle" @click="shuffle" :class="isShuffled">shuffle</i>
+                <i class="ft-icon skip-prev" title="Previous" @click="prev">prev</i>
+                <i class="ft-icon play-pause-icon" title="Play/pause" @click="playPause">{{playPauseIcon}}</i>
+                <i class="ft-icon skip-prev" title="Next" @click="next">skip</i>
+                <i class="ft-icon repeat-shuffle" title="Repeat" @click="repeat" :class="isRepeat">{{repeatIcon}}</i>
             </div>
             <div class="seek-time-inner-container">
                 <p class="song-duration" >{{ songCurrent }}</p>
@@ -59,9 +59,9 @@ export default {
             },
             playPauseIcon: state => {
                 if (state.paused) {
-                    return 'play_circle_filled'
+                    return 'play-circle'
                 } else {
-                    return 'pause_circle_filled'
+                    return 'pause-circle'
                 }
             },
             isShuffled: state => {
@@ -80,7 +80,7 @@ export default {
             },
             repeatIcon: state => {
                 if (state.repeat == 'one') {
-                    return 'repeat_one'
+                    return 'repeat-one'
                 } else {
                     return 'repeat'
                 }
@@ -362,16 +362,18 @@ export default {
 }
 
 .control-buttons i {
-    margin: 5px;
+    margin: 5px 7px;
     padding: 5px;
 }
 
 .play-pause-icon {
-    font-size: 38px;
+    font-size: 34px;
+    transition: 0.08s;
+    transition-property: transform text-shadow;
 }
 
 .skip-prev {
-    font-size: 30px;
+    font-size: 22px;
 }
 
 .track-controls.hide .skip-prev {
@@ -380,7 +382,7 @@ export default {
 }
 
 .repeat-shuffle {
-    font-size: 22px;
+    font-size: 20px;
 }
 
 .active {
@@ -392,6 +394,17 @@ export default {
 .control-buttons i:hover, #closeSidemenu:hover, #albumArtistBack:hover, .playing-bar-hidden i:hover, .top-controls i:hover {
     opacity: 0.6;
     cursor: pointer;
+}
+
+.play-pause-icon:hover, .play-pause-icon:active {
+    transform: scale(1.15);
+    opacity: 1 !important;
+    text-shadow: 0px 2px 10px rgba(0,0,0,.5);
+}
+
+.play-pause-icon:active {
+    transform: scale(1);
+    opacity: 0.6 !important;
 }
 
 .track-controls.notplaying {

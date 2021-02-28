@@ -22,21 +22,21 @@ const state = () => ({
         type: 'subtitle'
     },
     {
-        icon: 'favorite_border',
+        icon: 'favourite',
         name: tr.t('sidebar.favourite'),
         id: 'likedTab',
         type: 'large_button',
         link: '/liked'
     },
     {
-        icon: 'music_note',
+        icon: 'music-note',
         name: tr.t('sidebar.songs'),
         id: 'songsTab',
         type: 'large_button',
         link: `/?name=${encodeURIComponent(tr.t('sidebar.songs'))}&view=all`
     },
     {
-        icon: 'person',
+        icon: 'artist',
         name: tr.t('sidebar.artists'),
         id: 'artistsTab',
         type: 'large_button',

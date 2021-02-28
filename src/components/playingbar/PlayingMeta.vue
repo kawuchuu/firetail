@@ -8,7 +8,7 @@
         <div class="title-artist">
             <div class="song-title-fav">
                 <div class="song-title">{{title}}</div>
-                <i class="material-icons-outlined favourite-icon" :class="[isFavourite, isInLibrary]" @click="handleFavourite">{{ favouriteIcon }}</i>
+                <i class="ft-icon favourite-icon" :class="[isFavourite, isInLibrary]" @click="handleFavourite">{{ favouriteIcon }}</i>
             </div>
             <div class="song-artist">{{artist}}</div>
         </div>
@@ -64,9 +64,9 @@ export default {
         },
         favouriteIcon() {
             if (this.$store.state.nav.favouriteSongs.indexOf(this.$store.state.audio.currentSong) != -1) {
-                return 'favorite'
+                return 'favourite-filled'
             } else {
-                return 'favorite_border'
+                return 'favourite'
             }
         },
         isFavourite() {

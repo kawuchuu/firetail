@@ -102,6 +102,7 @@ export default {
     z-index: -1;
     filter: blur(40px) brightness(0.5);
     overflow: hidden;
+    transform: scale(1.3);
 }
 
 .bg-gradient-layer {
