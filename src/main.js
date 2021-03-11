@@ -15,8 +15,6 @@ new Vue({
 
 Vue.use(AsyncComputed)
 
-store.commit('audio/updateSpotifyToken')
-
 router.replace({ path: '/', query: { name: i18n.t('sidebar.songs'), view: 'all' } })
 
 ipcRenderer.addListener('library', (event, library) => {
@@ -70,10 +68,40 @@ ipcRenderer.once('enableCDBurn', () => {
     });
 })
 
-ipcRenderer.on('updatedSpotifyToken', () => {
-    store.commit('audio/updateSpotifyToken')
-})
-
 ipcRenderer.on('fullscreenUpdate', (event, arg) => {
     store.commit('nav/updateFullscreen', arg)
+})
+
+const refreshSpotify = async () => {
+    const query = new URLSearchParams({
+        'client_id': 'd1084781b7af46d6b6948192e372e4a6',
+        'grant_type': 'refresh_token',
+        'refresh_token': localStorage.getItem('refresh-token')
+    })
+    const resp = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: query.toString()
+    })
+    const data = await resp.json()
+    if (data.error) return console.error(data)
+    localStorage.setItem('sp-token', data.access_token)
+    if (data.refresh_token) {
+        localStorage.setItem('refresh-token', data.refresh_token)
+    }
+    localStorage.setItem('expires', Date.parse(new Date()) + (data.expires_in * 1000))
+}
+
+if (localStorage.getItem('sp-token')) {
+    refreshSpotify()
+}
+
+//nav buttons on mouse is implemented poorly in electron (and by extension chromium)...
+//simply causes weird nav problems. unfortunately it's best to disable them entirely.
+window.addEventListener('mouseup', evt => {
+    if (evt.button == 3 || evt.button == 4) {
+        evt.preventDefault();
+    }
 })

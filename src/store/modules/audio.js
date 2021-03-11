@@ -17,7 +17,6 @@ const state = () => ({
     currentList: [],
     shuffled: false,
     repeat: 'off',
-    spotifyActiveToken: "",
     volume: 1
 })
 
@@ -108,10 +107,6 @@ const mutations = {
     setVolume(state, vol) {
         audio.volume = vol
         state.volume = vol
-    },
-    async updateSpotifyToken(state) {
-        let details = await ipcRenderer.invoke('getSpotifyDetails')
-        state.spotifyActiveToken = details.curValidToken
     },
     getNoSongs(state) {
         state.currentList = []

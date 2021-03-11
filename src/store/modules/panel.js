@@ -66,6 +66,26 @@ const mutations = {
                 }
             ]
         }
+        if (content.buttons == 'spotifyLogout') {
+            newProps['buttons'] = [
+                {
+                    label: 'Cancel',
+                    onClick() {
+                        store.commit('panel/updateActive', false)
+                    }
+                },
+                {
+                    label: 'Log Out',
+                    onClick() {
+                        localStorage.removeItem('sp-token')
+                        localStorage.removeItem('sp-name')
+                        localStorage.removeItem('sp-uri')
+                        store.commit('nav/updateSpotifyActive', false)
+                        store.commit('panel/updateActive', false)
+                    }
+                }
+            ]
+        }
         state.currentPanelProps = newProps
         state.currentPanelComponent = 'Prompt'
         this.commit('panel/updateActive', true)

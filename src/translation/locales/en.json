@@ -3,14 +3,14 @@
         "home": "Home",
         "settings": "Settings",
         "library": "Library",
-        "favourite": "Liked Songs",
-        "songs": "All Songs",
+        "favourite": "Favourites",
+        "songs": "Songs",
         "artists": "Artists",
         "albums": "Albums",
         "playlists": "Playlists"
     },
     "router": {
-        "allSongs": "All Songs",
+        "allSongs": "Songs",
         "artists": "Artists",
         "albums": "Albums",
         "unknown": "Component not found"
@@ -30,6 +30,9 @@
     "topBar": {
         "addSongs": "Add Songs",
         "nuke": "Remove Library"
+    },
+    "settings": {
+        "title": "Settings"
     },
     "appName": "Firetail"
 }

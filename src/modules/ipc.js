@@ -76,7 +76,7 @@ export default {
         })
 
         ipcMain.handle('getPort', () => {
-            return server.server.address().port
+            return server.app.get('port')
         })
 
         ipcMain.handle('canBurn', async () => {
@@ -103,6 +103,19 @@ export default {
         ipcMain.on('getAllFromColumnWithArtist', () => {
             let albumWithArtist = db.getAllFromColumnWithArtist()
             win.send('getAllWithColumnArtist', albumWithArtist)
+        })
+
+        win.webContents.on('did-navigate-in-page', () => {
+            const checkNav = {
+                back: win.webContents.canGoBack(),
+                forward: win.webContents.canGoForward()
+            }
+            win.send('updateNav', checkNav)
+        })
+
+        ipcMain.on('clearHistory', () => {
+            win.webContents.executeJavaScript("history.pushState({}, '', location.href)");
+            win.webContents.clearHistory()
         })
     }
 }

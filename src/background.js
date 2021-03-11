@@ -36,7 +36,7 @@ async function createWindow() {
         minHeight: 400,
         show: false,
         backgroundColor: '#181818',
-        title: 'Firetail Next',
+        title: 'Firetail',
         webPreferences: {
             // Use pluginOptions.nodeIntegration, leave this alone
             // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info

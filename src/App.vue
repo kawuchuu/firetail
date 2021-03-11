@@ -27,9 +27,9 @@
             <SideBar/>
             <div class="screen-container">
                 <TopBar/>
-                <div class="container" ref="container">
-                    <router-view/>
-                </div>
+                <main class="container" id="main-container" ref="container">
+                    <router-view :key="$route.fullPath"/>
+                </main>
             </div>
         </div>
         <PlayingBar/>
@@ -116,10 +116,18 @@ export default {
         let port = await ipcRenderer.invoke('getPort')
         this.$store.commit('nav/updatePort', port)
         let ver = await ipcRenderer.invoke('getVersion')
-        document.title = `Firetail ${ver}`
+        //document.title = `Firetail ${ver}`
+        this.$store.commit('nav/updateVer', ver)
         this.$refs.container.addEventListener('scroll', e => {
             this.$store.commit('nav/updateCurrentScroll', e.target.scrollTop)
         })
+        if (localStorage.getItem('sp-token')) {
+            this.$store.commit('nav/updateSpotifyActive', true)
+            this.$store.commit('nav/updateSpotifyDetails', {
+                name: localStorage.getItem('sp-name'),
+                uri: localStorage.getItem('sp-uri')
+            })
+        }
     }
 }
 </script>

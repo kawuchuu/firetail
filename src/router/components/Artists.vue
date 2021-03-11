@@ -104,7 +104,7 @@ export default {
         align-items: center;
 
         h3 {
-            margin: 0 70px;
+            margin: 0 110px;
             font-size: 24px;
             letter-spacing: -1px;
         }

@@ -1,7 +1,7 @@
 <template>
     <li class="results-link" @mouseover="listHover" @mouseleave="listHoverLeave" :class="isActive">
         <i class="material-icons-outlined play-pause" :style="listIconVisible" @click="decidePlaySong" @mouseover="listIconHover" @mouseleave="listIconHoverLeave">{{ listIcon }}</i>
-        <i class="material-icons-outlined favourite-icon" @click="handleFavourite">{{ favouriteIcon }}</i>
+        <i class="ft-icon favourite-icon" @click="handleFavourite">{{ favouriteIcon }}</i>
         <div class="artist-title-album" @dblclick="playSong">
             <div v-if="$route.path == '/albums'">
                 <p v-if="song.trackNum !== 'null'" class="track-num">{{song.trackNum}}</p>
@@ -52,9 +52,9 @@ export default {
         },
         favouriteIcon() {
             if (this.$store.state.nav.favouriteSongs.indexOf(this.song.id) != -1) {
-                return 'favorite'
+                return 'favourite-filled'
             } else {
-                return 'favorite_border'
+                return 'favourite'
             }
         }
     },

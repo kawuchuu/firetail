@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3'
 import {app} from 'electron'
 
-const db = new Database(`${app.getPath('userData')}/library.db`, {verbose: console.log})
+const db = new Database(`${app.getPath('userData')}/library.db`)
 db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, album text, duration decimal, path text, id text, hasImage integer, trackNum integer, year text)').run()
 db.prepare('CREATE TABLE IF NOT EXISTS favourites (id text)').run()
 db.prepare('CREATE TABLE IF NOT EXISTS spotify (clientID text, refreshToken text, clientAuth text, curValidToken text)').run()

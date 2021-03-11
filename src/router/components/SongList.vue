@@ -3,13 +3,13 @@
         <div class="bg-gradient"></div>
         <div class="sticky-bg" ref="stickyBg" :class="currentScroll">
             <div class="bg-inner">
-                <h3>All Songs</h3>
+                <h3>Songs</h3>
             </div>
         </div>
         <div class="top-title" ref="topTitle">
             <div class="tab-album-art"></div>
             <div>
-                <h1>All Songs</h1>
+                <h1>Songs</h1>
                 <p>{{ screenCountNum }} songs</p>
             </div>
         </div>
@@ -217,7 +217,7 @@ div.section {
         align-items: center;
 
         h3 {
-            margin: 0 70px;
+            margin: 0 110px;
             font-size: 24px;
             letter-spacing: -1px;
         }

@@ -70,7 +70,16 @@ const state = () => ({
     isCDBurnEnable: false,
     albumViewCurrentArt: '',
     fullscreen: false,
-    zenMoveMouseActive: false
+    zenMoveMouseActive: false,
+    spotifyDetails: {
+        name: 'unknown',
+        uri: 'unknown'
+    },
+    isSpotifyConnected: false,
+    checkNav: {
+        back: false,
+        forward: false
+    }
 })
 
 const mutations = {
@@ -129,6 +138,18 @@ const mutations = {
     },
     updateZenMouse(state, moved) {
         state.zenMoveMouseActive = moved
+    },
+    updateSpotifyDetails(state, details) {
+        state.spotifyDetails = {
+            name: details.name,
+            uri: details.uri
+        }
+    },
+    updateSpotifyActive(state, isActive) {
+        state.isSpotifyConnected = isActive
+    },
+    updateCheckNav(state, nav) {
+        state.checkNav = nav
     }
 }
 

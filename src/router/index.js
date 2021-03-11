@@ -7,9 +7,11 @@ import Artists from './components/Artists'
 import Albums from './components/Albums'
 import store from '../store'
 import tr from '../translation'
-import VirtualList from 'vue-virtual-scroll-list'
+import Settings from './components/settings/Settings'
+import VueVirtualScroller from 'vue-virtual-scroller'
+import { ipcRenderer } from 'electron'
 
-Vue.component('VirtualList', VirtualList)
+Vue.use(VueVirtualScroller)
 
 class VueRouterEx extends VueRouter {
     constructor(options) {
@@ -59,11 +61,22 @@ const router = new VueRouterEx({
             ]
         },
         {
+            path: '/settings',
+            component: Settings,
+            name: tr.t('settings.title')
+        },
+        {
             path: '*',
             component: Unknown,
             name: 'Unknown'
         }
     ]
+})
+
+let isDoneOnce = false
+
+ipcRenderer.on('updateNav', (event, checkNav) => {
+    store.commit('nav/updateCheckNav', checkNav)
 })
 
 router.beforeEach((to, from, next) => {
@@ -91,6 +104,14 @@ router.beforeEach((to, from, next) => {
         store.commit('nav/updateScreenTitle', to.query.name)
     }
     next()
+    if (!isDoneOnce) {
+        isDoneOnce = true
+        ipcRenderer.send('clearHistory')
+        store.commit('nav/updateCheckNav', {
+            back: false,
+            true: false
+        })
+    }
 })
 
 export default router

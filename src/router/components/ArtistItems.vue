@@ -14,11 +14,10 @@ export default {
     props: ['artist'],
     asyncComputed: {
         ...mapState('audio', {
-            spotifyToken: state => state.spotifyActiveToken,
             async getArtistImage() {
-                let token = this.spotifyToken
+                let token = localStorage.getItem('sp-token')
                 let artist = this.artist.artist
-                if (token == "" || token == null) return
+                if (!token) return
                 let resp = await axios({
                     method: 'GET',
                     url: 'https://api.spotify.com/v1/search',
