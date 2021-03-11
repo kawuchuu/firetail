@@ -1,6 +1,9 @@
 name: Continuous
 
-on: push
+on:
+  push:
+    branches:
+      - next
 
 defaults:
   run:

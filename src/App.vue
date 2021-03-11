@@ -28,7 +28,7 @@
             <div class="screen-container">
                 <TopBar/>
                 <main class="container" id="main-container" ref="container">
-                    <router-view :key="$route.fullPath"/>
+                    <router-view/>
                 </main>
             </div>
         </div>
