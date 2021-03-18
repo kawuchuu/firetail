@@ -18,13 +18,13 @@
             </div>
         </div>
         <div class="root-wrapper">
-            <div v-show="isCDEnabled" class="actionsContainer">
+            <!-- <div v-show="isCDEnabled" class="actionsContainer">
                 <b>ACTIONS</b>
                 <div class="actionsButtons">
                     <Button :button="{label: 'Play Random'}" @click.native="playRandom()"/>
                     <Button :button="{label: 'Burn'}" @click.native="burn()"/>
                 </div>
-            </div>
+            </div> -->
             <div class="list-section" :class="currentScroll">
                 <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
                 <i class="ft-icon favourite-icon" style="visibility: hidden">favourite</i>
@@ -43,17 +43,17 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron';
+//import { ipcRenderer } from 'electron';
 import SongItem from './SimpleSongItem'
 import { mapState } from 'vuex'
 import axios from 'axios'
-import Button from '@/components/Button.vue';
+//import Button from '@/components/Button.vue';
 import sort from '@/modules/sort'
 
 export default {
     components: {
         SongItem,
-        Button
+        //Button
     },
     computed: {
         ...mapState('audio', {
@@ -125,7 +125,7 @@ export default {
                     return ''
                 }
             },
-            burn: async function(state) {
+            /* burn: async function(state) {
                 if (process.platform == 'linux') {
                     let canBurn = await ipcRenderer.invoke('canBurn');
                     if (canBurn) {
@@ -148,7 +148,7 @@ export default {
                         alert("Burning a CD is not possible at this time");
                     }
                 }
-            },
+            }, */
         })
     },
     methods: {
