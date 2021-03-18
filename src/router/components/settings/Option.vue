@@ -4,6 +4,7 @@
         <p>{{item.label}}</p>
         <div @click="item.action($root)" class="button">{{item.btnLabel}}</div>
     </div>
+    <p v-else-if="item.type == 'text'" class="text">{{item.message}}</p>
     <About v-else-if="item.type == 'about'"/>
 </template>
 
@@ -102,4 +103,9 @@ export default {
     }
 }
 
+.text {
+    margin-top: 35px;
+    opacity: 0.5;
+    font-size: 14px;
+}
 </style>
