@@ -1,11 +1,19 @@
 <template>
-    <li class="results-link" @mouseover="listHover" @mouseleave="listHoverLeave" :class="isActive">
+    <li class="results-link" @mouseover="listHover" @mouseleave="listHoverLeave" :class="[isActive, doHighlight, isSimple]">
         <i class="material-icons-outlined play-pause" :style="listIconVisible" @click="decidePlaySong" @mouseover="listIconHover" @mouseleave="listIconHoverLeave">{{ listIcon }}</i>
         <i class="ft-icon favourite-icon" @click="handleFavourite">{{ favouriteIcon }}</i>
-        <div class="artist-title-album" @dblclick="playSong">
-            <p class="list-title">{{ song.title }}</p>
-            <p class="list-artist"><span>{{song.artist}}</span></p>
-            <p class="list-album"><span>{{song.album}}</span></p>
+        <div v-if="$route.path == '/albums'">
+            <p v-if="song.trackNum !== 'null'" class="track-num">{{song.trackNum}}</p>
+            <p v-else class="track-num">-</p>
+        </div>
+        <div class="artist-title-album" @pointerdown="select" @dblclick="playSong">
+            <div class="list-title">
+                <p>{{ song.title }}</p>
+                <span v-if="$route.path == '/artists'">{{song.album}}</span>
+                <span v-if="$route.path == '/albums'">{{song.artist}}</span>
+            </div>
+            <p v-if="$route.path == '/'" class="list-artist"><span>{{song.artist}}</span></p>
+            <p v-if="$route.path == '/'" class="list-album"><span>{{song.album}}</span></p>
             <p class="list-duration"><span>{{song.duration}}</span></p>
         </div>
     </li>
@@ -14,7 +22,7 @@
 <script>
 import { ipcRenderer } from 'electron'
 export default {
-    props: ['song'],
+    props: ['song', 'index', 'selectedItems'],
     computed: {
         isActive() {
             let view = this.$route.query.view
@@ -50,6 +58,29 @@ export default {
             } else {
                 return 'favourite'
             }
+        },
+        doHighlight() {
+            let inIndex = this.selectedItems.indexOf(this.index)
+            if (inIndex !== -1) {
+                let topIndex = this.selectedItems.indexOf(this.index - 1)
+                let bottomIndex = this.selectedItems.indexOf(this.index + 1)
+                if (topIndex !== -1 && bottomIndex !== -1) {
+                    return 'hactive none'
+                }
+                if (topIndex !== -1) {
+                    return 'hactive notop'
+                }
+                if (bottomIndex !== -1) {
+                    return 'hactive nobottom'
+                } else {
+                    return 'hactive'
+                }
+            } else return ''
+        },
+        isSimple() {
+            if (this.$route.path == '/albums') return 'simple albums'
+            else if (this.$route.path == '/artists') return 'simple artists'
+            else return ''
         }
     },
     data() {
@@ -59,7 +90,8 @@ export default {
         }
     },
     methods: {
-        playSong() {
+        playSong(evt) {
+            if (evt.ctrlKey || evt.shiftKey) return
             let currentList = []
             this.$store.state.audio.currentList.forEach(f => { currentList.push(f) })
             this.$store.commit('audio/genNewQueue', currentList)
@@ -97,10 +129,12 @@ export default {
         },
         addToFavourite() {
             ipcRenderer.send('addFavourite', this.song.id)
-            console.log('yeah')
         },
         removeFromFavourites() {
             ipcRenderer.send('removeFavourite', this.song.id)
+        },
+        select(evt) {
+            this.$emit('selected', [evt, this.index])
         }
     }
 }
@@ -111,11 +145,22 @@ export default {
     overflow: hidden;
     position: relative;
     height: 42px;
-    display: flex;
+    display: grid;
+    grid-template-columns: 40px 40px 1fr;
     align-items: center;
+    justify-items: center;
+    column-gap: 5px;
     transition: .25s;
     transition-property: margin-left;
     border-radius: 5px;
+}
+
+.results-link.simple {
+    height: 55px;
+}
+
+.results-link.simple.albums {
+    grid-template-columns: 40px 40px 40px 1fr;
 }
 
 li:hover {
@@ -126,8 +171,24 @@ li.nohover:hover {
     background: none;
 }
 
-.results-link i, .list-section i {
-    padding: 0 7px;
+.results-link.hactive {
+    background: #ffffff36;
+}
+
+.results-link.hactive:hover {
+    background: #ffffff22;
+}
+
+.results-link.hactive.notop {
+    border-radius: 0px 0px 5px 5px;
+}
+
+.results-link.hactive.nobottom {
+    border-radius: 5px 5px 0px 0px;
+}
+
+.results-link.hactive.none {
+    border-radius: 0px;
 }
 
 .play-pause {
@@ -150,41 +211,60 @@ li.nohover:hover {
 }
 
 .artist-title-album {
-    display: flex;
-    width: calc(100% - 72px);
-    font-size: 14px;
+    display: grid;
+    column-gap: 30px;
+    grid-template-columns: 3fr 2fr 2fr 0fr;
     align-items: center;
+    width: calc(100% - 25px);
+    font-size: 14px;
+    height: 100%;
+}
+
+.results-link.simple .artist-title-album {
+    grid-template-columns: 3fr 0fr;
+}
+
+.artist-title-album p {
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 .list-title {
     margin: 0;
-    margin-left: 14px;
-    width: calc(40% - 40px);
-    padding-right: 40px !important;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 9px 0;
     pointer-events: none;
     white-space: nowrap;
+}
+
+.results-link.simple .list-title {
+    p {
+        margin: 0 0 5px;
+        font-size: 15px;
+    }
+
+    span {
+        font-size: 12px;
+        opacity: 0.75;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 }
 
 .list-artist,
 .list-album,
 .list-duration {
-    width: calc(30% - 77px);
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 9px 0;
-    padding-right: 40px;
     pointer-events: none;
     white-space: nowrap;
     opacity: 0.7;
 }
 
 .list-duration {
-    width: 40px;
     text-align: right;
-    padding-right: 20px;
+    min-width: 40px;
 }
 
 .list-artist span, .list-album span {
@@ -222,5 +302,23 @@ li.nohover:hover {
 .favourite-icon {
     font-size: 20px;
     cursor: pointer;
+}
+
+.track-num {
+    margin: 0 10px;
+    font-size: 16px;
+    opacity: 0.5;
+    text-align: center;
+    max-width: 20px;
+    width: 20px;
+}
+
+@media (max-width: 900px) {
+    .list-album {
+        display: none;
+    }
+    .artist-title-album {
+        grid-template-columns: 3fr 2fr 0fr;
+    }
 }
 </style>

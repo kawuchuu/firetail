@@ -31,12 +31,11 @@ export default {
     },
     computed: {
         albumItems() {
-            console.log(this)
             return this.$store.state.nav.albums
         },
         ...mapState('nav', {
             currentScroll: state => {
-                if (state.scrolled > 200) {
+                if (state.scrolled > 230) {
                     return 'sticky'
                 } else {
                     return ''
@@ -44,10 +43,10 @@ export default {
             },
             imgBackground: state => {
                 let artURL = state.albumViewCurrentArt
-                if (artURL == '') {
+                if (artURL == '' || !artURL) {
                     return ''
                 } else {
-                    return `background-image: url('${artURL}')`
+                    return `background-image: url('${artURL}'); filter: blur(20px) brightness(0.6)`
                 }
             }
         })
@@ -94,13 +93,12 @@ export default {
     width: 100%;
     height: 450px;
     max-height: 450px;
-    background-color: #00daa4;
+    background-color: #5e00da;
     background-position: center;
     background-size: 150%;
     background-repeat: no-repeat;
     top: 0;
     z-index: -1;
-    filter: blur(40px) brightness(0.5);
     overflow: hidden;
     transform: scale(1.3);
 }

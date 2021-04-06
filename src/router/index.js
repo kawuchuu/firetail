@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import SongList from './components/SongList'
-import SimpleSongList from './components/SimpleSongList/SimpleSongList'
+//import SimpleSongList from './components/SimpleSongList/SimpleSongList'
 import Unknown from './components/Unknown'
 import Artists from './components/Artists'
 import Albums from './components/Albums'
@@ -45,7 +45,7 @@ const router = new VueRouterEx({
             children: [
                 {
                     path: '',
-                    component: SimpleSongList,
+                    component: SongList,
                 }
             ]
         },
@@ -56,7 +56,7 @@ const router = new VueRouterEx({
             children: [
                 {
                     path: '',
-                    component: SimpleSongList,
+                    component: SongList,
                 }
             ]
         },

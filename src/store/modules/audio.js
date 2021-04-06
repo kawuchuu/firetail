@@ -63,7 +63,6 @@ const mutations = {
         } else {
             state.queue = songs
         }
-        console.log(this)
         this.commit('nav/updatePlayingView', this.state.nav.currentView)
     },
     updateCurrentList(state, list) {

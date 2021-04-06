@@ -104,8 +104,8 @@ export default {
 }
 
 .text {
-    margin-top: 35px;
+    margin-top: 10px;
     opacity: 0.5;
-    font-size: 14px;
+    font-size: 13px;
 }
 </style>

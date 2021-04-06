@@ -30,9 +30,17 @@ export default {
                         'Authorization': `Bearer ${token}`
                     }
                 })
-                let img = resp.data.artists.items[0].images[1].url
-                console.log(img)
-                return `background-image: url('${img}')`
+                let img = ''
+                try {
+                    img = resp.data.artists.items[0].images[1].url
+                } catch(err) {
+                    console.warn("Image doesn't exist for " + artist)
+                }
+                if (img == '') {
+                    return ''
+                } else {
+                    return `background-image: url('${img}')`
+                }
             }
         })
     }

@@ -78,6 +78,15 @@ export default {
         db.prepare('DELETE FROM library').run()
         return []
     },
+    deleteSome(ids) {
+        let deleteId = db.prepare('DELETE FROM library WHERE id = ?')
+        let deleteMany = db.transaction(songDelete => {
+            songDelete.forEach(id => {
+                deleteId.run(id)
+            })
+        })
+        deleteMany(ids)
+    },
     fetchSpotifyDetails() {
         let spotifyData = db.prepare('SELECT * FROM spotify').get()
         return spotifyData

@@ -103,7 +103,6 @@ export default {
         },
         addToFavourite() {
             ipcRenderer.send('addFavourite', this.song.id)
-            console.log('yeah')
         },
         removeFromFavourites() {
             ipcRenderer.send('removeFavourite', this.song.id)

@@ -1,8 +1,6 @@
 import express from 'express'
 import { constants, mkdirSync, access } from 'fs'
-/* import db from './database'
-import axios from 'axios'
-import qs from 'qs' */
+import cors from 'cors'
 
 let app = express()
 
@@ -10,6 +8,7 @@ let startServer = async (appLoc, win) => {
     access(`${appLoc}/images/`, constants.F_OK | constants.W_OK, (err) => {
         if (err) mkdirSync(`${appLoc}/images/`)
     })
+    app.use(cors())
     app.use(express.static(`${appLoc}/images/`))
     app.use(function(req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");

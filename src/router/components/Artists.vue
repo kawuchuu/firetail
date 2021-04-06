@@ -33,7 +33,7 @@ export default {
         },
         ...mapState('nav', {
             currentScroll: state => {
-                if (state.scrolled > 200) {
+                if (state.scrolled > 230) {
                     return 'sticky'
                 } else {
                     return ''

@@ -15,7 +15,6 @@ export default {
     computed: {
         isActive() {
             const checkNav = this.$store.state.nav.checkNav
-            console.log(checkNav)
             if (!checkNav[this.nav.type]) {
                 return 'inactive'
             } else {

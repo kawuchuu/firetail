@@ -78,7 +78,6 @@ export default {
         }
     },
     mounted() {
-        console.log('lol show please')
         this.isUIShown = true
         clearTimeout(this.mouseTimeout)
         this.mouseTimeout = setTimeout(this.hideUI, 3000)

@@ -42,11 +42,6 @@ export default {
                     label: 'Spotify Integration'
                 },
                 {
-                    type: 'text',
-                    id: 'spotifyPrivacyWarning',
-                    message: `By using this feature, you agree that requests will be made to Spotify. Some anonymous usage data will also be sent (I can't disable this).`
-                },
-                {
                     type: 'button',
                     id: 'connectSpotify',
                     label: 'Connect your Spotify account for extra metadata features',
@@ -96,6 +91,11 @@ export default {
                             objectKey: 'name'
                         }
                     }
+                },
+                {
+                    type: 'text',
+                    id: 'spotifyPrivacyWarning',
+                    message: `By using this feature, you agree that requests will be made to Spotify. Some anonymous usage data will also be sent.`
                 },
                 {
                     type: 'subtitle',

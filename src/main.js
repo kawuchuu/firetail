@@ -5,7 +5,7 @@ import router from './router'
 import i18n from './translation'
 import AsyncComputed from 'vue-async-computed'
 import { ipcRenderer } from 'electron'
-
+export const bus = new Vue()
 new Vue({
     i18n,
     router,
@@ -17,26 +17,29 @@ Vue.use(AsyncComputed)
 
 router.replace({ path: '/', query: { name: i18n.t('sidebar.songs'), view: 'all' } })
 
-ipcRenderer.addListener('library', (event, library) => {
+ipcRenderer.on('library', (event, library) => {
+    store.commit('audio/updateCurrentList', library)
+    ipcRenderer.send('getAllFromColumn', 'artist')
+    ipcRenderer.send('getAllFromColumnWithArtist')
+    ipcRenderer.once('getAllWithColumnArtist', (event, args) => {
+        store.commit('nav/updateAlbums', args)
+    })
+})
+
+ipcRenderer.on('libraryMid', (event, library) => {
     store.commit('audio/updateCurrentList', library)
 })
 
-ipcRenderer.addListener('getAllFromColumn', (event, type) => {
+ipcRenderer.on('getAllFromColumn', (event, type) => {
     if (type[0] == 'artist') {
         store.commit('nav/updateArtists', type[1])
     }
 })
 
 ipcRenderer.send('library')
-ipcRenderer.send('getAllFromColumn', 'artist')
-ipcRenderer.send('getAllFromColumnWithArtist')
 ipcRenderer.send('getFavourites')
 
-ipcRenderer.once('getAllWithColumnArtist', (event, args) => {
-    store.commit('nav/updateAlbums', args)
-})
-
-ipcRenderer.addListener('getFavourites', (event, ids) => {
+ipcRenderer.on('getFavourites', (event, ids) => {
     let favs = []
     ids.forEach(f => {
         favs.push(f.id)

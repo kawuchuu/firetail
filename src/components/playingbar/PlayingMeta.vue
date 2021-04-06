@@ -71,7 +71,6 @@ export default {
         },
         isFavourite() {
             if (this.$store.state.nav.favouriteSongs.indexOf(this.$store.state.audio.currentSong) != -1) {
-                console.log('what')
                 return 'active'
             } else {
                 return ''
@@ -98,7 +97,6 @@ export default {
         },
         addToFavourite() {
             ipcRenderer.send('addFavourite', this.$store.state.audio.currentSong)
-            console.log('yeah')
         },
         removeFromFavourites() {
             ipcRenderer.send('removeFavourite', this.$store.state.audio.currentSong)

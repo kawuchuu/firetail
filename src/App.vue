@@ -22,6 +22,7 @@
             </div>
         </div>
         <Panel/>
+        <ContextMenu/>
         <ZenMode v-if="isFullscreen"/>
         <div class="main-content-wrapper">
             <SideBar/>
@@ -42,6 +43,7 @@ import SideBar from './components/sidebar/SideBar.vue'
 import PlayingBar from './components/playingbar/PlayingBar'
 import Panel from './components/panel/Panel'
 import ZenMode from './components/zen/ZenMode'
+import ContextMenu from './components/ContextMenu'
 import { ipcRenderer } from 'electron'
 //import PluginComp from './PluginComp'
 
@@ -52,7 +54,8 @@ export default {
         SideBar,
         PlayingBar,
         Panel,
-        ZenMode
+        ZenMode,
+        ContextMenu
     },
     methods: {
         addFiles(evt) {
