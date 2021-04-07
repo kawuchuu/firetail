@@ -38,7 +38,7 @@ jobs:
         run: |
           export FTBUILD_NUM=${{steps.get-ver-build.outputs.build}}
           npm i
-          bash npm run electron:build
+          npm run electron:build
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
