@@ -26,7 +26,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Get Version
         id: package-version
-        uses: martinbeentjes/npm-get-version-action@master
+        run: |
+          PACKAGE_JSON_PATH="${1-.}"
+          PACKAGE_VERSION=$(cat ${PACKAGE_JSON_PATH}/package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+          echo ::set-output name=current-version::$PACKAGE_VERSION
       - id: get-ver-build
         run: |
           build=$(echo ${{ github.sha }} | cut -c1-5)
