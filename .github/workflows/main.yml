@@ -12,6 +12,10 @@ defaults:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
+    
+    defaults:
+      run:
+        shell: bash
 
     strategy:
       matrix:
@@ -20,11 +24,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Get Version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+      - id: get-ver-build
+        run: |
+          build=$(echo ${{ github.sha }} | cut -c1-5)
+          echo "::set-output name=build::$build"
       - name: Build
         run: |
+          export FTBUILD_NUM=${{steps.get-ver-build.outputs.build}}
           npm i
-          npm run electron:build
-
+          bash npm run electron:build
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

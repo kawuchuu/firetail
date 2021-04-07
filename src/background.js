@@ -45,7 +45,7 @@ async function createWindow() {
     })
     let openSong = filePath => {
         let lastElement = filePath
-        if (process.argv.length > 1 && existsSync(lastElement) && lastElement != "dist_electron") {
+        if (process.argv.length >= 1  && lastElement != "dist_electron" && existsSync(lastElement)) {
             musicMetadata.parseFile(lastElement).then(meta => {
                 let fileName = path.parse(lastElement).name
                 let info = {

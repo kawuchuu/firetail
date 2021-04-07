@@ -1,3 +1,11 @@
+const {version} = require('./package.json')
+
+let buildNum = version
+
+if (process.env.FTBUILD_NUM) {
+    buildNum = `${version}-${process.env.FTBUILD_NUM}`
+}
+
 module.exports = {
     devServer: {
         host: 'localhost',
@@ -20,6 +28,9 @@ module.exports = {
                 appId: "xyz.kawuchuu.firetail",
                 productName: "Firetail",
                 copyright: "Copyright © 2020 kawuchuu",
+                extraMetadata: {
+                    version: buildNum
+                },
                 mac: {
                     category: "public.app-category.music",
                     target: "dmg",
@@ -40,6 +51,26 @@ module.exports = {
                             ext: 'mp3',
                             name: 'MP3',
                             description: 'MP3 File'
+                        },
+                        {
+                            ext: 'm4a',
+                            name: 'M4A',
+                            description: 'M4A File'
+                        },
+                        {
+                            ext: 'flac',
+                            name: 'FLAC',
+                            description: 'FLAC File'
+                        },
+                        {
+                            ext: 'ogg',
+                            name: 'OGG',
+                            description: 'OGG File'
+                        },
+                        {
+                            ext: 'wav',
+                            name: 'WAV',
+                            description: 'WAV File'
                         }
                     ]
                 },
