@@ -2,9 +2,9 @@ const {version} = require('./package.json')
 
 let buildNum = version
 
-/* if (process.env.FTBUILD_NUM) {
+if (process.env.FTBUILD_NUM) {
     buildNum = `${version}-${process.env.FTBUILD_NUM}`
-} */
+}
 
 module.exports = {
     devServer: {
