@@ -1,6 +1,6 @@
 {
   "name": "firetail",
-  "version": "0.7.0-snapshot",
+  "version": "0.7.0-alpha",
   "repository": {
     "type": "git",
     "url": "https://github.com/kawuchuu/firetail/"
@@ -24,6 +24,7 @@
     "better-sqlite3": "^7.1.2",
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
+    "electron-updater": "^4.3.8",
     "music-metadata": "^7.0.2",
     "node-vibrant": "^3.1.6",
     "qs": "^6.9.4",

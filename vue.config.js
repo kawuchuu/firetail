@@ -1,9 +1,9 @@
-const {version} = require('./package.json')
-
-let buildNum = version
+const fs = require('fs')
 
 if (process.env.FTBUILD_NUM) {
-    buildNum = `${version}-${process.env.FTBUILD_NUM}`
+    fs.writeFile('./public/build.txt', process.env.FTBUILD_NUM, (err, file) => {
+        if (err) console.error(err)
+    })
 }
 
 module.exports = {
@@ -27,10 +27,7 @@ module.exports = {
             builderOptions: {
                 appId: "xyz.kawuchuu.firetail",
                 productName: "Firetail",
-                copyright: "Copyright © 2020 kawuchuu",
-                extraMetadata: {
-                    version: buildNum
-                },
+                copyright: "Copyright © 2021 kawuchuu",
                 mac: {
                     category: "public.app-category.music",
                     target: "dmg",

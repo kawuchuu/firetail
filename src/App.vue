@@ -119,8 +119,14 @@ export default {
         let port = await ipcRenderer.invoke('getPort')
         this.$store.commit('nav/updatePort', port)
         let ver = await ipcRenderer.invoke('getVersion')
-        //document.title = `Firetail ${ver}`
+        let buildNum = await ipcRenderer.invoke('getBuildNum')
+        if (buildNum == 'dev') {
+            document.title = 'Firetail [DEV]'
+        } else if (ver.includes('alpha') && buildNum !== 'unknown') {
+            document.title = `Firetail [ALPHA BUILD ${buildNum}]`
+        }
         this.$store.commit('nav/updateVer', ver)
+        this.$store.commit('nav/updateBuildNum', buildNum)
         this.$refs.container.addEventListener('scroll', e => {
             this.$store.commit('nav/updateCurrentScroll', e.target.scrollTop)
         })

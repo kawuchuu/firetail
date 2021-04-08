@@ -1,4 +1,5 @@
 import { app, ipcMain, shell } from 'electron'
+import fs from 'fs'
 import db from './database'
 import files from './files'
 import server from './server'
@@ -76,8 +77,17 @@ export default {
 
         ipcMain.handle('getVersion', () => {
             let ver = app.getVersion()
-            if (ver.endsWith('-snapshot')) return `${ver}`
-            else return ver
+            return ver
+        })
+
+        ipcMain.handle('getBuildNum', async () => {
+            let buildNum = 'unknown'
+            if (!app.isPackaged) {
+                buildNum = (await fs.promises.readFile(`${__dirname}/../public/build.txt`)).toString()
+            } else {
+                buildNum = (await fs.promises.readFile(`${__dirname}/build.txt`)).toString()
+            }
+            return buildNum
         })
 
         ipcMain.handle('getPort', () => {

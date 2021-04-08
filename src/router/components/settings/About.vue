@@ -4,7 +4,7 @@
         <div class="info">
             <div>
                 <h1>Firetail</h1>
-                <p>Version {{version}}</p>
+                <p>Version {{version}}<span v-show="checkBuild"> [{{build}}]</span></p>
                 <p>Copyright &copy; 2021 kawuchuu</p>
             </div>
         </div>
@@ -15,7 +15,13 @@
 export default {
     data() {
         return {
-            version: this.$store.state.nav.ver
+            version: this.$store.state.nav.ver,
+            build: this.$store.state.nav.buildNum
+        }
+    },
+    computed: {
+        checkBuild() {
+            return this.build !== 'unknown'
         }
     }
 }

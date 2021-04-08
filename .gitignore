@@ -2,6 +2,7 @@
 node_modules
 /dist
 yarn-error.log
+/public/build.txt
 
 # local env files
 .env.local

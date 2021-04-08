@@ -66,6 +66,7 @@ const state = () => ({
     scrolled: 0,
     playingBarColour: null,
     ver: 'unknown',
+    buildNum: 'unknown',
     port: '0',
     isCDBurnEnable: false,
     albumViewCurrentArt: '',
@@ -117,6 +118,9 @@ const mutations = {
     },
     updateVer(state, ver) {
         state.ver = ver
+    },
+    updateBuildNum(state, buildNum) {
+        state.buildNum = buildNum
     },
     updatePort(state, port) {
         state.port = port
