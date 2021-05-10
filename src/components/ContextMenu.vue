@@ -120,7 +120,7 @@ export default {
 .context-menu {
     width: 100%;
     height: 100%;
-    min-width: 120px;
+    min-width: 175px;
     padding: 6px;
     box-sizing: border-box;
     

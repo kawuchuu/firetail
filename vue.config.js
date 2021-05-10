@@ -1,7 +1,7 @@
 const fs = require('fs')
 
 if (process.env.FTBUILD_NUM) {
-    fs.writeFile('./public/build.txt', process.env.FTBUILD_NUM, (err, file) => {
+    fs.writeFile('./public/build.txt', process.env.FTBUILD_NUM, (err) => {
         if (err) console.error(err)
     })
 }

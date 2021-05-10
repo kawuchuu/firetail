@@ -66,8 +66,12 @@ const mutations = {
         this.commit('nav/updatePlayingView', this.state.nav.currentView)
     },
     updateCurrentList(state, list) {
-        let sortedList = sort.sortArray(list, 'artist')
-        state.currentList = sortedList
+        if (!list || list.length > 0) {
+            let sortedList = sort.sortArray(list, 'artist')
+            state.currentList = sortedList
+        } else {
+            state.currentList = []
+        }
         this.commit('nav/updateScreenCountNum', list.length)
     },
     doShuffle(state) {

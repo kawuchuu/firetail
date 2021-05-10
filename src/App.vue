@@ -18,7 +18,7 @@
         <div :class="showDragIndicator" @dragleave="changeDrag(false)" @drop="filesDropped" class="drag-indicator">
             <div class="drag-msg">
                 <h1>Drop your music here!</h1>
-                <p>We're ready to import them!</p>
+                <p>You can drop music files and folders with music inside</p>
             </div>
         </div>
         <Panel/>
@@ -77,20 +77,8 @@ export default {
             evt.preventDefault();
             let files = []
             Array.from(evt.dataTransfer.files).forEach(f => {
-                /* f = f.webkitGetAsEntry()
-                if (f.isDirectory) {
-                    let basePath = evt.dataTransfer.files[i].path
-                    let reader = f.createReader();
-                    reader.readEntries(entries => {
-                        entries.forEach(file => {
-                            files.push([`${basePath}/${file.name}`, file.name])
-                        })
-                    })
-                } else {
-                    if (!f.type.startsWith('audio')) return;
-                    files.push([f.path,f.name])
-                } */
-                if (!f.type.startsWith('audio')) return;
+                /* console.log(f)
+                if (!f.type.startsWith('audio')) return; */
                 files.push([f.path,f.name])
             })
             //console.log(files)
@@ -116,6 +104,7 @@ export default {
         }
     },
     async mounted() {
+        //require('./scss/sketch.scss')
         let port = await ipcRenderer.invoke('getPort')
         this.$store.commit('nav/updatePort', port)
         let ver = await ipcRenderer.invoke('getVersion')
@@ -150,10 +139,6 @@ export default {
     height: calc(100vh - 85px);
 }
 
-.screen-container {
-    
-}
-
 .drag-indicator {
     width: 100vw;
     height: 100vh;
@@ -170,6 +155,10 @@ export default {
 
     .drag-msg {
         pointer-events: none;
+
+        p {
+            opacity: 0.65;
+        }
     }
 }
 
@@ -202,13 +191,23 @@ a {
 }
 
 ::-webkit-scrollbar {
-    width: 13px !important;
+    width: 16px !important;
     background: var(--bg);
 }
 
 ::-webkit-scrollbar-thumb {
-    border: solid 5px var(--bg);
-    background: var(--bd);
+    border: solid 4px var(--bg);
+    background: #ffffff50;
+    border-radius: 20px;
+    min-height: 60px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ffffff;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: var(--hl-txt);
 }
 
 ::-webkit-scrollbar-button {
@@ -296,10 +295,6 @@ html.firetail {
     src: url('./assets/NotoSansKR-Bold.otf') format('opentype');
 }
 
-.screen-container {
-    
-}
-
 .load-spinner {
     border: 2px solid var(--text);
     border-left: 2px solid transparent;
@@ -310,7 +305,7 @@ html.firetail {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 </style>

@@ -38,6 +38,16 @@ export default {
                 },
                 {
                     type: 'subtitle',
+                    id: 'subtitleAppearance',
+                    label: 'Appearance'
+                },
+                {
+                    type: 'text',
+                    id: 'yo',
+                    message: 'Themes and stuff goes here'
+                },
+                {
+                    type: 'subtitle',
                     id: 'subtitleSpotify',
                     label: 'Spotify Integration'
                 },

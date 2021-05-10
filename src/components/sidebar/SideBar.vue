@@ -34,7 +34,6 @@ export default {
     width: $sidebarwidth;
     height: 100%;
     background: #000;
-    box-shadow: 1px 0px 5px rgba(0, 0, 0, .15);
     z-index: 2;
     color: white;
 }

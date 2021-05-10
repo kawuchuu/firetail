@@ -1,8 +1,9 @@
 import * as metadata from 'music-metadata'
 import time from '../modules/timeformat'
-import { writeFile } from 'fs'
+import { writeFile, statSync, readdirSync } from 'fs'
 //import Jimp from 'jimp'
 import { app } from 'electron'
+import mime from 'mime-types'
 
 let randomString = length => {
     let text = ''
@@ -14,6 +15,37 @@ let randomString = length => {
 }
 
 export default {
+    async processFiles(filesAR) {
+        let processFiles = []
+        for (const item of filesAR) {
+            const path = item[0]
+            const name = item[1]
+            const stat = statSync(path)
+            if (stat) {
+                if (stat.isDirectory()) {
+                    const files = readdirSync(path)
+                    for (const file of files) {
+                        const fullPath = `${path}/${file.toString()}`
+                        if (statSync(fullPath).isFile()) {
+                            const ext = file.toString().split('.').pop()
+                            const isAudio = mime.lookup(ext)
+                            if (isAudio && isAudio.startsWith('audio')) {
+                                processFiles.push([fullPath, file.toString()])
+                            }
+                        }
+                    }
+                } else if (stat.isFile()) {
+                    const ext = name.split('.').pop()
+                    const isAudio = mime.lookup(ext)
+                    if (isAudio && isAudio.startsWith('audio')) {
+                        processFiles.push([path, name])
+                    }
+                }
+            }
+        }
+        const stuff = await this.addFiles(processFiles)
+        return stuff
+    },
     async addFiles(songs) {
         let path = app.getPath('userData')
         let getData = new Promise(resolve => {

@@ -1,0 +1,102 @@
+/*
+* App.vue
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Pangolin&display=swap');
+
+body {
+    font-family: 'Pangolin' !important;
+    letter-spacing: 0.5px;
+    background-color: #ffb0d8;
+    color: #313131;
+}
+
+html.firetail {
+    --hl-txt: #c75cac;
+}
+
+/*
+* SideBar.vue
+*/
+
+.side-bar {
+    background: #ffdcee;
+    color: #313131;
+    //border-radius: 0 20px 0 0;
+    //box-shadow: 5px 0px 15px rgba(0,0,0,.1);
+    border-right: 10px solid transparent;
+    border-image: url('./sketch_line_vert.svg') 8 stretch;
+    box-sizing: border-box;
+}
+
+.item-sidebar {
+    color: #313131;
+}
+
+.firetail-icon {
+    filter: brightness(0.15)
+}
+
+.app-name {
+    letter-spacing: normal;
+}
+
+.beta-tag {
+    color: #313131;
+    border-color: #313131;
+    font-family: 'Inter';
+}
+
+.router-link-active .item-sidebar {
+    background: rgba(0,0,0,.1)
+}
+
+.list-subtitle {
+    text-transform: none;
+    font-size: 17px;
+}
+
+/*
+* SongList.vue
+*/
+
+.bg-gradient {
+    background: none !important;
+}
+
+.list-gradient-fade {
+    background: none !important;
+}
+
+.list-section {
+    border-color: transparent !important;
+    border-width: 6px !important;
+    border-image: url('./sketch_line_hor.svg') 8 stretch;
+}
+
+.sticky-bg {
+    background: #ffdcee !important;
+    box-shadow: 0px 5px 15px rgba(0,0,0,.1);
+}
+
+.top-title h1 {
+    letter-spacing: 0.5px !important;
+}
+
+/*
+* TopBar.vue
+*/
+
+.top-button-container {
+    background: #ffdcee !important;
+    backdrop-filter: none;
+}
+
+/*
+* TopNav.vue
+*/
+
+.nav-button {
+    background: #ffdcee !important;
+    backdrop-filter: none;
+}

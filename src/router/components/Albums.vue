@@ -125,7 +125,7 @@ export default {
     position: fixed;
     top: 0;
     height: 81px;
-    width: 100%;
+    width: calc(100% - #{$sidebarwidth} - 16px);
     background: rgba(0,0,0,.65);
     backdrop-filter: blur(15px);
     z-index: 3;

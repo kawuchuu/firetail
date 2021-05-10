@@ -422,7 +422,7 @@ div.section {
     position: fixed;
     top: 0;
     height: 81px;
-    width: 100%;
+    width: calc(100% - #{$sidebarwidth} - 16px);
     background: $subColour;
     z-index: 3;
     opacity: 0;
