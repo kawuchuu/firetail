@@ -8,10 +8,10 @@ import Albums from './components/Albums'
 import store from '../store'
 import tr from '../translation'
 import Settings from './components/settings/Settings'
-import VueVirtualScroller from 'vue-virtual-scroller'
+import VirtualList from 'vue-virtual-scroll-list'
 import { ipcRenderer } from 'electron'
 
-Vue.use(VueVirtualScroller)
+Vue.component('virtual-list', VirtualList)
 
 class VueRouterEx extends VueRouter {
     constructor(options) {

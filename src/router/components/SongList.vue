@@ -37,7 +37,16 @@
             </div>
             <div class="wrapper">
                 <p v-if="list.length == 0" style="margin-left: 50px;">No songs have been imported yet. Click Add Songs at the top to import some!</p>
-                <SongItem @selected="select" v-for="(item, index) in list" :song="item" :key="item.id" :selectedItems="selectedItems" :index="index"/>
+                <!-- <SongItem v-for="(item, index) in list" :song="item" :key="item.id" :selectedItems="selectedItems" :index="index"/> -->
+                <virtual-list
+                    :data-key="'id'"
+                    :data-sources="list"
+                    :data-component="sItem"
+                    :page-mode="true"
+                    :page-mode-el="'#main-container'"
+                    :extra-props="{selectedItems: selectedItems}"
+                    @selected="select"
+                />
             </div>
         </div>
     </div>
@@ -52,13 +61,14 @@ import sort from '@/modules/sort'
 import axios from 'axios'
 
 export default {
-    components: {
+    /* components: {
         SongItem
-    },
+    }, */
     data() {
         return {
             selectedItems: [],
-            lastSelectedIndex: 0
+            lastSelectedIndex: 0,
+            sItem: SongItem
         }
     },
     computed: {
@@ -241,6 +251,11 @@ export default {
                 })
             }
         }
+    },
+    mounted() {
+        bus.$on('selected', evt => {
+            this.select(evt)
+        })
     }
 }
 </script>

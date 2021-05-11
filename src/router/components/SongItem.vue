@@ -3,30 +3,32 @@
         <i class="material-icons-outlined play-pause" :style="listIconVisible" @click="decidePlaySong" @mouseover="listIconHover" @mouseleave="listIconHoverLeave">{{ listIcon }}</i>
         <i class="ft-icon favourite-icon" @click="handleFavourite">{{ favouriteIcon }}</i>
         <div v-if="$route.path == '/albums'">
-            <p v-if="song.trackNum !== 'null'" class="track-num">{{song.trackNum}}</p>
+            <p v-if="source.trackNum !== 'null'" class="track-num">{{source.trackNum}}</p>
             <p v-else class="track-num">-</p>
         </div>
         <div class="artist-title-album" @pointerdown="select" @dblclick="playSong">
             <div class="list-title">
-                <p>{{ song.title }}</p>
-                <span v-if="$route.path == '/artists'">{{song.album}}</span>
-                <span v-if="$route.path == '/albums'">{{song.artist}}</span>
+                <p>{{ source.title }}<!--  {{ index }} --></p>
+                <span v-if="$route.path == '/artists'">{{source.album}}</span>
+                <span v-if="$route.path == '/albums'">{{source.artist}}</span>
             </div>
-            <p v-if="$route.path == '/'" class="list-artist"><span>{{song.artist}}</span></p>
-            <p v-if="$route.path == '/'" class="list-album"><span>{{song.album}}</span></p>
-            <p class="list-duration"><span>{{song.duration}}</span></p>
+            <p v-if="$route.path == '/'" class="list-artist"><span>{{source.artist}}</span></p>
+            <p v-if="$route.path == '/'" class="list-album"><span>{{source.album}}</span></p>
+            <p class="list-duration"><span>{{source.duration}}</span></p>
         </div>
     </li>
 </template>
 
 <script>
 import { ipcRenderer } from 'electron'
+import {bus} from '@/main'
+
 export default {
-    props: ['song', 'index', 'selectedItems'],
+    props: ['source', 'index', 'selectedItems'],
     computed: {
         isActive() {
             let view = this.$route.query.view
-            if (this.song.id == this.$store.state.audio.currentSong && view == this.$store.state.nav.playingView) {
+            if (this.source.id == this.$store.state.audio.currentSong && view == this.$store.state.nav.playingView) {
                 return "active"
             } else {
                 return ""
@@ -34,11 +36,11 @@ export default {
         },
         listIcon() {
             let view = this.$route.query.view
-            if (this.song.id == this.$store.state.audio.currentSong && this.$store.state.audio.paused && view == this.$store.state.nav.playingView) {
+            if (this.source.id == this.$store.state.audio.currentSong && this.$store.state.audio.paused && view == this.$store.state.nav.playingView) {
                 return 'play_arrow'
-            } else if (this.song.id == this.$store.state.audio.currentSong && this.isIconHover && view == this.$store.state.nav.playingView) {
+            } else if (this.source.id == this.$store.state.audio.currentSong && this.isIconHover && view == this.$store.state.nav.playingView) {
                 return 'pause'
-            } else if (this.song.id == this.$store.state.audio.currentSong && view == this.$store.state.nav.playingView) {
+            } else if (this.source.id == this.$store.state.audio.currentSong && view == this.$store.state.nav.playingView) {
                 return 'volume_up'
             } else {
                 return 'play_arrow'
@@ -46,14 +48,14 @@ export default {
         },
         listIconVisible() {
             let view = this.$route.query.view
-            if (this.song.id == this.$store.state.audio.currentSong && view == this.$store.state.nav.playingView || this.isHover) {
+            if (this.source.id == this.$store.state.audio.currentSong && view == this.$store.state.nav.playingView || this.isHover) {
                 return 'opacity: 1'
             } else {
                 return 'opacity: 0'
             }
         },
         favouriteIcon() {
-            if (this.$store.state.nav.favouriteSongs.indexOf(this.song.id) != -1) {
+            if (this.$store.state.nav.favouriteSongs.indexOf(this.source.id) != -1) {
                 return 'favourite-filled'
             } else {
                 return 'favourite'
@@ -91,15 +93,16 @@ export default {
     },
     methods: {
         playSong(evt) {
-            if (evt.ctrlKey || evt.shiftKey) return
+            console.log(this.selectedItems)
+            if (evt && (evt.ctrlKey || evt.shiftKey)) return
             let currentList = []
             this.$store.state.audio.currentList.forEach(f => { currentList.push(f) })
             this.$store.commit('audio/genNewQueue', currentList)
-            this.$store.dispatch('audio/playSong', this.song)
+            this.$store.dispatch('audio/playSong', this.source)
         },
         decidePlaySong() {
             let view = this.$route.query.view
-            if (this.song.id == this.$store.state.audio.currentSong && view == this.$store.state.nav.playingView) {
+            if (this.source.id == this.$store.state.audio.currentSong && view == this.$store.state.nav.playingView) {
                 this.$store.dispatch('audio/playPause')
             } else {
                 this.playSong()
@@ -113,7 +116,7 @@ export default {
             this.isIconHover = false
         },
         listIconHover() {
-            if (this.song.id == this.$store.state.audio.currentSong) {
+            if (this.source.id == this.$store.state.audio.currentSong) {
                 this.isIconHover = true
             }
         },
@@ -121,20 +124,20 @@ export default {
             this.isIconHover = false
         },
         handleFavourite() {
-            if (this.$store.state.nav.favouriteSongs.indexOf(this.song.id) == -1) {
+            if (this.$store.state.nav.favouriteSongs.indexOf(this.source.id) == -1) {
                 this.addToFavourite()
             } else {
                 this.removeFromFavourites()
             }
         },
         addToFavourite() {
-            ipcRenderer.send('addFavourite', this.song.id)
+            ipcRenderer.send('addFavourite', this.source.id)
         },
         removeFromFavourites() {
-            ipcRenderer.send('removeFavourite', this.song.id)
+            ipcRenderer.send('removeFavourite', this.source.id)
         },
         select(evt) {
-            this.$emit('selected', [evt, this.index])
+            bus.$emit('selected', [evt, this.index])
         }
     }
 }

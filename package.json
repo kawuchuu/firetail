@@ -34,7 +34,7 @@
     "vue-async-computed": "^3.9.0",
     "vue-i18n": "^8.21.1",
     "vue-router": "^3.4.5",
-    "vue-virtual-scroller": "^1.0.10",
+    "vue-virtual-scroll-list": "kawuchuu/vue-virtual-scroll-list",
     "vuex": "^3.5.1"
   },
   "devDependencies": {
