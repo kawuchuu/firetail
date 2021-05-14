@@ -45,6 +45,8 @@
                     :page-mode="true"
                     :page-mode-el="'#main-container'"
                     :extra-props="{selectedItems: selectedItems}"
+                    :estimate-size="42"
+                    :keeps="55"
                     @selected="select"
                 />
             </div>
