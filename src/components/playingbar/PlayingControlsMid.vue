@@ -283,6 +283,28 @@ export default {
     z-index: 3;
 }
 
+@keyframes indicate {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(-35px);
+        opacity: 1;
+    }
+}
+
+@keyframes indicate-yeah {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(-35px);
+        opacity: 1;
+    }
+}
+
 .seek-hover-indicate {
     background: #000000;
     border: solid 1px var(--bd);
@@ -290,8 +312,12 @@ export default {
     border-radius: 5px;
     transform: scale(0);
     position: fixed;
-    transition: 0.1s;
-    transition-property: transform;
+    /* transition: 0.25s cubic-bezier(0.17, 0.88, 0.23, 1.15);
+    transition-property: transform; */
+
+    animation: indicate 0.08s reverse;
+    opacity: 0;
+
     padding: 0px 10px;
     left: 0;
     pointer-events: none;
@@ -300,6 +326,12 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.seek-hover-indicate.hover  {
+    transform: scale(1) translateY(-35px);
+    opacity: 1;
+    animation: indicate-yeah 0.2s cubic-bezier(0.17, 0.88, 0.23, 1.15);
 }
 
 .seek-hover-indicate::after {
@@ -332,10 +364,6 @@ export default {
     width: 10px !important;
     height: 10px !important;
     transition: all .1s !important;
-}
-
-.seek-hover-indicate.hover  {
-    transform: scale(1) translateY(-35px);
 }
 
 .fill-hover.hover {

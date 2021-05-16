@@ -23,6 +23,7 @@
         </div>
         <Panel/>
         <ContextMenu/>
+        <ItemAdd/>
         <ZenMode v-if="isFullscreen"/>
         <div class="main-content-wrapper">
             <SideBar/>
@@ -44,6 +45,7 @@ import PlayingBar from './components/playingbar/PlayingBar'
 import Panel from './components/panel/Panel'
 import ZenMode from './components/zen/ZenMode'
 import ContextMenu from './components/ContextMenu'
+import ItemAdd from '@/components/ItemAdd'
 import { ipcRenderer } from 'electron'
 //import PluginComp from './PluginComp'
 
@@ -55,7 +57,8 @@ export default {
         PlayingBar,
         Panel,
         ZenMode,
-        ContextMenu
+        ContextMenu,
+        ItemAdd
     },
     methods: {
         addFiles(evt) {
@@ -120,9 +123,9 @@ export default {
         let ver = await ipcRenderer.invoke('getVersion')
         let buildNum = await ipcRenderer.invoke('getBuildNum')
         if (buildNum == 'dev') {
-            document.title = 'Firetail [DEV]'
+            document.title = 'Firetail [dev]'
         } else if (ver.includes('alpha') && buildNum !== 'unknown') {
-            document.title = `Firetail [ALPHA BUILD ${buildNum}]`
+            document.title = `Firetail [build ${buildNum}]`
         }
         this.$store.commit('nav/updateVer', ver)
         this.$store.commit('nav/updateBuildNum', buildNum)

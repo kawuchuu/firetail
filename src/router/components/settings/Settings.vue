@@ -151,7 +151,7 @@ main {
 .top-title h1 {
     font-size: 64px;
     margin: 0;
-    letter-spacing: -2px;
+    letter-spacing: -0.03em;
 }
 
 .bg-gradient {

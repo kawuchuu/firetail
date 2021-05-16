@@ -23,6 +23,7 @@ module.exports = {
     pluginOptions: {
         electronBuilder: {
             nodeIntegration: true,
+            contextIsolation: false,
             externals: ['better-sqlite3'],
             builderOptions: {
                 appId: "xyz.kawuchuu.firetail",

@@ -151,6 +151,7 @@ export default {
     background-image: url('../../assets/firetail-menu.svg');
     background-size: cover;
     margin: 0 7px 0 0;
+    filter: brightness(10);
 }
 
 .app-info {
@@ -163,6 +164,7 @@ export default {
     font-family: 'Inter';
     font-weight: bold;
     font-size: 18px;
+    letter-spacing: -0.02em;
 }
 
 .beta-tag {

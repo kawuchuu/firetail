@@ -2,7 +2,7 @@ import * as metadata from 'music-metadata'
 import time from '../modules/timeformat'
 import { writeFile, statSync, readdirSync } from 'fs'
 //import Jimp from 'jimp'
-import { app } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import mime from 'mime-types'
 
 let randomString = length => {
@@ -51,6 +51,7 @@ export default {
         let getData = new Promise(resolve => {
             let toAdd = []
             let imgUsed = []
+            let progress = 0;
             songs.forEach(async f => {
                 let id =  randomString(10)
                 let meta = await metadata.parseFile(f[0]).catch(err => {
@@ -79,7 +80,10 @@ export default {
                     metaObj['hasImage'] = 1
                 }
                 toAdd.push(metaObj)
+                progress++
+                BrowserWindow.getAllWindows()[0].webContents.send('doneProgress', [progress, songs.length])
                 if (toAdd.length == songs.length) {
+                    BrowserWindow.getAllWindows()[0].webContents.send('startOrFinish', false)
                     resolve(toAdd)
                 }
                 if (meta.common.picture && imgUsed.indexOf(artistAlbum) == -1) {

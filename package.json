@@ -1,10 +1,6 @@
 {
   "name": "firetail",
   "version": "0.7.0-alpha",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kawuchuu/firetail/"
-  },
   "description": "Audio Player",
   "author": {
     "name": "kawuchuu"
@@ -21,7 +17,7 @@
   "main": "background.js",
   "dependencies": {
     "axios": "^0.21.1",
-    "better-sqlite3": "^7.1.2",
+    "better-sqlite3": "^7.3.1",
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
     "electron-updater": "^4.3.8",
@@ -42,14 +38,18 @@
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "babel-eslint": "^10.1.0",
-    "electron": "^9.0.0",
+    "electron": "^12.0.6",
     "electron-devtools-installer": "^3.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "node-abi": "^2.26.0",
     "node-sass": "^5.0.0",
     "sass-loader": "^10.1.0",
-    "vue-cli-plugin-electron-builder": "~2.0.0-rc.4",
+    "vue-cli-plugin-electron-builder": "~2.0.0",
     "vue-template-compiler": "^2.6.11"
+  },
+  "resolutions": {
+    "node-abi": "https://github.com/lgeiger/node-abi.git#8e696075aff39f29a5cccf8235608dd3c070daa1"
   },
   "eslintConfig": {
     "root": true,
@@ -69,5 +69,9 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kawuchuu/firetail/"
+  }
 }

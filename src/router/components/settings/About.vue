@@ -38,6 +38,7 @@ img {
 }
 h1 {
     margin: 10px 0px;
+    letter-spacing: -0.02em;
 }
 p {
     margin: 10px 0px;

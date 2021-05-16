@@ -156,6 +156,7 @@ export default {
     max-width: 350px;
     font-weight: bold;
     margin-right: 10px;
+    letter-spacing: -0.01em;
 }
 
 .song-artist {

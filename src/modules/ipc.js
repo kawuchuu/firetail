@@ -8,6 +8,8 @@ import BurnJob from './burn'
 export default {
     start(win) {
         ipcMain.on('addToLibrary', async (event, locations) => {
+            if (locations.length <= 0) return
+            win.webContents.send('startOrFinish', true)
             let songs = await files.processFiles(locations)
             db.addToLibrary(songs)
             let library = db.getLibrary()
@@ -84,6 +86,8 @@ export default {
             let buildNum = 'unknown'
             if (app.isPackaged) {
                 buildNum = (await fs.promises.readFile(`${__dirname}/build.txt`)).toString()
+            } else {
+                buildNum = 'dev'
             }
             return buildNum
         })

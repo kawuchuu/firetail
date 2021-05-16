@@ -23,7 +23,7 @@ export default {
         insertMany(songs)
     },
     addToFavourite(id) {
-        console.log(id)
+        //console.log(id)
         db.prepare('INSERT INTO favourites (id) VALUES (?)').run(id)
     },
     removeFromFavourite(id) {

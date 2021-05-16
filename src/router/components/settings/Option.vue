@@ -66,7 +66,7 @@ export default {
     border-bottom: solid 1px var(--text);
     padding-bottom: 15px;
     margin: 50px 0px 20px;
-    letter-spacing: -1px;
+    letter-spacing: -0.02em;
 }
 
 .button-option {
