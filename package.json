@@ -1,9 +1,10 @@
 {
-  "name": "firetail",
+  "name": "Firetail",
   "version": "0.7.0-alpha",
   "description": "Audio Player",
   "author": {
-    "name": "kawuchuu"
+    "name": "kawuchuu",
+    "email": "kawuchuu@gmail.com"
   },
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -49,7 +50,8 @@
     "vue-template-compiler": "^2.6.11"
   },
   "resolutions": {
-    "node-abi": "https://github.com/lgeiger/node-abi.git#8e696075aff39f29a5cccf8235608dd3c070daa1"
+    "node-abi": "https://github.com/lgeiger/node-abi.git#8e696075aff39f29a5cccf8235608dd3c070daa1",
+    "electron-builder": "^22.10.5"
   },
   "eslintConfig": {
     "root": true,

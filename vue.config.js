@@ -29,11 +29,6 @@ module.exports = {
                 appId: "xyz.kawuchuu.firetail",
                 productName: "Firetail",
                 copyright: "Copyright © 2021 kawuchuu",
-                mac: {
-                    category: "public.app-category.music",
-                    target: "dmg",
-                    icon: "build/icon-macos.png"
-                },
                 nsis: {
                     artifactName: "Firetail-Setup-${version}.${ext}",
                     uninstallDisplayName: "Firetail"
@@ -42,7 +37,7 @@ module.exports = {
                     target: [
                         "nsis"
                     ],
-                    icon: "build/icon.ico",
+                    icon: "build/other/windows.ico",
                     publisherName: "kawuchuu",
                     fileAssociations: [
                         {
@@ -77,8 +72,17 @@ module.exports = {
                         {
                             target: "AppImage",
                             arch: "x64"
+                        },
+                        {
+                            target: "rpm",
+                            arch: "x64"
+                        },
+                        {
+                            target: "deb",
+                            arch: "x64"
                         }
                     ],
+                    icon: 'build/icons',
                     category: "AudioVideo",
                     executableName: "firetail",
                     desktop: {
@@ -88,6 +92,14 @@ module.exports = {
                         Icon: "firetail",
                         Terminal: "false"
                     }
+                },
+                mac: {
+                    category: "public.app-category.music",
+                    target: {
+                        target: "dmg",
+                        arch: "universal"
+                    },
+                    icon: "build/other/macos.png"
                 },
                 publish: null
             }
