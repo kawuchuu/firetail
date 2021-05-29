@@ -1,7 +1,9 @@
 <template>
     <div class="root" :class="isSimple" v-if="list.length > 0 || $route.path == '/'">
-        <div v-if="$route.path == '/'">
-            <div class="bg-gradient"></div>
+        <div class="standard" v-if="$route.path == '/'">
+            <div class="bg-gradient">
+                <div class="bg-banner"></div>
+            </div>
             <div class="sticky-bg" ref="stickyBg" :class="currentScroll">
                 <div class="bg-inner">
                     <h3>Songs</h3>

@@ -1,41 +1,27 @@
 <template>
-    <div v-show="icon !== 'waving_hand'" class="item-add" :class="theClass">
+    <div v-show="icon !== 'waving_hand'" class="item-add" :class="[theClass, mainColour]">
         <i class="material-icons" :class="statusIcon">{{ icon }}</i>
         <div class="add-info">
             <h4>{{ title }}</h4>
             <p v-if="message !== ''">{{ message }}</p>
-            <p v-else>{{ progress }} - {{ progPer }}%</p>
-        </div>
-        <div class="bar-wrapper">
-            <div class="bar" :style="barWidth">
-                <div v-if="icon === 'queue' && progPer === 100" class="indicate-wrapper">
-                    <div class="bar-indicate"></div>
-                    <div class="bar-indicate"></div>
-                    <div class="bar-indicate"></div>
-                    <div class="bar-indicate"></div>
-                </div>
-            </div>
         </div>
     </div>
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+import {bus} from '@/main'
+
 export default {
     data() {
         return {
-            progress: '0/0',
-            progPer: 100,
             theClass: '',
             title: 'blah blah blah',
             message: "coolswag",
-            icon: 'waving_hand'
+            icon: 'waving_hand',
+            niceTimeout: null
         }
     },
     computed: {
-        barWidth() {
-            return `width: ${this.progPer}%`
-        },
         statusIcon() {
             switch(this.icon) {
                 case 'autorenew': {
@@ -50,29 +36,23 @@ export default {
                 default:
                     return ''
             }
+        },
+        mainColour() {
+            if (this.icon == 'error') return 'error'
+            else return ''
         }
     },
     mounted() {
-        ipcRenderer.on('doneProgress', (event, prog) => {
-            this.message = ''
-            this.icon = 'autorenew'
-            const progP = prog[0] / prog[1] * 100;
-            this.progress = `${prog[0]}/${prog[1]}`
-            this.progPer = `${Math.round(progP)}`
-        })
-        ipcRenderer.on('startOrFinish', (event, doingWhat) => {
-            if (doingWhat) {
-                this.progPer = 100
-                this.icon = 'queue'
-                this.title = 'Preparing for import...'
-                this.message = "Sit tight... we'll start soon!"
-                this.theClass = 'shown'
-            } else {
-                this.title = 'Finished!'
-                this.icon = 'done'
-                setTimeout(() => this.theClass = '', 3000)
-            }
-        })
+        bus.$on('notifySwag', details => {
+            clearTimeout(this.niceTimeout)
+            this.title = details.title
+            this.message = details.message
+            this.icon = details.icon
+            this.theClass = 'shown'
+            this.niceTimeout = setTimeout(() => {
+                this.theClass = ''
+            }, 5000)
+        }) 
     }
 }
 </script>
@@ -108,16 +88,16 @@ export default {
 
     display: grid;
     grid-template-areas:
-    "icon info"
-    "bar bar";
+    "icon info";
     grid-template-columns: 65px 1fr;
 
     background: black;
     border: solid var(--bd) 1px;
     box-shadow: 0px 5px 10px rgba(0,0,0,.15);
-    width: 325px;
-    height: 90px;
+    width: 345px;
+    height: auto;
     border-radius: 10px;
+    padding: 10px 10px 10px 0px;
 
     opacity: 0;
 
@@ -156,19 +136,6 @@ export default {
     }
 }
 
-.bar-wrapper {
-    grid-area: bar;
-    margin: 3px 15px 0px;
-
-    .bar {
-        height: 5px;
-        width: 100%;
-        background: var(--hl-txt);
-        border-radius: 10px;
-        overflow: hidden;
-    }
-}
-
 @keyframes rotate {
     from {
         transform: rotate(0deg)
@@ -199,26 +166,12 @@ export default {
     color: #4cc967;
 }
 
-@keyframes movelmao {
-    from {
-        transform: translate(-170px)
-    }
-    to {
-        transform: translate(0px);
-    }
-}
+.error {
+    color: #ff4848;
+    border-color: #7a2424;
 
-.indicate-wrapper {
-    display: flex;
-    transform: translate(-170px);
-    animation: movelmao 1.5s infinite linear;
-}
-
-.bar-indicate {
-    position: relative;
-    min-width: 150px;
-    height: 5px;
-    background: linear-gradient(to left, transparent, #f5bfbc, transparent);
-    margin-right: 20px;
+    .add-info p {
+        opacity: 0.85;
+    }
 }
 </style>

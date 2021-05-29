@@ -2,6 +2,7 @@ import sort from '../../modules/sort'
 import store from '../index'
 import tr from '../../translation'
 import { ipcRenderer } from 'electron'
+import {bus} from '@/main'
 
 let audio = new Audio();
 
@@ -170,7 +171,17 @@ const actions = {
             context.commit('updateCurrentSongString', song.id)
         }
         context.commit('songMetadata', [song.title, song.artist])
-        audio.play()
+        audio.play().catch(err => {
+            let msg = err.toString()
+            if (err.toString().includes('supported source was found')) {
+                msg = 'The file you requested could not be played. Make sure the file exists and try again.'
+            }
+            bus.$emit('notifySwag', {
+                title: "Unfortunately, an error occurred",
+                message: msg,
+                icon: "error"
+            })
+        })
         audio.addEventListener('timeupdate', timeUpdate)
         audio.addEventListener('pause', () => {
             context.commit('updatePause')

@@ -1,5 +1,5 @@
 <template>
-    <div id="app" @dragover="changeDrag($event, true)">
+    <div id="app" class="test" @dragover="changeDrag($event, true)">
         <input type="file" multiple accept="audio/*" id="addFiles" @change="addFiles" style="display: none;">
         <div class="cover" style="transition:.25s;transition-property:opacity;width: 100%;height: 100%;position: fixed;z-index: 11;background: linear-gradient(#e74e8e, #ef9135);display: none;justify-content: center;align-items: center;">
             <!-- generated svg, slightly modified -->
@@ -24,6 +24,7 @@
         <Panel/>
         <ContextMenu/>
         <ItemAdd/>
+        <Notification/>
         <ZenMode v-if="isFullscreen"/>
         <div class="main-content-wrapper">
             <SideBar/>
@@ -46,6 +47,7 @@ import Panel from './components/panel/Panel'
 import ZenMode from './components/zen/ZenMode'
 import ContextMenu from './components/ContextMenu'
 import ItemAdd from '@/components/ItemAdd'
+import Notification from '@/components/Notification'
 import { ipcRenderer } from 'electron'
 //import PluginComp from './PluginComp'
 
@@ -58,7 +60,8 @@ export default {
         Panel,
         ZenMode,
         ContextMenu,
-        ItemAdd
+        ItemAdd,
+        Notification
     },
     methods: {
         addFiles(evt) {
@@ -107,7 +110,7 @@ export default {
         }
     },
     async mounted() {
-        //require('./scss/sketch.scss')
+        //require('./scss/test.scss')
         let port = await ipcRenderer.invoke('getPort')
         this.$store.commit('nav/updatePort', port)
         this.$refs.container.addEventListener('scroll', e => {
