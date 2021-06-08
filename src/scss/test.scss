@@ -5,6 +5,11 @@ html.dark {
 #app.test {
     /* honestly i don't know what the direction is here but whatever as long as it no longer looks like a spotify clone */
     
+    .root-sl {
+        color: black;
+        background: #ffcaac;
+    }
+    
     .playing-bar {
         background-color: #181818 !important;
         border-top: solid 1px var(--bd) !important;
@@ -15,8 +20,9 @@ html.dark {
     }
     
     .list-gradient-fade {
-        background: linear-gradient(#00000060, transparent) !important;
-        backdrop-filter: blur(20px);
+        background: linear-gradient(#00000030, var(--bg)) !important;
+        height: 198px;
+        display: none;
     }
     
     .bg-banner {
@@ -25,7 +31,7 @@ html.dark {
         background-image: url('../assets/songs-banner.svg');
         background-size: cover;
         background-position: center;
-        opacity: 0.2;
+        //opacity: 0.2;
     }
     
     .sticky-bg {

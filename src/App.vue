@@ -110,7 +110,7 @@ export default {
         }
     },
     async mounted() {
-        //require('./scss/test.scss')
+        require('./scss/test.scss')
         let port = await ipcRenderer.invoke('getPort')
         this.$store.commit('nav/updatePort', port)
         this.$refs.container.addEventListener('scroll', e => {

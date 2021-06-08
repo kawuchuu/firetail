@@ -1,5 +1,5 @@
 <template>
-    <div class="root" :class="isSimple" v-if="list.length > 0 || $route.path == '/'">
+    <div class="root-sl" :class="isSimple" v-if="list.length > 0 || $route.path == '/'">
         <div class="standard" v-if="$route.path == '/'">
             <div class="bg-gradient">
                 <div class="bg-banner"></div>
@@ -278,7 +278,7 @@ $subColour: desaturate(darken($currentGradColour, 25%), 40%);
     height: 450px;
     background: linear-gradient($currentGradColour, transparent);
     top: 0;
-    z-index: -1;
+    z-index: 0;
 }
 
 .list-gradient-fade {
@@ -398,7 +398,9 @@ div.section {
     padding: 50px 70px;
     display: flex;
     align-items: center;
-    //background: linear-gradient(#e74e8e, #e74e8ea6)
+    //background: linear-gradient(#e74e8e, #e74e8ea6);
+    z-index: 1;
+    position: relative;
 }
 
 .top-title-text {
