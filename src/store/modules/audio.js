@@ -234,7 +234,11 @@ let skip = () => {
 }
 
 let prev = () => {
-    store.dispatch('audio/playSong', store.state.audio.queue[store.state.audio.currentSongIndex - 1])
+    if (store.state.audio.currentTime < 5) {
+        store.dispatch('audio/playSong', store.state.audio.queue[store.state.audio.currentSongIndex - 1])
+    } else {
+        store.commit('audio/newAudioTime', 0)
+    }
 }
 
 let setSkipPrevButtons = () => {

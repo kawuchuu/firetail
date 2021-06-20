@@ -50,6 +50,7 @@ export default {
                 return time.timeFormat(state.duration)
             },
             rawSongDuration: state => state.duration,
+            rawSongCurrent: state => state.currentTime,
             songCurrent: state => {
                 if (typeof state.currentTime != 'number' || isNaN(state.currentTime)) {
                     return '-:--'
@@ -185,10 +186,14 @@ export default {
             }
         },
         prev() {
-            if (this.$store.state.audio.repeat != 'off' && this.$store.state.audio.currentSongIndex == 0) {
-                this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.queue.length - 1])
+            if (this.rawSongCurrent < 5) {
+                if (this.$store.state.audio.repeat != 'off' && this.$store.state.audio.currentSongIndex == 0) {
+                    this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.queue.length - 1])
+                } else {
+                    this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex - 1])
+                }
             } else {
-                this.$store.dispatch('audio/playSong', this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex - 1])
+                this.$store.commit('audio/newAudioTime', 0)
             }
         },
         shuffle() {

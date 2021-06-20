@@ -18,39 +18,37 @@
   "main": "background.js",
   "dependencies": {
     "axios": "^0.21.1",
-    "better-sqlite3": "^7.3.1",
-    "core-js": "^3.6.5",
+    "better-sqlite3": "^7.4.1",
+    "core-js": "^3.14.0",
     "cors": "^2.8.5",
-    "electron-updater": "^4.3.8",
-    "mime-types": "^2.1.30",
-    "music-metadata": "^7.0.2",
+    "electron-updater": "^4.3.9",
+    "mime-types": "^2.1.31",
+    "music-metadata": "^7.8.6",
     "node-vibrant": "^3.1.6",
-    "qs": "^6.9.4",
     "tmp": "^0.2.1",
-    "vue": "^2.6.12",
+    "vue": "^2.6.14",
     "vue-async-computed": "^3.9.0",
-    "vue-i18n": "^8.21.1",
-    "vue-router": "^3.4.5",
+    "vue-i18n": "^8.24.4",
+    "vue-router": "^3.5.1",
     "vue-virtual-scroll-list": "kawuchuu/vue-virtual-scroll-list",
-    "vuex": "^3.5.1"
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "babel-eslint": "^10.1.0",
-    "electron": "^12.0.6",
-    "electron-devtools-installer": "^3.1.0",
+    "electron": "^13.1.0",
+    "electron-devtools-installer": "^3.2.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
-    "node-abi": "^2.26.0",
+    "node-abi": "^2.30.0",
     "node-sass": "^5.0.0",
     "sass-loader": "^10.1.0",
     "vue-cli-plugin-electron-builder": "~2.0.0",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.14"
   },
   "resolutions": {
-    "node-abi": "https://github.com/lgeiger/node-abi.git#8e696075aff39f29a5cccf8235608dd3c070daa1",
     "electron-builder": "^22.10.5"
   },
   "eslintConfig": {
