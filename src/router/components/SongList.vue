@@ -51,7 +51,7 @@
                     :page-mode="true"
                     :page-mode-el="'#main-container'"
                     :extra-props="{selectedItems: selectedItems}"
-                    :estimate-size="42"
+                    :estimate-size="itemSizeCheck"
                     :keeps="55"
                     @selected="select"
                 />
@@ -139,6 +139,13 @@ export default {
                 default: {
                     return 'Songs'
                 }
+            }
+        },
+        itemSizeCheck() {
+            if (this.$route.path == '/') {
+                return 42
+            } else {
+                return 55
             }
         }
     },
