@@ -3,6 +3,10 @@
         <i class="material-icons-outlined play-pause" :style="listIconVisible" @click="decidePlaySong" @mouseover="listIconHover" @mouseleave="listIconHoverLeave">{{ listIcon }}</i>
         <i class="ft-icon favourite-icon" @click="handleFavourite">{{ favouriteIcon }}</i>
         <div v-if="$route.path == '/albums'">
+            <p v-if="source.disc !== null" class="track-num">{{source.disc}}</p>
+            <p v-else class="track-num">-</p>
+        </div>
+        <div v-if="$route.path == '/albums'">
             <p v-if="source.trackNum !== 'null'" class="track-num">{{source.trackNum}}</p>
             <p v-else class="track-num">-</p>
         </div>
@@ -163,7 +167,7 @@ export default {
 }
 
 .results-link.simple.albums {
-    grid-template-columns: 40px 40px 40px 1fr;
+    grid-template-columns: 40px 40px 40px 40px 1fr;
 }
 
 li:hover {

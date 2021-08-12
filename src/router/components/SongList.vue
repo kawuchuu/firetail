@@ -1,5 +1,5 @@
 <template>
-    <div class="root-sl" :class="isSimple" v-if="list.length > 0 || $route.path == '/'">
+    <div class="root-sl" :class="isSimple" v-show="list.length > 0 || $route.path == '/'">
         <div class="standard" v-if="$route.path == '/'">
             <div class="bg-gradient">
                 <div class="bg-banner"></div>
@@ -13,11 +13,12 @@
         <div class="top-title" ref="topTitle">
             <div v-if="$route.path == '/albums'" class="tab-album-art" :style="getAlbumImage"></div>
             <div v-if="$route.path == '/artists'" class="tab-album-art" :style="getArtistImage"></div>
-            <div class="top-title-text">
-                <h1 v-if="$route.path == '/'">Songs</h1>
-                <h1 v-if="$route.path == '/artists'">{{list[0].artist}}</h1>
-                <h1 v-if="$route.path == '/albums'">{{list[0].album}}</h1>
-                <p v-if="$route.path == '/albums' && list[0].year">{{ list[0].year }} • {{ screenCountNum }} {{ $tc('topTitle.countTypeSongs', parseInt(screenCountNum)) }}</p>
+            <div ref="topTitle" class="top-title-text">
+                <!-- <h1 v-if="$route.path == '/artists' && list[0]" ref="header" :style="topTitleSize" class="top-header">{{list[0].artist}}</h1>
+                <h1 v-else-if="$route.path == '/albums' && list[0]" ref="header" :style="topTitleSize" class="top-header">{{list[0].album}}</h1> -->
+                <h1 ref="header" :style="topTitleSize" class="top-header">{{ topTitleText }}</h1>
+                <!-- <h1 ref="headerTEST" class="top-header-test">{{ topTitleText }}</h1> -->
+                <p v-if="$route.path == '/albums' && list[0] && list[0].year">{{ list[0].year }} • {{ screenCountNum }} {{ $tc('topTitle.countTypeSongs', parseInt(screenCountNum)) }}</p>
                 <p v-else>{{ screenCountNum }} {{ $tc('topTitle.countTypeSongs', parseInt(screenCountNum)) }}</p>
             </div>
         </div>
@@ -26,6 +27,9 @@
             <div class="list-section" :class="currentScroll">
                 <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
                 <i class="ft-icon favourite-icon" style="visibility: hidden">favourite</i>
+                <div class="section" v-if="$route.path == '/albums'">
+                    <i class="ft-icon disc-num">albums</i>
+                </div>
                 <div class="section" v-if="$route.path == '/albums'">
                     <p class="track-num">#</p>
                 </div>
@@ -72,7 +76,15 @@ export default {
         return {
             selectedItems: [],
             lastSelectedIndex: 0,
-            sItem: SongItem
+            sItem: SongItem,
+            titleSizes: {
+                large: '6rem',
+                medium: '4rem',
+                small: '2.5rem' 
+            },
+            activeSize: 'large',
+            topTitleTxt: 'Songs',
+            justChanged: false
         }
     },
     computed: {
@@ -82,8 +94,11 @@ export default {
                     let doSort = state.currentList;
                     doSort = sort.sortArray(doSort, 'title')
                     doSort.sort(function (a, b) {
-                        return a.trackNum - b.trackNum;
+                        return a.trackNum - b.trackNum
                     });
+                    doSort.sort(function (a, b) {
+                        return a.disc - b.disc
+                    })
                     return doSort
                 } else {
                     return state.currentList
@@ -104,6 +119,27 @@ export default {
             if (this.$route.path == '/albums') return 'simple albums'
             else if (this.$route.path == '/artists') return 'simple artist'
             else return ''
+        },
+        topTitleSize() {
+            return `font-size: ${this.titleSizes[this.activeSize]}`
+        },
+        topTitleText() {
+            switch(this.$route.path) {
+                case '/': {
+                    return 'Songs'
+                }
+                case '/albums': {
+                    if (!this.list[0]) return 'Songs'
+                    else return this.list[0].album
+                }
+                case '/artists': {
+                    if (!this.list[0]) return 'Songs'
+                    else return this.list[0].artist
+                }
+                default: {
+                    return 'Songs'
+                }
+            }
         }
     },
     asyncComputed: {
@@ -260,6 +296,25 @@ export default {
         bus.$on('selected', evt => {
             this.select(evt)
         })
+        /* 
+            Please excuse this hardcoded mess
+        */
+        const topHeader = this.$refs.header
+        const resizeObserver = new ResizeObserver(entries => {
+            resizeObserver.unobserve(topHeader)
+            for (let entry of entries) {
+                entry
+                topHeader.style.fontSize = this.titleSizes.large
+                if (topHeader.getBoundingClientRect().height > 116) {
+                    topHeader.style.fontSize = this.titleSizes.medium
+                }
+                if (topHeader.getBoundingClientRect().height > 77 && topHeader.style.fontSize == this.titleSizes.medium) {
+                    topHeader.style.fontSize = this.titleSizes.small
+                }
+                resizeObserver.observe(topHeader)
+            }
+        })
+        resizeObserver.observe(topHeader)
     }
 }
 </script>
@@ -307,14 +362,15 @@ $subColour: desaturate(darken($currentGradColour, 25%), 40%);
 .list-artist,
 .list-album,
 .list-duration,
-.track-num {
+.track-num,
+.disc-num {
     overflow: hidden;
     text-overflow: ellipsis;
     pointer-events: none;
     white-space: nowrap;
 }
 
-.list-duration i {
+.list-duration i, .disc-num {
     font-size: 18px;
     padding: 0 6px;
 }
@@ -348,7 +404,7 @@ div.section .track-num {
 }
 
 .simple.albums .list-section {
-    grid-template-columns: 40px 40px 40px 1fr;
+    grid-template-columns: 40px 40px 40px 40px 1fr;
 }
 
 .list-section p {
@@ -395,9 +451,10 @@ div.section {
 }
 
 .top-title {
-    padding: 50px 70px;
+    padding: 50px 100px;
+    padding-left: 75px;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     //background: linear-gradient(#e74e8e, #e74e8ea6);
     z-index: 1;
     position: relative;
@@ -405,15 +462,24 @@ div.section {
 
 .top-title-text {
     max-width: calc(100% - 200px);
+    padding-bottom: 10px;
+    max-height: 200px;
+}
+
+.top-header-test {
+    position: absolute;
+    opacity: 1;
+    pointer-events: none;
+    padding-right: 100px;
 }
 
 .top-title h1 {
-    font-size: 64px;
+    font-size: 6rem;
     margin: 0;
-    overflow: hidden;
+/*     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
-    letter-spacing: -2px;
+    white-space: nowrap; */
+    letter-spacing: -0.04em;
 }
 
 .top-title p {
@@ -423,8 +489,8 @@ div.section {
 }
 
 .tab-album-art {
-    min-width: 130px;
-    height: 130px;
+    min-width: 200px;
+    height: 200px;
     background-color: #000000b3;
     background-size: cover;
     background-position: center;
@@ -435,7 +501,7 @@ div.section {
 }
 
 .albums .tab-album-art {
-    border-radius: 10px;
+    border-radius: 5px;
     background-image: url('../../assets/no_album.svg');
 }
 

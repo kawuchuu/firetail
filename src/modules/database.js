@@ -2,17 +2,22 @@ import Database from 'better-sqlite3'
 import {app} from 'electron'
 
 const db = new Database(`${app.getPath('userData')}/library.db`)
-db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, album text, duration decimal, path text, id text, hasImage integer, trackNum integer, year text)').run()
+db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, album text, duration decimal, path text, id text, hasImage integer, trackNum integer, year text, disc integer)').run()
 db.prepare('CREATE TABLE IF NOT EXISTS favourites (id text)').run()
 db.prepare('CREATE TABLE IF NOT EXISTS spotify (clientID text, refreshToken text, clientAuth text, curValidToken text)').run()
 if (db.prepare('SELECT COUNT(*) FROM spotify').get()['COUNT(*)'] == 0) {
     db.prepare('INSERT INTO spotify DEFAULT VALUES').run()
 }
+try {
+    db.prepare('ALTER TABLE library ADD COLUMN disc').run()
+} catch(err) {
+    //
+}
 
 export default {
     addToLibrary(songs) {
         let existingSongs = this.getLibrary()
-        let insert = db.prepare(`INSERT INTO library (title, artist, album, duration, path, id, hasImage, trackNum, year) VALUES (@title, @artist, @album, @duration, @path, @id, @hasImage, @trackNum, @year)`)
+        let insert = db.prepare(`INSERT INTO library (title, artist, album, duration, path, id, hasImage, trackNum, year, disc) VALUES (@title, @artist, @album, @duration, @path, @id, @hasImage, @trackNum, @year, @disc)`)
         let insertMany = db.transaction((newSongs) => {
             for (let song of newSongs){
                 if (existingSongs.map(e => { return e.path }).indexOf(song.path) == -1){

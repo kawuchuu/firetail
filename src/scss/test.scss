@@ -1,17 +1,21 @@
 html.dark {
-    --bg: #0f0f0f !important;
+    --bg: #18171c !important;
 }
 
 #app.test {
     /* honestly i don't know what the direction is here but whatever as long as it no longer looks like a spotify clone */
     
-    .root-sl {
+    /* .root-sl {
         background: #18171c;
-    }
+    } */
     
     .playing-bar {
         background-color: #181818 !important;
         border-top: solid 1px var(--bd) !important;
+    }
+
+    .colour-bg {
+        filter: saturate(0.8);
     }
     
     .standard .bg-gradient {

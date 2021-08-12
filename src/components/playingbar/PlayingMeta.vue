@@ -137,7 +137,7 @@ export default {
     min-height: 55px;
     margin-right: 15px;
     left: 0;
-    border-radius: 3px;
+    border-radius: 2px;
     z-index: 2;
     background-image: url('../../assets/no_image.svg');
     background-color: var(--bg);

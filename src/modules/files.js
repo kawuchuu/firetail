@@ -67,7 +67,8 @@ export default {
                     id: id,
                     hasImage: 0,
                     trackNum: null,
-                    year: null
+                    year: null,
+                    disc: null
                 }
                 if (meta.common.title) metaObj['title'] = meta.common.title
                 if (meta.common.artist) metaObj['artist'] = meta.common.artist
@@ -76,9 +77,8 @@ export default {
                 if (meta.common.year) metaObj['year'] = `${meta.common.year}`
                 if (meta.format.duration) metaObj['duration'] = time.timeFormat(meta.format.duration)
                 let artistAlbum = `${meta.common.artist}${meta.common.album}`.replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')
-                if (meta.common.picture) {
-                    metaObj['hasImage'] = 1
-                }
+                if (meta.common.picture) { metaObj['hasImage'] = 1 }
+                if (meta.common.disk) metaObj['disc'] = meta.common.disk.no
                 toAdd.push(metaObj)
                 progress++
                 BrowserWindow.getAllWindows()[0].webContents.send('doneProgress', [progress, songs.length])
