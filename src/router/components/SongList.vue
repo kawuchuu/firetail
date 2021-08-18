@@ -52,7 +52,7 @@
                     :page-mode-el="'#main-container'"
                     :extra-props="{selectedItems: selectedItems}"
                     :estimate-size="itemSizeCheck"
-                    :keeps="55"
+                    :keeps="40"
                     @selected="select"
                 />
             </div>
@@ -78,9 +78,9 @@ export default {
             lastSelectedIndex: 0,
             sItem: SongItem,
             titleSizes: {
-                large: '6rem',
-                medium: '4rem',
-                small: '2.5rem' 
+                large: '5.5rem',
+                medium: '3.5rem',
+                small: '2.4rem' 
             },
             activeSize: 'large',
             topTitleTxt: 'Songs',
@@ -305,21 +305,19 @@ export default {
         })
         /* 
             Please excuse this hardcoded mess
+            Currently looping if not large, using unnecessary resources... needs fix!!
         */
         const topHeader = this.$refs.header
-        const resizeObserver = new ResizeObserver(entries => {
+        const resizeObserver = new ResizeObserver(() => {
             resizeObserver.unobserve(topHeader)
-            for (let entry of entries) {
-                entry
-                topHeader.style.fontSize = this.titleSizes.large
-                if (topHeader.getBoundingClientRect().height > 116) {
-                    topHeader.style.fontSize = this.titleSizes.medium
-                }
-                if (topHeader.getBoundingClientRect().height > 77 && topHeader.style.fontSize == this.titleSizes.medium) {
-                    topHeader.style.fontSize = this.titleSizes.small
-                }
-                resizeObserver.observe(topHeader)
+            topHeader.style.fontSize = this.titleSizes.large
+            if (topHeader.getBoundingClientRect().height > 116) {
+                topHeader.style.fontSize = this.titleSizes.medium
             }
+            if (topHeader.getBoundingClientRect().height > 77 && topHeader.style.fontSize == this.titleSizes.medium) {
+                topHeader.style.fontSize = this.titleSizes.small
+            }
+            resizeObserver.observe(topHeader)
         })
         resizeObserver.observe(topHeader)
     }
@@ -458,7 +456,7 @@ div.section {
 }
 
 .top-title {
-    padding: 50px 100px;
+    padding: 50px 100px 30px;
     padding-left: 75px;
     display: flex;
     align-items: flex-end;

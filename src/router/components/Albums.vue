@@ -1,23 +1,26 @@
 <template>
     <div class="artists">
-        <div class="sticky-bg" ref="stickyBg" :class="currentScroll">
-            <div class="bg-inner">
-                <h3 v-if="$route.query.q">{{ $route.query.q }}</h3>
-                <h3 v-else>Albums</h3>
-            </div>
+        <div class="albums-container">
+            <section class="artists-list">
+                <div class="artist-inner">
+                    <div class="list-fade" />
+                    <AlbumItems v-for="item in albumItems" :album="item" :key="item.id"/>
+                </div>
+            </section>
+            <section class="song-list">
+                <div class="sticky-bg" ref="stickyBg" :class="currentScroll">
+                    <div class="bg-inner">
+                        <h3 v-if="$route.query.q">{{ $route.query.q }}</h3>
+                        <h3 v-else>Albums</h3>
+                    </div>
+                </div>
+                <div class="special-gradient-bg-wrapper">
+                    <div class="bg-gradient" :style="imgBackground"></div>
+                    <div class="bg-gradient-layer"></div>
+                </div>
+                <router-view></router-view>
+            </section>
         </div>
-        <div class="special-gradient-bg-wrapper">
-            <div class="bg-gradient" :style="imgBackground"></div>
-            <div class="bg-gradient-layer"></div>
-        </div>
-        <section class="artists-list">
-            <div class="artist-inner">
-                <AlbumItems v-for="item in albumItems" :album="item" :key="item.id"/>
-            </div>
-        </section>
-        <section class="song-list">
-            <router-view></router-view>
-        </section>
     </div>
 </template>
 
@@ -46,7 +49,7 @@ export default {
                 if (artURL == '' || !artURL) {
                     return ''
                 } else {
-                    return `background-image: url('${artURL}'); filter: blur(20px) brightness(0.6)`
+                    return `background-image: url('${artURL}'); filter: blur(25px) brightness(0.6)`
                 }
             }
         })
@@ -58,33 +61,58 @@ export default {
 .artist-inner {
     overflow: hidden;
     overflow-y: auto;
-    width: 250px;
-    z-index: 4;
-    height: calc(100% - 225px);
-    padding: 15px;
-    background: #000000b3;
-    border-radius: 20px;
-    position: fixed;
-    transform: translateY(45px);
-}
-.artists {
-    display: flex;
     width: 100%;
-    height: 100%;
-}
-
-.artists-list {
-    min-width: 300px;
-    height: calc(100% - 45px);
-    margin-left: 15px;
+    max-width: 270px;
+    z-index: 4;
+    height: calc(100% - 160px);
+    padding: 15px;
+    padding-top: 60px;
+    background: var(--bg);
+    border-right: solid #5f587c 1px;
+    position: fixed;
+    top: 0;
 }
 
 .artist-inner::-webkit-scrollbar {
     display: none;
 }
 
+.artist-inner:hover::-webkit-scrollbar {
+    display: block;
+    width: 15px !important;
+}
+
+.artist-inner:hover {
+    padding-right: 0px;
+    max-width: 285px;
+}
+
+.list-fade {
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    width: 270px;
+    height: 68px;
+    background: linear-gradient(var(--bg), transparent);
+    padding: 0px 15px;
+    transform: translateX(-15px);
+    pointer-events: none;
+}
+
+.albums-container {
+    display: grid;
+    grid-template-areas: 'albums list';
+    grid-template-columns: 300px 1fr;
+    width: 100%;
+    height: 100%;
+}
+
+.artists-list {
+    min-width: 300px;
+}
+
 .song-list {
-    width: calc(100% - 315px);
+    width: 100%;
     height: 100%;
 }
 
@@ -127,7 +155,6 @@ export default {
     height: 81px;
     width: calc(100% - #{$sidebarwidth} - 16px);
     background: rgba(0,0,0,.65);
-    backdrop-filter: blur(15px);
     z-index: 3;
     opacity: 0;
     transition: 0.15s;
@@ -155,5 +182,26 @@ export default {
     height: 300px;
     position: absolute;
     background: linear-gradient(#12121233, transparent);
+}
+
+@media (max-width: 1350px) {
+    .artist-inner {
+        max-width: 75px;
+        transition: 0.3s cubic-bezier(0, 1, 0.35, 1);
+    }
+    .artist-inner:hover {
+        box-shadow: 2px 0px 10px rgba(0,0,0,.5);
+
+        .list-fade {
+            width: 270px;
+        }
+    }
+    .albums-container {
+        grid-template-columns: 105px 1fr;
+    }
+    .list-fade {
+        width: 75px;
+        transition: 0.3s cubic-bezier(0, 1, 0.35, 1);
+    }
 }
 </style>

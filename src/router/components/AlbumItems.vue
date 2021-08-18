@@ -35,11 +35,12 @@ export default {
     text-overflow: ellipsis;
     white-space: nowrap;
     opacity: 0.65;
+    padding-right: 10px;
 }
 
 .router-link-exact-active {
-    background-color: #ffffff18;
-    border-radius: 10px;
+    background-color: #322d47;
+    border-radius: 5px;
     cursor: default;
 }
 
@@ -69,10 +70,16 @@ export default {
     min-height: 45px;
     margin: 0px 15px;
     background-color: #1e1e1ebe;
-    border-radius: 5px;
+    border-radius: 3px;
     background-image: url('../../assets/no_album.svg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+}
+
+@media (max-width: 1350px) {
+    .albums-item a span {
+        padding-right: 0px;
+    }
 }
 </style>
