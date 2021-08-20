@@ -1,26 +1,28 @@
 <template>
-    <li class="results-link" @mouseover="listHover" @mouseleave="listHoverLeave" :class="[isActive, doHighlight, isSimple]">
-        <i class="material-icons-outlined play-pause" :style="listIconVisible" @click="decidePlaySong" @mouseover="listIconHover" @mouseleave="listIconHoverLeave">{{ listIcon }}</i>
-        <i class="ft-icon favourite-icon" @click="handleFavourite">{{ favouriteIcon }}</i>
-        <div v-if="$route.path == '/albums'">
-            <p v-if="source.disc !== null" class="track-num">{{source.disc}}</p>
-            <p v-else class="track-num">-</p>
-        </div>
-        <div v-if="$route.path == '/albums'">
-            <p v-if="source.trackNum !== 'null'" class="track-num">{{source.trackNum}}</p>
-            <p v-else class="track-num">-</p>
-        </div>
-        <div class="artist-title-album" @pointerdown="select" @dblclick="playSong">
-            <div class="list-title">
-                <p>{{ source.title }}<!--  {{ index }} --></p>
-                <span v-if="$route.path == '/artists'">{{source.album}}</span>
-                <span v-if="$route.path == '/albums'">{{source.artist}}</span>
+    <div class="root">
+        <li class="results-link" @mouseover="listHover" @mouseleave="listHoverLeave" :class="[isActive, doHighlight, isSimple]">
+            <i class="material-icons-outlined play-pause" :style="listIconVisible" @click="decidePlaySong" @mouseover="listIconHover" @mouseleave="listIconHoverLeave">{{ listIcon }}</i>
+            <i class="ft-icon favourite-icon" @click="handleFavourite">{{ favouriteIcon }}</i>
+            <div v-if="$route.path == '/albums'">
+                <p v-if="source.disc !== null" class="track-num">{{source.disc}}</p>
+                <p v-else class="track-num">-</p>
             </div>
-            <p v-if="$route.path == '/'" class="list-artist"><span>{{source.artist}}</span></p>
-            <p v-if="$route.path == '/'" class="list-album"><span>{{source.album}}</span></p>
-            <p class="list-duration"><span>{{source.duration}}</span></p>
-        </div>
-    </li>
+            <div v-if="$route.path == '/albums'">
+                <p v-if="source.trackNum !== 'null'" class="track-num">{{source.trackNum}}</p>
+                <p v-else class="track-num">-</p>
+            </div>
+            <div class="artist-title-album" @pointerdown="select" @dblclick="playSong">
+                <div class="list-title">
+                    <p>{{ source.title }}<!--  {{ index }} --></p>
+                    <span v-if="$route.path == '/artists'">{{source.album}}</span>
+                    <span v-if="$route.path == '/albums'">{{source.artist}}</span>
+                </div>
+                <p v-if="$route.path == '/'" class="list-artist"><span>{{source.artist}}</span></p>
+                <p v-if="$route.path == '/'" class="list-album"><span>{{source.album}}</span></p>
+                <p class="list-duration"><span>{{source.duration}}</span></p>
+            </div>
+        </li>
+    </div>
 </template>
 
 <script>
@@ -28,7 +30,7 @@ import { ipcRenderer } from 'electron'
 import {bus} from '@/main'
 
 export default {
-    props: ['source', 'index', 'selectedItems'],
+    props: ['source', 'index', 'selectedItems', 'prev'],
     computed: {
         isActive() {
             let view = this.$route.query.view

@@ -31,6 +31,7 @@ const mutations = {
                 state.closing = true
                 setTimeout(() => {
                     state.closing = false
+                    state.currentPanelComponent = 'None'
                     store.commit('panel/updatePanelProps', {topMsg: 'Panel Title'})
                 }, 300)
             }

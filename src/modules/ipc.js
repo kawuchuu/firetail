@@ -134,5 +134,31 @@ export default {
             win.webContents.executeJavaScript("history.pushState({}, '', location.href)");
             win.webContents.clearHistory()
         })
+
+        ipcMain.handle('createPlaylist', (event, playlist) => {
+            const randomString = length => {
+                let text = ''
+                let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+                for (let i = 0; i < length; i++) {
+                    text += characters.charAt(Math.floor(Math.random() * characters.length))
+                }
+                return text
+            }
+            db.createPlaylist({
+                name: playlist.name,
+                desc: playlist.desc,
+                id: randomString(8),
+                songIds: JSON.stringify([])
+            })
+            return db.getAllPlaylists()
+        })
+
+        ipcMain.handle('getAllPlaylists', () => {
+            return db.getAllPlaylists()
+        })
+
+        ipcMain.handle('getSpecificPlaylist', (event, id) => {
+            return db.getSpecificPlaylist(id)
+        })
     }
 }

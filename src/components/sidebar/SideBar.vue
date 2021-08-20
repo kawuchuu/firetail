@@ -8,6 +8,7 @@
                     <div class="beta-tag">Beta</div>
                 </div>
                 <SideButtons v-for="item in getNavs" v-bind:button="item" v-bind:key="item.id"></SideButtons>
+                <SidePlaylists v-for="item in playlists" :playlist="item" :key="item.id" />
             </div>
         </div>
     </div>
@@ -16,15 +17,20 @@
 <script>
 import SideButtons from './SideButtons'
 import { mapState } from 'vuex'
+import SidePlaylists from './SidePlaylists.vue'
 
 export default {
     components: {
-        SideButtons
+        SideButtons,
+        SidePlaylists
     },
     computed: {
         ...mapState('nav', {
             getNavs: state => state.navs,
         }),
+        ...mapState('playlist', {
+            playlists: state => state.playlists
+        })
     }
 }
 </script>
@@ -122,10 +128,15 @@ export default {
 }
 
 .list-subtitle {
-    font-size: 14px;
+    font-size: 15px;
     opacity: .75;
-    text-transform: uppercase;
+    //text-transform: uppercase;
     margin: 30px 0 5px 16px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    border-bottom: 1px solid white;
+    transform: translateX(-15px);
+    width: calc(100% - 17px);
 }
 
 .playlist-sidename {
@@ -179,5 +190,34 @@ export default {
     top: 1px;
     font-weight: bold;
     text-transform: uppercase
+}
+
+.special-button {
+    display: flex;
+    width: 100%;
+    height: 42px;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0.75;
+    border-radius: 5px;
+    color: white;
+    transform: translatex(-4px);
+}
+
+.special-button:hover {
+    opacity: 1;
+}
+
+.special-button span {
+    font-size: 15px;
+    transform: translateY(1px);
+}
+
+.special-button i {
+    margin: 0 16px;
+    pointer-events: none;
+    font-size: 20px;
+    border: white 2px solid;
+    border-radius: 3px;
 }
 </style>

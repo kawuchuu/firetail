@@ -113,6 +113,8 @@ export default {
         require('./scss/test.scss')
         let port = await ipcRenderer.invoke('getPort')
         this.$store.commit('nav/updatePort', port)
+        const playlists = await ipcRenderer.invoke('getAllPlaylists')
+        this.$store.commit('playlist/setPlaylists', playlists)
         this.$refs.container.addEventListener('scroll', e => {
             this.$store.commit('nav/updateCurrentScroll', e.target.scrollTop)
         })

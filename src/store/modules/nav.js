@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron'
 import sort from '../../modules/sort'
 import tr from '../../translation'
+import store from '..'
 
 const state = () => ({
     navs: [{
@@ -52,6 +53,19 @@ const state = () => ({
     {
         name: tr.t('sidebar.playlists'),
         type: 'subtitle'
+    },
+    {
+        name: 'Create Playlist',
+        id: 'createPlaylist',
+        icon: 'add',
+        type: 'special_button',
+        action() {
+            store.commit('panel/updatePanelProps', {
+                topMsg: 'Create Playlist'
+            })
+            store.commit('panel/updatePanelComponent', 'Playlist')
+            store.commit('panel/updateActive', true)
+        }
     }
     ],
     screenTitle: '',

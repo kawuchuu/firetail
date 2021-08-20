@@ -4,10 +4,8 @@ import {app} from 'electron'
 const db = new Database(`${app.getPath('userData')}/library.db`)
 db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, album text, duration decimal, path text, id text, hasImage integer, trackNum integer, year text, disc integer)').run()
 db.prepare('CREATE TABLE IF NOT EXISTS favourites (id text)').run()
-db.prepare('CREATE TABLE IF NOT EXISTS spotify (clientID text, refreshToken text, clientAuth text, curValidToken text)').run()
-if (db.prepare('SELECT COUNT(*) FROM spotify').get()['COUNT(*)'] == 0) {
-    db.prepare('INSERT INTO spotify DEFAULT VALUES').run()
-}
+db.prepare('CREATE TABLE IF NOT EXISTS playlists (name text, desc text, id text, songIds text)').run()
+
 try {
     db.prepare('ALTER TABLE library ADD COLUMN disc').run()
 } catch(err) {
@@ -92,24 +90,14 @@ export default {
         })
         deleteMany(ids)
     },
-    fetchSpotifyDetails() {
-        let spotifyData = db.prepare('SELECT * FROM spotify').get()
-        return spotifyData
+    createPlaylist(playlist) {
+        const pl = db.prepare(`INSERT INTO playlists (name, desc, id, songIds) VALUES (@name, @desc, @id, @songIds)`).run(playlist)
+        return pl
     },
-    updateSpotifyClientIDField(value) {
-        let rows = db.prepare('UPDATE spotify SET (clientID)=?;').run(value)
-        return rows
+    getAllPlaylists() {
+        return db.prepare('SELECT name,id FROM playlists').all()
     },
-    updateSpotifyClientAuthField(value) {
-        let rows = db.prepare('UPDATE spotify SET (clientAuth)=?;').run(value)
-        return rows
-    },
-    updateSpotifyRefreshTokenField(value) {
-        let rows = db.prepare('UPDATE spotify SET (refreshToken)=?;').run(value)
-        return rows
-    },
-    updateSpotifyCurrentValidTokenField(value) {
-        let rows = db.prepare('UPDATE spotify SET (curValidToken)=?;').run(value)
-        return rows
+    getSpecificPlaylist(id) {
+        return db.prepare('SELECT * FROM playlists WHERE id = ?').run(id)
     }
 }
