@@ -79,7 +79,7 @@ export default {
 .router-link-active .item-sidebar {
     opacity: 1;
     cursor: default;
-    background: rgba(255,255,255,.15);
+    background: #322d47;
 }
 
 .router-link-active .item-sidebar:hover {

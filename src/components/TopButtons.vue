@@ -1,8 +1,10 @@
 <template>
-    <label @click="click" class="top-button" :for="checkFor">
-        <i class="material-icons-outlined">{{button.icon}}</i>
-        <span>{{button.name}}</span>
-    </label>
+    <div class="root">
+        <label @click="click" class="top-button" :for="checkFor">
+            <i class="material-icons-outlined">{{button.icon}}</i>
+            <span>{{button.name}}</span>
+        </label>
+    </div>
 </template>
 
 <script>

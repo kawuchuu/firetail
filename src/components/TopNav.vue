@@ -35,6 +35,7 @@ export default {
     border-radius: 50px;
     cursor: pointer;
     backdrop-filter: blur(5px);
+    border: solid 1px #5f587c;
 }
 
 .nav-button:hover i {

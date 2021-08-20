@@ -74,12 +74,14 @@ export default {
             ipcRenderer.send('addToLibrary', files)
         },
         changeDrag(evt, change) {
+            if (evt.dataTransfer && evt.dataTransfer.types[0] !== 'Files') return
             if (evt.preventDefault) {
                 evt.preventDefault();
             }
             this.isDraggedOver = change
         },
         filesDropped(evt) {
+            if (evt.dataTransfer && evt.dataTransfer.types[0] !== 'Files') return
             evt.preventDefault();
             let files = []
             Array.from(evt.dataTransfer.files).forEach(f => {

@@ -121,7 +121,7 @@ export default {
     width: 100%;
     height: 450px;
     max-height: 450px;
-    background-color: #5e00da;
+    //background-color: #5e00da;
     background-position: center;
     background-size: 150%;
     background-repeat: no-repeat;

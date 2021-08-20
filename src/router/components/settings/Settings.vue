@@ -1,10 +1,9 @@
 <template>
     <div class="root">
-        <div class="bg-gradient"></div>
-        <div class="top-title">
-            <h1>Settings</h1>
-        </div>
         <main>
+            <div class="top-title">
+                <h1>Settings</h1>
+            </div>
             <div class="option-wrapper">
                 <Option class="option" v-for="item in options" :item="item" :key="item.id" :class="item.customClass"/>
             </div>
@@ -36,7 +35,7 @@ export default {
                         vue.$store.commit('panel/showNewPrompt', {title: 'Clear Library', message: "Are you sure you want to clear your current library? Your music files will not be deleted.", buttons: 'clearLibrary'})
                     }
                 },
-                {
+                /* {
                     type: 'subtitle',
                     id: 'subtitleAppearance',
                     label: 'Appearance'
@@ -45,7 +44,7 @@ export default {
                     type: 'text',
                     id: 'yo',
                     message: 'Themes and stuff goes here'
-                },
+                }, */
                 {
                     type: 'subtitle',
                     id: 'subtitleSpotify',
@@ -105,7 +104,7 @@ export default {
                 {
                     type: 'text',
                     id: 'spotifyPrivacyWarning',
-                    message: `By using this feature, you agree that requests will be made to Spotify. Some anonymous usage data will also be sent.`
+                    message: `By using this feature, you agree to Spotify's privacy policy. You can opt-out by removing Firetail's access in your account settings.`
                 },
                 {
                     type: 'subtitle',
@@ -125,9 +124,14 @@ export default {
 <style lang="scss" scoped>
 $currentGradColour: #006eff;
 
+.root {
+    padding: 0px 70px;
+}
+
 main {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     width: 100%;
 }
 
@@ -146,12 +150,14 @@ main {
     padding: 50px 70px 20px;
     display: flex;
     align-items: center;
+    width: 100%;
+    max-width: 1150px;
 }
 
 .top-title h1 {
-    font-size: 64px;
+    font-size: 5.5em;
     margin: 0;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
 }
 
 .bg-gradient {
