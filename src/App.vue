@@ -1,6 +1,10 @@
 <template>
     <div id="app" class="test" @dragover="changeDrag($event, true)">
         <input type="file" multiple accept="audio/*" id="addFiles" @change="addFiles" style="display: none;">
+        <div class="drag-detail">
+            <p id="dragInfo">Nothing selected</p>
+        </div>
+        <div class="bg-cover" />
         <div class="cover" style="transition:.25s;transition-property:opacity;width: 100%;height: 100%;position: fixed;z-index: 11;background: linear-gradient(#e74e8e, #ef9135);display: none;justify-content: center;align-items: center;">
             <!-- generated svg, slightly modified -->
             <svg style="width:150px;height:150px;" viewBox="0 0 1080 1080">
@@ -317,5 +321,29 @@ html.firetail {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.drag-detail {
+    position: fixed;
+    z-index: -2;
+    background: var(--fg-bg);
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 280px;
+    pointer-events: none;
+
+    p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.5em;
+    }
+}
+
+.bg-cover {
+    background: var(--bg);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: -1;
 }
 </style>

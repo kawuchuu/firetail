@@ -1,6 +1,6 @@
 <template>
     <div class="root">
-        <li class="results-link" @mouseover="listHover" @mouseleave="listHoverLeave" :class="[isActive, doHighlight, isSimple]">
+        <li draggable="true" class="results-link" @dragstart="drag" @mouseover="listHover" @mouseleave="listHoverLeave" :class="[isActive, doHighlight, isSimple]">
             <i class="material-icons-outlined play-pause" :style="listIconVisible" @click="decidePlaySong" @mouseover="listIconHover" @mouseleave="listIconHoverLeave">{{ listIcon }}</i>
             <i class="ft-icon favourite-icon" @click="handleFavourite">{{ favouriteIcon }}</i>
             <div v-if="$route.path == '/albums'">
@@ -144,6 +144,17 @@ export default {
         },
         select(evt) {
             bus.$emit('selected', [evt, this.index])
+        },
+        drag(evt) {
+            if (!evt.dataTransfer) return
+            evt.dataTransfer.setData('ftsong', JSON.stringify({
+                title: this.source.title,
+                artist: this.source.artist,
+                album: this.source.album,
+                id: this.source.id
+            }))
+            document.querySelector('#dragInfo').textContent = `${this.source.artist} - ${this.source.title}`
+            evt.dataTransfer.setDragImage(document.querySelector('.drag-detail'), -15, 10)
         }
     }
 }

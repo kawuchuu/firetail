@@ -139,23 +139,6 @@ export default {
     width: calc(100% - 17px);
 }
 
-.playlist-sidename {
-    height: 30px;
-}
-
-.playlist-sidename .active-indicator {
-    height: 20px;
-}
-
-.playlist-sidename span {
-    font-size: 14px;
-    margin-left: 16px
-}
-
-.playlist-sidename.active span {
-    margin-left: 13px
-}
-
 .firetail-icon {
     width: 35px;
     height: 35px;
