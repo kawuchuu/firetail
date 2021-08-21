@@ -53,9 +53,10 @@ export default {
         handleDrop(evt) {
             evt.preventDefault()
             this.isDragOver = false
-            const song = evt.dataTransfer.getData('ftsong')
+            let song = evt.dataTransfer.getData('ftsong')
             if (song === '') return
-            console.log(JSON.parse(song))
+            song = JSON.parse(song)
+            
         }
     }
 }
