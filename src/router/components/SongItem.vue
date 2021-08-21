@@ -17,8 +17,8 @@
                     <span v-if="$route.path == '/artists'">{{source.album}}</span>
                     <span v-if="$route.path == '/albums'">{{source.artist}}</span>
                 </div>
-                <p v-if="$route.path == '/'" class="list-artist"><span>{{source.artist}}</span></p>
-                <p v-if="$route.path == '/'" class="list-album"><span>{{source.album}}</span></p>
+                <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-artist"><span>{{source.artist}}</span></p>
+                <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-album"><span>{{source.album}}</span></p>
                 <p class="list-duration"><span>{{source.duration}}</span></p>
             </div>
         </li>
@@ -228,6 +228,10 @@ li.nohover:hover {
 
 .results-link.active {
     color: var(--hl-txt);
+
+    p, span {
+        opacity: 1;
+    }
 }
 
 .artist-title-album {
@@ -295,22 +299,7 @@ li.nohover:hover {
     color: var(--hl-txt);
     text-decoration: underline;
     cursor: pointer;
-}
-
-.list-artist span:active, .list-album span:active {
-    color: var(--hl-txt);
-    text-decoration: underline;
-    opacity: .8;
-}
-
-.list-artist span, .list-album span {
-    pointer-events: all;
-}
-
-.list-artist span:hover, .list-album span:hover {
-    color: var(--hl-txt);
-    text-decoration: underline;
-    cursor: pointer;
+    opacity: 1;
 }
 
 .list-artist span:active, .list-album span:active {

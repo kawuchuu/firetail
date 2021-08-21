@@ -1,18 +1,21 @@
 <template>
-    <div draggable="true" :class="isDragOverClass" @pointerdown="context" @dragover="handleDragOver" @dragleave="handleDragLeave" @dragend="handleDragLeave" @drop="handleDrop" class="item-sidebar playlist-sidename">
-        <span>{{ playlist.name }}</span>
-
-    </div>
+    <router-link :to="link">
+        <div draggable="true" :class="isDragOverClass" @pointerdown="context" @dragover="handleDragOver" @dragleave="handleDragLeave" @dragend="handleDragLeave" @drop="handleDrop" class="item-sidebar playlist-sidename">
+            <span>{{ playlist.name }}</span>
+        </div>
+    </router-link>
 </template>
 
 <script>
 import { bus } from '@/main'
+import { ipcRenderer } from 'electron'
 
 export default {
     props: ['playlist'],
     data() {
         return {
-            isDragOver: false
+            isDragOver: false,
+            link: `/playlist?id=${this.playlist.id}&view=playlist_${this.playlist.id}`
         }
     },
     computed: {
@@ -50,13 +53,20 @@ export default {
         handleDragLeave() {
             this.isDragOver = false
         },
-        handleDrop(evt) {
+        async handleDrop(evt) {
             evt.preventDefault()
             this.isDragOver = false
             let song = evt.dataTransfer.getData('ftsong')
             if (song === '') return
             song = JSON.parse(song)
-            
+            const playlist = await ipcRenderer.invoke('getSpecificPlaylist', this.playlist.id)
+            const songIds = JSON.parse(playlist[0].songIds)
+            songIds.push(song.id)
+            ipcRenderer.invoke('updatePlaylist', {
+                column: 'songids',
+                id: this.playlist.id,
+                data: JSON.stringify(songIds)
+            })
         }
     }
 }
@@ -92,5 +102,41 @@ export default {
     span {
         transform: translate(-2px, 1px);
     }
+}
+
+.router-link-active .item-sidebar {
+    opacity: 0.75;
+    cursor: pointer;
+    background: none;
+}
+
+.router-link-active:hover {
+    opacity: 1;
+}
+
+.router-link-active .item-sidebar:active {
+    opacity: 0.75;
+}
+
+.router-link-active .item-sidebar span {
+    font-weight: normal;
+}
+
+.router-link-exact-active .item-sidebar {
+    opacity: 1;
+    cursor: default;
+    background: #322d47;
+}
+
+.router-link-exact-active .item-sidebar:hover {
+    opacity: 1;
+}
+
+.router-link-exact-active .item-sidebar:active {
+    opacity: 1;
+}
+
+.router-link-exact-active .item-sidebar span {
+    font-weight: bold;
 }
 </style>

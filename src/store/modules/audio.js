@@ -75,6 +75,10 @@ const mutations = {
         }
         this.commit('nav/updateScreenCountNum', list.length)
     },
+    updateCurrentListNoSort(state, list) {
+        state.currentList = list
+        this.commit('nav/updateScreenCountNum', list.length)
+    },
     doShuffle(state) {
         let queue = state.queue
         let currentSong = state.queue[state.currentSongIndex]

@@ -61,6 +61,11 @@ const router = new VueRouterEx({
             ]
         },
         {
+            path: '/playlist',
+            component: SongList,
+            name: 'Playlist'
+        },
+        {
             path: '/settings',
             component: Settings,
             name: tr.t('settings.title')
@@ -79,7 +84,7 @@ ipcRenderer.on('updateNav', (event, checkNav) => {
     store.commit('nav/updateCheckNav', checkNav)
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
     store.commit('audio/updateCurrentList', [])
     if (to.query.column && to.query.q) {
         store.dispatch('audio/getSpecificSongs', {
@@ -88,6 +93,11 @@ router.beforeEach((to, from, next) => {
         })
     } else if (to.query.view == 'firetailnoselect') {
         store.commit('audio/getNoSongs')
+    } else if (to.path == '/playlist' && to.query.id) {
+        const playlist = await ipcRenderer.invoke('getSpecificPlaylist', to.query.id)
+        const songs = await ipcRenderer.invoke('getSomeFromColumnMatches', JSON.parse(playlist[0].songIds))
+        store.commit('audio/updateCurrentListNoSort', songs)
+        store.commit('playlist/setCurrentPlaylist', playlist[0])
     } else {
         store.dispatch('audio/getAllSongs')
     }

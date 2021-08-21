@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3'
 import {app} from 'electron'
 
-const db = new Database(`${app.getPath('userData')}/library.db`)
+const db = new Database(`${app.getPath('userData')}/library.db`, { verbose: console.log })
 db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, album text, duration decimal, path text, id text, hasImage integer, trackNum integer, year text, disc integer)').run()
 db.prepare('CREATE TABLE IF NOT EXISTS favourites (id text)').run()
 db.prepare('CREATE TABLE IF NOT EXISTS playlists (name text, desc text, id text, songIds text)').run()
@@ -65,6 +65,17 @@ export default {
             return rows
         } else return []
     },
+    getSomeFromColumnMatches(ids) {
+        let prepIds = '';
+        ids.forEach(id => {
+            prepIds += `'${id}',`
+        })
+        prepIds = prepIds.substr(0, prepIds.length - 1)
+        console.log(prepIds)
+        let stmt = db.prepare(`SELECT * FROM library WHERE id IN (${prepIds})`)
+        const rows = stmt.all()
+        return rows
+    },
     getSomeFromMultiColumn(column, query) {
         let columns = []
         column.forEach((f, i) => {
@@ -98,6 +109,11 @@ export default {
         return db.prepare('SELECT name,id FROM playlists').all()
     },
     getSpecificPlaylist(id) {
-        return db.prepare('SELECT * FROM playlists WHERE id = ?').run(id)
+        return db.prepare('SELECT * FROM playlists WHERE id = ?').all(id)
+    },
+    updatePlaylist(column, id, data) {
+        console.log(column, id, data)
+        db.prepare(`UPDATE playlists SET ${column} = ? WHERE id = ?;`).run(data, id)
+        return this.getAllPlaylists()
     }
 }

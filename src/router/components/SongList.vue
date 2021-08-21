@@ -1,7 +1,7 @@
 <template>
     <div class="root-sl" :class="isSimple" v-show="list.length > 0 || $route.path == '/'">
-        <div class="standard" v-if="$route.path == '/'">
-            <div class="bg-gradient">
+        <div class="standard" v-if="$route.path == '/' || $route.path == '/playlist'">
+            <div v-if="$route.path == '/'" class="bg-gradient">
                 <div class="bg-banner"></div>
             </div>
             <div class="sticky-bg" ref="stickyBg" :class="currentScroll">
@@ -11,6 +11,7 @@
             </div>
         </div>
         <div class="top-title" ref="topTitle">
+            <div v-if="$route.path == '/playlist'" class="tab-album-art"></div>
             <div v-if="$route.path == '/albums'" class="tab-album-art" :style="getAlbumImage"></div>
             <div v-if="$route.path == '/artists'" class="tab-album-art" :style="getArtistImage"></div>
             <div ref="topTitle" class="top-title-text">
@@ -35,8 +36,8 @@
                 </div>
                 <div class="artist-title-album section">
                     <p class="list-title">{{ $t('songList.listTitle') }}</p>
-                    <p v-if="$route.path == '/'" class="list-artist">{{ $t('songList.listArtist') }}</p>
-                    <p v-if="$route.path == '/'" class="list-album">{{ $t('songList.listAlbum') }}</p>
+                    <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-artist">{{ $t('songList.listArtist') }}</p>
+                    <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-album">{{ $t('songList.listAlbum') }}</p>
                     <p class="list-duration"><i class="material-icons-outlined">schedule</i></p>
                 </div>
                 <div class="sec-border"></div>
@@ -115,9 +116,13 @@ export default {
                 }
             }
         }),
+        ...mapState('playlist', {
+            playlist: state => state.currentPlaylist
+        }),
         isSimple() {
             if (this.$route.path == '/albums') return 'simple albums'
             else if (this.$route.path == '/artists') return 'simple artist'
+            else if (this.$route.path == '/playlist') return 'playlist'
             else return ''
         },
         topTitleSize() {
@@ -135,6 +140,9 @@ export default {
                 case '/artists': {
                     if (!this.list[0]) return 'Songs'
                     else return this.list[0].artist
+                }
+                case '/playlist': {
+                    return this.playlist.name
                 }
                 default: {
                     return 'Songs'
@@ -505,7 +513,7 @@ div.section {
     margin-right: 40px;
 }
 
-.albums .tab-album-art {
+.albums .tab-album-art, .playlist .tab-album-art {
     border-radius: 5px;
     background-image: url('../../assets/no_album.svg');
 }

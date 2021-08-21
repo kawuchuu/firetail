@@ -43,6 +43,13 @@ export default {
             event.reply('library', someColumn)
         })
 
+        ipcMain.handle('getSomeFromColumnMatches', (event, args) => {
+            console.log(args)
+            let someColumn = db.getSomeFromColumnMatches(args)
+            return someColumn
+            //event.reply('library', someColumn)
+        })
+
         ipcMain.on('addFavourite', (event, id) => {
             db.addToFavourite(id)
             let favourites = db.getFavourites()
@@ -159,6 +166,10 @@ export default {
 
         ipcMain.handle('getSpecificPlaylist', (event, id) => {
             return db.getSpecificPlaylist(id)
+        })
+
+        ipcMain.handle('updatePlaylist', (event, playlist) => {
+            return db.updatePlaylist(playlist.column, playlist.id, playlist.data)
         })
     }
 }
