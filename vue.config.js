@@ -97,7 +97,7 @@ module.exports = {
                     category: "public.app-category.music",
                     target: {
                         target: "dmg",
-                        arch: "universal"
+                        arch: "x64"
                     },
                     icon: "build/other/macos.png"
                 },
