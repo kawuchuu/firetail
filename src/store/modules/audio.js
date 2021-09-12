@@ -141,7 +141,7 @@ const actions = {
             audio.pause()
         }
     },
-    playSong(context, song, isCustom) {
+    async playSong(context, song, isCustom) {
         if (song == null && context.state.repeat == 'off') {
             context.commit('setStopState')
             if (audio.src) {
@@ -175,7 +175,14 @@ const actions = {
             context.commit('updateCurrentSongString', song.id)
         }
         context.commit('songMetadata', [song.title, song.artist])
-        audio.play().catch(err => {
+        audio.addEventListener('timeupdate', timeUpdate)
+        audio.addEventListener('pause', () => {
+            context.commit('updatePause')
+        })
+        audio.addEventListener('play', () => {
+            context.commit('updatePause')
+        })
+        await audio.play().catch(err => {
             let msg = err.toString()
             if (err.toString().includes('supported source was found')) {
                 msg = 'The file you requested could not be played. Make sure the file exists and try again.'
@@ -185,13 +192,6 @@ const actions = {
                 message: msg,
                 icon: "error"
             })
-        })
-        audio.addEventListener('timeupdate', timeUpdate)
-        audio.addEventListener('pause', () => {
-            context.commit('updatePause')
-        })
-        audio.addEventListener('play', () => {
-            context.commit('updatePause')
         })
         updateMediaSession(song)
     },
@@ -218,6 +218,7 @@ let updateMediaSession = song => {
         title: song.title,
         artist: song.artist,
         album: song.album,
+        src: song.path
     }
     if (song.hasImage == 1) {
         let port = store.state.nav.port
@@ -231,6 +232,11 @@ let updateMediaSession = song => {
     }
     setSkipPrevButtons()
     navigator.mediaSession.metadata = new window.MediaMetadata(metadata)
+    navigator.mediaSession.setPositionState({
+        duration: audio.duration,
+        playbackRate: audio.playbackRate,
+        position: audio.currentTime
+    });
 }
 
 let skip = () => {

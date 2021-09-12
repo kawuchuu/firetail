@@ -34,6 +34,9 @@ jobs:
         run: |
           build=$(echo ${{ github.sha }} | cut -c1-7)
           echo "::set-output name=build::$build"
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.17.0'
       - name: Build
         run: |
           export FTBUILD_NUM=${{steps.get-ver-build.outputs.build}}
