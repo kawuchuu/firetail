@@ -36,6 +36,7 @@ export default {
     cursor: pointer;
     backdrop-filter: blur(5px);
     border: solid 1px #5f587c;
+    -webkit-app-region: no-drag;
 }
 
 .nav-button:hover i {

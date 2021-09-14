@@ -95,11 +95,44 @@ module.exports = {
                 },
                 mac: {
                     category: "public.app-category.music",
-                    target: {
-                        target: "dmg",
-                        arch: "x64"
-                    },
-                    icon: "build/other/macos.png"
+                    target: [
+                        {
+                            target: "dmg",
+                            arch: "x64" // github actions doesn't play well with arm64... will be universal binary for proper releases :)
+                        },
+                        {
+                            target: "dmg",
+                            arch: "arm64"
+                        }
+                    ],
+                    icon: "build/other/macos.png",
+                    fileAssociations: [
+                        {
+                            ext: 'mp3',
+                            name: 'MP3',
+                            description: 'MP3 File'
+                        },
+                        {
+                            ext: 'm4a',
+                            name: 'M4A',
+                            description: 'M4A File'
+                        },
+                        {
+                            ext: 'flac',
+                            name: 'FLAC',
+                            description: 'FLAC File'
+                        },
+                        {
+                            ext: 'ogg',
+                            name: 'OGG',
+                            description: 'OGG File'
+                        },
+                        {
+                            ext: 'wav',
+                            name: 'WAV',
+                            description: 'WAV File'
+                        }
+                    ]
                 },
                 publish: null
             }

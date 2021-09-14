@@ -51,6 +51,7 @@ export default {
     display: flex;
     align-items: center;
     cursor: pointer;
+    -webkit-app-region: no-drag;
 }
 
 .top-button:not(:first-child) {

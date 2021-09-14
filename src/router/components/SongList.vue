@@ -528,6 +528,7 @@ div.section {
     opacity: 0;
     transition: 0.15s;
     transition-property: opacity;
+    pointer-events: none;
 
     .bg-inner {
         height: 50px;

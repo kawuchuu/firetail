@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, Menu } from 'electron'
 import {
     createProtocol
 } from 'vue-cli-plugin-electron-builder/lib'
@@ -27,14 +27,125 @@ protocol.registerSchemesAsPrivileged([{
     }
 }])
 
+// functionality is missing, will be implemented in the future
+const macMenu = [
+    { role: 'appMenu' },
+    {
+        label: 'File',
+        submenu: [
+            {
+                label: 'Add Songs',
+            },
+            {
+                label: 'Create Playlist'
+            }
+        ]
+    },
+    { role: 'editMenu' },
+    {
+        label: 'View',
+        submenu: [
+            { role: 'resetZoom' },
+            { role: 'zoomIn' },
+            { role: 'zoomOut' },
+            { type: 'separator' },
+            { role: 'togglefullscreen' },
+            { type: 'separator' },
+            {
+                label: 'Developer',
+                submenu: [
+                    { role: 'reload' },
+                    { role: 'forceReload' },
+                    { role: 'toggleDevTools' }
+                ]
+            }
+        ]
+    },
+    {
+        label: 'Controls',
+        submenu: [
+            {
+                label: 'Play',
+                accelerator: 'Space',
+                acceleratorWorksWhenHidden: false
+            },
+            {
+                label: 'Stop',
+                accelerator: 'Command+.'
+            },
+            {
+                label: 'Next',
+                accelerator: 'Command+Right'
+            },
+            {
+                label: 'Previous',
+                accelerator: 'Command+Left'
+            },
+            {
+                label: 'Go to Current Song',
+                accelerator: 'Command+L'
+            },
+            { type: 'separator' },
+            {
+                label: 'Increase Volume',
+                accelerator: 'Command+Up'
+            },
+            {
+                label: 'Decrease Volume',
+                accelerator: 'Command+Down'
+            },
+            {
+                label: 'Mute Volume',
+                accelerator: 'Shift+Command+M'
+            },
+            { type: 'separator' },
+            {
+                label: 'Shuffle',
+                accelerator: 'Command+S'
+            },
+            {
+                label: 'Repeat',
+            },
+            { type: 'separator' },
+            {
+                label: 'Back',
+                accelerator: 'Command+['
+            },
+            {
+                label: 'Forward',
+                accelerator: 'Command+]'
+            }
+
+        ]
+    },
+    { role: 'windowMenu' },
+    {
+        role: 'help',
+        submenu: [
+            {
+                label: 'GitHub Repository',
+                click: async() => {
+                    const { shell } = require('electron')
+                    await shell.openExternal('https://github.com/kawuchuu/firetail')
+                }
+            }
+        ]
+    }
+]
+
+const menu = Menu.buildFromTemplate(macMenu)
+Menu.setApplicationMenu(menu)
+
 async function createWindow() {
     // Create the browser window.
+    const osType = process.platform
     win = new BrowserWindow({
         width: 1350,
         height: 750,
         minWidth: 750,
         minHeight: 400,
         show: false,
+        titleBarStyle: osType === 'darwin' ? 'hiddenInset' : 'default',
         backgroundColor: '#181818',
         title: 'Firetail',
         webPreferences: {
@@ -107,9 +218,11 @@ async function createWindow() {
         openSong(process.argv[process.argv.length - 1])
     })
     win.on('enter-full-screen', () => {
+        if (process.platform === 'darwin') return
         win.webContents.send('fullscreenUpdate', true)
     })
     win.on('leave-full-screen', () => {
+        if (process.platform === 'darwin') return
         win.webContents.send('fullscreenUpdate', false)
     })
     if (process.env.WEBPACK_DEV_SERVER_URL) {

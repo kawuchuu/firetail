@@ -1,5 +1,6 @@
 <template>
     <div id="app" class="test" @dragover="changeDrag($event, true)">
+        <div class="draggable" />
         <input type="file" multiple accept="audio/*" id="addFiles" @change="addFiles" style="display: none;">
         <div class="drag-detail">
             <p id="dragInfo">Nothing selected</p>
@@ -194,7 +195,7 @@ body {
     margin: 0;
     background-color: var(--bg);
     color: var(--text);
-    font-family: 'Inter', 'Noto Sans JP', 'Noto Sans SC', 'Noto Sans KR', 'Overpass', 'Dosis', Arial, Helvetica, sans-serif !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Noto Sans JP', 'Noto Sans SC', 'Noto Sans KR', 'Overpass', 'Dosis', Arial, Helvetica, sans-serif !important;
     user-select: none;
     -webkit-user-select: none;
 }
@@ -207,6 +208,7 @@ a {
 ::-webkit-scrollbar {
     width: 16px !important;
     background: var(--bg);
+    -webkit-app-region: no-drag;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -226,6 +228,15 @@ a {
 
 ::-webkit-scrollbar-button {
     display: none
+}
+
+.draggable {
+    -webkit-app-region: drag;
+    width: calc(100% - 16px);
+    height: 50px;
+    z-index: 100;
+    pointer-events: none;
+    position: fixed;
 }
 
 html.dark {

@@ -1,6 +1,6 @@
 <template>
     <div class="side-bar">
-        <div class="side-bar-inner-container">
+        <div class="side-bar-inner-container" :class="platformType">
             <div class="nav-buttons">
                 <div class="app-info">
                     <div class="firetail-icon"/>
@@ -30,7 +30,12 @@ export default {
         }),
         ...mapState('playlist', {
             playlists: state => state.playlists
-        })
+        }),
+        platformType() {
+            if (process.platform === 'darwin') {
+                return 'macos'
+            } else return ''
+        }
     }
 }
 </script>
@@ -49,6 +54,10 @@ export default {
     flex-direction: column;
     overflow-y: auto;
     height: 100%;
+}
+
+.side-bar-inner-container.macos {
+    margin-top: 25px;
 }
 
 .side-bar-inner-container::-webkit-scrollbar {

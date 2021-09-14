@@ -97,6 +97,8 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    -webkit-app-region: no-drag;
     
     i {
         font-size: 22px;
