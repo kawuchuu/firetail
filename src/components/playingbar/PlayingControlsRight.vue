@@ -28,6 +28,7 @@ export default {
     computed: {
         ...mapState('audio', {
             volume: state => state.volume,
+            muted: state => state.muted,
             fill: state => {
                 return `width: ${state.volume * 100}%`
             },
@@ -49,13 +50,10 @@ export default {
     },
     methods: {
         mute() {
-            if (this.volume > 0) {
-                this.unmuteVol = this.volume
-                this.$store.commit('audio/setVolume', 0)
+            if (this.muted) {
+                this.$store.commit('audio/setMute', false)
             } else {
-                if (this.unmuteVol == null) return
-                this.$store.commit('audio/setVolume', this.unmuteVol)
-                this.unmuteVol = null
+                this.$store.commit('audio/setMute', true)
             }
         },
         move(evt) {
@@ -84,6 +82,7 @@ export default {
         },
         down(evt) {
             this.unmuteVol = null
+            this.$store.commit('audio/setMute', false)
             let pBar = getP(evt, this.$refs.volBar)
             this.volMouseDown = true
             this.$store.commit('audio/setVolume', pBar)

@@ -1,6 +1,7 @@
 'use strict'
 
 import { app, protocol, BrowserWindow, Menu } from 'electron'
+import glasstron from 'glasstron'
 import {
     createProtocol
 } from 'vue-cli-plugin-electron-builder/lib'
@@ -29,7 +30,26 @@ protocol.registerSchemesAsPrivileged([{
 
 // functionality is missing, will be implemented in the future
 const macMenu = [
-    { role: 'appMenu' },
+    { 
+        role: 'appMenu',
+        submenu: [
+            { role: 'appMenu' },
+            { type: 'separator' },
+            {
+                label: 'Preferences',
+                accelerator: 'Command+,',
+                click() {
+                    win.webContents.send('control', 'preferences')
+                }
+            },
+            { type: 'separator' },
+            { role: 'hide' },
+            { role: 'hideOthers' },
+            { role: 'unhide' },
+            { type: 'separator' },
+            { role: 'quit' }
+        ]
+    },
     {
         label: 'File',
         submenu: [
@@ -64,56 +84,95 @@ const macMenu = [
     {
         label: 'Controls',
         submenu: [
+            // this one is still registering when hidden even though acceleratorWorksWhenHidden is false...
             {
                 label: 'Play',
-                accelerator: 'Space',
-                acceleratorWorksWhenHidden: false
+                //accelerator: 'Space',
+                acceleratorWorksWhenHidden: false,
+                registerAccelerator: false,
+                click() {
+                    win.webContents.send('control', 'playPause')
+                }
             },
             {
                 label: 'Stop',
-                accelerator: 'Command+.'
+                accelerator: 'Command+.',
+                click() {
+                    win.webContents.send('control', 'stop')
+                }
             },
             {
                 label: 'Next',
-                accelerator: 'Command+Right'
+                accelerator: 'Command+Right',
+                click() {
+                    win.webContents.send('control', 'next')
+                }
             },
             {
                 label: 'Previous',
-                accelerator: 'Command+Left'
+                accelerator: 'Command+Left',
+                click() {
+                    win.webContents.send('control', 'prev')
+                }
             },
-            {
+            /* {
                 label: 'Go to Current Song',
-                accelerator: 'Command+L'
-            },
+                accelerator: 'Command+L',
+                click() {
+                    win.webContents.send('control', 'cursong')
+                }
+            }, */
             { type: 'separator' },
             {
                 label: 'Increase Volume',
-                accelerator: 'Command+Up'
+                accelerator: 'Command+Up',
+                click() {
+                    win.webContents.send('control', 'volUp')
+                }
             },
             {
                 label: 'Decrease Volume',
-                accelerator: 'Command+Down'
+                accelerator: 'Command+Down',
+                click() {
+                    win.webContents.send('control', 'volDown')
+                }
             },
             {
                 label: 'Mute Volume',
-                accelerator: 'Shift+Command+M'
+                accelerator: 'Shift+Command+M',
+                click() {
+                    win.webContents.send('control', 'mute')
+                }
             },
             { type: 'separator' },
             {
                 label: 'Shuffle',
-                accelerator: 'Command+S'
+                accelerator: 'Command+S',
+                click() {
+                    win.webContents.send('control', 'shuffle')
+                }
             },
             {
                 label: 'Repeat',
+                accelerator: 'Command+Option+R',
+                click() {
+                    win.webContents.send('control', 'repeat')
+                }
             },
             { type: 'separator' },
             {
                 label: 'Back',
-                accelerator: 'Command+['
+                accelerator: 'Command+[',
+                click() {
+                    win.webContents.send('control', 'backPage')
+                }
             },
             {
                 label: 'Forward',
-                accelerator: 'Command+]'
+                accelerator: 'Command+]',
+                click() {
+                    win.webContents.send('control', 'forPage')
+                }
             }
 
         ]
@@ -136,25 +195,37 @@ const macMenu = [
 const menu = Menu.buildFromTemplate(macMenu)
 Menu.setApplicationMenu(menu)
 
+app.commandLine.appendSwitch("enable-transparent-visuals");
 async function createWindow() {
     // Create the browser window.
     const osType = process.platform
-    win = new BrowserWindow({
+    const winConfig = {
         width: 1350,
         height: 750,
         minWidth: 750,
         minHeight: 400,
         show: false,
         titleBarStyle: osType === 'darwin' ? 'hiddenInset' : 'default',
-        backgroundColor: '#181818',
+        frame: false,
+        vibrancy: 'sidebar',
+        backgroundColor: osType === 'darwin' ? 'transparent' : '#181818',
         title: 'Firetail',
+        transparent: osType === 'darwin' ? true : false,
         webPreferences: {
             // Use pluginOptions.nodeIntegration, leave this alone
             // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-            contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
+            contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+            enableBlinkFeatures: "CSSColorSchemeUARendering",
         }
-    })
+    }
+    if (osType === 'darwin') {
+        win = new glasstron.BrowserWindow(winConfig)
+        win.vibrancy = 'appearance-based'
+        win.setBlur(true)
+    } else {
+        win = new BrowserWindow()
+    }
     let openSong = filePath => {
         let lastElement = filePath
         if (process.argv.length >= 1  && lastElement != "dist_electron" && existsSync(lastElement)) {
@@ -228,6 +299,7 @@ async function createWindow() {
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
         await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
+        //await win.loadURL('about:blank')
         if (!process.env.IS_TEST) win.webContents.openDevTools()
     } else {
         createProtocol('app')

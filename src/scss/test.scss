@@ -1,5 +1,6 @@
 html.dark {
     --bg: #18171c !important;
+    --fg-bg: #322d47 !important;
 }
 
 #app.test {
@@ -10,7 +11,7 @@ html.dark {
     } */
     
     .playing-bar {
-        background-color: #181818 !important;
+        background-color: #1f1e25;
         border-top: solid 1px var(--bd) !important;
     }
 
@@ -20,17 +21,15 @@ html.dark {
     
     .standard .bg-gradient {
         //background: linear-gradient(rgb(5, 5, 5), transparent) !important;
-        background: #18171c;
+        //background: #18171c;
     }
     
     .list-gradient-fade {
-        background: linear-gradient(#ffcbac00, #18171c) !important;
-        height: 100px;
-        //display: none;
+        display: none;
     }
     
     .bg-banner {
-        width: 100%;
+        width: 95%;
         height: 100%;
         max-height: 350px;
         background-image: url('../assets/songs-banner.svg');
@@ -49,7 +48,126 @@ html.dark {
     }
 
     .list-section.sticky {
-        border: none;
-        box-shadow: 0px 5px 5px rgba(0,0,0,.15);
+        //border: none;
+        box-shadow: 0px 5px 5px rgba(0,0,0,.1);
+    }
+}
+
+:root.light #app.test {
+    .bg-banner {
+        background-image: url('../assets/songs-banner-light.svg');
+    }
+
+    .list-section {
+        border-color: #5f587c73;
+    }
+
+    .sticky-bg {
+        //background: #f0ecff !important;
+        background: #ffffff50 !important;
+        backdrop-filter: blur(20px);
+    }
+
+    ::-webkit-scrollbar {
+        width: 16px !important;
+        background: var(--bg);
+        -webkit-app-region: no-drag;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        border: solid 4px var(--bg);
+        background: #322d4750;
+        border-radius: 20px;
+        min-height: 60px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: #322d47;
+    }
+    
+    ::-webkit-scrollbar-thumb:active {
+        background: var(--hl-txt);
+    }
+    
+    ::-webkit-scrollbar-button {
+        display: none
+    }
+
+    .nav-button, .search-btn, .top-button-container {
+        background: #ffffff7c;
+        backdrop-filter: blur(20px);
+    }
+
+    .playing-bar {
+        background: var(--bg);
+        color: var(--text);
+
+        .play-pause-icon:hover, .play-pause-icon:active {
+            text-shadow: none;
+            opacity: 0.8 !important;
+        }
+
+        .play-pause-icon:active {
+            opacity: 0.6 !important;
+        }
+    }
+
+    .seek-bar, .vol-bar {
+        background: #00000025;
+
+        .seek-hover-indicate {
+            color: #ffffff;
+        }
+
+        .fill-hover {
+            background: #00000036;
+        }
+    }
+
+    .side-bar {
+        //background: #ffffffb4;
+        background: transparent;
+        color: var(--text);
+
+        .item-sidebar, .special-button {
+            color: var(--text);
+        }
+
+        .special-button .material-icons, .list-subtitle {
+            border-color: var(--text);
+        }
+
+        .router-link-exact-active .item-sidebar, .router-link-active .item-sidebar {
+            color: white;
+        }
+
+        .beta-tag {
+            border-color: var(--text);
+            color: var(--text);
+        }
+
+        .firetail-icon {
+            filter: none;
+        }
+    }
+
+    .bg-gradient {
+        opacity: 0.35;
+    }
+
+    li:hover {
+        background: #00000010;
+    }
+    
+    .results-link.hactive {
+        background: #00000028;
+    }
+    
+    .results-link.hactive:hover {
+        background: #00000022;
+    }
+
+    .artist-inner {
+        border-color: #5f587c73;
     }
 }

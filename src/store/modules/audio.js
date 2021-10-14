@@ -18,7 +18,8 @@ const state = () => ({
     currentList: [],
     shuffled: false,
     repeat: 'off',
-    volume: 1
+    volume: 1,
+    muted: false
 })
 
 const mutations = {
@@ -113,8 +114,16 @@ const mutations = {
         }
     },
     setVolume(state, vol) {
+        if (vol > 1) vol = 1
+        if (vol < 0) vol = 0
         audio.volume = vol
         state.volume = vol
+    },
+    setMute(state, mute) {
+        state.muted = mute
+        audio.muted = mute
+        if (mute) state.volume = 0
+        else state.volume = audio.volume
     },
     getNoSongs(state) {
         state.currentList = []
@@ -130,6 +139,14 @@ const mutations = {
         state.songArtist = ''
         state.songTitle = 'No song playing...'
         state.queue = []
+        if (audio.src) {
+            audio.pause()
+            audio.src == ''
+            state.currentSong = null
+            state.currentSongIndex = null
+            state.currentTime = null
+            state.duration = null
+        }
     }
 }
 
@@ -144,14 +161,6 @@ const actions = {
     async playSong(context, song, isCustom) {
         if (song == null && context.state.repeat == 'off') {
             context.commit('setStopState')
-            if (audio.src) {
-                audio.pause()
-                audio.src == ''
-                context.state.currentSong = null
-                context.state.currentSongIndex = null
-                context.state.currentTime = null
-                context.state.duration = null
-            }
             return
         }
         if (!audio.src) {

@@ -91,7 +91,7 @@ export default {
     position: fixed;
     top: 0;
     height: 81px;
-    width: calc(100% - #{$sidebarwidth} - 16px);
+    width: calc(100% - 225px - 16px);
     background: #005e61;
     z-index: 3;
     opacity: 0;

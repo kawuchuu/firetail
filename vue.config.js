@@ -13,18 +13,18 @@ module.exports = {
             poll: true
         }
     },
-    css: {
+    /* css: {
         loaderOptions: {
             sass: {
                 additionalData: `@import "@/scss/_variables.scss";`
             }
         }
-    },
+    }, */
     pluginOptions: {
         electronBuilder: {
             nodeIntegration: true,
             contextIsolation: false,
-            externals: ['better-sqlite3'],
+            externals: ['better-sqlite3', 'glasstron'],
             builderOptions: {
                 appId: "xyz.kawuchuu.firetail",
                 productName: "Firetail",

@@ -1,5 +1,5 @@
 <template>
-    <div class="side-bar">
+    <div class="side-bar" :class="platformType">
         <div class="side-bar-inner-container" :class="platformType">
             <div class="nav-buttons">
                 <div class="app-info">
@@ -42,11 +42,15 @@ export default {
 
 <style lang="scss">
 .side-bar {
-    width: $sidebarwidth;
+    width: 225px;
     height: 100%;
     background: #000;
     z-index: 2;
     color: white;
+}
+
+.side-bar.macos {
+    background: transparent;
 }
 
 .side-bar-inner-container {

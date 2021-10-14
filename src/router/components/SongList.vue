@@ -51,6 +51,7 @@
                     :data-component="sItem"
                     :page-mode="true"
                     :page-mode-el="'#main-container'"
+                    :top-threshold="-200"
                     :extra-props="{selectedItems: selectedItems}"
                     :estimate-size="itemSizeCheck"
                     :keeps="40"
@@ -109,7 +110,7 @@ export default {
         ...mapState('nav', {
             screenCountNum: state => state.screenCountNum,
             currentScroll: function(state) {
-                if ((this.$route.path == '/' && state.scrolled > 200) || (this.$route.path !== '/' && state.scrolled > 230)) {
+                if ((this.$route.path == '/' && state.scrolled > 215) || (this.$route.path !== '/' && state.scrolled > 230)) {
                     return 'sticky'
                 } else {
                     return ''
@@ -333,9 +334,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$currentGradColour: $gradient1;
-$subColour: desaturate(darken($currentGradColour, 25%), 40%);
-
 .wrapper {
     padding: 5px 20px;
 }
@@ -344,7 +342,6 @@ $subColour: desaturate(darken($currentGradColour, 25%), 40%);
     position: absolute;
     width: 100%;
     height: 450px;
-    background: linear-gradient($currentGradColour, transparent);
     top: 0;
     z-index: 0;
 }
@@ -522,8 +519,8 @@ div.section {
     position: fixed;
     top: 0;
     height: 81px;
-    width: calc(100% - #{$sidebarwidth} - 16px);
-    background: $subColour;
+    width: calc(100% - 225px - 16px);
+    background: black;
     z-index: 3;
     opacity: 0;
     transition: 0.15s;

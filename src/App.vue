@@ -118,6 +118,19 @@ export default {
     },
     async mounted() {
         require('./scss/test.scss')
+        if (window.matchMedia("(prefers-color-scheme: light").matches) {
+            document.documentElement.classList.remove('dark')
+            document.documentElement.classList.add('light')
+        }
+        window.matchMedia("(prefers-color-scheme: light)").onchange = e => {
+            if (e.matches) {
+                document.documentElement.classList.remove('dark')
+                document.documentElement.classList.add('light')
+            } else {
+                document.documentElement.classList.add('dark')
+                document.documentElement.classList.remove('light')
+            }
+        }
         let port = await ipcRenderer.invoke('getPort')
         this.$store.commit('nav/updatePort', port)
         const playlists = await ipcRenderer.invoke('getAllPlaylists')
@@ -186,18 +199,19 @@ export default {
     overflow: hidden;
     overflow-y: auto;
     position: fixed;
-    width: calc(100% - #{$sidebarwidth});
+    width: calc(100% - 225px);
     height: calc(100% - 135px);
     padding-top: 50px;
 }
 
 body {
     margin: 0;
-    background-color: var(--bg);
     color: var(--text);
+    background: transparent;
     font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Noto Sans JP', 'Noto Sans SC', 'Noto Sans KR', 'Overpass', 'Dosis', Arial, Helvetica, sans-serif !important;
     user-select: none;
     -webkit-user-select: none;
+    color-scheme: dark;
 }
 
 a {
@@ -252,10 +266,10 @@ html.dark {
     --hl: #252525;
 }
 
-html.panda {
+html.light {
     --bg: #f3f3f3;
     --bg-op: #a6a6a633;
-    --text: #3d3d3d;
+    --text: #242424;
     --fg-bg: #000000;
     --fg-bg-op: #ffffff84;
     --bd: #b4b4b4;
@@ -270,6 +284,10 @@ html.firetail {
     --hl-op: #eb6e641a;
     --gradient1: #e74e8e;
     --gradient2: #ef9135;
+}
+
+html.light.firetail {
+    --hl-txt: #d44835;
 }
 
 @font-face {
@@ -342,6 +360,7 @@ html.firetail {
     border-radius: 5px;
     max-width: 280px;
     pointer-events: none;
+    left: 280px;
 
     p {
         margin: 0;
@@ -352,7 +371,8 @@ html.firetail {
 
 .bg-cover {
     background: var(--bg);
-    width: 100%;
+    width: calc(100% - 225px);
+    margin-left: 225px;
     height: 100%;
     position: fixed;
     z-index: -1;

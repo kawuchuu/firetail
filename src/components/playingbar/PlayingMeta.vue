@@ -6,12 +6,10 @@
         </div>
         <div class="song-album-art" :style="getImage" @mouseover="hoverImage" @mouseleave="leaveImage"></div>
         <div class="title-artist">
-            <div class="song-title-fav">
-                <div class="song-title">{{title}}</div>
-                <i class="ft-icon favourite-icon" :class="[isFavourite, isInLibrary]" @click="handleFavourite">{{ favouriteIcon }}</i>
-            </div>
+            <div class="song-title">{{title}}</div>
             <div class="song-artist">{{artist}}</div>
         </div>
+        <i class="ft-icon favourite-icon" :class="[isFavourite, isInLibrary]" @click="handleFavourite">{{ favouriteIcon }}</i>
     </div>
 </template>
 
@@ -156,6 +154,7 @@ export default {
     max-width: 350px;
     font-weight: bold;
     margin-right: 10px;
+    margin-bottom: 3px;
     letter-spacing: -0.01em;
 }
 
@@ -172,11 +171,29 @@ export default {
 .favourite-icon {
     font-size: 18px;
     opacity: 0.5;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.favourite-icon:hover {
+    opacity: 0.8;
+}
+
+.favourite-icon:active {
+    opacity: 0.3;
 }
 
 .favourite-icon.active {
     opacity: 1;
     color: var(--hl-txt)
+}
+
+.favourite-icon.active:hover {
+    opacity: 0.7;
+}
+
+.favourite-icon.active:active {
+    opacity: 0.5;
 }
 
 .favourite-icon.hide {

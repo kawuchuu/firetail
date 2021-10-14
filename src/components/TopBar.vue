@@ -43,7 +43,7 @@ export default {
 
 <style lang="scss" scoped>
 .top-bar {
-    width: calc(100% - #{$sidebarwidth});
+    width: calc(100% - 225px);
     height: 50px;
     background: transparent;
     position: fixed;

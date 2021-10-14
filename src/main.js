@@ -108,3 +108,59 @@ window.addEventListener('mouseup', evt => {
         evt.preventDefault();
     }
 })
+
+window.addEventListener('keydown', evt => {
+    if (evt.metaKey && (evt.key === 'ArrowDown' || evt.key === 'ArrowUp')) {
+        evt.preventDefault()
+        let key = 'up'
+        if (evt.key === 'ArrowDown') key = 'down'
+        changeVol(key)
+    }
+})
+
+const changeVol = action => {
+    const vol = Math.round((store.state.audio.volume + (action === 'up' ? 0.1 : -0.1)) * 10) / 10
+    store.commit('audio/setVolume', vol)
+}
+
+ipcRenderer.on('control', (evt, action) => {
+    switch(action) {
+        case 'playPause':
+            store.dispatch('audio/playPause')
+            break
+        case 'stop':
+            store.commit('audio/setStopState')
+            break
+        case 'next': {
+            const curSong = store.state.audio.currentSongIndex
+            const nextSong = store.state.audio.queue[curSong + 1]
+            store.dispatch('audio/playSong', nextSong)
+            break
+        }
+        case 'prev': {
+            const curSong = store.state.audio.currentSongIndex
+            const nextSong = store.state.audio.queue[curSong - 1]
+            store.dispatch('audio/playSong', nextSong)
+            break
+        }
+        case 'volUp': {
+            changeVol('up')
+            break
+        }
+        case 'volDown': {
+            changeVol('down')
+            break
+        }
+        case 'mute':
+            store.commit('audio/setMute', !store.state.audio.muted)
+            break
+        case 'shuffle':
+            store.commit('audio/doShuffle')
+            break
+        case 'repeat':
+            store.commit('audio/toggleRepeat')
+            break
+        case 'preferences':
+            router.push('/settings')
+    }
+})

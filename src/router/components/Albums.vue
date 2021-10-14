@@ -57,7 +57,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .artist-inner {
     overflow: hidden;
     overflow-y: auto;
@@ -153,7 +153,7 @@ export default {
     position: fixed;
     top: 0;
     height: 81px;
-    width: calc(100% - #{$sidebarwidth} - 16px);
+    width: calc(100% - 225px - 16px);
     background: rgba(0,0,0,.65);
     z-index: 3;
     opacity: 0;
@@ -186,22 +186,30 @@ export default {
 
 @media (max-width: 1350px) {
     .artist-inner {
-        max-width: 75px;
+        max-width: 80px;
         transition: 0.3s cubic-bezier(0, 1, 0.35, 1);
     }
     .artist-inner:hover {
-        box-shadow: 2px 0px 10px rgba(0,0,0,.5);
+        box-shadow: 2px 0px 10px rgba(0,0,0,.15);
 
         .list-fade {
             width: 270px;
         }
+
+        .albums-item a span {
+            opacity: 1 !important;
+        }
     }
     .albums-container {
-        grid-template-columns: 105px 1fr;
+        grid-template-columns: 110px 1fr;
     }
     .list-fade {
-        width: 75px;
+        width: 80px;
         transition: 0.3s cubic-bezier(0, 1, 0.35, 1);
+    }
+    .albums-item a span {
+        opacity: 0 !important;
+        transition: 0.2s;
     }
 }
 </style>
