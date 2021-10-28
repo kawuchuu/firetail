@@ -1,6 +1,7 @@
 html.dark {
     --bg: #18171c !important;
-    --fg-bg: #322d47 !important;
+    --fg-bg: #2b2838 !important;
+    --sub-fg: #232029;
 }
 
 #app.test {
@@ -51,6 +52,11 @@ html.dark {
         //border: none;
         box-shadow: 0px 5px 5px rgba(0,0,0,.1);
     }
+}
+
+html.light {
+    --sub-fg: #DEDBE4;
+    --fg-bg: #D7D2E8;
 }
 
 :root.light #app.test {
@@ -125,8 +131,7 @@ html.dark {
     }
 
     .side-bar {
-        //background: #ffffffb4;
-        background: transparent;
+        background: #dfdfdf;
         color: var(--text);
 
         .item-sidebar, .special-button {

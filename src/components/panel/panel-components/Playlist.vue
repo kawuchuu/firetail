@@ -72,7 +72,7 @@ export default {
 .pl-img {
     width: 140px;
     height: 140px;
-    background-color: var(--fg-bg);
+    background-color: var(--sub-fg);
     background-image: url('../../../assets/no_album.svg');
     border-radius: 5px;
 }
@@ -94,7 +94,7 @@ export default {
     margin-bottom: 10px;
 }
 .input input, .input textarea {
-    background: var(--fg-bg);
+    background: var(--sub-fg);
     border: none;
     padding: 10px 15px;
     height: 20px;
@@ -110,7 +110,7 @@ export default {
 }
 
 .input input:focus, .input textarea:focus {
-    background: var(--bd)
+    background: var(--fg-bg)
 }
 
 .buttons {

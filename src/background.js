@@ -206,7 +206,7 @@ async function createWindow() {
         minHeight: 400,
         show: false,
         titleBarStyle: osType === 'darwin' ? 'hiddenInset' : 'default',
-        frame: false,
+        frame: osType === 'darwin' ? false : true,
         vibrancy: 'sidebar',
         backgroundColor: osType === 'darwin' ? 'transparent' : '#181818',
         title: 'Firetail',
@@ -224,7 +224,7 @@ async function createWindow() {
         win.vibrancy = 'appearance-based'
         win.setBlur(true)
     } else {
-        win = new BrowserWindow()
+        win = new BrowserWindow(winConfig)
     }
     let openSong = filePath => {
         let lastElement = filePath

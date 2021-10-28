@@ -18,7 +18,7 @@
   "main": "background.js",
   "dependencies": {
     "axios": "^0.21.1",
-    "better-sqlite3": "^7.4.1",
+    "better-sqlite3": "^7.4.2",
     "core-js": "^3.14.0",
     "cors": "^2.8.5",
     "electron-updater": "^4.3.9",
@@ -39,7 +39,7 @@
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "babel-eslint": "^10.1.0",
-    "electron": "^16.0.0-alpha.7",
+    "electron": "^15.0.0",
     "electron-devtools-installer": "^3.2.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
@@ -50,7 +50,7 @@
   },
   "resolutions": {
     "electron-builder": "^22.11.7",
-    "node-abi": "^3.0.0"
+    "node-abi": "^3.2.0"
   },
   "eslintConfig": {
     "root": true,

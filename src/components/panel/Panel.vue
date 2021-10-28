@@ -136,7 +136,7 @@ export default {
     width: 90%;
     max-height: 80%;
     border-radius: 10px;
-    background-color: #282828;
+    background-color: var(--bg);
     z-index: 21;
     position: fixed;
     //border: solid 2px var(--bd);

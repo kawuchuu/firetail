@@ -50,7 +50,7 @@ export default {
 }
 
 .side-bar.macos {
-    background: transparent;
+    background: transparent !important;
 }
 
 .side-bar-inner-container {

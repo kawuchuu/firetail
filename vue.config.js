@@ -33,6 +33,8 @@ module.exports = {
                     artifactName: "Firetail-Setup-${version}.${ext}",
                     uninstallDisplayName: "Firetail"
                 },
+                buildDependenciesFromSource: true,
+                npmRebuild: true,
                 win: {
                     target: [
                         "nsis"
