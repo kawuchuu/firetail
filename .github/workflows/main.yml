@@ -40,7 +40,7 @@ jobs:
       - name: Build
         run: |
           export FTBUILD_NUM=${{steps.get-ver-build.outputs.build}}
-          yarn install
+          npm install
           yarn electron:build
       - name: Release
         env:
