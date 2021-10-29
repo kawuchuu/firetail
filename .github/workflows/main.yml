@@ -41,7 +41,8 @@ jobs:
         run: |
           export FTBUILD_NUM=${{steps.get-ver-build.outputs.build}}
           npm install
-          yarn electron:build
+          npm run rebuild
+          npm run electron:build
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

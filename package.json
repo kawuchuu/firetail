@@ -13,7 +13,8 @@
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps"
+    "postuninstall": "electron-builder install-app-deps",
+    "rebuild": "electron-rebuild"
   },
   "main": "background.js",
   "dependencies": {
@@ -21,6 +22,7 @@
     "better-sqlite3": "^7.4.2",
     "core-js": "^3.14.0",
     "cors": "^2.8.5",
+    "electron-rebuild": "^3.2.3",
     "electron-updater": "^4.3.9",
     "glasstron": "^0.1.0",
     "mime-types": "^2.1.31",
