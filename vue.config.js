@@ -35,6 +35,7 @@ module.exports = {
                 },
                 buildDependenciesFromSource: true,
                 npmRebuild: true,
+                nodeGypRebuild: true,
                 win: {
                     target: [
                         "nsis"

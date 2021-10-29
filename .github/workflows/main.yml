@@ -41,7 +41,6 @@ jobs:
         run: |
           export FTBUILD_NUM=${{steps.get-ver-build.outputs.build}}
           npm install
-          npm run rebuild -f -w better-sqlite3
           npm run electron:build
       - name: Release
         env:
