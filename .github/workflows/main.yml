@@ -44,12 +44,23 @@ jobs:
           export FTBUILD_NUM=${{steps.get-ver-build.outputs.build}}
           yarn
           yarn electron:build
-      - name: Move artifacts to directory
+      - if: matrix.os == 'windows-latest'
+        name: Move Windows artifacts to directory
         shell: bash
         run: |
           mkdir dist_electron/artifacts-upload
           mv ./dist_electron/*.exe ./dist_electron/artifacts-upload
+      - if: matrix.os == 'macos-latest'
+        name: Move macOS artifacts to directory
+        shell: bash
+        run: |
+          mkdir dist_electron/artifacts-upload
           mv ./dist_electron/*.dmg ./dist_electron/artifacts-upload
+      - if: matrix.os == 'ubuntu-latest'
+        name: Move Linux artifacts to directory
+        shell: bash
+        run: |
+          mkdir dist_electron/artifacts-upload
           mv ./dist_electron/*.rpm ./dist_electron/artifacts-upload
           mv ./dist_electron/*.deb ./dist_electron/artifacts-upload
           mv ./dist_electron/*.AppImage ./dist_electron/artifacts-upload
