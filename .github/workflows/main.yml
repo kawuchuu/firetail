@@ -47,11 +47,11 @@ jobs:
       - name: Move artifacts to directory
         run: |
           mkdir dist_electron/artifacts-upload
-          bash mv *.exe ./dist_electron/artifacts-upload
-          bash mv *.dmg ./dist_electron/artifacts-upload
-          bash mv *.rpm ./dist_electron/artifacts-upload
-          bash mv *.deb ./dist_electron/artifacts-upload
-          bash mv *.AppImage ./dist_electron/artifacts-upload
+          mv *.exe ./dist_electron/artifacts-upload
+          mv *.dmg ./dist_electron/artifacts-upload
+          mv *.rpm ./dist_electron/artifacts-upload
+          mv *.deb ./dist_electron/artifacts-upload
+          mv *.AppImage ./dist_electron/artifacts-upload
       - name: Upload artifacts to continuous GitHub release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
