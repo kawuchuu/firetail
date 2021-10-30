@@ -46,7 +46,7 @@ jobs:
           yarn electron:build
       - name: Move artifacts to directory
         run: |
-          bash mkdir dist_electron/artifacts-upload
+          mkdir dist_electron/artifacts-upload
           bash mv *.exe ./dist_electron/artifacts-upload
           bash mv *.dmg ./dist_electron/artifacts-upload
           bash mv *.rpm ./dist_electron/artifacts-upload
