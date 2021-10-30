@@ -30,19 +30,29 @@ jobs:
           PACKAGE_JSON_PATH="${1-.}"
           PACKAGE_VERSION=$(cat ${PACKAGE_JSON_PATH}/package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
           echo ::set-output name=current-version::$PACKAGE_VERSION
-      - id: get-ver-build
+      - name: Get Build Number
+        id: get-ver-build
         run: |
           build=$(echo ${{ github.sha }} | cut -c1-7)
           echo "::set-output name=build::$build"
       - uses: actions/setup-node@v2
+        name: Setup Node
         with:
           node-version: '14.17.0'
-      - name: Build
+      - name: Install deps & build artifacts
         run: |
           export FTBUILD_NUM=${{steps.get-ver-build.outputs.build}}
           yarn
           yarn electron:build
-      - name: Release
+      - name: Move artifacts to directory
+        run: |
+          bash mkdir dist_electron/artifacts-upload
+          bash mv *.exe ./dist_electron/artifacts-upload
+          bash mv *.dmg ./dist_electron/artifacts-upload
+          bash mv *.rpm ./dist_electron/artifacts-upload
+          bash mv *.deb ./dist_electron/artifacts-upload
+          bash mv *.AppImage ./dist_electron/artifacts-upload
+      - name: Upload artifacts to continuous GitHub release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           UPLOADTOOL_ISPRERELEASE: true
@@ -51,4 +61,9 @@ jobs:
           REPO_SLUG: kawuchuu/firetail
         run: |
           curl https://raw.githubusercontent.com/probonopd/uploadtool/master/upload.sh --output upload.sh
-          bash upload.sh dist_electron/Firetail*.*
+          bash upload.sh dist_electron/artifacts-upload/Firetail*.*
+      - name: Upload artifacts to GitHub actions
+        uses: actions/upload-artifact@v2
+        with:
+          name: Firetail ${{steps.get-ver-build.outputs.build}}
+          path: ./dist_electron/artifacts-upload/
