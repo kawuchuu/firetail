@@ -19,7 +19,8 @@ const state = () => ({
     shuffled: false,
     repeat: 'off',
     volume: 1,
-    muted: false
+    muted: false,
+    preventSpacePause: false
 })
 
 const mutations = {
@@ -147,6 +148,9 @@ const mutations = {
             state.currentTime = null
             state.duration = null
         }
+    },
+    setPauseSpace(state, option) {
+        state.preventSpacePause = option
     }
 }
 
@@ -264,6 +268,18 @@ let setSkipPrevButtons = () => {
     navigator.mediaSession.setActionHandler('previoustrack', prev);
     navigator.mediaSession.setActionHandler('nexttrack', skip);
 }
+
+window.addEventListener('keydown', evt => {
+    switch(evt.key) {
+        case ' ':
+            if (store.state.audio.preventSpacePause) return
+            evt.preventDefault()
+            store.dispatch('audio/playPause')
+        break
+        default:
+            console.log(evt.key)
+    }
+})
 
 export default {
     namespaced: true,

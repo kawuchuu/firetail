@@ -7,11 +7,11 @@
             <div class="pl-info">
                 <div class="input">
                     <label class="input-label">Name</label>
-                    <input type="text" v-model="name" placeholder="My Playlist" value="My Playlist">
+                    <input type="text" v-model="name" placeholder="My Playlist" value="My Playlist" @focus="focused" @blur="unfocused">
                 </div>
                 <div class="input">
                     <label class="input-label">Description</label>
-                    <textarea v-model="desc" placeholder="My playlist description..."></textarea>
+                    <textarea v-model="desc" placeholder="My playlist description..." @focus="focused" @blur="unfocused"></textarea>
                 </div>
             </div>
             <div class="buttons">
@@ -42,6 +42,12 @@ export default {
             })
             this.$store.commit('playlist/setPlaylists', playlists)
             this.close()
+        },
+        focused() {
+            this.$store.commit('audio/setPauseSpace', true)
+        },
+        unfocused() {
+            this.$store.commit('audio/setPauseSpace', false)
         }
     },
     data() {
@@ -92,6 +98,7 @@ export default {
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 10px;
+    margin-left: 15px;
 }
 .input input, .input textarea {
     background: var(--sub-fg);

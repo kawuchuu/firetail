@@ -69,7 +69,8 @@ export default {
 .album-img {
     min-width: 45px;
     min-height: 45px;
-    margin: 0px 15px;
+    margin-right: 15px;
+    margin-left: 18px;
     background-color: #1e1e1ebe;
     border-radius: 3px;
     background-image: url('../../assets/no_album.svg');

@@ -50,7 +50,7 @@ export default {
 }
 
 .side-bar.macos {
-    background: transparent !important;
+    //background: transparent !important;
 }
 
 .side-bar-inner-container {
@@ -155,7 +155,7 @@ export default {
 .firetail-icon {
     width: 35px;
     height: 35px;
-    background-image: url('../../assets/firetail-menu.svg');
+    background-image: url('../../assets/logo-mono.svg');
     background-size: cover;
     margin: 0 7px 0 0;
     filter: brightness(10);

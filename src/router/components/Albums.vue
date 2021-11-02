@@ -8,12 +8,12 @@
                 </div>
             </section>
             <section class="song-list">
-                <div class="sticky-bg" ref="stickyBg" :class="currentScroll">
+<!--                 <div class="sticky-bg" ref="stickyBg" :class="currentScroll">
                     <div class="bg-inner">
                         <h3 v-if="$route.query.q">{{ $route.query.q }}</h3>
                         <h3 v-else>Albums</h3>
                     </div>
-                </div>
+                </div> -->
                 <div class="special-gradient-bg-wrapper">
                     <div class="bg-gradient" :style="imgBackground"></div>
                     <div class="bg-gradient-layer"></div>
@@ -38,7 +38,7 @@ export default {
         },
         ...mapState('nav', {
             currentScroll: state => {
-                if (state.scrolled > 230) {
+                if (state.scrolled > 278) {
                     return 'sticky'
                 } else {
                     return ''
@@ -149,7 +149,7 @@ export default {
     top: 0;
 }
 
-.sticky-bg {
+/* .sticky-bg {
     position: fixed;
     top: 0;
     height: 81px;
@@ -175,7 +175,7 @@ export default {
 
 .sticky-bg.sticky {
     opacity: 1;
-}
+} */
 
 .list-gradient-fade {
     width: 100%;

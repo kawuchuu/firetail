@@ -4,10 +4,10 @@
             <div v-if="$route.path == '/'" class="bg-gradient">
                 <div class="bg-banner"></div>
             </div>
-            <div class="sticky-bg" ref="stickyBg" :class="currentScroll">
-                <div class="bg-inner">
-                    <h3>Songs</h3>
-                </div>
+        </div>
+        <div class="sticky-bg" :class="currentScroll">
+            <div class="bg-inner">
+                <h3>Songs</h3>
             </div>
         </div>
         <div class="top-title" ref="topTitle">
@@ -44,19 +44,23 @@
             </div>
             <div class="wrapper">
                 <p v-if="list.length == 0" style="margin-left: 50px;">No songs have been imported yet. Click Add Songs at the top to import some!</p>
-                <!-- <SongItem v-for="(item, index) in list" :song="item" :key="item.id" :selectedItems="selectedItems" :index="index"/> -->
-                <virtual-list
-                    :data-key="'id'"
-                    :data-sources="list"
-                    :data-component="sItem"
-                    :page-mode="true"
-                    :page-mode-el="'#main-container'"
-                    :top-threshold="-200"
-                    :extra-props="{selectedItems: selectedItems}"
-                    :estimate-size="itemSizeCheck"
-                    :keeps="40"
-                    @selected="select"
-                />
+                <div v-if="$route.path !== '/'">
+                    <SongItem v-for="(item, index) in list" :source="item" :key="item.id" :selectedItems="selectedItems" :index="index"/>
+                </div>
+                <div v-if="$route.path === '/'">
+                    <virtual-list
+                        :data-key="'id'"
+                        :data-sources="list"
+                        :data-component="sItem"
+                        :page-mode="true"
+                        :page-mode-el="'#main-container'"
+                        :top-threshold="-200"
+                        :extra-props="{selectedItems: selectedItems}"
+                        :estimate-size="itemSizeCheck"
+                        :keeps="40"
+                        @selected="select"
+                    />
+                </div>
             </div>
         </div>
     </div>
@@ -71,9 +75,9 @@ import sort from '@/modules/sort'
 import axios from 'axios'
 
 export default {
-    /* components: {
+    components: {
         SongItem
-    }, */
+    },
     data() {
         return {
             selectedItems: [],
@@ -110,7 +114,7 @@ export default {
         ...mapState('nav', {
             screenCountNum: state => state.screenCountNum,
             currentScroll: function(state) {
-                if ((this.$route.path == '/' && state.scrolled > 215) || (this.$route.path !== '/' && state.scrolled > 230)) {
+                if (this.$route.path === '/' && state.scrolled > 215 || this.$route.path !== '/' && state.scrolled > 282) {
                     return 'sticky'
                 } else {
                     return ''
@@ -215,7 +219,7 @@ export default {
         select(evt) {
             let getIndex = this.selectedItems.indexOf(evt[1])
             if (evt[0].which == 1) {
-                if (evt[0].ctrlKey) {
+                if (evt[0].ctrlKey || evt[0].metaKey) {
                     if (getIndex == -1) {
                         this.selectedItems.push(evt[1])
                     } else {
@@ -320,10 +324,10 @@ export default {
         const resizeObserver = new ResizeObserver(() => {
             resizeObserver.unobserve(topHeader)
             topHeader.style.fontSize = this.titleSizes.large
-            if (topHeader.getBoundingClientRect().height > 116) {
+            if (topHeader.getBoundingClientRect().height > 190) {
                 topHeader.style.fontSize = this.titleSizes.medium
             }
-            if (topHeader.getBoundingClientRect().height > 77 && topHeader.style.fontSize == this.titleSizes.medium) {
+            if (topHeader.getBoundingClientRect().height > 140 && topHeader.style.fontSize == this.titleSizes.medium) {
                 topHeader.style.fontSize = this.titleSizes.small
             }
             resizeObserver.observe(topHeader)
@@ -525,7 +529,7 @@ div.section {
     opacity: 0;
     transition: 0.15s;
     transition-property: opacity;
-    pointer-events: none;
+    pointer-events: all;
 
     .bg-inner {
         height: 50px;

@@ -30,10 +30,13 @@ protocol.registerSchemesAsPrivileged([{
 
 // functionality is missing, will be implemented in the future
 const macMenu = [
-    { 
-        role: 'appMenu',
+    {
+        label: 'Firetail',
         submenu: [
-            { role: 'appMenu' },
+            {
+                label: 'About Firetail',
+                selector: 'orderFrontStandardAboutPanel:'
+            },
             { type: 'separator' },
             {
                 label: 'Preferences',
@@ -86,7 +89,7 @@ const macMenu = [
         submenu: [
             // this one is still registering when hidden even though acceleratorWorksWhenHidden is false...
             {
-                label: 'Play',
+                label: 'Play / Pause',
                 //accelerator: 'Space',
                 acceleratorWorksWhenHidden: false,
                 registerAccelerator: false,
@@ -208,9 +211,10 @@ async function createWindow() {
         titleBarStyle: osType === 'darwin' ? 'hiddenInset' : 'default',
         frame: osType === 'darwin' ? false : true,
         vibrancy: 'sidebar',
-        backgroundColor: osType === 'darwin' ? 'transparent' : '#181818',
+        //backgroundColor: osType === 'darwin' ? 'transparent' : '#181818',
+        backgroundColor: '#18171c',
         title: 'Firetail',
-        transparent: osType === 'darwin' ? true : false,
+        //transparent: osType === 'darwin' ? true : false,
         webPreferences: {
             // Use pluginOptions.nodeIntegration, leave this alone
             // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -219,7 +223,7 @@ async function createWindow() {
             enableBlinkFeatures: "CSSColorSchemeUARendering",
         }
     }
-    if (osType === 'darwin') {
+    if (osType === 'darwin-disable') {
         win = new glasstron.BrowserWindow(winConfig)
         win.vibrancy = 'appearance-based'
         win.setBlur(true)
