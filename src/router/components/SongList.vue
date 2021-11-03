@@ -319,10 +319,12 @@ export default {
         /* 
             Please excuse this hardcoded mess
             Currently looping if not large, using unnecessary resources... needs fix!!
+            Update 03/11/2021: a bit of tweaking seems to have resolved this issue :)
+            Was motivated to fix since it was draining my laptop's battery
         */
         const topHeader = this.$refs.header
+        const topTitle = this.$refs.topTitle
         const resizeObserver = new ResizeObserver(() => {
-            resizeObserver.unobserve(topHeader)
             topHeader.style.fontSize = this.titleSizes.large
             if (topHeader.getBoundingClientRect().height > 190) {
                 topHeader.style.fontSize = this.titleSizes.medium
@@ -330,9 +332,8 @@ export default {
             if (topHeader.getBoundingClientRect().height > 140 && topHeader.style.fontSize == this.titleSizes.medium) {
                 topHeader.style.fontSize = this.titleSizes.small
             }
-            resizeObserver.observe(topHeader)
         })
-        resizeObserver.observe(topHeader)
+        resizeObserver.observe(topTitle)
     }
 }
 </script>

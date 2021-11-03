@@ -276,8 +276,6 @@ window.addEventListener('keydown', evt => {
             evt.preventDefault()
             store.dispatch('audio/playPause')
         break
-        default:
-            console.log(evt.key)
     }
 })
 

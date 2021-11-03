@@ -74,8 +74,9 @@ jobs:
         run: |
           curl https://raw.githubusercontent.com/probonopd/uploadtool/master/upload.sh --output upload.sh
           bash upload.sh dist_electron/artifacts-upload/Firetail*.*
-      - name: Upload artifacts to GitHub actions
-        uses: actions/upload-artifact@v2
-        with:
-          name: Firetail ${{steps.get-ver-build.outputs.build}}
-          path: ./dist_electron/artifacts-upload/
+# I don't like how GitHub artifacts work...
+#      - name: Upload artifacts to GitHub actions
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: Firetail ${{steps.get-ver-build.outputs.build}}
+#          path: ./dist_electron/artifacts-upload/
