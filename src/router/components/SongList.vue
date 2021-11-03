@@ -324,7 +324,7 @@ export default {
         */
         const topHeader = this.$refs.header
         const topTitle = this.$refs.topTitle
-        const resizeObserver = new ResizeObserver(() => {
+        const doTextResize = () => {
             topHeader.style.fontSize = this.titleSizes.large
             if (topHeader.getBoundingClientRect().height > 190) {
                 topHeader.style.fontSize = this.titleSizes.medium
@@ -332,7 +332,22 @@ export default {
             if (topHeader.getBoundingClientRect().height > 140 && topHeader.style.fontSize == this.titleSizes.medium) {
                 topHeader.style.fontSize = this.titleSizes.small
             }
+        }
+        const mutationObserver = new MutationObserver((mutations) => {
+            mutationObserver.disconnect(topHeader)
+            for (let mutation of mutations) {
+                if (mutation.type == 'attributes') {
+                    doTextResize()
+                }
+            }
+            mutationObserver.observe(topHeader, {
+                attributes: true
+            })
         })
+        mutationObserver.observe(topHeader, {
+            attributes: true
+        })
+        const resizeObserver = new ResizeObserver(doTextResize)
         resizeObserver.observe(topTitle)
     }
 }
