@@ -1,20 +1,28 @@
 <template>
-    <div class="albums-item">
-        <router-link :to="`?hideTop=true&column=album&q=${encodeURIComponent(album.album)}&view=album_${encodeURIComponent(album.album)}`">
-            <div class="album-img" :style="albumArt"/>
-            <span>{{ album.album }}</span>
-        </router-link>
+    <div class="item-root">
+        <div v-if="$route.path === '/artists'" class="albums-item">
+            <router-link :to="`?hideTop=true&column=artist&q=${encodeURIComponent(item.artist)}&view=artist_${encodeURIComponent(item.artist)}`">
+                <div class="artist-img"/>
+                <span>{{ item.artist }}</span>
+            </router-link>
+        </div>
+        <div v-else-if="$route.path === '/albums'" class="albums-item">
+            <router-link :to="`?hideTop=true&column=album&q=${encodeURIComponent(item.album)}&view=album_${encodeURIComponent(item.album)}`">
+                <div class="album-img" :style="albumArt"/>
+                <span>{{ item.album }}</span>
+            </router-link>
+        </div>
     </div>
 </template>
 
 <script>
 export default {
-    props: ['album'],
+    props: ['item'],
     asyncComputed: {
         async albumArt() {
             let port = this.$store.state.nav.port
-            if (this.album.hasImage == 1) {
-                let artistAlbum = `http://localhost:${port}/${(this.album.artist + this.album.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
+            if (this.item.hasImage == 1) {
+                let artistAlbum = `http://localhost:${port}/${(this.item.artist + this.item.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
                 return `background-image: url('${artistAlbum}')`
             } else {
                 return ''
@@ -66,7 +74,7 @@ export default {
     }
 }
 
-.album-img {
+.album-img, .artist-img {
     min-width: 45px;
     min-height: 45px;
     margin-right: 15px;
@@ -77,6 +85,11 @@ export default {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+}
+
+.artist-img {
+    border-radius: 999px;
+    background-image: url('../../assets/no_artist.svg')
 }
 
 @media (max-width: 1350px) {

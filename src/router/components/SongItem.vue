@@ -218,7 +218,7 @@ li.nohover:hover {
     opacity: 0;
 }
 
-.play-pause:hover, .favourite-icon:hover {
+.play-pause:hover {
     opacity: .5 !important;
 }
 
@@ -311,6 +311,11 @@ li.nohover:hover {
 .favourite-icon {
     font-size: 20px;
     cursor: pointer;
+    opacity: 0.5;
+}
+
+.favourite-icon:hover {
+    opacity: 1;
 }
 
 .track-num {

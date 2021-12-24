@@ -42,6 +42,7 @@ jobs:
       - name: Install deps & build artifacts
         run: |
           export FTBUILD_NUM=${{steps.get-ver-build.outputs.build}}
+          export BUILD_NUMBER=${{steps.get-ver-build.outputs.build}}
           yarn
           yarn electron:build
       - if: matrix.os == 'windows-latest'

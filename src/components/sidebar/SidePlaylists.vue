@@ -26,12 +26,13 @@ export default {
     },
     methods: {
         context(evt) {
+            // everything below is temporary, will develop a proper context menu system :)
             if (evt.which !== 3) return
             let menuItems = [
                 {name: 'Edit playlist', type: 'button'},
                 {name: 'Rename', type: 'button'},
                 {type: 'divider'},
-                {name: 'Remove playlist', type: 'button', style: 'dangerous'}
+                {name: 'Remove playlist', type: 'button', style: 'dangerous', onClick: this.delete}
             ]
             bus.$emit('updateitems', {
                 items: menuItems,
@@ -40,6 +41,11 @@ export default {
                     clientY: evt.clientY
                 }
             })
+        },
+        async delete() {
+            const newPlaylists = await ipcRenderer.invoke('deletePlaylist', this.playlist.id)
+            console.log(newPlaylists)
+            this.$store.commit('playlist/setPlaylists', newPlaylists)
         },
         handleDragOver(evt) {
             evt.preventDefault()

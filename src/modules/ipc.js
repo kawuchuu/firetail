@@ -171,5 +171,9 @@ export default {
         ipcMain.handle('updatePlaylist', (event, playlist) => {
             return db.updatePlaylist(playlist.column, playlist.id, playlist.data)
         })
+
+        ipcMain.handle('deletePlaylist', (event, id) => {
+            return db.deletePlaylist(id)
+        })
     }
 }

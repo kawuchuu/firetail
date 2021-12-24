@@ -115,5 +115,9 @@ export default {
         console.log(column, id, data)
         db.prepare(`UPDATE playlists SET ${column} = ? WHERE id = ?;`).run(data, id)
         return this.getAllPlaylists()
+    },
+    deletePlaylist(id) {
+        db.prepare('DELETE FROM playlists WHERE id = ?').run(id)
+        return this.getAllPlaylists()
     }
 }

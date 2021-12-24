@@ -26,9 +26,9 @@ module.exports = {
             contextIsolation: false,
             externals: ['better-sqlite3', 'glasstron'],
             builderOptions: {
-                appId: "xyz.kawuchuu.firetail",
+                appId: "dev.kawuchuu.firetail",
                 productName: "Firetail",
-                copyright: "Copyright © 2021 kawuchuu",
+                copyright: "Copyright © 2022 kawuchuu",
                 nsis: {
                     artifactName: "Firetail-Setup-${version}.${ext}",
                     uninstallDisplayName: "Firetail"

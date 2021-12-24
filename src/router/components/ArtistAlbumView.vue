@@ -2,9 +2,13 @@
     <div class="artists">
         <div class="albums-container">
             <section class="artists-list">
-                <div class="artist-inner">
+                <div class="artist-inner" v-if="$route.path === '/albums'">
                     <div class="list-fade" />
-                    <AlbumItems v-for="item in albumItems" :album="item" :key="item.id"/>
+                    <ListItem v-for="item in albumItems" :item="item" :key="item.id"/>
+                </div>
+                <div class="artist-inner" v-else-if="$route.path === '/artists'">
+                    <div class="list-fade" />
+                    <ListItem v-for="item in artistItems" :item="item" :key="item.id"/>
                 </div>
             </section>
             <section class="song-list">
@@ -26,15 +30,18 @@
 
 <script>
 import { mapState } from 'vuex'
-import AlbumItems from './AlbumItems'
+import ListItem from './ListItem'
 
 export default {
     components: {
-        AlbumItems
+        ListItem
     },
     computed: {
         albumItems() {
             return this.$store.state.nav.albums
+        },
+        artistItems() {
+            return this.$store.state.nav.artists
         },
         ...mapState('nav', {
             currentScroll: state => {
@@ -197,6 +204,10 @@ export default {
         }
 
         .albums-item a span {
+            opacity: 0.65 !important;
+        }
+
+        .albums-item:hover a span, .albums-item a.router-link-exact-active span {
             opacity: 1 !important;
         }
     }
@@ -210,6 +221,7 @@ export default {
     .albums-item a span {
         opacity: 0 !important;
         transition: 0.2s;
+        transition-property: opacity;
     }
 }
 </style>

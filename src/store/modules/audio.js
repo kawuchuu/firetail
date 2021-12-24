@@ -191,9 +191,21 @@ const actions = {
         audio.addEventListener('timeupdate', timeUpdate)
         audio.addEventListener('pause', () => {
             context.commit('updatePause')
+            navigator.mediaSession.setPositionState({
+                duration: audio.duration,
+                playbackRate: audio.playbackRate,
+                position: audio.currentTime
+            });
         })
         audio.addEventListener('play', () => {
             context.commit('updatePause')
+            if (audio.readyState !== 0) {
+                navigator.mediaSession.setPositionState({
+                    duration: audio.duration,
+                    playbackRate: audio.playbackRate,
+                    position: audio.currentTime
+                });
+            }
         })
         await audio.play().catch(err => {
             let msg = err.toString()
@@ -227,12 +239,15 @@ let timeUpdate = function() {
 }
 
 let updateMediaSession = song => {
-    let metadata = {
-        title: song.title,
-        artist: song.artist,
-        album: song.album,
-        src: song.path
+    let sessionMetadata = navigator.mediaSession.metadata
+    if (!sessionMetadata) {
+        navigator.mediaSession.metadata = new window.MediaMetadata()
+        sessionMetadata = navigator.mediaSession.metadata
     }
+    sessionMetadata.title = song.title
+    sessionMetadata.artist = song.artist
+    sessionMetadata.album = song.album
+    sessionMetadata.src = song.path
     if (song.hasImage == 1) {
         let port = store.state.nav.port
         let artistAlbum = ''
@@ -241,10 +256,9 @@ let updateMediaSession = song => {
         } else {
             artistAlbum = `http://localhost:${port}/${(song.artist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
         }
-        metadata['artwork'] = [{src: artistAlbum, sizes: '512x512', type: 'image/jpeg'}]
+        sessionMetadata.artwork = [{src: artistAlbum, sizes: '512x512', type: 'image/jpeg'}]
     }
     setSkipPrevButtons()
-    navigator.mediaSession.metadata = new window.MediaMetadata(metadata)
     navigator.mediaSession.setPositionState({
         duration: audio.duration,
         playbackRate: audio.playbackRate,

@@ -3,8 +3,7 @@ import VueRouter from 'vue-router'
 import SongList from './components/SongList'
 //import SimpleSongList from './components/SimpleSongList/SimpleSongList'
 import Unknown from './components/Unknown'
-import Artists from './components/Artists'
-import Albums from './components/Albums'
+import ArtistAlbumView from './components/ArtistAlbumView'
 import store from '../store'
 import tr from '../translation'
 import Settings from './components/settings/Settings'
@@ -40,7 +39,7 @@ const router = new VueRouterEx({
         },
         {
             path: '/artists',
-            component: Artists,
+            component: ArtistAlbumView,
             name: tr.t('router.artists'),
             children: [
                 {
@@ -51,7 +50,7 @@ const router = new VueRouterEx({
         },
         {
             path: '/albums',
-            component: Albums,
+            component: ArtistAlbumView,
             name: tr.t('router.albums'),
             children: [
                 {

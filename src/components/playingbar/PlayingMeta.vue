@@ -171,7 +171,7 @@ export default {
 .favourite-icon {
     font-size: 18px;
     opacity: 0.5;
-    margin-left: 20px;
+    margin-left: 12px;
     cursor: pointer;
 }
 
