@@ -1,12 +1,13 @@
 <template>
     <div class="side-bar" :class="platformType">
-        <div class="side-bar-inner-container" :class="platformType">
+        <div class="side-bar-inner-container">
             <div class="nav-buttons">
-                <div class="app-info">
+                <div class="app-info" :class="platformType">
                     <div class="firetail-icon"/>
                     <div class="app-name">{{ $t('appName') }}</div>
                     <div class="beta-tag">Beta</div>
                 </div>
+                <div class="spacer" :class="platformType" />
                 <SideButtons v-for="item in getNavs" v-bind:button="item" v-bind:key="item.id"></SideButtons>
                 <SidePlaylists v-for="item in playlists" :playlist="item" :key="item.id" />
             </div>
@@ -56,20 +57,31 @@ export default {
 .side-bar-inner-container {
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: scroll;
     height: 100%;
 }
 
-.side-bar-inner-container.macos {
-    margin-top: 25px;
+.side-bar-inner-container::-webkit-scrollbar {
+    background: black;
+    width: 12px !important;
 }
 
-.side-bar-inner-container::-webkit-scrollbar {
-    display: none;
+.side-bar-inner-container::-webkit-scrollbar-thumb {
+    border-color: black;
+    border-width: 4px;
+    background: black;
+}
+
+.side-bar-inner-container::-webkit-scrollbar-thumb:active {
+    background: var(--hl-txt) !important;
+}
+
+.side-bar-inner-container:hover::-webkit-scrollbar-thumb {
+    background-color: #ffffff50;
 }
 
 .nav-buttons {
-    padding: 12px;
+    padding: 0px 0px 12px 12px;
 }
 
 .side-bar button {
@@ -164,7 +176,23 @@ export default {
 .app-info {
     display: flex;
     align-items: center;
-    margin: 5px 15px 15px;
+    padding: 15px;
+    background: linear-gradient(black, black, black, transparent);
+    position: fixed;
+    z-index: 2;
+    width: 175px;
+}
+
+.app-info.macos {
+    padding-top: 40px;
+}
+
+.spacer {
+    margin-top: 65px;
+}
+
+.spacer.macos {
+    margin-top: 90px;
 }
 
 .app-name {
@@ -215,5 +243,26 @@ export default {
     font-size: 20px;
     border: white 2px solid;
     border-radius: 3px;
+}
+
+:root.light {
+    .app-info {
+        background: linear-gradient(#dfdfdf, #dfdfdf, #dfdfdf, transparent);
+    }
+    .side-bar .side-bar-inner-container::-webkit-scrollbar {
+        background: #dfdfdf !important;
+        width: 12px !important;
+    }
+    .side-bar-inner-container::-webkit-scrollbar-thumb {
+        border-color: #dfdfdf !important;
+        background: #dfdfdf !important;
+        border-width: 4px !important;
+    }
+    .side-bar-inner-container:hover::-webkit-scrollbar-thumb {
+        background: #322d4750 !important;
+    }
+    .side-bar-inner-container::-webkit-scrollbar-thumb:active {
+        background: var(--hl-txt) !important;
+    }
 }
 </style>

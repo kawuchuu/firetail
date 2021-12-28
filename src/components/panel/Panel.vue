@@ -64,6 +64,9 @@ export default {
     methods: {
         hidePanel() {
             this.$store.commit('panel/updateActive', false)
+        },
+        escHide(evt) {
+            console.log(evt)
         }
     }
 }
@@ -115,6 +118,7 @@ export default {
     transition-property: opacity;
     pointer-events: none;
     animation: preventClick 0.5s;
+    backdrop-filter: blur(10px) saturate(1.5);
 }
 
 .panel-container.show {
@@ -181,10 +185,13 @@ export default {
 .panel-bg {
     position: fixed;
     z-index: 20;
-    background-color: rgba(0,0,0,.8);
+    background-color: rgba(0,0,0,.75);
     width: 100%;
     height: 100%;
-    /* backdrop-filter: blur(10px); */
+}
+
+html.light .panel-bg {
+    background-color :rgba(0,0,0,.4)
 }
 
 .content {

@@ -24,7 +24,7 @@ module.exports = {
         electronBuilder: {
             nodeIntegration: true,
             contextIsolation: false,
-            externals: ['better-sqlite3', 'glasstron'],
+            externals: ['better-sqlite3', 'glasstron', 'sharp'],
             builderOptions: {
                 appId: "dev.kawuchuu.firetail",
                 productName: "Firetail",

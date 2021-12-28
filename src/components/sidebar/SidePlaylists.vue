@@ -29,7 +29,7 @@ export default {
             // everything below is temporary, will develop a proper context menu system :)
             if (evt.which !== 3) return
             let menuItems = [
-                {name: 'Edit playlist', type: 'button'},
+                {name: 'Edit playlist', type: 'button', onClick: this.openEditDialog},
                 {name: 'Rename', type: 'button'},
                 {type: 'divider'},
                 {name: 'Remove playlist', type: 'button', style: 'dangerous', onClick: this.delete}
@@ -46,6 +46,15 @@ export default {
             const newPlaylists = await ipcRenderer.invoke('deletePlaylist', this.playlist.id)
             console.log(newPlaylists)
             this.$store.commit('playlist/setPlaylists', newPlaylists)
+        },
+        async openEditDialog() {
+            const fullPlaylist = await ipcRenderer.invoke('getSpecificPlaylist', this.playlist.id)
+            this.$store.commit('panel/updatePanelProps', {
+                topMsg: 'Edit Playlist',
+                playlist: fullPlaylist[0]
+            })
+            this.$store.commit('panel/updatePanelComponent', 'Playlist')
+            this.$store.commit('panel/updateActive', true)
         },
         handleDragOver(evt) {
             evt.preventDefault()

@@ -19,6 +19,7 @@
                 <h1 v-else-if="$route.path == '/albums' && list[0]" ref="header" :style="topTitleSize" class="top-header">{{list[0].album}}</h1> -->
                 <h1 ref="header" :style="topTitleSize" class="top-header">{{ topTitleText }}</h1>
                 <!-- <h1 ref="headerTEST" class="top-header-test">{{ topTitleText }}</h1> -->
+                <p v-if="$route.path === '/playlist' && playlist.desc">{{ playlist.desc }}</p>
                 <p v-if="$route.path == '/albums' && list[0] && list[0].year">{{ list[0].year }} • {{ screenCountNum }} {{ $tc('topTitle.countTypeSongs', parseInt(screenCountNum)) }}</p>
                 <p v-else>{{ screenCountNum }} {{ $tc('topTitle.countTypeSongs', parseInt(screenCountNum)) }}</p>
             </div>
@@ -514,9 +515,13 @@ div.section {
 }
 
 .top-title p {
-    margin: 0px;
-    margin-top: 5px;
+    margin: 8px 0px;
     opacity: .75;
+    font-size: 0.9em;
+}
+
+.top-title p:last-child {
+    margin-bottom: 0px ;
 }
 
 .tab-album-art {

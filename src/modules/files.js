@@ -1,9 +1,11 @@
 import * as metadata from 'music-metadata'
 import time from '../modules/timeformat'
 import { writeFile, statSync, readdirSync } from 'fs'
-//import Jimp from 'jimp'
+import { promises as fs, constants as fsConstants } from 'fs'
 import { app, BrowserWindow } from 'electron'
 import mime from 'mime-types'
+import sharp from 'sharp'
+import { resolve } from 'path'
 
 let randomString = length => {
     let text = ''
@@ -96,5 +98,27 @@ export default {
             })
         })
         return await getData
+    },
+    async savePlaylistImage(buffer, id) {
+        if (buffer) {
+            const playlistImgPath = resolve(app.getPath('userData'), 'images/playlist')
+            try {
+                await fs.access(playlistImgPath, fsConstants.R_OK | fsConstants.W_OK)
+            } catch(e) {
+                await fs.mkdir(playlistImgPath)
+            }
+            sharp(Buffer.from(buffer))
+                .toFormat('jpg')
+                .resize({
+                    width: 256,
+                    height: 256,
+                    fit: 'cover',
+                    withoutEnlargement: true
+                })
+                .toFile(`${playlistImgPath}/${id}.jpg`)
+                .catch(err => {
+                    console.error(err)
+                })
+        }
     }
 }

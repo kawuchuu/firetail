@@ -100,7 +100,7 @@ export default {
     top: 0;
     width: 270px;
     height: 68px;
-    background: linear-gradient(var(--bg), transparent);
+    background: linear-gradient(var(--bg), var(--bg), var(--bg), transparent);
     padding: 0px 15px;
     transform: translateX(-15px);
     pointer-events: none;

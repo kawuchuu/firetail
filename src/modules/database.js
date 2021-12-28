@@ -1,5 +1,6 @@
 import Database from 'better-sqlite3'
 import {app} from 'electron'
+import files from './files'
 
 const db = new Database(`${app.getPath('userData')}/library.db`, { verbose: console.log })
 db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, album text, duration decimal, path text, id text, hasImage integer, trackNum integer, year text, disc integer)').run()
@@ -102,6 +103,9 @@ export default {
         deleteMany(ids)
     },
     createPlaylist(playlist) {
+        if (playlist.buffer) {
+            files.savePlaylistImage(playlist.buffer, playlist.id)
+        }
         const pl = db.prepare(`INSERT INTO playlists (name, desc, id, songIds) VALUES (@name, @desc, @id, @songIds)`).run(playlist)
         return pl
     },

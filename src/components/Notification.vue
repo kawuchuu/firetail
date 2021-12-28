@@ -91,7 +91,7 @@ export default {
     "icon info";
     grid-template-columns: 65px 1fr;
 
-    background: black;
+    background: var(--bg);
     border: solid var(--bd) 1px;
     box-shadow: 0px 5px 10px rgba(0,0,0,.15);
     width: 345px;
@@ -166,6 +166,10 @@ export default {
     color: #4cc967;
 }
 
+html.light .green {
+    color: #00ac25;
+}
+
 .error {
     color: #ff4848;
     border-color: #7a2424;
@@ -173,5 +177,10 @@ export default {
     .add-info p {
         opacity: 0.85;
     }
+}
+
+html.light .error {
+    color: #ff0000;
+    border-color: #ff0000;
 }
 </style>

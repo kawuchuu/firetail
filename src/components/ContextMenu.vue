@@ -129,6 +129,10 @@ export default {
     box-shadow: 0px 2px 15px rgba(0,0,0,.45);
     font-size: 14px;
 }
+html.light .context-menu {
+    background: var(--bg);
+    box-shadow: 0px 2px 12px rgba(0,0,0,.25);
+}
 .menu-item span {
     opacity: 0.5;
 }
@@ -139,6 +143,9 @@ export default {
 }
 .button.dangerous {
     color: #ff5151;
+}
+html.light .button.dangerous {
+    color: #ff0000;
 }
 .button:hover {
     background: #ffffff18;
@@ -151,5 +158,15 @@ export default {
     width: 100%;
     border-bottom: solid 1px #ffffff50;
     margin: 6px 0px;
+}
+html.light .divider {
+    border-color: #00000050;
+}
+html.light .button:hover {
+    background: #00000018;
+}
+html.light .button:active {
+    background: #00000018;
+    opacity: 0.5;
 }
 </style>

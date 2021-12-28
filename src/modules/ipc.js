@@ -155,7 +155,8 @@ export default {
                 name: playlist.name,
                 desc: playlist.desc,
                 id: randomString(8),
-                songIds: JSON.stringify([])
+                songIds: JSON.stringify([]),
+                buffer: playlist.buffer
             })
             return db.getAllPlaylists()
         })
@@ -174,6 +175,11 @@ export default {
 
         ipcMain.handle('deletePlaylist', (event, id) => {
             return db.deletePlaylist(id)
+        })
+
+        ipcMain.handle('createPlaylistImage', (event, imageInfo) => {
+            files.savePlaylistImage(imageInfo.buffer, imageInfo.id)
+            return
         })
     }
 }
