@@ -72,7 +72,10 @@ const macMenu = [
             { role: 'zoomIn' },
             { role: 'zoomOut' },
             { type: 'separator' },
-            { role: 'togglefullscreen' },
+            { 
+                role: 'togglefullscreen',
+                label: 'Enter Full Screen'
+            },
             { type: 'separator' },
             {
                 label: 'Developer',

@@ -5,7 +5,7 @@ import files from './files'
 const db = new Database(`${app.getPath('userData')}/library.db`, { verbose: console.log })
 db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, album text, duration decimal, path text, id text, hasImage integer, trackNum integer, year text, disc integer)').run()
 db.prepare('CREATE TABLE IF NOT EXISTS favourites (id text)').run()
-db.prepare('CREATE TABLE IF NOT EXISTS playlists (name text, desc text, id text, songIds text)').run()
+db.prepare('CREATE TABLE IF NOT EXISTS playlists (name text, desc text, id text, songIds text, hasImage integer)').run()
 
 try {
     db.prepare('ALTER TABLE library ADD COLUMN disc').run()
@@ -105,9 +105,12 @@ export default {
     createPlaylist(playlist) {
         if (playlist.buffer) {
             files.savePlaylistImage(playlist.buffer, playlist.id)
+            const pl = db.prepare(`INSERT INTO playlists (name, desc, id, songIds, hasImage) VALUES (@name, @desc, @id, @songIds, 1)`).run(playlist)
+            return pl
+        } else {
+            const pl = db.prepare(`INSERT INTO playlists (name, desc, id, songIds, hasImage) VALUES (@name, @desc, @id, @songIds, 0)`).run(playlist)
+            return pl
         }
-        const pl = db.prepare(`INSERT INTO playlists (name, desc, id, songIds) VALUES (@name, @desc, @id, @songIds)`).run(playlist)
-        return pl
     },
     getAllPlaylists() {
         return db.prepare('SELECT name,id FROM playlists').all()

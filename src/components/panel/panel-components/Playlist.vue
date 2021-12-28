@@ -44,13 +44,16 @@ export default {
         async createOrEdit() {
             console.log(this.name, this.desc)
             let playlists
-            const buffer = await new Promise(resolve => {
-                const reader = new FileReader()
-                reader.addEventListener('loadend', () => {
-                    resolve(reader.result)
+            let buffer
+            if (this.imageBlob) {
+                buffer = await new Promise(resolve => {
+                    const reader = new FileReader()
+                    reader.addEventListener('loadend', () => {
+                        resolve(reader.result)
+                    })
+                    reader.readAsArrayBuffer(this.imageBlob)
                 })
-                reader.readAsArrayBuffer(this.imageBlob)
-            })
+            }
             if (this.$attrs.props.playlist && this.$attrs.props.playlist.name) {
                 const playlist = this.$attrs.props.playlist
                 if (this.desc) {

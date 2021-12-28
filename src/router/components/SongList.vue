@@ -11,9 +11,9 @@
             </div>
         </div>
         <div class="top-title" ref="topTitle">
-            <div v-if="$route.path == '/playlist'" class="tab-album-art"></div>
             <div v-if="$route.path == '/albums'" class="tab-album-art" :style="getAlbumImage"></div>
             <div v-if="$route.path == '/artists'" class="tab-album-art" :style="getArtistImage"></div>
+            <div v-if="$route.path == '/playlist'" class="tab-album-art" :style="getPlaylistImage"></div>
             <div ref="topTitle" class="top-title-text">
                 <!-- <h1 v-if="$route.path == '/artists' && list[0]" ref="header" :style="topTitleSize" class="top-header">{{list[0].artist}}</h1>
                 <h1 v-else-if="$route.path == '/albums' && list[0]" ref="header" :style="topTitleSize" class="top-header">{{list[0].album}}</h1> -->
@@ -162,6 +162,18 @@ export default {
             } else {
                 return 55
             }
+        },
+        getPlaylistImage() {
+            if (this.$route.path !== '/playlist' || this.playlist.hasImage === 0) {
+                this.$store.commit('nav/updateAlbumViewCurrentArt', '')
+                return ''
+            }
+            if (this.playlist.hasImage === 1) {
+                const port = this.$store.state.nav.port
+                const image = `http://localhost:${port}/playlist/${this.playlist.id}.jpg`
+                this.$store.commit('nav/updateAlbumViewCurrentArt', image)
+                return `background-image: url('${image}')`
+            } else return ''
         }
     },
     asyncComputed: {

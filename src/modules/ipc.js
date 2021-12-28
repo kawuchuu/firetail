@@ -4,6 +4,7 @@ import db from './database'
 import files from './files'
 import server from './server'
 import BurnJob from './burn'
+import { resolve } from 'path'
 
 export default {
     start(win) {
@@ -173,7 +174,12 @@ export default {
             return db.updatePlaylist(playlist.column, playlist.id, playlist.data)
         })
 
-        ipcMain.handle('deletePlaylist', (event, id) => {
+        ipcMain.handle('deletePlaylist', async (event, id) => {
+            try {
+                const image = resolve(app.getPath('userData'), `images/playlist/${id}.jpg`)
+                await fs.promises.access(image, fs.constants.R_OK | fs.constants.W_OK)
+                await fs.promises.unlink(image)
+            } catch(e) {''}
             return db.deletePlaylist(id)
         })
 
