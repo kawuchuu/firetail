@@ -92,7 +92,8 @@ export default {
             },
             activeSize: 'large',
             topTitleTxt: 'Songs',
-            justChanged: false
+            justChanged: false,
+            performingMultiDrag: false
         }
     },
     computed: {
@@ -170,7 +171,7 @@ export default {
             }
             if (this.playlist.hasImage === 1) {
                 const port = this.$store.state.nav.port
-                const image = `http://localhost:${port}/playlist/${this.playlist.id}.jpg`
+                const image = `http://localhost:${port}/playlist/${this.playlist.id}.jpg?${performance.now()}`
                 this.$store.commit('nav/updateAlbumViewCurrentArt', image)
                 return `background-image: url('${image}')`
             } else return ''
@@ -230,6 +231,23 @@ export default {
         })
     },
     methods: {
+        multiDrag(evt) {
+            console.log('doing multi drag LMAO')
+            this.performingMultiDrag = true
+            const songsToSelect = []
+            this.selectedItems.forEach(songIndex => {
+                const song = this.list[songIndex]
+                songsToSelect.push({
+                    title: song.title,
+                    artist: song.artist,
+                    album: song.album,
+                    id: song.id
+                })
+            })
+            evt.dataTransfer.setData('ftsong', JSON.stringify(songsToSelect))
+            document.querySelector('#dragInfo').textContent = `${songsToSelect[0].artist} - ${songsToSelect[0].title} + ${songsToSelect.length - 1} more songs`
+            evt.dataTransfer.setDragImage(document.querySelector('.drag-detail'), -15, 10)
+        },
         select(evt) {
             let getIndex = this.selectedItems.indexOf(evt[1])
             if (evt[0].which == 1) {
@@ -252,6 +270,7 @@ export default {
                         }
                     }
                 } else {
+                    if (this.performingMultiDrag) return this.performingMultiDrag = false
                     this.selectedItems = [evt[1]]
                     this.lastSelectedIndex = evt[1]
                 }

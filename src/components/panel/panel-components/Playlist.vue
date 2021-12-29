@@ -2,13 +2,13 @@
     <div class="pl-root">
         <div class="pl-info-wrapper">
             <div class="pl-img-wrapper">
-                <label for="playlistImg">
-                    <div class="pl-img" :style="displayImage">
+                <div class="pl-img" :style="displayImage">
+                    <label for="playlistImg">
                         <div class="label-wrapper">
                             <span>Choose image</span>
                         </div>
-                    </div>
-                </label>
+                    </label>
+                </div>
                 <input style="display: none" type="file" id="playlistImg" accept="image/*" @change="updateImage">
             </div>
             <div class="pl-info">
@@ -119,6 +119,7 @@ export default {
             if (playlist.name || playlist.desc) this.saveBtn = 'Save'
             if (playlist.name) this.name = playlist.name
             if (playlist.desc) this.desc = playlist.desc
+            if (playlist.hasImage) this.image = `http://localhost:56741/playlist/${playlist.id}.jpg?${performance.now()}`
         }
     }
 }

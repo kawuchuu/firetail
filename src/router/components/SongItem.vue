@@ -1,6 +1,6 @@
 <template>
     <div class="root">
-        <li draggable="true" class="results-link" @dragstart="drag" @mouseover="listHover" @mouseleave="listHoverLeave" :class="[isActive, doHighlight, isSimple]">
+        <li draggable="true" class="results-link" @dragstart="drag" @dragend="stopDrag" @mouseover="listHover" @mouseleave="listHoverLeave" :class="[isActive, doHighlight, isSimple]">
             <i class="material-icons-outlined play-pause" :style="listIconVisible" @click="decidePlaySong" @mouseover="listIconHover" @mouseleave="listIconHoverLeave">{{ listIcon }}</i>
             <i class="ft-icon favourite-icon" @click="handleFavourite">{{ favouriteIcon }}</i>
             <div v-if="$route.path == '/albums'">
@@ -11,7 +11,7 @@
                 <p v-if="source.trackNum !== 'null'" class="track-num">{{source.trackNum}}</p>
                 <p v-else class="track-num">-</p>
             </div>
-            <div class="artist-title-album" @pointerdown="select" @dblclick="playSong">
+            <div class="artist-title-album" @pointerup="select" @dblclick="playSong">
                 <div class="list-title">
                     <p>{{ source.title }}<!--  {{ index }} --></p>
                     <span v-if="$route.path == '/artists'">{{source.album}}</span>
@@ -147,14 +147,19 @@ export default {
         },
         drag(evt) {
             if (!evt.dataTransfer) return
-            evt.dataTransfer.setData('ftsong', JSON.stringify({
+            const mainParent = this.$parent.$parent.$parent
+            if (mainParent.selectedItems.length > 1) return mainParent.multiDrag(evt)
+            evt.dataTransfer.setData('ftsong', JSON.stringify([{
                 title: this.source.title,
                 artist: this.source.artist,
                 album: this.source.album,
                 id: this.source.id
-            }))
+            }]))
             document.querySelector('#dragInfo').textContent = `${this.source.artist} - ${this.source.title}`
             evt.dataTransfer.setDragImage(document.querySelector('.drag-detail'), -15, 10)
+        },
+        stopDrag() {
+            this.$parent.$parent.$parent.performingMultiDrag = false
         }
     }
 }

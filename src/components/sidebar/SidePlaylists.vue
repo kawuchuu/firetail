@@ -71,12 +71,15 @@ export default {
         async handleDrop(evt) {
             evt.preventDefault()
             this.isDragOver = false
-            let song = evt.dataTransfer.getData('ftsong')
-            if (song === '') return
-            song = JSON.parse(song)
+            let songs = evt.dataTransfer.getData('ftsong')
+            if (songs === '') return
+            songs = JSON.parse(songs)
             const playlist = await ipcRenderer.invoke('getSpecificPlaylist', this.playlist.id)
             const songIds = JSON.parse(playlist[0].songIds)
-            songIds.push(song.id)
+            console.log(songs)
+            songs.forEach(song => {
+                songIds.push(song.id)
+            })
             ipcRenderer.invoke('updatePlaylist', {
                 column: 'songids',
                 id: this.playlist.id,
