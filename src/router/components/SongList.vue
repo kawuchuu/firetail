@@ -47,7 +47,7 @@
                 <p v-if="list.length == 0 && $route.path === '/'" style="margin-left: 50px;">No songs have been imported yet. Click Add Songs at the top to import some!</p>
                 <p v-else-if="list.length === 0 && $route.path === '/playlist'" style="margin-left: 50px">No songs have been added to this playlist. You should drag some to this playlist's button on the side bar!</p>
                 <div v-if="$route.path !== '/'">
-                    <SongItem v-for="(item, index) in list" :source="item" :key="item.id" :selectedItems="selectedItems" :index="index"/>
+                    <SongItem v-for="(item, index) in list" :source="item" :key="item.id" :selectedItems="selectedItems" :index="index" :performingMultiDrag="performingMultiDrag"/>
                 </div>
                 <div v-if="$route.path === '/'">
                     <virtual-list
@@ -348,6 +348,12 @@ export default {
     mounted() {
         bus.$on('selected', evt => {
             this.select(evt)
+        })
+        bus.$on('multiDrag', evt => {
+            this.multiDrag(evt)
+        })
+        bus.$on('stopDrag', () => {
+            this.performingMultiDrag = false
         })
         /* 
             Please excuse this hardcoded mess

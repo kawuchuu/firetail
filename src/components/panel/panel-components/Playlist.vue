@@ -10,6 +10,7 @@
                     </label>
                 </div>
                 <input style="display: none" type="file" id="playlistImg" accept="image/*" @change="updateImage">
+                <span class="remove-image">Remove Image</span>
             </div>
             <div class="pl-info">
                 <div class="input">
@@ -64,9 +65,20 @@ export default {
                     })
                 }
                 if (this.image) {
+                    await ipcRenderer.invoke('updatePlaylist', {
+                        column: 'hasImage',
+                        id: playlist.id,
+                        data: 1,
+                    })
                     ipcRenderer.invoke('createPlaylistImage', {
                         buffer: buffer,
                         id: playlist.id
+                    })
+                } else {
+                    await ipcRenderer.invoke('updatePlaylist', {
+                        column: 'hasImage',
+                        id: playlist.id,
+                        data: 1,
                     })
                 }
                 playlists = await ipcRenderer.invoke('updatePlaylist', {
@@ -139,6 +151,24 @@ export default {
     grid-area: img;
     align-self: flex-start;
     margin-top: 25px;
+    display: grid;
+    width: 140px;
+
+    span.remove-image {
+        font-size: 0.8em;
+        justify-self: center;
+        margin-top: 10px;
+        opacity: 0.5;
+        cursor: pointer;
+    }
+
+    span.remove-image:hover {
+        opacity: 1;
+    }
+
+    span.remove-image:active {
+        opacity: 0.65;
+    }
 }
 
 .pl-img {
@@ -160,10 +190,6 @@ export default {
         align-items: center;
         justify-content: center;
         background: #000000a2;
-
-        span {
-
-        }
     }
 }
 

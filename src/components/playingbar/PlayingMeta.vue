@@ -4,7 +4,9 @@
         <div class="large-album-art" :class="hoverShow" >
             <div class="inner" :style="getImage"></div>
         </div>
-        <div class="song-album-art" :style="getImage" @mouseover="hoverImage" @mouseleave="leaveImage"></div>
+        <router-link :to="viewLink">
+            <div class="song-album-art" :style="getImage" @mouseover="hoverImage" @mouseleave="leaveImage"></div>
+        </router-link>
         <div class="title-artist">
             <div class="song-title">{{title}}</div>
             <div class="song-artist">{{artist}}</div>
@@ -82,6 +84,25 @@ export default {
                 return 'hover'
             } else {
                 return ''
+            }
+        },
+        viewLink() {
+            const playingView = this.$store.state.nav.playingView
+            if (!playingView) return '/?view=all'
+            const splitView = playingView.split('_')
+            switch(splitView[0]) {
+                case 'playlist': {
+                    return `/playlist?id=${splitView[1]}&view=${playingView}`
+                }
+                case 'artist': {
+                    return `/artists?hideTop=true&column=artist&q=${playingView.substr(7)}&view=${playingView}`
+                }
+                case 'album': {
+                    return `/albums?hideTop=true&column=album&q=${playingView.substr(6)}&view=${playingView}`
+                }
+                default: {
+                    return '/?view=all'
+                }
             }
         }
     },

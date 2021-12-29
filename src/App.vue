@@ -154,6 +154,9 @@ export default {
         }
         this.$store.commit('nav/updateVer', ver)
         this.$store.commit('nav/updateBuildNum', buildNum)
+        if (window.localStorage.getItem('lastPlayed')) {
+            this.$store.dispatch('audio/resumeState')
+        }
     }
 }
 </script>

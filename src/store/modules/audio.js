@@ -20,7 +20,8 @@ const state = () => ({
     repeat: 'off',
     volume: 1,
     muted: false,
-    preventSpacePause: false
+    preventSpacePause: false,
+    isResumeState: false
 })
 
 const mutations = {
@@ -32,6 +33,7 @@ const mutations = {
     newAudioTime(state, newTime) {
         if (audio) {
             audio.currentTime = newTime
+            window.localStorage.setItem('lastPlayTime', audio.currentTime)
         }
     },
     audioDur(state) {
@@ -66,6 +68,7 @@ const mutations = {
         } else {
             state.queue = songs
         }
+        window.localStorage.setItem('currentQueue', JSON.stringify(state.queue))
         this.commit('nav/updatePlayingView', this.state.nav.currentView)
     },
     updateCurrentList(state, list) {
@@ -154,6 +157,8 @@ const mutations = {
     }
 }
 
+let updateLocal = 0
+
 const actions = {
     playPause() {
         if (audio.paused) {
@@ -207,17 +212,28 @@ const actions = {
                 });
             }
         })
-        await audio.play().catch(err => {
-            let msg = err.toString()
-            if (err.toString().includes('supported source was found')) {
-                msg = 'The file you requested could not be played. Make sure the file exists and try again.'
-            }
-            bus.$emit('notifySwag', {
-                title: "Unfortunately, an error occurred",
-                message: msg,
-                icon: "error"
+        if (!context.state.isResumeState) {
+            await audio.play().catch(err => {
+                let msg = err.toString()
+                if (err.toString().includes('supported source was found')) {
+                    msg = 'The file you requested could not be played. Make sure the file exists and try again.'
+                }
+                bus.$emit('notifySwag', {
+                    title: "Unfortunately, an error occurred",
+                    message: msg,
+                    icon: "error"
+                })
             })
-        })
+            window.localStorage.setItem('lastPlayed', JSON.stringify({
+                song: song,
+                view: store.state.nav.playingView,
+                songIndex: context.state.currentSongIndex
+            }))
+            window.localStorage.setItem('lastPlayTime', 0.1)
+        } else {
+            context.state.isResumeState = false
+        }
+        updateLocal = 0
         updateMediaSession(song)
     },
     removeTimeUpdate() {
@@ -231,23 +247,35 @@ const actions = {
     },
     getSpecificSongs(context, args) {
         ipcRenderer.send('getSomeFromColumn', [args.column, args.q])
+    },
+    resumeState(context) {
+        const lastPlayedInfo = JSON.parse(window.localStorage.getItem('lastPlayed'))
+        context.state.queue = JSON.parse(window.localStorage.getItem('currentQueue'))
+        store.commit('nav/updatePlayingView', lastPlayedInfo.view)
+        context.state.isResumeState = true
+        store.dispatch('audio/playSong', lastPlayedInfo.song)
+        context.state.currentSongIndex = lastPlayedInfo.songIndex
+        audio.currentTime = window.localStorage.getItem('lastPlayTime')
     }
 }
 
 let timeUpdate = function() {
+    if (updateLocal === 10) {
+        window.localStorage.setItem('lastPlayTime', audio.currentTime)
+        updateLocal = 0
+    } else {
+        updateLocal++
+    }
     store.commit('audio/timeUpdate', [audio.duration, audio.currentTime])
 }
 
 let updateMediaSession = song => {
-    let sessionMetadata = navigator.mediaSession.metadata
-    if (!sessionMetadata) {
-        navigator.mediaSession.metadata = new window.MediaMetadata()
-        sessionMetadata = navigator.mediaSession.metadata
+    let metadata = {
+        title: song.title,
+        artist: song.artist,
+        album: song.album,
+        src: song.path
     }
-    sessionMetadata.title = song.title
-    sessionMetadata.artist = song.artist
-    sessionMetadata.album = song.album
-    sessionMetadata.src = song.path
     if (song.hasImage == 1) {
         let port = store.state.nav.port
         let artistAlbum = ''
@@ -256,14 +284,18 @@ let updateMediaSession = song => {
         } else {
             artistAlbum = `http://localhost:${port}/${(song.artist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
         }
-        sessionMetadata.artwork = [{src: artistAlbum, sizes: '512x512', type: 'image/jpeg'}]
+        metadata['artwork'] = [{src: artistAlbum, sizes: '512x512', type: 'image/jpeg'}]
     }
     setSkipPrevButtons()
-    navigator.mediaSession.setPositionState({
-        duration: audio.duration,
-        playbackRate: audio.playbackRate,
-        position: audio.currentTime
-    });
+    navigator.mediaSession.metadata = new window.MediaMetadata(metadata)
+    setSkipPrevButtons()
+    if (store.state.audio.isResumeState) {
+        navigator.mediaSession.setPositionState({
+            duration: audio.duration,
+            playbackRate: audio.playbackRate,
+            position: audio.currentTime
+        });
+    }
 }
 
 let skip = () => {

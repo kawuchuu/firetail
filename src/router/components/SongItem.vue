@@ -30,7 +30,7 @@ import { ipcRenderer } from 'electron'
 import {bus} from '@/main'
 
 export default {
-    props: ['source', 'index', 'selectedItems', 'prev'],
+    props: ['source', 'index', 'selectedItems', 'prev', 'performingMultiDrag'],
     computed: {
         isActive() {
             let view = this.$route.query.view
@@ -147,8 +147,7 @@ export default {
         },
         drag(evt) {
             if (!evt.dataTransfer) return
-            const mainParent = this.$parent.$parent.$parent
-            if (mainParent.selectedItems.length > 1) return mainParent.multiDrag(evt)
+            if (this.selectedItems.length > 1) return bus.$emit('multiDrag', evt)
             evt.dataTransfer.setData('ftsong', JSON.stringify([{
                 title: this.source.title,
                 artist: this.source.artist,
@@ -159,7 +158,7 @@ export default {
             evt.dataTransfer.setDragImage(document.querySelector('.drag-detail'), -15, 10)
         },
         stopDrag() {
-            this.$parent.$parent.$parent.performingMultiDrag = false
+            bus.$emit('stopDrag')
         }
     }
 }
