@@ -22,7 +22,8 @@ export default {
     },
     computed: {
         checkBuild() {
-            return this.build !== 'unknown'
+            if (this.build === 'unknown' || this.build === 'CUSTOM') return false
+            else return true
         }
     }
 }

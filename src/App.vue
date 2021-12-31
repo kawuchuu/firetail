@@ -149,7 +149,7 @@ export default {
         let buildNum = await ipcRenderer.invoke('getBuildNum')
         if (buildNum == 'dev') {
             document.title = 'Firetail [dev]'
-        } else if (ver.includes('alpha') && buildNum !== 'unknown') {
+        } else if (ver.includes('alpha') && buildNum !== 'unknown' || ver.includes('alpha') && buildNum !== 'CUSTOM') {
             document.title = `Firetail [build ${buildNum}]`
         }
         this.$store.commit('nav/updateVer', ver)

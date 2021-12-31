@@ -119,7 +119,6 @@ export default {
         return db.prepare('SELECT * FROM playlists WHERE id = ?').all(id)
     },
     updatePlaylist(column, id, data) {
-        console.log(column, id, data)
         db.prepare(`UPDATE playlists SET ${column} = ? WHERE id = ?;`).run(data, id)
         return this.getAllPlaylists()
     },

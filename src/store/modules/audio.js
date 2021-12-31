@@ -73,8 +73,26 @@ const mutations = {
     },
     updateCurrentList(state, list) {
         if (!list || list.length > 0) {
-            let sortedList = sort.sortArray(list, 'artist')
-            state.currentList = sortedList
+            const sortBy = {}
+            list.forEach(item => {
+                if (!sortBy[item.artist]) sortBy[item.artist] = {}
+                if (!sortBy[item.artist][item.album]) sortBy[item.artist][item.album] = []
+                sortBy[item.artist][item.album].push(item)
+            })
+            const sortKeys = sort.simpleSort(Object.keys(sortBy))
+            const finalList = []
+            sortKeys.forEach(artist => {
+                const albums = sort.simpleSort(Object.keys(sortBy[artist]))
+                albums.forEach(album => {
+                    sortBy[artist][album] = sortBy[artist][album].sort(function (a, b) {
+                        return a.trackNum - b.trackNum
+                    });
+                    sortBy[artist][album].forEach(item => {
+                        finalList.push(item)
+                    })
+                })
+            })
+            state.currentList = finalList
         } else {
             state.currentList = []
         }
@@ -289,13 +307,11 @@ let updateMediaSession = song => {
     setSkipPrevButtons()
     navigator.mediaSession.metadata = new window.MediaMetadata(metadata)
     setSkipPrevButtons()
-    if (store.state.audio.isResumeState) {
-        navigator.mediaSession.setPositionState({
-            duration: audio.duration,
-            playbackRate: audio.playbackRate,
-            position: audio.currentTime
-        });
-    }
+    navigator.mediaSession.setPositionState({
+        duration: audio.duration,
+        playbackRate: audio.playbackRate,
+        position: audio.currentTime
+    });
 }
 
 let skip = () => {

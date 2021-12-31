@@ -163,6 +163,13 @@ ipcRenderer.on('control', (evt, action) => {
             store.commit('audio/toggleRepeat')
             break
         case 'preferences':
-            router.push('/settings')
+            if (router.currentRoute.path == '/settings') {
+                bus.$emit('notifySwag', {
+                    title: "You're already here!",
+                    message: "No need to switch to this page :)"
+                })
+            } else {
+                router.push('/settings')
+            }
     }
 })

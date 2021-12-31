@@ -13,7 +13,7 @@
             </div>
             <div class="artist-title-album" @pointerup="select" @dblclick="playSong">
                 <div class="list-title">
-                    <p>{{ source.title }}<!--  {{ index }} --></p>
+                    <p>{{ source.title }}<span v-if="source.trackNum !== 'null'" v-show="$route.path !== '/albums'" class="track-num-list">{{ source.trackNum }}</span></p>
                     <span v-if="$route.path == '/artists'">{{source.album}}</span>
                     <span v-if="$route.path == '/albums'">{{source.artist}}</span>
                 </div>
@@ -329,6 +329,11 @@ li.nohover:hover {
     text-align: center;
     max-width: 20px;
     width: 20px;
+}
+
+.track-num-list {
+    margin-left: 15px;
+    opacity: 0.5;
 }
 
 @media (max-width: 900px) {

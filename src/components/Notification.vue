@@ -1,5 +1,5 @@
 <template>
-    <div v-show="icon !== 'waving_hand'" class="item-add" :class="[theClass, mainColour]">
+    <div v-show="icon !== 'waving_hand'" class="item-add" :class="[theClass, mainColour, displayIcon]">
         <i class="material-icons" :class="statusIcon">{{ icon }}</i>
         <div class="add-info">
             <h4>{{ title }}</h4>
@@ -40,6 +40,10 @@ export default {
         mainColour() {
             if (this.icon == 'error') return 'error'
             else return ''
+        },
+        displayIcon() {
+            if (this.icon) return ''
+            else return 'icon-missing'
         }
     },
     mounted() {
@@ -109,6 +113,12 @@ export default {
         align-self: center;
         grid-area: icon;
     }
+}
+
+.item-add.icon-missing {
+    grid-template-columns: 0px 1fr;
+    padding-left: 18px;
+    width: 300px;
 }
 
 .item-add.shown {
