@@ -300,7 +300,7 @@ let updateMediaSession = song => {
         if (song.id == 'customSong') {
             artistAlbum = song.customImage
         } else {
-            artistAlbum = `http://localhost:${port}/${(song.artist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
+            artistAlbum = `http://localhost:${port}/images/${(song.artist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
         }
         metadata['artwork'] = [{src: artistAlbum, sizes: '512x512', type: 'image/jpeg'}]
     }

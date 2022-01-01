@@ -131,7 +131,7 @@ export default {
             if (playlist.name || playlist.desc) this.saveBtn = 'Save'
             if (playlist.name) this.name = playlist.name
             if (playlist.desc) this.desc = playlist.desc
-            if (playlist.hasImage) this.image = `http://localhost:56741/playlist/${playlist.id}.jpg?${performance.now()}`
+            if (playlist.hasImage) this.image = `http://localhost:56741/images/playlist/${playlist.id}.jpg?${performance.now()}`
         }
     }
 }

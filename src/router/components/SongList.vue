@@ -171,7 +171,7 @@ export default {
             }
             if (this.playlist.hasImage === 1) {
                 const port = this.$store.state.nav.port
-                const image = `http://localhost:${port}/playlist/${this.playlist.id}.jpg?${performance.now()}`
+                const image = `http://localhost:${port}/images/playlist/${this.playlist.id}.jpg?${performance.now()}`
                 this.$store.commit('nav/updateAlbumViewCurrentArt', image)
                 return `background-image: url('${image}')`
             } else return ''
@@ -220,7 +220,7 @@ export default {
                     return ''
                 }
                 if (song.hasImage == 1) {
-                    let artistAlbum = `http://localhost:${port}/${(song.artist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
+                    let artistAlbum = `http://localhost:${port}/images/${(song.artist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
                     this.$store.commit('nav/updateAlbumViewCurrentArt', artistAlbum)
                     return `background-image: url('${artistAlbum}')`
                 } else {
@@ -249,6 +249,7 @@ export default {
             evt.dataTransfer.setDragImage(document.querySelector('.drag-detail'), -15, 10)
         },
         select(evt) {
+            console.log('hah')
             let getIndex = this.selectedItems.indexOf(evt[1])
             if (evt[0].which == 1) {
                 if (evt[0].ctrlKey || evt[0].metaKey) {
@@ -355,12 +356,6 @@ export default {
         bus.$on('stopDrag', () => {
             this.performingMultiDrag = false
         })
-        /* 
-            Please excuse this hardcoded mess
-            Currently looping if not large, using unnecessary resources... needs fix!!
-            Update 03/11/2021: a bit of tweaking seems to have resolved this issue :)
-            Was motivated to fix since it was draining my laptop's battery
-        */
         const topHeader = this.$refs.header
         const topTitle = this.$refs.topTitle
         const doTextResize = () => {

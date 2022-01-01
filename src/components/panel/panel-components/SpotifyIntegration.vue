@@ -4,7 +4,7 @@
             <p>Your browser should have opened a Spotify authorisation page. Follow their instructions to continue.</p>
             <div class="spinner-text">
                 <div class="load-spinner"></div>
-                <span>Waiting for a response from Spotify...</span>
+                <span>{{ message }}</span>
             </div>
         </div>
         <div ref="2" class="2 hide">
@@ -15,6 +15,21 @@
                 </div>
                 <p>Hi, {{user}}!</p>
                 <p>Firetail can now fetch metadata from Spotify!</p>
+            </div>
+            <div class="buttons">
+                <Button :button="{label: 'Done'}" @click.native="close()"/>
+            </div>
+        </div>
+        <div ref="3" class="3 hide">
+            <div class="final">
+                <div class="confirm">
+                    <i class="material-icons-outlined">error</i>
+                    <span>An error occurred while connecting.</span>
+                </div>
+                <p>See the error details below:</p>
+                <div class="error-code">
+                    <span>{{ error }}</span>
+                </div>
             </div>
             <div class="buttons">
                 <Button :button="{label: 'Done'}" @click.native="close()"/>
@@ -55,7 +70,9 @@ export default {
             ],
             active: 1,
             comp: this,
-            user: 'unknown'
+            user: 'unknown',
+            message: 'Waiting for authorisation from Spotify...',
+            error: 'Unknown'
         }
     },
     mounted: async function() {
@@ -82,8 +99,17 @@ export default {
             'code_challenge': codeChallenge,
             'state': state
         }).toString()
-        ipcRenderer.send('openLink', `https://accounts.spotify.com/authorize?${query}`)
+        ipcRenderer.send('openLink', `http://localhost:56741/spconnect?redirect=${encodeURIComponent(`https://accounts.spotify.com/authorize?${query}`)}`)
         ipcRenderer.once('spotifyAuthFinish', async (evt, args) => {
+            if (args.error) {
+                console.error(args.error)
+                this.error = args.error
+                this.active = 3;
+                this.doShow(3, 1)
+                return
+            }
+            console.log('now connecting to spotify wahoo')
+            this.message = 'Requesting access tokens...'
             if (sessionStorage.getItem('temp-state') == args.state) {
                 const query = new URLSearchParams({
                     'client_id': 'd1084781b7af46d6b6948192e372e4a6',
@@ -100,17 +126,29 @@ export default {
                     body: query.toString()
                 })
                 const data = await resp.json()
-                if (data.error) return console.error(data)
+                if (data.error) {
+                    console.error(data)
+                    this.error = data.error
+                    this.active = 3;
+                    this.doShow(3, 1)
+                    return
+                }
                 localStorage.setItem('sp-token', data.access_token)
                 localStorage.setItem('refresh-token', data.refresh_token)
                 localStorage.setItem('expires', Date.parse(new Date()) + (data.expires_in * 1000))
+                this.message = 'Requesting account information...'
                 fetch('https://api.spotify.com/v1/me', {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('sp-token')}`
                     }
                 }).then(sresp => {
                     sresp.json().then(account => {
-                        if (account.error) return console.error(account)
+                        if (account.error) {
+                            console.error(account)
+                            this.error = account.error
+                            this.active = 3;
+                            this.doShow(3, 1)
+                        }
                         const details = {
                             name: account.display_name,
                             uri: account.uri
@@ -211,7 +249,7 @@ p {
 .confirm {
     display: flex;
     align-content: center;
-    padding: 20px 20px 40px;
+    padding: 20px;
 }
 
 .confirm span {
@@ -222,5 +260,15 @@ p {
 
 .confirm i {
     font-size: 30px;
+}
+
+.error-code {
+    max-width: 95%;
+    padding: 10px 12px;
+    background: var(--fg-bg);
+    font-family: monospace;
+    text-align: left;
+    margin-top: 5px;
+    border-radius: 10px;
 }
 </style>

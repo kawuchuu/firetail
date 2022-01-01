@@ -22,7 +22,7 @@ export default {
         async albumArt() {
             let port = this.$store.state.nav.port
             if (this.item.hasImage == 1) {
-                let artistAlbum = `http://localhost:${port}/${(this.item.artist + this.item.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
+                let artistAlbum = `http://localhost:${port}/images/${(this.item.artist + this.item.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
                 return `background-image: url('${artistAlbum}')`
             } else {
                 return ''

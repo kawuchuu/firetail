@@ -42,7 +42,7 @@ export default {
                     if (song.id == 'customSong') {
                         artistAlbum = song.customImage
                     } else {
-                        artistAlbum = `http://localhost:${port}/${(song.artist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
+                        artistAlbum = `http://localhost:${port}/images/${(song.artist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
                     }
                     Vibrant.from(artistAlbum).getPalette((err, palette) => {
                         this.$store.commit('nav/updatePlayingBarColour', palette.Vibrant.hex)
