@@ -5,7 +5,6 @@
         <div class="drag-detail">
             <p id="dragInfo">Nothing selected</p>
         </div>
-        <div class="bg-cover" />
         <div class="cover" style="transition:.25s;transition-property:opacity;width: 100%;height: 100%;position: fixed;z-index: 11;background: linear-gradient(#e74e8e, #ef9135);display: none;justify-content: center;align-items: center;">
             <!-- generated svg, slightly modified -->
             <svg style="width:150px;height:150px;" viewBox="0 0 1080 1080">
@@ -31,14 +30,18 @@
         <ItemAdd/>
         <Notification/>
         <ZenMode v-if="isFullscreen"/>
-        <div class="main-content-wrapper">
+        <div class="main-content-wrapper" ref="mainContentWrapper">
             <SideBar/>
+            <div class="sidebar-resizer" @mousedown="sidebarisResizing = true" @mouseup="sidebarisResizing = false">
+                <div class="resize-line" />
+            </div>
             <div class="screen-container">
                 <TopBar/>
                 <main class="container" id="main-container" ref="container">
                     <router-view/>
                 </main>
             </div>
+            <div class="bg-cover" />
         </div>
         <PlayingBar/>
     </div>
@@ -46,7 +49,7 @@
 
 <script>
 import TopBar from './components/TopBar'
-import SideBar from './components/sidebar/SideBar.vue'
+import SideBar from './components/sidebar/SideBar'
 import PlayingBar from './components/playingbar/PlayingBar'
 import Panel from './components/panel/Panel'
 import ZenMode from './components/zen/ZenMode'
@@ -97,11 +100,24 @@ export default {
             //console.log(files)
             this.isDraggedOver = false
             ipcRenderer.send('addToLibrary', files)
+        },
+        resizeSidebar(evt) {
+            if (!this.sidebarisResizing) return
+            if (evt.clientX < 185 || evt.clientX > 350) return
+            this.sidebarwidth = evt.clientX
         }
     },
     data() {
         return {
-            isDraggedOver: false
+            isDraggedOver: false,
+            sidebarwidth: 225,
+            sidebarisResizing: false
+        }
+    },
+    watch: {
+        sidebarwidth() {
+            if (this.sidebarwidth < 185 || this.sidebarwidth > 350) return
+            this.$refs.mainContentWrapper.style.setProperty('--sidebar-width', `${this.sidebarwidth}px`)
         }
     },
     computed: {
@@ -118,6 +134,14 @@ export default {
     },
     async mounted() {
         require('./scss/test.scss')
+        if (window.localStorage.getItem('lastPlayed')) {
+            this.$store.dispatch('audio/resumeState')
+        }
+        if (window.localStorage.getItem('sidebarwidth')) {
+            this.sidebarwidth = window.localStorage.getItem('sidebarwidth')
+        } else {
+            window.localStorage.setItem('sidebarwidth', 225)
+        }
         if (window.matchMedia("(prefers-color-scheme: light").matches) {
             document.documentElement.classList.remove('dark')
             document.documentElement.classList.add('light')
@@ -154,9 +178,11 @@ export default {
         }
         this.$store.commit('nav/updateVer', ver)
         this.$store.commit('nav/updateBuildNum', buildNum)
-        if (window.localStorage.getItem('lastPlayed')) {
-            this.$store.dispatch('audio/resumeState')
-        }
+        window.addEventListener('mousemove', this.resizeSidebar)
+        window.addEventListener('mouseup', () => {
+            this.sidebarisResizing = false
+            window.localStorage.setItem('sidebarwidth', this.sidebarwidth)
+        })
     }
 }
 </script>
@@ -166,8 +192,35 @@ export default {
 .st1{fill:none;stroke:#221f1f;stroke-width:55;stroke-miterlimit:10;}
 
 .main-content-wrapper {
+    --sidebar-width: 225px;
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 0px 1fr;
+    height: 100%;
+}
+
+.sidebar-resizer {
+    width: 10px;
+    height: 100%;
+    position: absolute;
+    left: calc(var(--sidebar-width) - 5px);
+    z-index: 2;
     display: flex;
-    height: calc(100vh - 85px);
+    justify-content: center;
+    cursor: col-resize;
+
+    .resize-line {
+        width: 1px;
+        border-right: solid 1px #8a8a8a;
+        box-sizing: border-box;
+        height: 100%;
+        opacity: 0;
+    }
+}
+
+.sidebar-resizer:hover {
+    .resize-line {
+        opacity: 1;
+    }
 }
 
 .drag-indicator {
@@ -202,9 +255,13 @@ export default {
     overflow: hidden;
     overflow-y: auto;
     position: fixed;
-    width: calc(100% - 225px);
     height: calc(100% - 135px);
+    width: calc(100% - var(--sidebar-width));
     padding-top: 50px;
+}
+
+#app {
+    height: 100%;
 }
 
 body {
@@ -215,6 +272,7 @@ body {
     user-select: none;
     -webkit-user-select: none;
     color-scheme: dark;
+    height: 100vh;
 }
 
 a {
@@ -338,8 +396,8 @@ html.light.firetail {
 
 .bg-cover {
     background: var(--bg);
-    width: calc(100% - 225px);
-    margin-left: 225px;
+    width: calc(100% - var(--sidebar-width));
+    margin-left: var(--sidebar-width);
     height: 100%;
     position: fixed;
     z-index: -1;

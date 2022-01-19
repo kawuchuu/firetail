@@ -577,7 +577,7 @@ div.section {
     position: fixed;
     top: 0;
     height: 81px;
-    width: calc(100% - 225px - 16px);
+    width: calc(100% - var(--sidebar-width) - 16px);
     background: black;
     z-index: 3;
     opacity: 0;

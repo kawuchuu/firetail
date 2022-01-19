@@ -43,8 +43,8 @@ export default {
 
 <style lang="scss">
 .side-bar {
-    width: 225px;
-    height: 100%;
+    width: var(--sidebar-width);
+    height: calc(100vh - 86px);
     background: #000;
     z-index: 2;
     color: white;
@@ -180,7 +180,7 @@ export default {
     background: linear-gradient(black, black, black, transparent);
     position: fixed;
     z-index: 2;
-    width: 175px;
+    width: calc(var(--sidebar-width) - 50px);
 }
 
 .app-info.macos {
@@ -204,16 +204,17 @@ export default {
 
 .beta-tag {
     font-size: 10px;
-    padding: 3px 4px;
-    border: solid 2px white;
+    padding: 2px 3px;
+    border: solid 1px white;
     color: white;
     opacity: .75;
     border-radius: 20px;
-    margin: 0px 10px 0px 10px;
+    margin-left: 8px;
     position: relative;
     top: 1px;
     font-weight: bold;
-    text-transform: uppercase
+    text-transform: uppercase;
+    font-size: 0.45em;
 }
 
 .special-button {
