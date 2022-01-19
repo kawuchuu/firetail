@@ -27,7 +27,7 @@
 
 <script>
 import { ipcRenderer } from 'electron'
-import {bus} from '@/main'
+import { bus, contextMenuBus } from '@/main'
 
 export default {
     props: ['source', 'index', 'selectedItems', 'prev', 'performingMultiDrag'],
@@ -143,7 +143,11 @@ export default {
             ipcRenderer.send('removeFavourite', this.source.id)
         },
         select(evt) {
-            bus.$emit('selected', [evt, this.index])
+            if (evt.which == 1) {
+                bus.$emit('selected', [evt, this.index])
+            } else if (evt.which == 3) {
+                contextMenuBus.$emit('selected', [evt, this.index])
+            }
         },
         drag(evt) {
             if (!evt.dataTransfer) return

@@ -13,7 +13,7 @@
     </div>
 </template>
 <script>
-import {bus} from '@/main'
+import { contextMenuBus } from '@/main'
 export default {
     data() {
         return {
@@ -82,7 +82,7 @@ export default {
         }
     },
     mounted() {
-        bus.$on('updateitems', evt => {
+        contextMenuBus.$on('updateitems', evt => {
             this.updateItems(evt.items)
             if (evt.position) {
                 this.x = evt.position.clientX

@@ -106,6 +106,8 @@ export default {
             //if (evt.clientX < 185 || evt.clientX > 350) return
             if (evt.clientX < 185) {
                 this.sidebarwidth = 185
+            } else if (evt.clientX >= 217 && evt.clientX <= 233) {
+                this.sidebarwidth = 225
             } else if (evt.clientX > 350) {
                 this.sidebarwidth = 350
             } else {

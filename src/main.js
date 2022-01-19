@@ -5,6 +5,7 @@ import router from './router'
 import i18n from './translation'
 import AsyncComputed from 'vue-async-computed'
 import { ipcRenderer } from 'electron'
+export const contextMenuBus = new Vue()
 export const bus = new Vue()
 new Vue({
     i18n,
