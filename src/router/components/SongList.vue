@@ -70,7 +70,7 @@
 
 <script>
 import SongItem from './SongItem'
-import {bus} from '@/main'
+import { bus, contextMenuBus } from '@/main'
 import { mapState } from 'vuex'
 import { ipcRenderer } from 'electron'
 import sort from '@/modules/sort'
@@ -248,8 +248,77 @@ export default {
             document.querySelector('#dragInfo').textContent = `${songsToSelect[0].artist} - ${songsToSelect[0].title} + ${songsToSelect.length - 1} more songs`
             evt.dataTransfer.setDragImage(document.querySelector('.drag-detail'), -15, 10)
         },
+        contextMenu(evt) {
+            let getIndex = this.selectedItems.indexOf(evt[1])
+            if (getIndex == -1) {
+                this.selectedItems = [evt[1]]
+                this.lastSelectedIndex = evt[1]
+            }
+            let favCompare = false
+            const favourites = this.$store.state.nav.favouriteSongs
+            if (this.selectedItems.length > 1) {
+                this.selectedItems.forEach(f => {
+                    if (favourites.indexOf(this.list[f].id) == -1) {
+                        favCompare = true
+                        return
+                    }
+                })
+            } else if (favourites.indexOf(this.list[evt[1]].id) == -1) {
+                favCompare = true
+            }
+            const favouriteOnClick = () => {
+                this.selectedItems.forEach(f => {
+                    const item = this.list[f].id
+                    if (favCompare) {
+                        if (favourites.indexOf(item) == -1) {
+                            ipcRenderer.send('addFavourite', item)
+                        }
+                    } else {
+                        ipcRenderer.send('removeFavourite', item)
+                    }
+                })
+            }
+            const goToArtist = () => {
+                if (this.list[evt[1]].artist) {
+                    let artist = encodeURIComponent(this.list[evt[1]].artist)
+                    this.$router.push(`/artists?hideTop=true&column=artist&q=${artist}&view=artist_${artist}`)
+                }
+            }
+            const goToAlbum = () => {
+                if (this.list[evt[1]].album) {
+                    let album = encodeURIComponent(this.list[evt[1]].album)
+                    this.$router.push(`/albums?hideTop=true&column=album&q=${album}&view=album_${album}`)
+                }
+            }
+            const deleteSongs = () => {
+                let idsToDelete = []
+                this.selectedItems.forEach(index => {
+                    idsToDelete.push(this.list[index].id)
+                })
+                ipcRenderer.send('deleteSome', idsToDelete)
+                this.selectedItems.splice(0)
+                this.lastSelectedIndex = 0
+            }
+            let menuItems = [
+                {name: 'Add to queue', type: 'button'},
+                {type: 'divider', hide: [this.selectedItems.length == 1 ? false : true, this.list[evt[1]].artist == 'Unknown Artist' && this.list[evt[1]].album == 'Unknown Album']},
+                {name: 'Go to artist', type: 'button', hide: [this.selectedItems.length == 1 ? false : true, this.$route.path == '/artists', this.list[evt[1]].artist == 'Unknown Artist'], onClick: goToArtist},
+                {name: 'Go to album', type: 'button', hide: [this.selectedItems.length == 1 ? false : true, this.$route.path == '/albums', this.list[evt[1]].album == 'Unknown Album'], onClick: goToAlbum},
+                {type: 'divider'},
+                {name: favCompare ? 'Add to favourites' : 'Remove from favourites', type: 'button', onClick: favouriteOnClick},
+                {name: 'Add to playlist', type: 'button'},
+                {type: 'divider'},
+                {name: 'Remove from library', type: 'button', style: 'dangerous', onClick: deleteSongs}
+            ]
+            contextMenuBus.$emit('updateitems', {
+                items: menuItems,
+                position: {
+                    clientX: evt[0].clientX,
+                    clientY: evt[0].clientY
+                }
+            })
+        },
         select(evt) {
-            console.log('hah')
             let getIndex = this.selectedItems.indexOf(evt[1])
             if (evt[0].which == 1) {
                 if (evt[0].ctrlKey || evt[0].metaKey) {
@@ -275,80 +344,15 @@ export default {
                     this.selectedItems = [evt[1]]
                     this.lastSelectedIndex = evt[1]
                 }
-            } else if (evt[0].which == 3) {
-                if (getIndex == -1) {
-                    this.selectedItems = [evt[1]]
-                    this.lastSelectedIndex = evt[1]
-                }
-                let favCompare = false
-                const favourites = this.$store.state.nav.favouriteSongs
-                if (this.selectedItems.length > 1) {
-                    this.selectedItems.forEach(f => {
-                        if (favourites.indexOf(this.list[f].id) == -1) {
-                            favCompare = true
-                            return
-                        }
-                    })
-                } else if (favourites.indexOf(this.list[evt[1]].id) == -1) {
-                    favCompare = true
-                }
-                const favouriteOnClick = () => {
-                    this.selectedItems.forEach(f => {
-                        const item = this.list[f].id
-                        if (favCompare) {
-                            if (favourites.indexOf(item) == -1) {
-                                ipcRenderer.send('addFavourite', item)
-                            }
-                        } else {
-                            ipcRenderer.send('removeFavourite', item)
-                        }
-                    })
-                }
-                const goToArtist = () => {
-                    if (this.list[evt[1]].artist) {
-                        let artist = encodeURIComponent(this.list[evt[1]].artist)
-                        this.$router.push(`/artists?hideTop=true&column=artist&q=${artist}&view=artist_${artist}`)
-                    }
-                }
-                const goToAlbum = () => {
-                    if (this.list[evt[1]].album) {
-                        let album = encodeURIComponent(this.list[evt[1]].album)
-                        this.$router.push(`/albums?hideTop=true&column=album&q=${album}&view=album_${album}`)
-                    }
-                }
-                const deleteSongs = () => {
-                    let idsToDelete = []
-                    this.selectedItems.forEach(index => {
-                        idsToDelete.push(this.list[index].id)
-                    })
-                    ipcRenderer.send('deleteSome', idsToDelete)
-                    this.selectedItems.splice(0)
-                    this.lastSelectedIndex = 0
-                }
-                let menuItems = [
-                    {name: 'Add to queue', type: 'button'},
-                    {type: 'divider', hide: [this.selectedItems.length == 1 ? false : true, this.list[evt[1]].artist == 'Unknown Artist' && this.list[evt[1]].album == 'Unknown Album']},
-                    {name: 'Go to artist', type: 'button', hide: [this.selectedItems.length == 1 ? false : true, this.$route.path == '/artists', this.list[evt[1]].artist == 'Unknown Artist'], onClick: goToArtist},
-                    {name: 'Go to album', type: 'button', hide: [this.selectedItems.length == 1 ? false : true, this.$route.path == '/albums', this.list[evt[1]].album == 'Unknown Album'], onClick: goToAlbum},
-                    {type: 'divider'},
-                    {name: favCompare ? 'Add to favourites' : 'Remove from favourites', type: 'button', onClick: favouriteOnClick},
-                    {name: 'Add to playlist', type: 'button'},
-                    {type: 'divider'},
-                    {name: 'Remove from library', type: 'button', style: 'dangerous', onClick: deleteSongs}
-                ]
-                bus.$emit('updateitems', {
-                    items: menuItems,
-                    position: {
-                        clientX: evt[0].clientX,
-                        clientY: evt[0].clientY
-                    }
-                })
             }
         }
     },
     mounted() {
         bus.$on('selected', evt => {
             this.select(evt)
+        })
+        contextMenuBus.$on('selected', evt => {
+            this.contextMenu(evt)
         })
         bus.$on('multiDrag', evt => {
             this.multiDrag(evt)

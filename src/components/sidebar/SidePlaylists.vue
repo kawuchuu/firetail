@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { bus } from '@/main'
+import { contextMenuBus } from '@/main'
 import { ipcRenderer } from 'electron'
 
 export default {
@@ -34,7 +34,7 @@ export default {
                 {type: 'divider'},
                 {name: 'Remove playlist', type: 'button', style: 'dangerous', onClick: this.delete}
             ]
-            bus.$emit('updateitems', {
+            contextMenuBus.$emit('updateitems', {
                 items: menuItems,
                 position: {
                     clientX: evt.clientX,

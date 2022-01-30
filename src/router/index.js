@@ -9,6 +9,7 @@ import tr from '../translation'
 import Settings from './components/settings/Settings'
 import VirtualList from 'vue-virtual-scroll-list'
 import { ipcRenderer } from 'electron'
+import { bus } from '../main'
 
 Vue.component('virtual-list', VirtualList)
 
@@ -84,6 +85,7 @@ ipcRenderer.on('updateNav', (event, checkNav) => {
 })
 
 router.beforeEach(async (to, from, next) => {
+    bus.$off()
     store.commit('audio/updateCurrentList', [])
     if (to.query.column && to.query.q) {
         store.dispatch('audio/getSpecificSongs', {
