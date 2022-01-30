@@ -6,6 +6,13 @@ export default {
         }
         return array.sort(compare);
     },
+    sortArrayNum(array, sortBy) {
+        function compare(a, b) {
+            if (a[sortBy] < b[sortBy]) return -1;
+            if (a[sortBy] > b[sortBy]) return 1;
+        }
+        return array.sort(compare);
+    },
     simpleSort(array) {
         function compare(a, b) {
             if (a.toLowerCase() < b.toLowerCase()) return -1;

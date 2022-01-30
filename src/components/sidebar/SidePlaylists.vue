@@ -76,9 +76,13 @@ export default {
             songs = JSON.parse(songs)
             const playlist = await ipcRenderer.invoke('getSpecificPlaylist', this.playlist.id)
             const songIds = JSON.parse(playlist[0].songIds)
+            const currentLength = songIds.length
             console.log(songs)
-            songs.forEach(song => {
-                songIds.push(song.id)
+            songs.forEach((song, index) => {
+                songIds.push({
+                    id: song.id,
+                    position: currentLength + index + 1
+                })
             })
             ipcRenderer.invoke('updatePlaylist', {
                 column: 'songids',

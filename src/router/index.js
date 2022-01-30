@@ -8,8 +8,9 @@ import store from '../store'
 import tr from '../translation'
 import Settings from './components/settings/Settings'
 import VirtualList from 'vue-virtual-scroll-list'
+import sort from '../modules/sort'
 import { ipcRenderer } from 'electron'
-import { bus } from '../main'
+//import { bus } from '../main'
 
 Vue.component('virtual-list', VirtualList)
 
@@ -85,7 +86,6 @@ ipcRenderer.on('updateNav', (event, checkNav) => {
 })
 
 router.beforeEach(async (to, from, next) => {
-    bus.$off()
     store.commit('audio/updateCurrentList', [])
     if (to.query.column && to.query.q) {
         store.dispatch('audio/getSpecificSongs', {
@@ -96,7 +96,13 @@ router.beforeEach(async (to, from, next) => {
         store.commit('audio/getNoSongs')
     } else if (to.path == '/playlist' && to.query.id) {
         const playlist = await ipcRenderer.invoke('getSpecificPlaylist', to.query.id)
-        const songs = await ipcRenderer.invoke('getSomeFromColumnMatches', JSON.parse(playlist[0].songIds))
+        const unsortedSongs = JSON.parse(playlist[0].songIds)
+        const sortedSongs = sort.sortArrayNum(unsortedSongs, 'position')
+        const sortedIds = []
+        sortedSongs.forEach(song => {
+            sortedIds.push(song.id)
+        })
+        const songs = await ipcRenderer.invoke('getSomeFromColumnMatches', sortedIds)
         store.commit('audio/updateCurrentListNoSort', songs)
         store.commit('playlist/setCurrentPlaylist', playlist[0])
     } else {
