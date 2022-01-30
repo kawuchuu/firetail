@@ -1,6 +1,6 @@
 <template>
     <div class="about">
-        <img draggable="false" src="@/assets/firetail.svg">
+        <img draggable="false" src="@/assets/firetail.png">
         <div class="info">
             <div>
                 <h1>Firetail</h1>
@@ -31,12 +31,14 @@ export default {
 
 <style lang="scss" scoped>
 img {
-    width: 100px;
-    height: auto;
+    width: 108px;
+    height: 108px;
     margin-right: 35px;
+    aspect-ratio: 1 / 1;
 }
 .about {
     display: flex;
+    align-items: center;
 }
 h1 {
     margin: 10px 0px;
