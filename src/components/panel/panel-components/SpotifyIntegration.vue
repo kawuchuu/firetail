@@ -17,7 +17,7 @@
                 <p>Firetail can now fetch metadata from Spotify!</p>
             </div>
             <div class="buttons">
-                <Button :button="{label: 'Done'}" @click.native="close()"/>
+                <Button :button="{label: 'Done', style: 'primary'}" @click.native="close()"/>
             </div>
         </div>
         <div ref="3" class="3 hide">
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="buttons">
-                <Button :button="{label: 'Done'}" @click.native="close()"/>
+                <Button :button="{label: 'Done', style: 'primary'}" @click.native="close()"/>
             </div>
         </div>
     </div>

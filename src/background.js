@@ -1,7 +1,6 @@
 'use strict'
 
 import { app, protocol, BrowserWindow, Menu } from 'electron'
-import glasstron from 'glasstron'
 import {
     createProtocol
 } from 'vue-cli-plugin-electron-builder/lib'
@@ -213,7 +212,6 @@ async function createWindow() {
         show: false,
         titleBarStyle: osType === 'darwin' ? 'hiddenInset' : 'default',
         frame: osType === 'darwin' ? false : true,
-        vibrancy: 'sidebar',
         //backgroundColor: osType === 'darwin' ? 'transparent' : '#181818',
         backgroundColor: '#18171c',
         title: 'Firetail',
@@ -226,13 +224,7 @@ async function createWindow() {
             enableBlinkFeatures: "CSSColorSchemeUARendering",
         }
     }
-    if (osType === 'darwin-disable') {
-        win = new glasstron.BrowserWindow(winConfig)
-        win.vibrancy = 'appearance-based'
-        win.setBlur(true)
-    } else {
-        win = new BrowserWindow(winConfig)
-    }
+    win = new BrowserWindow(winConfig)
     let openSong = filePath => {
         let lastElement = filePath
         if (process.argv.length >= 1  && lastElement != "dist_electron" && existsSync(lastElement)) {

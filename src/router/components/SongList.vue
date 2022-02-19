@@ -45,8 +45,8 @@
             </div>
             <p v-if="false">{{$route.path}} || {{$route.path === '/' || $route.path === '/playlist'}} || {{ $route.path !== '/' || $route.path !== '/playlist' }}</p>
             <div class="wrapper">
-                <p v-if="list.length == 0 && $route.path === '/'" style="margin-left: 50px;">No songs have been imported yet. Click Add Songs at the top to import some!</p>
-                <p v-else-if="list.length === 0 && $route.path === '/playlist'" style="margin-left: 50px">No songs have been added to this playlist. You should drag some to this playlist's button on the side bar!</p>
+                <!-- <p v-if="list.length == 0 && $route.path === '/'" style="margin-left: 50px;">No songs have been imported yet. Click Add Songs at the top to import some!</p>
+                <p v-else-if="list.length === 0 && $route.path === '/playlist'" style="margin-left: 50px">No songs have been added to this playlist. You should drag some to this playlist's button on the side bar!</p> -->
                 <div v-if="$route.path !== '/' && $route.path !== '/playlist'">
                     <SongItem v-for="(item, index) in list" :source="item" :key="item.id" :selectedItems="selectedItems" :index="index" :performingMultiDrag="performingMultiDrag"/>
                 </div>
@@ -64,6 +64,9 @@
                         @selected="select"
                     />
                 </div>
+                <div v-if="list.length < 1">
+                    <SongLoadItem v-for="index in 50" :key="index" />
+                </div>
             </div>
         </div>
     </div>
@@ -71,6 +74,7 @@
 
 <script>
 import SongItem from './SongItem'
+import SongLoadItem from './SongLoadItem'
 import { bus, contextMenuBus } from '@/main'
 import { mapState } from 'vuex'
 import { ipcRenderer } from 'electron'
@@ -79,7 +83,8 @@ import axios from 'axios'
 
 export default {
     components: {
-        SongItem
+        SongItem,
+        SongLoadItem
     },
     data() {
         return {

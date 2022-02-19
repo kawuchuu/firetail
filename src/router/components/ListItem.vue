@@ -1,15 +1,15 @@
 <template>
     <div class="item-root">
         <div v-if="$route.path === '/artists'" class="albums-item">
-            <router-link :to="`?hideTop=true&column=artist&q=${encodeURIComponent(item.artist)}&view=artist_${encodeURIComponent(item.artist)}`">
+            <router-link :to="`?hideTop=true&column=artist&q=${encodeURIComponent(source.artist)}&view=artist_${encodeURIComponent(source.artist)}`">
                 <div class="artist-img"/>
-                <span>{{ item.artist }}</span>
+                <span>{{ source.artist }}</span>
             </router-link>
         </div>
         <div v-else-if="$route.path === '/albums'" class="albums-item">
-            <router-link :to="`?hideTop=true&column=album&q=${encodeURIComponent(item.album)}&view=album_${encodeURIComponent(item.album)}`">
+            <router-link :to="`?hideTop=true&column=album&q=${encodeURIComponent(source.album)}&view=album_${encodeURIComponent(source.album)}`">
                 <div class="album-img" :style="albumArt"/>
-                <span>{{ item.album }}</span>
+                <span>{{ source.album }}</span>
             </router-link>
         </div>
     </div>
@@ -17,12 +17,12 @@
 
 <script>
 export default {
-    props: ['item'],
+    props: ['source'],
     asyncComputed: {
         async albumArt() {
             let port = this.$store.state.nav.port
-            if (this.item.hasImage == 1) {
-                let artistAlbum = `http://localhost:${port}/images/${(this.item.artist + this.item.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
+            if (this.source.hasImage == 1) {
+                let artistAlbum = `http://localhost:${port}/images/${(this.source.artist + this.source.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
                 return `background-image: url('${artistAlbum}')`
             } else {
                 return ''

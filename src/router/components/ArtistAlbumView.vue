@@ -2,14 +2,20 @@
     <div class="artists">
         <div class="albums-container">
             <section class="artists-list">
-                <div class="artist-inner" v-if="$route.path === '/albums'">
-                    <div class="list-fade" />
-                    <ListItem v-for="item in albumItems" :item="item" :key="item.id"/>
-                </div>
-                <div class="artist-inner" v-else-if="$route.path === '/artists'">
-                    <div class="list-fade" />
-                    <ListItem v-for="item in artistItems" :item="item" :key="item.id"/>
-                </div>
+                <div class="list-fade" />
+                <virtual-list class="artist-inner" v-if="$route.path === '/albums'"
+                    :data-key="'album'"
+                    :data-sources="albumItems"
+                    :dataComponent="lItem"
+                />
+                <!-- <ListItem v-for="item in albumItems" :source="item" :key="item.id"/> -->
+                <div class="list-fade" />
+                <virtual-list class="artist-inner" v-if="$route.path === '/artists'"
+                    :data-key="'artist'"
+                    :data-sources="artistItems"
+                    :dataComponent="lItem"
+                />
+                <!-- <ListItem v-for="item in artistItems" :item="item" :key="item.id"/> -->
             </section>
             <section class="song-list">
 <!--                 <div class="sticky-bg" ref="stickyBg" :class="currentScroll">
@@ -34,14 +40,21 @@ import ListItem from './ListItem'
 
 export default {
     components: {
-        ListItem
+        //ListItem
+    },
+    data() {
+        return {
+            lItem: ListItem
+        }
     },
     computed: {
         albumItems() {
-            return this.$store.state.nav.albums
+            if (this.$route.path === '/albums') return this.$store.state.nav.albums
+            else return []
         },
         artistItems() {
-            return this.$store.state.nav.artists
+            if (this.$route.path === '/artists') return this.$store.state.nav.artists
+            else return []
         },
         ...mapState('nav', {
             currentScroll: state => {
@@ -196,7 +209,7 @@ export default {
         max-width: 80px;
         transition: 0.3s cubic-bezier(0, 1, 0.35, 1);
     }
-    .artist-inner:hover {
+    .artists-list:hover {
         box-shadow: 2px 0px 10px rgba(0,0,0,.15);
 
         .list-fade {

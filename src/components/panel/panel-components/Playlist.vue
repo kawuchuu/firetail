@@ -24,7 +24,7 @@
             </div>
             <div class="buttons">
                 <Button @click.native="close" :button="{ label: 'Cancel' }" />
-                <Button @click.native="createOrEdit" :button="{ label: saveBtn }" />
+                <Button @click.native="createOrEdit" :button="{ label: saveBtn, style: 'primary' }" />
             </div>
         </div>
     </div>
