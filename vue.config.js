@@ -102,13 +102,17 @@ module.exports = {
                 mac: {
                     category: "public.app-category.music",
                     target: [
-                        {
+                        /* {
                             target: "dmg",
                             arch: "x64" // github actions doesn't play well with arm64... will be universal binary for proper releases :)
                         },
                         {
                             target: "dmg",
                             arch: "arm64"
+                        } */
+                        {
+                            target: "dmg",
+                            arch: "universal"
                         }
                     ],
                     icon: "build/other/macos.png",

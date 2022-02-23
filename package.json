@@ -71,6 +71,7 @@
     "url": "https://github.com/kawuchuu/firetail/"
   },
   "resolutions": {
-    "node-abi": "3.8.0"
+    "node-abi": "3.8.0",
+    "electron-builder": "23.0.0"
   }
 }
