@@ -19,7 +19,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest, windows-2019]
 
     steps:
       - name: Checkout
@@ -38,7 +38,7 @@ jobs:
       - uses: actions/setup-node@v2
         name: Setup Node
         with:
-          node-version: '17.6.0'
+          node-version: '16'
       - name: Install deps & build artifacts
         run: |
           export FTBUILD_NUM=${{steps.get-ver-build.outputs.build}}
