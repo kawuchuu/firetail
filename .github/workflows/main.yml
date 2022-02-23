@@ -43,8 +43,7 @@ jobs:
         run: |
           export FTBUILD_NUM=${{steps.get-ver-build.outputs.build}}
           export BUILD_NUMBER=${{steps.get-ver-build.outputs.build}}
-          npm i -g node-gyp@8.4.1
-          npm config set msvs_version 2022
+          npm config set msvs_version 2019
           yarn
           yarn electron:build
       - if: matrix.os == 'windows-latest'
