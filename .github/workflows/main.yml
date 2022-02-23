@@ -46,7 +46,7 @@ jobs:
           npm config set msvs_version 2019
           yarn
           yarn electron:build
-      - if: matrix.os == 'windows-latest'
+      - if: matrix.os == 'windows-2019'
         name: Move Windows artifacts to directory
         shell: bash
         run: |
