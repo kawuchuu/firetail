@@ -38,7 +38,7 @@ jobs:
       - uses: actions/setup-node@v2
         name: Setup Node
         with:
-          node-version: '14.17.0'
+          node-version: '16.9.1'
       - name: Install deps & build artifacts
         run: |
           export FTBUILD_NUM=${{steps.get-ver-build.outputs.build}}
