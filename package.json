@@ -51,7 +51,8 @@
   },
   "resolutions": {
     "electron-builder": "^22.11.7",
-    "node-abi": "^3.2.0"
+    "node-abi": "^3.2.0",
+    "node-gyp": "^8.4.1"
   },
   "eslintConfig": {
     "root": true,
