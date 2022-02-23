@@ -1,4 +1,3 @@
-import { app, ipcMain, shell } from 'electron';
 import childProcess from 'child_process';
 import tmp from 'tmp';
 import fs from 'fs';
@@ -179,7 +178,7 @@ class Burn {
     }
 
     static canBurn() {
-        return new Promise((res, rej) => {
+        return new Promise(res => {
             let proc = childProcess.spawn("cdrdao", ["disk-info"]);
 
             let canBurn = true;
@@ -193,7 +192,7 @@ class Burn {
 
             proc.stdout.on("data", stdio);
             proc.stderr.on("data", stdio);
-            proc.on("close", (exitCode) => {
+            proc.on("close", () => {
                 res(canBurn);
             });
         });
