@@ -6,7 +6,7 @@
             </div>
             <div class="nav-top-buttons">
                 <div class="search-btn">
-                    <i class="material-icons">search</i>
+                    <i class="ft-icon">search</i>
                     <input type="text" placeholder="Search...">
                 </div>
                 <div class="top-button-container">
@@ -102,7 +102,7 @@ export default {
     
     i {
         font-size: 22px;
-        transform: translate(-1px);
+        transform: translate(-2px);
     }
 
     input[type=text] {

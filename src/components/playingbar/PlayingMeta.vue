@@ -64,9 +64,9 @@ export default {
         },
         favouriteIcon() {
             if (this.$store.state.nav.favouriteSongs.indexOf(this.$store.state.audio.currentSong) != -1) {
-                return 'favourite-filled'
+                return 'heart-filled'
             } else {
-                return 'favourite'
+                return 'heart'
             }
         },
         isFavourite() {

@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'ft-icon';
-  src: url('Firetail-Icon.ttf') format('truetype');
+  src: url('ft-icon.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -10,7 +10,7 @@
   font-family: 'ft-icon' !important;
   font-weight: normal;
   font-style: normal;
-  font-size: 28px;
+  font-size: 24px;
   line-height: 1;
   letter-spacing: normal;
   text-transform: none;

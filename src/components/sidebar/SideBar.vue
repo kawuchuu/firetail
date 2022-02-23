@@ -140,7 +140,7 @@ export default {
 .item-sidebar i {
     margin: 0 16px;
     pointer-events: none;
-    font-size: 20px;
+    font-size: 24px;
 }
 
 .router-link-active .item-sidebar span {

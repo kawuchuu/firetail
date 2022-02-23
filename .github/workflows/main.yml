@@ -43,6 +43,7 @@ jobs:
         run: |
           export FTBUILD_NUM=${{steps.get-ver-build.outputs.build}}
           export BUILD_NUMBER=${{steps.get-ver-build.outputs.build}}
+          yarn global add node-gyp@8.4.1
           yarn
           yarn electron:build
       - if: matrix.os == 'windows-latest'

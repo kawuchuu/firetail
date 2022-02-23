@@ -1,6 +1,6 @@
 <template>
     <div class="right-controls">
-        <i @click="mute" class="material-icons-outlined">{{volIcon}}</i>
+        <i @click="mute" class="ft-icon">{{volIcon}}</i>
         <div ref="volBarWrapper" class="vol-bar-inner-container" @mousemove="moveHover" @mouseover="hover" @mouseleave="leave" @mousedown="down">
             <div class="vol-bar" ref="volBar">
                 <div ref="volFill" :style="fill" class="fill"></div>
@@ -34,9 +34,9 @@ export default {
             },
             volIcon: state => {
                 if (state.volume == 0) {
-                    return 'volume_off'
+                    return 'volume-mute'
                 } else {
-                    return 'volume_up'
+                    return 'volume-up'
                 }
             }
         })

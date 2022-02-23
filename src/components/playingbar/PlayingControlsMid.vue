@@ -3,9 +3,9 @@
         <div class="track-controls-inner-container">
             <div class="control-buttons">
                 <i class="ft-icon repeat-shuffle" title="Shuffle" @click="shuffle" :class="isShuffled">shuffle</i>
-                <i class="ft-icon skip-prev" title="Previous" @click="prev">prev</i>
+                <i class="ft-icon skip-prev" title="Previous" @click="prev">previous</i>
                 <i class="ft-icon play-pause-icon" title="Play/pause" @click="playPause">{{playPauseIcon}}</i>
-                <i class="ft-icon skip-prev" title="Next" @click="next">skip</i>
+                <i class="ft-icon skip-prev" title="Next" @click="next">next-</i>
                 <i class="ft-icon repeat-shuffle" title="Repeat" @click="repeat" :class="isRepeat">{{repeatIcon}}</i>
             </div>
             <div class="seek-time-inner-container">
@@ -60,9 +60,9 @@ export default {
             },
             playPauseIcon: state => {
                 if (state.paused) {
-                    return 'play-circle'
+                    return 'play-visual-centre'
                 } else {
-                    return 'pause-circle'
+                    return 'pause'
                 }
             },
             isShuffled: state => {
@@ -399,14 +399,23 @@ export default {
     padding: 5px;
 }
 
-.play-pause-icon {
-    font-size: 34px;
+.control-buttons .play-pause-icon {
+    font-size: 30px;
     transition: 0.08s;
-    transition-property: transform text-shadow;
+    transition-property: transform, text-shadow;
+    background: white;
+    color: black;
+    border-radius: 100px;
+    padding: 2px;
+}
+
+:root.light .control-buttons .play-pause-icon {
+    background: black;
+    color: white;
 }
 
 .skip-prev {
-    font-size: 22px;
+    font-size: 24px;
 }
 
 .track-controls.hide .skip-prev {
@@ -415,7 +424,7 @@ export default {
 }
 
 .repeat-shuffle {
-    font-size: 20px;
+    font-size: 22px;
 }
 
 .active {
@@ -432,7 +441,7 @@ export default {
 .play-pause-icon:hover, .play-pause-icon:active {
     transform: scale(1.15);
     opacity: 1 !important;
-    text-shadow: 0px 2px 10px rgba(0,0,0,.5);
+    box-shadow: 0px 2px 10px rgba(0,0,0,.5);
 }
 
 .play-pause-icon:active {

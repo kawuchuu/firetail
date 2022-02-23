@@ -1,7 +1,7 @@
 <template>
     <div class="root">
         <li draggable="true" class="results-link" @dragstart="drag" @dragend="stopDrag" @mouseover="listHover" @mouseleave="listHoverLeave" :class="[isActive, doHighlight, isSimple]">
-            <i class="material-icons-outlined play-pause" :style="listIconVisible" @click="decidePlaySong" @mouseover="listIconHover" @mouseleave="listIconHoverLeave">{{ listIcon }}</i>
+            <i class="ft-icon play-pause" :style="listIconVisible" @click="decidePlaySong" @mouseover="listIconHover" @mouseleave="listIconHoverLeave">{{ listIcon }}</i>
             <i class="ft-icon favourite-icon" @click="handleFavourite">{{ favouriteIcon }}</i>
             <div v-if="$route.path == '/albums'">
                 <p v-if="source.disc !== null" class="track-num">{{source.disc}}</p>
@@ -43,13 +43,13 @@ export default {
         listIcon() {
             let view = this.$route.query.view
             if (this.source.id == this.$store.state.audio.currentSong && this.$store.state.audio.paused && view == this.$store.state.nav.playingView) {
-                return 'play_arrow'
+                return 'play'
             } else if (this.source.id == this.$store.state.audio.currentSong && this.isIconHover && view == this.$store.state.nav.playingView) {
                 return 'pause'
             } else if (this.source.id == this.$store.state.audio.currentSong && view == this.$store.state.nav.playingView) {
-                return 'volume_up'
+                return 'volume-up'
             } else {
-                return 'play_arrow'
+                return 'play'
             }
         },
         listIconVisible() {
@@ -62,9 +62,9 @@ export default {
         },
         favouriteIcon() {
             if (this.$store.state.nav.favouriteSongs.indexOf(this.source.id) != -1) {
-                return 'favourite-filled'
+                return 'heart-filled'
             } else {
-                return 'favourite'
+                return 'heart'
             }
         },
         doHighlight() {
@@ -317,7 +317,7 @@ li.nohover:hover {
 }
 
 .favourite-icon {
-    font-size: 20px;
+    font-size: 23px;
     cursor: pointer;
     opacity: 0.5;
 }
