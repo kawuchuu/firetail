@@ -39,7 +39,7 @@
                     <p class="list-title">{{ $t('songList.listTitle') }}</p>
                     <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-artist">{{ $t('songList.listArtist') }}</p>
                     <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-album">{{ $t('songList.listAlbum') }}</p>
-                    <p class="list-duration"><i class="material-icons-outlined">schedule</i></p>
+                    <p class="list-duration"><i class="ft-icon">clock</i></p>
                 </div>
                 <div class="sec-border"></div>
             </div>
@@ -448,7 +448,7 @@ export default {
 }
 
 .list-duration i, .disc-num {
-    font-size: 18px;
+    font-size: 20px;
     padding: 0 6px;
 }
 

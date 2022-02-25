@@ -190,7 +190,7 @@ export default {
 }
 
 .favourite-icon {
-    font-size: 18px;
+    font-size: 22px;
     opacity: 0.5;
     margin-left: 12px;
     cursor: pointer;

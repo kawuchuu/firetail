@@ -1,7 +1,7 @@
 <template>
     <div class="root">
         <label @click="click" class="top-button" :for="checkFor">
-            <i class="material-icons-outlined">{{button.icon}}</i>
+            <i class="ft-icon">{{button.icon}}</i>
             <span>{{button.name}}</span>
         </label>
     </div>
