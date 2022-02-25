@@ -1,6 +1,6 @@
 <template>
     <div :class="isActive" @click="navigate(nav.nav)" class="nav-button">
-        <i class="material-icons-outlined" :class="nav.class">{{nav.icon}}</i>
+        <i class="ft-icon" :class="nav.class">{{nav.icon}}</i>
     </div>
 </template>
 
@@ -58,11 +58,13 @@ export default {
 }
 
 .nav-button i {
-    font-size: 20px;
+    font-size: 22px;
+    position: relative;
+    bottom: 2px;
 }
 
 .littlebitback {
-    transform: translate(-2px);
+    transform: translate(-1px);
 }
 
 .littlebitforward {

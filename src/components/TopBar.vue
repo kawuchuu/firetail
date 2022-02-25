@@ -33,8 +33,8 @@ export default {
                 {name: tr.t('topBar.addSongs'), id: 'addFiles', for: 'addFiles', icon: 'add'},
             ],
             nav: [
-                {type: 'back', class: 'littlebitback', nav: -1, icon: 'arrow_back_ios'},
-                {type: 'forward', class: 'littlebitforward', nav: 1, icon: 'arrow_forward_ios'}
+                {type: 'back', class: 'littlebitback', nav: -1, icon: 'chevron-left'},
+                {type: 'forward', class: 'littlebitback', nav: 1, icon: 'chevron-right'}
             ]
         }
     }

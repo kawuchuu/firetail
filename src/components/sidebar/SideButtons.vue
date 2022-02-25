@@ -7,7 +7,7 @@
     </router-link>
     <div class="list-subtitle" v-else-if="button.type == 'subtitle'" v-on:click="test">{{ button.name }}</div>
     <div v-else-if="button.type == 'special_button'" class="special-button" @click="doAction">
-        <i class="material-icons">{{ button.icon }}</i>
+        <i class="ft-icon">{{ button.icon }}</i>
         <span>{{ button.name }}</span>
     </div>
 </template>

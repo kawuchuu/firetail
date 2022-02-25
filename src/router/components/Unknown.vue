@@ -5,7 +5,7 @@
             <h1>The route you were looking for could not be found.</h1>
             <p>Sorry about that. If you believe this is an error, please create an issue <a @click="openIssue">here.</a></p>
             <div class="more-info">
-                <div @click="isMoreOpen = isMoreOpen ? false : true" class="open-more"><i class="material-icons">{{ moreIcon }}</i> More info</div>
+                <div @click="isMoreOpen = isMoreOpen ? false : true" class="open-more"><i class="ft-icon">{{ moreIcon }}</i> More info</div>
                 <div class="inner-swag" :class="doShow">
                     <p>The current path is: {{ path }}</p>
                 </div>
@@ -24,9 +24,9 @@ export default {
         },
         moreIcon() {
             if (this.isMoreOpen) {
-                return 'arrow_drop_up'
+                return 'arrow-head-up'
             } else {
-                return 'arrow_drop_down'
+                return 'arrow-head-down'
             }
         },
         doShow() {
@@ -95,6 +95,7 @@ a {
 
     i {
         margin-right: 10px;
+        font-size: 22px;
     }
 }
 
