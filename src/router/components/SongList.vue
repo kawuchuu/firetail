@@ -7,7 +7,7 @@
         </div>
         <div class="sticky-bg" :class="currentScroll">
             <div class="bg-inner">
-                <h3>Songs</h3>
+                <h3>{{ topTitleText }}</h3>
             </div>
         </div>
         <div class="top-title" ref="topTitle">

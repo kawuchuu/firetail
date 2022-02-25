@@ -400,7 +400,7 @@ export default {
 }
 
 .control-buttons .play-pause-icon {
-    font-size: 30px;
+    font-size: 31px;
     transition: 0.08s;
     transition-property: transform, text-shadow;
     background: white;
