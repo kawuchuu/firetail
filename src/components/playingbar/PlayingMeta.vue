@@ -3,6 +3,15 @@
         <div class="colour-bg" :style="getColour"></div>
         <div class="large-album-art" :class="hoverShow" >
             <div class="inner" :style="getImage"></div>
+            <div class="advanced-info" v-show="showAdvancedFileInfo">
+                <h3>Codec Information</h3>
+                <span v-if="advancedFileInfo.codec">Codec: {{ advancedFileInfo.codec }}</span>
+                <span v-if="advancedFileInfo.container">Container: {{ advancedFileInfo.container }}</span>
+                <span v-if="advancedFileInfo.bitrate">Bitrate: {{ Math.round(advancedFileInfo.bitrate / 1000) }} kb/s</span>
+                <span v-if="advancedFileInfo.sampleRate">Sample rate: {{ advancedFileInfo.sampleRate }} Hz</span>
+                <span v-if="advancedFileInfo.bitDepth">Bits per sample: {{ advancedFileInfo.bitDepth }}</span>
+                <span v-if="advancedFileInfo.noChannels">No. channels: {{ advancedFileInfo.noChannels }}</span>
+            </div>
         </div>
         <router-link :to="viewLink">
             <div class="song-album-art" :style="getImage" @mouseover="hoverImage" @mouseleave="leaveImage"></div>
@@ -104,6 +113,9 @@ export default {
                     return '/?view=all'
                 }
             }
+        },
+        showAdvancedFileInfo() {
+            return this.$store.state.nav.advancedFileInfo
         }
     },
     methods: {
@@ -129,7 +141,13 @@ export default {
     },
     data() {
         return {
-            showLargeImage: false
+            showLargeImage: false,
+            advancedFileInfo: {}
+        }
+    },
+    watch: {
+        async title() {
+            this.advancedFileInfo = await ipcRenderer.invoke('getAdvancedFileInfo', this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex].path)
         }
     }
 }
@@ -239,7 +257,7 @@ export default {
 
 .large-album-art {
     position: fixed;
-    width: 300px;
+    width: auto;
     height: 300px;
     background: #000;
     transform: translateY(-215px);
@@ -249,10 +267,11 @@ export default {
     opacity: 0;
     //transition: .15s;
     border: solid 1px var(--bd);
+    display: flex;
 
     .inner {
-        width: 100%;
-        height: 100%;
+        width: 300px;
+        height: 300px;
         border-radius: 5px;
         background-color: #000;
         background-position: center;
@@ -261,6 +280,22 @@ export default {
         z-index: 2;
         position: relative;
         transition: .15s;
+    }
+
+    .advanced-info {
+        width: 250px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 15px 20px;
+
+        h3 {
+            margin-top: 5px;
+        }
+
+        span:not(:last-child) {
+            margin-bottom: 10px;
+        }
     }
 }
 

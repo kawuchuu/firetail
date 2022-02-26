@@ -94,7 +94,8 @@ const state = () => ({
     checkNav: {
         back: false,
         forward: false
-    }
+    },
+    advancedFileInfo: window.localStorage.getItem('advancedFileInfo') === 'true'
 })
 
 const mutations = {
@@ -168,6 +169,9 @@ const mutations = {
     },
     updateCheckNav(state, nav) {
         state.checkNav = nav
+    },
+    updateAdvancedFileInfo(state, enabled) {
+        state.advancedFileInfo = enabled
     }
 }
 

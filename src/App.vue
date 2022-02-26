@@ -356,7 +356,7 @@ html.light {
 
 html.firetail {
     --hl-txt: #eb6e64;
-    --hl-op: #eb6e641a;
+    --hl-op: #eb6e642a;
     --gradient1: #e74e8e;
     --gradient2: #ef9135;
 }

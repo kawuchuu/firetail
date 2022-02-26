@@ -108,6 +108,21 @@ export default {
                 },
                 {
                     type: 'subtitle',
+                    id: 'subtitleAdvanced',
+                    label: 'Advanced'
+                },
+                {
+                    type: 'switch',
+                    id: 'advancedInfoSwitch',
+                    label: 'Show file codec information',
+                    enabled: window.localStorage.getItem('advancedFileInfo') === 'true',
+                    onClick(vue, enabled) {
+                        window.localStorage.setItem('advancedFileInfo', enabled)
+                        vue.$store.commit('nav/updateAdvancedFileInfo', enabled)
+                    }
+                },
+                {
+                    type: 'subtitle',
                     id: 'subtitleAbout',
                     label: 'About'
                 },

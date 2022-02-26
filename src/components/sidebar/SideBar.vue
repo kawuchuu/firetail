@@ -47,7 +47,6 @@ export default {
     height: calc(100vh - 86px);
     background: #000;
     z-index: 2;
-    color: white;
 }
 
 .side-bar.macos {
@@ -98,7 +97,6 @@ export default {
     cursor: pointer;
     opacity: 0.75;
     border-radius: 5px;
-    color: white;
 }
 
 .router-link-active .item-sidebar {
@@ -138,7 +136,7 @@ export default {
 }
 
 .item-sidebar i {
-    margin: 0 16px;
+    margin: 0 12px;
     pointer-events: none;
     font-size: 24px;
 }
@@ -149,7 +147,6 @@ export default {
 
 .item-sidebar span {
     font-size: 15px;
-    transform: translateY(1px);
 }
 
 .list-subtitle {
@@ -235,20 +232,22 @@ export default {
 
 .special-button span {
     font-size: 15px;
-    transform: translateY(1px);
 }
 
 .special-button i {
-    margin: 0 16px;
+    margin: 0 12px 0 16px;
     pointer-events: none;
     font-size: 20px;
-    border: white 2px solid;
+    border: var(--text) 2px solid;
     border-radius: 3px;
 }
 
 :root.light {
     .app-info {
         background: linear-gradient(#dfdfdf, #dfdfdf, #dfdfdf, transparent);
+    }
+    .router-link-active .item-sidebar {
+        background: #baa9ff
     }
     .side-bar .side-bar-inner-container::-webkit-scrollbar {
         background: #dfdfdf !important;

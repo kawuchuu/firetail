@@ -4,6 +4,12 @@
         <p>{{item.label}}</p>
         <div @click="item.action($root)" class="button">{{item.btnLabel}}</div>
     </div>
+    <div v-else-if="item.type == 'switch'" class="switch-option">
+        <p>{{item.label}}</p>
+        <div class="switch" :class="switchEnabled" @click="switchOnClick">
+            <div class="circle-inner" />
+        </div>
+    </div>
     <p v-else-if="item.type == 'text'" class="text">{{item.message}}</p>
     <About v-else-if="item.type == 'about'"/>
 </template>
@@ -25,6 +31,10 @@ export default {
                     this.item.label = itemLabel.baseString.replace('$$FTINSERT$$', details.name)
                 }
             }
+        },
+        switchOnClick() {
+            this.item.enabled = !this.item.enabled
+            this.item.onClick(this.$root, this.item.enabled)
         }
     },
     computed: {
@@ -41,6 +51,11 @@ export default {
             const getModState = this.item.conditions.watch.item.split('/')
             const getStoreItem = this.$store.state[getModState[0]][getModState[1]]
             return getStoreItem
+        },
+        switchEnabled() {
+            if (this.item.enabled) {
+                return 'enabled'
+            } else return ''
         }
     },
     watch: {
@@ -69,7 +84,7 @@ export default {
     letter-spacing: -0.02em;
 }
 
-.button-option {
+.button-option, .switch-option {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -100,6 +115,51 @@ export default {
     .button:active {
         background-color: var(--hl-op);
         opacity: 0.5;
+    }
+
+    .switch {
+        width: 45px;
+        height: 14px;
+        background-color: #3d3d3d;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        transition-duration: 0.15s;
+        transition-property: background-color;
+        margin: 20px;
+        cursor: pointer;
+
+        .circle-inner {
+            width: 24px;
+            height: 24px;
+            border-radius: 50px;
+            transition-duration: 0.15s;
+            transition-property: transform, background-color, width;
+            transform: translateX(0px);
+            background-color: var(--text);
+            box-shadow: 0px 1px 5px rgba(0,0,0,.25);
+        }
+    }
+
+    .switch:active {
+        .circle-inner {
+            width: 30px;
+        }
+    }
+
+    .switch.enabled {
+        background-color: var(--hl-op);
+
+        .circle-inner {
+            background-color: var(--hl-txt);
+            transform: translateX(21px);
+        }
+    }
+
+    .switch.enabled:active {
+        .circle-inner {
+            transform: translateX(15px);
+        }
     }
 }
 

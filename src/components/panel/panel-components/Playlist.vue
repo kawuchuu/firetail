@@ -193,6 +193,10 @@ export default {
     }
 }
 
+:root.light .label-wrapper {
+    background: #ffffff7a;
+}
+
 .pl-img:hover {
     .label-wrapper {
         opacity: 1;

@@ -61,6 +61,10 @@ export default {
     transition-property: transform text-shadow;
 }
 
+:root.light .button.primary {
+    color: white;
+}
+
 .button.primary:hover {
     transform: scale(1.08);
     box-shadow: 0px 2px 10px rgba(0,0,0,.5);

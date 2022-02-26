@@ -187,5 +187,17 @@ export default {
             files.savePlaylistImage(imageInfo.buffer, imageInfo.id)
             return
         })
+
+        ipcMain.handle('getAdvancedFileInfo', async (event, path) => {
+            const { format } = await require('music-metadata').parseFile(path)
+            return {
+                container: format.container,
+                codec: format.codec,
+                bitrate: format.bitrate,
+                sampleRate: format.sampleRate,
+                bitDepth: format.bitsPerSample,
+                noChannels: format.numberOfChannels
+            }
+        })
     }
 }

@@ -4,7 +4,7 @@
             <div class="control-buttons">
                 <i class="ft-icon repeat-shuffle" title="Shuffle" @click="shuffle" :class="isShuffled">shuffle</i>
                 <i class="ft-icon skip-prev" title="Previous" @click="prev">previous</i>
-                <i class="ft-icon play-pause-icon" title="Play/pause" @click="playPause">{{playPauseIcon}}</i>
+                <div class="play-pause-icon" title="Play/pause" @click="playPause"><i class="ft-icon">{{playPauseIcon}}</i></div>
                 <i class="ft-icon skip-prev" title="Next" @click="next">next-</i>
                 <i class="ft-icon repeat-shuffle" title="Repeat" @click="repeat" :class="isRepeat">{{repeatIcon}}</i>
             </div>
@@ -407,10 +407,26 @@ export default {
     color: black;
     border-radius: 100px;
     padding: 2px;
+    margin: 5px 7px;
+    width: 33px;
+    height: 33px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control-buttons .play-pause-icon i {
+    margin: 0px;
+    padding: 0px;
+    font-size: 28px;
+}
+
+.control-buttons .play-pause-icon i:hover {
+    opacity: 1;
 }
 
 :root.light .control-buttons .play-pause-icon {
-    background: black;
+    background: var(--text);
     color: white;
 }
 
