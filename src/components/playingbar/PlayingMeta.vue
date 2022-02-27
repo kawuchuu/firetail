@@ -88,8 +88,10 @@ export default {
         hoverShow() {
             let song = this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex]
             if (!song) return ''
-            if (song.hasImage == 0) return ''
-            if (this.showLargeImage) {
+            console
+            if (song.hasImage == 0 && this.showLargeImage && this.$store.state.nav.advancedFileInfo) {
+                return 'hover-noimg'
+            } else if (this.showLargeImage && song.hasImage == 1) {
                 return 'hover'
             } else {
                 return ''
@@ -284,10 +286,14 @@ export default {
 
     .advanced-info {
         width: 250px;
-        height: 100%;
+        height: calc(300px - 30px);
+        border-radius: 5px;
         display: flex;
         flex-direction: column;
         padding: 15px 20px;
+        background-color: black;
+        position: relative;
+        z-index: 2;
 
         h3 {
             margin-top: 5px;
@@ -316,5 +322,13 @@ export default {
 
 .large-album-art.hover {
     opacity: 1;
+}
+
+.large-album-art.hover-noimg {
+    opacity: 1;
+
+    .inner {
+        display: none;
+    }
 }
 </style>
