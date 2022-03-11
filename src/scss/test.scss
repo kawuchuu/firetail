@@ -1,7 +1,7 @@
 html.dark {
     --bg: #18171c !important;
     --fg-bg: #2b2838 !important;
-    --sub-fg: #232029;
+    --sub-fg: #232029 !important;
 }
 
 #app.test {
@@ -55,8 +55,8 @@ html.dark {
 }
 
 html.light {
-    --sub-fg: #DEDBE4;
-    --fg-bg: #D7D2E8;
+    --sub-fg: #DEDBE4 !important;
+    --fg-bg: #D7D2E8 !important;
 }
 
 :root.light #app.test {

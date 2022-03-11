@@ -150,11 +150,17 @@ export default {
         } else {
             window.localStorage.setItem('sidebarwidth', 225)
         }
-        if (window.matchMedia("(prefers-color-scheme: light").matches) {
+        const theme = window.localStorage.getItem('theme')
+        if (!theme) window.localStorage.setItem('theme', 'system')
+        if (theme === 'light') {
+            document.documentElement.classList.remove('dark')
+            document.documentElement.classList.add('light')
+        } else if (theme !== 'dark' && window.matchMedia("(prefers-color-scheme: light").matches) {
             document.documentElement.classList.remove('dark')
             document.documentElement.classList.add('light')
         }
         window.matchMedia("(prefers-color-scheme: light)").onchange = e => {
+            if (window.localStorage.getItem('theme') !== 'system') return
             if (e.matches) {
                 document.documentElement.classList.remove('dark')
                 document.documentElement.classList.add('light')

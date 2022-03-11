@@ -64,8 +64,10 @@
                         @selected="select"
                     />
                 </div>
-                <div v-if="list.length < 1">
-                    <SongLoadItem v-for="index in 50" :key="index" />
+                <div class="fixed-songload" v-if="list.length < 1">
+                    <div class="inner-songload">
+                        <SongLoadItem v-for="index in 30" :key="index" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -608,6 +610,16 @@ div.section {
             font-size: 24px;
             letter-spacing: -1px;
         }
+    }
+}
+
+.fixed-songload {
+    width: 100%;
+    height: calc(100vh - 400px);
+    overflow: hidden;
+
+    .inner-songload {
+        width: 100%;
     }
 }
 

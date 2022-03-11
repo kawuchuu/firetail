@@ -1,66 +1,94 @@
 <template>
-    <div v-if="item.type == 'subtitle'" class="subtitle">{{item.label}}</div>
-    <div v-else-if="item.type == 'button'" v-show="hideCheck" class="button-option">
-        <p>{{item.label}}</p>
-        <div @click="item.action($root)" class="button">{{item.btnLabel}}</div>
+    <div v-if="option.type == 'subtitle'" class="subtitle">{{option.label}}</div>
+    <div v-else-if="option.type == 'button'" v-show="hideCheck" class="button-option">
+        <p>{{option.label}}</p>
+        <div @click="option.action($root)" class="button">{{option.btnLabel}}</div>
     </div>
-    <div v-else-if="item.type == 'switch'" class="switch-option">
-        <p>{{item.label}}</p>
+    <div v-else-if="option.type == 'switch'" class="switch-option">
+        <p>{{option.label}}</p>
         <div class="switch" :class="switchEnabled" @click="switchOnClick">
             <div class="circle-inner" />
         </div>
     </div>
-    <p v-else-if="item.type == 'text'" class="text">{{item.message}}</p>
-    <About v-else-if="item.type == 'about'"/>
+    <div v-else-if="option.type == 'dropdown'" class="dropdown-option">
+        <p>{{option.label}}</p>
+        <div class="dropdown" @click="dropdownClick" :class="showOptions">
+            <div class="default-option">
+                <span>{{option.option}}</span>
+                <i class="ft-icon">arrow-head-down</i>
+            </div>
+            <div class="options">
+                <option v-for="item in option.options" :key="item" @click="optionClick(item)">{{ item }}</option>
+            </div>
+        </div>
+    </div>
+    <p v-else-if="option.type == 'text'" class="text">{{option.message}}</p>
+    <About v-else-if="option.type == 'about'"/>
 </template>
 
 <script>
 import About from './About'
 
 export default {
-    props: ['item'],
+    props: ['option'],
     components: {
         About
     },
+    data() {
+        return {
+            dropdownEnabled: false
+        }
+    },
     methods: {
         updateLabel() {
-            if (this.item.conditions && this.item.conditions.label) {
-                const itemLabel = this.item.conditions.label
-                if (itemLabel.type == 'store') {
-                    const details = this.$store.state[itemLabel.module][itemLabel.state]
-                    this.item.label = itemLabel.baseString.replace('$$FTINSERT$$', details.name)
+            if (this.option.conditions && this.option.conditions.label) {
+                const optionLabel = this.option.conditions.label
+                if (optionLabel.type == 'store') {
+                    const details = this.$store.state[optionLabel.module][optionLabel.state]
+                    this.option.label = optionLabel.baseString.replace('$$FTINSERT$$', details.name)
                 }
             }
         },
         switchOnClick() {
-            this.item.enabled = !this.item.enabled
-            this.item.onClick(this.$root, this.item.enabled)
+            this.option.enabled = !this.option.enabled
+            this.option.onClick(this.$root, this.option.enabled)
+        },
+        dropdownClick() {
+            this.dropdownEnabled = !this.dropdownEnabled
+        },
+        optionClick(item) {
+            this.option.option = item
+            this.option.onChange(this.$root, item)
         }
     },
     computed: {
         hideCheck() {
-            if (this.item.conditions && this.item.conditions.show && this.item.conditions.show.type == 'store') {
-                const checkItem = this.$store.state[this.item.conditions.show.module][this.item.conditions.show.state]
-                return checkItem == this.item.conditions.show.onlyShow
+            if (this.option.conditions && this.option.conditions.show && this.option.conditions.show.type == 'store') {
+                const checkoption = this.$store.state[this.option.conditions.show.module][this.option.conditions.show.state]
+                return checkoption == this.option.conditions.show.onlyShow
             } else {
                 return true
             }
         },
         prepWatch() {
-            if (!this.item.conditions || !this.item.conditions.watch) return
-            const getModState = this.item.conditions.watch.item.split('/')
-            const getStoreItem = this.$store.state[getModState[0]][getModState[1]]
-            return getStoreItem
+            if (!this.option.conditions || !this.option.conditions.watch) return
+            const getModState = this.option.conditions.watch.option.split('/')
+            const getStoreoption = this.$store.state[getModState[0]][getModState[1]]
+            return getStoreoption
         },
         switchEnabled() {
-            if (this.item.enabled) {
+            if (this.option.enabled) {
                 return 'enabled'
             } else return ''
+        },
+        showOptions() {
+            if (this.dropdownEnabled) return 'active'
+            else return ''
         }
     },
     watch: {
         prepWatch() {
-            switch(this.item.conditions.watch.for) {
+            switch(this.option.conditions.watch.for) {
                 case "label": {
                     this.updateLabel()
                     break;
@@ -84,7 +112,7 @@ export default {
     letter-spacing: -0.02em;
 }
 
-.button-option, .switch-option {
+.button-option, .switch-option, .dropdown-option {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -159,6 +187,53 @@ export default {
     .switch.enabled:active {
         .circle-inner {
             transform: translateX(15px);
+        }
+    }
+
+    .dropdown {
+        width: 150px;
+        background: var(--fg-bg);
+        border-radius: 10px;
+        position: relative;
+        z-index: 2;
+        cursor: pointer;
+
+        .default-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            i {
+                font-size: 1.2em;
+            }
+        }
+
+        option, .default-option {
+            padding: 10px 15px;
+            text-transform: capitalize;
+        }
+
+        .options {
+            display: none;
+            position: absolute;
+            background: var(--fg-bg);
+            width: 150px;
+            border-radius: 0px 0px 10px 10px;
+            z-index: 1;
+            
+            option {
+                opacity: 0.75;
+            }
+        }
+    }
+
+    .dropdown.active {
+        border-radius: 10px 10px 0px 0px;
+        box-shadow: 0px 4px 4px rgba(0,0,0,.2);
+
+        .options {
+            display: block;
+            box-shadow: 0px 4px 4px rgba(0,0,0,.2);
         }
     }
 }

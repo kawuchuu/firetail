@@ -5,7 +5,7 @@
                 <h1>Settings</h1>
             </div>
             <div class="option-wrapper">
-                <Option class="option" v-for="item in options" :item="item" :key="item.id" :class="item.customClass"/>
+                <Option class="option" v-for="item in options" :option="item" :key="item.id" :class="item.customClass"/>
             </div>
         </main>
     </div>
@@ -35,16 +35,58 @@ export default {
                         vue.$store.commit('panel/showNewPrompt', {title: 'Clear Library', message: "Are you sure you want to clear your current library? Your music files will not be deleted.", buttons: 'clearLibrary'})
                     }
                 },
-                /* {
+                {
                     type: 'subtitle',
                     id: 'subtitleAppearance',
                     label: 'Appearance'
                 },
-                {
-                    type: 'text',
-                    id: 'yo',
-                    message: 'Themes and stuff goes here'
+                /* {
+                    type: 'switch',
+                    id: 'systemThemeToggle',
+                    label: 'Use system theme with Firetail',
+                    enabled: window.localStorage.getItem('theme') === 'system',
+                    onClick(vue, enabled) {
+                        window.localStorage.setItem('theme', enabled ? 'system' : 'dark')
+                    }
                 }, */
+                {
+                    type: 'dropdown',
+                    id: 'themeDropdown',
+                    label: 'App theme',
+                    options: ['System', 'Dark', 'Light'],
+                    option: window.localStorage.getItem('theme'),
+                    onChange(vue, option) {
+                        window.localStorage.setItem('theme', option.toLowerCase())
+                        switch(option) {
+                            case 'Light':
+                                document.documentElement.classList.remove('dark')
+                                document.documentElement.classList.add('light')
+                                break
+                            case 'Dark':
+                                document.documentElement.classList.remove('light')
+                                document.documentElement.classList.add('dark')
+                                break
+                            case 'System':
+                                if (window.matchMedia("(prefers-color-scheme: light").matches) {
+                                    document.documentElement.classList.remove('dark')
+                                    document.documentElement.classList.add('light')
+                                } else {
+                                    document.documentElement.classList.remove('light')
+                                    document.documentElement.classList.add('dark')
+                                }
+                                break
+                            default:
+                                window.localStorage.setItem('theme', 'system')
+                                if (window.matchMedia("(prefers-color-scheme: light").matches) {
+                                    document.documentElement.classList.remove('dark')
+                                    document.documentElement.classList.add('light')
+                                } else {
+                                    document.documentElement.classList.remove('light')
+                                    document.documentElement.classList.add('dark')
+                                }
+                        }
+                    }
+                },
                 {
                     type: 'subtitle',
                     id: 'subtitleSpotify',
