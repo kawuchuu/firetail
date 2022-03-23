@@ -15,7 +15,7 @@
         <div class="dropdown" @click="dropdownClick" :class="showOptions">
             <div class="default-option">
                 <span>{{option.option}}</span>
-                <i class="ft-icon">arrow-head-down</i>
+                <i class="ft-icon">{{dropdownEnabled ? 'arrow-head-up' : 'arrow-head-down'}}</i>
             </div>
             <div class="options">
                 <option v-for="item in option.options" :key="item" @click="optionClick(item)">{{ item }}</option>
@@ -155,6 +155,7 @@ export default {
         transition-duration: 0.15s;
         transition-property: background-color;
         margin: 20px;
+        margin-right: 0px;
         cursor: pointer;
 
         .circle-inner {
@@ -222,7 +223,11 @@ export default {
             z-index: 1;
             
             option {
-                opacity: 0.75;
+                opacity: 0.65;
+            }
+
+            option:hover {
+                opacity: 1;
             }
         }
     }

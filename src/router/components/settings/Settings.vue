@@ -87,6 +87,15 @@ export default {
                         }
                     }
                 },
+                /* {
+                    type: 'switch',
+                    id: 'highContrastSwitch',
+                    label: 'Use high contrast style',
+                    enabled: false,
+                    onClick() {
+                        console.log("LMAO")
+                    }
+                }, */
                 {
                     type: 'subtitle',
                     id: 'subtitleSpotify',

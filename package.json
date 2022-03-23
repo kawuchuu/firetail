@@ -18,7 +18,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "better-sqlite3": "^7.4.2",
-    "core-js": "^3.14.0",
+    "core-js": "^3.21.1",
     "cors": "^2.8.5",
     "electron-updater": "^4.3.9",
     "mime-types": "^2.1.31",
@@ -34,9 +34,9 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@vue/cli-plugin-babel": "^4.5.16",
+    "@vue/cli-plugin-eslint": "^4.5.16",
+    "@vue/cli-service": "^4.5.16",
     "babel-eslint": "^10.1.0",
     "electron": "^16.0.0",
     "electron-devtools-installer": "^3.2.0",

@@ -406,7 +406,7 @@ export default {
     background: white;
     color: black;
     border-radius: 100px;
-    padding: 2px;
+    padding: 1px;
     margin: 5px 7px;
     width: 33px;
     height: 33px;
