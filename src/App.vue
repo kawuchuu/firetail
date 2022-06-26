@@ -142,9 +142,6 @@ export default {
     },
     async mounted() {
         require('./scss/test.scss')
-        if (window.localStorage.getItem('lastPlayed')) {
-            this.$store.dispatch('audio/resumeState')
-        }
         if (window.localStorage.getItem('sidebarwidth')) {
             this.sidebarwidth = window.localStorage.getItem('sidebarwidth')
         } else {
@@ -197,6 +194,9 @@ export default {
             this.sidebarisResizing = false
             window.localStorage.setItem('sidebarwidth', this.sidebarwidth)
         })
+        if (window.localStorage.getItem('lastPlayed')) {
+            this.$store.dispatch('audio/resumeState')
+        }
     }
 }
 </script>

@@ -1,6 +1,6 @@
 {
   "name": "Firetail",
-  "version": "0.8.0-alpha",
+  "version": "1.0.0-beta",
   "description": "Audio Player",
   "author": {
     "name": "kawuchuu",
@@ -17,10 +17,11 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "better-sqlite3": "^7.4.2",
+    "better-sqlite3": "^7.5.3",
     "core-js": "^3.21.1",
     "cors": "^2.8.5",
     "electron-updater": "^4.3.9",
+    "is-port-reachable": "^4.0.0",
     "mime-types": "^2.1.31",
     "music-metadata": "^7.8.6",
     "node-vibrant": "^3.1.6",
@@ -38,7 +39,7 @@
     "@vue/cli-plugin-eslint": "^4.5.16",
     "@vue/cli-service": "^4.5.16",
     "babel-eslint": "^10.1.0",
-    "electron": "^16.0.6",
+    "electron": "^19",
     "electron-devtools-installer": "^3.2.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
@@ -71,7 +72,7 @@
     "url": "https://github.com/kawuchuu/firetail/"
   },
   "resolutions": {
-    "node-abi": "3.8.0",
-    "electron-builder": "23.0.0"
+    "node-abi": "3.22.0",
+    "electron-builder": "23.2.0"
   }
 }

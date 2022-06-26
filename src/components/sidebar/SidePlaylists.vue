@@ -49,12 +49,13 @@ export default {
         },
         async openEditDialog() {
             const fullPlaylist = await ipcRenderer.invoke('getSpecificPlaylist', this.playlist.id)
-            this.$store.commit('panel/updatePanelProps', {
-                topMsg: 'Edit Playlist',
-                playlist: fullPlaylist[0]
+            this.$store.commit('panel/invokeNewPanel', {
+                component: 'Playlist',
+                newProps: {
+                    topMsg: 'Edit Playlist',
+                    playlist: fullPlaylist[0]
+                }
             })
-            this.$store.commit('panel/updatePanelComponent', 'Playlist')
-            this.$store.commit('panel/updateActive', true)
         },
         handleDragOver(evt) {
             evt.preventDefault()

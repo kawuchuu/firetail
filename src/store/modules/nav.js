@@ -60,11 +60,12 @@ const state = () => ({
         icon: 'add',
         type: 'special_button',
         action() {
-            store.commit('panel/updatePanelProps', {
-                topMsg: 'Create Playlist'
+            store.commit('panel/invokeNewPanel', {
+                component: 'Playlist',
+                newProps: {
+                    topMsg: 'Create Playlist'
+                }
             })
-            store.commit('panel/updatePanelComponent', 'Playlist')
-            store.commit('panel/updateActive', true)
         }
     }
     ],

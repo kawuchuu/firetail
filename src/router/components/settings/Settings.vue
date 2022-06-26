@@ -91,9 +91,9 @@ export default {
                     type: 'switch',
                     id: 'highContrastSwitch',
                     label: 'Use high contrast style',
-                    enabled: false,
-                    onClick() {
-                        console.log("LMAO")
+                    enabled: window.localStorage.getItem('highContrast'),
+                    onClick(vue, enabled) {
+                        window.localStorage.setItem('highContrast', enabled)
                     }
                 }, */
                 {

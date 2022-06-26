@@ -200,6 +200,65 @@ const macMenu = [
 const menu = Menu.buildFromTemplate(macMenu)
 Menu.setApplicationMenu(menu)
 
+const openSong = filePath => {
+    let lastElement = filePath
+    if (process.argv.length >= 1  && lastElement != "dist_electron" && existsSync(lastElement)) {
+        musicMetadata.parseFile(lastElement).then(meta => {
+            let fileName = path.parse(lastElement).name
+            let info = {
+                title: meta.common.title ? meta.common.title : fileName,
+                artist: meta.common.artist ? meta.common.artist : "Unknown Artist",
+                album: meta.common.album ? meta.common.album : "Unknown Album",
+                path: lastElement,
+                hasImage: 0,
+                id: 'customSong',
+            }
+            if (meta.common.picture) {
+                info['customImage'] = `data:image/jpeg;base64,${meta.common.picture[0].data.toString('base64')}`
+                info.hasImage = 1
+            }
+            win.webContents.send('playCustomSong', info)
+        })
+    }
+}
+
+let launchSong = null
+
+if (process.platform == 'darwin') {
+    app.on('open-file', (event, path) => {
+        if (win) {
+            openSong(path)
+            if (win.isMinimized()) win.restore()
+            win.focus()
+        } else {
+            launchSong = path
+        }
+    })
+}
+
+//lock app
+if (app.isPackaged || app.commandLine.hasSwitch('enable-instance-lock')) {
+    const getLock = app.requestSingleInstanceLock()
+    if (!getLock) {
+        app.quit()
+    } else {
+        server.startServer(app.getPath('userData'), win)
+        if (process.platform == 'win32') {
+            app.on('second-instance', (event, args) => {
+                if (win) {
+                    openSong(args[args.length - 1])
+                    if (win.isMinimized()) win.restore()
+                    win.focus()
+                } else {
+                    launchSong = args[args.length - 1]
+                }
+            })
+        }
+    }
+} else {
+    console.log('App is not packaged... skipping second instance lock')
+}
+
 app.commandLine.appendSwitch("enable-transparent-visuals");
 async function createWindow() {
     // Create the browser window.
@@ -225,45 +284,6 @@ async function createWindow() {
         }
     }
     win = new BrowserWindow(winConfig)
-    let openSong = filePath => {
-        let lastElement = filePath
-        if (process.argv.length >= 1  && lastElement != "dist_electron" && existsSync(lastElement)) {
-            musicMetadata.parseFile(lastElement).then(meta => {
-                let fileName = path.parse(lastElement).name
-                let info = {
-                    title: meta.common.title ? meta.common.title : fileName,
-                    artist: meta.common.artist ? meta.common.artist : "Unknown Artist",
-                    album: meta.common.album ? meta.common.album : "Unknown Album",
-                    path: lastElement,
-                    hasImage: 0,
-                    id: 'customSong',
-                }
-                if (meta.common.picture) {
-                    info['customImage'] = `data:image/jpeg;base64,${meta.common.picture[0].data.toString('base64')}`
-                    info.hasImage = 1
-                }
-                win.webContents.send('playCustomSong', info)
-            })
-        }
-    }
-    //lock app
-    if (app.isPackaged || app.commandLine.hasSwitch('enable-instance-lock')) {
-        const getLock = app.requestSingleInstanceLock()
-        if (!getLock) {
-            app.quit()
-        } else {
-            server.startServer(app.getPath('userData'), win)
-            app.on('second-instance', (event, args) => {
-                if (win) {
-                    openSong(args[args.length - 1])
-                    if (win.isMinimized()) win.restore()
-                    win.focus()
-                }
-            })
-        }
-    } else {
-        console.log('App is not packaged... skipping second instance lock')
-    }
     if (isDevelopment) {
         if (!app.commandLine.hasSwitch('enable-instance-lock')) {
             server.startServer(app.getPath('userData'), win)
@@ -284,8 +304,11 @@ async function createWindow() {
                 win.webContents.send('enableCDBurn')
             })
         }
+        if (launchSong) {
+            openSong(launchSong)
+        }
         win.show()
-        openSong(process.argv[process.argv.length - 1])
+        //openSong(process.argv[process.argv.length - 1])
     })
     win.on('enter-full-screen', () => {
         if (process.platform === 'darwin') return

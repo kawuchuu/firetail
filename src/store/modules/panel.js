@@ -4,16 +4,9 @@ import store from ".."
 const state = () => ({
     currentPanelComponent: 'None',
     currentPanelProps: {
-        topMsg: 'Welcome to Firetail',
-        msg: "Thank you for trying out Firetail. This is an example prompt, showing how panels will work in the future! This prompt is temporary and will be removed very soon.",
-        buttons: [
-            {
-                label: 'Dismiss',
-                onClick() {
-                    store.commit('panel/updateActive', false)
-                }
-            }
-        ]
+        topMsg: '',
+        msg: "",
+        buttons: []
     },
     active: false,
     closing: false,
@@ -32,7 +25,7 @@ const mutations = {
                 setTimeout(() => {
                     state.closing = false
                     state.currentPanelComponent = 'None'
-                    store.commit('panel/updatePanelProps', {topMsg: 'Panel Title'})
+                    this.commit('panel/updatePanelProps', {})
                 }, 300)
             }
         } else {
@@ -44,6 +37,11 @@ const mutations = {
     },
     updatePreventLoad(state, name) {
         state.preventLoad.push(name)
+    },
+    invokeNewPanel(state, props) {
+        state.currentPanelProps = props.newProps
+        state.currentPanelComponent = props.component
+        this.commit('panel/updateActive', true)
     },
     showNewPrompt(state, content) {
         let newProps = {

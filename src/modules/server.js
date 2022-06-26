@@ -2,10 +2,13 @@ import express from 'express'
 import { constants, mkdirSync, access } from 'fs'
 import cors from 'cors'
 import { resolve } from 'path'
+import {createServer} from 'net'
+//import isPortReachable from 'is-port-reachable'
+import { dialog } from 'electron'
 
-let app = express()
+const app = express()
 
-let startServer = async (appLoc, win) => {
+const startServer = async (appLoc, win) => {
     access(`${appLoc}/images/`, constants.F_OK | constants.W_OK, (err) => {
         if (err) mkdirSync(`${appLoc}/images/`)
     })
@@ -24,11 +27,27 @@ let startServer = async (appLoc, win) => {
         res.header("Access-Control-Allow-Headers", "X-Requested-With");
         next();
     });
-    app.set('port', 56741)
-    app.listen(app.get('port'), 'localhost', err => {
-        if (err) return console.log(err)
-        console.log('Server now running...')
-    })
+    for (let testPort = 56741; testPort < 56752; testPort++) {
+        try {
+            await new Promise((res, rej) => {
+                app.listen(testPort, 'localhost', () => {
+                    // dialog.showErrorBox("port", testPort);
+                    app.set('port', testPort)
+                    console.log('Server now running...')
+                    res();
+                }).on('error', err => {
+                    rej(err);
+                });
+            });
+            break;
+        } catch {
+            if (testPort >= 56751) {
+                const msg = "ERROR: Unable to establish a server port. Please close any applications using the following range: 56741-56751."
+                dialog.showErrorBox("Failed to establish a server port", msg)
+            }
+        }
+    }
+    
     app.get('/', (req, res) => {
         res.send('stop peeking!')
     })

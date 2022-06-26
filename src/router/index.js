@@ -86,6 +86,7 @@ ipcRenderer.on('updateNav', (event, checkNav) => {
 })
 
 router.beforeEach(async (to, from, next) => {
+    window.scrollTo(0, 0)
     store.commit('audio/updateCurrentList', [])
     if (to.query.column && to.query.q) {
         store.dispatch('audio/getSpecificSongs', {

@@ -38,9 +38,3 @@ Build artifacts:
 ```
 yarn electron:build
 ```
-
-## Contributions
-
-Firetail is mostly closed from contributions as this is primarily a portfolio project, however I am open to *some*, such as bug fixes.
-
-Please read [CONTRIBUTING.md](https://github.com/kawuchuu/firetail/blob/next/CONTRIBUTING.md) for more details. (This file doesn't exist yet)

@@ -267,6 +267,7 @@ const actions = {
         ipcRenderer.send('getSomeFromColumn', [args.column, args.q])
     },
     resumeState(context) {
+        if (context.state.queue[0] && context.state.queue[0].id == 'customSong') return
         const lastPlayedInfo = JSON.parse(window.localStorage.getItem('lastPlayed'))
         context.state.queue = JSON.parse(window.localStorage.getItem('currentQueue'))
         store.commit('nav/updatePlayingView', lastPlayedInfo.view)

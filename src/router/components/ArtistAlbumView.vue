@@ -44,15 +44,19 @@ export default {
     },
     data() {
         return {
-            lItem: ListItem
+            lItem: ListItem,
         }
     },
     computed: {
         albumItems() {
+            const artistInner = document.querySelector('.artist-inner')
+            if (artistInner) artistInner.scrollTo({ top: 0 })
             if (this.$route.path === '/albums') return this.$store.state.nav.albums
             else return []
         },
         artistItems() {
+            const artistInner = document.querySelector('.artist-inner')
+            if (artistInner) artistInner.scrollTo({ top: 0 })
             if (this.$route.path === '/artists') return this.$store.state.nav.artists
             else return []
         },
@@ -214,6 +218,10 @@ export default {
 
         .list-fade {
             width: 270px;
+        }
+
+        .albums-item {
+            width: calc(100% - 15px);
         }
 
         .albums-item a span {

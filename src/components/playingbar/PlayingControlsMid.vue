@@ -400,16 +400,16 @@ export default {
 }
 
 .control-buttons .play-pause-icon {
-    font-size: 31px;
+    font-size: 30px;
     transition: 0.08s;
     transition-property: transform, text-shadow;
     background: white;
     color: black;
     border-radius: 100px;
-    padding: 1px;
-    margin: 5px 7px;
-    width: 33px;
-    height: 33px;
+    padding: 2px;
+    margin: 6px 8px;
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
