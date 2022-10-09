@@ -1,13 +1,12 @@
 <template>
     <div class="side-bar" :class="platformType">
         <div class="side-bar-inner-container">
-            <div class="nav-buttons">
-                <div class="app-info" :class="platformType">
+            <div class="nav-buttons" :class="platformType">
+                <div class="app-info">
                     <div class="firetail-icon"/>
                     <div class="app-name">{{ $t('appName') }}</div>
                     <div class="beta-tag">Beta</div>
                 </div>
-                <div class="spacer" :class="platformType" />
                 <SideButtons v-for="item in getNavs" v-bind:button="item" v-bind:key="item.id"></SideButtons>
                 <SidePlaylists v-for="item in playlists" :playlist="item" :key="item.id" />
             </div>
@@ -31,7 +30,9 @@ export default {
         }),
         ...mapState('playlist', {
             playlists: state => state.playlists
-        }),
+        })
+    },
+    methods: {
         platformType() {
             if (process.platform === 'darwin') {
                 return 'macos'
@@ -80,7 +81,7 @@ export default {
 }
 
 .nav-buttons {
-    padding: 0px 0px 12px 12px;
+    padding: 12px 0px 12px 12px;
 }
 
 .side-bar button {
@@ -171,7 +172,7 @@ export default {
 }
 
 .app-info {
-    display: flex;
+    display: none;
     align-items: center;
     padding: 15px;
     background: linear-gradient(black, black, black, transparent);
@@ -182,14 +183,6 @@ export default {
 
 .app-info.macos {
     padding-top: 40px;
-}
-
-.spacer {
-    margin-top: 65px;
-}
-
-.spacer.macos {
-    margin-top: 90px;
 }
 
 .app-name {

@@ -2,14 +2,12 @@
     <div class="artists">
         <div class="albums-container">
             <section class="artists-list">
-                <div class="list-fade" />
                 <virtual-list class="artist-inner" v-if="$route.path === '/albums'"
                     :data-key="'album'"
                     :data-sources="albumItems"
                     :dataComponent="lItem"
                 />
                 <!-- <ListItem v-for="item in albumItems" :source="item" :key="item.id"/> -->
-                <div class="list-fade" />
                 <virtual-list class="artist-inner" v-if="$route.path === '/artists'"
                     :data-key="'artist'"
                     :data-sources="artistItems"
@@ -90,11 +88,11 @@ export default {
     z-index: 4;
     height: calc(100% - 160px);
     padding: 15px;
-    padding-top: 60px;
     background: var(--bg);
     border-right: solid #5f587c 1px;
     position: fixed;
-    top: 0;
+    top: 50px;
+    border-radius: var(--main-border-radius);
 }
 
 .artist-inner::-webkit-scrollbar {

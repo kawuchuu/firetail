@@ -27,7 +27,6 @@
                     <router-view/>
                 </main>
             </div>
-            <div class="bg-cover" />
         </div>
         <PlayingBar/>
     </div>
@@ -263,7 +262,9 @@ export default {
     position: fixed;
     height: calc(100% - 135px);
     width: calc(100% - var(--sidebar-width));
-    padding-top: 50px;
+    margin-top: 50px;
+    background: var(--bg);
+    border-radius: var(--main-border-radius);
 }
 
 #app {
@@ -273,7 +274,7 @@ export default {
 body {
     margin: 0;
     color: var(--text);
-    background: transparent;
+    background: var(--back-bg);
     font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Overpass', 'Dosis', Arial, Helvetica, sans-serif !important;
     user-select: none;
     -webkit-user-select: none;
@@ -320,7 +321,12 @@ a {
     position: fixed;
 }
 
+:root {
+    --main-border-radius: 10px 0px 0px 0px;
+}
+
 html.dark {
+    --back-bg: #000000;
     --bg: #131313;
     --bg-op: #181818ad;
     --text: #ffffff;
@@ -392,20 +398,12 @@ html.light.firetail {
     max-width: 280px;
     pointer-events: none;
     left: 280px;
+    top: 50px;
 
     p {
         margin: 0;
         font-size: 14px;
         line-height: 1.5em;
     }
-}
-
-.bg-cover {
-    background: var(--bg);
-    width: calc(100% - var(--sidebar-width));
-    margin-left: var(--sidebar-width);
-    height: 100%;
-    position: fixed;
-    z-index: -1;
 }
 </style>

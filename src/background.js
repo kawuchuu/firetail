@@ -272,7 +272,7 @@ async function createWindow() {
         titleBarStyle: osType === 'darwin' ? 'hiddenInset' : 'default',
         frame: osType === 'darwin' ? false : true,
         //backgroundColor: osType === 'darwin' ? 'transparent' : '#181818',
-        backgroundColor: '#18171c',
+        backgroundColor: '#000000',
         title: 'Firetail',
         //transparent: osType === 'darwin' ? true : false,
         webPreferences: {

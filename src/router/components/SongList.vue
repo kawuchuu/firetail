@@ -492,7 +492,7 @@ div.section .track-num {
 
 .list-section.sticky {
     margin: 0;
-    padding: 0px 20px;
+    padding: 50px 20px 0px;
 }
 
 .list-section .list-artist:hover, .list-section .list-album:hover, .list-section .list-duration:hover {
@@ -590,7 +590,7 @@ div.section {
 
 .sticky-bg {
     position: fixed;
-    top: 0;
+    top: 50px;
     height: 81px;
     width: calc(100% - var(--sidebar-width) - 16px);
     background: black;
@@ -599,6 +599,7 @@ div.section {
     transition: 0.15s;
     transition-property: opacity;
     pointer-events: all;
+    border-radius: var(--main-border-radius);
 
     .bg-inner {
         height: 50px;

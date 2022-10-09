@@ -50,6 +50,7 @@ export default {
     z-index: 10;
     top: 0;
     pointer-events: none;
+    background: var(--back-bg);
 }
 
 .top-bar .inner {
