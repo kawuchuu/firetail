@@ -270,11 +270,11 @@ async function createWindow() {
         minHeight: 400,
         show: false,
         titleBarStyle: osType === 'darwin' ? 'hiddenInset' : 'default',
-        frame: osType === 'darwin' ? false : true,
+        frame: osType === 'darwin' || osType === 'win32' ? false : true,
         //backgroundColor: osType === 'darwin' ? 'transparent' : '#181818',
-        backgroundColor: '#000000',
+        backgroundColor: 'transparent',
         title: 'Firetail',
-        //transparent: osType === 'darwin' ? true : false,
+        transparent: osType === 'darwin' ? true : false,
         webPreferences: {
             // Use pluginOptions.nodeIntegration, leave this alone
             // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info

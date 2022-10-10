@@ -340,6 +340,7 @@ html.dark {
 }
 
 html.light {
+    --back-bg: #dfdfdf;
     --bg: #f3f3f3;
     --bg-op: #a6a6a633;
     --text: #242424;

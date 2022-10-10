@@ -12,6 +12,11 @@
                 <div class="top-button-container">
                     <TopButtons v-for="item in button" v-bind:button="item" v-bind:key="item.id"></TopButtons>
                 </div>
+                <div v-if="platform === 'win32'" class="windows-custom-buttons">
+                    <div class="window-button" @click="sendButtonSignal('minimize')"><img src="@/assets/minimise.svg"></div>
+                    <div class="window-button" @click="sendButtonSignal(isMaximized ? 'unmaximize' : 'maximize')"><img :src="maximizeIcon"></div>
+                    <div class="window-button close" @click="sendButtonSignal('close')"><img src="@/assets/close.svg"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -21,6 +26,7 @@
 import TopButtons from './TopButtons'
 import TopNav from './TopNav'
 import tr from '../translation'
+import { ipcRenderer } from 'electron'
 
 export default {
     components: {
@@ -35,8 +41,26 @@ export default {
             nav: [
                 {type: 'back', class: 'littlebitback', nav: -1, icon: 'chevron-left'},
                 {type: 'forward', class: 'littlebitback', nav: 1, icon: 'chevron-right'}
-            ]
+            ],
+            platform: process.platform,
+            maximizeIcon: require('@/assets/maximise.svg'),
+            isMaximized: false
         }
+    },
+    methods: {
+        sendButtonSignal(action) {
+            ipcRenderer.send('do-custom-window-action', action)
+        }
+    },
+    async mounted() {
+        if (await ipcRenderer.invoke('is-maximized') == true) {
+            this.isMaximized = true
+            this.maximizeIcon = require('@/assets/unmaximise.svg')
+        }
+        ipcRenderer.addListener('change-maximize-button', (event, icon) => {
+            this.maximizeIcon = require(`@/assets/${icon}.svg`)
+            this.isMaximized = icon == 'unmaximise'
+        })
     }
 }
 </script>
@@ -58,7 +82,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-right: 20px;
+    margin-right: 5px;
 }
 
 .top-button-container {
@@ -68,7 +92,7 @@ export default {
     border-radius: 40px;
     pointer-events: all;
     backdrop-filter: blur(5px);
-    border: solid 1px #5f587c;
+    //border: solid 1px #5f587c;
 }
 
 .nav-hist-buttons {
@@ -93,7 +117,7 @@ export default {
     backdrop-filter: blur(5px);
     pointer-events: all;
     cursor: pointer;
-    border: solid 1px #5f587c;
+    //border: solid 1px #5f587c;
 
     display: flex;
     align-items: center;
@@ -151,5 +175,39 @@ export default {
 
 .search-btn.active:active i {
     opacity: 1;
+}
+
+html.dark .window-button img {
+    filter: brightness(500);
+}
+
+.windows-custom-buttons {
+    width: 150px;
+    display: flex;
+    -webkit-app-region: no-drag;
+    pointer-events: all;
+    margin-left: 5px;
+
+    .window-button {
+        width: 50px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+
+        img {
+            width: 12px;
+            pointer-events: none;
+        }
+    }
+
+    .window-button:hover {
+        background-color: var(--fg-bg);
+    }
+
+    .window-button.close:hover {
+        background-color: #ff3a3a;
+    }
 }
 </style>

@@ -199,5 +199,32 @@ export default {
                 noChannels: format.numberOfChannels
             }
         })
+
+        ipcMain.on('do-custom-window-action', (event, action) => {
+            switch(action) {
+                case "minimize":
+                    win.minimize()
+                    break
+                case "unmaximize":
+                    win.unmaximize()
+                    break
+                case "maximize":
+                    win.maximize()
+                    break
+                case "close":
+                    win.close()
+                    break
+            }
+        })
+
+        ipcMain.handle('is-maximized', () => { return win.isMaximized() })
+
+        win.on('maximize', () => {
+            win.webContents.send('change-maximize-button', 'unmaximise')
+        })
+
+        win.on('unmaximize', () => {
+            win.webContents.send('change-maximize-button', 'maximise')
+        })
     }
 }
