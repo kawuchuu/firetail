@@ -61,26 +61,18 @@ export default {
                 })
                 if (!meta) return;
                 let metaObj = {
-                    title: f[1],
-                    artist: 'Unknown Artist',
-                    album: 'Unknown Album',
-                    duration: 0,
+                    title: meta.common.title ? meta.common.title : f[1],
+                    artist: meta.common.artist ? meta.common.artist : 'Unknown Artist',
+                    album: meta.common.album ? meta.common.album : 'Unknown Album',
+                    duration: meta.format.duration ? time.timeFormat(meta.format.duration) : 0,
                     path: f[0],
                     id: id,
-                    hasImage: 0,
-                    trackNum: null,
-                    year: null,
-                    disc: null
+                    hasImage: meta.common.picture ? 1 : 0,
+                    trackNum: meta.common.track ? meta.common.track : null,
+                    year: meta.common.year ? meta.common.year : null,
+                    disc: meta.common.disk ? meta.common.disk.no : null
                 }
-                if (meta.common.title) metaObj['title'] = meta.common.title
-                if (meta.common.artist) metaObj['artist'] = meta.common.artist
-                if (meta.common.album) metaObj['album'] = meta.common.album
-                if (meta.common.track) metaObj['trackNum'] = `${meta.common.track.no}`
-                if (meta.common.year) metaObj['year'] = `${meta.common.year}`
-                if (meta.format.duration) metaObj['duration'] = time.timeFormat(meta.format.duration)
                 let artistAlbum = `${meta.common.artist}${meta.common.album}`.replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')
-                if (meta.common.picture) { metaObj['hasImage'] = 1 }
-                if (meta.common.disk) metaObj['disc'] = meta.common.disk.no
                 toAdd.push(metaObj)
                 progress++
                 BrowserWindow.getAllWindows()[0].webContents.send('doneProgress', [progress, songs.length])

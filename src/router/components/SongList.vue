@@ -5,11 +5,6 @@
                 <div class="bg-banner"></div>
             </div>
         </div>
-        <div class="sticky-bg" :class="currentScroll">
-            <div class="bg-inner">
-                <h3>{{ topTitleText }}</h3>
-            </div>
-        </div>
         <div class="top-title" ref="topTitle">
             <div v-if="$route.path == '/albums'" class="tab-album-art" :style="getAlbumImage"></div>
             <div v-if="$route.path == '/artists'" class="tab-album-art" :style="getArtistImage"></div>
@@ -26,22 +21,27 @@
         </div>
         <div class="root-wrapper">
             <div v-if="$route.path == '/'" class="list-gradient-fade"></div>
-            <div class="list-section" :class="currentScroll">
-                <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
-                <i class="ft-icon favourite-icon" style="visibility: hidden">favourite</i>
-                <div class="section" v-if="$route.path == '/albums'">
-                    <i class="ft-icon disc-num">albums</i>
+            <div class="sticky-bg" :class="currentScroll">
+                <div class="bg-inner">
+                    <h3>{{ topTitleText }}</h3>
                 </div>
-                <div class="section" v-if="$route.path == '/albums'">
-                    <p class="track-num">#</p>
+                <div class="list-section" :class="currentScroll">
+                    <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
+                    <i class="ft-icon favourite-icon" style="visibility: hidden">favourite</i>
+                    <div class="section" v-if="$route.path == '/albums'">
+                        <i class="ft-icon disc-num">albums</i>
+                    </div>
+                    <div class="section" v-if="$route.path == '/albums'">
+                        <p class="track-num">#</p>
+                    </div>
+                        <div class="artist-title-album section">
+                            <p class="list-title">{{ $t('songList.listTitle') }}</p>
+                            <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-artist">{{ $t('songList.listArtist') }}</p>
+                            <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-album">{{ $t('songList.listAlbum') }}</p>
+                            <p class="list-duration"><i class="ft-icon">clock</i></p>
+                        </div>
+                    <div class="sec-border"></div>
                 </div>
-                <div class="artist-title-album section">
-                    <p class="list-title">{{ $t('songList.listTitle') }}</p>
-                    <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-artist">{{ $t('songList.listArtist') }}</p>
-                    <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-album">{{ $t('songList.listAlbum') }}</p>
-                    <p class="list-duration"><i class="ft-icon">clock</i></p>
-                </div>
-                <div class="sec-border"></div>
             </div>
             <p v-if="false">{{$route.path}} || {{$route.path === '/' || $route.path === '/playlist'}} || {{ $route.path !== '/' || $route.path !== '/playlist' }}</p>
             <div class="wrapper">
@@ -125,7 +125,7 @@ export default {
         ...mapState('nav', {
             screenCountNum: state => state.screenCountNum,
             currentScroll: function(state) {
-                if (this.$route.path === '/' && state.scrolled > 215 || this.$route.path !== '/' && state.scrolled > 282) {
+                if (this.$route.path === '/' && state.scrolled > 188 || this.$route.path !== '/' && state.scrolled > 250) {
                     return 'sticky'
                 } else {
                     return ''
@@ -492,7 +492,8 @@ div.section .track-num {
 
 .list-section.sticky {
     margin: 0;
-    padding: 50px 20px 0px;
+    padding: 0px 20px;
+    background: #322d47;
 }
 
 .list-section .list-artist:hover, .list-section .list-album:hover, .list-section .list-duration:hover {
@@ -530,7 +531,7 @@ div.section {
 }
 
 .top-title {
-    padding: 50px 100px 30px;
+    padding: 50px 100px 0px;
     padding-left: 75px;
     display: flex;
     align-items: flex-end;
@@ -589,13 +590,11 @@ div.section {
 }
 
 .sticky-bg {
-    position: fixed;
-    top: 50px;
+    position: sticky;
+    top: 0px;
     height: 81px;
-    width: calc(100% - var(--sidebar-width) - 16px);
-    background: black;
+    width: 100%;
     z-index: 3;
-    opacity: 0;
     transition: 0.15s;
     transition-property: opacity;
     pointer-events: all;
@@ -605,13 +604,20 @@ div.section {
         height: 50px;
         display: flex;
         align-items: center;
+        opacity: 0;
+        width: 100%;
+        background: #322d47;
 
         h3 {
-            margin: 0 110px;
+            margin: 0 120px;
             font-size: 24px;
             letter-spacing: -1px;
         }
     }
+}
+
+.sticky-bg.sticky .bg-inner {
+    opacity: 1;
 }
 
 .fixed-songload {
@@ -624,9 +630,6 @@ div.section {
     }
 }
 
-.sticky-bg.sticky {
-    opacity: 1;
-}
 @media (max-width: 900px) {
     .list-album {
         display: none;

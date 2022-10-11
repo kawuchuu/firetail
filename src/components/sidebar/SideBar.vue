@@ -30,9 +30,7 @@ export default {
         }),
         ...mapState('playlist', {
             playlists: state => state.playlists
-        })
-    },
-    methods: {
+        }),
         platformType() {
             if (process.platform === 'darwin') {
                 return 'macos'
@@ -82,6 +80,10 @@ export default {
 
 .nav-buttons {
     padding: 12px 0px 12px 12px;
+}
+
+.nav-buttons.macos {
+    margin-top: 38px;
 }
 
 .side-bar button {
