@@ -2,13 +2,13 @@
     <div class="artists">
         <div class="albums-container">
             <section class="artists-list">
-                <virtual-list class="artist-inner" v-if="$route.path === '/albums'"
+                <virtual-list :ref="'albumList'" class="artist-inner" v-show="$route.path === '/albums'"
                     :data-key="'album'"
                     :data-sources="albumItems"
                     :dataComponent="lItem"
                 />
                 <!-- <ListItem v-for="item in albumItems" :source="item" :key="item.id"/> -->
-                <virtual-list class="artist-inner" v-if="$route.path === '/artists'"
+                <virtual-list :ref="'artistList'" class="artist-inner" v-show="$route.path === '/artists'"
                     :data-key="'artist'"
                     :data-sources="artistItems"
                     :dataComponent="lItem"
@@ -47,14 +47,10 @@ export default {
     },
     computed: {
         albumItems() {
-            const artistInner = document.querySelector('.artist-inner')
-            if (artistInner) artistInner.scrollTo({ top: 0 })
             if (this.$route.path === '/albums') return this.$store.state.nav.albums
             else return []
         },
         artistItems() {
-            const artistInner = document.querySelector('.artist-inner')
-            if (artistInner) artistInner.scrollTo({ top: 0 })
             if (this.$route.path === '/artists') return this.$store.state.nav.artists
             else return []
         },
@@ -75,6 +71,17 @@ export default {
                 }
             }
         })
+    },
+    watch: {
+        $route(to, from) {
+            if (to.path == '/albums' && from.path == '/artists') {
+                this.$refs.albumList.scrollToOffset(0)
+                console.log('to albums')
+            } else if (to.path == '/artists' && from.path == '/albums') {
+                this.$refs.artistList.scrollToOffset(0)
+                console.log('to artists')
+            }
+        }
     }
 }
 </script>
@@ -210,6 +217,7 @@ export default {
     .artist-inner {
         max-width: 80px;
         transition: 0.3s cubic-bezier(0, 1, 0.35, 1);
+        //transition-delay: 0.2s;
     }
     .artists-list:hover {
         box-shadow: 2px 0px 10px rgba(0,0,0,.15);
