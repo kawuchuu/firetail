@@ -12,6 +12,7 @@
                 <div class="top-button-container">
                     <TopButtons v-for="item in button" v-bind:button="item" v-bind:key="item.id"></TopButtons>
                 </div>
+                <div class="divider" />
                 <div v-if="platform === 'win32'" class="windows-custom-buttons">
                     <div class="window-button" @click="sendButtonSignal('minimize')"><img src="@/assets/minimise.svg"></div>
                     <div class="window-button" @click="sendButtonSignal(isMaximized ? 'unmaximize' : 'maximize')"><img :src="maximizeIcon"></div>
@@ -75,6 +76,7 @@ export default {
     top: 0;
     pointer-events: none;
     background: var(--back-bg);
+    -webkit-app-region: drag;
 }
 
 .top-bar .inner {
@@ -181,6 +183,14 @@ html.dark .window-button img {
     filter: brightness(500);
 }
 
+.divider {
+    margin: 0px 8px;
+    width: 1px;
+    height: 25px;
+    border-left: solid 1px var(--text);
+    opacity: 0.2;
+}
+
 .windows-custom-buttons {
     width: 150px;
     display: flex;
@@ -204,6 +214,10 @@ html.dark .window-button img {
 
     .window-button:hover {
         background-color: var(--fg-bg);
+    }
+
+    .window-button:active {
+        background-color: transparent;
     }
 
     .window-button.close:hover {

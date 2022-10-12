@@ -2,7 +2,7 @@
     <div class="root">
         <label @click="click" class="top-button" :for="checkFor">
             <i class="ft-icon">{{button.icon}}</i>
-            <span>{{button.name}}</span>
+            <!-- <span>{{button.name}}</span> -->
         </label>
     </div>
 </template>
@@ -54,16 +54,16 @@ export default {
     -webkit-app-region: no-drag;
 }
 
-.top-button:not(:first-child) {
+/* .top-button:not(:first-child) {
     margin-left: 20px;
-}
+} */
 
 .top-button:hover {
     opacity: 0.5;
 }
 
 .top-button i {
-    font-size: 17px;
+    font-size: 22px;
 }
 
 .top-button span {

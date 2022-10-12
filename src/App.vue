@@ -1,6 +1,5 @@
 <template>
     <div id="app" class="test" @dragover="changeDrag($event, true)">
-        <div class="draggable" />
         <input type="file" multiple accept="audio/*" id="addFiles" @change="addFiles" style="display: none;">
         <div class="drag-detail">
             <p id="dragInfo">Nothing selected</p>
@@ -322,7 +321,7 @@ a {
 }
 
 :root {
-    --main-border-radius: 10px 0px 0px 0px;
+    --main-border-radius: 10px 10px 0px 0px;
 }
 
 html.dark {

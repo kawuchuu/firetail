@@ -35,9 +35,7 @@ export default {
             volIcon: state => {
                 if (state.volume == 0) {
                     return 'volume-mute'
-                } else if (state.volume <= 0.33) {
-                    return 'volume-down'
-                } else if (state.volume <= 0.66) {
+                } else if (state.volume <= 0.5) {
                     return 'volume-mid'
                 } else {
                     return 'volume-up'

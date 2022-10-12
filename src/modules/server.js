@@ -27,7 +27,7 @@ const startServer = async (appLoc, win) => {
         res.header("Access-Control-Allow-Headers", "X-Requested-With");
         next();
     });
-    for (let testPort = 56741; testPort < 56752; testPort++) {
+    for (let testPort = 56742; testPort < 56752; testPort++) {
         try {
             await new Promise((res, rej) => {
                 app.listen(testPort, 'localhost', () => {

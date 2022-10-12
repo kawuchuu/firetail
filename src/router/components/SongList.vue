@@ -410,16 +410,15 @@ export default {
 .bg-gradient {
     position: absolute;
     width: 100%;
-    height: 450px;
+    height: 600px;
     top: 0;
     z-index: 0;
 }
 
 .list-gradient-fade {
     width: 100%;
-    height: 300px;
+    height: 600px;
     position: absolute;
-    background: linear-gradient(#12121233, transparent);
 }
 
 .artist-title-album {

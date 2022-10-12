@@ -163,15 +163,15 @@ export default {
 .bg-gradient-layer {
     position: absolute;
     width: 100%;
-    height: 450px;
-    background: linear-gradient(transparent, var(--bg));
+    height: 600px;
+    background: linear-gradient(transparent, var(--bg)), radial-gradient(farthest-corner at 5% 10%, transparent 5%, var(--bg));
     top: 0;
     z-index: -1;
 }
 
 .special-gradient-bg-wrapper {
-    max-height: 450px;
-    height: 450px;
+    max-height: 600px;
+    height: 600px;
     width: 100%;
     overflow: hidden;
     position: absolute;
