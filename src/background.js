@@ -282,6 +282,7 @@ async function createWindow() {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
             contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
             enableBlinkFeatures: "CSSColorSchemeUARendering",
+            disableBlinkFeatures: "Auxclick"
         }
     }
     win = new BrowserWindow(winConfig)
@@ -332,6 +333,10 @@ async function createWindow() {
 
     win.on('closed', () => {
         win = null
+    })
+
+    win.webContents.setWindowOpenHandler(() => {
+        return { action: 'deny' };
     })
 
 }

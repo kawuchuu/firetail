@@ -1,13 +1,13 @@
 <template>
     <div class="item-root">
         <div v-if="$route.path === '/artists'" class="albums-item">
-            <router-link :to="`?hideTop=true&column=artist&q=${encodeURIComponent(source.artist)}&view=artist_${encodeURIComponent(source.artist)}`">
+            <router-link :to="`?hideTop=true&column=artist&q=${encodeURIComponent(source.artist)}&view=artist_${encodeURIComponent(source.artist)}`" draggable="false">
                 <div class="artist-img"/>
                 <span>{{ source.artist }}</span>
             </router-link>
         </div>
         <div v-else-if="$route.path === '/albums'" class="albums-item">
-            <router-link :to="`?hideTop=true&column=album&q=${encodeURIComponent(source.album)}&view=album_${encodeURIComponent(source.album)}`">
+            <router-link :to="`?hideTop=true&column=album&q=${encodeURIComponent(source.album)}&view=album_${encodeURIComponent(source.album)}`" draggable="false">
                 <div class="album-img" :style="albumArt"/>
                 <span>{{ source.album }}</span>
             </router-link>
