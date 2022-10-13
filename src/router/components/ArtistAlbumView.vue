@@ -96,7 +96,7 @@ export default {
     height: calc(100% - 160px);
     padding: 15px;
     background: var(--bg);
-    border-right: solid #5f587c 1px;
+    border-right: solid var(--bd) 1px;
     position: fixed;
     top: 50px;
     border-radius: var(--main-border-radius);
@@ -210,7 +210,7 @@ export default {
     width: 100%;
     height: 300px;
     position: absolute;
-    background: linear-gradient(#12121233, transparent);
+    background: linear-gradient(var(--bg), transparent);
 }
 
 @media (max-width: 1350px) {

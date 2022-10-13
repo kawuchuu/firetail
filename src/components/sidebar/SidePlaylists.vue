@@ -148,7 +148,7 @@ export default {
 .router-link-exact-active .item-sidebar {
     opacity: 1;
     cursor: default;
-    background: #322d47;
+    background: var(--fg-bg);
 }
 
 .router-link-exact-active .item-sidebar:hover {

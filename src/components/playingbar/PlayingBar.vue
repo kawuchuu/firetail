@@ -51,12 +51,11 @@ export default {
     z-index: 12;
     width: 100vw;
     height: 85px;
-    background-color: #1e1e1e;
-    border-top: solid 1px black;
+    background-color: var(--fg-bg);
+    border-top: solid 1px var(--mono-bd);
     box-shadow: 0px -1px 5px rgba(0, 0, 0, .15);
     display: flex;
     align-items: center;
-    color: white;
     transition: 0.25s;
     transition-property: transform;
     transform: translateY(0px);

@@ -29,12 +29,10 @@ export default {
 .nav-button {
     width: 18px;
     height: 18px;
-    background: #000000b3;
     padding: 10px;
     margin-right: 10px;
     border-radius: 50px;
     cursor: pointer;
-    backdrop-filter: blur(5px);
     /* border: solid 1px #5f587c; */
     -webkit-app-region: no-drag;
 }

@@ -34,7 +34,6 @@ export default {
         })
 
         ipcMain.on('getAllFromColumn', (event, column) => {
-            console.log(column)
             let allColumn = db.getAllFromColumn(column)
             win.send('getAllFromColumn', allColumn)
         })
@@ -45,7 +44,6 @@ export default {
         })
 
         ipcMain.handle('getSomeFromColumnMatches', (event, args) => {
-            console.log(args)
             let someColumn = db.getSomeFromColumnMatches(args)
             return someColumn
             //event.reply('library', someColumn)

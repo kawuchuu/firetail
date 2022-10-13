@@ -125,7 +125,7 @@ export default {
         }
     },
     async mounted() {
-        require('./scss/test.scss')
+        require('./scss/default.scss')
         if (window.localStorage.getItem('sidebarwidth')) {
             this.sidebarwidth = window.localStorage.getItem('sidebarwidth')
         } else {
@@ -186,8 +186,47 @@ export default {
 </script>
 
 <style lang="scss">
-.st0{fill:none;stroke:#221f1f;stroke-width:55;}
-.st1{fill:none;stroke:#221f1f;stroke-width:55;stroke-miterlimit:10;}
+html {
+    --main-border-radius: 10px 0px 0px;
+    --hl-txt: #1f88ff;
+    --hl-op: #1f88ff2a;
+}
+
+html.dark {
+    --back-bg: #0a0a0a;
+    --bg: #131313;
+    --text: #ffffff;
+    --text-op: #ffffff50;
+    --fg-bg: #1e1e1e;
+    --sub-fg: #0e0e0e;
+    --bd: #3a3a3a;
+    --mono-bd: #3a3a3a;
+    --button: #242424;
+}
+
+html.light {
+    --back-bg: #dfdfdf;
+    --bg: #f3f3f3;
+    --text: #242424;
+    --text-op: #2424246c;
+    --fg-bg: #ffffff;
+    --sub-fg: #dadada;
+    --bd: #b4b4b4;
+    --mono-bd: #b4b4b4;
+    --button: var(--fg-bg);
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: normal;
+    src: url('./assets/Inter-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: bold;
+    src: url('./assets/Inter-Bold.ttf') format('truetype');
+}
 
 .main-content-wrapper {
     --sidebar-width: 225px;
@@ -198,7 +237,8 @@ export default {
 
 .sidebar-resizer {
     width: 10px;
-    height: 100%;
+    height: calc(100% - 50px);
+    top: 50px;
     position: absolute;
     left: calc(var(--sidebar-width) - 5px);
     z-index: 2;
@@ -208,7 +248,8 @@ export default {
 
     .resize-line {
         width: 1px;
-        border-right: solid 1px #8a8a8a;
+        border-left: solid 1px #8a8a8a;
+        border-radius: 150px 0px 0px;
         box-sizing: border-box;
         height: 100%;
         opacity: 0;
@@ -294,13 +335,13 @@ a {
 
 ::-webkit-scrollbar-thumb {
     border: solid 4px var(--bg);
-    background: #ffffff50;
+    background: var(--text-op);
     border-radius: 20px;
     min-height: 60px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #ffffff;
+    background: var(--text);
 }
 
 ::-webkit-scrollbar-thumb:active {
@@ -318,61 +359,6 @@ a {
     z-index: 100;
     pointer-events: none;
     position: fixed;
-}
-
-:root {
-    --main-border-radius: 10px 10px 0px 0px;
-}
-
-html.dark {
-    --back-bg: #000000;
-    --bg: #131313;
-    --bg-op: #181818ad;
-    --text: #ffffff;
-    --fg-bg: #1e1e1e;
-    --fg-bg-op: #25252584;
-    --bd: #3a3a3a;
-    --li-hv: #212121;
-    --logo: 0.9;
-    --switch: #3d3d3d;
-    --hl: #252525;
-}
-
-html.light {
-    --back-bg: #dfdfdf;
-    --bg: #f3f3f3;
-    --bg-op: #a6a6a633;
-    --text: #242424;
-    --fg-bg: #000000;
-    --fg-bg-op: #ffffff84;
-    --bd: #b4b4b4;
-    --li-hv: #dddddd;
-    --logo: 0.25;
-    --switch: #cccccc;
-    --hl: #cecece;
-}
-
-html.firetail {
-    --hl-txt: #eb6e64;
-    --hl-op: #eb6e642a;
-    --gradient1: #e74e8e;
-    --gradient2: #ef9135;
-}
-
-html.light.firetail {
-    --hl-txt: #d44835;
-}
-
-@font-face {
-    font-family: 'Inter';
-    font-weight: normal;
-    src: url('./assets/Inter-Regular.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Inter';
-    font-weight: bold;
-    src: url('./assets/Inter-Bold.ttf') format('truetype');
 }
 
 .load-spinner {

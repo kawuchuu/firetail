@@ -44,7 +44,7 @@ export default {
 .side-bar {
     width: var(--sidebar-width);
     height: calc(100vh - 86px);
-    background: #000;
+    background: var(--back-bg);
     z-index: 2;
 }
 
@@ -60,14 +60,14 @@ export default {
 }
 
 .side-bar-inner-container::-webkit-scrollbar {
-    background: black;
+    background: var(--back-bg);
     width: 12px !important;
 }
 
 .side-bar-inner-container::-webkit-scrollbar-thumb {
-    border-color: black;
+    border-color: var(--back-bg);
     border-width: 4px;
-    background: black;
+    background: var(--back-bg);
 }
 
 .side-bar-inner-container::-webkit-scrollbar-thumb:active {
@@ -75,7 +75,7 @@ export default {
 }
 
 .side-bar-inner-container:hover::-webkit-scrollbar-thumb {
-    background-color: #ffffff50;
+    background-color: var(--text-op);
 }
 
 .nav-buttons {
@@ -105,7 +105,7 @@ export default {
 .router-link-active .item-sidebar {
     opacity: 1;
     cursor: default;
-    background: #322d47;
+    background: var(--button);
 }
 
 .router-link-active .item-sidebar:hover {
@@ -159,7 +159,7 @@ export default {
     margin: 30px 0 5px 16px;
     padding-bottom: 10px;
     padding-left: 15px;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid var(--text);
     transform: translateX(-15px);
     width: calc(100% - 17px);
 }
@@ -217,7 +217,7 @@ export default {
     cursor: pointer;
     opacity: 0.75;
     border-radius: 5px;
-    color: white;
+    color: var(--text);
     transform: translatex(-4px);
 }
 
@@ -235,29 +235,5 @@ export default {
     font-size: 20px;
     border: var(--text) 2px solid;
     border-radius: 3px;
-}
-
-:root.light {
-    .app-info {
-        background: linear-gradient(#dfdfdf, #dfdfdf, #dfdfdf, transparent);
-    }
-    .router-link-active .item-sidebar {
-        background: #baa9ff
-    }
-    .side-bar .side-bar-inner-container::-webkit-scrollbar {
-        background: #dfdfdf !important;
-        width: 12px !important;
-    }
-    .side-bar-inner-container::-webkit-scrollbar-thumb {
-        border-color: #dfdfdf !important;
-        background: #dfdfdf !important;
-        border-width: 4px !important;
-    }
-    .side-bar-inner-container:hover::-webkit-scrollbar-thumb {
-        background: #322d4750 !important;
-    }
-    .side-bar-inner-container::-webkit-scrollbar-thumb:active {
-        background: var(--hl-txt) !important;
-    }
 }
 </style>

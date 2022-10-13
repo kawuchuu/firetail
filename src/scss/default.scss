@@ -1,0 +1,62 @@
+html.dark {
+    --back-bg: #000000;
+    --bg: #18171c;
+    --fg-bg: #2b2838;
+    --sub-fg: #232029;
+    --bd: #5f587c;
+    --button: #322d47;
+    --hl-txt: #eb6e64;
+    --hl-op: #eb6e642a;
+
+    .playing-bar {
+        background-color: #1f1e25 !important;
+    }
+
+    .bg-banner {
+        background-image: url('../assets/songs-banner.svg');
+    }
+}
+
+html.light {
+    --back-bg: #dfdfdf;
+    --sub-fg: #dedbe4;
+    --fg-bg: #d7d2e8;
+    --bd: #b4b4b4;
+    --button: #baa9ff;
+    --hl-txt: #d44835;
+    --hl-op: #eb6e642a;
+
+    .playing-bar {
+        background-color: var(--bg) !important;
+    }
+
+    .bg-banner {
+        background-image: url('../assets/songs-banner-light.svg');
+    }
+
+    .bg-gradient {
+        opacity: 0.35;
+    }
+
+    .sticky-bg .bg-inner, .list-section.sticky {
+        background: none;
+    }
+
+    .sticky-bg.sticky {
+        background: #ffffff50 !important;
+        backdrop-filter: blur(20px);
+    }
+}
+
+.text {
+    color: #7e769c !important;
+}
+
+.bg-banner {
+    width: 95%;
+    height: 100%;
+    max-height: 350px;
+    background-size: cover;
+    background-position: center 85%;
+    //opacity: 0.2;
+}

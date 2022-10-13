@@ -89,11 +89,9 @@ export default {
 
 .top-button-container {
     display: flex;
-    background: #000000b3;
-    padding: 10px 20px;
+    padding: 10px;
     border-radius: 40px;
     pointer-events: all;
-    backdrop-filter: blur(5px);
     //border: solid 1px #5f587c;
 }
 
@@ -110,13 +108,11 @@ export default {
 }
 
 .search-btn {
-    background: #000000b3;
     padding: 10px;
     border-radius: 40px;
     height: 18px;
     width: 18px;
     margin-right: 10px;
-    backdrop-filter: blur(5px);
     pointer-events: all;
     cursor: pointer;
     //border: solid 1px #5f587c;

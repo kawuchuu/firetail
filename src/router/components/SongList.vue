@@ -20,7 +20,6 @@
             </div>
         </div>
         <div class="root-wrapper">
-            <div v-if="$route.path == '/'" class="list-gradient-fade"></div>
             <div class="sticky-bg" :class="currentScroll">
                 <div class="bg-inner">
                     <h3>{{ topTitleText }}</h3>
@@ -476,7 +475,7 @@ div.section .track-num {
     text-transform: uppercase;
     font-size: 14px;
     letter-spacing: 1px;
-    border-bottom: solid 1px #ffffff3f;
+    border-bottom: solid 1px var(--bd);
     position: sticky;
     margin: 0px 20px;
 }
@@ -492,7 +491,7 @@ div.section .track-num {
 .list-section.sticky {
     margin: 0;
     padding: 0px 20px;
-    background: #322d47;
+    background: var(--fg-bg);
 }
 
 .list-section .list-artist:hover, .list-section .list-album:hover, .list-section .list-duration:hover {
@@ -605,7 +604,7 @@ div.section {
         align-items: center;
         opacity: 0;
         width: 100%;
-        background: #322d47;
+        background: var(--fg-bg);
 
         h3 {
             margin: 0 120px;

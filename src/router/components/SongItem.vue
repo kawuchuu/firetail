@@ -219,6 +219,20 @@ li.nohover:hover {
     border-radius: 0px;
 }
 
+html.light {
+    li:hover {
+        background: #00000010;
+    }
+    
+    .results-link.hactive {
+        background: #00000028;
+    }
+    
+    .results-link.hactive:hover {
+        background: #00000022;
+    }
+}
+
 .play-pause {
     font-size: 24px !important;
     padding: 0;

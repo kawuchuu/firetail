@@ -47,8 +47,7 @@ export default {
 }
 
 .router-link-exact-active {
-    background-color: #322d47;
-    color: #ffffff;
+    background-color: var(--button);
     border-radius: 5px;
     cursor: default;
 }

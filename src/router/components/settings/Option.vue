@@ -106,7 +106,7 @@ export default {
 .subtitle {
     font-size: 30px;
     font-weight: bold;
-    border-bottom: solid 1px #5f587c;
+    border-bottom: solid 1px var(--bd);
     padding-bottom: 15px;
     margin: 50px 0px 20px;
     letter-spacing: -0.02em;
@@ -246,6 +246,6 @@ export default {
 .text {
     margin-top: 10px;
     font-size: 12px;
-    color: #7e769c;
+    color: var(--text-op);
 }
 </style>
