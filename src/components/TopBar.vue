@@ -68,11 +68,10 @@ export default {
 
 <style lang="scss" scoped>
 .top-bar {
-    width: calc(100% - var(--sidebar-width));
+    width: calc(100vw - var(--sidebar-width));
     height: 50px;
     background: transparent;
-    position: fixed;
-    z-index: 10;
+    position: relative;
     top: 0;
     pointer-events: none;
     background: var(--back-bg);
@@ -84,7 +83,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-right: 5px;
 }
 
 .top-button-container {
@@ -192,7 +190,13 @@ html.dark .window-button img {
     display: flex;
     -webkit-app-region: no-drag;
     pointer-events: all;
-    margin-left: 5px;
+    padding: 0px 5px;
+    height: 50px;
+    align-items: center;
+    background-color: var(--back-bg);
+    position: relative;
+    z-index: 30;
+    border-radius: 0px 0px 0px 10px;
 
     .window-button {
         width: 50px;

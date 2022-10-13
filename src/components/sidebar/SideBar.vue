@@ -82,6 +82,10 @@ export default {
     padding: 12px 0px 12px 12px;
 }
 
+.nav-buttons a {
+    outline: none;
+}
+
 .nav-buttons.macos {
     margin-top: 38px;
 }

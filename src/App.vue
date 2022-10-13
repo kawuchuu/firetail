@@ -237,28 +237,30 @@ html.light {
 
 .sidebar-resizer {
     width: 10px;
-    height: calc(100% - 50px);
-    top: 50px;
+    height: 100%;
     position: absolute;
     left: calc(var(--sidebar-width) - 5px);
     z-index: 2;
     display: flex;
     justify-content: center;
     cursor: col-resize;
+    z-index: 11;
 
     .resize-line {
         width: 1px;
         border-left: solid 1px #8a8a8a;
-        border-radius: 150px 0px 0px;
         box-sizing: border-box;
         height: 100%;
         opacity: 0;
+        transition: 0.25s;
+        transition-property: opacity;
     }
 }
 
 .sidebar-resizer:hover, .sidebar-resizer:active {
     .resize-line {
         opacity: 1;
+                transition-delay: 150ms;
     }
 }
 
@@ -302,7 +304,6 @@ html.light {
     position: fixed;
     height: calc(100% - 135px);
     width: calc(100% - var(--sidebar-width));
-    margin-top: 50px;
     background: var(--bg);
     border-radius: var(--main-border-radius);
 }
@@ -384,7 +385,7 @@ a {
     max-width: 280px;
     pointer-events: none;
     left: 280px;
-    top: 50px;
+    top: 150px;
 
     p {
         margin: 0;
