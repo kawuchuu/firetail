@@ -17,8 +17,8 @@
                     <span v-if="$route.path == '/artists'">{{source.album}}</span>
                     <span v-if="$route.path == '/albums'">{{source.artist}}</span>
                 </div>
-                <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-artist"><span>{{source.artist}}</span></p>
-                <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-album"><span>{{source.album}}</span></p>
+                <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-artist"><router-link :to="`/artists?hideTop=true&column=artist&q=${encodeURIComponent(source.artist)}&view=artist_${encodeURIComponent(source.artist)}`"><span>{{source.artist}}</span></router-link></p>
+                <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-album"><router-link :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(source.album)}&view=album_${encodeURIComponent(source.album)}`"><span>{{source.album}}</span></router-link></p>
                 <p class="list-duration"><span>{{source.duration}}</span></p>
             </div>
         </li>
@@ -256,6 +256,10 @@ html.light {
     }
 }
 
+.results-link.active a {
+    color: var(--hl-txt);
+}
+
 .artist-title-album {
     display: grid;
     column-gap: 30px;
@@ -305,7 +309,10 @@ html.light {
     text-overflow: ellipsis;
     pointer-events: none;
     white-space: nowrap;
-    opacity: 0.7;
+}
+
+.list-artist span, .list-album span, .list-duration span {
+    opacity: 0.8;
 }
 
 .list-duration {

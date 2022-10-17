@@ -310,7 +310,7 @@ export default {
 }
 
 .seek-hover-indicate {
-    background: #000000;
+    background: var(--back-bg);
     border: solid 1px var(--bd);
     box-shadow: 0px 5px 10px rgba(0,0,0,.15);
     border-radius: 5px;
@@ -343,7 +343,7 @@ export default {
     width: 20px;
     height: 20px;
     transform: rotate(-45deg);
-    background: #000;
+    background: var(--back-bg);
     position: absolute;
     bottom: -5px;
     left: 17px;
@@ -354,7 +354,7 @@ export default {
 }
 
 .num {
-    background: #000000;
+    background: var(--back-bg);
     z-index: 2;
     position: relative;
     height: 30px;

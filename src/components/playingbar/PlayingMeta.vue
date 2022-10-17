@@ -98,12 +98,12 @@ export default {
             }
         },
         viewLink() {
-            const playingView = this.$store.state.nav.playingView
-            if (!playingView) return '/?view=all'
+            const playingView = encodeURIComponent(this.$store.state.nav.playingView)
+            if (!playingView) return '/?name=Songs&view=all'
             const splitView = playingView.split('_')
             switch(splitView[0]) {
                 case 'playlist': {
-                    return `/playlist?id=${splitView[1]}&view=${playingView}`
+                    return `/playlist?id=${encodeURIComponent(splitView[1])}&view=${playingView}`
                 }
                 case 'artist': {
                     return `/artists?hideTop=true&column=artist&q=${playingView.substr(7)}&view=${playingView}`
@@ -112,7 +112,7 @@ export default {
                     return `/albums?hideTop=true&column=album&q=${playingView.substr(6)}&view=${playingView}`
                 }
                 default: {
-                    return '/?view=all'
+                    return '/?name=Songs&view=all'
                 }
             }
         },
@@ -169,12 +169,12 @@ export default {
 
 .title-artist {
     overflow: hidden;
+    margin-left: 15px;
 }
 
 .song-album-art {
     min-width: 55px;
     min-height: 55px;
-    margin-right: 15px;
     left: 0;
     border-radius: 2px;
     z-index: 2;
@@ -261,7 +261,7 @@ export default {
     position: fixed;
     width: auto;
     height: 300px;
-    background: #000;
+    background: var(--back-bg);
     transform: translateY(-215px);
     border-radius: 5px;
     box-shadow: 0px 5px 10px rgba(0,0,0,.15);
@@ -275,7 +275,7 @@ export default {
         width: 300px;
         height: 300px;
         border-radius: 5px;
-        background-color: #000;
+        background-color: var(--back-bg);
         background-position: center;
         background-size: cover;
         background-repeat: no-repeat;
@@ -291,7 +291,7 @@ export default {
         display: flex;
         flex-direction: column;
         padding: 15px 20px;
-        background-color: black;
+        background-color: var(--back-bg);
         position: relative;
         z-index: 2;
 
@@ -310,7 +310,7 @@ export default {
     width: 20px;
     height: 20px;
     transform: rotate(-45deg);
-    background: #000;
+    background: var(--back-bg);
     position: absolute;
     bottom: -8px;
     left: 18px;
