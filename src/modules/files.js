@@ -68,7 +68,7 @@ export default {
                     path: f[0],
                     id: id,
                     hasImage: meta.common.picture ? 1 : 0,
-                    trackNum: meta.common.track ? meta.common.track : null,
+                    trackNum: meta.common.track.no ? meta.common.track.no : null,
                     year: meta.common.year ? meta.common.year : null,
                     disc: meta.common.disk ? meta.common.disk.no : null
                 }

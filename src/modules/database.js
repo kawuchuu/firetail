@@ -19,6 +19,7 @@ export default {
         let insert = db.prepare(`INSERT INTO library (title, artist, album, duration, path, id, hasImage, trackNum, year, disc) VALUES (@title, @artist, @album, @duration, @path, @id, @hasImage, @trackNum, @year, @disc)`)
         let insertMany = db.transaction((newSongs) => {
             for (let song of newSongs){
+                console.log(song)
                 if (existingSongs.map(e => { return e.path }).indexOf(song.path) == -1){
                     insert.run(song)
                 }

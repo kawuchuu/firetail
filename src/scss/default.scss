@@ -1,12 +1,12 @@
 html.dark {
-    --back-bg: #000000;
-    --bg: #18171c;
-    --fg-bg: #2b2838;
-    --sub-fg: #232029;
-    --bd: #5f587c;
-    --button: #322d47;
-    --hl-txt: #eb6e64;
-    --hl-op: #eb6e642a;
+    --back-bg: #000000 !important;
+    --bg: #18171c !important;
+    --fg-bg: #2b2838 !important;
+    --sub-fg: #232029 !important;
+    --bd: #5f587c !important;
+    --button: #322d47 !important;
+    --hl-txt: #eb6e64 !important;
+    --hl-op: #eb6e642a !important;
 
     .playing-bar {
         background-color: #1f1e25 !important;
@@ -18,13 +18,13 @@ html.dark {
 }
 
 html.light {
-    --back-bg: #dfdfdf;
-    --sub-fg: #dedbe4;
-    --fg-bg: #d7d2e8;
-    --bd: #b4b4b4;
-    --button: #baa9ff;
-    --hl-txt: #d44835;
-    --hl-op: #eb6e642a;
+    --back-bg: #dfdfdf !important;
+    --sub-fg: #dedbe4 !important;
+    --fg-bg: #d7d2e8 !important;
+    --bd: #b4b4b4 !important;
+    --button: #baa9ff !important;
+    --hl-txt: #d44835 !important;
+    --hl-op: #eb6e642a !important;
 
     .playing-bar {
         background-color: var(--bg) !important;
