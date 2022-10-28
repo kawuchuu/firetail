@@ -1,0 +1,130 @@
+html.dark {
+    --text: #dfdfdf !important;
+    --back-bg: var(--fg-bg) !important;
+    --li-hv: #212121;
+    --hl-txt: #eb6e64 !important;
+    --hl-op: #eb6e641a !important;
+    --gradient1: #e74e8e;
+    --gradient2: #ef9135;
+}
+
+.side-bar {
+    height: calc(100vh - 86px - 50px);
+    position: relative;
+    top: 50px;
+    background: var(--fg-bg) !important;
+    border-right: solid 2px var(--bd);
+    box-shadow: 1px 0 5px rgba(0, 0, 0, .15);
+}
+
+.nav-buttons {
+    .router-link-active .item-sidebar {
+        background: none;
+        color: var(--hl-txt);
+    }
+    .item-sidebar, .list-subtitle, .special-button {
+        opacity: 1;
+    }
+    .list-subtitle {
+        border-bottom: solid 2px var(--bd);
+    }
+    .router-link-active .item-sidebar::before {
+        content: "";
+        width: 3px;
+        height: 30px;
+        background: var(--hl-txt);
+        border-radius: 10px;
+        position: absolute;
+    }
+}
+
+.top-bar {
+    width: 100vw !important;
+    position: fixed !important;
+    left: 0 !important;
+    z-index: 11;
+    background-color: var(--fg-bg) !important;
+    border-bottom: solid 2px var(--bd);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, .15);
+}
+
+.windows-custom-buttons {
+    background-color: var(--fg-bg) !important;
+}
+
+.container {
+    top: 50px;
+    border-radius: 0px;
+}
+
+.colour-bg {
+    display: none;
+}
+
+.playing-bar {
+    border-top: solid 2px var(--bd) !important;
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, .15);
+}
+
+.list-section {
+    margin: 0px !important;
+}
+
+.list-section.sticky {
+    border-bottom: solid 2px var(--bd) !important;
+    padding: 0px !important;
+}
+
+.root-wrapper .wrapper {
+    padding: 0px;
+}
+
+.results-link {
+    border-bottom: solid 1px var(--bd);
+    //height: 35px !important;
+    border-radius: 0px !important;
+}
+
+.results-link:hover {
+    background-color: var(--li-hv) !important;
+}
+
+.seek-bar {
+    background: var(--bd) !important;
+}
+
+.fill {
+    background: linear-gradient(to right, var(--gradient1), var(--gradient2)) !important;
+}
+
+.handle {
+    background-color: var(--gradient2) !important;
+}
+
+.panel {
+    border: solid 2px var(--bd);
+    border-radius: 20px !important;
+
+    input, textarea, .label-wrapper {
+        background: var(--fg-bg) !important;
+    }
+}
+
+.sticky-bg .bg-inner, .list-section.sticky {
+    background: var(--bg) !important;
+}
+
+.sticky-bg .bg-inner h3 {
+    margin: 0px 100px;
+}
+
+.resize-line {
+    border-left: solid 2px #8a8a8a !important;
+    transform: translateX(1px);
+}
+
+.sidebar-resizer:active {
+    .resize-line {
+        border-color: var(--hl-txt) !important;
+    }
+}
