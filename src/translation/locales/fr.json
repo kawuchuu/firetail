@@ -1,0 +1,38 @@
+{
+    "sidebar": {
+        "home": "Home",
+        "settings": "Paramètres",
+        "library": "Bibliothèque",
+        "favourite": "Favoris",
+        "songs": "Chansons",
+        "artists": "Artistes",
+        "albums": "Albums",
+        "playlists": "Playlistes"
+    },
+    "router": {
+        "allSongs": "Chansons",
+        "artists": "Artistes",
+        "albums": "Albums",
+        "unknown": "Composant non trouvé"
+    },
+    "topTitle": {
+        "countTypeSongs": "chanson | chansons"
+    },
+    "songList": {
+        "listTitle": "Titre",
+        "listArtist": "Artiste",
+        "listAlbum": "Album",
+        "listDuration": "Durée"
+    },
+    "playingBar": {
+        "songTitleNotPlaying": "Aucune chanson ne joue..."
+    },
+    "topBar": {
+        "addSongs": "Ajouter des chansons",
+        "nuke": "Retirer la bibliothèque"
+    },
+    "settings": {
+        "title": "Paramètres"
+    },
+    "appName": "Firetail"
+}
