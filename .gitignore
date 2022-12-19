@@ -27,3 +27,4 @@ pnpm-debug.log*
 /dist_electron
 
 /public/ft-icon-file
+/.VSCodeCounter

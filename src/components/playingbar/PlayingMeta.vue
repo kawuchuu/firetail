@@ -1,14 +1,16 @@
 <template>
     <div class="song-info">
         <div class="colour-bg" :style="getColour"></div>
-        <div class="large-album-art" :class="hoverShow" >
+        <div class="popup large-album-art" :class="hoverShow" >
             <div class="inner" :style="getImage"></div>
-            <div class="advanced-info" v-show="showAdvancedFileInfo">
+        </div>
+        <div class="popup codec-info" :class="showAdvancedFileInfo">
+            <div class="advanced-info">
                 <h3>Codec Information</h3>
                 <span v-if="advancedFileInfo.codec">Codec: {{ advancedFileInfo.codec }}</span>
                 <span v-if="advancedFileInfo.container">Container: {{ advancedFileInfo.container }}</span>
-                <span v-if="advancedFileInfo.bitrate">Bitrate: {{ Math.round(advancedFileInfo.bitrate / 1000) }} kb/s</span>
-                <span v-if="advancedFileInfo.sampleRate">Sample rate: {{ advancedFileInfo.sampleRate }} Hz</span>
+                <span v-if="advancedFileInfo.bitrate">Bitrate: {{ Math.round(advancedFileInfo.bitrate / 1000) }}kb/s</span>
+                <span v-if="advancedFileInfo.sampleRate">Sample rate: {{ advancedFileInfo.sampleRate }}Hz</span>
                 <span v-if="advancedFileInfo.bitDepth">Bits per sample: {{ advancedFileInfo.bitDepth }}</span>
                 <span v-if="advancedFileInfo.noChannels">No. channels: {{ advancedFileInfo.noChannels }}</span>
             </div>
@@ -16,7 +18,7 @@
         <router-link :to="viewLink">
             <div class="song-album-art" :style="getImage" @mouseover="hoverImage" @mouseleave="leaveImage"></div>
         </router-link>
-        <div class="title-artist">
+        <div class="title-artist" @mouseover="hoverCodec" @mouseleave="leaveCodec">
             <div class="song-title">{{title}}</div>
             <div class="song-artist">{{artist}}</div>
         </div>
@@ -117,7 +119,9 @@ export default {
             }
         },
         showAdvancedFileInfo() {
-            return this.$store.state.nav.advancedFileInfo
+            if (this.$store.state.nav.advancedFileInfo && this.showCodecInfo) {
+                return 'hover'
+            } else return ''
         }
     },
     methods: {
@@ -139,11 +143,18 @@ export default {
         },
         leaveImage() {
             this.showLargeImage = false
+        },
+        hoverCodec() {
+            this.showCodecInfo = true
+        },
+        leaveCodec() {
+            this.showCodecInfo = false
         }
     },
     data() {
         return {
             showLargeImage: false,
+            showCodecInfo: false,
             advancedFileInfo: {}
         }
     },
@@ -257,19 +268,24 @@ export default {
     transition: .1s;
 }
 
-.large-album-art {
+.popup {
     position: fixed;
     width: auto;
     height: 300px;
     background: var(--back-bg);
-    transform: translateY(-215px);
     border-radius: 5px;
     box-shadow: 0px 5px 10px rgba(0,0,0,.15);
     pointer-events: none;
     opacity: 0;
     //transition: .15s;
     border: solid 1px var(--bd);
+    transition: 0.2s cubic-bezier(0.17, 0.88, 0.25, 1.1);
+    transition-property: transform opacity;
+}
+
+.large-album-art {
     display: flex;
+    transform: translate(-145px, -10px) scale(0);
 
     .inner {
         width: 300px;
@@ -283,17 +299,21 @@ export default {
         position: relative;
         transition: .15s;
     }
+}
+
+.codec-info {
+    width: 250px;
+    transform: translate(-10px, -10px) scale(0);
 
     .advanced-info {
-        width: 250px;
-        height: calc(300px - 30px);
-        border-radius: 5px;
+        position: relative;
         display: flex;
         flex-direction: column;
-        padding: 15px 20px;
         background-color: var(--back-bg);
-        position: relative;
+        height: calc(300px - 30px);
+        padding: 15px 20px;
         z-index: 2;
+        border-radius: 5px;
 
         h3 {
             margin-top: 5px;
@@ -305,7 +325,7 @@ export default {
     }
 }
 
-.large-album-art::after {
+.popup::after {
     content: "";
     width: 20px;
     height: 20px;
@@ -320,8 +340,16 @@ export default {
     z-index: 1;
 }
 
-.large-album-art.hover {
+.popup.hover {
     opacity: 1;
+}
+
+.popup.hover.large-album-art {
+    transform: translateY(-215px);
+}
+
+.popup.hover.codec-info {
+    transform: translate(70px, -215px);
 }
 
 .large-album-art.hover-noimg {

@@ -87,7 +87,9 @@ ipcRenderer.on('updateNav', (event, checkNav) => {
 
 router.beforeEach(async (to, from, next) => {
     window.scrollTo(0, 0)
-    store.commit('audio/updateCurrentList', [])
+    if (to.path != '/playlist') {
+        store.commit('audio/updateCurrentList', [])
+    }
     if (to.query.column && to.query.q) {
         store.dispatch('audio/getSpecificSongs', {
             column: to.query.column,
@@ -97,14 +99,17 @@ router.beforeEach(async (to, from, next) => {
         store.commit('audio/getNoSongs')
     } else if (to.path == '/playlist' && to.query.id) {
         const playlist = await ipcRenderer.invoke('getSpecificPlaylist', to.query.id)
-        const unsortedSongs = JSON.parse(playlist[0].songIds)
-        const sortedSongs = sort.sortArrayNum(unsortedSongs, 'position')
-        const sortedIds = []
+        const sortedSongs = sort.sortArrayNum(JSON.parse(playlist[0].songIds), 'position')
+        const ids = []
         sortedSongs.forEach(song => {
-            sortedIds.push(song.id)
+            ids.push(song.id)
         })
-        const songs = await ipcRenderer.invoke('getSomeFromColumnMatches', sortedIds)
-        store.commit('audio/updateCurrentListNoSort', songs)
+        const songs = await ipcRenderer.invoke('getSomeFromColumnMatches', ids)
+        const sortedSongsToUse = []
+        sortedSongs.forEach(song => {
+            sortedSongsToUse.push(songs.find(item => item.id == song.id))
+        })
+        store.commit('audio/updateCurrentListNoSort', sortedSongsToUse)
         store.commit('playlist/setCurrentPlaylist', playlist[0])
     } else {
         store.dispatch('audio/getAllSongs')

@@ -354,6 +354,19 @@ export default {
             }
         }
     },
+    watch: {
+        topTitleText() {
+            const topHeader = this.$refs.header
+            topHeader.style.fontSize = this.titleSizes.large
+            if (topHeader.getBoundingClientRect().height > 190) {
+                topHeader.style.fontSize = this.titleSizes.medium
+            }
+            if (topHeader.getBoundingClientRect().height > 140 && topHeader.style.fontSize == this.titleSizes.medium) {
+                topHeader.style.fontSize = this.titleSizes.small
+            }
+            this.selectedItems = []
+        }
+    },
     destroyed() {
         bus.$off()
     },

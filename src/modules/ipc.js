@@ -169,6 +169,7 @@ export default {
         })
 
         ipcMain.handle('updatePlaylist', (event, playlist) => {
+            console.log(playlist)
             return db.updatePlaylist(playlist.column, playlist.id, playlist.data)
         })
 

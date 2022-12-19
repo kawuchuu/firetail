@@ -73,7 +73,6 @@ export default {
             prepIds += `'${id}',`
         })
         prepIds = prepIds.substr(0, prepIds.length - 1)
-        console.log(prepIds)
         let stmt = db.prepare(`SELECT * FROM library WHERE id IN (${prepIds})`)
         const rows = stmt.all()
         return rows

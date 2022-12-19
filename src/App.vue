@@ -125,7 +125,7 @@ export default {
         }
     },
     async mounted() {
-        require('./scss/classic.scss')
+        require('./scss/default.scss')
         if (window.localStorage.getItem('sidebarwidth')) {
             this.sidebarwidth = window.localStorage.getItem('sidebarwidth')
         } else {

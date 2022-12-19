@@ -1,5 +1,6 @@
 <template>
-    <div class="root">
+    <div class="root" @dragover="songDragOver" @dragleave="songDragLeave" @dragend="songDragLeave" @drop="songDragFinish">
+        <div v-if="dragOverY >= 0 && dragOverY <= 21" class="drag-indicate-line top" />
         <li draggable="true" class="results-link" @dragstart="drag" @dragend="stopDrag" @mouseover="listHover" @mouseleave="listHoverLeave" :class="[isActive, doHighlight, isSimple]">
             <i class="ft-icon play-pause" :style="listIconVisible" @click="decidePlaySong" @mouseover="listIconHover" @mouseleave="listIconHoverLeave">{{ listIcon }}</i>
             <i class="ft-icon favourite-icon" @click="handleFavourite">{{ favouriteIcon }}</i>
@@ -22,12 +23,14 @@
                 <p class="list-duration"><span>{{source.duration}}</span></p>
             </div>
         </li>
+        <div v-if="dragOverY >= 22 && dragOverY <= 42" class="drag-indicate-line bottom" />
     </div>
 </template>
 
 <script>
 import { ipcRenderer } from 'electron'
 import { bus, contextMenuBus } from '@/main'
+import sort from '@/modules/sort'
 
 export default {
     props: ['source', 'index', 'selectedItems', 'prev', 'performingMultiDrag'],
@@ -94,7 +97,8 @@ export default {
     data() {
         return {
             isHover: false,
-            isIconHover: false
+            isIconHover: false,
+            dragOverY: -1
         }
     },
     methods: {
@@ -163,6 +167,53 @@ export default {
         },
         stopDrag() {
             bus.$emit('stopDrag')
+        },
+        songDragOver(evt) {
+            evt.preventDefault()
+            if (this.$route.path != '/playlist') return
+            if (evt.dataTransfer && evt.dataTransfer.types[0] === 'ftsong') {
+                evt.dataTransfer.dropEffect = 'copy'
+            } else if (evt.dataTransfer) {
+                evt.dataTransfer.dropEffect = 'none'
+            }
+            this.dragOverY = evt.layerY
+        },
+        songDragLeave() {
+            if (this.$route.path != '/playlist') return
+            this.dragOverY = -1
+        },
+        async songDragFinish(evt) {
+            evt.preventDefault()
+            if (this.$route.path != '/playlist') return
+            let songs = evt.dataTransfer.getData('ftsong')
+            console.log(evt)
+            if (songs === '') return
+            songs = JSON.parse(songs)
+            const playlist = await ipcRenderer.invoke('getSpecificPlaylist', this.$route.query.id)
+            const songIds = JSON.parse(playlist[0].songIds)
+            const sortedPlaylistSongs = sort.sortArrayNum(songIds, 'position')
+            const currentSong = songIds.find(item => item.id == this.source.id).position
+            const newStartPos = this.dragOverY >= 0 && this.dragOverY <= 21 ? currentSong : currentSong + 1
+            songs.forEach((song, index) => {
+                const item = sortedPlaylistSongs.find(item => item.id == song.id)
+                item.position = newStartPos
+                const plIndex = sortedPlaylistSongs.indexOf(item)
+                console.log(item)
+                sortedPlaylistSongs.splice(plIndex, 1)
+                sortedPlaylistSongs.splice(newStartPos + index - 1, 0, item)
+            })
+            console.log(newStartPos + songs.length, sortedPlaylistSongs.length)
+            for (let i = newStartPos + songs.length - 1; i < sortedPlaylistSongs.length; i++) {
+                console.log(i + "a")
+                sortedPlaylistSongs[i].position = sortedPlaylistSongs[i].position + songs.length
+            }
+            console.log(sortedPlaylistSongs)
+            /* ipcRenderer.invoke('updatePlaylist', {
+                column: 'songids',
+                id: playlist[0].id,
+                data: JSON.stringify(sortedPlaylistSongs)
+            }) */
+            this.dragOverY = -1
         }
     }
 }
@@ -189,6 +240,13 @@ export default {
 
 .results-link.simple.albums {
     grid-template-columns: 40px 40px 40px 40px 1fr;
+}
+
+.drag-indicate-line {
+    width: calc(100% - 40px);
+    height: 2px;
+    background-color: var(--hl-txt);
+    position: absolute;
 }
 
 li:hover {
