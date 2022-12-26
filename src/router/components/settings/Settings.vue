@@ -40,19 +40,17 @@ export default {
                     id: 'subtitleAppearance',
                     label: 'Appearance'
                 },
-                /* {
-                    type: 'switch',
-                    id: 'systemThemeToggle',
-                    label: 'Use system theme with Firetail',
-                    enabled: window.localStorage.getItem('theme') === 'system',
-                    onClick(vue, enabled) {
-                        window.localStorage.setItem('theme', enabled ? 'system' : 'dark')
-                    }
-                }, */
+                {
+                    type: 'dropdown',
+                    id: 'altThemeDropdown',
+                    label: 'App theme',
+                    options: ['Firetail', 'Classic', 'Cyber'],
+                    option: 'Firetail'
+                },
                 {
                     type: 'dropdown',
                     id: 'themeDropdown',
-                    label: 'App theme',
+                    label: 'Colour theme',
                     options: ['System', 'Dark', 'Light'],
                     option: window.localStorage.getItem('theme'),
                     onChange(vue, option) {
@@ -87,7 +85,7 @@ export default {
                         }
                     }
                 },
-                /* {
+                {
                     type: 'switch',
                     id: 'highContrastSwitch',
                     label: 'Use high contrast style',
@@ -95,8 +93,10 @@ export default {
                     onClick(vue, enabled) {
                         window.localStorage.setItem('highContrast', enabled)
                     }
-                }, */
-                {
+                },
+                // TODO: actually add features to spotify integration that people would want to use
+                // for the time being, this feature will remain unused
+                /* {
                     type: 'subtitle',
                     id: 'subtitleSpotify',
                     label: 'Spotify Integration'
@@ -156,7 +156,7 @@ export default {
                     type: 'text',
                     id: 'spotifyPrivacyWarning',
                     message: `By using this feature, you agree to Spotify's privacy policy. You can opt-out by removing Firetail's access in your account settings.`
-                },
+                }, */
                 {
                     type: 'subtitle',
                     id: 'subtitleAdvanced',
@@ -209,7 +209,7 @@ main {
 .option-wrapper {
     padding: 0px 70px 50px;
     width: 100%;
-    max-width: 1150px;
+    max-width: 1050px;
 }
 
 .top-title {
@@ -217,7 +217,7 @@ main {
     display: flex;
     align-items: center;
     width: 100%;
-    max-width: 1150px;
+    max-width: 1050px;
 }
 
 .top-title h1 {

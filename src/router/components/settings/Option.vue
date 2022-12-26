@@ -220,7 +220,7 @@ export default {
             background: var(--fg-bg);
             width: 150px;
             border-radius: 0px 0px 10px 10px;
-            z-index: 1;
+            z-index: 3;
             
             option {
                 opacity: 0.65;
