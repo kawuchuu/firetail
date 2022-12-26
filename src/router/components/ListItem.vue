@@ -78,7 +78,7 @@ export default {
     min-height: 45px;
     margin-right: 15px;
     margin-left: 18px;
-    background-color: #1e1e1ebe;
+    background-color: var(--back-bg);
     border-radius: 3px;
     background-image: url('../../assets/no_album.svg');
     background-size: cover;

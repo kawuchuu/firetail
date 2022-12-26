@@ -586,7 +586,7 @@ div.section {
 .tab-album-art {
     min-width: 200px;
     height: 200px;
-    background-color: #000000b3;
+    background-color: var(--back-bg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

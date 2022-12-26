@@ -220,8 +220,6 @@ export default {
         //transition-delay: 0.2s;
     }
     .artists-list:hover {
-        box-shadow: 2px 0px 10px rgba(0,0,0,.15);
-
         .list-fade {
             width: 270px;
         }
@@ -236,6 +234,10 @@ export default {
 
         .albums-item:hover a span, .albums-item a.router-link-exact-active span {
             opacity: 1 !important;
+        }
+
+        .artist-inner {
+            box-shadow: 2px 0px 10px rgba(0,0,0,.15);
         }
     }
     .albums-container {
