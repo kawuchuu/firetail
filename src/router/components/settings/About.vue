@@ -44,6 +44,11 @@ h1 {
     margin: 10px 0px;
     letter-spacing: -0.02em;
 }
+
+.darwin h1 {
+    letter-spacing: -0.01em;
+}
+
 p {
     margin: 10px 0px;
     opacity: 0.75;

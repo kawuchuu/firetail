@@ -89,9 +89,10 @@ export default {
                     type: 'switch',
                     id: 'highContrastSwitch',
                     label: 'Use high contrast style',
-                    enabled: window.localStorage.getItem('highContrast'),
+                    enabled: window.localStorage.getItem('highContrast') == 'true',
                     onClick(vue, enabled) {
                         window.localStorage.setItem('highContrast', enabled)
+                        enabled ? document.documentElement.classList.add('high-contrast') : document.documentElement.classList.remove('high-contrast')
                     }
                 },
                 // TODO: actually add features to spotify integration that people would want to use
@@ -224,6 +225,10 @@ main {
     font-size: 5.5em;
     margin: 0;
     letter-spacing: -0.04em;
+}
+
+.darwin .top-title h1 {
+    letter-spacing: -0.02em;
 }
 
 .bg-gradient {

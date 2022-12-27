@@ -20,6 +20,10 @@
             </div>
         </div>
         <div class="root-wrapper">
+            <!-- <div class="bottom-row">
+                <div class="round-button"><i class="ft-icon">play</i></div>
+                <div class="round-button"><i class="ft-icon">shuffle</i></div>
+            </div> -->
             <div class="sticky-bg" :class="currentScroll">
                 <div class="bg-inner">
                     <h3>{{ topTitleText }}</h3>
@@ -553,7 +557,6 @@ div.section {
 
 .top-title-text {
     max-width: calc(100% - 200px);
-    padding-bottom: 10px;
     max-height: 200px;
 }
 
@@ -638,6 +641,31 @@ div.section {
 
     .inner-songload {
         width: 100%;
+    }
+}
+
+.darwin .top-header, .darwin .bg-inner h3 {
+    letter-spacing: -0.02em;
+}
+
+.bottom-row {
+    display: flex;
+    margin-top: 20px;
+    position: relative;
+    z-index: 1;
+    margin-left: 20px;
+
+    .round-button {
+        background: var(--hl-txt);
+        min-width: 50px;
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        border-radius: 100px;
+        color: black;
+        margin-right: 25px;
     }
 }
 

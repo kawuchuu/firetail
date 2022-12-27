@@ -27,6 +27,9 @@
                     <div class="bg-gradient-layer"></div>
                 </div>
                 <router-view></router-view>
+                <div class="bg-text" v-if="$store.state.audio.currentList.length == 0">
+                    <i class="ft-icon">{{ $route.path == '/artists' ? "person" : "album" }}</i>
+                </div>
             </section>
         </div>
     </div>
@@ -211,6 +214,19 @@ export default {
     height: 300px;
     position: absolute;
     background: linear-gradient(var(--bg), transparent);
+}
+
+.bg-text {
+    width: 100%;
+    height: calc(100vh - 50px - 86px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    i {
+        font-size: 8em;
+        color: var(--bd);
+    }
 }
 
 @media (max-width: 1350px) {

@@ -72,6 +72,7 @@ export default {
                     year: meta.common.year ? meta.common.year : null,
                     disc: meta.common.disk ? meta.common.disk.no : null
                 }
+                console.log(meta.common.year)
                 let artistAlbum = `${meta.common.artist}${meta.common.album}`.replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')
                 toAdd.push(metaObj)
                 progress++

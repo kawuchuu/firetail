@@ -270,7 +270,7 @@ async function createWindow() {
         minHeight: 400,
         show: false,
         titleBarStyle: osType === 'darwin' ? 'hiddenInset' : 'default',
-        trafficLightPosition: { x: 25, y: 20 },
+        trafficLightPosition: { x: 25, y: 17 },
         frame: osType === 'darwin' || osType === 'win32' ? false : true,
         //backgroundColor: osType === 'darwin' ? 'transparent' : '#181818',
         backgroundColor: 'transparent',

@@ -108,15 +108,19 @@ export default {
     font-weight: bold;
     border-bottom: solid 1px var(--bd);
     padding-bottom: 15px;
-    margin: 50px 0px 20px;
+    margin: 30px 0px 20px;
     letter-spacing: -0.02em;
+}
+
+.darwin .subtitle {
+    letter-spacing: -0.01em;
 }
 
 .button-option, .switch-option, .dropdown-option {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0px;
+    padding: 6px 0px;
     
     p {
         margin: 0;

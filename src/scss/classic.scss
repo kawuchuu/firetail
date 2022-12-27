@@ -128,3 +128,13 @@ html.dark {
         border-color: var(--hl-txt) !important;
     }
 }
+
+.darwin {
+    .nav-buttons.macos {
+        margin-top: 0px;
+    }
+
+    .top-bar .inner {
+        padding-left: 80px;
+    }
+}

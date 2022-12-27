@@ -60,3 +60,53 @@ html.light {
     background-position: center 85%;
     //opacity: 0.2;
 }
+
+html.dark.high-contrast {
+    --back-bg: #000000 !important;
+    --bg: #18171c !important;
+    --fg-bg: #2b2838 !important;
+    --sub-fg: #232029 !important;
+    --bd: #ffffff !important;
+    --button: #322d47 !important;
+    --hl-txt: #ff5448 !important;
+    --hl-op: #eb6e642a !important;
+}
+
+html.light.high-contrast {
+    --back-bg: #dfdfdf !important;
+    --sub-fg: #dedbe4 !important;
+    --fg-bg: #d7d2e8 !important;
+    --bd: #000000 !important;
+    --button: #c6bde8 !important;
+    --hl-txt: #d44835 !important;
+    --hl-op: #eb6e642a !important;
+}
+
+.high-contrast {
+    .container {
+        border-color: var(--bd);
+    }
+
+    .bg-banner {
+        background-image: none !important;
+    }
+
+    .top-title-text p, .artist-title-album span, div.section {
+        opacity: 1;
+    }
+
+    .item-sidebar {
+        outline: solid 2px var(--bd);
+        width: calc(100% - 2px);
+        margin: 6px 0px;
+        opacity: 1;
+    }
+
+    .router-link-active .item-sidebar {
+        outline-color: var(--hl-txt);
+    }
+
+    .nav-button, .top-button, .search-btn {
+        outline: solid 2px var(--bd);
+    }
+}

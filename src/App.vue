@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="test" @dragover="changeDrag($event, true)">
+    <div id="app" class="test" :class="platform" @dragover="changeDrag($event, true)">
         <input type="file" multiple accept="audio/*" id="addFiles" @change="addFiles" style="display: none;">
         <div class="drag-detail">
             <p id="dragInfo">Nothing selected</p>
@@ -103,7 +103,8 @@ export default {
         return {
             isDraggedOver: false,
             sidebarwidth: 225,
-            sidebarisResizing: false
+            sidebarisResizing: false,
+            platform: process.platform
         }
     },
     watch: {
@@ -149,6 +150,9 @@ export default {
                 document.documentElement.classList.add('dark')
                 document.documentElement.classList.remove('light')
             }
+        }
+        if (window.localStorage.getItem('highContrast') == 'true') {
+            document.documentElement.classList.add('high-contrast')
         }
         let port = await ipcRenderer.invoke('getPort')
         this.$store.commit('nav/updatePort', port)
@@ -302,10 +306,11 @@ html.light {
     overflow: hidden;
     overflow-y: auto;
     position: fixed;
-    height: calc(100% - 135px);
-    width: calc(100% - var(--sidebar-width));
+    height: calc(100% - 135px - 2px);
+    width: calc(100% - var(--sidebar-width) - 2px);
     background: var(--bg);
     border-radius: var(--main-border-radius);
+    border: solid 2px transparent;
 }
 
 #app {

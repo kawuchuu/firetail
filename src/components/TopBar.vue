@@ -12,8 +12,8 @@
                 <div class="top-button-container">
                     <TopButtons v-for="item in button" v-bind:button="item" v-bind:key="item.id"></TopButtons>
                 </div>
-                <div class="divider" />
                 <div v-if="platform === 'win32'" class="windows-custom-buttons">
+                    <div class="divider" />
                     <div class="window-button" @click="sendButtonSignal('minimize')"><img src="@/assets/minimise.svg"></div>
                     <div class="window-button" @click="sendButtonSignal(isMaximized ? 'unmaximize' : 'maximize')"><img :src="maximizeIcon"></div>
                     <div class="window-button close" @click="sendButtonSignal('close')"><img src="@/assets/close.svg"></div>
@@ -88,6 +88,7 @@ export default {
 .top-button-container {
     display: flex;
     padding: 10px;
+    padding-right: 15px;
     border-radius: 40px;
     pointer-events: all;
     //border: solid 1px #5f587c;
