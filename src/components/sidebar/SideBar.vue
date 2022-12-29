@@ -103,7 +103,7 @@ export default {
     align-items: center;
     cursor: pointer;
     opacity: 0.75;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 .router-link-active .item-sidebar {

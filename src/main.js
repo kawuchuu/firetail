@@ -124,6 +124,13 @@ const changeVol = action => {
     store.commit('audio/setVolume', vol)
 }
 
+ipcRenderer.on('updateHighContrast', (evt, enabled) => {
+    window.localStorage.setItem('highContrast', enabled)
+    console.log('highcontrast: ' + enabled)
+    store.commit('nav/updateHighContrast', enabled)
+    enabled ? document.documentElement.classList.add('high-contrast') : document.documentElement.classList.remove('high-contrast')
+})
+
 ipcRenderer.on('control', (evt, action) => {
     switch(action) {
         case 'playPause':

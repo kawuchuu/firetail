@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, Menu } from 'electron'
+import { app, protocol, BrowserWindow, Menu, nativeTheme } from 'electron'
 import {
     createProtocol
 } from 'vue-cli-plugin-electron-builder/lib'
@@ -337,6 +337,10 @@ async function createWindow() {
 
     win.webContents.setWindowOpenHandler(() => {
         return { action: 'deny' };
+    })
+
+    nativeTheme.on('updated', evt => {
+        win.webContents.send('updateHighContrast', evt.sender.shouldUseHighContrastColors)
     })
 
 }

@@ -1,4 +1,4 @@
-import { app, ipcMain, shell } from 'electron'
+import { app, ipcMain, nativeTheme, shell } from 'electron'
 import fs from 'fs'
 import db from './database'
 import files from './files'
@@ -225,5 +225,7 @@ export default {
         win.on('unmaximize', () => {
             win.webContents.send('change-maximize-button', 'maximise')
         })
+
+        ipcMain.handle('isHighContrastEnabled', () => { return nativeTheme.shouldUseHighContrastColors })
     }
 }

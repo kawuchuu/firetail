@@ -126,7 +126,7 @@ export default {
         }
     },
     async mounted() {
-        require('./scss/default.scss')
+            require(`./scss/${window.localStorage.getItem('altTheme')}.scss`)
         if (window.localStorage.getItem('sidebarwidth')) {
             this.sidebarwidth = window.localStorage.getItem('sidebarwidth')
         } else {
@@ -153,6 +153,9 @@ export default {
         }
         if (window.localStorage.getItem('highContrast') == 'true') {
             document.documentElement.classList.add('high-contrast')
+        } else if (await ipcRenderer.invoke('isHighContrastEnabled')) {
+            document.documentElement.classList.add('high-contrast')
+            localStorage.setItem('highContrast', true)
         }
         let port = await ipcRenderer.invoke('getPort')
         this.$store.commit('nav/updatePort', port)
@@ -306,11 +309,10 @@ html.light {
     overflow: hidden;
     overflow-y: auto;
     position: fixed;
-    height: calc(100% - 135px - 2px);
-    width: calc(100% - var(--sidebar-width) - 2px);
+    height: calc(100% - 135px);
+    width: calc(100% - var(--sidebar-width));
     background: var(--bg);
     border-radius: var(--main-border-radius);
-    border: solid 2px transparent;
 }
 
 #app {

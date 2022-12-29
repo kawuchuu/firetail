@@ -96,7 +96,7 @@ export default {
     width: 100%;
     max-width: 270px;
     z-index: 4;
-    height: calc(100% - 160px);
+    height: calc(100% - 166px);
     padding: 15px;
     background: var(--bg);
     border-right: solid var(--bd) 1px;
@@ -216,12 +216,25 @@ export default {
     background: linear-gradient(var(--bg), transparent);
 }
 
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    15% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 .bg-text {
     width: 100%;
     height: calc(100vh - 50px - 86px);
     display: flex;
     justify-content: center;
     align-items: center;
+    animation: fadeIn 2s;
 
     i {
         font-size: 8em;

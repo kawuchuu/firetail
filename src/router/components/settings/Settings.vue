@@ -45,7 +45,10 @@ export default {
                     id: 'altThemeDropdown',
                     label: 'App theme',
                     options: ['Firetail', 'Classic', 'Cyber'],
-                    option: 'Firetail'
+                    option: window.localStorage.getItem('altTheme') ? window.localStorage.getItem('altTheme') : 'Firetail',
+                    onChange(vue, option) {
+                        window.localStorage.setItem('altTheme', option.toLowerCase())
+                    }
                 },
                 {
                     type: 'dropdown',
@@ -90,6 +93,18 @@ export default {
                     id: 'highContrastSwitch',
                     label: 'Use high contrast style',
                     enabled: window.localStorage.getItem('highContrast') == 'true',
+                    conditions: {
+                        enabled: {
+                            type: 'store',
+                            module: 'nav',
+                            state: 'highContrastEnabled',
+                            base: window.localStorage.getItem('highContrast') == 'true'
+                        },
+                        watch: {
+                            item: 'nav/highContrastEnabled',
+                            for: 'enabled',
+                        }
+                    },
                     onClick(vue, enabled) {
                         window.localStorage.setItem('highContrast', enabled)
                         enabled ? document.documentElement.classList.add('high-contrast') : document.documentElement.classList.remove('high-contrast')

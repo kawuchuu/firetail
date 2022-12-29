@@ -231,7 +231,7 @@ export default {
     column-gap: 5px;
     transition: .25s;
     transition-property: margin-left;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 .results-link.simple {
@@ -266,11 +266,11 @@ li.nohover:hover {
 }
 
 .results-link.hactive.notop {
-    border-radius: 0px 0px 5px 5px;
+    border-radius: 0px 0px 10px 10px;
 }
 
 .results-link.hactive.nobottom {
-    border-radius: 5px 5px 0px 0px;
+    border-radius: 10px 10px 0px 0px;
 }
 
 .results-link.hactive.none {

@@ -12,7 +12,7 @@
             <div ref="topTitle" class="top-title-text">
                 <!-- <h1 v-if="$route.path == '/artists' && list[0]" ref="header" :style="topTitleSize" class="top-header">{{list[0].artist}}</h1>
                 <h1 v-else-if="$route.path == '/albums' && list[0]" ref="header" :style="topTitleSize" class="top-header">{{list[0].album}}</h1> -->
-                <h1 ref="header" :style="topTitleSize" class="top-header">{{ topTitleText }}</h1>
+                <h1 ref="header" :style="topTitleSize" class="top-header" v-show="topTitleText !== ''">{{ topTitleText }}</h1>
                 <!-- <h1 ref="headerTEST" class="top-header-test">{{ topTitleText }}</h1> -->
                 <p v-if="$route.path === '/playlist' && playlist.desc">{{ playlist.desc }}</p>
                 <p v-if="$route.path == '/albums' && list[0] && list[0].year">{{ list[0].year }} • {{ screenCountNum }} {{ $tc('topTitle.countTypeSongs', parseInt(screenCountNum)) }}</p>
@@ -153,17 +153,18 @@ export default {
                     return 'Songs'
                 }
                 case '/albums': {
-                    if (!this.list[0]) return 'Songs'
+                    if (!this.list[0]) return ''
                     else return this.list[0].album
                 }
                 case '/artists': {
-                    if (!this.list[0]) return 'Songs'
+                    if (!this.list[0]) return ''
                     else return this.list[0].artist
                 }
                 case '/playlist': {
                     return this.playlist.name
                 }
                 default: {
+                    console.log('defaulting to songs')
                     return 'Songs'
                 }
             }
@@ -361,6 +362,7 @@ export default {
     watch: {
         topTitleText() {
             const topHeader = this.$refs.header
+            if (topHeader.getBoundingClientRect().height == 0) return
             topHeader.style.fontSize = this.titleSizes.large
             if (topHeader.getBoundingClientRect().height > 190) {
                 topHeader.style.fontSize = this.titleSizes.medium

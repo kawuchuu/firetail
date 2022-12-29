@@ -50,8 +50,13 @@ export default {
 .top-button {
     display: flex;
     align-items: center;
+    justify-content: center;
     cursor: pointer;
     -webkit-app-region: no-drag;
+    width: 18px;
+    height: 18px;
+    padding: 10px;
+    border-radius: 40px;
 }
 
 /* .top-button:not(:first-child) {
@@ -64,10 +69,5 @@ export default {
 
 .top-button i {
     font-size: 22px;
-}
-
-.top-button span {
-    margin-left: 10px;
-    font-size: 13px;
 }
 </style>

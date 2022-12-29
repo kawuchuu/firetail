@@ -96,6 +96,7 @@ const state = () => ({
         back: false,
         forward: false
     },
+    highContrastEnabled: false,
     advancedFileInfo: window.localStorage.getItem('advancedFileInfo') === 'true'
 })
 
@@ -173,6 +174,9 @@ const mutations = {
     },
     updateAdvancedFileInfo(state, enabled) {
         state.advancedFileInfo = enabled
+    },
+    updateHighContrast(state, enabled) {
+        state.highContrastEnabled = enabled
     }
 }
 

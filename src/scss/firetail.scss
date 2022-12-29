@@ -68,8 +68,9 @@ html.dark.high-contrast {
     --sub-fg: #232029 !important;
     --bd: #ffffff !important;
     --button: #322d47 !important;
-    --hl-txt: #ff5448 !important;
-    --hl-op: #eb6e642a !important;
+    --hl-txt: #ff9891 !important;
+    --hl-txt-darker: #af2a18;
+    --hl-op: #ff98912a !important;
 }
 
 html.light.high-contrast {
@@ -78,21 +79,22 @@ html.light.high-contrast {
     --fg-bg: #d7d2e8 !important;
     --bd: #000000 !important;
     --button: #c6bde8 !important;
-    --hl-txt: #d44835 !important;
-    --hl-op: #eb6e642a !important;
+    --hl-txt: #af2a18 !important;
+    --hl-op: #9d1f0e2a !important;
 }
 
 .high-contrast {
     .container {
-        border-color: var(--bd);
+        outline: solid 2px var(--bd);
+        z-index: 2;
     }
 
     .bg-banner {
         background-image: none !important;
     }
 
-    .top-title-text p, .artist-title-album span, div.section {
-        opacity: 1;
+    .top-title-text p, .artist-title-album span, div.section, .options option, .about p, .list-subtitle, .special-button {
+        opacity: 1 !important;
     }
 
     .item-sidebar {
@@ -106,7 +108,45 @@ html.light.high-contrast {
         outline-color: var(--hl-txt);
     }
 
-    .nav-button, .top-button, .search-btn {
+    .nav-button, .top-button, .search-btn, .dropdown, .dropdown .options, .results-link:hover {
         outline: solid 2px var(--bd);
+    }
+
+    .special-gradient-bg-wrapper {
+        display: none;
+    }
+
+    .results-link.hactive {
+        background: var(--text) !important;
+        color: var(--back-bg) !important;
+    }
+
+    .results-link.hactive a {
+        color: var(--back-bg);
+    }
+
+    .results-link.hactive:hover {
+        outline: solid 2px var(--hl-txt-darker);
+        z-index: 2;
+    }
+
+    .results-link.hactive.active, .results-link.hactive.active a {
+        color: var(--hl-txt-darker) !important;
+    }
+
+    .playing-bar {
+        border-top: solid 2px var(--text);
+    }
+
+    .resize-line {
+        border-left-width: 2px;
+        transform: translateX(-1px);
+    }
+}
+
+html.light.high-contrast {
+    .sticky-bg.sticky {
+        backdrop-filter: none;
+        background-color: #fff !important;
     }
 }

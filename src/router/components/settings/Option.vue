@@ -49,6 +49,10 @@ export default {
                 }
             }
         },
+        updateSwitch() {
+            const optionEnabled = this.option.conditions.enabled
+            this.option.enabled = this.$store.state[optionEnabled.module][optionEnabled.state]
+        },
         switchOnClick() {
             this.option.enabled = !this.option.enabled
             this.option.onClick(this.$root, this.option.enabled)
@@ -72,7 +76,7 @@ export default {
         },
         prepWatch() {
             if (!this.option.conditions || !this.option.conditions.watch) return
-            const getModState = this.option.conditions.watch.option.split('/')
+            const getModState = this.option.conditions.watch.item.split('/')
             const getStoreoption = this.$store.state[getModState[0]][getModState[1]]
             return getStoreoption
         },
@@ -92,6 +96,9 @@ export default {
                 case "label": {
                     this.updateLabel()
                     break;
+                }
+                case "enabled": {
+                    this.updateSwitch()
                 }
             }
         }
@@ -239,6 +246,8 @@ export default {
     .dropdown.active {
         border-radius: 10px 10px 0px 0px;
         box-shadow: 0px 4px 4px rgba(0,0,0,.2);
+        position: relative;
+        z-index: 55;
 
         .options {
             display: block;
