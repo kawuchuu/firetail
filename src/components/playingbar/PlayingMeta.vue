@@ -204,7 +204,7 @@ export default {
     line-height: 20px;
     white-space: nowrap;
     max-width: 350px;
-    font-weight: bold;
+    font-weight: 600;
     margin-right: 10px;
     margin-bottom: 3px;
     letter-spacing: -0.01em;
@@ -317,6 +317,7 @@ export default {
 
         h3 {
             margin-top: 5px;
+            font-weight: 600;
         }
 
         span:not(:last-child) {

@@ -7,6 +7,7 @@ import ArtistAlbumView from './components/ArtistAlbumView'
 import store from '../store'
 import tr from '../translation'
 import Settings from './components/settings/Settings'
+import Home from './components/Home'
 import VirtualList from 'vue-virtual-scroll-list'
 import sort from '../modules/sort'
 import { ipcRenderer } from 'electron'
@@ -70,6 +71,11 @@ const router = new VueRouterEx({
             path: '/settings',
             component: Settings,
             name: tr.t('settings.title')
+        },
+        {
+            path: '/home',
+            component: Home,
+            name: 'Home'
         },
         {
             path: '*',

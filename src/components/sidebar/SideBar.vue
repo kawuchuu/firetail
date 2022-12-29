@@ -149,7 +149,7 @@ export default {
 }
 
 .router-link-active .item-sidebar span {
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .item-sidebar span {

@@ -287,6 +287,10 @@ async function createWindow() {
     }
     win = new BrowserWindow(winConfig)
     if (isDevelopment) {
+        if (osType == 'darwin') {
+            app.dock.setIcon(path.resolve(__dirname, '../build/other/macos.png'))
+        }
+        app.setName('Firetail')
         if (!app.commandLine.hasSwitch('enable-instance-lock')) {
             server.startServer(app.getPath('userData'), win)
         }
@@ -298,14 +302,6 @@ async function createWindow() {
     win.setMenuBarVisibility(false)
 
     win.on('ready-to-show', () => {
-        const enableCd = app.commandLine.hasSwitch('enable-cd-burning')
-        if (enableCd && process.platform == 'linux') {
-            console.log("CD burning is currently very experimental and may not work correctly (I didn't develop the feature). Please proceed with caution.")
-            win.webContents.send('enableCDBurn')
-            win.webContents.on('did-frame-finish-load', () => {
-                win.webContents.send('enableCDBurn')
-            })
-        }
         if (launchSong) {
             openSong(launchSong)
         }

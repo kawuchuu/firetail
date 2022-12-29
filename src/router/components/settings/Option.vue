@@ -111,8 +111,8 @@ export default {
 
 <style lang="scss">
 .subtitle {
-    font-size: 30px;
-    font-weight: bold;
+    font-size: 1.6em;
+    font-weight: 600;
     border-bottom: solid 1px var(--bd);
     padding-bottom: 15px;
     margin: 30px 0px 20px;
@@ -141,11 +141,11 @@ export default {
         border-radius: 10px;
         width: auto;
         text-transform: uppercase;
-        font-weight: bold;
+        font-weight: 600;
         cursor: pointer;
     }
     .button span {
-        font-weight: bold;
+        font-weight: 600;
         text-transform: uppercase;
     }
     .button:hover {

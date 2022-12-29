@@ -32,7 +32,7 @@ export default {
     margin: 0px 8px;
 
     span {
-        font-weight: bold;
+        font-weight: 600;
         text-transform: uppercase;
     }
 

@@ -98,7 +98,6 @@ export default {
                             type: 'store',
                             module: 'nav',
                             state: 'highContrastEnabled',
-                            base: window.localStorage.getItem('highContrast') == 'true'
                         },
                         watch: {
                             item: 'nav/highContrastEnabled',
@@ -229,7 +228,7 @@ main {
 }
 
 .top-title {
-    padding: 50px 70px 20px;
+    padding: 40px 70px 20px;
     display: flex;
     align-items: center;
     width: 100%;
@@ -237,7 +236,7 @@ main {
 }
 
 .top-title h1 {
-    font-size: 5.5em;
+    font-size: 3.75em;
     margin: 0;
     letter-spacing: -0.04em;
 }

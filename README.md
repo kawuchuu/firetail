@@ -17,7 +17,7 @@
 
 If you'd like to try the latest unstable release, check out the snapshot builds [here.](https://github.com/kawuchuu/firetail/releases/continuous) (Please note these builds are incomplete and may not function as expected)
 
-## Prerequesites
+## Prerequisites
 - Python 3.x is required for all platforms to install dependencies.
 
 - To install dependencies and build on Windows, you'll need to install the 'Desktop development with C++' component with Visual Studio Build Tools or Visual Studio Community via Visual Studio Installer.
