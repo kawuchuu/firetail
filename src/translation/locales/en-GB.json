@@ -60,8 +60,8 @@
         "USE_HIGH_CONTRAST": "Use high contrast style",
         "SHOW_FILE_CODEC": "Show file codec information",
         "ABOUT": {
-            "VERSION": "Version",
-            "COPYRIGHT": "Copyright"
+            "VERSION": "Version ",
+            "COPYRIGHT": "Copyright © 2022 "
         }
     },
     "POPUPS": {
@@ -73,6 +73,18 @@
             "SAMPLE_RATE": "Sample rate: ",
             "BIT_DEPTH": "Bits per sample: ",
             "CHANNELS": "No. Channels: "
+        }
+    },
+    "PANEL": {
+        "PLAYLIST": {
+            "TITLE": "Create Playlist",
+            "EDIT_TITLE": "Edit Playlist",
+            "NAME_INPUT": "Name",
+            "DESC_INPUT": "Description",
+            "DEFAULT_NAME": "My Playlist",
+            "DEFAULT_DESC": "My playlist description...",
+            "REMOVE_IMAGE": "Remove Image",
+            "CHOOSE_IMAGE": "Choose image"
         }
     },
     "BUTTONS": {

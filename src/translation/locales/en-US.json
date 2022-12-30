@@ -85,7 +85,8 @@
             "DESC_INPUT": "Description",
             "DEFAULT_NAME": "My Playlist",
             "DEFAULT_DESC": "My playlist description...",
-            "REMOVE_IMAGE": "Remove Image"
+            "REMOVE_IMAGE": "Remove Image",
+            "CHOOSE_IMAGE": "Choose image"
         }
     },
     "BUTTONS": {

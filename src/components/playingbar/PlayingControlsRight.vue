@@ -1,5 +1,11 @@
 <template>
     <div class="right-controls">
+        <i @click="showQueue = !showQueue" class="material-icons">queue_music</i>
+        <div class="popup queue" :class="active">
+            <div class="queue-inner">
+                <span>Queue will go here</span>
+            </div>
+        </div>
         <i @click="mute" class="ft-icon">{{volIcon}}</i>
         <div ref="volBarWrapper" class="vol-bar-inner-container" @mousemove="moveHover" @mouseover="hover" @mouseleave="leave" @mousedown="down">
             <div class="vol-bar" ref="volBar">
@@ -41,13 +47,18 @@ export default {
                     return 'volume-up'
                 }
             }
-        })
+        }),
+        active() {
+            console.log('what')
+            return this.showQueue ? 'active' : ''
+        }
     },
     data() {
         return {
             volMouseDown: false,
             volMouseDownHover: false,
-            unmuteVol: null
+            unmuteVol: null,
+            showQueue: false
         }
     },
     methods: {
@@ -123,6 +134,7 @@ export default {
     i {
         font-size: 20px;
         cursor: pointer;
+        margin-left: 20px;
     }
 
     i:hover {
@@ -218,5 +230,56 @@ export default {
 
 .fill-hover.hover {
     opacity: 1;
+}
+
+.popup {
+    position: fixed;
+    width: auto;
+    height: 300px;
+    background: var(--back-bg);
+    border-radius: 5px;
+    box-shadow: 0px 5px 10px rgba(0,0,0,.15);
+    pointer-events: none;
+    opacity: 0;
+    //transition: .15s;
+    border: solid 1px var(--bd);
+    transition: 0.2s cubic-bezier(0.17, 0.88, 0.25, 1.1);
+    transition-property: transform opacity;
+}
+
+.popup::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    transform: rotate(-45deg);
+    background: var(--back-bg);
+    position: absolute;
+    bottom: -8px;
+    right: 18px;
+    border: solid 1px var(--bd);
+    border-radius: 2px;
+    box-shadow: 0px 5px 10px rgba(0,0,0,.15);
+    z-index: 1;
+}
+
+.popup.active {
+    opacity: 1;
+    transform: translate(-160px, -315px) scale(1) !important;
+}
+
+.popup.queue {
+    transform: translate(-10px, 0px) scale(0);
+    width: 350px;
+    height: 500px;
+    pointer-events: all;
+
+    .queue-inner {
+        width: 100%;
+        height: 100%;
+        background: var(--back-bg);
+        border-radius: 20px;
+        position: relative;
+        z-index: 2;
+    }
 }
 </style>

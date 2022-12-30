@@ -63,7 +63,7 @@ const state = () => ({
             store.commit('panel/invokeNewPanel', {
                 component: 'Playlist',
                 newProps: {
-                    topMsg: 'Create Playlist'
+                    topMsg: tr.t('PANEL.PLAYLIST.TITLE')
                 }
             })
         }

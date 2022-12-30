@@ -65,5 +65,42 @@
             "CHANNELS": "チャンネル : "
         }
     },
+    "PANEL": {
+        "PLAYLIST": {
+            "TITLE": "プレイリストを作る",
+            "EDIT_TITLE": "プレイリストを編集",
+            "NAME_INPUT": "名前",
+            "DESC_INPUT": "概要",
+            "DEFAULT_NAME": "このプレイリストの名前",
+            "DEFAULT_DESC": "楽しい概要",
+            "REMOVE_IMAGE": "写真を削除",
+            "CHOOSE_IMAGE": "写真を選ぶ"
+        }
+    },
+    "BUTTONS": {
+        "CREATE": "作る",
+        "OK": "確かめる",
+        "CANCEL": "キャンセル",
+        "YES": "はい",
+        "NO": "いいえ",
+        "SAVE": "書きます"
+    },
+    "CONTEXT_MENU": {
+        "SONG_LIST_ITEM": {
+            "ADD_QUEUE": "キューに追加する",
+            "GO_ARTIST": "アーティストページへ",
+            "GO_ALBUM": "アルバムページへ",
+            "ADD_FAVOURITE": "お気に入りに追加",
+            "ADD_PLAYLIST": "プレイリストに追加する",
+            "REMOVE_FAVOURITE": "お気に入りから削除",
+            "REMOVE_PLAYLIST": "プレイリストから削除",
+            "DELETE": "音楽ライブラリから削除"
+        },
+        "PLAYLIST_SIDE_ITEM": {
+            "EDIT_PLAYLIST": "このプレイリストを編集",
+            "RENAME": "名前を変更",
+            "REMOVE_PLAYLIST": "このプレイリストを削除"
+        }
+    },
     "APP_NAME": "Firetail"
 }

@@ -5,25 +5,25 @@
                 <div class="pl-img" :style="displayImage">
                     <label for="playlistImg">
                         <div class="label-wrapper">
-                            <span>Choose image</span>
+                            <span>{{ $t('PANEL.PLAYLIST.CHOOSE_IMAGE') }}</span>
                         </div>
                     </label>
                 </div>
                 <input style="display: none" type="file" id="playlistImg" accept="image/*" @change="updateImage">
-                <span class="remove-image">Remove Image</span>
+                <span class="remove-image">{{ $t('PANEL.PLAYLIST.REMOVE_IMAGE') }}</span>
             </div>
             <div class="pl-info">
                 <div class="input">
-                    <label class="input-label">Name</label>
-                    <input type="text" v-model="name" placeholder="My Playlist" value="My Playlist" @focus="focused" @blur="unfocused">
+                    <label class="input-label">{{ $t('PANEL.PLAYLIST.NAME_INPUT') }}</label>
+                    <input type="text" v-model="name" :placeholder="$t('PANEL.PLAYLIST.DEFAULT_NAME')" @focus="focused" @blur="unfocused">
                 </div>
                 <div class="input">
-                    <label class="input-label">Description</label>
-                    <textarea v-model="desc" placeholder="My playlist description..." @focus="focused" @blur="unfocused"></textarea>
+                    <label class="input-label">{{$t('PANEL.PLAYLIST.DESC_INPUT')}}</label>
+                    <textarea v-model="desc" :placeholder="$t('PANEL.PLAYLIST.DEFAULT_DESC')" @focus="focused" @blur="unfocused"></textarea>
                 </div>
             </div>
             <div class="buttons">
-                <Button @click.native="close" :button="{ label: 'Cancel' }" />
+                <Button @click.native="close" :button="{ label: $t('BUTTONS.CANCEL') }" />
                 <Button @click.native="createOrEdit" :button="{ label: saveBtn, style: 'primary' }" />
             </div>
         </div>
@@ -118,9 +118,9 @@ export default {
     },
     data() {
         return {
-            name: 'My Playlist',
+            name: this.$t('PANEL.PLAYLIST.DEFAULT_NAME'),
             desc: '',
-            saveBtn: 'Create',
+            saveBtn: this.$t('BUTTONS.CREATE'),
             image: null,
             imageBlob: null
         }
@@ -128,7 +128,7 @@ export default {
     mounted() {
         const playlist = this.$attrs.props.playlist
         if (playlist) {
-            if (playlist.name || playlist.desc) this.saveBtn = 'Save'
+            if (playlist.name || playlist.desc) this.saveBtn = this.$t('BUTTONS.SAVE')
             if (playlist.name) this.name = playlist.name
             if (playlist.desc) this.desc = playlist.desc
             if (playlist.hasImage) this.image = `http://localhost:56741/images/playlist/${playlist.id}.jpg?${performance.now()}`

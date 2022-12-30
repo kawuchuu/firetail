@@ -29,10 +29,10 @@ export default {
             // everything below is temporary, will develop a proper context menu system :)
             if (evt.which !== 3) return
             let menuItems = [
-                {name: 'Edit playlist', type: 'button', onClick: this.openEditDialog},
-                {name: 'Rename', type: 'button'},
+                {name: this.$t('CONTEXT_MENU.PLAYLIST_SIDE_ITEM.EDIT_PLAYLIST'), type: 'button', onClick: this.openEditDialog},
+                {name: this.$t('CONTEXT_MENU.PLAYLIST_SIDE_ITEM.RENAME'), type: 'button'},
                 {type: 'divider'},
-                {name: 'Remove playlist', type: 'button', style: 'dangerous', onClick: this.delete}
+                {name: this.$t('CONTEXT_MENU.PLAYLIST_SIDE_ITEM.REMOVE_PLAYLIST'), type: 'button', style: 'dangerous', onClick: this.delete}
             ]
             contextMenuBus.$emit('updateitems', {
                 items: menuItems,
@@ -52,7 +52,7 @@ export default {
             this.$store.commit('panel/invokeNewPanel', {
                 component: 'Playlist',
                 newProps: {
-                    topMsg: 'Edit Playlist',
+                    topMsg: this.$t('PANEL.PLAYLIST.EDIT_TITLE'),
                     playlist: fullPlaylist[0]
                 }
             })
