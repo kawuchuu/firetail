@@ -4,7 +4,7 @@
             <div class="nav-buttons" :class="platformType">
                 <div class="app-info">
                     <div class="firetail-icon"/>
-                    <div class="app-name">{{ $t('appName') }}</div>
+                    <div class="app-name">{{ $t('APP_NAME') }}</div>
                     <div class="beta-tag">Beta</div>
                 </div>
                 <SideButtons v-for="item in getNavs" v-bind:button="item" v-bind:key="item.id"></SideButtons>

@@ -2,7 +2,7 @@
     <div class="root">
         <main>
             <div class="top-title">
-                <h1>Settings</h1>
+                <h1>{{$t('SETTINGS.TITLE')}}</h1>
             </div>
             <div class="option-wrapper">
                 <Option class="option" v-for="item in options" :option="item" :key="item.id" :class="item.customClass"/>
@@ -24,13 +24,13 @@ export default {
                 {
                     type: 'subtitle',
                     id: 'subtitleLib',
-                    label: 'Library'
+                    label: this.$t('SETTINGS.SUBTITLES.LIBRARY')
                 },
                 {
                     type: 'button',
                     id: 'removeLibBtn',
-                    label: 'Clear your Firetail music library',
-                    btnLabel: 'Clear Library',
+                    label: this.$t('SETTINGS.CLEAR_LIBRARY'),
+                    btnLabel: this.$t('SETTINGS.BUTTON.CLEAR_LIBRARY'),
                     action(vue) {
                         vue.$store.commit('panel/showNewPrompt', {title: 'Clear Library', message: "Are you sure you want to clear your current library? Your music files will not be deleted.", buttons: 'clearLibrary'})
                     }
@@ -38,12 +38,12 @@ export default {
                 {
                     type: 'subtitle',
                     id: 'subtitleAppearance',
-                    label: 'Appearance'
+                    label: this.$t('SETTINGS.SUBTITLES.APPEARANCE')
                 },
                 {
                     type: 'dropdown',
                     id: 'altThemeDropdown',
-                    label: 'App theme',
+                    label: this.$t('SETTINGS.APP_THEME'),
                     options: ['Firetail', 'Classic', 'Cyber'],
                     option: window.localStorage.getItem('altTheme') ? window.localStorage.getItem('altTheme') : 'Firetail',
                     onChange(vue, option) {
@@ -53,7 +53,7 @@ export default {
                 {
                     type: 'dropdown',
                     id: 'themeDropdown',
-                    label: 'Colour theme',
+                    label: this.$t('SETTINGS.COLOUR_THEME'),
                     options: ['System', 'Dark', 'Light'],
                     option: window.localStorage.getItem('theme'),
                     onChange(vue, option) {
@@ -91,7 +91,7 @@ export default {
                 {
                     type: 'switch',
                     id: 'highContrastSwitch',
-                    label: 'Use high contrast style',
+                    label: this.$t('SETTINGS.USE_HIGH_CONTRAST'),
                     enabled: window.localStorage.getItem('highContrast') == 'true',
                     conditions: {
                         enabled: {
@@ -175,12 +175,12 @@ export default {
                 {
                     type: 'subtitle',
                     id: 'subtitleAdvanced',
-                    label: 'Advanced'
+                    label: this.$t('SETTINGS.SUBTITLES.ADVANCED')
                 },
                 {
                     type: 'switch',
                     id: 'advancedInfoSwitch',
-                    label: 'Show file codec information',
+                    label: this.$t('SETTINGS.SHOW_FILE_CODEC'),
                     enabled: window.localStorage.getItem('advancedFileInfo') === 'true',
                     onClick(vue, enabled) {
                         window.localStorage.setItem('advancedFileInfo', enabled)
@@ -190,7 +190,7 @@ export default {
                 {
                     type: 'subtitle',
                     id: 'subtitleAbout',
-                    label: 'About'
+                    label: this.$t('SETTINGS.SUBTITLES.ABOUT')
                 },
                 {
                     type: 'about',

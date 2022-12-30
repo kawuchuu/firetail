@@ -10,7 +10,7 @@ const state = () => ({
     paused: true,
     currentTime: '-:--',
     duration: '-:--',
-    songTitle: tr.t('playingBar.songTitleNotPlaying'),
+    songTitle: tr.t('PLAYING_BAR.SONG_TITLE_NOT_PLAYING'),
     songArtist: '',
     currentSong: null,
     currentSongIndex: null,
@@ -159,7 +159,7 @@ const mutations = {
     },
     setStopState(state) {
         state.songArtist = ''
-        state.songTitle = 'No song playing...'
+        state.songTitle = tr.t('PLAYING_BAR.SONG_TITLE_NOT_PLAYING')
         state.queue = []
         if (audio.src) {
             audio.pause()

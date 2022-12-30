@@ -15,8 +15,8 @@
                 <h1 ref="header" :style="topTitleSize" class="top-header" v-show="topTitleText !== ''">{{ topTitleText }}</h1>
                 <!-- <h1 ref="headerTEST" class="top-header-test">{{ topTitleText }}</h1> -->
                 <p v-if="$route.path === '/playlist' && playlist.desc">{{ playlist.desc }}</p>
-                <p v-if="$route.path == '/albums' && list[0] && list[0].year">{{ list[0].year }} • {{ screenCountNum }} {{ $tc('topTitle.countTypeSongs', parseInt(screenCountNum)) }}</p>
-                <p v-else>{{ screenCountNum }} {{ $tc('topTitle.countTypeSongs', parseInt(screenCountNum)) }}</p>
+                <p v-if="$route.path == '/albums' && list[0] && list[0].year">{{ list[0].year }} • {{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum)}}</p>
+                <p v-else>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum)}}</p>
             </div>
         </div>
         <div class="root-wrapper">
@@ -38,9 +38,9 @@
                         <p class="track-num">#</p>
                     </div>
                         <div class="artist-title-album section">
-                            <p class="list-title">{{ $t('songList.listTitle') }}</p>
-                            <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-artist">{{ $t('songList.listArtist') }}</p>
-                            <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-album">{{ $t('songList.listAlbum') }}</p>
+                            <p class="list-title">{{ $t('SONG_LIST.LIST_TITLE') }}</p>
+                            <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-artist">{{ $t('SONG_LIST.LIST_ARTIST') }}</p>
+                            <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-album">{{ $t('SONG_LIST.LIST_ALBUM') }}</p>
                             <p class="list-duration"><i class="ft-icon">clock</i></p>
                         </div>
                     <div class="sec-border"></div>
@@ -102,7 +102,7 @@ export default {
                 small: '2.4rem' 
             },
             activeSize: 'large',
-            topTitleTxt: 'Songs',
+            topTitleTxt: this.$t('ROUTER.ALL_SONGS'),
             justChanged: false,
             performingMultiDrag: false
         }
@@ -150,7 +150,7 @@ export default {
         topTitleText() {
             switch(this.$route.path) {
                 case '/': {
-                    return 'Songs'
+                    return this.$t('ROUTER.ALL_SONGS')
                 }
                 case '/albums': {
                     if (!this.list[0]) return ''
@@ -165,7 +165,7 @@ export default {
                 }
                 default: {
                     console.log('defaulting to songs')
-                    return 'Songs'
+                    return this.$t('ROUTER.ALL_SONGS')
                 }
             }
         },
@@ -312,15 +312,15 @@ export default {
                 this.lastSelectedIndex = 0
             }
             let menuItems = [
-                {name: 'Add to queue', type: 'button'},
+                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_QUEUE'), type: 'button'},
                 {type: 'divider', hide: [this.selectedItems.length == 1 ? false : true, this.list[evt[1]].artist == 'Unknown Artist' && this.list[evt[1]].album == 'Unknown Album']},
-                {name: 'Go to artist', type: 'button', hide: [this.selectedItems.length == 1 ? false : true, this.$route.path == '/artists', this.list[evt[1]].artist == 'Unknown Artist'], onClick: goToArtist},
-                {name: 'Go to album', type: 'button', hide: [this.selectedItems.length == 1 ? false : true, this.$route.path == '/albums', this.list[evt[1]].album == 'Unknown Album'], onClick: goToAlbum},
+                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ARTIST'), type: 'button', hide: [this.selectedItems.length == 1 ? false : true, this.$route.path == '/artists', this.list[evt[1]].artist == 'Unknown Artist'], onClick: goToArtist},
+                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ALBUM'), type: 'button', hide: [this.selectedItems.length == 1 ? false : true, this.$route.path == '/albums', this.list[evt[1]].album == 'Unknown Album'], onClick: goToAlbum},
                 {type: 'divider'},
-                {name: favCompare ? 'Add to favourites' : 'Remove from favourites', type: 'button', onClick: favouriteOnClick},
-                {name: 'Add to playlist', type: 'button'},
+                {name: favCompare ? this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_FAVOURITE') : this.$t('CONTEXT_MENU.SONG_LIST_ITEM.REMOVE_FAVOURITE'), type: 'button', onClick: favouriteOnClick},
+                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_PLAYLIST'), type: 'button'},
                 {type: 'divider'},
-                {name: 'Remove from library', type: 'button', style: 'dangerous', onClick: deleteSongs}
+                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.DELETE'), type: 'button', style: 'dangerous', onClick: deleteSongs}
             ]
             contextMenuBus.$emit('updateitems', {
                 items: menuItems,

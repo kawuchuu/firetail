@@ -1,32 +1,69 @@
 {
-    "sidebar": {
-        "home": "家",
-        "settings": "設定",
-        "library": "ライブラリ",
-        "favourite": "お気に入り",
-        "songs": "曲",
-        "artists": "アーティスト",
-        "albums": "アルバム",
-        "playlists": "プレイリスト"
+    "SIDEBAR": {
+        "HOME": "家",
+        "SETTINGS": "設定",
+        "LIBRARY": "ライブラリ",
+        "FAVOURITE": "お気に入り",
+        "SONGS": "曲",
+        "ARTISTS": "アーティスト",
+        "ALBUMS": "アルバム",
+        "PLAYLISTS": "プレイリスト",
+        "CREATE_PLAYLIST": "プレイリストを作成"
     },
-    "router": {
-        "allSongs": "曲",
-        "artists": "アーティスト",
-        "unknown": "わからない"
+    "ROUTER": {
+        "ALL_SONGS": "曲",
+        "ARTISTS": "アーティスト",
+        "UNKNOWN": "パスが見つかりませんでした"
     },
-    "topTitle": {
-        "countTypeSongs": "曲"
+    "TOP_TITLE": {
+        "COUNT_TYPE_SONGS": "{count}曲"
     },
-    "songList": {
-        "listTitle": "タイトル",
-        "listArtist": "アーティスト",
-        "listAlbum": "アルバム",
-        "listDuration": "限目"
+    "SONG_LIST": {
+        "LIST_TITLE": "タイトル",
+        "LIST_ARTIST": "アーティスト",
+        "LIST_ALBUM": "アルバム",
+        "LIST_DURATION": "限目"
     },
-    "playingBar": {
-        "songTitleNotPlaying": "再生停止中..."
+    "PLAYING_BAR": {
+        "SONG_TITLE_NOT_PLAYING": "再生停止中..."
     },
-    "topBar": {
-        "addSongs": "曲を追加する"
-    }
+    "TOP_BAR": {
+        "ADD_SONGS": "曲を追加する"
+    },
+    "SETTINGS": {
+        "TITLE": "設定",
+        "SUBTITLES": {
+            "LIBRARY": "ライブラリ",
+            "APPEARANCE": "アプリケーションの外観",
+            "ADVANCED": "高度な設定",
+            "ABOUT": "アプリケーション情報"
+        },
+        "BUTTON": {
+            "CLEAR_LIBRARY": "ライブラリを削除"
+        },
+        "DROP_DOWN": {
+
+        },
+        "CLEAR_LIBRARY": "音楽ライブラリを削除する",
+        "APP_THEME": "応募テーマ",
+        "COLOUR_THEME": "色のテーマ",
+        "USE_HIGH_CONTRAST": "ハイコントラストカラー",
+        "SHOW_FILE_CODEC": "音楽ファイルのコーデックを表示",
+        "ABOUT": {
+            "VERSION": "バージョン",
+            "COPYRIGHT": "© 2022 "
+        }
+    },
+    "POPUPS": {
+        "CODEC_INFO": {
+            "TITLE": "コーデック情報",
+            "CODEC": "エンコーダー : ",
+            "CONTAINER": "コンテナ : ",
+            "BITRATE": "ビットレート : ",
+            "SAMPLE_RATE": "サンプルレート : ",
+            "BIT_DEPTH": "ビット深度 : ",
+            "CHANNELS": "チャンネル : "
+        }
+    },
+    "APP_NAME": "Firetail"
 }

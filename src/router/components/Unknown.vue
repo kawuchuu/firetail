@@ -2,8 +2,8 @@
     <div class="root">
         <img class="img-bird" src="../../assets/crash-tree.svg"/>
         <div class="info">
-            <h1>The route you were looking for could not be found.</h1>
-            <p>Sorry about that. If you believe this is an error, please create an issue <a @click="openIssue">here.</a></p>
+            <h1>{{$t('ROUTER.UNKNOWN')}}</h1>
+            <p>{{$t('ROUTER.UNKNOWN_DESC')}}</p>
             <div class="more-info">
                 <div @click="isMoreOpen = isMoreOpen ? false : true" class="open-more"><i class="ft-icon">{{ moreIcon }}</i> More info</div>
                 <div class="inner-swag" :class="doShow">

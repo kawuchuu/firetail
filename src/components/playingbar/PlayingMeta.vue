@@ -6,13 +6,13 @@
         </div>
         <div class="popup codec-info" :class="showAdvancedFileInfo">
             <div class="advanced-info">
-                <h3>Codec Information</h3>
-                <span v-if="advancedFileInfo.codec">Codec: {{ advancedFileInfo.codec }}</span>
-                <span v-if="advancedFileInfo.container">Container: {{ advancedFileInfo.container }}</span>
-                <span v-if="advancedFileInfo.bitrate">Bitrate: {{ Math.round(advancedFileInfo.bitrate / 1000) }}kb/s</span>
-                <span v-if="advancedFileInfo.sampleRate">Sample rate: {{ advancedFileInfo.sampleRate }}Hz</span>
-                <span v-if="advancedFileInfo.bitDepth">Bits per sample: {{ advancedFileInfo.bitDepth }}</span>
-                <span v-if="advancedFileInfo.noChannels">No. channels: {{ advancedFileInfo.noChannels }}</span>
+                <h3>{{ $t('POPUPS.CODEC_INFO.TITLE') }}</h3>
+                <span v-if="advancedFileInfo.codec">{{ $t('POPUPS.CODEC_INFO.CODEC') }}{{ advancedFileInfo.codec }}</span>
+                <span v-if="advancedFileInfo.container">{{ $t('POPUPS.CODEC_INFO.CONTAINER') }}{{ advancedFileInfo.container }}</span>
+                <span v-if="advancedFileInfo.bitrate">{{ $t('POPUPS.CODEC_INFO.BITRATE') }}{{ Math.round(advancedFileInfo.bitrate / 1000) }}kb/s</span>
+                <span v-if="advancedFileInfo.sampleRate">{{ $t('POPUPS.CODEC_INFO.SAMPLE_RATE') }}{{ advancedFileInfo.sampleRate }}Hz</span>
+                <span v-if="advancedFileInfo.bitDepth">{{ $t('POPUPS.CODEC_INFO.BIT_DEPTH') }}{{ advancedFileInfo.bitDepth }}</span>
+                <span v-if="advancedFileInfo.noChannels">{{ $t('POPUPS.CODEC_INFO.CHANNELS') }}{{ advancedFileInfo.noChannels }}</span>
             </div>
         </div>
         <router-link :to="viewLink">

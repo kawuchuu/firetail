@@ -3,9 +3,9 @@
         <img draggable="false" src="@/assets/firetail.png">
         <div class="info">
             <div>
-                <h1>Firetail</h1>
-                <p>Version {{version}}<span v-show="checkBuild"> [{{build}}]</span>, {{ arch }}</p>
-                <p>Copyright &copy; 2022 kawuchuu</p>
+                <h1>{{$t('APP_NAME')}}</h1>
+                <p>{{$t('SETTINGS.ABOUT.VERSION')}}{{version}}<span v-show="checkBuild"> [{{build}}]</span>, {{ arch }}</p>
+                <p>{{$t('SETTINGS.ABOUT.COPYRIGHT')}}kawuchuu</p>
             </div>
         </div>
     </div>

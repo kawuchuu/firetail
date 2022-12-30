@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
-import {ipcRenderer} from 'electron'
+//import {ipcRenderer} from 'electron'
 
 Vue.use(VueI18n)
 
@@ -17,7 +17,7 @@ let loadLocaleMessages = () => {
     return messages
 }
 
-let getLocale = async () => {
+/* let getLocale = async () => {
     let locale = await ipcRenderer.invoke('hasCustomLanguage')
     console.log(locale)
     if (locale) {
@@ -26,12 +26,15 @@ let getLocale = async () => {
         i18n.locale = navigator.language.split('-')[0]
     }
 }
-getLocale()
+getLocale() */
+
+console.log(loadLocaleMessages())
 
 let i18n = new VueI18n({
-    locale: navigator.language.split('-')[0],
-    fallbackLocale: 'en',
-    messages: loadLocaleMessages()
+    locale: navigator.language,
+    fallbackLocale: 'en-US',
+    messages: loadLocaleMessages(),
+    silentFallbackWarn: true
 })
 
 export default i18n

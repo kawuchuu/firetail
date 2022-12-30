@@ -43,7 +43,7 @@ const router = new VueRouterEx({
         {
             path: '/artists',
             component: ArtistAlbumView,
-            name: tr.t('router.artists'),
+            name: tr.t('ROUTER.ARTISTS'),
             children: [
                 {
                     path: '',
@@ -54,7 +54,7 @@ const router = new VueRouterEx({
         {
             path: '/albums',
             component: ArtistAlbumView,
-            name: tr.t('router.albums'),
+            name: tr.t('ROUTER.ALBUMS'),
             children: [
                 {
                     path: '',
@@ -70,7 +70,7 @@ const router = new VueRouterEx({
         {
             path: '/settings',
             component: Settings,
-            name: tr.t('settings.title')
+            name: tr.t('SETTINGS.TITLE')
         },
         {
             path: '/home',

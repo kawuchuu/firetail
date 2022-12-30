@@ -26,7 +26,6 @@
 <script>
 import TopButtons from './TopButtons'
 import TopNav from './TopNav'
-import tr from '../translation'
 import { ipcRenderer } from 'electron'
 
 export default {
@@ -37,7 +36,7 @@ export default {
     data() {
         return {
             button: [
-                {name: tr.t('topBar.addSongs'), id: 'addFiles', for: 'addFiles', icon: 'add'},
+                {id: 'addFiles', for: 'addFiles', icon: 'add'},
             ],
             nav: [
                 {type: 'back', class: 'littlebitback', nav: -1, icon: 'chevron-left'},

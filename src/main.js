@@ -16,7 +16,7 @@ new Vue({
 
 Vue.use(AsyncComputed)
 
-router.replace({ path: '/', query: { name: i18n.t('sidebar.songs'), view: 'all' } })
+router.replace({ path: '/', query: { name: i18n.t('SIDEBAR.SONGS'), view: 'all' } })
 
 ipcRenderer.on('library', (event, library) => {
     store.commit('audio/updateCurrentList', library)

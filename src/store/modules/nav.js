@@ -6,56 +6,56 @@ import store from '..'
 const state = () => ({
     navs: [{
         icon: 'home',
-        name: tr.t('sidebar.home'),
+        name: tr.t('SIDEBAR.HOME'),
         id: 'homeTab',
         type: 'large_button',
         link: '/home'
     },
     {
         icon: 'settings',
-        name: tr.t('sidebar.settings'),
+        name: tr.t('SIDEBAR.SETTINGS'),
         id: 'settingsTab',
         type: 'large_button',
         link: '/settings'
     },
     {
-        name: tr.t('sidebar.library'),
+        name: tr.t('SIDEBAR.LIBRARY'),
         type: 'subtitle'
     },
     {
         icon: 'heart',
-        name: tr.t('sidebar.favourite'),
+        name: tr.t('SIDEBAR.FAVOURITE'),
         id: 'likedTab',
         type: 'large_button',
         link: '/liked'
     },
     {
         icon: 'note',
-        name: tr.t('sidebar.songs'),
+        name: tr.t('SIDEBAR.SONGS'),
         id: 'songsTab',
         type: 'large_button',
-        link: `/?name=${encodeURIComponent(tr.t('sidebar.songs'))}&view=all`
+        link: `/?name=${encodeURIComponent(tr.t('SIDEBAR.SONGS'))}&view=all`
     },
     {
         icon: 'person',
-        name: tr.t('sidebar.artists'),
+        name: tr.t('SIDEBAR.ARTISTS'),
         id: 'artistsTab',
         type: 'large_button',
         link: '/artists?hideTop=true&view=firetailnoselect'
     },
     {
         icon: 'album',
-        name: tr.t('sidebar.albums'),
+        name: tr.t('SIDEBAR.ALBUMS'),
         id: 'albumsTab',
         type: 'large_button',
         link: '/albums?hideTop=true&view=firetailnoselect'
     },
     {
-        name: tr.t('sidebar.playlists'),
+        name: tr.t('SIDEBAR.PLAYLISTS'),
         type: 'subtitle'
     },
     {
-        name: 'Create Playlist',
+        name: tr.t('SIDEBAR.CREATE_PLAYLIST'),
         id: 'createPlaylist',
         icon: 'add',
         type: 'special_button',
@@ -70,7 +70,7 @@ const state = () => ({
     }
     ],
     screenTitle: '',
-    screenCountType: tr.tc('topTitle.countTypeSongs', 0),
+    screenCountType: tr.tc('TOP_TITLE.COUNT_TYPE_SONGS', 0),
     screenCountNum: 0,
     showScreenTop: true,
     artists: [],
