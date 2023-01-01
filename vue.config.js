@@ -32,7 +32,7 @@ module.exports = {
             builderOptions: {
                 appId: "dev.kawuchuu.firetail",
                 productName: "Firetail",
-                copyright: "Copyright © 2022 kawuchuu",
+                copyright: "Copyright © 2023 kawuchuu",
                 nsis: {
                     artifactName: "Firetail-Setup-${version}.${ext}",
                     uninstallDisplayName: "Firetail"

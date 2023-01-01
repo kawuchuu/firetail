@@ -231,6 +231,12 @@ html.light {
 
 @font-face {
     font-family: 'Inter';
+    font-weight: 600;
+    src: url('./assets/Inter-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Inter';
     font-weight: bold;
     src: url('./assets/Inter-Bold.ttf') format('truetype');
 }
