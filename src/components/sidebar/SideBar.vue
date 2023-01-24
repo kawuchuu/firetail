@@ -104,6 +104,9 @@ export default {
     cursor: pointer;
     opacity: 0.75;
     border-radius: 10px;
+    background: transparent;
+    transition: 0.1s;
+    transition-property: background;
 }
 
 .router-link-active .item-sidebar {
