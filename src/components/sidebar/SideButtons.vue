@@ -1,5 +1,5 @@
 <template>
-    <router-link draggable="false" :to="button.link" v-if="button.type == 'large_button'">
+    <router-link draggable="false" :to="button.link" v-if="button.type == 'large_button'" role="tab" :aria-label="button.name">
         <div class="item-sidebar">
             <i class="ft-icon">{{ button.icon }}</i>
             <span>{{ button.name }}</span>
