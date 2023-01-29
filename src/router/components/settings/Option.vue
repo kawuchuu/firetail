@@ -2,7 +2,7 @@
     <div v-if="option.type == 'subtitle'" class="subtitle">{{option.label}}</div>
     <div v-else-if="option.type == 'button'" v-show="hideCheck" class="button-option">
         <p>{{option.label}}</p>
-        <div @click="option.action($root)" class="button">{{option.btnLabel}}</div>
+        <div @click="option.action($root)" class="button" role="button" tabindex="0" :aria-label="`${option.label}. ${option.btnLabel}`">{{option.btnLabel}}</div>
     </div>
     <div v-else-if="option.type == 'switch'" class="switch-option">
         <p>{{option.label}}</p>
@@ -12,8 +12,8 @@
     </div>
     <div v-else-if="option.type == 'dropdown'" class="dropdown-option">
         <p>{{option.label}}</p>
-        <div class="dropdown" @click="dropdownClick" :class="showOptions">
-            <div class="default-option">
+        <div class="dropdown" @click="dropdownClick" :class="showOptions" role="combobox" aria-disabled="false" aria-selected="false" :aria-label="`${option.label}. ${option.option} selected`" tabindex=0>
+            <div class="default-option" aria-hidden="true">
                 <span>{{option.option}}</span>
                 <i class="ft-icon">{{dropdownEnabled ? 'arrow-head-up' : 'arrow-head-down'}}</i>
             </div>
