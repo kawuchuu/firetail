@@ -126,7 +126,8 @@ export default {
         }
     },
     async mounted() {
-            require(`./scss/${window.localStorage.getItem('altTheme')}.scss`)
+            //require(`./scss/${window.localStorage.getItem('altTheme')}.scss`)
+            require('./scss/firetail.scss')
         if (window.localStorage.getItem('sidebarwidth')) {
             this.sidebarwidth = window.localStorage.getItem('sidebarwidth')
         } else {
