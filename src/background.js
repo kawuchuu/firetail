@@ -283,7 +283,8 @@ async function createWindow() {
             contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
             enableBlinkFeatures: "CSSColorSchemeUARendering",
             disableBlinkFeatures: "Auxclick"
-        }
+        },
+        titleBarOverlay: true
     }
     win = new BrowserWindow(winConfig)
     if (isDevelopment) {

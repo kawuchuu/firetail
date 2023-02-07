@@ -2,7 +2,12 @@
     <div class="root" @dragover="songDragOver" @dragleave="songDragLeave" @dragend="songDragLeave" @drop="songDragFinish">
         <div v-if="dragOverY >= 0 && dragOverY <= 21" class="drag-indicate-line top" />
         <li draggable="true" class="results-link" @dragstart="drag" @dragend="stopDrag" @mouseover="listHover" @mouseleave="listHoverLeave" :class="[isActive, doHighlight, isSimple]">
-            <i class="ft-icon play-pause" :style="listIconVisible" @click="decidePlaySong" @mouseover="listIconHover" @mouseleave="listIconHoverLeave">{{ listIcon }}</i>
+            <i v-if="listIcon !== 'volume-up'" class="ft-icon play-pause" :style="listIconVisible" @click="decidePlaySong" @mouseover="listIconHover" @mouseleave="listIconHoverLeave">{{ listIcon }}</i>
+            <div v-if="listIcon == 'volume-up'" class="playing-ani">
+                <div class="bar one"></div>
+                <div class="bar two"></div>
+                <div class="bar three"></div>
+            </div>
             <i class="ft-icon favourite-icon" @click="handleFavourite">{{ favouriteIcon }}</i>
             <div v-if="$route.path == '/albums'">
                 <p v-if="source.disc !== null" class="track-num">{{source.disc}}</p>
@@ -426,5 +431,44 @@ html.light {
     .artist-title-album {
         grid-template-columns: 3fr 2fr 0fr;
     }
+}
+
+.playing-ani {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 21px;
+    height: 15px;
+}
+
+.playing-ani .bar {
+    min-width: 3px;
+    height: 15%;
+    background: var(--hl-txt);
+    margin: 0 1.5px;
+    transition: 0.25s;
+    transition-property: height;
+    border-radius: 10px;
+}
+
+.playing-ani .bar {
+    animation: barmove 0.4s infinite ease-out alternate;
+}
+
+@keyframes barmove {
+    from {
+        height: 15%;
+    }
+    to {
+        height: 90%;
+    }
+}
+
+.playing-ani .bar.two {
+    animation-delay: 0.25s;
+}
+
+.playing-ani .bar.three {
+    animation-delay: 0.5s;
 }
 </style>

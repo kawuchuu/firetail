@@ -24,6 +24,7 @@
   - Random scrolling between pages
   - Try to make the sticky bar on song list pages work better
   - Make UI as smooth and quality as possible
+  - Fix shuffling
 
 
 ## Features that can (probably) wait for v1.1.0

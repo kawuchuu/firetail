@@ -12,7 +12,7 @@
                 <div class="top-button-container">
                     <TopButtons v-for="item in button" v-bind:button="item" v-bind:key="item.id"></TopButtons>
                 </div>
-                <div v-if="platform === 'win32'" class="windows-custom-buttons">
+                <div v-if="platform === 'none'" class="windows-custom-buttons">
                     <div class="divider" />
                     <div class="window-button" @click="sendButtonSignal('minimize')"><img src="@/assets/minimise.svg"></div>
                     <div class="window-button" @click="sendButtonSignal(isMaximized ? 'unmaximize' : 'maximize')"><img :src="maximizeIcon"></div>
@@ -68,7 +68,7 @@ export default {
 <style lang="scss" scoped>
 .top-bar {
     width: calc(100vw - var(--sidebar-width));
-    height: 50px;
+    height: 44px;
     background: transparent;
     position: relative;
     top: 0;
@@ -186,12 +186,11 @@ html.dark .window-button img {
 }
 
 .windows-custom-buttons {
-    width: 150px;
     display: flex;
     -webkit-app-region: no-drag;
     pointer-events: all;
     padding: 0px 5px;
-    height: 50px;
+    height: 44px;
     align-items: center;
     background-color: var(--back-bg);
     position: relative;
@@ -199,15 +198,15 @@ html.dark .window-button img {
     border-radius: 0px 0px 0px 10px;
 
     .window-button {
-        width: 50px;
-        height: 40px;
+        width: 47px;
+        height: 35px;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 5px;
 
         img {
-            width: 12px;
+            width: 11px;
             pointer-events: none;
         }
     }
