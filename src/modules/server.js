@@ -2,7 +2,6 @@ import express from 'express'
 import { constants, mkdirSync, access } from 'fs'
 import cors from 'cors'
 import { resolve } from 'path'
-import {createServer} from 'net'
 //import isPortReachable from 'is-port-reachable'
 import { dialog } from 'electron'
 

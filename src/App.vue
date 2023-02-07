@@ -316,7 +316,7 @@ html.light {
     overflow: hidden;
     overflow-y: auto;
     position: fixed;
-    height: calc(100% - 135px);
+    height: calc(100% - 130px);
     width: calc(100% - var(--sidebar-width));
     background: var(--bg);
     border-radius: var(--main-border-radius);

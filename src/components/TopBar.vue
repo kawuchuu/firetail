@@ -12,12 +12,12 @@
                 <div class="top-button-container">
                     <TopButtons v-for="item in button" v-bind:button="item" v-bind:key="item.id"></TopButtons>
                 </div>
-                <div v-if="platform === 'none'" class="windows-custom-buttons">
-                    <div class="divider" />
+                <div v-if="platform === 'win32'" class="divider" />
+                <!-- <div class="windows-custom-buttons">
                     <div class="window-button" @click="sendButtonSignal('minimize')"><img src="@/assets/minimise.svg"></div>
                     <div class="window-button" @click="sendButtonSignal(isMaximized ? 'unmaximize' : 'maximize')"><img :src="maximizeIcon"></div>
                     <div class="window-button close" @click="sendButtonSignal('close')"><img src="@/assets/close.svg"></div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -178,7 +178,7 @@ html.dark .window-button img {
 }
 
 .divider {
-    margin: 0px 8px;
+    margin: 0px 155px 0px 8px;
     width: 1px;
     height: 25px;
     border-left: solid 1px var(--text);

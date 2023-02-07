@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "axios": "^1.1.2",
-    "better-sqlite3": "^7.6.2",
+    "better-sqlite3": "^8.1.0",
     "core-js": "^3.25.5",
     "cors": "^2.8.5",
     "mime-types": "^2.1.35",
@@ -37,7 +37,7 @@
     "@vue/cli-plugin-eslint": "^4.5.16",
     "@vue/cli-service": "^4.5.16",
     "babel-eslint": "^10.1.0",
-    "electron": "^19.1.1",
+    "electron": "^23.0.0",
     "electron-devtools-installer": "^3.2.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
@@ -70,7 +70,7 @@
     "url": "https://github.com/kawuchuu/firetail/"
   },
   "resolutions": {
-    "node-abi": "3.26.0",
+    "node-abi": "3.32.0",
     "electron-builder": "23.6.0"
   }
 }

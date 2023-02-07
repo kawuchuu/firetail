@@ -269,7 +269,7 @@ async function createWindow() {
         minWidth: 750,
         minHeight: 400,
         show: false,
-        titleBarStyle: osType === 'darwin' ? 'hiddenInset' : 'default',
+        titleBarStyle: osType === 'darwin' || osType === 'win32' ? 'hidden' : 'default',
         trafficLightPosition: { x: 25, y: 17 },
         frame: osType === 'darwin' || osType === 'win32' ? false : true,
         //backgroundColor: osType === 'darwin' ? 'transparent' : '#181818',
@@ -284,7 +284,12 @@ async function createWindow() {
             enableBlinkFeatures: "CSSColorSchemeUARendering",
             disableBlinkFeatures: "Auxclick"
         },
-        titleBarOverlay: true
+        titleBarOverlay: {
+            height: 44,
+            width: 150,
+            color: '#000000',
+            symbolColor: '#ffffff'
+        }
     }
     win = new BrowserWindow(winConfig)
     if (isDevelopment) {
