@@ -2,6 +2,7 @@
     <div class="root-sl" :class="isSimple" v-show="list.length > 0 || $route.path == '/' || $route.path === '/playlist'">
         <div class="standard" v-if="$route.path == '/' || $route.path == '/playlist'">
             <div v-if="$route.path == '/'" class="bg-gradient">
+                <div class="list-gradient-fade" />
                 <div class="bg-banner"></div>
             </div>
         </div>
