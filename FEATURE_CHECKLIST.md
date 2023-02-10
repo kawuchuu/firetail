@@ -1,6 +1,6 @@
 # Firetail Feature Checklist
 *Created: 2/01/2023*
-*Updated: 29/01/2023*
+*Updated: 11/02/2023*
 
 ## Features required for completion before releasing v1.0.0
 - Playlists
@@ -37,3 +37,7 @@
   - Artist images
   - Pull metadata for songs missing it
   - Add local song to playlist
+- Effects
+  - Tempo, pitch, reverb effects
+  - Low and high pass filters?
+- Equalisation

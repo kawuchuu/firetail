@@ -87,7 +87,7 @@ export default {
 }
 
 .nav-buttons.macos {
-    margin-top: 38px;
+    margin-top: 32px;
 }
 
 .side-bar button {

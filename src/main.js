@@ -117,11 +117,28 @@ window.addEventListener('keydown', evt => {
         if (evt.key === 'ArrowDown') key = 'down'
         changeVol(key)
     }
+    if (!evt.metaKey && (evt.key === 'ArrowLeft' || evt.key === 'ArrowRight')) {
+        evt.preventDefault()
+        let direction = 'forward'
+        if (evt.key === 'ArrowLeft') direction = 'backward'
+        arrowChangeTime(direction)
+    }
 })
 
 const changeVol = action => {
     const vol = Math.round((store.state.audio.volume + (action === 'up' ? 0.1 : -0.1)) * 10) / 10
     store.commit('audio/setVolume', vol)
+}
+
+const arrowChangeTime = direction => {
+    let newTime = 0;
+    const currentTime = store.state.audio.currentTime
+    if (direction === 'forward') {
+        newTime = currentTime + 5
+    } else if (direction === 'backward') {
+        newTime = currentTime - 5
+    }
+    store.commit('audio/newAudioTime', newTime)
 }
 
 ipcRenderer.on('updateHighContrast', (evt, enabled) => {

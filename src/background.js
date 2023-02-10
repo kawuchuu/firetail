@@ -1,7 +1,6 @@
 'use strict'
 
 import { app, protocol, BrowserWindow, Menu, nativeTheme } from 'electron'
-import { MicaBrowserWindow } from 'mica-electron'
 import {
     createProtocol
 } from 'vue-cli-plugin-electron-builder/lib'
@@ -292,13 +291,7 @@ async function createWindow() {
             symbolColor: '#ffffff'
         }
     }
-    if (osType === 'win32') {
-        win = new MicaBrowserWindow(winConfig)
-        /* win.setMicaTabbedEffect()
-        win.setAutoTheme() */
-    } else {
-        win = new BrowserWindow(winConfig)
-    }
+    win = new BrowserWindow(winConfig)
     if (isDevelopment) {
         if (osType == 'darwin') {
             app.dock.setIcon(path.resolve(__dirname, '../build/other/macos.png'))
