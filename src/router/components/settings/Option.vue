@@ -165,7 +165,7 @@ export default {
         align-items: center;
         transition-duration: 0.15s;
         transition-property: background-color;
-        margin: 20px;
+        margin: 13px;
         margin-right: 0px;
         cursor: pointer;
 
@@ -253,6 +253,12 @@ export default {
             display: block;
             box-shadow: 0px 4px 4px rgba(0,0,0,.2);
         }
+    }
+}
+
+.reduce-motion {
+    .switch, .switch .circle-inner {
+        transition-duration: 0s;
     }
 }
 

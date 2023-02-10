@@ -360,4 +360,14 @@ export default {
         display: none;
     }
 }
+
+.reduce-motion {
+    .popup.large-album-art {
+        transform: translateY(-215px);
+    }
+
+    .popup.codec-info {
+        transform: translate(70px, -215px);
+    }
+}
 </style>

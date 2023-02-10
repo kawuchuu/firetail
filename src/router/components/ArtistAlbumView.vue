@@ -96,12 +96,12 @@ export default {
     width: 100%;
     max-width: 270px;
     z-index: 4;
-    height: calc(100% - 166px);
+    height: calc(100% - 160px);
     padding: 15px;
     background: var(--bg);
     border-right: solid var(--bd) 1px;
     position: fixed;
-    top: 50px;
+    top: 44px;
     border-radius: var(--main-border-radius);
 }
 
@@ -280,6 +280,11 @@ export default {
         opacity: 0 !important;
         transition: 0.2s;
         transition-property: opacity;
+    }
+    .reduce-motion {
+        .artist-inner, .list-fade, .albums-item a span {
+            transition-duration: 0s;
+        }
     }
 }
 </style>

@@ -38,6 +38,7 @@
         "SUBTITLES": {
             "LIBRARY": "Library",
             "APPEARANCE": "Appearance",
+            "ACCESSIBILITY": "Accessibility",
             "ADVANCED": "Advanced",
             "ABOUT": "About"
         },
@@ -60,6 +61,7 @@
         "APP_THEME": "App theme (requires reload for now)",
         "COLOUR_THEME": "Color theme",
         "USE_HIGH_CONTRAST": "Use high contrast style",
+        "REDUCE_MOTION": "Reduce motion",
         "SHOW_FILE_CODEC": "Show file codec information",
         "ABOUT": {
             "VERSION": "Version ",

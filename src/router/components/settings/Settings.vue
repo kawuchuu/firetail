@@ -89,6 +89,11 @@ export default {
                     }
                 },
                 {
+                    type: 'subtitle',
+                    id: 'subtitleAccessibility',
+                    label: this.$t('SETTINGS.SUBTITLES.ACCESSIBILITY')
+                },
+                {
                     type: 'switch',
                     id: 'highContrastSwitch',
                     label: this.$t('SETTINGS.USE_HIGH_CONTRAST'),
@@ -107,6 +112,27 @@ export default {
                     onClick(vue, enabled) {
                         window.localStorage.setItem('highContrast', enabled)
                         enabled ? document.documentElement.classList.add('high-contrast') : document.documentElement.classList.remove('high-contrast')
+                    }
+                },
+                {
+                    type: 'switch',
+                    id: 'reduceMotionSwitch',
+                    label: this.$t('SETTINGS.REDUCE_MOTION'),
+                    enabled: window.localStorage.getItem('reduceMotion') == 'true',
+                    conditions: {
+                        enabled: {
+                            type: 'store',
+                            module: 'nav',
+                            state: 'reduceMotionEnabled',
+                        },
+                        watch: {
+                            item: 'nav/reduceMotionEnabled',
+                            for: 'enabled',
+                        }
+                    },
+                    onClick(vue, enabled) {
+                        window.localStorage.setItem('reduceMotion', enabled)
+                        enabled ? document.documentElement.classList.add('reduce-motion') : document.documentElement.classList.remove('reduce-motion')
                     }
                 },
                 // TODO: actually add features to spotify integration that people would want to use

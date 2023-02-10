@@ -200,4 +200,32 @@ html.light .panel-bg {
     transition: 0.25s;
     transition-property: height;
 }
+
+.reduce-motion {
+    @keyframes showPanelReduce {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes hidePanelReduce {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
+    }
+
+    .panel-container .panel {
+        animation: hidePanelReduce 0.25s;
+    }
+
+    .panel-container.show .panel {
+        animation: showPanelReduce 0.25s;
+    }
+}
 </style>

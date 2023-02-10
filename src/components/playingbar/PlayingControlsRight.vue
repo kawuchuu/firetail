@@ -265,13 +265,13 @@ export default {
 .popup.active {
     opacity: 1;
     transform: translate(-160px, -315px) scale(1) !important;
+    pointer-events: all;
 }
 
 .popup.queue {
     transform: translate(-10px, 0px) scale(0);
     width: 350px;
     height: 500px;
-    pointer-events: all;
 
     .queue-inner {
         width: 100%;
@@ -280,6 +280,15 @@ export default {
         border-radius: 20px;
         position: relative;
         z-index: 2;
+    }
+}
+
+.reduce-motion {
+    .popup.queue {
+        transform: translate(-160px, -315px);
+    }
+    .handle, .handle-hover, .fill {
+        transition-duration: 0s !important;
     }
 }
 </style>

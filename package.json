@@ -20,6 +20,7 @@
     "better-sqlite3": "^8.1.0",
     "core-js": "^3.25.5",
     "cors": "^2.8.5",
+    "mica-electron": "^1.2.3",
     "mime-types": "^2.1.35",
     "music-metadata": "^8.1.0",
     "node-vibrant": "^3.1.6",

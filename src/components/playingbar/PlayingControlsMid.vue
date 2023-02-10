@@ -309,6 +309,15 @@ export default {
     }
 }
 
+@keyframes indicate-reduce {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 .seek-hover-indicate {
     background: var(--back-bg);
     border: solid 1px var(--bd);
@@ -467,5 +476,19 @@ export default {
 .track-controls.notplaying {
     opacity: 0.35;
     pointer-events: none;
+}
+
+.reduce-motion {
+    .seek-hover-indicate {
+        animation: indicate-reduce 0.15s;
+    }
+
+    .seek-hover-indicate.hover {
+        animation: indicate-reduce 0.15s reverse;
+    }
+
+    .handle, .handle-hover, .fill, .control-buttons .play-pause-icon {
+        transition-duration: 0s !important;
+    }
 }
 </style>
