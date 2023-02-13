@@ -8,7 +8,6 @@
                 <div class="bar two"></div>
                 <div class="bar three"></div>
             </div>
-            <i class="ft-icon favourite-icon" @click="handleFavourite">{{ favouriteIcon }}</i>
             <div v-if="$route.path == '/albums'">
                 <p v-if="source.disc !== null" class="track-num">{{source.disc}}</p>
                 <p v-else class="track-num">-</p>
@@ -25,6 +24,7 @@
                 </div>
                 <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-artist"><router-link :to="`/artists?hideTop=true&column=artist&q=${encodeURIComponent(source.artist)}&view=artist_${encodeURIComponent(source.artist)}`"><span>{{source.artist}}</span></router-link></p>
                 <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-album"><router-link :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(source.album)}&view=album_${encodeURIComponent(source.album)}`"><span>{{source.album}}</span></router-link></p>
+                <i class="ft-icon favourite-icon" @click="handleFavourite" :style="showFavourite">{{ favouriteIcon }}</i>
                 <p class="list-duration"><span>{{source.duration}}</span></p>
             </div>
         </li>
@@ -97,6 +97,13 @@ export default {
             if (this.$route.path == '/albums') return 'simple albums'
             else if (this.$route.path == '/artists') return 'simple artists'
             else return ''
+        },
+        showFavourite() {
+            if (this.favouriteIcon === 'heart-filled') {
+                return 'opacity: 1; color: var(--hl-txt)';
+            } else {
+                return ''
+            }
         }
     },
     data() {
@@ -230,7 +237,7 @@ export default {
     position: relative;
     height: 42px;
     display: grid;
-    grid-template-columns: 40px 40px 1fr;
+    grid-template-columns: 40px 1fr;
     align-items: center;
     justify-items: center;
     column-gap: 5px;
@@ -244,7 +251,7 @@ export default {
 }
 
 .results-link.simple.albums {
-    grid-template-columns: 40px 40px 40px 40px 1fr;
+    grid-template-columns: 40px 40px 40px 1fr;
 }
 
 .drag-indicate-line {
@@ -256,6 +263,7 @@ export default {
 
 li:hover {
     background: #ffffff18;
+    backdrop-filter: blur(10px);
 }
 
 li.nohover:hover {
@@ -264,10 +272,12 @@ li.nohover:hover {
 
 .results-link.hactive {
     background: #ffffff36;
+    backdrop-filter: blur(10px);
 }
 
 .results-link.hactive:hover {
     background: #ffffff22;
+    backdrop-filter: blur(10px);
 }
 
 .results-link.hactive.notop {
@@ -325,8 +335,8 @@ html.light {
 
 .artist-title-album {
     display: grid;
-    column-gap: 30px;
-    grid-template-columns: 3fr 2fr 2fr 0fr;
+    column-gap: 20px;
+    grid-template-columns: 3fr 2fr 2fr 20px 0fr;
     align-items: center;
     width: calc(100% - 25px);
     font-size: 14px;
@@ -334,7 +344,7 @@ html.light {
 }
 
 .results-link.simple .artist-title-album {
-    grid-template-columns: 3fr 0fr;
+    grid-template-columns: 3fr 20px 0fr;
 }
 
 .artist-title-album p {
@@ -403,6 +413,10 @@ html.light {
 .favourite-icon {
     font-size: 23px;
     cursor: pointer;
+    opacity: 0;
+}
+
+.results-link:hover .favourite-icon, .results-link.hactive .favourite-icon {
     opacity: 0.5;
 }
 

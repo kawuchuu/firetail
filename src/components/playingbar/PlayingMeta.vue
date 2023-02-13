@@ -210,6 +210,10 @@ export default {
     letter-spacing: -0.01em;
 }
 
+.bold-text .song-title {
+    font-weight: bold;
+}
+
 .song-artist {
     margin: 0;
     opacity: .75;
@@ -324,6 +328,10 @@ export default {
             margin-bottom: 10px;
         }
     }
+}
+
+.bold-text .codec-info h3 {
+    font-weight: bold;
 }
 
 .popup::after {
