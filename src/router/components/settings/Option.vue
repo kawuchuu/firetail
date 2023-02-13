@@ -267,4 +267,8 @@ export default {
     font-size: 12px;
     color: var(--text-op);
 }
+
+.bold-text .subtitle, .bold-text .button {
+    font-weight: bold;
+}
 </style>

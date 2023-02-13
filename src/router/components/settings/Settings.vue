@@ -89,6 +89,26 @@ export default {
                     }
                 },
                 {
+                    type: 'switch',
+                    id: 'colourBarSwitch',
+                    label: this.$t('SETTINGS.COLOUR_BAR'),
+                    enabled: window.localStorage.getItem('colourBar') == 'true',
+                    conditions: {
+                        enabled: {
+                            type: 'store',
+                            module: 'nav',
+                            state: 'colourBarEnabled',
+                        },
+                        watch: {
+                            item: 'nav/colourBarEnabled',
+                            for: 'enabled',
+                        }
+                    },
+                    onClick(vue, enabled) {
+                        window.localStorage.setItem('colourBar', enabled)
+                    }
+                },
+                {
                     type: 'subtitle',
                     id: 'subtitleAccessibility',
                     label: this.$t('SETTINGS.SUBTITLES.ACCESSIBILITY')
@@ -133,6 +153,27 @@ export default {
                     onClick(vue, enabled) {
                         window.localStorage.setItem('reduceMotion', enabled)
                         enabled ? document.documentElement.classList.add('reduce-motion') : document.documentElement.classList.remove('reduce-motion')
+                    }
+                },
+                {
+                    type: 'switch',
+                    id: 'boldTextSwitch',
+                    label: this.$t('SETTINGS.BOLD_TEXT'),
+                    enabled: window.localStorage.getItem('boldText') == 'true',
+                    conditions: {
+                        enabled: {
+                            type: 'store',
+                            module: 'nav',
+                            state: 'boldTextEnabled',
+                        },
+                        watch: {
+                            item: 'nav/boldTextEnabled',
+                            for: 'enabled',
+                        }
+                    },
+                    onClick(vue, enabled) {
+                        window.localStorage.setItem('boldText', enabled)
+                        enabled ? document.documentElement.classList.add('bold-text') : document.documentElement.classList.remove('bold-text')
                     }
                 },
                 // TODO: actually add features to spotify integration that people would want to use

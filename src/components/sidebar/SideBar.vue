@@ -155,6 +155,10 @@ export default {
     font-weight: 600;
 }
 
+.bold-text .router-link-active .item-sidebar span {
+    font-weight: bold;
+}
+
 .item-sidebar span {
     font-size: 15px;
 }

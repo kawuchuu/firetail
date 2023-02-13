@@ -31,7 +31,6 @@
                 </div>
                 <div class="list-section" :class="currentScroll">
                     <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
-                    <i class="ft-icon favourite-icon" style="visibility: hidden">favourite</i>
                     <div class="section" v-if="$route.path == '/albums'">
                         <i class="ft-icon disc-num">albums</i>
                     </div>
@@ -42,6 +41,7 @@
                             <p class="list-title">{{ $t('SONG_LIST.LIST_TITLE') }}</p>
                             <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-artist">{{ $t('SONG_LIST.LIST_ARTIST') }}</p>
                             <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-album">{{ $t('SONG_LIST.LIST_ALBUM') }}</p>
+                            <i class="ft-icon favourite-icon" style="visibility: hidden">favourite</i>
                             <p class="list-duration"><i class="ft-icon">clock</i></p>
                         </div>
                     <div class="sec-border"></div>
@@ -442,13 +442,13 @@ export default {
 
 .artist-title-album {
     display: grid;
-    column-gap: 30px;
-    grid-template-columns: 3fr 2fr 2fr 0fr;
+    column-gap: 20px;
+    grid-template-columns: 3fr 2fr 2fr 20px 0fr;
     width: calc(100% - 25px);
 }
 
 .simple .artist-title-album {
-    grid-template-columns: 3fr 0fr;
+    grid-template-columns: 3fr 40px 0fr;
 }
 
 .artist-title-album p {
@@ -486,7 +486,7 @@ div.section .track-num {
     overflow: hidden;
     height: 30px;
     display: grid;
-    grid-template-columns: 40px 40px 1fr;
+    grid-template-columns: 40px 1fr;
     align-items: center;
     justify-items: center;
     column-gap: 5px;
@@ -501,7 +501,7 @@ div.section .track-num {
 }
 
 .simple.albums .list-section {
-    grid-template-columns: 40px 40px 40px 40px 1fr;
+    grid-template-columns: 40px 40px 40px 1fr;
 }
 
 .list-section p {
@@ -626,7 +626,7 @@ div.section {
         background: var(--fg-bg);
 
         h3 {
-            margin: 0 120px;
+            margin: 0 78px;
             font-size: 24px;
             letter-spacing: -1px;
         }
