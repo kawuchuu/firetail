@@ -89,7 +89,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .artist-inner {
     overflow: hidden;
     overflow-y: auto;
