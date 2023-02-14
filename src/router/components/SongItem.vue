@@ -263,7 +263,6 @@ export default {
 
 li:hover {
     background: #ffffff18;
-    backdrop-filter: blur(10px);
 }
 
 li.nohover:hover {
@@ -272,12 +271,10 @@ li.nohover:hover {
 
 .results-link.hactive {
     background: #ffffff36;
-    backdrop-filter: blur(10px);
 }
 
 .results-link.hactive:hover {
     background: #ffffff22;
-    backdrop-filter: blur(10px);
 }
 
 .results-link.hactive.notop {
@@ -465,10 +462,6 @@ html.light {
     border-radius: 10px;
 }
 
-.playing-ani .bar {
-    animation: barmove 0.4s infinite ease-out alternate;
-}
-
 @keyframes barmove {
     from {
         height: 15%;
@@ -478,11 +471,32 @@ html.light {
     }
 }
 
-.playing-ani .bar.two {
-    animation-delay: 0.25s;
+.playing-ani .bar {
+    animation: barmove 0.4s infinite ease-out alternate;
 }
 
-.playing-ani .bar.three {
-    animation-delay: 0.5s;
+.playing-ani .bar.two {
+    animation-delay: -0.25s;
+}
+
+.playing-ani .bar.one {
+    animation-delay: -0.5s;
+}
+
+.reduce-motion {
+    .playing-ani {
+        .bar {
+            animation: none;
+        }
+        .bar.one {
+            height: 70%;
+        }
+        .bar.two {
+            height: 45%;
+        }
+        .bar.three {
+            height: 100%;
+        }
+    }
 }
 </style>

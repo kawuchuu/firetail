@@ -76,7 +76,7 @@ export default {
 .album-img, .artist-img {
     min-width: 45px;
     min-height: 45px;
-    margin-right: 15px;
+    margin-right: 18px;
     margin-left: 18px;
     background-color: var(--back-bg);
     border-radius: 3px;

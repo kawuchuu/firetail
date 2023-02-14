@@ -13,7 +13,8 @@
         "ALL_SONGS": "Songs",
         "ARTISTS": "Artists",
         "ALBUMS": "Albums",
-        "UNKNOWN": "Component not found"
+        "UNKNOWN": "The route you were looking for could not be found.",
+        "UNKNOWN_DESC": "Sorry about that. If you believe this is an error, please create an issue here."
     },
     "TOP_TITLE": {
         "COUNT_TYPE_SONGS": "1 song | {count} songs"
@@ -36,6 +37,7 @@
         "SUBTITLES": {
             "LIBRARY": "Library",
             "APPEARANCE": "Appearance",
+            "ACCESSIBILITY": "Accessibility",
             "ADVANCED": "Advanced",
             "ABOUT": "About"
         },
@@ -57,7 +59,10 @@
         "CLEAR_LIBRARY": "Clear your Firetail music library",
         "APP_THEME": "App theme (requires reload for now)",
         "COLOUR_THEME": "Colour theme",
+        "COLOUR_BAR": "Show album colour on playing bar",
         "USE_HIGH_CONTRAST": "Use high contrast style",
+        "REDUCE_MOTION": "Reduce motion",
+        "BOLD_TEXT": "Increase font weight",
         "SHOW_FILE_CODEC": "Show file codec information",
         "ABOUT": {
             "VERSION": "Version ",
