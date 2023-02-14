@@ -337,6 +337,10 @@ body {
     height: 100vh;
 }
 
+.bold-text body {
+    font-weight: 600;
+}
+
 a {
     text-decoration: none;
     color: var(--text);

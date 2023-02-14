@@ -60,8 +60,10 @@
         "CLEAR_LIBRARY": "Clear your Firetail music library",
         "APP_THEME": "App theme (requires reload for now)",
         "COLOUR_THEME": "Color theme",
+        "COLOUR_BAR": "Show album color on playing bar",
         "USE_HIGH_CONTRAST": "Use high contrast style",
         "REDUCE_MOTION": "Reduce motion",
+        "BOLD_TEXT": "Increase font weight",
         "SHOW_FILE_CODEC": "Show file codec information",
         "ABOUT": {
             "VERSION": "Version ",

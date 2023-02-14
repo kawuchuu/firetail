@@ -41,6 +41,10 @@ export default {
     }
 }
 
+.bold-text .button span {
+    font-weight: bold;
+}
+
 .button:last-child {
     margin-right: 0px;
 }
