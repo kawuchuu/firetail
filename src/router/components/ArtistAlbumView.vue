@@ -175,7 +175,7 @@ export default {
 .special-gradient-bg-wrapper {
     max-height: 600px;
     height: 600px;
-    width: 100%;
+    width: calc(100% - 111px);
     overflow: hidden;
     position: absolute;
     top: 0;

@@ -5,18 +5,18 @@
                 <h1>{{$t('SETTINGS.TITLE')}}</h1>
             </div>
             <div class="option-wrapper">
-                <Option class="option" v-for="item in options" :option="item" :key="item.id" :class="item.customClass"/>
+                <SettingOption class="option" v-for="item in options" :option="item" :key="item.id" :class="item.customClass"/>
             </div>
         </main>
     </div>
 </template>
 
 <script>
-import Option from './Option'
+import SettingOption from './SettingOption'
 
 export default {
     components: {
-        Option
+        SettingOption
     },
     data() {
         return {

@@ -306,7 +306,7 @@ export default {
 }
 
 .codec-info {
-    width: 250px;
+    width: 240px;
     transform: translate(-10px, -10px) scale(0);
 
     .advanced-info {
@@ -314,7 +314,7 @@ export default {
         display: flex;
         flex-direction: column;
         background-color: var(--back-bg);
-        height: calc(300px - 30px);
+        height: 270px;
         padding: 15px 20px;
         z-index: 2;
         border-radius: 5px;

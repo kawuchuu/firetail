@@ -86,7 +86,7 @@ const mutations = {
             ]
         }
         state.currentPanelProps = newProps
-        state.currentPanelComponent = 'Prompt'
+        state.currentPanelComponent = 'PromptModule'
         this.commit('panel/updateActive', true)
     }
 }

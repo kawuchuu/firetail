@@ -23,8 +23,8 @@
                 </div>
             </div>
             <div class="buttons">
-                <Button @click.native="close" :button="{ label: $t('BUTTONS.CANCEL') }" />
-                <Button @click.native="createOrEdit" :button="{ label: saveBtn, style: 'primary' }" />
+                <StandardButton @click.native="close" :button="{ label: $t('BUTTONS.CANCEL') }" />
+                <StandardButton @click.native="createOrEdit" :button="{ label: saveBtn, style: 'primary' }" />
             </div>
         </div>
     </div>
@@ -32,11 +32,11 @@
 
 <script>
 import { ipcRenderer } from 'electron'
-import Button from '../../Button.vue'
+import StandardButton from '../../StandardButton.vue'
 
 export default {
     components: {
-        Button
+        StandardButton
     },
     methods: {
         close() {

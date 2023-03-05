@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import Button from '@/components/Button'
+import Button from '@/components/StandardButton'
 import { ipcRenderer } from 'electron'
 
 export default {
