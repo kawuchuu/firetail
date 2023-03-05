@@ -69,7 +69,7 @@ export default {
                     id: id,
                     hasImage: meta.common.picture ? 1 : 0,
                     trackNum: meta.common.track.no ? meta.common.track.no : null,
-                    year: meta.common.year ? meta.common.year : null,
+                    year: meta.common.year ? `${meta.common.year}` : null,
                     disc: meta.common.disk ? meta.common.disk.no : null
                 }
                 console.log(meta.common.year)
