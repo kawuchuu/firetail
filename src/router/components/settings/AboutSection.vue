@@ -7,11 +7,16 @@
                 <p>{{$t('SETTINGS.ABOUT.VERSION')}}{{version}}<span v-show="checkBuild"> [{{build}}]</span>, {{ arch }}</p>
                 <p>{{$t('SETTINGS.ABOUT.COPYRIGHT')}}kawuchuu</p>
             </div>
+            <div>
+                <p>{{$t('SETTINGS.ABOUT.BUG_REPORT')}}<a @click="openLink">{{$t('SETTINGS.ABOUT.BUG_REPORT_LINK')}}</a></p>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import {ipcRenderer} from 'electron'
+
 export default {
     data() {
         return {
@@ -24,6 +29,11 @@ export default {
         checkBuild() {
             if (this.build === 'unknown' || this.build === 'CUSTOM') return false
             else return true
+        }
+    },
+    methods: {
+        openLink() {
+            ipcRenderer.send('openLink', `https://github.com/kawuchuu/firetail/issues`)
         }
     }
 }
@@ -52,5 +62,11 @@ h1 {
 p {
     margin: 10px 0px;
     opacity: 0.75;
+}
+
+a {
+    color: #3ea8ff;
+    text-decoration: underline;
+    cursor: pointer;
 }
 </style>

@@ -67,7 +67,9 @@
         "SHOW_FILE_CODEC": "Show file codec information",
         "ABOUT": {
             "VERSION": "Version ",
-            "COPYRIGHT": "Copyright © 2023 "
+            "COPYRIGHT": "Copyright © 2023 ",
+            "BUG_REPORT": "Found a bug? Please report it ",
+            "BUG_REPORT_LINK": "here on GitHub."
         }
     },
     "POPUPS": {
