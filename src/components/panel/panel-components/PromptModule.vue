@@ -8,10 +8,9 @@
 </template>
 
 <script>
-import ButtonArray from './ButtonArray'
+import ButtonArray from './ArrayButton'
 
 export default {
-    name: 'Prompt',
     props: ['props'],
     components: {
         ButtonArray

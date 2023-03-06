@@ -33,7 +33,7 @@ export default {
                 }
                 let comp
                 if (state.preventLoad.indexOf(getComp) != -1) {
-                    comp = require('./panel-components/Error').default
+                    comp = require('./panel-components/ModuleError').default
                     let newProps = this.panelProps
                     newProps.topMsg = 'Error'
                     this.$store.commit('panel/updatePanelProps', newProps)
@@ -43,7 +43,7 @@ export default {
                     comp = require(`./panel-components/${getComp}`).default
                 } catch(err) {
                     console.error(err)
-                    comp = require('./panel-components/Error').default
+                    comp = require('./panel-components/ModuleError').default
                     this.$store.commit('panel/updatePreventLoad', getComp)
                     let newProps = this.panelProps
                     newProps.topMsg = 'Error'
@@ -113,18 +113,27 @@ export default {
     height: 100vh;
     z-index: 20;
     top: 0;
-    opacity: 0;
+    opacity: 1;
     transition: 0.25s;
-    transition-property: opacity;
+    transition-property: opacity backdrop-filter;
     pointer-events: none;
     animation: preventClick 0.5s;
-    backdrop-filter: blur(10px) saturate(1.5);
+    backdrop-filter: blur(0px) saturate(1);
+
+    .panel-bg {
+        opacity: 0;
+    }
 }
 
 .panel-container.show {
     pointer-events: all;
     opacity: 1;
     animation: preventClick 0.5s;
+    backdrop-filter: blur(10px) saturate(1.5);
+
+    .panel, .panel-bg {
+        opacity: 1;
+    }
 }
 
 .panel-container .panel {
@@ -144,6 +153,7 @@ export default {
     z-index: 21;
     position: fixed;
     //border: solid 2px var(--bd);
+    opacity: 0;
 }
 
 .top {
@@ -188,6 +198,8 @@ export default {
     background-color: rgba(0,0,0,.75);
     width: 100%;
     height: 100%;
+    transition-duration: 0.25s;
+    transition-property: opacity;
 }
 
 html.light .panel-bg {

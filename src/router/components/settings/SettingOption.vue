@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import About from './About'
+import About from './AboutSection'
 
 export default {
     props: ['option'],

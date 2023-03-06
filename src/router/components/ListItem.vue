@@ -48,13 +48,13 @@ export default {
 
 .router-link-exact-active {
     background-color: var(--button);
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: default;
 }
 
 .albums-item a.router-link-exact-active span {
     opacity: 1;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .albums-item a.router-link-exact-active div {

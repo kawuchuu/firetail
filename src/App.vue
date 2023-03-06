@@ -35,11 +35,11 @@
 import TopBar from './components/TopBar'
 import SideBar from './components/sidebar/SideBar'
 import PlayingBar from './components/playingbar/PlayingBar'
-import Panel from './components/panel/Panel'
+import Panel from './components/panel/PanelBase'
 import ZenMode from './components/zen/ZenMode'
 import ContextMenu from './components/ContextMenu'
 import ItemAdd from '@/components/ItemAdd'
-import Notification from '@/components/Notification'
+import Notification from '@/components/NotificationPopup'
 import { ipcRenderer } from 'electron'
 //import PluginComp from './PluginComp'
 
@@ -318,8 +318,8 @@ html.light {
 }
 
 .container {
-    overflow: hidden;
-    overflow-y: auto;
+    // I know overlay is deprecated but it's the only thing that works for a transparent scrollbar
+    overflow: overlay;
     position: fixed;
     height: calc(100% - 130px);
     width: calc(100% - var(--sidebar-width));
@@ -335,7 +335,7 @@ body {
     margin: 0;
     color: var(--text);
     background: var(--back-bg);
-    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Overpass', 'Dosis', Arial, Helvetica, sans-serif !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', Arial, Helvetica, sans-serif !important;
     user-select: none;
     -webkit-user-select: none;
     color-scheme: dark;
@@ -353,23 +353,28 @@ a {
 
 ::-webkit-scrollbar {
     width: 16px !important;
-    background: var(--bg);
+    //background: var(--bg);
     -webkit-app-region: no-drag;
 }
 
 ::-webkit-scrollbar-thumb {
-    border: solid 4px var(--bg);
     background: var(--text-op);
     border-radius: 20px;
     min-height: 60px;
+    background-clip: content-box;
+    border: 4px solid transparent;
 }
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--text);
+    background-clip: content-box;
+    border: 4px solid transparent;
 }
 
 ::-webkit-scrollbar-thumb:active {
     background: var(--hl-txt);
+    background-clip: content-box;
+    border: 4px solid transparent;
 }
 
 ::-webkit-scrollbar-button {

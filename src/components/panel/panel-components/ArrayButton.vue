@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Button from '@/components/Button'
+import Button from '@/components/StandardButton'
 
 export default {
     props: ['button'],

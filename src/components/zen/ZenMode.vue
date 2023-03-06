@@ -7,6 +7,8 @@
                 <p>{{artist}}</p>
             </div>
         </div>
+        <div class="bg-cover" />
+        <div class="bg" :style="getImage" />
     </div>
 </template>
 
@@ -25,7 +27,7 @@ export default {
         updateMouseMove() {
             this.showUI()
             clearTimeout(this.mouseTimeout)
-            this.mouseTimeout = setTimeout(this.hideUI, 3000)
+            this.mouseTimeout = setTimeout(this.hideUI, 2000)
         },
         hideUI() {
             this.isUIShown = false
@@ -73,14 +75,14 @@ export default {
     },
     data() {
         return {
-            mouseTimeout: setTimeout(this.hideUI, 3000),
+            mouseTimeout: setTimeout(this.hideUI, 2000),
             isUIShown: true
         }
     },
     mounted() {
         this.isUIShown = true
         clearTimeout(this.mouseTimeout)
-        this.mouseTimeout = setTimeout(this.hideUI, 3000)
+        this.mouseTimeout = setTimeout(this.hideUI, 2000)
     },
     beforeDestroy() {
         this.isUIShown = false
@@ -90,49 +92,75 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .zen {
-        width: 100vw;
-        height: 100vh;
-        position: fixed;
-        z-index: 11;
-        background: black;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+.zen {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 11;
+    background: black;
+    display: flex;
+    align-items: flex-end;
+    //justify-content: center;
+}
+
+.album-art {
+    min-width: 275px;
+    min-height: 275px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('../../assets/no_image.svg');
+    border-radius: 10px;
+    transition: 0.25s;
+}
+
+.song-info {
+    padding: 50px 0px 20px 50px;
+    //text-align: center;
+
+    h1 {
+        font-size: 4.5em;
+        letter-spacing: -0.03em;
+        margin: 0 0 20px;
+        font-weight: 600;
     }
 
-    .album-art {
-        width: 400px;
-        height: 400px;
-        background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-image: url('../../assets/no_image.svg');
-        border-radius: 10px;
-        transition: 0.25s;
+    p {
+        margin: 20px 0 0;
+        font-size: 1.5em;
+        opacity: 0.8;
     }
+}
 
-    .song-info {
-        padding: 50px;
-        text-align: center;
+.info-wrapper {
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    pointer-events: none;
+    margin-left: 100px;
+    margin-bottom: 200px;
+    z-index: 3;
+}
 
-        h1 {
-            font-size: 46px;
-            letter-spacing: -2px;
-            margin: 0 0 20px;
-        }
+.bg {
+    width: 100%;
+    height: 100%;
+    transform: scale(1.1);
+    position: fixed;
+    z-index: 1;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    filter: blur(35px);
+    opacity: 0.8;
+    transition: 0.8s;
+}
 
-        p {
-            margin: 20px 0 0;
-        }
-    }
-
-    .info-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        pointer-events: none;
-    }
+.bg-cover {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: radial-gradient(farthest-corner at 5% 10%, transparent 5%, black);
+    z-index: 2;
+}
 </style>

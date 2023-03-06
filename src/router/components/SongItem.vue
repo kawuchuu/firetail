@@ -314,20 +314,14 @@ html.light {
     opacity: .5 !important;
 }
 
-.results-link.active i {
-    opacity: 1;
-}
-
 .results-link.active {
-    color: var(--hl-txt);
-
-    p, span {
-        opacity: 1;
+    .list-title {
+        color: var(--hl-txt);
     }
 }
 
 .results-link.active a {
-    color: var(--hl-txt);
+    //color: var(--hl-txt);
 }
 
 .artist-title-album {

@@ -175,7 +175,7 @@ export default {
 .special-gradient-bg-wrapper {
     max-height: 600px;
     height: 600px;
-    width: 100%;
+    width: calc(100% - 301px);
     overflow: hidden;
     position: absolute;
     top: 0;
@@ -285,6 +285,9 @@ export default {
         .artist-inner, .list-fade, .albums-item a span {
             transition-duration: 0s;
         }
+    }
+    .special-gradient-bg-wrapper {
+        width: calc(100% - 111px);
     }
 }
 </style>

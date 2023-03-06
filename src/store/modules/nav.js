@@ -61,7 +61,7 @@ const state = () => ({
         type: 'special_button',
         action() {
             store.commit('panel/invokeNewPanel', {
-                component: 'Playlist',
+                component: 'PlaylistModule',
                 newProps: {
                     topMsg: tr.t('PANEL.PLAYLIST.TITLE')
                 }

@@ -1,6 +1,6 @@
 # Firetail Feature Checklist
-*Created: 2/01/2023*
-*Updated: 11/02/2023*
+*Created: 02/01/2023*
+*Updated: 01/03/2023*
 
 ## Features required for completion before releasing v1.0.0
 - Playlists
@@ -20,6 +20,9 @@
   - Add specific colourblind colour mode? (?)
   - Screen reader support
   - Better keyboard-only navigation
+- Queue
+  - Queue management popup
+  - Only view current queue
 - Bug fixes & improvements
   - Random scrolling between pages
   - Try to make the sticky bar on song list pages work better
@@ -31,7 +34,7 @@
 - Appearance
   - App theming: both built-in and custom
 - Queue
-  - Queue management popup
+  - Edit current queue
   - Add song to queue in context menu
 - Spotify integration
   - Artist images
