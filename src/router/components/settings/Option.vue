@@ -269,6 +269,6 @@ export default {
 }
 
 .bold-text .subtitle, .bold-text .button {
-    font-weight: bold;
+    font-weight: 800;
 }
 </style>

@@ -111,6 +111,7 @@ window.addEventListener('mouseup', evt => {
 })
 
 window.addEventListener('keydown', evt => {
+    if (store.state.audio.preventSpacePause) return
     if (evt.metaKey && (evt.key === 'ArrowDown' || evt.key === 'ArrowUp')) {
         evt.preventDefault()
         let key = 'up'

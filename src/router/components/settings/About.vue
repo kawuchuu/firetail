@@ -43,6 +43,7 @@ img {
 h1 {
     margin: 10px 0px;
     letter-spacing: -0.02em;
+    font-weight: 600;
 }
 
 .darwin h1 {
@@ -52,5 +53,9 @@ h1 {
 p {
     margin: 10px 0px;
     opacity: 0.75;
+}
+
+.bold-text h1 {
+    font-weight: 800;
 }
 </style>

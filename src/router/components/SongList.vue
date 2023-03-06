@@ -672,6 +672,10 @@ div.section {
     }
 }
 
+.bold-text .top-title h1 {
+    font-weight: 800;
+}
+
 @media (max-width: 900px) {
     .list-album {
         display: none;

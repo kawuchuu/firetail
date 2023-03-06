@@ -1,8 +1,8 @@
 <template>
     <div class="loading-item">
         <div />
-        <div />
         <div class="artist-title-album">
+            <div class="loady-item" />
             <div class="loady-item" />
             <div class="loady-item" />
             <div class="loady-item" />
@@ -16,11 +16,11 @@
     position: relative;
     height: 42px;
     display: grid;
-    grid-template-columns: 40px 40px 1fr;
+    grid-template-columns: 40px 1fr;
     align-items: center;
     justify-items: center;
     column-gap: 5px;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 @keyframes blink {
@@ -34,8 +34,8 @@
 
 .artist-title-album {
     display: grid;
-    column-gap: 30px;
-    grid-template-columns: 3fr 2fr 2fr 40px;
+    column-gap: 20px;
+    grid-template-columns: 3fr 2fr 2fr 40px 40px;
     align-items: center;
     width: calc(100% - 25px);
     height: 100%;

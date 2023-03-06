@@ -224,7 +224,7 @@ html.light {
     --button: var(--fg-bg);
 }
 
-@font-face {
+/* @font-face {
     font-family: 'Inter';
     font-weight: normal;
     src: url('./assets/Inter-Regular.ttf') format('truetype');
@@ -240,6 +240,11 @@ html.light {
     font-family: 'Inter';
     font-weight: bold;
     src: url('./assets/Inter-Bold.ttf') format('truetype');
+} */
+
+@font-face {
+    font-family: 'Inter';
+    src: url('./assets/Inter.ttf') format('truetype');
 }
 
 .main-content-wrapper {

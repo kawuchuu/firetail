@@ -320,4 +320,8 @@ main {
     top: 0;
     z-index: -1;
 }
+
+.bold-text .top-title h1 {
+    font-weight: 800;
+}
 </style>
