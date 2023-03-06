@@ -1,11 +1,18 @@
 <template>
     <div class="song-info">
-        <div class="colour-bg" :style="getColour"></div>
+        <div class="colour-bg" :style="getColour" :class="$store.state.nav.colourBarEnabled ? '' : 'hide'"></div>
         <div class="popup large-album-art" :class="hoverShow" >
             <div class="inner" :style="getImage"></div>
         </div>
-        <div class="popup codec-info" :class="showAdvancedFileInfo">
-            <div class="advanced-info">
+        <div class="popup codec-info" :class="showMoreInfo">
+            <div class="info">
+                <h3>More Song Info</h3>
+                <span>Album: {{ currentSong.album ? currentSong.album : 'Unknown' }}</span>
+                <span>Year: {{ currentSong.year ? currentSong.year : 'Unknown' }}</span>
+                <span>Track No.: {{ currentSong.trackNum ? currentSong.trackNum : 'Unknown' }}</span>
+                <span>Disc: {{ currentSong.disc ? currentSong.disc : 'Unknown' }}</span>
+            </div>
+            <div class="info advanced" :class="showAdvancedFileInfo">
                 <h3>{{ $t('POPUPS.CODEC_INFO.TITLE') }}</h3>
                 <span v-if="advancedFileInfo.codec">{{ $t('POPUPS.CODEC_INFO.CODEC') }}{{ advancedFileInfo.codec }}</span>
                 <span v-if="advancedFileInfo.container">{{ $t('POPUPS.CODEC_INFO.CONTAINER') }}{{ advancedFileInfo.container }}</span>
@@ -36,6 +43,7 @@ export default {
         ...mapState('audio', {
             title: state => state.songTitle,
             artist: state => state.songArtist,
+            currentSong: state => state.queue[state.currentSongIndex],
             isInLibrary: state => {
                 if (state.queue.length == 0 || state.queue[state.currentSongIndex].id == 'customSong') {
                     return 'hide'
@@ -118,9 +126,12 @@ export default {
                 }
             }
         },
+        showMoreInfo() {
+            return this.showCodecInfo ? 'hover' : ''
+        },
         showAdvancedFileInfo() {
             if (this.$store.state.nav.advancedFileInfo && this.showCodecInfo) {
-                return 'hover'
+                return 'show'
             } else return ''
         }
     },
@@ -272,6 +283,10 @@ export default {
     transition: .1s;
 }
 
+.colour-bg.hide {
+    display: none;
+}
+
 .popup {
     position: fixed;
     width: auto;
@@ -306,10 +321,11 @@ export default {
 }
 
 .codec-info {
-    width: 240px;
+    width: auto;
     transform: translate(-10px, -10px) scale(0);
+    display: flex;
 
-    .advanced-info {
+    .info {
         position: relative;
         display: flex;
         flex-direction: column;
@@ -327,6 +343,15 @@ export default {
         span:not(:last-child) {
             margin-bottom: 10px;
         }
+    }
+
+    .info.advanced {
+        display: none;
+        border-left: solid 1px var(--bd);
+    }
+
+    .info.advanced.show {
+        display: flex;
     }
 }
 

@@ -98,7 +98,8 @@ const state = () => ({
     },
     highContrastEnabled: false,
     reduceMotionEnabled: false,
-    advancedFileInfo: window.localStorage.getItem('advancedFileInfo') === 'true'
+    advancedFileInfo: window.localStorage.getItem('advancedFileInfo') === 'true',
+    colourBarEnabled: true
 })
 
 const mutations = {
@@ -181,6 +182,9 @@ const mutations = {
     },
     updateReduceMotion(state, enabled) {
         state.reduceMotionEnabled = enabled
+    },
+    updateColourBar(state, enabled) {
+        state.colourBarEnabled = enabled
     }
 }
 

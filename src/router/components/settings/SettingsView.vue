@@ -106,6 +106,7 @@ export default {
                     },
                     onClick(vue, enabled) {
                         window.localStorage.setItem('colourBar', enabled)
+                        vue.$store.commit('nav/updateColourBar', enabled)
                     }
                 },
                 {

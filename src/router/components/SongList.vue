@@ -129,7 +129,7 @@ export default {
         ...mapState('nav', {
             screenCountNum: state => state.screenCountNum,
             currentScroll: function(state) {
-                if (this.$route.path === '/' && state.scrolled > 188 || this.$route.path !== '/' && state.scrolled > 250) {
+                if (this.$route.path === '/' && state.scrolled > 178 || this.$route.path !== '/' && state.scrolled > 250) {
                     return 'sticky'
                 } else {
                     return ''

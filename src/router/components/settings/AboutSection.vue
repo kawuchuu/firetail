@@ -68,4 +68,10 @@ p {
 .bold-text h1 {
     font-weight: 800;
 }
+
+a {
+    color: #3ea8ff;
+    text-decoration: underline;
+    cursor: pointer;
+}
 </style>
