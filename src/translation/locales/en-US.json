@@ -120,5 +120,10 @@
             "REMOVE_PLAYLIST": "Remove playlist"
         }
     },
-    "APP_NAME": "Firetail"
+    "APP_NAME": "Firetail",
+    "decimal": {
+        "style": "decimal",
+        "minimumSignificantDigits": 3,
+        "maximumSignificantDigits": 5
+    }
 }

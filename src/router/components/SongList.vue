@@ -49,8 +49,8 @@
             </div>
             <p v-if="false">{{$route.path}} || {{$route.path === '/' || $route.path === '/playlist'}} || {{ $route.path !== '/' || $route.path !== '/playlist' }}</p>
             <div class="wrapper">
-                <!-- <p v-if="list.length == 0 && $route.path === '/'" style="margin-left: 50px;">No songs have been imported yet. Click Add Songs at the top to import some!</p>
-                <p v-else-if="list.length === 0 && $route.path === '/playlist'" style="margin-left: 50px">No songs have been added to this playlist. You should drag some to this playlist's button on the side bar!</p> -->
+                <p v-if="list.length == 0 && !$store.state.audio.isLoadingSongs && $route.path === '/'" style="margin-left: 60px;">No songs have been added to Firetail's library. Drag some into this window to get started!</p>
+                <p v-else-if="list.length === 0 && !$store.state.audio.isLoadingSongs && $route.path === '/playlist'" style="margin-left: 60px">No songs have been added to this playlist. You should drag some to this playlist's button on the side bar!</p>
                 <div v-if="$route.path !== '/' && $route.path !== '/playlist'">
                     <SongItem v-for="(item, index) in list" :source="item" :key="item.id" :selectedItems="selectedItems" :index="index" :performingMultiDrag="performingMultiDrag"/>
                 </div>
@@ -68,7 +68,7 @@
                         @selected="select"
                     />
                 </div>
-                <div class="fixed-songload" v-if="list.length < 1">
+                <div class="fixed-songload" v-if="list.length < 1 && $store.state.audio.isLoadingSongs">
                     <div class="inner-songload">
                         <SongLoadItem v-for="index in 30" :key="index" />
                     </div>
@@ -424,6 +424,8 @@ export default {
 <style lang="scss" scoped>
 .wrapper {
     padding: 5px 20px;
+    position: relative;
+    z-index: 2;
 }
 
 .bg-gradient {
@@ -628,7 +630,8 @@ div.section {
         h3 {
             margin: 0 78px;
             font-size: 24px;
-            letter-spacing: -1px;
+            letter-spacing: -0.02px;
+            font-weight: 600;
         }
     }
 }

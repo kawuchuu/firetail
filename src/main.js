@@ -25,6 +25,7 @@ ipcRenderer.on('library', (event, library) => {
     ipcRenderer.once('getAllWithColumnArtist', (event, args) => {
         store.commit('nav/updateAlbums', args)
     })
+    store.commit('audio/notLoadingSongs')
 })
 
 ipcRenderer.on('libraryMid', (event, library) => {
