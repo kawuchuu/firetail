@@ -50,31 +50,31 @@ const state = () => ({
         type: 'large_button',
         link: '/liked'
     },
-    /* {
+    {
         name: "External",
         type: 'subtitle'
     },
     {
         icon: 'album',
-        name: "CD",
+        name: "CD/DVD",
         id: 'settingsTab',
         type: 'large_button',
-        link: '/settings'
+        link: '/cd'
     },
     {
         icon: 'album',
         name: "Radio",
         id: 'settingsTab',
         type: 'large_button',
-        link: '/settings'
+        link: '/radio'
     },
     {
         icon: 'album',
         name: "Podcasts",
         id: 'settingsTab',
         type: 'large_button',
-        link: '/settings'
-    }, */
+        link: '/podcasts'
+    },
     {
         name: tr.t('SIDEBAR.PLAYLISTS'),
         type: 'subtitle'

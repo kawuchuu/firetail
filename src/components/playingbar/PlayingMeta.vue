@@ -4,23 +4,20 @@
         <div class="popup large-album-art" :class="hoverShow" >
             <div class="inner" :style="getImage"></div>
         </div>
-        <div class="popup codec-info" :class="showMoreInfo">
+        <div class="popup codec-info" :class="[showMoreInfo, showAdvancedFileInfo]">
             <div class="info">
-                <h3>More Song Info</h3>
+                <h3>Song Metadata</h3>
                 <span>Album: {{ currentSong.album ? currentSong.album : 'Unknown' }}</span>
                 <span>Year: {{ currentSong.year ? currentSong.year : 'Unknown' }}</span>
                 <span>Track No.: {{ currentSong.trackNum ? currentSong.trackNum : 'Unknown' }}</span>
                 <span>Disc: {{ currentSong.disc ? currentSong.disc : 'Unknown' }}</span>
-            </div>
-            <div class="divider" :class="showAdvancedFileInfo"/>
-            <div class="info advanced" :class="showAdvancedFileInfo">
-                <h3>{{ $t('POPUPS.CODEC_INFO.TITLE') }}</h3>
-                <span v-if="advancedFileInfo.codec">{{ $t('POPUPS.CODEC_INFO.CODEC') }}{{ advancedFileInfo.codec }}</span>
-                <span v-if="advancedFileInfo.container">{{ $t('POPUPS.CODEC_INFO.CONTAINER') }}{{ advancedFileInfo.container }}</span>
                 <span v-if="advancedFileInfo.bitrate">{{ $t('POPUPS.CODEC_INFO.BITRATE') }}{{ Math.round(advancedFileInfo.bitrate / 1000) }}kb/s</span>
-                <span v-if="advancedFileInfo.sampleRate">{{ $t('POPUPS.CODEC_INFO.SAMPLE_RATE') }}{{ advancedFileInfo.sampleRate }}Hz</span>
-                <span v-if="advancedFileInfo.bitDepth">{{ $t('POPUPS.CODEC_INFO.BIT_DEPTH') }}{{ advancedFileInfo.bitDepth }}</span>
-                <span v-if="advancedFileInfo.noChannels">{{ $t('POPUPS.CODEC_INFO.CHANNELS') }}{{ advancedFileInfo.noChannels }}</span>
+                <div class="advanced">
+                    <span v-if="advancedFileInfo.codec">{{ $t('POPUPS.CODEC_INFO.CODEC') }}{{ advancedFileInfo.codec }}</span>
+                    <span v-if="advancedFileInfo.container">{{ $t('POPUPS.CODEC_INFO.CONTAINER') }}{{ advancedFileInfo.container }}</span>
+                    <span v-if="advancedFileInfo.sampleRate">{{ $t('POPUPS.CODEC_INFO.SAMPLE_RATE') }}{{ advancedFileInfo.sampleRate }}Hz</span>
+                    <span v-if="advancedFileInfo.bitDepth">{{ $t('POPUPS.CODEC_INFO.BIT_DEPTH') }}{{ advancedFileInfo.bitDepth }}</span>
+                </div>
             </div>
         </div>
         <router-link :to="viewLink">
@@ -324,6 +321,7 @@ export default {
 .codec-info {
     width: auto;
     min-width: 200px;
+    height: 200px;
     transform: translate(-10px, -10px) scale(0);
     display: flex;
     align-items: center;
@@ -333,18 +331,23 @@ export default {
         display: flex;
         flex-direction: column;
         background-color: var(--back-bg);
-        height: 270px;
+        height: 170px;
         padding: 15px 20px;
         z-index: 2;
         border-radius: 5px;
 
         h3 {
-            margin-top: 5px;
+            margin-top: 2px;
             font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        span {
+            font-size: 0.9em;
         }
 
         span:not(:last-child) {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
     }
 
@@ -354,14 +357,29 @@ export default {
         background: var(--bd);
     }
 
-    .info.advanced {
+    .advanced {
         display: none;
         //border-left: solid 1px var(--bd);
     }
 
-    .info.advanced.show {
-        display: flex;
+    
+}
+
+.codec-info.show {
+    height: 300px;
+
+    .info {
+        height: 270px;
+
+        .advanced {
+            display: flex;
+            flex-direction: column;
+        }
     }
+}
+
+.codec-info.show.hover {
+    transform: translate(70px, -215px) !important;
 }
 
 .bold-text .codec-info h3 {
@@ -392,7 +410,7 @@ export default {
 }
 
 .popup.hover.codec-info {
-    transform: translate(70px, -215px);
+    transform: translate(70px, -165px);
 }
 
 .large-album-art.hover-noimg {
