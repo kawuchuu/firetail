@@ -312,11 +312,15 @@ export default {
                 this.selectedItems.splice(0)
                 this.lastSelectedIndex = 0
             }
+            const revealInFileExplorer = () => {
+                ipcRenderer.invoke('open-file-in-explorer', this.list[evt[1]].path)
+            }
             let menuItems = [
                 {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_QUEUE'), type: 'button'},
                 {type: 'divider', hide: [this.selectedItems.length == 1 ? false : true, this.list[evt[1]].artist == 'Unknown Artist' && this.list[evt[1]].album == 'Unknown Album']},
                 {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ARTIST'), type: 'button', hide: [this.selectedItems.length == 1 ? false : true, this.$route.path == '/artists', this.list[evt[1]].artist == 'Unknown Artist'], onClick: goToArtist},
                 {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ALBUM'), type: 'button', hide: [this.selectedItems.length == 1 ? false : true, this.$route.path == '/albums', this.list[evt[1]].album == 'Unknown Album'], onClick: goToAlbum},
+                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.VIEW_EXPLORER'), type: 'button', hide: [this.selectedItems.length == 1 ? false : true], onClick: revealInFileExplorer},
                 {type: 'divider'},
                 {name: favCompare ? this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_FAVOURITE') : this.$t('CONTEXT_MENU.SONG_LIST_ITEM.REMOVE_FAVOURITE'), type: 'button', onClick: favouriteOnClick},
                 {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_PLAYLIST'), type: 'button'},

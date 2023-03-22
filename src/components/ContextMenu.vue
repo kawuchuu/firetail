@@ -125,6 +125,7 @@ export default {
     box-sizing: border-box;
     
     background: var(--fg-bg);
+    border: solid 1px var(--bd);
     border-radius: 5px;
     box-shadow: 0px 2px 15px rgba(0,0,0,.45);
     font-size: 14px;
@@ -142,7 +143,7 @@ html.light .context-menu {
     border-radius: 5px;
 }
 .button.dangerous {
-    color: #ff5151;
+    color: #ff6868;
 }
 html.light .button.dangerous {
     color: #ff0000;
@@ -156,7 +157,7 @@ html.light .button.dangerous {
 }
 .divider {
     width: 100%;
-    border-bottom: solid 1px #ffffff50;
+    border-bottom: solid 1px var(--bd);
     margin: 6px 0px;
 }
 html.light .divider {

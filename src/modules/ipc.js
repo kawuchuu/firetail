@@ -227,5 +227,15 @@ export default {
         })
 
         ipcMain.handle('isHighContrastEnabled', () => { return nativeTheme.shouldUseHighContrastColors })
+
+        ipcMain.handle('open-file-in-explorer', (evt, path) => {
+            let command = ''
+            switch(process.platform) {
+                case "win32":
+                    command = 'explorer /e,/select,'
+                    break
+            }
+            require('child_process').exec(`${command}"${resolve(path)}"`)
+        })
     }
 }

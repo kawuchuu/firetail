@@ -12,6 +12,7 @@
                 <span>Track No.: {{ currentSong.trackNum ? currentSong.trackNum : 'Unknown' }}</span>
                 <span>Disc: {{ currentSong.disc ? currentSong.disc : 'Unknown' }}</span>
             </div>
+            <div class="divider" :class="showAdvancedFileInfo"/>
             <div class="info advanced" :class="showAdvancedFileInfo">
                 <h3>{{ $t('POPUPS.CODEC_INFO.TITLE') }}</h3>
                 <span v-if="advancedFileInfo.codec">{{ $t('POPUPS.CODEC_INFO.CODEC') }}{{ advancedFileInfo.codec }}</span>
@@ -130,7 +131,7 @@ export default {
             return this.showCodecInfo ? 'hover' : ''
         },
         showAdvancedFileInfo() {
-            if (this.$store.state.nav.advancedFileInfo && this.showCodecInfo) {
+            if (this.$store.state.nav.advancedFileInfo) {
                 return 'show'
             } else return ''
         }
@@ -322,8 +323,10 @@ export default {
 
 .codec-info {
     width: auto;
+    min-width: 200px;
     transform: translate(-10px, -10px) scale(0);
     display: flex;
+    align-items: center;
 
     .info {
         position: relative;
@@ -345,9 +348,15 @@ export default {
         }
     }
 
+    .divider {
+        width: 1px;
+        height: 90%;
+        background: var(--bd);
+    }
+
     .info.advanced {
         display: none;
-        border-left: solid 1px var(--bd);
+        //border-left: solid 1px var(--bd);
     }
 
     .info.advanced.show {

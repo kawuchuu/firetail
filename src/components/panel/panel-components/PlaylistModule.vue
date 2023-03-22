@@ -139,7 +139,7 @@ export default {
 
 <style lang="scss" scoped>
 .pl-info-wrapper {
-    padding: 10px 20px 20px;
+    padding: 5px 20px 20px;
     display: grid;
     grid-template-areas: 
     'img info'
@@ -217,7 +217,7 @@ export default {
     opacity: 0.75;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     margin-left: 15px;
 }
 .input input, .input textarea {

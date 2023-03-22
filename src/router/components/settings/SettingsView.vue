@@ -110,6 +110,27 @@ export default {
                     }
                 },
                 {
+                    type: 'switch',
+                    id: 'performanceSwitch',
+                    label: this.$t('SETTINGS.INCREASE_PERFORMANCE'),
+                    enabled: window.localStorage.getItem('performance') == 'true',
+                    conditions: {
+                        enabled: {
+                            type: 'store',
+                            module: 'nav',
+                            state: 'increasePerformanceEnabled',
+                        },
+                        watch: {
+                            item: 'nav/increasePerformanceEnabled',
+                            for: 'enabled',
+                        }
+                    },
+                    onClick(vue, enabled) {
+                        window.localStorage.setItem('performance', enabled)
+                        enabled ? document.documentElement.classList.add('performance') : document.documentElement.classList.remove('performance')
+                    }
+                },
+                {
                     type: 'subtitle',
                     id: 'subtitleAccessibility',
                     label: this.$t('SETTINGS.SUBTITLES.ACCESSIBILITY')

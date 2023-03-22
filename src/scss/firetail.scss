@@ -134,7 +134,7 @@ html.light.high-contrast {
     }
 
     .results-link.hactive:hover {
-        outline: solid 2px var(--hl-txt-darker);
+        outline: solid 2px var(--hl-txt);
         z-index: 2;
     }
 
@@ -149,6 +149,11 @@ html.light.high-contrast {
     .resize-line {
         border-left-width: 2px;
         transform: translateX(-1px);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--text);
+        background-clip: content-box;
     }
 }
 

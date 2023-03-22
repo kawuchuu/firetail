@@ -166,7 +166,8 @@ export default {
 
 .top span {
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 600;
+    letter-spacing: -0.02em;
 }
 
 .error {
@@ -239,5 +240,15 @@ html.light .panel-bg {
     .panel-container.show .panel {
         animation: showPanelReduce 0.25s;
     }
+}
+
+.performance {
+    .panel-container, .panel-container.show {
+        backdrop-filter: none;
+    }
+}
+
+.performance.dark .panel-bg {
+    background-color: rgba(0,0,0,.85);
 }
 </style>

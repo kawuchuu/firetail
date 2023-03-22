@@ -48,10 +48,11 @@ img {
 }
 .about {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    margin-top: 30px;
 }
 h1 {
-    margin: 10px 0px;
+    margin: 0px 0px 10px;
     letter-spacing: -0.02em;
     font-weight: 600;
 }

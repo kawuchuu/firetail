@@ -151,8 +151,8 @@ export default {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    filter: blur(35px);
-    opacity: 0.8;
+    filter: blur(10px);
+    opacity: 0.65;
     transition: 0.8s;
 }
 
@@ -160,7 +160,7 @@ export default {
     width: 100%;
     height: 100%;
     position: fixed;
-    background: radial-gradient(farthest-corner at 5% 10%, transparent 5%, black);
+    background: radial-gradient(farthest-corner at 5% 10%, transparent 5%, #000000e1);
     z-index: 2;
 }
 </style>

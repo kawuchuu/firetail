@@ -368,13 +368,11 @@ a {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--text);
     background-clip: content-box;
-    border: 4px solid transparent;
 }
 
 ::-webkit-scrollbar-thumb:active {
     background: var(--hl-txt);
     background-clip: content-box;
-    border: 4px solid transparent;
 }
 
 ::-webkit-scrollbar-button {
