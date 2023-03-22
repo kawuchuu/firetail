@@ -23,13 +23,6 @@ const state = () => ({
         type: 'subtitle'
     },
     {
-        icon: 'heart',
-        name: tr.t('SIDEBAR.FAVOURITE'),
-        id: 'likedTab',
-        type: 'large_button',
-        link: '/liked'
-    },
-    {
         icon: 'note',
         name: tr.t('SIDEBAR.SONGS'),
         id: 'songsTab',
@@ -50,6 +43,38 @@ const state = () => ({
         type: 'large_button',
         link: '/albums?hideTop=true&view=firetailnoselect'
     },
+    {
+        icon: 'heart',
+        name: tr.t('SIDEBAR.FAVOURITE'),
+        id: 'likedTab',
+        type: 'large_button',
+        link: '/liked'
+    },
+    /* {
+        name: "External",
+        type: 'subtitle'
+    },
+    {
+        icon: 'album',
+        name: "CD",
+        id: 'settingsTab',
+        type: 'large_button',
+        link: '/settings'
+    },
+    {
+        icon: 'album',
+        name: "Radio",
+        id: 'settingsTab',
+        type: 'large_button',
+        link: '/settings'
+    },
+    {
+        icon: 'album',
+        name: "Podcasts",
+        id: 'settingsTab',
+        type: 'large_button',
+        link: '/settings'
+    }, */
     {
         name: tr.t('SIDEBAR.PLAYLISTS'),
         type: 'subtitle'
@@ -99,7 +124,7 @@ const state = () => ({
     highContrastEnabled: false,
     reduceMotionEnabled: false,
     advancedFileInfo: window.localStorage.getItem('advancedFileInfo') === 'true',
-    colourBarEnabled: true
+    colourBarEnabled: true,
 })
 
 const mutations = {

@@ -21,7 +21,8 @@ const state = () => ({
     volume: 1,
     muted: false,
     preventSpacePause: false,
-    isResumeState: false
+    isResumeState: false,
+    isLoadingSongs: true
 })
 
 const mutations = {
@@ -172,6 +173,10 @@ const mutations = {
     },
     setPauseSpace(state, option) {
         state.preventSpacePause = option
+    },
+    notLoadingSongs(state) {
+        console.log("yep " + state.isLoadingSongs)
+        state.isLoadingSongs = false
     }
 }
 
@@ -257,13 +262,15 @@ const actions = {
     removeTimeUpdate() {
         audio.removeEventListener('timeupdate', timeUpdate)
     },
-    addTimeUpdate() {
+    addTimeUpdate(context) {
         audio.addEventListener('timeupdate', timeUpdate)
     },
-    getAllSongs() {
+    getAllSongs(context) {
+        context.state.isLoadingSongs = true
         ipcRenderer.send('library')
     },
     getSpecificSongs(context, args) {
+        context.state.isLoadingSongs = true
         ipcRenderer.send('getSomeFromColumn', [args.column, args.q])
     },
     resumeState(context) {
