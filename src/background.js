@@ -265,7 +265,7 @@ async function createWindow() {
     const osType = process.platform
     const winConfig = {
         width: 1350,
-        height: 750,
+        height: 815,
         minWidth: 750,
         minHeight: 400,
         show: false,

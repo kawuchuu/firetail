@@ -160,6 +160,6 @@ export default {
 }
 
 .router-link-exact-active .item-sidebar span {
-    font-weight: bold;
+    font-weight: 600;
 }
 </style>
