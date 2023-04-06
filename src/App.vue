@@ -379,6 +379,10 @@ a {
     display: none
 }
 
+::-webkit-scrollbar-corner {
+    display: none;
+}
+
 .draggable {
     -webkit-app-region: drag;
     width: calc(100% - 16px);

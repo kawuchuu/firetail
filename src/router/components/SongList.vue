@@ -498,9 +498,8 @@ div.section .track-num {
     column-gap: 5px;
     top: 0;
     z-index: 3;
-    text-transform: uppercase;
-    font-size: 14px;
-    letter-spacing: 1px;
+    //text-transform: uppercase;
+    letter-spacing: 0px;
     border-bottom: solid 1px var(--bd);
     position: sticky;
     margin: 0px 20px;
@@ -534,7 +533,7 @@ div.section .track-num {
 }
 
 div.section {
-    font-size: 12px;
+    font-size: 0.9em;
     opacity: .75;
 }
 
@@ -614,7 +613,7 @@ div.section {
 
 .sticky-bg {
     position: sticky;
-    top: 0px;
+    top: -1px;
     height: 81px;
     width: 100%;
     z-index: 3;
@@ -634,7 +633,7 @@ div.section {
         h3 {
             margin: 0 78px;
             font-size: 24px;
-            letter-spacing: -0.02px;
+            letter-spacing: -0.03em;
             font-weight: 600;
         }
     }
