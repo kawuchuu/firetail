@@ -28,13 +28,11 @@ let loadLocaleMessages = () => {
 }
 getLocale() */
 
-console.log(loadLocaleMessages())
-
 let i18n = new VueI18n({
     locale: navigator.language,
     fallbackLocale: 'en-US',
     messages: loadLocaleMessages(),
-    silentFallbackWarn: true
+    silentFallbackWarn: true,
 })
 
 export default i18n

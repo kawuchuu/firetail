@@ -205,7 +205,7 @@ export default {
             const songIds = JSON.parse(playlist[0].songIds)
             const sortedPlaylistSongs = sort.sortArrayNum(songIds, 'position')
             const currentSong = songIds.find(item => item.id == this.source.id).position
-            const newStartPos = this.dragOverY >= 0 && this.dragOverY <= 21 ? currentSong : currentSong + 1
+            const newStartPos = this.dragOverY >= 0 && this.dragOverY <= 21 ? currentSong -1 : currentSong
             songs.forEach((song, index) => {
                 const item = sortedPlaylistSongs.find(item => item.id == song.id)
                 item.position = newStartPos
@@ -220,11 +220,21 @@ export default {
                 sortedPlaylistSongs[i].position = sortedPlaylistSongs[i].position + songs.length
             }
             console.log(sortedPlaylistSongs)
-            /* ipcRenderer.invoke('updatePlaylist', {
+            ipcRenderer.invoke('updatePlaylist', {
                 column: 'songids',
                 id: playlist[0].id,
                 data: JSON.stringify(sortedPlaylistSongs)
-            }) */
+            })
+            const sortedIds = []
+            sortedPlaylistSongs.forEach(song => {
+                sortedIds.push(song.id)
+            })
+            const newSongs = await ipcRenderer.invoke('getSomeFromColumnMatches', sortedIds)
+            const sortedSongsToUse = []
+            sortedPlaylistSongs.forEach(song => {
+                sortedSongsToUse.push(newSongs.find(item => item.id == song.id))
+            })
+            this.$store.commit('audio/updateCurrentListNoSort', sortedSongsToUse)
             this.dragOverY = -1
         }
     }

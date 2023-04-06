@@ -127,11 +127,12 @@ export default {
     },
     mounted() {
         const playlist = this.$attrs.props.playlist
+        const port = this.$store.state.nav.port
         if (playlist) {
             if (playlist.name || playlist.desc) this.saveBtn = this.$t('BUTTONS.SAVE')
             if (playlist.name) this.name = playlist.name
             if (playlist.desc) this.desc = playlist.desc
-            if (playlist.hasImage) this.image = `http://localhost:56741/images/playlist/${playlist.id}.jpg?${performance.now()}`
+            if (playlist.hasImage) this.image = `http://localhost:${port}/images/playlist/${playlist.id}.jpg?${performance.now()}`
         }
     }
 }

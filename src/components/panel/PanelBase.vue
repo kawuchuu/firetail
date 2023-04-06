@@ -115,7 +115,7 @@ export default {
     top: 0;
     opacity: 1;
     transition: 0.25s;
-    transition-property: opacity backdrop-filter;
+    transition-property: opacity, backdrop-filter;
     pointer-events: none;
     animation: preventClick 0.5s;
     backdrop-filter: blur(0px) saturate(1);
