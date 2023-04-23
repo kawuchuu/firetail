@@ -28,6 +28,7 @@
   - Try to make the sticky bar on song list pages work better
   - Make UI as smooth and quality as possible
   - Fix shuffling
+- Explicit tag?
 
 
 ## Features that can (probably) wait for v1.1.0
@@ -44,3 +45,5 @@
   - Tempo, pitch, reverb effects
   - Low and high pass filters?
 - Equalisation
+- Playlists
+  - Import m3u playlists?

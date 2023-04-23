@@ -24,8 +24,8 @@
             <div class="song-album-art" :style="getImage" @mouseover="hoverImage" @mouseleave="leaveImage"></div>
         </router-link>
         <div class="title-artist" @mouseover="hoverCodec" @mouseleave="leaveCodec">
-            <div class="song-title">{{title}}</div>
-            <div class="song-artist">{{artist}}</div>
+            <router-link :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(currentSong.album)}&view=album_${encodeURIComponent(currentSong.album)}`" class="song-title">{{title}}</router-link>
+            <router-link :to="`/artists?hideTop=true&column=artist&q=${encodeURIComponent(artist)}&view=artist_${encodeURIComponent(artist)}`" class="song-artist">{{artist}}</router-link>
         </div>
         <i class="ft-icon favourite-icon" :class="[isFavourite, isInLibrary]" @click="handleFavourite">{{ favouriteIcon }}</i>
     </div>
@@ -217,6 +217,10 @@ export default {
     margin-right: 10px;
     margin-bottom: 3px;
     letter-spacing: -0.01em;
+}
+
+.song-title:hover, .song-artist:hover {
+    text-decoration: underline;
 }
 
 .bold-text .song-title {

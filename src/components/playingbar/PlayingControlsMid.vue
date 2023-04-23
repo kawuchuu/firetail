@@ -30,16 +30,6 @@
 import { mapActions, mapState } from 'vuex'
 import time from '../../modules/timeformat'
 
-let clamp = (min, val, max) => {
-    return Math.min(Math.max(min, val), max);
-}
-
-let getP = (e, el) => {
-    let pBar = (e.clientX - el.getBoundingClientRect().x) / el.clientWidth;
-    pBar = clamp(0, pBar, 1);
-    return pBar;
-}
-
 export default {
     computed: {
         ...mapState('audio', {
@@ -110,7 +100,7 @@ export default {
         move(evt) {
             if (!this.seekMouseDown) return
             this.$refs.seekFill.style.transition = 'none'
-            let pBar = getP(evt, this.$refs.seekBar)
+            let pBar = this.getP(evt, this.$refs.seekBar)
             this.$refs.seekFill.style.width = pBar * 100 + '%'
             this.$refs.seekFillHover.style.width = pBar * 100 + '%'
             let seekBarWidth = this.$refs.seekBar.clientWidth
@@ -125,7 +115,7 @@ export default {
             if (!this.seekMouseDown) return
             this.seekMouseDown = false
             this.$refs.seekFill.style.removeProperty('transition')
-            let pBar = getP(evt, this.$refs.seekBar)
+            let pBar = this.getP(evt, this.$refs.seekBar)
             this.$refs.seekFill.width = pBar * 100 + '%'
             let seekBarWidth = this.$refs.seekBar.clientWidth
             let getPosition = (pBar * 100 * seekBarWidth) / 100
@@ -140,7 +130,7 @@ export default {
             }
         },
         down(evt) {
-            let pBar = getP(evt, this.$refs.seekBar)
+            let pBar = this.getP(evt, this.$refs.seekBar)
             let seekBarWidth = this.$refs.seekBar.clientWidth
             let getPosition = (pBar * 100 * seekBarWidth) / 100
             let getHalfHoverIndicate = this.$refs.hoverIndicate.clientWidth / 2
@@ -161,7 +151,7 @@ export default {
             //this.$refs.seekFill.classList.add('hover')
         },
         moveHover(evt) {
-            let pBar = getP(evt, this.$refs.seekBar)
+            let pBar = this.getP(evt, this.$refs.seekBar)
             let seekBarWidth = this.$refs.seekBar.clientWidth
             let getPosition = (pBar * 100 * seekBarWidth) / 100
             let getHalfHoverIndicate = this.$refs.hoverIndicate.clientWidth / 2
@@ -201,6 +191,14 @@ export default {
         },
         repeat() {
             this.$store.commit('audio/toggleRepeat')
+        },
+        getP(e, el) {
+            let pBar = (e.clientX - el.getBoundingClientRect().x) / el.clientWidth;
+            pBar = this.clamp(0, pBar, 1);
+            return pBar;
+        },
+        clamp(min, val, max) {
+            return Math.min(Math.max(min, val), max);
         }
     }
 }

@@ -140,7 +140,7 @@ export default {
         color: var(--hl-txt);
         border-radius: 10px;
         width: auto;
-        text-transform: uppercase;
+        //text-transform: uppercase;
         font-weight: 600;
         cursor: pointer;
     }

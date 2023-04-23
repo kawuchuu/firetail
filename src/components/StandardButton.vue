@@ -33,7 +33,7 @@ export default {
 
     span {
         font-weight: 600;
-        text-transform: uppercase;
+        //text-transform: uppercase;
     }
 
     i {

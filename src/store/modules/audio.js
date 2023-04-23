@@ -116,10 +116,12 @@ const mutations = {
         if (store.state.nav.currentView == store.state.nav.playingView) {
             state.currentList = sort.sortArray(state.currentList, 'artist')
         }
-        let index = state.queue.indexOf(currentSong)
-        state.queue.splice(index, 1)
-        state.queue.splice(0, 0, currentSong)
-        state.currentSongIndex = 0
+        if (!state.shuffled) {
+            let index = state.queue.indexOf(currentSong)
+            state.queue.splice(index, 1)
+            state.queue.splice(0, 0, currentSong)
+            state.currentSongIndex = 0
+        }
     },
     toggleRepeat(state) {
         switch(state.repeat) {

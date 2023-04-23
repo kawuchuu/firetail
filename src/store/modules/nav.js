@@ -50,7 +50,8 @@ const state = () => ({
         type: 'large_button',
         link: '/liked'
     },
-    {
+    //potential future features? :o just trying to see how it could look
+    /* {
         name: "External",
         type: 'subtitle'
     },
@@ -74,7 +75,7 @@ const state = () => ({
         id: 'settingsTab',
         type: 'large_button',
         link: '/podcasts'
-    },
+    }, */
     {
         name: tr.t('SIDEBAR.PLAYLISTS'),
         type: 'subtitle'

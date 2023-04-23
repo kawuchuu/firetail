@@ -214,10 +214,10 @@ export default {
     margin-bottom: 20px;
 }
 .input label {
-    font-size: 12px;
+    font-size: 0.9em;
     opacity: 0.75;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    //text-transform: uppercase;
+    //letter-spacing: 1px;
     margin-bottom: 8px;
     margin-left: 15px;
 }
