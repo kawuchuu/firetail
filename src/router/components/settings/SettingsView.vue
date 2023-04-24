@@ -36,6 +36,16 @@ export default {
                     }
                 },
                 {
+                    type: 'dropdown',
+                    id: 'startPageDropdown',
+                    label: this.$t('SETTINGS.START_PAGE'),
+                    options: ['Home', 'Songs', 'Artists', 'Albums', 'Favourites', 'Settings'],
+                    option: 'Songs',
+                    onChange(vue, option) {
+                        //window.localStorage.setItem('altTheme', option.toLowerCase())
+                    }
+                },
+                {
                     type: 'subtitle',
                     id: 'subtitleAppearance',
                     label: this.$t('SETTINGS.SUBTITLES.APPEARANCE')

@@ -58,6 +58,7 @@
             }
         },
         "CLEAR_LIBRARY": "Clear your Firetail music library",
+        "START_PAGE": "Choose which screen is shown when Firetail is launched",
         "APP_THEME": "App theme (requires reload for now)",
         "COLOUR_THEME": "Color theme",
         "COLOUR_BAR": "Show album color on playing bar",

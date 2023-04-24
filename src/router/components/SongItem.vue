@@ -18,7 +18,11 @@
             </div>
             <div class="artist-title-album" @pointerup="select" @dblclick="playSong">
                 <div class="list-title">
-                    <p>{{ source.title }}<span v-if="source.trackNum !== 'null'" v-show="$route.path !== '/albums'" class="track-num-list">{{ source.trackNum }}</span></p>
+                    <p>
+                        {{ source.title }}
+                        <div class="explicit" v-if="source.explicit == 1"><span>E</span></div>
+                        <span v-if="source.trackNum !== 'null'" v-show="$route.path !== '/albums'" class="track-num-list">{{ source.trackNum }}</span>
+                    </p>
                     <span v-if="$route.path == '/artists'">{{source.album}}</span>
                     <span v-if="$route.path == '/albums'">{{source.artist}}</span>
                 </div>
@@ -355,6 +359,8 @@ html.light {
     text-overflow: ellipsis;
     pointer-events: none;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
 }
 
 .results-link.simple .list-title {
@@ -481,6 +487,20 @@ html.light {
 
 .playing-ani .bar.one {
     animation-delay: -0.5s;
+}
+
+.explicit {
+    width: 14px;
+    height: 14px;
+    font-size: 0.8em;
+    background: white;
+    border-radius: 2px;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 15px;
+    opacity: 0.5;
 }
 
 .reduce-motion {
