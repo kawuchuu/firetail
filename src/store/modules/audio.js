@@ -73,26 +73,9 @@ const mutations = {
         this.commit('nav/updatePlayingView', this.state.nav.currentView)
     },
     updateCurrentList(state, list) {
+        console.log(list)
         if (!list || list.length > 0) {
-            const sortBy = {}
-            list.forEach(item => {
-                if (!sortBy[item.artist]) sortBy[item.artist] = {}
-                if (!sortBy[item.artist][item.album]) sortBy[item.artist][item.album] = []
-                sortBy[item.artist][item.album].push(item)
-            })
-            const sortKeys = sort.simpleSort(Object.keys(sortBy))
-            const finalList = []
-            sortKeys.forEach(artist => {
-                const albums = sort.simpleSort(Object.keys(sortBy[artist]))
-                albums.forEach(album => {
-                    sortBy[artist][album] = sortBy[artist][album].sort(function (a, b) {
-                        return a.trackNum - b.trackNum
-                    });
-                    sortBy[artist][album].forEach(item => {
-                        finalList.push(item)
-                    })
-                })
-            })
+            const finalList = doComplexSort(list)
             state.currentList = finalList
         } else {
             state.currentList = []
@@ -110,14 +93,16 @@ const mutations = {
             state.queue = sort.shuffle(queue)
             state.shuffled = true
         } else {
-            state.queue = sort.sortArray(queue, 'artist')
+            state.queue = doComplexSort(queue)
+            state.currentSongIndex = state.queue.indexOf(currentSong)
             state.shuffled = false
         }
         if (store.state.nav.currentView == store.state.nav.playingView) {
             state.currentList = sort.sortArray(state.currentList, 'artist')
         }
-        if (!state.shuffled) {
+        if (state.shuffled) {
             let index = state.queue.indexOf(currentSong)
+            console.log(index)
             state.queue.splice(index, 1)
             state.queue.splice(0, 0, currentSong)
             state.currentSongIndex = 0
@@ -295,6 +280,29 @@ let timeUpdate = function() {
         updateLocal++
     }
     store.commit('audio/timeUpdate', [audio.duration, audio.currentTime])
+}
+
+const doComplexSort = list => {
+    const sortBy = {}
+    list.forEach(item => {
+        if (!sortBy[item.artist]) sortBy[item.artist] = {}
+        if (!sortBy[item.artist][item.album]) sortBy[item.artist][item.album] = []
+        sortBy[item.artist][item.album].push(item)
+    })
+    const sortKeys = sort.simpleSort(Object.keys(sortBy))
+    const finalList = []
+    sortKeys.forEach(artist => {
+        const albums = sort.simpleSort(Object.keys(sortBy[artist]))
+        albums.forEach(album => {
+            sortBy[artist][album] = sortBy[artist][album].sort(function (a, b) {
+                return a.trackNum - b.trackNum
+            });
+            sortBy[artist][album].forEach(item => {
+                finalList.push(item)
+            })
+        })
+    })
+    return finalList
 }
 
 let updateMediaSession = song => {
