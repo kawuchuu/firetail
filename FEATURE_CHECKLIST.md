@@ -1,8 +1,9 @@
 # Firetail Feature Checklist
-*Created: 02/01/2023*
-*Updated: 01/03/2023*
+*Created: 02/01/2023, Updated: 26/04/2023*
 
 ## Features required for completion before releasing v1.0.0
+- Library
+  - Improve artist detection (use 'artists' and 'albumartist' tags)
 - Playlists
   - Manually change song position
   - Change playlist position on sidebar
@@ -28,7 +29,7 @@
   - Try to make the sticky bar on song list pages work better
   - Make UI as smooth and quality as possible
   - Fix shuffling
-- Explicit tag?
+- ~~Explicit tag~~
 
 
 ## Features that can (probably) wait for v1.1.0
