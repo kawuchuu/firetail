@@ -60,7 +60,13 @@ export default {
                     console.log(err);
                 })
                 if (!meta) return;
-                const explicit = meta.native.iTunes.find(tag => tag.id == 'rtng');
+                let explicit = null
+                if (meta.native.iTunes) {
+                    const result = meta.native.iTunes.find(tag => tag.id == 'rtng');
+                    if (result) {
+                        explicit = result
+                    }
+                }
                 let metaObj = {
                     title: meta.common.title ? meta.common.title : f[1],
                     artist: meta.common.artist ? meta.common.artist : 'Unknown Artist',
@@ -72,7 +78,7 @@ export default {
                     trackNum: meta.common.track.no ? meta.common.track.no : null,
                     year: meta.common.year ? `${meta.common.year}` : null,
                     disc: meta.common.disk ? meta.common.disk.no : null,
-                    explicit: explicit.value == 1 ? 1 : null
+                    explicit
                 }
                 let artistAlbum = `${meta.common.artist}${meta.common.album}`.replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')
                 toAdd.push(metaObj)

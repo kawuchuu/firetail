@@ -23,6 +23,31 @@ export default {
             options: [
                 {
                     type: 'subtitle',
+                    id: 'subtitleGeneral',
+                    label: this.$t('SETTINGS.SUBTITLES.GENERAL')
+                },
+                {
+                    type: 'dropdown',
+                    id: 'languageDropdown',
+                    label: this.$t('SETTINGS.LANGUAGE'),
+                    options: ['Auto', 'English (UK)', 'English (US)', '日本語'],
+                    option: 'Auto',
+                    onChange(vue, option) {
+                        //window.localStorage.setItem('altTheme', option.toLowerCase())
+                    }
+                },
+                {
+                    type: 'dropdown',
+                    id: 'startPageDropdown',
+                    label: this.$t('SETTINGS.START_PAGE'),
+                    options: ['Home', 'Songs', 'Artists', 'Albums', 'Favourites'],
+                    option: 'Songs',
+                    onChange(vue, option) {
+                        //window.localStorage.setItem('altTheme', option.toLowerCase())
+                    }
+                },
+                {
+                    type: 'subtitle',
                     id: 'subtitleLib',
                     label: this.$t('SETTINGS.SUBTITLES.LIBRARY')
                 },
@@ -36,13 +61,12 @@ export default {
                     }
                 },
                 {
-                    type: 'dropdown',
-                    id: 'startPageDropdown',
-                    label: this.$t('SETTINGS.START_PAGE'),
-                    options: ['Home', 'Songs', 'Artists', 'Albums', 'Favourites', 'Settings'],
-                    option: 'Songs',
-                    onChange(vue, option) {
-                        //window.localStorage.setItem('altTheme', option.toLowerCase())
+                    type: 'button',
+                    id: 'refreshMetaBtn',
+                    label: this.$t('SETTINGS.REFRESH_METADATA'),
+                    btnLabel: this.$t('SETTINGS.BUTTON.REFRESH'),
+                    action(vue) {
+                        //vue.$store.commit('panel/showNewPrompt', {title: 'Clear Library', message: "Are you sure you want to clear your current library? Your music files will not be deleted.", buttons: 'clearLibrary'})
                     }
                 },
                 {

@@ -63,7 +63,7 @@
         "USE_HIGH_CONTRAST": "Use high contrast style",
         "REDUCE_MOTION": "Reduce motion",
         "BOLD_TEXT": "Increase font weight",
-        "SHOW_FILE_CODEC": "Show file codec information",
+        "SHOW_FILE_CODEC": "Show more information in song details",
         "ABOUT": {
             "VERSION": "Version ",
             "COPYRIGHT": "Copyright © 2023 "
@@ -74,9 +74,9 @@
             "TITLE": "Codec Information",
             "CODEC": "Codec: ",
             "CONTAINER": "Container: ",
-            "BITRATE": "Bitrate: ",
+            "BITRATE": "Bit rate: ",
             "SAMPLE_RATE": "Sample rate: ",
-            "BIT_DEPTH": "Bits per sample: ",
+            "BIT_DEPTH": "Bit depth: ",
             "CHANNELS": "No. Channels: "
         }
     },
@@ -117,5 +117,6 @@
             "REMOVE_PLAYLIST": "Remove playlist"
         }
     },
-    "APP_NAME": "Firetail"
+    "APP_NAME": "Firetail",
+    "LANG_NAME": "English (UK)"
 }

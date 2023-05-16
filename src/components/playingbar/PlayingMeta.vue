@@ -6,17 +6,17 @@
         </div>
         <div class="popup codec-info" :class="[showMoreInfo, showAdvancedFileInfo]">
             <div class="info">
-                <h3>Song Metadata</h3>
-                <span>Album: {{ currentSong.album ? currentSong.album : 'Unknown' }}</span>
-                <span>Year: {{ currentSong.year ? currentSong.year : 'Unknown' }}</span>
-                <span>Track No.: {{ currentSong.trackNum ? currentSong.trackNum : 'Unknown' }}</span>
-                <span>Disc: {{ currentSong.disc ? currentSong.disc : 'Unknown' }}</span>
-                <span v-if="advancedFileInfo.bitrate">{{ $t('POPUPS.CODEC_INFO.BITRATE') }}{{ Math.round(advancedFileInfo.bitrate / 1000) }}kb/s</span>
+                <h3>Details</h3>
+                <p>Album: {{ currentSong.album ? currentSong.album : 'Unknown' }}</p>
+                <p>Year: {{ currentSong.year ? currentSong.year : 'Unknown' }}</p>
+                <p>Track No.: {{ currentSong.trackNum ? currentSong.trackNum : 'Unknown' }}</p>
+                <p>Disc: {{ currentSong.disc ? currentSong.disc : 'Unknown' }}</p>
+                <p v-if="advancedFileInfo.bitrate">{{ $t('POPUPS.CODEC_INFO.BITRATE') }}{{ Math.round(advancedFileInfo.bitrate / 1000) }}kb/s</p>
                 <div class="advanced">
-                    <span v-if="advancedFileInfo.sampleRate">{{ $t('POPUPS.CODEC_INFO.SAMPLE_RATE') }}{{ advancedFileInfo.sampleRate }}Hz</span>
-                    <span v-if="advancedFileInfo.bitDepth">{{ $t('POPUPS.CODEC_INFO.BIT_DEPTH') }}{{ advancedFileInfo.bitDepth }}</span>
-                    <span v-if="advancedFileInfo.codec">{{ $t('POPUPS.CODEC_INFO.CODEC') }}{{ advancedFileInfo.codec }}</span>
-                    <span v-if="advancedFileInfo.container">{{ $t('POPUPS.CODEC_INFO.CONTAINER') }}{{ advancedFileInfo.container }}</span>
+                    <p v-if="advancedFileInfo.bitDepth">{{ $t('POPUPS.CODEC_INFO.BIT_DEPTH') }}{{ advancedFileInfo.bitDepth }}-bit</p>
+                    <p v-if="advancedFileInfo.sampleRate">{{ $t('POPUPS.CODEC_INFO.SAMPLE_RATE') }}{{ advancedFileInfo.sampleRate }}Hz</p>
+                    <p v-if="advancedFileInfo.codec">{{ $t('POPUPS.CODEC_INFO.CODEC') }}{{ advancedFileInfo.codec }}</p>
+                    <p v-if="advancedFileInfo.container">{{ $t('POPUPS.CODEC_INFO.CONTAINER') }}{{ advancedFileInfo.container }}</p>
                 </div>
             </div>
         </div>
@@ -24,7 +24,7 @@
             <div class="song-album-art" :style="getImage" @mouseover="hoverImage" @mouseleave="leaveImage"></div>
         </router-link>
         <div class="title-artist" @mouseover="hoverCodec" @mouseleave="leaveCodec">
-            <router-link :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(currentSong.album)}&view=album_${encodeURIComponent(currentSong.album)}`" class="song-title">{{title}}</router-link>
+            <router-link :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(currentSong.album)}&view=album_${encodeURIComponent(currentSong.album)}`" class="song-title">{{title}}<div v-if="currentSong.explicit" class="explicit"><span>E</span></div></router-link>
             <router-link :to="`/artists?hideTop=true&column=artist&q=${encodeURIComponent(artist)}&view=artist_${encodeURIComponent(artist)}`" class="song-artist">{{artist}}</router-link>
         </div>
         <i class="ft-icon favourite-icon" :class="[isFavourite, isInLibrary]" @click="handleFavourite">{{ favouriteIcon }}</i>
@@ -209,7 +209,8 @@ export default {
     font-size: 15px;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: block;
+    display: flex;
+    align-items: center;
     line-height: 20px;
     white-space: nowrap;
     max-width: 350px;
@@ -325,6 +326,7 @@ export default {
 .codec-info {
     width: auto;
     min-width: 200px;
+    max-width: 375px;
     height: 200px;
     transform: translate(-10px, -10px) scale(0);
     display: flex;
@@ -336,6 +338,7 @@ export default {
         flex-direction: column;
         background-color: var(--back-bg);
         height: 170px;
+        max-width: 335px;
         padding: 15px 20px;
         z-index: 2;
         border-radius: 5px;
@@ -346,11 +349,15 @@ export default {
             font-size: 1.1em;
         }
 
-        span {
+        p {
             font-size: 0.9em;
+            margin: 0px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
 
-        span:not(:last-child) {
+        p:not(:last-child) {
             margin-bottom: 8px;
         }
     }
@@ -415,6 +422,21 @@ export default {
 
 .popup.hover.codec-info {
     transform: translate(70px, -165px);
+}
+
+.explicit {
+    width: 14px;
+    height: 14px;
+    font-size: 0.8em;
+    font-weight: 600;
+    background: white;
+    border-radius: 2px;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 8px;
+    opacity: 0.5;
 }
 
 .large-album-art.hover-noimg {

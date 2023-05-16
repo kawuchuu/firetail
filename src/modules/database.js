@@ -117,7 +117,7 @@ export default {
         }
     },
     getAllPlaylists() {
-        return db.prepare('SELECT name,id FROM playlists').all()
+        return db.prepare('SELECT name,id,hasImage FROM playlists').all()
     },
     getSpecificPlaylist(id) {
         return db.prepare('SELECT * FROM playlists WHERE id = ?').all(id)
