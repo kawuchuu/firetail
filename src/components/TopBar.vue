@@ -5,8 +5,8 @@
                 <TopNav v-for="item in nav" :key="item.type" :nav="item"/>
             </div>
             <div class="nav-top-buttons">
-                <div class="search-btn">
-                    <i class="ft-icon">search</i>
+                <div class="search-btn" :class="showSearch ? 'active' : ''">
+                    <i class="ft-icon" @click="showSearch = !showSearch">search</i>
                     <input type="text" placeholder="Search...">
                 </div>
                 <div class="top-button-container">
@@ -20,18 +20,21 @@
                 </div> -->
             </div>
         </div>
+        <SearchPopup :active="showSearch ? 'active' : ''" />
     </div>
 </template>
 
 <script>
 import TopButtons from './TopButtons'
 import TopNav from './TopNav'
+import SearchPopup from './SearchPopup'
 import { ipcRenderer } from 'electron'
 
 export default {
     components: {
         TopButtons,
-        TopNav
+        TopNav,
+        SearchPopup
     },
     data() {
         return {
@@ -44,7 +47,8 @@ export default {
             ],
             platform: process.platform,
             maximizeIcon: require('@/assets/maximise.svg'),
-            isMaximized: false
+            isMaximized: false,
+            showSearch: false
         }
     },
     methods: {
@@ -110,6 +114,8 @@ export default {
     border-radius: 40px;
     height: 18px;
     width: 18px;
+    max-width: 200px;
+    overflow: hidden;
     margin-right: 10px;
     pointer-events: all;
     cursor: pointer;
@@ -127,7 +133,7 @@ export default {
     }
 
     input[type=text] {
-        width: 165px;
+        width: 0px;
         background: transparent;
         border: none;
         outline: none;
@@ -135,8 +141,11 @@ export default {
         font-family: 'Inter', sans-serif;
         font-size: 14px;
         color: white;
-
-        display: none;
+        margin-left: 6px;
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.2s;
+        transition-property: width, opacity;
     }
 }
 
@@ -145,7 +154,9 @@ export default {
     cursor: default;
 
     input {
-        display: block;
+        width: 165px;
+        opacity: 1;
+        pointer-events: all;
     }
 }
 
