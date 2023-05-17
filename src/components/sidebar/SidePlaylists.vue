@@ -1,6 +1,8 @@
 <template>
     <router-link :to="link">
         <div draggable="true" :class="isDragOverClass" @pointerdown="context" @dragover="handleDragOver" @dragleave="handleDragLeave" @dragend="handleDragLeave" @drop="handleDrop" class="item-sidebar playlist-sidename">
+            <div v-if="playlist.hasImage === 1" class="playlist-image" :style="`background-image: url('http://localhost:${port}/images/playlist/${playlist.id}.jpg')`" />
+            <div v-else class="playlist-image" />
             <span>{{ playlist.name }}</span>
         </div>
     </router-link>
@@ -14,6 +16,7 @@ export default {
     props: ['playlist'],
     data() {
         return {
+            port: this.$store.state.nav.port,
             isDragOver: false,
             link: `/playlist?id=${this.playlist.id}&view=playlist_${this.playlist.id}`
         }
@@ -22,7 +25,7 @@ export default {
         isDragOverClass() {
             if (this.isDragOver) return 'drag-over'
             else return ''
-        }
+        },
     },
     methods: {
         context(evt) {
@@ -97,7 +100,7 @@ export default {
 
 <style lang="scss" scoped>
 .playlist-sidename {
-    height: 30px;
+    height: 38px;
     box-sizing: border-box;
 }
 
@@ -107,7 +110,7 @@ export default {
 
 .playlist-sidename span {
     font-size: 14px;
-    margin-left: 16px;
+    //margin-left: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -115,7 +118,7 @@ export default {
 }
 
 .playlist-sidename.active span {
-    margin-left: 13px
+    //margin-left: 13px
 }
 
 .playlist-sidename.drag-over {
@@ -161,5 +164,15 @@ export default {
 
 .router-link-exact-active .item-sidebar span {
     font-weight: 600;
+}
+
+.playlist-image {
+    min-width: 25px;
+    min-height: 25px;
+    background-image: url('../../assets/no_album.svg');
+    background-size: cover;
+    background-color: var(--bg);
+    margin: 0 12px;
+    border-radius: 4px;
 }
 </style>

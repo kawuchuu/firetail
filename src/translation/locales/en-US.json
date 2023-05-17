@@ -36,6 +36,7 @@
     "SETTINGS": {
         "TITLE": "Settings",
         "SUBTITLES": {
+            "GENERAL": "General",
             "LIBRARY": "Library",
             "APPEARANCE": "Appearance",
             "ACCESSIBILITY": "Accessibility",
@@ -43,7 +44,8 @@
             "ABOUT": "About"
         },
         "BUTTON": {
-            "CLEAR_LIBRARY": "Clear Library"
+            "CLEAR_LIBRARY": "Clear Library",
+            "REFRESH": "Refresh"
         },
         "DROP_DOWN": {
             "APP_THEME": {
@@ -57,8 +59,10 @@
                 "LIGHT": "Light"
             }
         },
+        "LANGUAGE": "Select a language",
+        "START_PAGE": "Choose which screen is displayed when Firetail is launched",
         "CLEAR_LIBRARY": "Clear your Firetail music library",
-        "START_PAGE": "Choose which screen is shown when Firetail is launched",
+        "REFRESH_METADATA": "Refresh your library's metadata",
         "APP_THEME": "App theme (requires reload for now)",
         "COLOUR_THEME": "Color theme",
         "COLOUR_BAR": "Show album color on playing bar",
@@ -79,9 +83,9 @@
             "TITLE": "Codec Information",
             "CODEC": "Codec: ",
             "CONTAINER": "Container: ",
-            "BITRATE": "Bitrate: ",
+            "BITRATE": "Bit rate: ",
             "SAMPLE_RATE": "Sample rate: ",
-            "BIT_DEPTH": "Bits per sample: ",
+            "BIT_DEPTH": "Bit depth: ",
             "CHANNELS": "No. Channels: "
         }
     },
@@ -125,5 +129,6 @@
             "REMOVE_PLAYLIST": "Remove playlist"
         }
     },
-    "APP_NAME": "Firetail"
+    "APP_NAME": "Firetail",
+    "LANG_NAME": "English (US)"
 }

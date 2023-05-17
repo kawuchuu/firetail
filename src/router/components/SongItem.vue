@@ -364,6 +364,10 @@ html.light {
 }
 
 .results-link.simple .list-title {
+    display: block;
+}
+
+.results-link.simple .list-title {
     p {
         margin: 0 0 5px;
         font-size: 15px;
@@ -493,6 +497,7 @@ html.light {
     width: 14px;
     height: 14px;
     font-size: 0.8em;
+    font-weight: 600;
     background: white;
     border-radius: 2px;
     color: black;

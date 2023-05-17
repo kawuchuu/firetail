@@ -632,7 +632,7 @@ div.section {
 
         h3 {
             margin: 0 78px;
-            font-size: 24px;
+            font-size: 20px;
             letter-spacing: -0.03em;
             font-weight: 600;
         }

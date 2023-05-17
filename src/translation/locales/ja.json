@@ -102,5 +102,6 @@
             "REMOVE_PLAYLIST": "このプレイリストを削除"
         }
     },
-    "APP_NAME": "Firetail"
+    "APP_NAME": "Firetail",
+    "LANG_NAME": "日本語"
 }
