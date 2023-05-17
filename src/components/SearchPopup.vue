@@ -1,7 +1,10 @@
 <template>
     <div class="popup search" :class="active">
         <div class="search-inner">
-            <span>Search will go here</span>
+            <div class="placeholder-search">
+                <i class="ft-icon">search</i>
+                <span>Start your search...</span>
+            </div>
         </div>
     </div>
 </template>
@@ -63,6 +66,23 @@ export default {
         border-radius: 20px;
         position: relative;
         z-index: 2;
+    }
+}
+
+.placeholder-search {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    opacity: 0.5;
+
+    i {
+        font-size: 5em;
+    }
+
+    span {
+        margin-top: 10px;
     }
 }
 

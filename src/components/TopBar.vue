@@ -7,7 +7,7 @@
             <div class="nav-top-buttons">
                 <div class="search-btn" :class="showSearch ? 'active' : ''">
                     <i class="ft-icon" @click="showSearch = !showSearch">search</i>
-                    <input type="text" placeholder="Search...">
+                    <input type="text" ref="search" placeholder="Search...">
                 </div>
                 <div class="top-button-container">
                     <TopButtons v-for="item in button" v-bind:button="item" v-bind:key="item.id"></TopButtons>
@@ -65,6 +65,11 @@ export default {
             this.maximizeIcon = require(`@/assets/${icon}.svg`)
             this.isMaximized = icon == 'unmaximise'
         })
+    },
+    watch: {
+        showSearch() {
+            if (this.showSearch) this.$refs.search.focus()
+        }
     }
 }
 </script>
@@ -125,6 +130,9 @@ export default {
     align-items: center;
     justify-content: space-between;
 
+    transition: 0.15s;
+    transition-property: width;
+
     -webkit-app-region: no-drag;
     
     i {
@@ -144,7 +152,7 @@ export default {
         margin-left: 6px;
         opacity: 0;
         pointer-events: none;
-        transition: 0.2s;
+        transition: 0.15s;
         transition-property: width, opacity;
     }
 }
