@@ -1,9 +1,21 @@
 <template>
     <div class="popup search" :class="active">
         <div class="search-inner">
-            <div class="placeholder-search">
+            <!-- <div class="placeholder-search">
                 <i class="ft-icon">search</i>
                 <span>Start your search...</span>
+            </div> -->
+            <div class="category">
+                <div class="heading">Songs</div>
+            </div>
+            <div class="category">
+                <div class="heading">Artists</div>
+            </div>
+            <div class="category">
+                <div class="heading">Albums</div>
+            </div>
+            <div class="category">
+                <div class="heading">Playlists</div>
             </div>
         </div>
     </div>
@@ -66,6 +78,8 @@ export default {
         border-radius: 20px;
         position: relative;
         z-index: 2;
+        overflow: hidden;
+        overflow-y: auto;
     }
 }
 
@@ -83,6 +97,15 @@ export default {
 
     span {
         margin-top: 10px;
+    }
+}
+
+.category {
+    padding: 15px;
+
+    .heading {
+        border-bottom: 1px solid var(--bd);
+        padding: 0px 0px 10px 15px;
     }
 }
 

@@ -43,7 +43,7 @@
     .loady-item {
         width: 100%;
         height: 20px;
-        background: var(--fg-bg);
+        background: var(--text-op);
         border-radius: 5px;
         //animation: blink 1.5s infinite alternate-reverse ease-in;
     }

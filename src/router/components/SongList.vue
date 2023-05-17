@@ -98,7 +98,7 @@ export default {
             lastSelectedIndex: 0,
             sItem: SongItem,
             titleSizes: {
-                large: '5.5rem',
+                large: '5.2rem',
                 medium: '3.5rem',
                 small: '2.4rem' 
             },
@@ -653,8 +653,12 @@ div.section {
     }
 }
 
-.darwin .top-header, .darwin .bg-inner h3 {
-    letter-spacing: -0.02em;
+.darwin .top-header {
+    letter-spacing: -0.015em;
+}
+
+.darwin .bg-inner h3 {
+    letter-spacing: -0.005em;
 }
 
 .bottom-row {

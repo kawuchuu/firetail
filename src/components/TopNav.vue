@@ -1,5 +1,5 @@
 <template>
-    <div :class="isActive" @click="navigate(nav.nav)" class="nav-button">
+    <div :class="isActive" @click="navigate(nav.nav)" class="std-top-btn nav-button">
         <i class="ft-icon" :class="nav.class">{{nav.icon}}</i>
     </div>
 </template>
@@ -27,11 +27,7 @@ export default {
 
 <style scoped>
 .nav-button {
-    width: 18px;
-    height: 18px;
-    padding: 10px;
     margin-right: 10px;
-    border-radius: 50px;
     cursor: pointer;
     /* border: solid 1px #5f587c; */
     -webkit-app-region: no-drag;

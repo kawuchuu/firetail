@@ -1,6 +1,6 @@
 <template>
     <div class="root">
-        <label @click="click" class="top-button" :for="checkFor">
+        <label @click="click" class="std-top-btn top-button" :for="checkFor">
             <i class="ft-icon">{{button.icon}}</i>
             <!-- <span>{{button.name}}</span> -->
         </label>
@@ -53,10 +53,6 @@ export default {
     justify-content: center;
     cursor: pointer;
     -webkit-app-region: no-drag;
-    width: 18px;
-    height: 18px;
-    padding: 10px;
-    border-radius: 40px;
 }
 
 /* .top-button:not(:first-child) {

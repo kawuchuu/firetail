@@ -5,9 +5,9 @@
                 <TopNav v-for="item in nav" :key="item.type" :nav="item"/>
             </div>
             <div class="nav-top-buttons">
-                <div class="search-btn" :class="showSearch ? 'active' : ''">
+                <div class="std-top-btn search-btn" :class="showSearch ? 'active' : ''">
                     <i class="ft-icon" @click="showSearch = !showSearch">search</i>
-                    <input type="text" ref="search" placeholder="Search...">
+                    <input @keydown="checkEsc" @focus="focused" @blur="unfocused" type="text" ref="search" placeholder="Search..." v-model="searchInput">
                 </div>
                 <div class="top-button-container">
                     <TopButtons v-for="item in button" v-bind:button="item" v-bind:key="item.id"></TopButtons>
@@ -48,12 +48,24 @@ export default {
             platform: process.platform,
             maximizeIcon: require('@/assets/maximise.svg'),
             isMaximized: false,
-            showSearch: false
+            showSearch: false,
+            searchInput: ""
         }
     },
     methods: {
         sendButtonSignal(action) {
             ipcRenderer.send('do-custom-window-action', action)
+        },
+        focused() {
+            this.$store.commit('audio/setPauseSpace', true)
+            this.searchInput = ""
+        },
+        unfocused() {
+            this.$store.commit('audio/setPauseSpace', false)
+            this.showSearch = false
+        },
+        checkEsc(evt) {
+            if (evt.key == "Escape") this.showSearch = false
         }
     },
     async mounted() {
@@ -73,6 +85,15 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+.std-top-btn {
+    padding: 8px;
+    border-radius: 40px;
+    height: 18px;
+    width: 18px;
+}
+</style>
 
 <style lang="scss" scoped>
 .top-bar {
@@ -115,10 +136,6 @@ export default {
 }
 
 .search-btn {
-    padding: 10px;
-    border-radius: 40px;
-    height: 18px;
-    width: 18px;
     max-width: 200px;
     overflow: hidden;
     margin-right: 10px;
@@ -160,6 +177,7 @@ export default {
 .search-btn.active {
     width: 200px;
     cursor: default;
+    background: rgba(255,255,255,.1);
 
     input {
         width: 165px;
