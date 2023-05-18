@@ -16,7 +16,7 @@ new Vue({
 
 Vue.use(AsyncComputed)
 
-router.replace({ path: '/', query: { name: i18n.t('SIDEBAR.SONGS'), view: 'all' } })
+//router.replace({ path: '/', query: { name: i18n.t('SIDEBAR.SONGS'), view: 'all' } })
 
 ipcRenderer.on('library', (event, library) => {
     store.commit('audio/updateCurrentList', library)
@@ -105,11 +105,11 @@ if (localStorage.getItem('sp-token')) {
 
 //nav buttons on mouse is implemented poorly in electron (and by extension chromium)...
 //simply causes weird nav problems. unfortunately it's best to disable them entirely.
-window.addEventListener('mouseup', evt => {
+/* window.addEventListener('mouseup', evt => {
     if (evt.button == 3 || evt.button == 4) {
         evt.preventDefault();
     }
-})
+}) */
 
 window.addEventListener('keydown', evt => {
     if (store.state.audio.preventSpacePause) return

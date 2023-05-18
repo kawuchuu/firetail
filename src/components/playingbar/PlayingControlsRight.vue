@@ -237,7 +237,7 @@ export default {
     width: auto;
     height: 300px;
     background: var(--back-bg);
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0px 5px 10px rgba(0,0,0,.15);
     pointer-events: none;
     opacity: 0;

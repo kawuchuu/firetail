@@ -30,6 +30,9 @@
   - Make UI as smooth and quality as possible
   - Fix shuffling
 - ~~Explicit tag~~
+- Updates
+  - Let user check for updates
+  - Choose update branch
 
 
 ## Features that can (probably) wait for v1.1.0

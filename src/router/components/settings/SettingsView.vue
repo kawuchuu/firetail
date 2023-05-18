@@ -297,6 +297,30 @@ export default {
                 }, */
                 {
                     type: 'subtitle',
+                    id: 'subtitleUpdates',
+                    label: this.$t('SETTINGS.SUBTITLES.UPDATE')
+                },
+                {
+                    type: 'button',
+                    id: 'checkUpdateBtn',
+                    label: this.$t('SETTINGS.CHECK_UPDATE'),
+                    btnLabel: this.$t('SETTINGS.BUTTON.CHECK_UPDATE'),
+                    /* action(vue) {
+                        vue.$store.commit('panel/showNewPrompt', {title: 'Clear Library', message: "Are you sure you want to clear your current library? Your music files will not be deleted.", buttons: 'clearLibrary'})
+                    } */
+                },
+                {
+                    type: 'dropdown',
+                    id: 'updateBranchDropdown',
+                    label: this.$t('SETTINGS.UPDATE_BRANCH'),
+                    options: ['Stable', 'Preview', 'Development'],
+                    option: 'Stable',
+                    onChange(vue, option) {
+                        //window.localStorage.setItem('altTheme', option.toLowerCase())
+                    }
+                },
+                {
+                    type: 'subtitle',
                     id: 'subtitleAdvanced',
                     label: this.$t('SETTINGS.SUBTITLES.ADVANCED')
                 },

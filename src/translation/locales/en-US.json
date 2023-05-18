@@ -41,11 +41,13 @@
             "APPEARANCE": "Appearance",
             "ACCESSIBILITY": "Accessibility",
             "ADVANCED": "Advanced",
+            "UPDATE": "Updates",
             "ABOUT": "About"
         },
         "BUTTON": {
             "CLEAR_LIBRARY": "Clear Library",
-            "REFRESH": "Refresh"
+            "REFRESH": "Refresh",
+            "CHECK_UPDATE": "Check for updates"
         },
         "DROP_DOWN": {
             "APP_THEME": {
@@ -71,6 +73,8 @@
         "REDUCE_MOTION": "Reduce motion",
         "BOLD_TEXT": "Increase font weight",
         "SHOW_FILE_CODEC": "Show file codec information",
+        "CHECK_UPDATE": "Check for app updates",
+        "UPDATE_BRANCH": "Choose a channel for app updates",
         "ABOUT": {
             "VERSION": "Version ",
             "COPYRIGHT": "Copyright © 2023 ",

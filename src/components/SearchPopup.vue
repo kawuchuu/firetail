@@ -33,7 +33,7 @@ export default {
     width: auto;
     height: 300px;
     background: var(--back-bg);
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0px 5px 10px rgba(0,0,0,.15);
     pointer-events: none;
     opacity: 0;
@@ -81,6 +81,19 @@ export default {
         overflow: hidden;
         overflow-y: auto;
     }
+}
+
+.win32 .popup.search {
+    transform: translate(-100px, -300px) scale(0) !important;
+}
+
+.win32 .popup.active {
+    transform: translate(-110px, 20px) scale(1) !important;
+}
+
+.win32 .popup::before {
+    right: initial;
+    left: 18px;
 }
 
 .placeholder-search {

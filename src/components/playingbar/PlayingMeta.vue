@@ -295,7 +295,7 @@ export default {
     width: auto;
     height: 300px;
     background: var(--back-bg);
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0px 5px 10px rgba(0,0,0,.15);
     pointer-events: none;
     opacity: 0;
@@ -312,7 +312,7 @@ export default {
     .inner {
         width: 300px;
         height: 300px;
-        border-radius: 5px;
+        border-radius: 10px;
         background-color: var(--back-bg);
         background-position: center;
         background-size: cover;
@@ -341,7 +341,7 @@ export default {
         max-width: 335px;
         padding: 15px 20px;
         z-index: 2;
-        border-radius: 5px;
+        border-radius: 10px;
 
         h3 {
             margin-top: 2px;

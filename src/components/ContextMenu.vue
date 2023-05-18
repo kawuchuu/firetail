@@ -124,7 +124,7 @@ export default {
     padding: 6px;
     box-sizing: border-box;
     
-    background: var(--fg-bg);
+    background: var(--sub-fg);
     border: solid 1px var(--bd);
     border-radius: 5px;
     box-shadow: 0px 2px 15px rgba(0,0,0,.45);

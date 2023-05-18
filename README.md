@@ -9,7 +9,7 @@
 
 [Click here](https://github.com/kawuchuu/firetail/releases/latest) to download the latest stable release for your system.
 
-If you'd like to try the latest unstable release, check out the snapshot builds [here.](https://github.com/kawuchuu/firetail/releases/continuous) (Please note these builds are incomplete and may not function as expected)
+If you'd like to try the latest unstable release, check them out [here.](https://github.com/kawuchuu/firetail/releases/continuous) (Please note these builds are incomplete and may not function as expected)
 
 ## Platform Information
 ### Windows

@@ -82,7 +82,9 @@ const router = new VueRouterEx({
             component: Unknown,
             name: 'Unknown'
         }
-    ]
+    ],
+    history: true,
+    root: '/'
 })
 
 let isDoneOnce = false
