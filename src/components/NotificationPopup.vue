@@ -48,6 +48,7 @@ export default {
     },
     mounted() {
         bus.$on('notifySwag', details => {
+            console.log('notification time!')
             clearTimeout(this.niceTimeout)
             this.title = details.title
             this.message = details.message

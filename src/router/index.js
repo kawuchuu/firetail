@@ -8,6 +8,7 @@ import store from '../store'
 import tr from '../translation'
 import Settings from './components/settings/SettingsView'
 import Home from './components/HomeView'
+import HiddenView from './components/HiddenView'
 import VirtualList from 'vue-virtual-scroll-list'
 import sort from '../modules/sort'
 import { ipcRenderer } from 'electron'
@@ -36,7 +37,7 @@ Vue.use(VueRouterEx)
 const router = new VueRouterEx({
     routes: [
         {
-            path: '/',
+            path: '/songs',
             component: SongList,
             name: 'NoUpdate'
         },
@@ -81,6 +82,16 @@ const router = new VueRouterEx({
             path: '*',
             component: Unknown,
             name: 'Unknown'
+        },
+        {
+            path: '/',
+            component: HiddenView,
+            name: 'Hidden'
+        },
+        {
+            path: '/liked',
+            component: SongList,
+            name: 'Favourites'
         }
     ],
     history: true,
