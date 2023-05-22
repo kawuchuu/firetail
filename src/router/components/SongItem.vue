@@ -18,16 +18,16 @@
             </div>
             <div class="artist-title-album" @pointerup="select" @dblclick="playSong">
                 <div class="list-title">
-                    <p>
-                        {{ source.title }}
+                    <div class="title-name">
+                        <p>{{ source.title }}</p>
                         <div class="explicit" v-if="source.explicit == 1"><span>E</span></div>
                         <span v-if="source.trackNum !== 'null'" v-show="$route.path !== '/albums'" class="track-num-list">{{ source.trackNum }}</span>
-                    </p>
+                    </div>
                     <span v-if="$route.path == '/artists'">{{source.album}}</span>
                     <span v-if="$route.path == '/albums'">{{source.artist}}</span>
                 </div>
-                <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-artist"><router-link :to="`/artists?hideTop=true&column=artist&q=${encodeURIComponent(source.artist)}&view=artist_${encodeURIComponent(source.artist)}`"><span>{{source.artist}}</span></router-link></p>
-                <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-album"><router-link :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(source.album)}&view=album_${encodeURIComponent(source.album)}`"><span>{{source.album}}</span></router-link></p>
+                <p v-if="$route.path == '/songs' || $route.path == '/playlist' || $route.path == '/liked'" class="list-artist"><router-link :to="`/artists?hideTop=true&column=artist&q=${encodeURIComponent(source.artist)}&view=artist_${encodeURIComponent(source.artist)}`"><span>{{source.artist}}</span></router-link></p>
+                <p v-if="$route.path == '/songs' || $route.path == '/playlist' || $route.path == '/liked'" class="list-album"><router-link :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(source.album)}&view=album_${encodeURIComponent(source.album)}`"><span>{{source.album}}</span></router-link></p>
                 <i class="ft-icon favourite-icon" @click="handleFavourite" :style="showFavourite">{{ favouriteIcon }}</i>
                 <p class="list-duration"><span>{{source.duration}}</span></p>
             </div>
@@ -361,6 +361,11 @@ html.light {
     white-space: nowrap;
     display: flex;
     align-items: center;
+
+    .title-name {
+        display: flex;
+        align-items: center;
+    }
 }
 
 .results-link.simple .list-title {

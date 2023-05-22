@@ -38,7 +38,7 @@ const macMenu = [
             },
             { type: 'separator' },
             {
-                label: 'Preferences',
+                label: 'Settings',
                 accelerator: 'Command+,',
                 click() {
                     win.webContents.send('control', 'preferences')

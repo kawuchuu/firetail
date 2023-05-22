@@ -27,21 +27,21 @@ const state = () => ({
         name: tr.t('SIDEBAR.SONGS'),
         id: 'songsTab',
         type: 'large_button',
-        link: `/?name=${encodeURIComponent(tr.t('SIDEBAR.SONGS'))}&view=all`
+        link: `/songs?view=all`
     },
     {
         icon: 'person',
         name: tr.t('SIDEBAR.ARTISTS'),
         id: 'artistsTab',
         type: 'large_button',
-        link: '/artists?hideTop=true&view=firetailnoselect'
+        link: '/artists?view=firetailnoselect'
     },
     {
         icon: 'album',
         name: tr.t('SIDEBAR.ALBUMS'),
         id: 'albumsTab',
         type: 'large_button',
-        link: '/albums?hideTop=true&view=firetailnoselect'
+        link: '/albums?view=firetailnoselect'
     },
     {
         icon: 'heart',

@@ -107,7 +107,7 @@ export default {
         },
         viewLink() {
             const playingView = encodeURIComponent(this.$store.state.nav.playingView)
-            if (!playingView) return '/?name=Songs&view=all'
+            if (!playingView) return '/songs?view=all'
             const splitView = playingView.split('_')
             switch(splitView[0]) {
                 case 'playlist': {
@@ -119,8 +119,11 @@ export default {
                 case 'album': {
                     return `/albums?hideTop=true&column=album&q=${playingView.substr(6)}&view=${playingView}`
                 }
+                case 'all': {
+                    return '/songs?view=all '
+                }
                 default: {
-                    return '/?name=Songs&view=all'
+                    return '/songs?view=all'
                 }
             }
         },

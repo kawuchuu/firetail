@@ -1,7 +1,7 @@
 <template>
-    <div class="root-sl" :class="isSimple" v-show="list.length > 0 || $route.path == '/' || $route.path === '/playlist'">
-        <div class="standard" v-if="$route.path == '/' || $route.path == '/playlist'">
-            <div v-if="$route.path == '/'" class="bg-gradient">
+    <div class="root-sl" :class="isSimple" v-show="list.length > 0 || $route.path == '/songs' || $route.path === '/playlist'">
+        <div class="standard" v-if="$route.path == '/songs' || $route.path == '/playlist'">
+            <div v-if="$route.path == '/songs'" class="bg-gradient">
                 <div class="list-gradient-fade" />
                 <div class="bg-banner"></div>
             </div>
@@ -39,22 +39,22 @@
                     </div>
                         <div class="artist-title-album section">
                             <p class="list-title">{{ $t('SONG_LIST.LIST_TITLE') }}</p>
-                            <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-artist">{{ $t('SONG_LIST.LIST_ARTIST') }}</p>
-                            <p v-if="$route.path == '/' || $route.path == '/playlist'" class="list-album">{{ $t('SONG_LIST.LIST_ALBUM') }}</p>
+                            <p v-if="$route.path == '/songs' || $route.path == '/playlist' || $route.path == '/liked'" class="list-artist">{{ $t('SONG_LIST.LIST_ARTIST') }}</p>
+                            <p v-if="$route.path == '/songs' || $route.path == '/playlist' || $route.path == '/liked'" class="list-album">{{ $t('SONG_LIST.LIST_ALBUM') }}</p>
                             <i class="ft-icon favourite-icon" style="visibility: hidden">favourite</i>
                             <p class="list-duration"><i class="ft-icon">clock</i></p>
                         </div>
                     <div class="sec-border"></div>
                 </div>
             </div>
-            <p v-if="false">{{$route.path}} || {{$route.path === '/' || $route.path === '/playlist'}} || {{ $route.path !== '/' || $route.path !== '/playlist' }}</p>
+            <p v-if="false">{{$route.path}} || {{$route.path === '/songs' || $route.path === '/playlist'}} || {{ $route.path !== '/songs' || $route.path !== '/playlist' }}</p>
             <div class="wrapper">
-                <p v-if="list.length == 0 && !$store.state.audio.isLoadingSongs && $route.path === '/'" style="margin-left: 60px;">No songs have been added to Firetail's library. Drag some into this window to get started!</p>
+                <p v-if="list.length == 0 && !$store.state.audio.isLoadingSongs && $route.path === '/songs'" style="margin-left: 60px;">No songs have been added to Firetail's library. Drag some into this window to get started!</p>
                 <p v-else-if="list.length === 0 && !$store.state.audio.isLoadingSongs && $route.path === '/playlist'" style="margin-left: 60px">No songs have been added to this playlist. You should drag some to this playlist's button on the side bar!</p>
-                <div v-if="$route.path !== '/' && $route.path !== '/playlist'">
+                <div v-if="$route.path !== '/songs' && $route.path !== '/playlist' && $route.path !== '/liked'">
                     <SongItem v-for="(item, index) in list" :source="item" :key="item.id" :selectedItems="selectedItems" :index="index" :performingMultiDrag="performingMultiDrag"/>
                 </div>
-                <div v-if="$route.path === '/' || $route.path === '/playlist'">
+                <div v-if="$route.path === '/songs' || $route.path === '/playlist' || $route.path === '/liked'">
                     <virtual-list
                         :data-key="'id'"
                         :data-sources="list"
@@ -129,7 +129,7 @@ export default {
         ...mapState('nav', {
             screenCountNum: state => state.screenCountNum,
             currentScroll: function(state) {
-                if (this.$route.path === '/' && state.scrolled > 178 || this.$route.path !== '/' && state.scrolled > 250) {
+                if (this.$route.path === '/songs' && state.scrolled > 174 || this.$route.path !== '/songs' && state.scrolled > 250) {
                     return 'sticky'
                 } else {
                     return ''
@@ -163,6 +163,9 @@ export default {
                 }
                 case '/playlist': {
                     return this.playlist.name
+                }
+                case '/liked': {
+                    return 'Favourites'
                 }
                 default: {
                     console.log('defaulting to songs')
