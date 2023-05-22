@@ -29,7 +29,7 @@ export default {
     border-radius: 10px;
     width: auto;
     cursor: pointer;
-    margin: 0px 8px;
+    //margin: 0px 8px;
 
     span {
         font-weight: 600;

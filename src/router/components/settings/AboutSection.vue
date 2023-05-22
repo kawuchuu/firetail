@@ -9,6 +9,7 @@
             </div>
             <div>
                 <p>{{$t('SETTINGS.ABOUT.BUG_REPORT')}}<a @click="openLink">{{$t('SETTINGS.ABOUT.BUG_REPORT_LINK')}}</a></p>
+                <a>Third-party licenses</a>
             </div>
         </div>
     </div>
@@ -16,8 +17,10 @@
 
 <script>
 import {ipcRenderer} from 'electron'
+import StandardButton from '../../../components/StandardButton.vue'
 
 export default {
+  components: { StandardButton },
     data() {
         return {
             version: this.$store.state.nav.ver,

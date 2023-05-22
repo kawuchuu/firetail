@@ -1,9 +1,10 @@
 # Firetail Feature Checklist
-*Created: 02/01/2023, Updated: 26/04/2023*
+*Created: 02/01/2023, Updated: 18/05/2023*
 
 ## Features required for completion before releasing v1.0.0
 - Library
   - Improve artist detection (use 'artists' and 'albumartist' tags)
+  - Recursive directory importing
 - Playlists
   - Manually change song position
   - Change playlist position on sidebar
