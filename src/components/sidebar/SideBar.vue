@@ -55,6 +55,7 @@ export default {
 .side-bar-inner-container {
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
     overflow-y: scroll;
     height: 100%;
 }
@@ -246,5 +247,18 @@ export default {
     font-size: 20px;
     border: var(--text) 2px solid;
     border-radius: 3px;
+}
+
+.rtl {
+    .list-subtitle {
+        padding-left: 0px;
+        padding-right: 15px;
+        margin: 30px 16px 5px 0px;
+        transform: translateX(15px);
+    }
+
+    .nav-buttons {
+        padding: 12px 12px 12px 0px;
+    }
 }
 </style>

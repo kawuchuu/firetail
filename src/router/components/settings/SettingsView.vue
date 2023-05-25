@@ -335,6 +335,15 @@ export default {
                     }
                 },
                 {
+                    type: 'switch',
+                    id: 'rtlForceSwitch',
+                    label: this.$t('SETTINGS.FORCE_RTL'),
+                    enabled: false,
+                    onClick(vue, enabled) {
+                        
+                    }
+                },
+                {
                     type: 'subtitle',
                     id: 'subtitleAbout',
                     label: this.$t('SETTINGS.SUBTITLES.ABOUT')

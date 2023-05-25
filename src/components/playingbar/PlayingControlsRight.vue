@@ -291,4 +291,14 @@ export default {
         transition-duration: 0s !important;
     }
 }
+
+.rtl {
+    .right-controls {
+
+        i {
+            margin-left: 0px;
+            margin-right: 20px;
+        }
+    }
+}
 </style>

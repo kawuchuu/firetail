@@ -1,5 +1,5 @@
 # Firetail Feature Checklist
-*Created: 02/01/2023, Updated: 18/05/2023*
+*Created: 02/01/2023, Updated: 25/05/2023*
 
 ## Features required for completion before releasing v1.0.0
 - Library
@@ -31,6 +31,7 @@
   - Make UI as smooth and quality as possible
   - Fix shuffling
 - ~~Explicit tag~~
+- RTL UI
 - Updates
   - Let user check for updates
   - Choose update branch

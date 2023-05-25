@@ -287,6 +287,7 @@ export default {
     transform: translateX(-15px);
     opacity: 0.1;
     transition: .1s;
+    left: 15px;
 }
 
 .colour-bg.hide {
@@ -457,6 +458,23 @@ export default {
 
     .popup.codec-info {
         transform: translate(70px, -215px);
+    }
+}
+
+.rtl {
+    .song-title {
+        margin-right: 0px;
+        margin-left: 10px;
+    }
+
+    .title-artist {
+        margin-left: 0px;
+        margin-right: 15px;
+    }
+
+    .favourite-icon {
+        margin-left: 0px;
+        margin-right: 12px;
     }
 }
 </style>
