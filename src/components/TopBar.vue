@@ -39,6 +39,7 @@ export default {
     data() {
         return {
             button: [
+                {id: 'settings', icon: 'settings'},
                 {id: 'addFiles', for: 'addFiles', icon: 'add'},
             ],
             nav: [

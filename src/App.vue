@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="rtl" :class="platform" @dragover="changeDrag($event, true)">
+    <div id="app" class="" :class="platform" @dragover="changeDrag($event, true)">
         <input type="file" multiple accept="audio/*" id="addFiles" @change="addFiles" style="display: none;">
         <div class="drag-detail">
             <p id="dragInfo">Nothing selected</p>
@@ -329,6 +329,9 @@ html.light {
 
 #app {
     height: 100%;
+}
+
+#app.rtl {
     direction: rtl;
 }
 

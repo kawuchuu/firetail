@@ -1,10 +1,8 @@
 <template>
-    <div class="root">
-        <label @click="click" class="std-top-btn top-button" :for="checkFor">
-            <i class="ft-icon">{{button.icon}}</i>
-            <!-- <span>{{button.name}}</span> -->
-        </label>
-    </div>
+    <label @click="click" class="std-top-btn top-button" :for="checkFor">
+        <i class="ft-icon">{{button.icon}}</i>
+        <!-- <span>{{button.name}}</span> -->
+    </label>
 </template>
 
 <script>
@@ -26,6 +24,9 @@ export default {
                 case "removeLibrary":
                     this.$store.commit('panel/showNewPrompt', {title: 'Remove Library', message: "Are you sure you want to remove your current library? Your music files will not be removed.", buttons: 'clearLibrary'})
                     break;
+                case "settings":
+                    this.$router.push('/settings') 
+                    break;
                 case "test":
                     this.$store.commit('panel/updatePanelProps', {
                         topMsg: 'Spotify Integration',
@@ -46,13 +47,29 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .top-button {
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     -webkit-app-region: no-drag;
+    margin-right: 20px;
+}
+
+.top-button:last-child {
+    margin-right: 0px;
+}
+
+.rtl {
+    .top-button {
+        margin-right: 0px;
+        margin-left: 20px;
+    }
+
+    .top-button:last-child {
+        margin-left: 0px;
+    }
 }
 
 /* .top-button:not(:first-child) {

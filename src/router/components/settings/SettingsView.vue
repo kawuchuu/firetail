@@ -48,6 +48,74 @@ export default {
                 },
                 {
                     type: 'subtitle',
+                    id: 'subtitleAccessibility',
+                    label: this.$t('SETTINGS.SUBTITLES.ACCESSIBILITY')
+                },
+                {
+                    type: 'switch',
+                    id: 'highContrastSwitch',
+                    label: this.$t('SETTINGS.USE_HIGH_CONTRAST'),
+                    enabled: window.localStorage.getItem('highContrast') == 'true',
+                    conditions: {
+                        enabled: {
+                            type: 'store',
+                            module: 'nav',
+                            state: 'highContrastEnabled',
+                        },
+                        watch: {
+                            item: 'nav/highContrastEnabled',
+                            for: 'enabled',
+                        }
+                    },
+                    onClick(vue, enabled) {
+                        window.localStorage.setItem('highContrast', enabled)
+                        enabled ? document.documentElement.classList.add('high-contrast') : document.documentElement.classList.remove('high-contrast')
+                    }
+                },
+                {
+                    type: 'switch',
+                    id: 'reduceMotionSwitch',
+                    label: this.$t('SETTINGS.REDUCE_MOTION'),
+                    enabled: window.localStorage.getItem('reduceMotion') == 'true',
+                    conditions: {
+                        enabled: {
+                            type: 'store',
+                            module: 'nav',
+                            state: 'reduceMotionEnabled',
+                        },
+                        watch: {
+                            item: 'nav/reduceMotionEnabled',
+                            for: 'enabled',
+                        }
+                    },
+                    onClick(vue, enabled) {
+                        window.localStorage.setItem('reduceMotion', enabled)
+                        enabled ? document.documentElement.classList.add('reduce-motion') : document.documentElement.classList.remove('reduce-motion')
+                    }
+                },
+                {
+                    type: 'switch',
+                    id: 'boldTextSwitch',
+                    label: this.$t('SETTINGS.BOLD_TEXT'),
+                    enabled: window.localStorage.getItem('boldText') == 'true',
+                    conditions: {
+                        enabled: {
+                            type: 'store',
+                            module: 'nav',
+                            state: 'boldTextEnabled',
+                        },
+                        watch: {
+                            item: 'nav/boldTextEnabled',
+                            for: 'enabled',
+                        }
+                    },
+                    onClick(vue, enabled) {
+                        window.localStorage.setItem('boldText', enabled)
+                        enabled ? document.documentElement.classList.add('bold-text') : document.documentElement.classList.remove('bold-text')
+                    }
+                },
+                {
+                    type: 'subtitle',
                     id: 'subtitleLib',
                     label: this.$t('SETTINGS.SUBTITLES.LIBRARY')
                 },
@@ -162,74 +230,6 @@ export default {
                     onClick(vue, enabled) {
                         window.localStorage.setItem('performance', enabled)
                         enabled ? document.documentElement.classList.add('performance') : document.documentElement.classList.remove('performance')
-                    }
-                },
-                {
-                    type: 'subtitle',
-                    id: 'subtitleAccessibility',
-                    label: this.$t('SETTINGS.SUBTITLES.ACCESSIBILITY')
-                },
-                {
-                    type: 'switch',
-                    id: 'highContrastSwitch',
-                    label: this.$t('SETTINGS.USE_HIGH_CONTRAST'),
-                    enabled: window.localStorage.getItem('highContrast') == 'true',
-                    conditions: {
-                        enabled: {
-                            type: 'store',
-                            module: 'nav',
-                            state: 'highContrastEnabled',
-                        },
-                        watch: {
-                            item: 'nav/highContrastEnabled',
-                            for: 'enabled',
-                        }
-                    },
-                    onClick(vue, enabled) {
-                        window.localStorage.setItem('highContrast', enabled)
-                        enabled ? document.documentElement.classList.add('high-contrast') : document.documentElement.classList.remove('high-contrast')
-                    }
-                },
-                {
-                    type: 'switch',
-                    id: 'reduceMotionSwitch',
-                    label: this.$t('SETTINGS.REDUCE_MOTION'),
-                    enabled: window.localStorage.getItem('reduceMotion') == 'true',
-                    conditions: {
-                        enabled: {
-                            type: 'store',
-                            module: 'nav',
-                            state: 'reduceMotionEnabled',
-                        },
-                        watch: {
-                            item: 'nav/reduceMotionEnabled',
-                            for: 'enabled',
-                        }
-                    },
-                    onClick(vue, enabled) {
-                        window.localStorage.setItem('reduceMotion', enabled)
-                        enabled ? document.documentElement.classList.add('reduce-motion') : document.documentElement.classList.remove('reduce-motion')
-                    }
-                },
-                {
-                    type: 'switch',
-                    id: 'boldTextSwitch',
-                    label: this.$t('SETTINGS.BOLD_TEXT'),
-                    enabled: window.localStorage.getItem('boldText') == 'true',
-                    conditions: {
-                        enabled: {
-                            type: 'store',
-                            module: 'nav',
-                            state: 'boldTextEnabled',
-                        },
-                        watch: {
-                            item: 'nav/boldTextEnabled',
-                            for: 'enabled',
-                        }
-                    },
-                    onClick(vue, enabled) {
-                        window.localStorage.setItem('boldText', enabled)
-                        enabled ? document.documentElement.classList.add('bold-text') : document.documentElement.classList.remove('bold-text')
                     }
                 },
                 // TODO: actually add features to spotify integration that people would want to use

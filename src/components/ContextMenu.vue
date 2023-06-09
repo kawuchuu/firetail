@@ -126,7 +126,7 @@ export default {
     
     background: var(--sub-fg);
     border: solid 1px var(--bd);
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0px 2px 15px rgba(0,0,0,.45);
     font-size: 14px;
 }
@@ -140,10 +140,10 @@ html.light .context-menu {
 .button {
     padding: 8px 13px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 7px;
 }
 .button.dangerous {
-    color: #ff6868;
+    color: #ff5454;
 }
 html.light .button.dangerous {
     color: #ff0000;

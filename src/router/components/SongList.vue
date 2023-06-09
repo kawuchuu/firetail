@@ -702,5 +702,10 @@ div.section {
         direction: ltr;
         text-align: right;
     }
+
+    .tab-album-art {
+        margin-right: 0px;
+        margin-left: 40px;
+    }
 }
 </style>
