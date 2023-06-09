@@ -529,4 +529,16 @@ html.light {
         }
     }
 }
+
+.rtl {
+    .results-link {
+        direction: rtl;
+        text-align: right;
+    }
+
+    .track-num-list {
+        margin-left: 0px;
+        margin-right: 15px;
+    }
+}
 </style>

@@ -39,6 +39,7 @@ export default {
     data() {
         return {
             button: [
+                {id: 'settings', icon: 'settings'},
                 {id: 'addFiles', for: 'addFiles', icon: 'add'},
             ],
             nav: [
@@ -128,6 +129,7 @@ export default {
     align-items: center;
     margin-left: 10px;
     pointer-events: all;
+    direction: ltr;
 }
 
 .nav-top-buttons {

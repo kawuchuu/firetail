@@ -489,4 +489,8 @@ export default {
         transition-duration: 0s !important;
     }
 }
+
+.rtl .track-controls {
+    direction: ltr;
+}
 </style>

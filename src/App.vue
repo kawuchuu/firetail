@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="test" :class="platform" @dragover="changeDrag($event, true)">
+    <div id="app" class="" :class="platform" @dragover="changeDrag($event, true)">
         <input type="file" multiple accept="audio/*" id="addFiles" @change="addFiles" style="display: none;">
         <div class="drag-detail">
             <p id="dragInfo">Nothing selected</p>
@@ -331,6 +331,10 @@ html.light {
     height: 100%;
 }
 
+#app.rtl {
+    direction: rtl;
+}
+
 body {
     margin: 0;
     color: var(--text);
@@ -422,5 +426,9 @@ a {
         font-size: 14px;
         line-height: 1.5em;
     }
+}
+
+.rtl {
+    --main-border-radius: 0px 10px 0px 0px;
 }
 </style>

@@ -557,8 +557,7 @@ div.section {
 }
 
 .top-title {
-    padding: 50px 100px 0px;
-    padding-left: 75px;
+    padding: 50px 75px 0px;
     display: flex;
     align-items: flex-end;
     //background: linear-gradient(#e74e8e, #e74e8ea6);
@@ -695,6 +694,18 @@ div.section {
     }
     .artist-title-album {
         grid-template-columns: 3fr 2fr 0fr;
+    }
+}
+
+.rtl {
+    .top-title-text p {
+        direction: ltr;
+        text-align: right;
+    }
+
+    .tab-album-art {
+        margin-right: 0px;
+        margin-left: 40px;
     }
 }
 </style>

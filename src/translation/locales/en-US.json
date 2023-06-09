@@ -73,6 +73,7 @@
         "REDUCE_MOTION": "Reduce motion",
         "BOLD_TEXT": "Increase font weight",
         "SHOW_FILE_CODEC": "Show file codec information",
+        "FORCE_RTL": "Force UI to right-to-left",
         "CHECK_UPDATE": "Check for app updates",
         "UPDATE_BRANCH": "Choose a channel for app updates",
         "ABOUT": {

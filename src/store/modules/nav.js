@@ -11,13 +11,13 @@ const state = () => ({
         type: 'large_button',
         link: '/home'
     },
-    {
+/*     {
         icon: 'settings',
         name: tr.t('SIDEBAR.SETTINGS'),
         id: 'settingsTab',
         type: 'large_button',
         link: '/settings'
-    },
+    }, */
     {
         name: tr.t('SIDEBAR.LIBRARY'),
         type: 'subtitle'
