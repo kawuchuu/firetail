@@ -260,6 +260,10 @@ const actions = {
         context.state.isLoadingSongs = true
         ipcRenderer.send('getSomeFromColumn', [args.column, args.q])
     },
+    getAllFavourites(context) {
+        context.state.isLoadingSongs = true
+        ipcRenderer.send('getFavouriteSongs')
+    },
     resumeState(context) {
         if (context.state.queue[0] && context.state.queue[0].id == 'customSong') return
         const lastPlayedInfo = JSON.parse(window.localStorage.getItem('lastPlayed'))

@@ -130,6 +130,8 @@ router.beforeEach(async (to, from, next) => {
         })
         store.commit('audio/updateCurrentListNoSort', sortedSongsToUse)
         store.commit('playlist/setCurrentPlaylist', playlist[0])
+    } else if (to.path == '/liked') {
+        store.dispatch('audio/getAllFavourites')
     } else {
         store.dispatch('audio/getAllSongs')
     }

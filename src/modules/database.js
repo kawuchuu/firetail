@@ -129,5 +129,10 @@ export default {
     deletePlaylist(id) {
         db.prepare('DELETE FROM playlists WHERE id = ?').run(id)
         return this.getAllPlaylists()
+    },
+    getAllFavouriteSongs() {
+        const allFavourites = this.getAllFavouriteSongs()
+        console.log('doing it?')
+        return db.prepare('SELECT * FROM library WHERE id = ?').run(allFavourites)
     }
 }

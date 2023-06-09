@@ -22,6 +22,11 @@ export default {
             win.send('library', library)
         })
 
+        ipcMain.on('getFavouriteSongs', async () => {
+            let favouriteSongs = await db.getAllFavouriteSongs()
+            win.send('library', favouriteSongs)
+        })
+
         ipcMain.on('deleteLibrary', () => {
             db.deleteLibrary()
             win.send('library', [])
