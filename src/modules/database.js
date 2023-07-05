@@ -3,27 +3,16 @@ import {app} from 'electron'
 import files from './files'
 
 const db = new Database(`${app.getPath('userData')}/library.db`, {  })
-db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, album text, duration decimal, path text, id text, hasImage integer, trackNum integer, year text, disc integer, explicit integer)').run()
+db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, album text, duration text, realdur number, path text, id text, hasImage number, trackNum number, year text, disc number, explicit number)').run()
 db.prepare('CREATE TABLE IF NOT EXISTS favourites (id text)').run()
-db.prepare('CREATE TABLE IF NOT EXISTS playlists (name text, desc text, id text, songIds text, hasImage integer)').run()
-
-try {
-    db.prepare('ALTER TABLE library ADD COLUMN disc').run()
-} catch(err) {
-    //
-}
-
-try {
-    db.prepare('ALTER TABLE library ADD COLUMN explicit').run()
-} catch{}
+db.prepare('CREATE TABLE IF NOT EXISTS playlists (name text, desc text, id text, songIds text, hasImage number)').run()
 
 export default {
     addToLibrary(songs) {
         let existingSongs = this.getLibrary()
-        let insert = db.prepare(`INSERT INTO library (title, artist, album, duration, path, id, hasImage, trackNum, year, disc, explicit) VALUES (@title, @artist, @album, @duration, @path, @id, @hasImage, @trackNum, @year, @disc, @explicit)`)
+        let insert = db.prepare(`INSERT INTO library (title, artist, album, duration, realdur, path, id, hasImage, trackNum, year, disc, explicit) VALUES (@title, @artist, @album, @duration, @realdur, @path, @id, @hasImage, @trackNum, @year, @disc, @explicit)`)
         let insertMany = db.transaction((newSongs) => {
             for (let song of newSongs){
-                console.log(song)
                 if (existingSongs.map(e => { return e.path }).indexOf(song.path) == -1){
                     insert.run(song)
                 }
@@ -44,7 +33,8 @@ export default {
     },
     getLibrary() {
         let rows = db.prepare('SELECT * FROM library').all()
-        return rows
+        let durSum = db.prepare('SELECT SUM(realdur) FROM library').all()
+        return [rows, durSum[0]['SUM(realdur)']]
     },
     getAllFromColumn(column) {
         if (column == 'artist' || column == 'album') {
@@ -68,8 +58,9 @@ export default {
     getSomeFromColumn(column, query) {
         if (column == 'artist' || column == 'album') {
             let rows = db.prepare(`SELECT * FROM library WHERE ${column} = ?`).all(query)
-            return rows
-        } else return []
+            const durSum = db.prepare(`SELECT SUM(realdur) FROM library WHERE ${column} = ?`).all(query)
+            return [rows, durSum[0]['SUM(realdur)']]
+        } else return [[], 0]
     },
     getSomeFromColumnMatches(ids) {
         let prepIds = '';
@@ -79,7 +70,8 @@ export default {
         prepIds = prepIds.substr(0, prepIds.length - 1)
         let stmt = db.prepare(`SELECT * FROM library WHERE id IN (${prepIds})`)
         const rows = stmt.all()
-        return rows
+        const durSum = db.prepare(`SELECT SUM(realdur) FROM library WHERE id IN (${prepIds})`).all()
+        return [rows, durSum[0]['SUM(realdur)']]
     },
     getSomeFromMultiColumn(column, query) {
         let columns = []

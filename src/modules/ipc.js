@@ -9,12 +9,14 @@ import { resolve } from 'path'
 export default {
     start(win) {
         ipcMain.on('addToLibrary', async (event, locations) => {
-            if (locations.length <= 0) return
+            if (locations[0].length <= 0) return
             win.webContents.send('startOrFinish', true)
-            let songs = await files.processFiles(locations)
+            let songs = await files.processFiles(locations[0])
             db.addToLibrary(songs)
-            let library = db.getLibrary()
-            win.send('library', library)
+            if (locations[1] == '/songs') {
+                let library = db.getLibrary()
+                win.send('library', library)
+            }
         })
 
         ipcMain.on('library', async () => {

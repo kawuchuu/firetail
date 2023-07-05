@@ -63,7 +63,7 @@ export default {
                 files.push([f.path,f.name])
             })
             console.log(evt.target.files)
-            ipcRenderer.send('addToLibrary', files)
+            ipcRenderer.send('addToLibrary', [files, this.$route.path])
         },
         changeDrag(evt, change) {
             if (evt.dataTransfer && evt.dataTransfer.types[0] !== 'Files') return
@@ -83,7 +83,7 @@ export default {
             })
             //console.log(files)
             this.isDraggedOver = false
-            ipcRenderer.send('addToLibrary', files)
+            ipcRenderer.send('addToLibrary', [files, this.$route.path])
         },
         resizeSidebar(evt) {
             if (!this.sidebarisResizing) return

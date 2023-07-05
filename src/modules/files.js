@@ -64,7 +64,7 @@ export default {
                 if (meta.native.iTunes) {
                     const result = meta.native.iTunes.find(tag => tag.id == 'rtng');
                     if (result) {
-                        explicit = result
+                        explicit = result.value
                     }
                 }
                 let metaObj = {
@@ -72,6 +72,7 @@ export default {
                     artist: meta.common.artist ? meta.common.artist : 'Unknown Artist',
                     album: meta.common.album ? meta.common.album : 'Unknown Album',
                     duration: meta.format.duration ? time.timeFormat(meta.format.duration) : 0,
+                    realdur: meta.format.duration ? meta.format.duration : 0,
                     path: f[0],
                     id: id,
                     hasImage: meta.common.picture ? 1 : 0,

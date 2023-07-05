@@ -22,7 +22,13 @@ const state = () => ({
     muted: false,
     preventSpacePause: false,
     isResumeState: false,
-    isLoadingSongs: true
+    isLoadingSongs: true,
+    currentListDur: {
+        total: 0,
+        hours: 0,
+        mins: 0,
+        secs: 0
+    }
 })
 
 const mutations = {
@@ -164,6 +170,14 @@ const mutations = {
     notLoadingSongs(state) {
         console.log("yep " + state.isLoadingSongs)
         state.isLoadingSongs = false
+    },
+    setCurrentListDur(state, duration) {
+        state.currentListDur = {
+            total: duration,
+            hours: ("0" + Math.floor(duration / 3600)).slice(-2),
+            mins: ("0" + Math.floor((duration % 3600) / 60)).slice(-2),
+            secs: ("0" + Math.floor(duration % 60)).slice(-2)
+        }
     }
 }
 

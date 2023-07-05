@@ -16,16 +16,18 @@ new Vue({
 
 Vue.use(AsyncComputed)
 
-//router.replace({ path: '/', query: { name: i18n.t('SIDEBAR.SONGS'), view: 'all' } })
+router.replace({ path: '/songs', query: { view: 'all' } })
 
 ipcRenderer.on('library', (event, library) => {
-    store.commit('audio/updateCurrentList', library)
+    console.log('library called')
+    store.commit('audio/updateCurrentList', library[0])
     ipcRenderer.send('getAllFromColumn', 'artist')
     ipcRenderer.send('getAllFromColumnWithArtist')
     ipcRenderer.once('getAllWithColumnArtist', (event, args) => {
         store.commit('nav/updateAlbums', args)
     })
     store.commit('audio/notLoadingSongs')
+    store.commit('audio/setCurrentListDur', library[1])
 })
 
 ipcRenderer.on('libraryMid', (event, library) => {
