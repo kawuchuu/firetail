@@ -606,6 +606,7 @@ div.section {
     background-image: url('../../assets/no_artist.svg');
     border-radius: 100px;
     margin-right: 40px;
+    box-shadow: 0px 0px 80px var(--bg-op);
 }
 
 .albums .tab-album-art, .playlist .tab-album-art {

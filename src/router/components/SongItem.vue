@@ -469,20 +469,23 @@ html.light {
 
 .playing-ani .bar {
     min-width: 3px;
-    height: 15%;
+    height: 90%;
     background: var(--hl-txt);
     margin: 0 1.5px;
     transition: 0.25s;
-    transition-property: height;
-    border-radius: 10px;
+    transition-property: transform;
+    border-radius: 100px;
+    transform: scale(100%);
+    transform-origin: bottom;
+    will-change: transform;
 }
 
 @keyframes barmove {
     from {
-        height: 15%;
+        transform: scaleY(15%);
     }
     to {
-        height: 90%;
+        transform: scaleY(100%);
     }
 }
 

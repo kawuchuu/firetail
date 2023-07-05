@@ -25,6 +25,7 @@
                 <div class="special-gradient-bg-wrapper">
                     <div class="bg-gradient" :style="imgBackground"></div>
                     <div class="bg-gradient-layer"></div>
+                    <div class="bg-image" />
                 </div>
                 <router-view></router-view>
                 <div class="bg-text" v-if="$store.state.audio.currentList.length == 0">
@@ -70,7 +71,7 @@ export default {
                 if (artURL == '' || !artURL) {
                     return ''
                 } else {
-                    return `background-image: url('${artURL}'); filter: blur(25px) brightness(0.6)`
+                    return `background-image: url('${artURL}'); filter: blur(25px) brightness(0.7) saturate(1.8);`
                 }
             }
         })
@@ -161,6 +162,7 @@ export default {
     z-index: -1;
     overflow: hidden;
     transform: scale(1.3);
+    opacity: 0.55;
 }
 
 .bg-gradient-layer {
@@ -170,6 +172,17 @@ export default {
     background: linear-gradient(transparent, var(--bg)), radial-gradient(farthest-corner at 5% 10%, transparent 5%, var(--bg));
     top: 0;
     z-index: -1;
+}
+
+.bg-image {
+    width: 100%;
+    height: 100%;
+    max-height: 450px;
+    background: linear-gradient(transparent, transparent, var(--bg)), radial-gradient(circle at top, transparent 40%, var(--bg)), url('../../assets/songs-banner.jpg');
+    background-size: cover;
+    background-position: center 80%;
+    z-index: -2;
+    position: absolute;
 }
 
 .special-gradient-bg-wrapper {
@@ -224,7 +237,7 @@ export default {
         opacity: 0;
     }
     100% {
-        opacity: 1;
+        opacity: 0.85;
     }
 }
 
@@ -235,10 +248,12 @@ export default {
     justify-content: center;
     align-items: center;
     animation: fadeIn 2s;
+    opacity: 0.85;
 
     i {
         font-size: 8em;
-        color: var(--bd);
+        color: var(--text);
+        text-shadow: 0px 0px 80px var(--bg-op);
     }
 }
 

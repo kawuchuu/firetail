@@ -13,11 +13,6 @@
                     <TopButtons v-for="item in button" v-bind:button="item" v-bind:key="item.id"></TopButtons>
                 </div>
                 <div v-if="platform === 'win32'" class="divider" />
-                <!-- <div class="windows-custom-buttons">
-                    <div class="window-button" @click="sendButtonSignal('minimize')"><img src="@/assets/minimise.svg"></div>
-                    <div class="window-button" @click="sendButtonSignal(isMaximized ? 'unmaximize' : 'maximize')"><img :src="maximizeIcon"></div>
-                    <div class="window-button close" @click="sendButtonSignal('close')"><img src="@/assets/close.svg"></div>
-                </div> -->
             </div>
         </div>
         <SearchPopup :active="showSearch ? 'active' : ''" />
@@ -47,8 +42,6 @@ export default {
                 {type: 'forward', class: 'littlebitback', nav: 1, icon: 'chevron-right'}
             ],
             platform: process.platform,
-            maximizeIcon: require('@/assets/maximise.svg'),
-            isMaximized: false,
             showSearch: false,
             searchInput: ""
         }
@@ -68,16 +61,6 @@ export default {
         checkEsc(evt) {
             if (evt.key == "Escape") this.showSearch = false
         }
-    },
-    async mounted() {
-        if (await ipcRenderer.invoke('is-maximized') == true) {
-            this.isMaximized = true
-            this.maximizeIcon = require('@/assets/unmaximise.svg')
-        }
-        ipcRenderer.addListener('change-maximize-button', (event, icon) => {
-            this.maximizeIcon = require(`@/assets/${icon}.svg`)
-            this.isMaximized = icon == 'unmaximise'
-        })
     },
     watch: {
         showSearch() {

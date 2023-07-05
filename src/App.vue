@@ -126,8 +126,7 @@ export default {
         }
     },
     async mounted() {
-            //require(`./scss/${window.localStorage.getItem('altTheme')}.scss`)
-            require('./scss/firetail.scss')
+        require('./themes/firetail.scss')
         if (window.localStorage.getItem('sidebarwidth')) {
             this.sidebarwidth = window.localStorage.getItem('sidebarwidth')
         } else {
@@ -223,24 +222,6 @@ html.light {
     --mono-bd: #b4b4b4;
     --button: var(--fg-bg);
 }
-
-/* @font-face {
-    font-family: 'Inter';
-    font-weight: normal;
-    src: url('./assets/Inter-Regular.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Inter';
-    font-weight: 600;
-    src: url('./assets/Inter-SemiBold.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Inter';
-    font-weight: bold;
-    src: url('./assets/Inter-Bold.ttf') format('truetype');
-} */
 
 @font-face {
     font-family: 'Inter';

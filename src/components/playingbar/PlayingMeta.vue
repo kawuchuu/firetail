@@ -286,7 +286,7 @@ export default {
     z-index: -1;
     transform: translateX(-15px);
     opacity: 0.1;
-    transition: .1s;
+    transition: .8s;
     left: 15px;
 }
 
