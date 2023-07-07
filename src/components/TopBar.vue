@@ -53,14 +53,16 @@ export default {
         },
         focused() {
             this.$store.commit('audio/setPauseSpace', true)
-            this.searchInput = ""
         },
         unfocused() {
             this.$store.commit('audio/setPauseSpace', false)
-            //this.showSearch = false
         },
         checkEsc(evt) {
             if (evt.key == "Escape") this.showSearch = false
+        },
+        closeSearch() {
+            this.showSearch = false
+            console.log('is it doing it??????????????')
         },
         async typingSearch(evt) {
             console.log(this.searchInput)
@@ -75,8 +77,15 @@ export default {
     },
     watch: {
         showSearch() {
-            if (this.showSearch) this.$refs.search.focus()
-            else this.searchOutput = null
+            if (this.showSearch) {
+                this.$refs.search.focus()
+                this.searchInput = ""
+            } else this.searchOutput = null
+        }
+    },
+    provide: function() {
+        return {
+            closeSearch: this.closeSearch
         }
     }
 }

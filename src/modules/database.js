@@ -86,11 +86,13 @@ export default {
         return columns
     },
     doFullQuery(query) {
-        const result = db.prepare(`SELECT * FROM library WHERE title LIKE '%'||?||'%' ORDER BY title = ? ASC, title LIKE ?||'%' DESC LIMIT 15`).all(query, query, query)
+        const songsResult = db.prepare(`SELECT DISTINCT * FROM library WHERE title LIKE '%'||?||'%' GROUP BY title ORDER BY title = ? ASC, title LIKE ?||'%' DESC LIMIT 5`).all(query, query, query)
+        const artistsResult = db.prepare(`SELECT DISTINCT artist,id FROM library WHERE artist LIKE '%'||?||'%' GROUP BY artist ORDER BY artist = ? ASC, artist LIKE ?||'%' DESC LIMIT 5`).all(query, query, query)
+        const albumResult = db.prepare(`SELECT album,artist,hasImage,id FROM library WHERE album LIKE '%'||?||'%' GROUP BY album ORDER BY album = ? ASC, album LIKE ?||'%' DESC LIMIT 5`).all(query, query, query)
         return {
-            songs: result,
-            artists: [],
-            albums: [],
+            songs: songsResult,
+            artists: artistsResult,
+            albums: albumResult,
             playlists: []
         }
     },

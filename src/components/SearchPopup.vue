@@ -11,7 +11,7 @@
             </div>
             <div v-if="results && results.songs && results.songs.length > 0" class="category songs">
                 <div class="heading">Songs</div>
-                <div class="song-result" v-for="item in results.songs" :key="item.id">
+                <div class="result song" v-for="item in results.songs" :key="item.id">
                     <img v-if="item.hasImage == 1" :src="getImg(item.artist, item.album)">
                     <img v-else src="@/assets/no_image.svg">
                     <div class="song-info">
@@ -20,11 +20,26 @@
                     </div>
                 </div>
             </div>
-            <div v-if="results && results.artists && results.artists.length > 0" class="category artists">
-                <div class="heading">Artists</div>
-            </div>
             <div v-if="results && results.albums && results.albums.length > 0" class="category albums">
                 <div class="heading">Albums</div>
+                <router-link v-for="item in results.albums" :key="item.id" :to="`/albums?column=album&q=${encodeURIComponent(item.album)}&view=album_${encodeURIComponent(item.album)}`">
+                    <div class="result album" @click="closeSearch">
+                        <img v-if="item.hasImage == 1" :src="getImg(item.artist, item.album)">
+                        <img v-else src="@/assets/no_album.svg">
+                        <div class="song-info">
+                            <span class="title">{{item.album}}</span>
+                        </div>
+                    </div>
+                </router-link>
+            </div>
+            <div v-if="results && results.artists && results.artists.length > 0" class="category artists">
+                <div class="heading">Artists</div>
+                <router-link v-for="item in results.artists" :key="item.id" :to="`/artists?column=artist&q=${encodeURIComponent(item.artist)}&view=artist_${encodeURIComponent(item.artist)}`">
+                    <div class="result artist" @click="closeSearch">
+                        <img src="@/assets/no_artist.svg">
+                        <span>{{ item.artist }}</span>
+                    </div>
+                </router-link>
             </div>
             <div v-if="results && results.playlists && results.playlists.length > 0" class="category playlists">
                 <div class="heading">Playlists</div>
@@ -36,6 +51,7 @@
 <script>
 export default {
     props: ['active', 'results'],
+    inject: ['closeSearch'],
     methods: {
         getImg(artist, album) {
             const port = this.$store.state.nav.port
@@ -136,7 +152,7 @@ export default {
 
     .heading {
         border-bottom: 1px solid var(--bd);
-        padding: 0px 0px 10px 15px;
+        padding: 0px 0px 10px 8px;
     }
 }
 
@@ -146,13 +162,20 @@ export default {
     }
 }
 
-.song-result {
+.result {
     display: flex;
+    align-items: center;
     padding: 8px;
 
     img {
         width: 45px;
         height: 45px;
+        background-color: var(--bg);
+    }
+}
+
+.result.song, .result.album {
+    img {
         border-radius: 2px;
     }
 
@@ -168,16 +191,30 @@ export default {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            margin-bottom: 3px;
         }
 
         .artist {
+            margin-top: 3px;
             font-size: 0.75em;
             opacity: 0.75;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+    }
+}
+
+.result.artist {
+    img {
+        border-radius: 100px;
+    }
+
+    span {
+        margin-left: 10px;
+        font-size: 0.95em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
 </style>
