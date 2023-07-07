@@ -85,6 +85,15 @@ export default {
         })
         return columns
     },
+    doFullQuery(query) {
+        const result = db.prepare(`SELECT * FROM library WHERE title LIKE '%'||?||'%' ORDER BY title = ? ASC, title LIKE ?||'%' DESC LIMIT 15`).all(query, query, query)
+        return {
+            songs: result,
+            artists: [],
+            albums: [],
+            playlists: []
+        }
+    },
     deleteLibrary() {
         db.prepare('DELETE FROM library').run()
         return []

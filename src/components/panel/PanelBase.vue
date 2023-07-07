@@ -113,12 +113,12 @@ export default {
     height: 100vh;
     z-index: 20;
     top: 0;
-    opacity: 1;
+    opacity: 0;
     transition: 0.25s;
     transition-property: opacity, backdrop-filter;
     pointer-events: none;
     animation: preventClick 0.5s;
-    backdrop-filter: blur(0px) saturate(1);
+    backdrop-filter: blur(10px) saturate(1.5);
 
     .panel-bg {
         opacity: 0;

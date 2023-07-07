@@ -1,20 +1,32 @@
 <template>
     <div class="popup search" :class="active">
         <div class="search-inner">
-            <!-- <div class="placeholder-search">
+            <div v-if="!results" class="placeholder-search">
                 <i class="ft-icon">search</i>
                 <span>Start your search...</span>
-            </div> -->
-            <div class="category">
-                <div class="heading">Songs</div>
             </div>
-            <div class="category">
+            <div v-if="results == -1" class="placeholder-search">
+                <i class="ft-icon">search</i>
+                <span>No results found...</span>
+            </div>
+            <div v-if="results && results.songs && results.songs.length > 0" class="category songs">
+                <div class="heading">Songs</div>
+                <div class="song-result" v-for="item in results.songs" :key="item.id">
+                    <img v-if="item.hasImage == 1" :src="getImg(item.artist, item.album)">
+                    <img v-else src="@/assets/no_image.svg">
+                    <div class="song-info">
+                        <span class="title">{{item.title}}</span>
+                        <span class="artist">{{item.artist}}</span>
+                    </div>
+                </div>
+            </div>
+            <div v-if="results && results.artists && results.artists.length > 0" class="category artists">
                 <div class="heading">Artists</div>
             </div>
-            <div class="category">
+            <div v-if="results && results.albums && results.albums.length > 0" class="category albums">
                 <div class="heading">Albums</div>
             </div>
-            <div class="category">
+            <div v-if="results && results.playlists && results.playlists.length > 0" class="category playlists">
                 <div class="heading">Playlists</div>
             </div>
         </div>
@@ -23,7 +35,13 @@
 
 <script>
 export default {
-    props: ['active']
+    props: ['active', 'results'],
+    methods: {
+        getImg(artist, album) {
+            const port = this.$store.state.nav.port
+            return `http://localhost:${port}/images/${(artist + album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
+        }
+    }
 }
 </script>
 
@@ -125,6 +143,41 @@ export default {
 .reduce-motion {
     .popup.search {
         transform: translate(-160px, -315px);
+    }
+}
+
+.song-result {
+    display: flex;
+    padding: 8px;
+
+    img {
+        width: 45px;
+        height: 45px;
+        border-radius: 2px;
+    }
+
+    .song-info {
+        margin-left: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 230px;
+
+        .title {
+            font-size: 0.95em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-bottom: 3px;
+        }
+
+        .artist {
+            font-size: 0.75em;
+            opacity: 0.75;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
     }
 }
 </style>

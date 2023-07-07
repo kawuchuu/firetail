@@ -244,5 +244,10 @@ export default {
             }
             require('child_process').exec(`${command}"${resolve(path)}"`)
         })
+
+        ipcMain.handle('do-full-query', (event, query) => {
+            const result = db.doFullQuery(query)
+            return result
+        })
     }
 }

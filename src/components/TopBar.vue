@@ -7,7 +7,7 @@
             <div class="nav-top-buttons">
                 <div class="std-top-btn search-btn" :class="showSearch ? 'active' : ''">
                     <i class="ft-icon" @click="showSearch = !showSearch">search</i>
-                    <input @keydown="checkEsc" @focus="focused" @blur="unfocused" type="text" ref="search" placeholder="Search..." v-model="searchInput">
+                    <input @keydown="checkEsc" @focus="focused" @blur="unfocused" type="text" ref="search" placeholder="Search..." v-model="searchInput" @input="typingSearch">
                 </div>
                 <div class="top-button-container">
                     <TopButtons v-for="item in button" v-bind:button="item" v-bind:key="item.id"></TopButtons>
@@ -15,7 +15,7 @@
                 <div v-if="platform === 'win32'" class="divider" />
             </div>
         </div>
-        <SearchPopup :active="showSearch ? 'active' : ''" />
+        <SearchPopup :results="searchOutput" :active="showSearch ? 'active' : ''" />
     </div>
 </template>
 
@@ -43,7 +43,8 @@ export default {
             ],
             platform: process.platform,
             showSearch: false,
-            searchInput: ""
+            searchInput: "",
+            searchOutput: null
         }
     },
     methods: {
@@ -56,15 +57,26 @@ export default {
         },
         unfocused() {
             this.$store.commit('audio/setPauseSpace', false)
-            this.showSearch = false
+            //this.showSearch = false
         },
         checkEsc(evt) {
             if (evt.key == "Escape") this.showSearch = false
+        },
+        async typingSearch(evt) {
+            console.log(this.searchInput)
+            if (this.searchInput === '') return this.searchOutput = null
+            const result = await ipcRenderer.invoke('do-full-query', this.searchInput)
+            if (result.songs.length == 0 && result.artists.length == 0 && result.albums.length == 0 && result.playlists.length == 0) {
+                this.searchOutput = -1
+                return
+            }
+            this.searchOutput = result
         }
     },
     watch: {
         showSearch() {
             if (this.showSearch) this.$refs.search.focus()
+            else this.searchOutput = null
         }
     }
 }
