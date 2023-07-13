@@ -207,7 +207,7 @@ html.dark {
     --fg-bg: #1e1e1e;
     --sub-fg: #0e0e0e;
     --bd: #3a3a3a;
-    --mono-bd: #3a3a3a;
+    --mono-bd: #ffffff25;
     --button: #242424;
 }
 
@@ -302,7 +302,7 @@ html.light {
     // I know overlay is deprecated but it's the only thing that works for a transparent scrollbar
     overflow: overlay;
     position: fixed;
-    height: calc(100% - 130px);
+    height: calc(100% - 129px);
     width: calc(100% - var(--sidebar-width));
     background: var(--bg);
     border-radius: var(--main-border-radius);

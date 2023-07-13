@@ -56,25 +56,6 @@ ipcRenderer.on('playCustomSong', (event, args) => {
     store.dispatch('audio/playSong', args, true)
 })
 
-ipcRenderer.once('enableCDBurn', () => {
-    store.commit('nav/enableCDBurn')
-    ipcRenderer.on("burnStarted", (event, jobId) => {
-        console.log(`Burn job ${jobId} started`);
-    });
-    ipcRenderer.on("burnComplete", (event, jobId) => {
-        console.log(`Burn job ${jobId} complete`);
-    });
-    ipcRenderer.on("burnFailed", (event, jobId) => {
-        console.log(`Burn job ${jobId} failed`);
-    });
-    ipcRenderer.on("burnProgress", (event, data) => {
-        console.log(`Burn job ${data.jobId}: ${Math.round(data.progress / data.maximum * 100)}% complete...`);
-    });
-    ipcRenderer.on("burnDescription", (event, data) => {
-        console.log(`Burn job ${data.jobId}: ${data.description}`);
-    });
-})
-
 ipcRenderer.on('fullscreenUpdate', (event, arg) => {
     store.commit('nav/updateFullscreen', arg)
 })
@@ -199,4 +180,8 @@ ipcRenderer.on('control', (evt, action) => {
                 router.push('/settings')
             }
     }
+})
+
+ipcRenderer.on('window-blur', (event, blur) => {
+    blur ? document.documentElement.classList.add('blur') : document.documentElement.classList.remove('blur')
 })

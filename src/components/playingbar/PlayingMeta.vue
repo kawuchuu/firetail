@@ -4,7 +4,7 @@
         <div class="popup large-album-art" :class="hoverShow" >
             <div class="inner" :style="getImage"></div>
         </div>
-        <div class="popup codec-info" :class="[showMoreInfo, showAdvancedFileInfo]">
+        <div v-if="currentSong" class="popup codec-info" :class="[showMoreInfo, showAdvancedFileInfo]">
             <div class="info">
                 <h3>Details</h3>
                 <p>Album: {{ currentSong.album ? currentSong.album : 'Unknown' }}</p>
@@ -23,9 +23,13 @@
         <router-link :to="viewLink">
             <div class="song-album-art" :style="getImage" @mouseover="hoverImage" @mouseleave="leaveImage"></div>
         </router-link>
-        <div class="title-artist" @mouseover="hoverCodec" @mouseleave="leaveCodec">
+        <div v-if="currentSong" class="title-artist" @mouseover="hoverCodec" @mouseleave="leaveCodec">
             <router-link :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(currentSong.album)}&view=album_${encodeURIComponent(currentSong.album)}`" class="song-title">{{title}}<div v-if="currentSong.explicit" class="explicit"><span>E</span></div></router-link>
             <router-link :to="`/artists?hideTop=true&column=artist&q=${encodeURIComponent(artist)}&view=artist_${encodeURIComponent(artist)}`" class="song-artist">{{artist}}</router-link>
+        </div>
+        <div v-else class="title-artist" @mouseover="hoverCodec" @mouseleave="leaveCodec">
+            <span class="song-title">{{title}}<div v-if="currentSong && currentSong.explicit" class="explicit"><span>E</span></div></span>
+            <span class="song-artist">{{artist}}</span>
         </div>
         <i class="ft-icon favourite-icon" :class="[isFavourite, isInLibrary]" @click="handleFavourite">{{ favouriteIcon }}</i>
     </div>
@@ -62,7 +66,7 @@ export default {
                         artistAlbum = `http://localhost:${port}/images/${(song.artist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
                     }
                     Vibrant.from(artistAlbum).getPalette((err, palette) => {
-                        this.$store.commit('nav/updatePlayingBarColour', palette.Vibrant.hex)
+                        this.$store.commit('nav/updatePlayingBarColour', palette.DarkMuted.hex)
                     })
                     return `background-image: url('${artistAlbum}')`
                 } else {
@@ -285,9 +289,10 @@ export default {
     height: 100%;
     z-index: -1;
     transform: translateX(-15px);
-    opacity: 0.1;
+    opacity: 0.2;
     transition: .8s;
     left: 15px;
+    filter: saturate(0.8);
 }
 
 .colour-bg.hide {

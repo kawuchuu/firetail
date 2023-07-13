@@ -266,4 +266,10 @@ html.dark .window-button img {
         background-color: #ff3a3a;
     }
 }
+
+html.blur {
+    .inner {
+        opacity: 0.5;
+    }
+}
 </style>

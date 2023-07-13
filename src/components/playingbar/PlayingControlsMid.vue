@@ -320,7 +320,7 @@ export default {
     background: var(--back-bg);
     border: solid 1px var(--bd);
     box-shadow: 0px 5px 10px rgba(0,0,0,.15);
-    border-radius: 5px;
+    border-radius: 8px;
     transform: scale(0);
     position: fixed;
     /* transition: 0.25s cubic-bezier(0.17, 0.88, 0.23, 1.15);

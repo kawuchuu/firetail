@@ -183,6 +183,7 @@ export default {
     background-position: center 80%;
     z-index: -2;
     position: absolute;
+    animation: fadeIn 1s;
 }
 
 .special-gradient-bg-wrapper {
@@ -237,7 +238,7 @@ export default {
         opacity: 0;
     }
     100% {
-        opacity: 0.85;
+        opacity: 1;
     }
 }
 
@@ -248,7 +249,7 @@ export default {
     justify-content: center;
     align-items: center;
     animation: fadeIn 2s;
-    opacity: 0.85;
+    opacity: 1;
 
     i {
         font-size: 8em;

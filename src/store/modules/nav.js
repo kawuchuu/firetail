@@ -109,7 +109,6 @@ const state = () => ({
     ver: 'unknown',
     buildNum: 'unknown',
     port: '0',
-    isCDBurnEnable: false,
     albumViewCurrentArt: '',
     fullscreen: false,
     zenMoveMouseActive: false,
@@ -172,9 +171,6 @@ const mutations = {
     },
     addItemToNav(state, item) {
         state.navs.push(item)
-    },
-    enableCDBurn(state) {
-        state.isCDBurnEnable = true
     },
     updateAlbumViewCurrentArt(state, url) {
         state.albumViewCurrentArt = url

@@ -261,4 +261,13 @@ export default {
         padding: 12px 12px 12px 0px;
     }
 }
+
+html.blur {
+    .item-sidebar, .special-button, .list-subtitle {
+        opacity: 0.5;
+    }
+    .nav-buttons {
+        filter: saturate(0.5);
+    }
+}
 </style>

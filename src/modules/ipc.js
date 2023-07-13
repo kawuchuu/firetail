@@ -3,7 +3,6 @@ import fs from 'fs'
 import db from './database'
 import files from './files'
 import server from './server'
-import BurnJob from './burn'
 import { resolve } from 'path'
 
 export default {
@@ -109,22 +108,6 @@ export default {
             return server.app.get('port')
         })
 
-        ipcMain.handle('canBurn', async () => {
-            return await BurnJob.canBurn();
-        });
-
-        ipcMain.handle('burn', (event, options) => {
-            console.log("burn job requested");
-
-            //TODO: make sure we're on Linux
-            if (process.platform === "linux") {
-                let burnJob = new BurnJob(options, event.sender);
-                return burnJob.id;
-            } else {
-                return null;
-            }
-        });
-
         ipcMain.handle('getSomeFromMultiColumn', (event, args) => {
             let columns = db.getSomeFromMultiColumn(args[0], args[1])
             return columns
@@ -225,12 +208,20 @@ export default {
 
         ipcMain.handle('is-maximized', () => { return win.isMaximized() })
 
-        win.on('maximize', () => {
+        /* win.on('maximize', () => {
             win.webContents.send('change-maximize-button', 'unmaximise')
         })
 
         win.on('unmaximize', () => {
             win.webContents.send('change-maximize-button', 'maximise')
+        }) */
+
+        win.on('blur', () => {
+            win.webContents.send('window-blur', true)
+        })
+
+        win.on('focus', () => {
+            win.webContents.send('window-blur', false)
         })
 
         ipcMain.handle('isHighContrastEnabled', () => { return nativeTheme.shouldUseHighContrastColors })

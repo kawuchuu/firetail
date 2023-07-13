@@ -345,6 +345,24 @@ async function createWindow() {
         win.webContents.send('updateHighContrast', evt.sender.shouldUseHighContrastColors)
     })
 
+    win.on('blur', () => {
+        win.setTitleBarOverlay({
+            height: 44,
+            width: 150,
+            color: '#000000',
+            symbolColor: '#ffffff80'
+        })
+    })
+
+    win.on('focus', () => {
+        win.setTitleBarOverlay({
+            height: 44,
+            width: 150,
+            color: '#000000',
+            symbolColor: '#ffffff'
+        })
+    })
+
 }
 
 // Quit when all windows are closed.
