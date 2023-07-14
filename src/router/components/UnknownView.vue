@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import {ipcRenderer} from 'electron'
 
 export default {
     computed: {
@@ -39,7 +38,7 @@ export default {
     },
     methods: {
         openIssue() {
-            ipcRenderer.send('openLink', `https://github.com/kawuchuu/firetail/issues`)
+            window.ipcRenderer.send('openLink', `https://github.com/kawuchuu/firetail/issues`)
         }
     },
     data() {

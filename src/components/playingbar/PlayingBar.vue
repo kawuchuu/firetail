@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import PlayingMeta from './PlayingMeta'
-import PlayingControlsMid from './PlayingControlsMid'
-import PlayingControlsRight from './PlayingControlsRight'
+import PlayingMeta from './PlayingMeta.vue'
+import PlayingControlsMid from './PlayingControlsMid.vue'
+import PlayingControlsRight from './PlayingControlsRight.vue'
 import {mapState} from 'vuex'
 
 export default {

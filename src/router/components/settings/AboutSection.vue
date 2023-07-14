@@ -1,6 +1,6 @@
 <template>
     <div class="about">
-        <img draggable="false" src="@/assets/firetail.png">
+        <img draggable="false" src="../../../assets/firetail.png">
         <div class="info">
             <div>
                 <h1>{{$t('APP_NAME')}}</h1>
@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import {ipcRenderer} from 'electron'
 import StandardButton from '../../../components/StandardButton.vue'
 
 export default {
@@ -36,7 +35,7 @@ export default {
     },
     methods: {
         openLink() {
-            ipcRenderer.send('openLink', `https://github.com/kawuchuu/firetail/issues`)
+            window.ipcRenderer.send('openLink', `https://github.com/kawuchuu/firetail/issues`)
         }
     }
 }

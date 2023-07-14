@@ -6,6 +6,7 @@ Vue.use(VueI18n)
 
 let loadLocaleMessages = () => {
     const locales = require.context('./locales', true, /[A-Za-z0-9-_,\s]+\.json$/i)
+    console.log(locales.keys())
     const messages = {}
     locales.keys().forEach(key => {
         const matched = key.match(/([A-Za-z0-9-_]+)\./i)
@@ -18,7 +19,7 @@ let loadLocaleMessages = () => {
 }
 
 /* let getLocale = async () => {
-    let locale = await ipcRenderer.invoke('hasCustomLanguage')
+    let locale = await window.ipcRenderer.invoke('hasCustomLanguage')
     console.log(locale)
     if (locale) {
         i18n.locale = locale

@@ -28,7 +28,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import time from '../../modules/timeformat'
+import time from '../../modules/timeformat.js'
 
 export default {
     computed: {

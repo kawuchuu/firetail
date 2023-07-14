@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import SettingOption from './SettingOption'
+import SettingOption from './SettingOption.vue'
 
 export default {
     components: {

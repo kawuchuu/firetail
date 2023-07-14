@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import {bus} from '@/main'
+import {bus} from '../renderer.js'
 
 export default {
     data() {

@@ -32,15 +32,15 @@
 </template>
 
 <script>
-import TopBar from './components/TopBar'
-import SideBar from './components/sidebar/SideBar'
-import PlayingBar from './components/playingbar/PlayingBar'
-import Panel from './components/panel/PanelBase'
-import ZenMode from './components/zen/ZenMode'
-import ContextMenu from './components/ContextMenu'
-import ItemAdd from '@/components/ItemAdd'
-import Notification from '@/components/NotificationPopup'
-import { ipcRenderer } from 'electron'
+import './themes/firetail.scss'
+import TopBar from './components/TopBar.vue'
+import SideBar from './components/sidebar/SideBar.vue'
+import PlayingBar from './components/playingbar/PlayingBar.vue'
+import Panel from './components/panel/PanelBase.vue'
+import ZenMode from './components/zen/ZenMode.vue'
+import ContextMenu from './components/ContextMenu.vue'
+import ItemAdd from './components/ItemAdd.vue'
+import Notification from './components/NotificationPopup.vue'
 //import PluginComp from './PluginComp'
 
 export default {
@@ -63,7 +63,7 @@ export default {
                 files.push([f.path,f.name])
             })
             console.log(evt.target.files)
-            ipcRenderer.send('addToLibrary', [files, this.$route.path])
+            window.ipcRenderer.send('addToLibrary', [files, this.$route.path])
         },
         changeDrag(evt, change) {
             if (evt.dataTransfer && evt.dataTransfer.types[0] !== 'Files') return
@@ -83,7 +83,7 @@ export default {
             })
             //console.log(files)
             this.isDraggedOver = false
-            ipcRenderer.send('addToLibrary', [files, this.$route.path])
+            window.ipcRenderer.send('addToLibrary', [files, this.$route.path])
         },
         resizeSidebar(evt) {
             if (!this.sidebarisResizing) return
@@ -126,7 +126,6 @@ export default {
         }
     },
     async mounted() {
-        require('./themes/firetail.scss')
         if (window.localStorage.getItem('sidebarwidth')) {
             this.sidebarwidth = window.localStorage.getItem('sidebarwidth')
         } else {
@@ -153,13 +152,13 @@ export default {
         }
         if (window.localStorage.getItem('highContrast') == 'true') {
             document.documentElement.classList.add('high-contrast')
-        } else if (await ipcRenderer.invoke('isHighContrastEnabled')) {
+        } else if (await window.ipcRenderer.invoke('isHighContrastEnabled')) {
             document.documentElement.classList.add('high-contrast')
             localStorage.setItem('highContrast', true)
         }
-        let port = await ipcRenderer.invoke('getPort')
+        let port = await window.ipcRenderer.invoke('getPort')
         this.$store.commit('nav/updatePort', port)
-        const playlists = await ipcRenderer.invoke('getAllPlaylists')
+        const playlists = await window.ipcRenderer.invoke('getAllPlaylists')
         this.$store.commit('playlist/setPlaylists', playlists)
         this.$refs.container.addEventListener('scroll', e => {
             this.$store.commit('nav/updateCurrentScroll', e.target.scrollTop)
@@ -171,8 +170,8 @@ export default {
                 uri: localStorage.getItem('sp-uri')
             })
         }
-        let ver = await ipcRenderer.invoke('getVersion')
-        let buildNum = await ipcRenderer.invoke('getBuildNum')
+        let ver = await window.ipcRenderer.invoke('getVersion')
+        let buildNum = await window.ipcRenderer.invoke('getBuildNum')
         if (buildNum == 'dev') {
             document.title = 'Firetail [dev]'
         } else if (ver.includes('alpha') && buildNum !== 'unknown' || ver.includes('alpha') && buildNum !== 'CUSTOM') {

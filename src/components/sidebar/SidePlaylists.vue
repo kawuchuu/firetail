@@ -9,8 +9,7 @@
 </template>
 
 <script>
-import { contextMenuBus } from '@/main'
-import { ipcRenderer } from 'electron'
+import { contextMenuBus } from '../../renderer.js'
 
 export default {
     props: ['playlist'],
@@ -46,14 +45,14 @@ export default {
             })
         },
         async delete() {
-            const newPlaylists = await ipcRenderer.invoke('deletePlaylist', this.playlist.id)
+            const newPlaylists = await window.ipcRenderer.invoke('deletePlaylist', this.playlist.id)
             console.log(newPlaylists)
             this.$store.commit('playlist/setPlaylists', newPlaylists)
         },
         async openEditDialog() {
-            const fullPlaylist = await ipcRenderer.invoke('getSpecificPlaylist', this.playlist.id)
+            const fullPlaylist = await window.ipcRenderer.invoke('getSpecificPlaylist', this.playlist.id)
             this.$store.commit('panel/invokeNewPanel', {
-                component: 'PlaylistModule',
+                component: 'PlaylistModule.vue',
                 newProps: {
                     topMsg: this.$t('PANEL.PLAYLIST.EDIT_TITLE'),
                     playlist: fullPlaylist[0]
@@ -78,7 +77,7 @@ export default {
             let songs = evt.dataTransfer.getData('ftsong')
             if (songs === '') return
             songs = JSON.parse(songs)
-            const playlist = await ipcRenderer.invoke('getSpecificPlaylist', this.playlist.id)
+            const playlist = await window.ipcRenderer.invoke('getSpecificPlaylist', this.playlist.id)
             const songIds = JSON.parse(playlist[0].songIds)
             const currentLength = songIds.length
             console.log(songs)
@@ -88,7 +87,7 @@ export default {
                     position: currentLength + index + 1
                 })
             })
-            ipcRenderer.invoke('updatePlaylist', {
+            window.ipcRenderer.invoke('updatePlaylist', {
                 column: 'songids',
                 id: this.playlist.id,
                 data: JSON.stringify(songIds)

@@ -79,12 +79,11 @@
 </template>
 
 <script>
-import SongItem from './SongItem'
-import SongLoadItem from './SongLoadItem'
-import { bus, contextMenuBus } from '@/main'
+import SongItem from './SongItem.vue'
+import SongLoadItem from './SongLoadItem.vue'
+import { bus, contextMenuBus } from '../../renderer.js'
 import { mapState } from 'vuex'
-import { ipcRenderer } from 'electron'
-import sort from '@/modules/sort'
+import sort from '../../modules/sort.js'
 import axios from 'axios'
 
 export default {
@@ -288,10 +287,10 @@ export default {
                     const item = this.list[f].id
                     if (favCompare) {
                         if (favourites.indexOf(item) == -1) {
-                            ipcRenderer.send('addFavourite', item)
+                            window.ipcRenderer.send('addFavourite', item)
                         }
                     } else {
-                        ipcRenderer.send('removeFavourite', item)
+                        window.ipcRenderer.send('removeFavourite', item)
                     }
                 })
             }
@@ -312,12 +311,12 @@ export default {
                 this.selectedItems.forEach(index => {
                     idsToDelete.push(this.list[index].id)
                 })
-                ipcRenderer.send('deleteSome', idsToDelete)
+                window.ipcRenderer.send('deleteSome', idsToDelete)
                 this.selectedItems.splice(0)
                 this.lastSelectedIndex = 0
             }
             const revealInFileExplorer = () => {
-                ipcRenderer.invoke('open-file-in-explorer', this.list[evt[1]].path)
+                window.ipcRenderer.invoke('open-file-in-explorer', this.list[evt[1]].path)
             }
             let menuItems = [
                 {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_QUEUE'), type: 'button'},

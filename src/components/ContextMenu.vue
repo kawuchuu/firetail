@@ -13,7 +13,7 @@
     </div>
 </template>
 <script>
-import { contextMenuBus } from '@/main'
+import { contextMenuBus } from '../renderer.js'
 export default {
     data() {
         return {

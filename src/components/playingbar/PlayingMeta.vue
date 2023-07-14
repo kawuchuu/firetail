@@ -37,7 +37,6 @@
 
 <script>
 import {mapState} from 'vuex'
-import {ipcRenderer} from 'electron'
 import * as Vibrant from 'node-vibrant'
 
 export default {
@@ -149,10 +148,10 @@ export default {
             }
         },
         addToFavourite() {
-            ipcRenderer.send('addFavourite', this.$store.state.audio.currentSong)
+            window.ipcRenderer.send('addFavourite', this.$store.state.audio.currentSong)
         },
         removeFromFavourites() {
-            ipcRenderer.send('removeFavourite', this.$store.state.audio.currentSong)
+            window.ipcRenderer.send('removeFavourite', this.$store.state.audio.currentSong)
         },
         hoverImage() {
             this.showLargeImage = true
@@ -176,7 +175,7 @@ export default {
     },
     watch: {
         async title() {
-            this.advancedFileInfo = await ipcRenderer.invoke('getAdvancedFileInfo', this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex].path)
+            this.advancedFileInfo = await window.ipcRenderer.invoke('getAdvancedFileInfo', this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex].path)
         }
     }
 }

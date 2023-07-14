@@ -38,7 +38,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import ListItem from './ListItem'
+import ListItem from './ListItem.vue'
 
 export default {
     components: {

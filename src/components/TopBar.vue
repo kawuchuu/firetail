@@ -20,10 +20,9 @@
 </template>
 
 <script>
-import TopButtons from './TopButtons'
-import TopNav from './TopNav'
-import SearchPopup from './SearchPopup'
-import { ipcRenderer } from 'electron'
+import TopButtons from './TopButtons.vue'
+import TopNav from './TopNav.vue'
+import SearchPopup from './SearchPopup.vue'
 
 export default {
     components: {
@@ -49,7 +48,7 @@ export default {
     },
     methods: {
         sendButtonSignal(action) {
-            ipcRenderer.send('do-custom-window-action', action)
+            window.ipcRenderer.send('do-custom-window-action', action)
         },
         focused() {
             this.$store.commit('audio/setPauseSpace', true)
@@ -67,7 +66,7 @@ export default {
         async typingSearch(evt) {
             console.log(this.searchInput)
             if (this.searchInput === '') return this.searchOutput = null
-            const result = await ipcRenderer.invoke('do-full-query', this.searchInput)
+            const result = await window.ipcRenderer.invoke('do-full-query', this.searchInput)
             if (result.songs.length == 0 && result.artists.length == 0 && result.albums.length == 0 && result.playlists.length == 0) {
                 this.searchOutput = -1
                 return

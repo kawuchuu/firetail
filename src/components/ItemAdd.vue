@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
 export default {
     data() {
         return {
@@ -53,14 +52,14 @@ export default {
         }
     },
     mounted() {
-        ipcRenderer.on('doneProgress', (event, prog) => {
+        window.ipcRenderer.receive('doneProgress', (event, prog) => {
             this.message = ''
             this.icon = 'autorenew'
             const progP = prog[0] / prog[1] * 100;
             this.progress = `${prog[0]}/${prog[1]}`
             this.progPer = `${Math.round(progP)}`
         })
-        ipcRenderer.on('startOrFinish', (event, doingWhat) => {
+        window.ipcRenderer.receive('startOrFinish', (event, doingWhat) => {
             if (doingWhat) {
                 this.progPer = 100
                 this.icon = 'queue'

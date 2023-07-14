@@ -1,4 +1,3 @@
-import { ipcRenderer } from "electron"
 import store from ".."
 
 const state = () => ({
@@ -59,7 +58,7 @@ const mutations = {
                 {
                     label: 'OK',
                     onClick() {
-                        ipcRenderer.send('deleteLibrary')
+                        window.ipcRenderer.send('deleteLibrary')
                         store.commit('panel/updateActive', false)
                     }
                 }
@@ -86,7 +85,7 @@ const mutations = {
             ]
         }
         state.currentPanelProps = newProps
-        state.currentPanelComponent = 'PromptModule'
+        state.currentPanelComponent = 'PromptModule.vue'
         this.commit('panel/updateActive', true)
     }
 }

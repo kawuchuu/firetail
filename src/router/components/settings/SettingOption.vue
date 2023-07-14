@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import About from './AboutSection'
+import About from './AboutSection.vue'
 
 export default {
     props: ['option'],

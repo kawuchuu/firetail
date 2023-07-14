@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import ButtonArray from './ArrayButton'
+import ButtonArray from './ArrayButton.vue'
 
 export default {
     props: ['props'],

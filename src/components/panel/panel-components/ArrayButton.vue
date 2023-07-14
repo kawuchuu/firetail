@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Button from '@/components/StandardButton'
+import Button from '../../StandardButton.vue'
 
 export default {
     props: ['button'],

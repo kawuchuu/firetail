@@ -13,7 +13,7 @@
                 <div class="heading">Songs</div>
                 <div class="result song" v-for="item in results.songs" :key="item.id">
                     <img v-if="item.hasImage == 1" :src="getImg(item.artist, item.album)">
-                    <img v-else src="@/assets/no_image.svg">
+                    <img v-else src="../assets/no_image.svg">
                     <div class="song-info">
                         <span class="title">{{item.title}}</span>
                         <span class="artist">{{item.artist}}</span>
@@ -25,7 +25,7 @@
                 <router-link v-for="item in results.albums" :key="item.id" :to="`/albums?column=album&q=${encodeURIComponent(item.album)}&view=album_${encodeURIComponent(item.album)}`">
                     <div class="result album" @click="closeSearch">
                         <img v-if="item.hasImage == 1" :src="getImg(item.artist, item.album)">
-                        <img v-else src="@/assets/no_album.svg">
+                        <img v-else src="../assets/no_album.svg">
                         <div class="song-info">
                             <span class="title">{{item.album}}</span>
                         </div>
@@ -36,7 +36,7 @@
                 <div class="heading">Artists</div>
                 <router-link v-for="item in results.artists" :key="item.id" :to="`/artists?column=artist&q=${encodeURIComponent(item.artist)}&view=artist_${encodeURIComponent(item.artist)}`">
                     <div class="result artist" @click="closeSearch">
-                        <img src="@/assets/no_artist.svg">
+                        <img src="../assets/no_artist.svg">
                         <span>{{ item.artist }}</span>
                     </div>
                 </router-link>

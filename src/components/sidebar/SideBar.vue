@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import SideButtons from './SideButtons'
+import SideButtons from './SideButtons.vue'
 import { mapState } from 'vuex'
 import SidePlaylists from './SidePlaylists.vue'
 

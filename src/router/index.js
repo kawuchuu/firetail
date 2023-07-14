@@ -1,22 +1,21 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import SongList from './components/SongList'
+import SongList from './components/SongList.vue'
 //import SimpleSongList from './components/SimpleSongList/SimpleSongList'
-import Unknown from './components/UnknownView'
-import ArtistAlbumView from './components/ArtistAlbumView'
+import Unknown from './components/UnknownView.vue'
+import ArtistAlbumView from './components/ArtistAlbumView.vue'
 import store from '../store'
 import tr from '../translation'
-import Settings from './components/settings/SettingsView'
-import Home from './components/HomeView'
-import HiddenView from './components/HiddenView'
+import Settings from './components/settings/SettingsView.vue'
+import Home from './components/HomeView.vue'
+import HiddenView from './components/HiddenView.vue'
 import VirtualList from 'vue-virtual-scroll-list'
-import sort from '../modules/sort'
-import { ipcRenderer } from 'electron'
+import sort from '../modules/sort.js'
 //import { bus } from '../main'
 
 Vue.component('virtual-list', VirtualList)
 
-class VueRouterEx extends VueRouter {
+/* class VueRouterEx extends VueRouter {
     constructor(options) {
         super(options)
         this.matcher
@@ -30,11 +29,11 @@ class VueRouterEx extends VueRouter {
             addRoutes(newRoutes)
         }
     }
-}
+} */
 
-Vue.use(VueRouterEx)
+Vue.use(VueRouter)
 
-const router = new VueRouterEx({
+const router = new VueRouter({
     routes: [
         {
             path: '/songs',
@@ -100,7 +99,7 @@ const router = new VueRouterEx({
 
 let isDoneOnce = false
 
-ipcRenderer.on('updateNav', (event, checkNav) => {
+window.ipcRenderer.receive('updateNav', (event, checkNav) => {
     store.commit('nav/updateCheckNav', checkNav)
 })
 
@@ -117,13 +116,13 @@ router.beforeEach(async (to, from, next) => {
     } else if (to.query.view == 'firetailnoselect') {
         store.commit('audio/getNoSongs')
     } else if (to.path == '/playlist' && to.query.id) {
-        const playlist = await ipcRenderer.invoke('getSpecificPlaylist', to.query.id)
+        const playlist = await window.ipcRenderer.invoke('getSpecificPlaylist', to.query.id)
         const sortedSongs = sort.sortArrayNum(JSON.parse(playlist[0].songIds), 'position')
         const ids = []
         sortedSongs.forEach(song => {
             ids.push(song.id)
         })
-        const songs = await ipcRenderer.invoke('getSomeFromColumnMatches', ids)
+        const songs = await window.ipcRenderer.invoke('getSomeFromColumnMatches', ids)
         const sortedSongsToUse = []
         sortedSongs.forEach(song => {
             sortedSongsToUse.push(songs.find(item => item.id == song.id))
@@ -151,7 +150,7 @@ router.beforeEach(async (to, from, next) => {
     next()
     if (!isDoneOnce) {
         isDoneOnce = true
-        ipcRenderer.send('clearHistory')
+        window.ipcRenderer.send('clearHistory')
         store.commit('nav/updateCheckNav', {
             back: false,
             true: false

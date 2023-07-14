@@ -33,7 +33,7 @@ export default {
                 }
                 let comp
                 if (state.preventLoad.indexOf(getComp) != -1) {
-                    comp = require('./panel-components/ModuleError').default
+                    comp = require('./panel-components/ModuleError.vue').default
                     let newProps = this.panelProps
                     newProps.topMsg = 'Error'
                     this.$store.commit('panel/updatePanelProps', newProps)
@@ -43,7 +43,7 @@ export default {
                     comp = require(`./panel-components/${getComp}`).default
                 } catch(err) {
                     console.error(err)
-                    comp = require('./panel-components/ModuleError').default
+                    comp = require('./panel-components/ModuleError.vue').default
                     this.$store.commit('panel/updatePreventLoad', getComp)
                     let newProps = this.panelProps
                     newProps.topMsg = 'Error'

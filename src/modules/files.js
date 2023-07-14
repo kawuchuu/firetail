@@ -4,7 +4,7 @@ import { writeFile, statSync, readdirSync } from 'fs'
 import { promises as fs, constants as fsConstants } from 'fs'
 import { app, BrowserWindow } from 'electron'
 import mime from 'mime-types'
-import sharp from 'sharp'
+//import sharp from 'sharp'
 import { resolve } from 'path'
 
 let randomString = length => {
@@ -108,7 +108,7 @@ export default {
             } catch(e) {
                 await fs.mkdir(playlistImgPath)
             }
-            sharp(Buffer.from(buffer))
+            /* sharp(Buffer.from(buffer))
                 .toFormat('jpg')
                 .resize({
                     width: 256,
@@ -119,7 +119,7 @@ export default {
                 .toFile(`${playlistImgPath}/${id}.jpg`)
                 .catch(err => {
                     console.error(err)
-                })
+                }) */
         }
     }
 }

@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
 import StandardButton from '../../StandardButton.vue'
 
 export default {
@@ -58,36 +57,36 @@ export default {
             if (this.$attrs.props.playlist && this.$attrs.props.playlist.name) {
                 const playlist = this.$attrs.props.playlist
                 if (this.desc) {
-                    await ipcRenderer.invoke('updatePlaylist', {
+                    await window.ipcRenderer.invoke('updatePlaylist', {
                         column: 'desc',
                         id: playlist.id,
                         data: this.desc,
                     })
                 }
                 if (this.image) {
-                    await ipcRenderer.invoke('updatePlaylist', {
+                    await window.ipcRenderer.invoke('updatePlaylist', {
                         column: 'hasImage',
                         id: playlist.id,
                         data: 1,
                     })
-                    ipcRenderer.invoke('createPlaylistImage', {
+                    window.ipcRenderer.invoke('createPlaylistImage', {
                         buffer: buffer,
                         id: playlist.id
                     })
                 } else {
-                    await ipcRenderer.invoke('updatePlaylist', {
+                    await window.ipcRenderer.invoke('updatePlaylist', {
                         column: 'hasImage',
                         id: playlist.id,
                         data: 1,
                     })
                 }
-                playlists = await ipcRenderer.invoke('updatePlaylist', {
+                playlists = await window.ipcRenderer.invoke('updatePlaylist', {
                     column: 'name',
                     id: playlist.id,
                     data: this.name,
                 })
             } else {
-                playlists = await ipcRenderer.invoke('createPlaylist', {
+                playlists = await window.ipcRenderer.invoke('createPlaylist', {
                     name: this.name,
                     desc: this.desc,
                     buffer: buffer

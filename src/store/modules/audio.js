@@ -1,8 +1,7 @@
-import sort from '../../modules/sort'
-import store from '../index'
+import sort from '../../modules/sort.js'
+import store from '../index.js'
 import tr from '../../translation'
-import { ipcRenderer } from 'electron'
-import {bus} from '@/main'
+import {bus} from '../../renderer.js'
 
 let audio = new Audio();
 
@@ -79,7 +78,6 @@ const mutations = {
         this.commit('nav/updatePlayingView', this.state.nav.currentView)
     },
     updateCurrentList(state, list) {
-        console.log(list)
         if (!list || list.length > 0) {
             const finalList = doComplexSort(list)
             state.currentList = finalList
@@ -220,20 +218,24 @@ const actions = {
         audio.addEventListener('timeupdate', timeUpdate)
         audio.addEventListener('pause', () => {
             context.commit('updatePause')
-            navigator.mediaSession.setPositionState({
-                duration: audio.duration,
-                playbackRate: audio.playbackRate,
-                position: audio.currentTime
-            });
-        })
-        audio.addEventListener('play', () => {
-            context.commit('updatePause')
-            if (audio.readyState !== 0) {
+            try {
                 navigator.mediaSession.setPositionState({
                     duration: audio.duration,
                     playbackRate: audio.playbackRate,
                     position: audio.currentTime
                 });
+            } catch {}
+        })
+        audio.addEventListener('play', () => {
+            context.commit('updatePause')
+            if (audio.readyState !== 0) {
+                try {
+                    navigator.mediaSession.setPositionState({
+                        duration: audio.duration,
+                        playbackRate: audio.playbackRate,
+                        position: audio.currentTime
+                    });
+                } catch {}
             }
         })
         if (!context.state.isResumeState) {
@@ -268,15 +270,15 @@ const actions = {
     },
     getAllSongs(context) {
         context.state.isLoadingSongs = true
-        ipcRenderer.send('library')
+        window.ipcRenderer.send('library')
     },
     getSpecificSongs(context, args) {
         context.state.isLoadingSongs = true
-        ipcRenderer.send('getSomeFromColumn', [args.column, args.q])
+        window.ipcRenderer.send('getSomeFromColumn', [args.column, args.q])
     },
     getAllFavourites(context) {
         context.state.isLoadingSongs = true
-        ipcRenderer.send('getFavouriteSongs')
+        window.ipcRenderer.send('getFavouriteSongs')
     },
     resumeState(context) {
         if (context.state.queue[0] && context.state.queue[0].id == 'customSong') return
@@ -343,11 +345,13 @@ let updateMediaSession = song => {
     setSkipPrevButtons()
     navigator.mediaSession.metadata = new window.MediaMetadata(metadata)
     setSkipPrevButtons()
-    navigator.mediaSession.setPositionState({
-        duration: audio.duration,
-        playbackRate: audio.playbackRate,
-        position: audio.currentTime
-    });
+    try {
+        navigator.mediaSession.setPositionState({
+            duration: audio.duration,
+            playbackRate: audio.playbackRate,
+            position: audio.currentTime
+        });
+    } catch {}
 }
 
 let skip = () => {

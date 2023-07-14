@@ -1,6 +1,6 @@
 <template>
     <div class="centre">
-        <img class="logo" src="@/assets/logo-mono.svg" />
+        <img class="logo" src="../../assets/logo-mono.svg" />
         <p>It's a little quiet here...</p>
     </div>
 </template>

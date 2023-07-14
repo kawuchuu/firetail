@@ -37,9 +37,8 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
-import { bus, contextMenuBus } from '@/main'
-import sort from '@/modules/sort'
+import { bus, contextMenuBus } from '../../renderer.js'
+import sort from '../../modules/sort.js'
 
 export default {
     props: ['source', 'index', 'selectedItems', 'prev', 'performingMultiDrag'],
@@ -157,10 +156,10 @@ export default {
             }
         },
         addToFavourite() {
-            ipcRenderer.send('addFavourite', this.source.id)
+            window.ipcRenderer.send('addFavourite', this.source.id)
         },
         removeFromFavourites() {
-            ipcRenderer.send('removeFavourite', this.source.id)
+            window.ipcRenderer.send('removeFavourite', this.source.id)
         },
         select(evt) {
             if (evt.which == 1) {
@@ -205,7 +204,7 @@ export default {
             console.log(evt)
             if (songs === '') return
             songs = JSON.parse(songs)
-            const playlist = await ipcRenderer.invoke('getSpecificPlaylist', this.$route.query.id)
+            const playlist = await window.ipcRenderer.invoke('getSpecificPlaylist', this.$route.query.id)
             const songIds = JSON.parse(playlist[0].songIds)
             let sortedPlaylistSongs = sort.sortArrayNum(songIds, 'position')
             const currentSong = songIds.find(item => item.id == this.source.id).position
@@ -230,7 +229,7 @@ export default {
             }
             sortedPlaylistSongs = sort.sortArrayNum(sortedPlaylistSongs, 'position')
             console.log(sortedPlaylistSongs)
-            ipcRenderer.invoke('updatePlaylist', {
+            window.ipcRenderer.invoke('updatePlaylist', {
                 column: 'songids',
                 id: playlist[0].id,
                 data: JSON.stringify(sortedPlaylistSongs)

@@ -1,9 +1,9 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import audio from './modules/audio'
-import nav from './modules/nav'
-import panel from './modules/panel'
-import playlist from './modules/playlist'
+import audio from './modules/audio.js'
+import nav from './modules/nav.js'
+import panel from './modules/panel.js'
+import playlist from './modules/playlist.js'
 
 Vue.use(Vuex)
 

@@ -1,5 +1,4 @@
-import { ipcRenderer } from 'electron'
-import sort from '../../modules/sort'
+import sort from '../../modules/sort.js'
 import tr from '../../translation'
 import store from '..'
 
@@ -87,7 +86,7 @@ const state = () => ({
         type: 'special_button',
         action() {
             store.commit('panel/invokeNewPanel', {
-                component: 'PlaylistModule',
+                component: 'PlaylistModule.vue',
                 newProps: {
                     topMsg: tr.t('PANEL.PLAYLIST.TITLE')
                 }
@@ -212,7 +211,7 @@ const mutations = {
 
 const actions = {
     requestColumn(context, type) {
-        ipcRenderer.send('getSomeFromColumna', type)
+        window.ipcRenderer.send('getSomeFromColumna', type)
     }
 }
 

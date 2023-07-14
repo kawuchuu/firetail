@@ -39,8 +39,7 @@
 </template>
 
 <script>
-import Button from '@/components/StandardButton'
-import { ipcRenderer } from 'electron'
+import Button from '../../StandardButton.vue'
 
 export default {
     props: ['props'],
@@ -99,8 +98,8 @@ export default {
             'code_challenge': codeChallenge,
             'state': state
         }).toString()
-        ipcRenderer.send('openLink', `http://localhost:56741/spconnect?redirect=${encodeURIComponent(`https://accounts.spotify.com/authorize?${query}`)}`)
-        ipcRenderer.once('spotifyAuthFinish', async (evt, args) => {
+        window.ipcRenderer.send('openLink', `http://localhost:56741/spconnect?redirect=${encodeURIComponent(`https://accounts.spotify.com/authorize?${query}`)}`)
+        window.ipcRenderer.receivece('spotifyAuthFinish', async (evt, args) => {
             if (args.error) {
                 console.error(args.error)
                 this.error = args.error
