@@ -45,7 +45,7 @@ const createWindow = () => {
       preload: path.join(__dirname, '../renderer/main_window/preload.js'),
       nodeIntegration: false,
       contextIsolation: true,
-      enableBlinkFeatures: "CSSColorSchemeUARendering",
+      enableBlinkFeatures: "OverlayScrollbars",
       disableBlinkFeatures: "Auxclick"
     },
     titleBarOverlay: {
@@ -341,8 +341,10 @@ const createWindow = () => {
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  if (isDevelopment) {
+    // Open the DevTools.
+    mainWindow.webContents.openDevTools();
+  }
 
   mainWindow.on('ready-to-show', () => {
     if (launchSong) {

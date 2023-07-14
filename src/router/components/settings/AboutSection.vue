@@ -24,7 +24,7 @@ export default {
         return {
             version: this.$store.state.nav.ver,
             build: this.$store.state.nav.buildNum,
-            arch: process.arch
+            arch: window.process.arch
         }
     },
     computed: {

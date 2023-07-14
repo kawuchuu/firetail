@@ -1,12 +1,15 @@
 module.exports = {
   packagerConfig: {
     asar: true,
+    icon: './build/other/icon'
   },
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
+      config: {
+        setupIcon: './build/other/icon.ico'
+      },
     },
     {
       name: '@electron-forge/maker-zip',
@@ -31,6 +34,9 @@ module.exports = {
       config: {
         mainConfig: './webpack.main.config.js',
         devContentSecurityPolicy: 'default-src \'self\' \'unsafe-inline\' data:; script-src \'self\' \'unsafe-eval\' \'unsafe-inline\' data:; media-src \'self\' localhost local-resource:; img-src *',
+        devServer: {
+          hot: true
+        },
         renderer: {
           config: './webpack.renderer.config.js',
           entryPoints: [

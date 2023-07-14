@@ -14,6 +14,9 @@ const copyPlugins = new CopyWebpackPlugin({
 module.exports = {
   // Put your normal webpack config below here
   mode: 'development',
+  devServer: {
+    hot: true
+  },
   module: {
     rules: [
       {

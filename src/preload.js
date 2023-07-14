@@ -17,5 +17,6 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 })
 
 contextBridge.exposeInMainWorld('process', {
-    platform: process.platform
+    platform: process.platform,
+    arch: process.arch
 })

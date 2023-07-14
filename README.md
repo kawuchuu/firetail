@@ -32,8 +32,6 @@ If you'd like to try the latest unstable release, check them out [here.](https:/
 
 - To install dependencies and build on Windows, you'll need to install the 'Desktop development with C++' component with Visual Studio Build Tools or Visual Studio Community via Visual Studio Installer.
 
-- Due to a dependency on an older version of Webpack, it is recommended to use NodeJS 16.x. Newer versions of Node may not work correctly.
-
 ### Building
 
 Clone repository:
@@ -46,9 +44,9 @@ yarn install
 ```
 **(Optional)** If you want to run in developer mode *without* building:
 ```
-yarn electron:serve
+yarn start
 ```
 Build artifacts:
 ```
-yarn electron:build
+yarn make
 ```

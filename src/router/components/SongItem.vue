@@ -515,20 +515,18 @@ html.light {
     opacity: 0.5;
 }
 
-.reduce-motion {
-    .playing-ani {
-        .bar {
-            animation: none;
-        }
-        .bar.one {
-            height: 70%;
-        }
-        .bar.two {
-            height: 45%;
-        }
-        .bar.three {
-            height: 100%;
-        }
+.reduce-motion .playing-ani, html.blur .playing-ani {
+    .bar {
+        animation: none;
+    }
+    .bar.one {
+        transform: scaleY(70%);
+    }
+    .bar.two {
+        transform: scaleY(100%);
+    }
+    .bar.three {
+        transform: scaleY(50%);
     }
 }
 

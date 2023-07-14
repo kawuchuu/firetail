@@ -298,7 +298,7 @@ html.light {
 }
 
 .container {
-    // I know overlay is deprecated but it's the only thing that works for a transparent scrollbar
+    // ugh they just HAD to remove overflow overlay right when people start using it. staying on chromium 112 for as long as i can.
     overflow: overlay;
     position: fixed;
     height: calc(100% - 129px);
