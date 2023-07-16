@@ -84,7 +84,7 @@ export default {
                     disc: meta.common.disk ? meta.common.disk.no : null,
                     explicit
                 }
-                let artistAlbum = `${meta.common.artist}${meta.common.album}`.replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')
+                let artistAlbum = `${metaObj.albumArtist}${meta.common.album}`.replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')
                 toAdd.push(metaObj)
                 progress++
                 BrowserWindow.getAllWindows()[0].webContents.send('doneProgress', [progress, songs.length])

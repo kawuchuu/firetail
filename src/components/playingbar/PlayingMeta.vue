@@ -24,7 +24,7 @@
             <div class="song-album-art" :style="getImage" @mouseover="hoverImage" @mouseleave="leaveImage"></div>
         </router-link>
         <div v-if="currentSong" class="title-artist" @mouseover="hoverCodec" @mouseleave="leaveCodec">
-            <router-link :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(currentSong.album)}&view=album_${encodeURIComponent(currentSong.album)}`" class="song-title">{{title}}<div v-if="currentSong.explicit" class="explicit"><span>E</span></div></router-link>
+            <router-link :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(currentSong.album)}&view=album_${encodeURIComponent(currentSong.albumArtist + currentSong.album)}&albumArtist=${encodeURIComponent(currentSong.albumArtist)}`" class="song-title">{{title}}<div v-if="currentSong.explicit" class="explicit"><span>E</span></div></router-link>
             <router-link :to="`/artists?hideTop=true&column=artist&q=${encodeURIComponent(artist)}&view=artist_${encodeURIComponent(artist)}`" class="song-artist">{{artist}}</router-link>
         </div>
         <div v-else class="title-artist" @mouseover="hoverCodec" @mouseleave="leaveCodec">
@@ -62,7 +62,7 @@ export default {
                     if (song.id == 'customSong') {
                         artistAlbum = song.customImage
                     } else {
-                        artistAlbum = `http://localhost:${port}/images/${(song.artist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
+                        artistAlbum = `http://localhost:${port}/images/${(song.albumArtist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
                     }
                     Vibrant.from(artistAlbum).getPalette((err, palette) => {
                         this.$store.commit('nav/updatePlayingBarColour', palette.DarkMuted.hex)
@@ -120,7 +120,7 @@ export default {
                     return `/artists?hideTop=true&column=artist&q=${playingView.substr(7)}&view=${playingView}`
                 }
                 case 'album': {
-                    return `/albums?hideTop=true&column=album&q=${playingView.substr(6)}&view=${playingView}`
+                    return `/albums?hideTop=true&column=album&q=${playingView.substr(6)}&view=${playingView}&albumArtist=${encodeURIComponent(this.currentSong.albumArtist)}`
                 }
                 case 'all': {
                     return '/songs?view=all '

@@ -37,28 +37,27 @@ export default {
         return [rows, durSum[0]['SUM(realdur)']]
     },
     getAllFromColumn(column) {
-        if (column == 'artist' || column == 'album') {
-            let rows = db.prepare(`SELECT DISTINCT ${column} FROM library`).all()
+        if (column == 'artist') {
+            let rows = db.prepare(`SELECT DISTINCT artist FROM library`).all()
+            return [column, rows]
+        } else if (column == 'album') {
+            let rows = db.prepare(`SELECT DISTINCT albumArtist,album FROM library`).all()
             return [column, rows]
         } else return []
     },
     getAllFromColumnWithArtist() {
-        let rows = db.prepare(`SELECT DISTINCT album FROM library`).all();
-        let albumWithArtist = []
-        rows.forEach(f => {
-            let artist = db.prepare(`SELECT artist,hasImage FROM library WHERE album = ?`).get(f.album);
-            albumWithArtist.push({
-                album: f.album,
-                artist: artist.artist,
-                hasImage: artist.hasImage
-            })
-        })
-        return albumWithArtist
+        let rows = db.prepare(`SELECT DISTINCT albumArtist,album,hasImage FROM library`).all();
+        return rows
     },
     getSomeFromColumn(column, query) {
-        if (column == 'artist' || column == 'album') {
-            let rows = db.prepare(`SELECT * FROM library WHERE ${column} = ?`).all(query)
-            const durSum = db.prepare(`SELECT SUM(realdur) FROM library WHERE ${column} = ?`).all(query)
+        console.log(column, query)
+        if (column[0] == 'artist') {
+            let rows = db.prepare(`SELECT * FROM library WHERE artist = ?`).all(query)
+            const durSum = db.prepare(`SELECT SUM(realdur) FROM library WHERE artist = ?`).all(query)
+            return [rows, durSum[0]['SUM(realdur)']]
+        } else if (column[0] == 'album') {
+            let rows = db.prepare(`SELECT * FROM library WHERE album = ? AND albumArtist = ?`).all(query, column[1])
+            const durSum = db.prepare(`SELECT SUM(realdur) FROM library WHERE album = ? AND albumArtist = ?`).all(query, column[1])
             return [rows, durSum[0]['SUM(realdur)']]
         } else return [[], 0]
     },
@@ -88,7 +87,7 @@ export default {
     doFullQuery(query) {
         const songsResult = db.prepare(`SELECT DISTINCT * FROM library WHERE title LIKE '%'||?||'%' GROUP BY title ORDER BY title = ? ASC, title LIKE ?||'%' DESC LIMIT 5`).all(query, query, query)
         const artistsResult = db.prepare(`SELECT DISTINCT artist,id FROM library WHERE artist LIKE '%'||?||'%' GROUP BY artist ORDER BY artist = ? ASC, artist LIKE ?||'%' DESC LIMIT 5`).all(query, query, query)
-        const albumResult = db.prepare(`SELECT album,artist,hasImage,id FROM library WHERE album LIKE '%'||?||'%' GROUP BY album ORDER BY album = ? ASC, album LIKE ?||'%' DESC LIMIT 5`).all(query, query, query)
+        const albumResult = db.prepare(`SELECT album,albumArtist,hasImage,id FROM library WHERE album LIKE '%'||?||'%' GROUP BY album ORDER BY album = ? ASC, album LIKE ?||'%' DESC LIMIT 5`).all(query, query, query)
         return {
             songs: songsResult,
             artists: artistsResult,

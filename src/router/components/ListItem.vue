@@ -7,9 +7,12 @@
             </router-link>
         </div>
         <div v-else-if="$route.path === '/albums'" class="albums-item">
-            <router-link :to="`?hideTop=true&column=album&q=${encodeURIComponent(source.album)}&view=album_${encodeURIComponent(source.album)}`" draggable="false">
+            <router-link :to="`?hideTop=true&column=album&q=${encodeURIComponent(source.album)}&view=album_${encodeURIComponent(source.albumArtist + source.album)}&albumArtist=${encodeURIComponent(source.albumArtist)}`" draggable="false">
                 <div class="album-img" :style="albumArt"/>
-                <span>{{ source.album }}</span>
+                <div class="album-info">
+                    <span>{{ source.album }}</span>
+                    <span class="album-artist">{{ source.albumArtist }}</span>
+                </div>
             </router-link>
         </div>
     </div>
@@ -22,7 +25,7 @@ export default {
         async albumArt() {
             let port = this.$store.state.nav.port
             if (this.source.hasImage == 1) {
-                let artistAlbum = `http://localhost:${port}/images/${(this.source.artist + this.source.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
+                let artistAlbum = `http://localhost:${port}/images/${(this.source.albumArtist + this.source.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
                 return `background-image: url('${artistAlbum}')`
             } else {
                 return ''
@@ -65,6 +68,22 @@ export default {
     display: flex;
     align-items: center;
     height: 100%;
+}
+
+.album-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: transparent !important;
+
+    span {
+        font-size: 0.95em;
+    }
+
+    .album-artist {
+        font-size: 0.8em;
+        margin-top: 5px;
+    }
 }
 
 .albums-item:hover {

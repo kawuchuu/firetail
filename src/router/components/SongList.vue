@@ -236,7 +236,7 @@ export default {
                     return ''
                 }
                 if (song.hasImage == 1) {
-                    let artistAlbum = `http://localhost:${port}/images/${(song.artist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
+                    let artistAlbum = `http://localhost:${port}/images/${(song.albumArtist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
                     this.$store.commit('nav/updateAlbumViewCurrentArt', artistAlbum)
                     return `background-image: url('${artistAlbum}')`
                 } else {

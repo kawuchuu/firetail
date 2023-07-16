@@ -26,8 +26,14 @@
                     <span v-if="$route.path == '/artists'">{{source.album}}</span>
                     <span v-if="$route.path == '/albums'">{{source.artist}}</span>
                 </div>
-                <p v-if="$route.path == '/songs' || $route.path == '/playlist' || $route.path == '/liked'" class="list-artist"><router-link :to="`/artists?hideTop=true&column=artist&q=${encodeURIComponent(source.artist)}&view=artist_${encodeURIComponent(source.artist)}`"><span>{{source.artist}}</span></router-link></p>
-                <p v-if="$route.path == '/songs' || $route.path == '/playlist' || $route.path == '/liked'" class="list-album"><router-link :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(source.album)}&view=album_${encodeURIComponent(source.album)}`"><span>{{source.album}}</span></router-link></p>
+                <div class="list-artist" v-if="$route.path == '/songs' || $route.path == '/playlist' || $route.path == '/liked'">
+                    <p v-for="(item, index) in artists" :key="index">
+                        <router-link :to="`/artists?hideTop=true&column=artist&q=${encodeURIComponent(item)}&view=artist_${encodeURIComponent(item)}`">
+                            <span class="artist-item">{{item}}<span v-if="index !== artists.length - 1">,</span></span>
+                        </router-link>
+                    </p>
+                </div>
+                <p v-if="$route.path == '/songs' || $route.path == '/playlist' || $route.path == '/liked'" class="list-album"><router-link :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(source.album)}&view=album_${encodeURIComponent(source.albumArtist + source.album)}&albumArtist=${encodeURIComponent(source.albumArtist)}`"><span>{{source.album}}</span></router-link></p>
                 <i class="ft-icon favourite-icon" @click="handleFavourite" :style="showFavourite">{{ favouriteIcon }}</i>
                 <p class="list-duration"><span>{{source.duration}}</span></p>
             </div>
@@ -113,7 +119,8 @@ export default {
         return {
             isHover: false,
             isIconHover: false,
-            dragOverY: -1
+            dragOverY: -1,
+            artists: JSON.parse(this.source.allArtists)
         }
     },
     methods: {
@@ -393,6 +400,18 @@ html.light {
     text-overflow: ellipsis;
     pointer-events: none;
     white-space: nowrap;
+}
+
+.list-artist {
+    display: flex;
+
+    .artist-item {
+        margin-right: 4px;
+
+        span {
+            color: var(--text);
+        }
+    }
 }
 
 .list-artist span, .list-album span, .list-duration span {

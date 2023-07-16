@@ -110,7 +110,7 @@ router.beforeEach(async (to, from, next) => {
     }
     if (to.query.column && to.query.q) {
         store.dispatch('audio/getSpecificSongs', {
-            column: to.query.column,
+            column: [to.query.column, to.query.albumArtist ? to.query.albumArtist : null],
             q: to.query.q
         })
     } else if (to.query.view == 'firetailnoselect') {

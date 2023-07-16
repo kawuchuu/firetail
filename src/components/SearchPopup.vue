@@ -12,7 +12,7 @@
             <div v-if="results && results.songs && results.songs.length > 0" class="category songs">
                 <div class="heading">Songs</div>
                 <div class="result song" v-for="item in results.songs" :key="item.id">
-                    <img v-if="item.hasImage == 1" :src="getImg(item.artist, item.album)">
+                    <img v-if="item.hasImage == 1" :src="getImg(item.albumArtist, item.album)">
                     <img v-else src="../assets/no_image.svg">
                     <div class="song-info">
                         <span class="title">{{item.title}}</span>
@@ -22,12 +22,13 @@
             </div>
             <div v-if="results && results.albums && results.albums.length > 0" class="category albums">
                 <div class="heading">Albums</div>
-                <router-link v-for="item in results.albums" :key="item.id" :to="`/albums?column=album&q=${encodeURIComponent(item.album)}&view=album_${encodeURIComponent(item.album)}`">
+                <router-link v-for="item in results.albums" :key="item.id" :to="`/albums?column=album&q=${encodeURIComponent(item.album)}&view=album_${encodeURIComponent(item.albumArtist + item.album)}&albumArtist=${encodeURIComponent(item.albumArtist)}`">
                     <div class="result album" @click="closeSearch">
-                        <img v-if="item.hasImage == 1" :src="getImg(item.artist, item.album)">
+                        <img v-if="item.hasImage == 1" :src="getImg(item.albumArtist, item.album)">
                         <img v-else src="../assets/no_album.svg">
                         <div class="song-info">
                             <span class="title">{{item.album}}</span>
+                            <span class="artist">{{item.albumArtist}}</span>
                         </div>
                     </div>
                 </router-link>
@@ -55,7 +56,8 @@ export default {
     methods: {
         getImg(artist, album) {
             const port = this.$store.state.nav.port
-            return `http://localhost:${port}/images/${(artist + album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
+            console.log(artist)
+            return `http://localhost:${port}/images/${encodeURIComponent(artist + album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
         }
     }
 }
