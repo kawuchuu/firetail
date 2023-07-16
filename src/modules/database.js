@@ -3,14 +3,14 @@ import {app} from 'electron'
 import files from './files'
 
 const db = new Database(`${app.getPath('userData')}/library.db`, {  })
-db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, album text, duration text, realdur number, path text, id text, hasImage number, trackNum number, year text, disc number, explicit number)').run()
+db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, allArtists text, albumArtist text, album text, duration text, realdur number, path text, id text, hasImage number, trackNum number, year text, disc number, explicit number)').run()
 db.prepare('CREATE TABLE IF NOT EXISTS favourites (id text)').run()
 db.prepare('CREATE TABLE IF NOT EXISTS playlists (name text, desc text, id text, songIds text, hasImage number)').run()
 
 export default {
     addToLibrary(songs) {
-        let existingSongs = this.getLibrary()
-        let insert = db.prepare(`INSERT INTO library (title, artist, album, duration, realdur, path, id, hasImage, trackNum, year, disc, explicit) VALUES (@title, @artist, @album, @duration, @realdur, @path, @id, @hasImage, @trackNum, @year, @disc, @explicit)`)
+        let existingSongs = this.getLibrary()[0]
+        let insert = db.prepare(`INSERT INTO library (title, artist, allArtists, albumArtist, album, duration, realdur, path, id, hasImage, trackNum, year, disc, explicit) VALUES (@title, @artist, @allArtists, @albumArtist, @album, @duration, @realdur, @path, @id, @hasImage, @trackNum, @year, @disc, @explicit)`)
         let insertMany = db.transaction((newSongs) => {
             for (let song of newSongs){
                 if (existingSongs.map(e => { return e.path }).indexOf(song.path) == -1){

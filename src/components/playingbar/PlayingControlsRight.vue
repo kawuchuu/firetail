@@ -6,6 +6,7 @@
                 <span>Queue will go here</span>
             </div>
         </div>
+        <i class="material-icons">blur_on</i>
         <i @click="mute" class="ft-icon">{{volIcon}}</i>
         <div ref="volBarWrapper" class="vol-bar-inner-container" @mousemove="moveHover" @mouseover="hover" @mouseleave="leave" @mousedown="down">
             <div class="vol-bar" ref="volBar">

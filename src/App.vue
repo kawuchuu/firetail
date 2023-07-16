@@ -170,15 +170,17 @@ export default {
                 uri: localStorage.getItem('sp-uri')
             })
         }
-        let ver = await window.ipcRenderer.invoke('getVersion')
-        let buildNum = await window.ipcRenderer.invoke('getBuildNum')
-        if (buildNum == 'dev') {
-            document.title = 'Firetail [dev]'
-        } else if (ver.includes('alpha') && buildNum !== 'unknown' || ver.includes('alpha') && buildNum !== 'CUSTOM') {
-            document.title = `Firetail [build ${buildNum}]`
-        }
-        this.$store.commit('nav/updateVer', ver)
-        this.$store.commit('nav/updateBuildNum', buildNum)
+        try {
+            let ver = await window.ipcRenderer.invoke('getVersion')
+            this.$store.commit('nav/updateVer', ver)
+            let buildNum = await window.ipcRenderer.invoke('getBuildNum')
+            if (buildNum == 'dev') {
+                document.title = 'Firetail [dev]'
+            } else if (ver.includes('alpha') && buildNum !== 'unknown' || ver.includes('alpha') && buildNum !== 'CUSTOM') {
+                document.title = `Firetail [build ${buildNum}]`
+            }
+            this.$store.commit('nav/updateBuildNum', buildNum)
+        } catch {}
         window.addEventListener('mousemove', this.resizeSidebar)
         window.addEventListener('mouseup', () => {
             this.sidebarisResizing = false

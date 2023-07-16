@@ -16,8 +16,8 @@
                 <h1 ref="header" :style="topTitleSize" class="top-header" v-show="topTitleText !== ''">{{ topTitleText }}</h1>
                 <!-- <h1 ref="headerTEST" class="top-header-test">{{ topTitleText }}</h1> -->
                 <p v-if="$route.path === '/playlist' && playlist.desc">{{ playlist.desc }}</p>
-                <p v-if="$route.path == '/albums' && list[0] && list[0].year">{{ list[0].year }} • {{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span v-if="totalDuration.mins > 0">{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
-                <p v-else>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span v-if="totalDuration.mins > 0">{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
+                <p v-if="$route.path == '/albums' && list[0] && list[0].year">{{ list[0].year }} • {{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
+                <p v-else>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
             </div>
         </div>
         <div class="root-wrapper">

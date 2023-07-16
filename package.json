@@ -16,7 +16,7 @@
     "name": "kawuchuu",
     "email": "kawuchuu@gmail.com"
   },
-  "license": "MIT",
+  "license": "GPL-3.0",
   "devDependencies": {
     "@electron-forge/cli": "^6.2.1",
     "@electron-forge/maker-deb": "^6.2.1",

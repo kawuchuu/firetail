@@ -67,9 +67,12 @@ export default {
                         explicit = result.value
                     }
                 }
+                console.log(meta.common)
                 let metaObj = {
                     title: meta.common.title ? meta.common.title : f[1],
                     artist: meta.common.artist ? meta.common.artist : 'Unknown Artist',
+                    allArtists: meta.common.artists ? JSON.stringify(meta.common.artists) : null,
+                    albumArtist: meta.common.albumartist ? meta.common.albumartist : meta.common.artist ? meta.common.artist : 'Unknown Artist',
                     album: meta.common.album ? meta.common.album : 'Unknown Album',
                     duration: meta.format.duration ? time.timeFormat(meta.format.duration) : 0,
                     realdur: meta.format.duration ? meta.format.duration : 0,

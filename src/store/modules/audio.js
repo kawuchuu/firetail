@@ -305,9 +305,9 @@ let timeUpdate = function() {
 const doComplexSort = list => {
     const sortBy = {}
     list.forEach(item => {
-        if (!sortBy[item.artist]) sortBy[item.artist] = {}
-        if (!sortBy[item.artist][item.album]) sortBy[item.artist][item.album] = []
-        sortBy[item.artist][item.album].push(item)
+        if (!sortBy[item.albumArtist]) sortBy[item.albumArtist] = {}
+        if (!sortBy[item.albumArtist][item.album]) sortBy[item.albumArtist][item.album] = []
+        sortBy[item.albumArtist][item.album].push(item)
     })
     const sortKeys = sort.simpleSort(Object.keys(sortBy))
     const finalList = []
