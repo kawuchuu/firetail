@@ -367,21 +367,25 @@ const createWindow = () => {
   })
 
   mainWindow.on('blur', () => {
-    mainWindow.setTitleBarOverlay({
-      height: 44,
-      width: 150,
-      color: '#000000',
-      symbolColor: '#ffffff80'
-    })
+    if (osType == 'win32') {
+      mainWindow.setTitleBarOverlay({
+        height: 44,
+        width: 150,
+        color: '#000000',
+        symbolColor: '#ffffff80'
+      })
+    }
   })
 
   mainWindow.on('focus', () => {
-    mainWindow.setTitleBarOverlay({
-      height: 44,
-      width: 150,
-      color: '#000000',
-      symbolColor: '#ffffff'
-    })
+    if (osType == 'win32') {
+      mainWindow.setTitleBarOverlay({
+        height: 44,
+        width: 150,
+        color: '#000000',
+        symbolColor: '#ffffff'
+      })
+    }
   })
 };
 
