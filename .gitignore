@@ -31,6 +31,7 @@ coverage
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
+dist_electron/
 
 # Dependency directories
 node_modules/
@@ -90,3 +91,8 @@ typings/
 
 # Electron-Forge
 out/
+
+.idea/
+dist/
+
+build.txt
