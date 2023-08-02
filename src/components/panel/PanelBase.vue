@@ -196,7 +196,9 @@ export default {
 .panel-bg {
     position: fixed;
     z-index: 20;
-    background-color: rgba(0,0,0,.75);
+    background-color: rgba(0,0,0,.6);
+    background-image: url('../../assets/noise.svg');
+    background-size: 25%;
     width: 100%;
     height: 100%;
     transition-duration: 0.25s;

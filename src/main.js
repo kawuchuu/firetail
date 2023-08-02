@@ -57,7 +57,7 @@ const createWindow = () => {
   });
 
   //lock app
-  if (app.isPackaged || app.commandLine.hasSwitch('enable-instance-lock')) {
+  if ((app.isPackaged && !app.commandLine.hasSwitch('disable-instance-lock')) || app.commandLine.hasSwitch('enable-instance-lock')) {
     const getLock = app.requestSingleInstanceLock()
     if (!getLock) {
       app.quit()

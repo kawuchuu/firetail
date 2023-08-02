@@ -3,7 +3,7 @@
 
 ## Features required for completion before releasing v1.0.0
 - Library
-  - Improve artist detection (use 'artists' and 'albumartist' tags)
+  - ~~Improve artist detection (use 'artists' and 'albumartist' tags)~~
   - Recursive directory importing
 - Playlists
   - Manually change song position
