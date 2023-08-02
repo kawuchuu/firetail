@@ -16,6 +16,7 @@
                 <!-- <div ref="hoverIndicate" class="vol-hover-indicate">{{ hoverIndicateNum }}</div> -->
             </div>
         </div>
+        <i @click="enterExitZen" class="material-icons">open_in_full</i>
     </div>
 </template>
 
@@ -118,6 +119,10 @@ export default {
             if (this.volMouseDown) return
             this.$refs.handle.classList.remove('handle-hover')
             this.$refs.volFillHover.classList.remove('hover')
+        },
+        enterExitZen() {
+            this.$store.commit('nav/updateFullscreen', !this.$store.state.nav.fullscreen)
+            window.ipcRenderer.send('set-fullscreen', this.$store.state.nav.fullscreen)
         }
     }
 }
@@ -144,6 +149,10 @@ export default {
 
     i:active {
         opacity: 0.5;
+    }
+
+    i:last-child {
+        margin-left: 0px;
     }
 }
 

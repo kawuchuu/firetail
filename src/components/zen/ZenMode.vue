@@ -132,6 +132,10 @@ export default {
     }
 }
 
+.darwin .song-info h1 {
+    letter-spacing: -0.02em;
+}
+
 .info-wrapper {
     display: flex;
     align-items: flex-end;

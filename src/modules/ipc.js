@@ -240,5 +240,9 @@ export default {
             const result = db.doFullQuery(query)
             return result
         })
+
+        ipcMain.on('set-fullscreen', (event, doSwitch) => {
+            win.setFullScreen(doSwitch)
+        })
     }
 }
