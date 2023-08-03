@@ -11,9 +11,21 @@ module.exports = {
         setupIcon: './build/other/icon.ico'
       },
     },
-    {
+    /* {
       name: '@electron-forge/maker-zip',
       platforms: ['darwin'],
+    }, */
+    {
+      name: '@electron-forge/maker-dmg',
+      config: {
+        title: "Firetail",
+        background: './build/background.tiff',
+        icon: './build/other/icon.icns',
+        contents: (opts) => { return [
+          { "x": 448, "y": 344, "type": "link", "path": "/Applications" },
+          { "x": 192, "y": 344, "type": "file", "path": opts.appPath }
+        ]}
+      }
     },
     {
       name: '@electron-forge/maker-deb',
