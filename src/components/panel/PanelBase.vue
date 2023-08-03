@@ -7,7 +7,7 @@
                     <span class="top-msg">Error</span>
                 </div>
                 <span v-else class="top-msg">{{panelProps.topMsg}}</span>
-                <i @click="hidePanel" class="material-icons-outlined">close</i>
+                <i @click="hidePanel" class="ft-icon">close</i>
             </div>
             <div class="content">
                 <component :props="panelProps" :is="newPanelComp"/>

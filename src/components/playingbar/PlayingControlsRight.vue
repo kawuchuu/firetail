@@ -1,6 +1,6 @@
 <template>
     <div class="right-controls">
-        <i @click="showQueue = !showQueue" class="material-icons">queue_music</i>
+        <i @click="showQueue = !showQueue" class="ft-icon">queue</i>
         <div class="popup queue" :class="active">
             <div class="queue-inner">
                 <span>Queue will go here</span>
@@ -11,12 +11,12 @@
         <div ref="volBarWrapper" class="vol-bar-inner-container" @mousemove="moveHover" @mouseover="hover" @mouseleave="leave" @mousedown="down">
             <div class="vol-bar" ref="volBar">
                 <div ref="volFill" :style="fill" class="fill"></div>
-                <div ref="volFillHover" class="fill-hover"></div>
+                <!-- <div ref="volFillHover" class="fill-hover"></div> -->
                 <div ref="handle" class="handle"></div>
                 <!-- <div ref="hoverIndicate" class="vol-hover-indicate">{{ hoverIndicateNum }}</div> -->
             </div>
         </div>
-        <i @click="enterExitZen" class="material-icons">open_in_full</i>
+        <i @click="enterExitZen" class="ft-icon">expand</i>
     </div>
 </template>
 

@@ -110,7 +110,7 @@ const state = () => ({
     port: '0',
     albumViewCurrentArt: '',
     fullscreen: false,
-    zenMoveMouseActive: false,
+    zenMoveMouseActive: true,
     spotifyDetails: {
         name: 'unknown',
         uri: 'unknown'

@@ -30,7 +30,7 @@
                     <h3>{{ topTitleText }}</h3>
                 </div>
                 <div class="list-section" :class="currentScroll">
-                    <i class="material-icons-outlined play-pause" style="visibility: hidden;">play_arrow</i>
+                    <i class="ft-icon play-pause" style="visibility: hidden;">play</i>
                     <div class="section" v-if="$route.path == '/albums'">
                         <i class="ft-icon disc-num">albums</i>
                     </div>
