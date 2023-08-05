@@ -22,7 +22,7 @@
                         <h3 v-else>Albums</h3>
                     </div>
                 </div> -->
-                <div class="special-gradient-bg-wrapper">
+                <div class="special-gradient-bg-wrapper" :style="paralax">
                     <div class="bg-gradient" :style="imgBackground"></div>
                     <div class="bg-gradient-layer"></div>
                     <div class="bg-image" />
@@ -73,6 +73,9 @@ export default {
                 } else {
                     return `background-image: url('${artURL}'); filter: blur(25px) brightness(0.7) saturate(1.8);`
                 }
+            },
+            paralax: state => {
+                return `transform: translateY(${state.scrolled / 2.5}px);`
             }
         })
     },
@@ -250,6 +253,7 @@ export default {
     align-items: center;
     animation: fadeIn 2s;
     opacity: 1;
+    position: relative;
 
     i {
         font-size: 8em;

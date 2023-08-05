@@ -1,7 +1,7 @@
 <template>
     <div class="root-sl" :class="isSimple" v-show="list.length > 0 || $route.path == '/songs' || $route.path === '/playlist'">
         <div class="standard" v-if="$route.path == '/songs' || $route.path == '/playlist'">
-            <div v-if="$route.path == '/songs'" class="bg-gradient">
+            <div v-if="$route.path == '/songs'" class="bg-gradient" :style="parallax">
                 <div class="list-gradient-fade" />
                 <div class="bg-banner"></div>
             </div>
@@ -134,6 +134,9 @@ export default {
                 } else {
                     return ''
                 }
+            },
+            parallax: state => {
+                return `transform: translateY(${state.scrolled / 2.5}px);`
             }
         }),
         ...mapState('playlist', {
