@@ -25,7 +25,7 @@
     "@electron-forge/maker-squirrel": "^6.2.1",
     "@electron-forge/maker-zip": "^6.2.1",
     "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
-    "@electron-forge/plugin-webpack": "^6.2.1",
+    "@electron-forge/plugin-webpack": "^6.3.0",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",
     "css-loader": "^6.0.0",
     "electron": "24.6.3",
@@ -34,7 +34,7 @@
     "sass": "^1.63.6",
     "sass-loader": "^13.3.2",
     "style-loader": "^3.0.0",
-    "vue-loader": "^15.10.0"
+    "vue-loader": "^15.10.1"
   },
   "dependencies": {
     "axios": "1.1.2",

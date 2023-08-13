@@ -207,7 +207,7 @@ export default {
 <style lang="scss" scoped>
 .track-controls {
     overflow: hidden;
-    width: 40%;
+    width: 50%;
     height: 100%;
     z-index: 15;
     display: flex;
@@ -382,7 +382,7 @@ export default {
 }
 
 .song-duration {
-    margin: 0 15px;
+    margin: 0 15px 2px;
     position: relative;
     min-width: 25px;
     max-width: 25px;

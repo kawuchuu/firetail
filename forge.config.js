@@ -47,7 +47,8 @@ module.exports = {
         mainConfig: './webpack.main.config.js',
         devContentSecurityPolicy: 'default-src \'self\' \'unsafe-inline\' data:; script-src \'self\' \'unsafe-eval\' \'unsafe-inline\' data:; media-src \'self\' localhost local-resource:; img-src *',
         devServer: {
-          hot: true
+          hot: true,
+          liveReload: false
         },
         renderer: {
           config: './webpack.renderer.config.js',

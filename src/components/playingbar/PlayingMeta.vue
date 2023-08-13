@@ -186,7 +186,7 @@ export default {
     display: flex;
     align-items: center;
     height: 100%;
-    width: 30%;
+    width: 25%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

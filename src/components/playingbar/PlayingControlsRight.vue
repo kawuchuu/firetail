@@ -1,17 +1,13 @@
 <template>
     <div class="right-controls">
         <i @click="showQueue = !showQueue" class="ft-icon">queue</i>
-        <div class="popup queue" :class="active">
-            <div class="queue-inner">
-                <span>Queue will go here</span>
-            </div>
-        </div>
-        <i class="material-icons">blur_on</i>
+        <QueuePopup :class="active" />
+        <!-- <i class="material-icons">blur_on</i> -->
         <i @click="mute" class="ft-icon">{{volIcon}}</i>
         <div ref="volBarWrapper" class="vol-bar-inner-container" @mousemove="moveHover" @mouseover="hover" @mouseleave="leave" @mousedown="down">
             <div class="vol-bar" ref="volBar">
                 <div ref="volFill" :style="fill" class="fill"></div>
-                <!-- <div ref="volFillHover" class="fill-hover"></div> -->
+                <div ref="volFillHover" class="fill-hover"></div>
                 <div ref="handle" class="handle"></div>
                 <!-- <div ref="hoverIndicate" class="vol-hover-indicate">{{ hoverIndicateNum }}</div> -->
             </div>
@@ -22,6 +18,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import QueuePopup from './queue/QueuePopup.vue'
 let clamp = (min, val, max) => {
     return Math.min(Math.max(min, val), max);
 }
@@ -33,6 +30,9 @@ let getP = (e, el) => {
 }
 
 export default {
+    components: {
+        QueuePopup
+    },
     computed: {
         ...mapState('audio', {
             volume: state => state.volume,
@@ -131,14 +131,14 @@ export default {
 <style lang="scss" scoped>
 .right-controls {
     height: 100%;
-    width: 30%;
+    width: 25%;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     padding: 0 15px;
 
     i {
-        font-size: 20px;
+        font-size: 22px;
         cursor: pointer;
         margin-left: 20px;
     }
@@ -175,7 +175,7 @@ export default {
 
 .vol-bar {
     margin: 10px 0px;
-    width: 110px;
+    width: 120px;
     background: #ffffff23;
     display: flex;
     align-items: center;
@@ -240,57 +240,6 @@ export default {
 
 .fill-hover.hover {
     opacity: 1;
-}
-
-.popup {
-    position: fixed;
-    width: auto;
-    height: 300px;
-    background: var(--back-bg);
-    border-radius: 10px;
-    box-shadow: 0px 5px 10px rgba(0,0,0,.15);
-    pointer-events: none;
-    opacity: 0;
-    //transition: .15s;
-    border: solid 1px var(--bd);
-    transition: 0.2s cubic-bezier(0.17, 0.88, 0.25, 1.1);
-    transition-property: transform opacity;
-}
-
-.popup::after {
-    content: "";
-    width: 20px;
-    height: 20px;
-    transform: rotate(-45deg);
-    background: var(--back-bg);
-    position: absolute;
-    bottom: -8px;
-    right: 18px;
-    border: solid 1px var(--bd);
-    border-radius: 2px;
-    box-shadow: 0px 5px 10px rgba(0,0,0,.15);
-    z-index: 1;
-}
-
-.popup.active {
-    opacity: 1;
-    transform: translate(-160px, -315px) scale(1) !important;
-    pointer-events: all;
-}
-
-.popup.queue {
-    transform: translate(-10px, 0px) scale(0);
-    width: 350px;
-    height: 500px;
-
-    .queue-inner {
-        width: 100%;
-        height: 100%;
-        background: var(--back-bg);
-        border-radius: 20px;
-        position: relative;
-        z-index: 2;
-    }
 }
 
 .reduce-motion {
