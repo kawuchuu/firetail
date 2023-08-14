@@ -1,139 +1,139 @@
 {
   "SIDEBAR": {
-    "HOME": "",
-    "SETTINGS": "",
-    "LIBRARY": "",
-    "FAVOURITE": "",
-    "SONGS": "",
-    "ARTISTS": "",
-    "ALBUMS": "",
-    "PLAYLISTS": "",
-    "CREATE_PLAYLIST": ""
+    "HOME": "Bắt đầu",
+    "SETTINGS": "Cài đặt",
+    "LIBRARY": "Thư viện",
+    "FAVOURITE": "Ưa thích",
+    "SONGS": "Bài hát",
+    "ARTISTS": "Nghệ sĩ",
+    "ALBUMS": "Đĩa",
+    "PLAYLISTS": "Danh sách phát",
+    "CREATE_PLAYLIST": "Tạo danh sách phát"
   },
   "ROUTER": {
-    "ALL_SONGS": "",
-    "ARTISTS": "",
-    "ALBUMS": "",
-    "UNKNOWN": "",
-    "UNKNOWN_DESC": ""
+    "ALL_SONGS": "Bài hát",
+    "ARTISTS": "Nghệ sĩ",
+    "ALBUMS": "Đĩa",
+    "UNKNOWN": "Tuyến bạn đang tìm kiếm không thể thấy được.",
+    "UNKNOWN_DESC": "Xin lỗi vì điều đó. Nếu bạn có lý do để tin rằng đã có lỗi nào, vui lòng tạo một vấn đề tại đây."
   },
   "TOP_TITLE": {
-    "COUNT_TYPE_SONGS": ""
+    "COUNT_TYPE_SONGS": "{count} bài hát"
   },
   "SONG_LIST": {
-    "LIST_TITLE": "",
-    "LIST_ARTIST": "",
-    "LIST_ALBUM": "",
-    "LIST_DURATION": ""
+    "LIST_TITLE": "Tiêu đề",
+    "LIST_ARTIST": "Nghệ sĩ",
+    "LIST_ALBUM": "Đĩa",
+    "LIST_DURATION": "Độ dài"
   },
   "PLAYING_BAR": {
-    "SONG_TITLE_NOT_PLAYING": ""
+    "SONG_TITLE_NOT_PLAYING": "Không có bài hát đang phát..."
   },
   "TOP_BAR": {
-    "ADD_SONGS": "",
-    "NUKE": ""
+    "ADD_SONGS": "Thêm bài hát",
+    "NUKE": "Xóa thư viện"
   },
   "SETTINGS": {
-    "TITLE": "",
+    "TITLE": "Cài đặt",
     "SUBTITLES": {
-      "GENERAL": "",
-      "LIBRARY": "",
-      "APPEARANCE": "",
-      "ACCESSIBILITY": "",
-      "ADVANCED": "",
-      "UPDATE": "",
-      "ABOUT": ""
+      "GENERAL": "Chung",
+      "LIBRARY": "Thư viện",
+      "APPEARANCE": "Giao diện",
+      "ACCESSIBILITY": "Trở nặng",
+      "ADVANCED": "Nâng cao",
+      "UPDATE": "Cập nhật",
+      "ABOUT": "Giới thiệu"
     },
     "BUTTON": {
-      "CLEAR_LIBRARY": "",
-      "REFRESH": "",
-      "CHECK_UPDATE": ""
+      "CLEAR_LIBRARY": "Xóa thư viện",
+      "REFRESH": "Tải lại",
+      "CHECK_UPDATE": "Kiểm tra cập nhật"
     },
     "DROP_DOWN": {
       "APP_THEME": {
-        "FIRETAIL": "",
-        "CLASSIC": "",
-        "CYBER": ""
+        "FIRETAIL": "Firetail",
+        "CLASSIC": "Cổ điển",
+        "CYBER": "Đam mê mạng"
       },
       "COLOUR_THEME": {
-        "SYSTEM": "",
-        "DARK": "",
-        "LIGHT": ""
+        "SYSTEM": "Hệ thống",
+        "DARK": "Tối",
+        "LIGHT": "Sáng"
       }
     },
-    "LANGUAGE": "",
-    "START_PAGE": "",
-    "CLEAR_LIBRARY": "",
-    "REFRESH_METADATA": "",
-    "APP_THEME": "",
-    "COLOUR_THEME": "",
-    "COLOUR_BAR": "",
-    "INCREASE_PERFORMANCE": "",
-    "USE_HIGH_CONTRAST": "",
-    "REDUCE_MOTION": "",
-    "BOLD_TEXT": "",
-    "SHOW_FILE_CODEC": "",
-    "FORCE_RTL": "",
-    "CHECK_UPDATE": "",
-    "UPDATE_BRANCH": "",
+    "LANGUAGE": "Chọn một ngôn ngữ",
+    "START_PAGE": "Chọn màn hình để hiển thị khi Firetail khởi động",
+    "CLEAR_LIBRARY": "Xóa thư viện nhạc của Firetail",
+    "REFRESH_METADATA": "Tải lại siêu dữ liệu của thư viện",
+    "APP_THEME": "Giao diện ứng dụng (cần tải lại)",
+    "COLOUR_THEME": "Mầu",
+    "COLOUR_BAR": "Hiển thị màu đĩa trên thanh trạng thái phát",
+    "INCREASE_PERFORMANCE": "Giảm hiệu ứng thay cho hiệu suất",
+    "USE_HIGH_CONTRAST": "Sử dụng giao diện có độ tương phản cao",
+    "REDUCE_MOTION": "Giảm chuyển động",
+    "BOLD_TEXT": "Tăng độ đậm phông chứ",
+    "SHOW_FILE_CODEC": "Xem thông tin mã hóa cho tệp",
+    "FORCE_RTL": "Buộc giao diện RTL",
+    "CHECK_UPDATE": "Kiểm tra cập nhật ứng dụng",
+    "UPDATE_BRANCH": "Chọn kênh cho cập nhật ứng dụng",
     "ABOUT": {
-      "VERSION": "",
-      "COPYRIGHT": "",
-      "BUG_REPORT": "",
-      "BUG_REPORT_LINK": ""
+      "VERSION": "Phiên bản",
+      "COPYRIGHT": "Copyright © 2023 ",
+      "BUG_REPORT": "Đã thấy một lỗi? Vui lòng báo cáo",
+      "BUG_REPORT_LINK": "đây trên GitHub."
     }
   },
   "POPUPS": {
     "CODEC_INFO": {
-      "TITLE": "",
-      "CODEC": "",
-      "CONTAINER": "",
-      "BITRATE": "",
-      "SAMPLE_RATE": "",
-      "BIT_DEPTH": "",
-      "CHANNELS": ""
+      "TITLE": "Thông tin về mã hóa",
+      "CODEC": "Loại mã hóa: ",
+      "CONTAINER": "Thùng: ",
+      "BITRATE": "Tốc độ bit: ",
+      "SAMPLE_RATE": "Tỷ lệ mẫu: ",
+      "BIT_DEPTH": "Độ sâu bit: ",
+      "CHANNELS": "Số kênh: "
     }
   },
   "PANEL": {
     "PLAYLIST": {
-      "TITLE": "",
-      "EDIT_TITLE": "",
-      "NAME_INPUT": "",
-      "DESC_INPUT": "",
-      "DEFAULT_NAME": "",
-      "DEFAULT_DESC": "",
-      "REMOVE_IMAGE": "",
-      "CHOOSE_IMAGE": ""
+      "TITLE": "Tạo danh sách phát",
+      "EDIT_TITLE": "Sửa danh sách phát",
+      "NAME_INPUT": "Tên",
+      "DESC_INPUT": "Sự miêu tả",
+      "DEFAULT_NAME": "Danh sách phát của tôi",
+      "DEFAULT_DESC": "Sự miêu tả danh sách phát của tôi...",
+      "REMOVE_IMAGE": "Xóa hình ảnh",
+      "CHOOSE_IMAGE": "Chọn hình ảnh"
     }
   },
   "BUTTONS": {
-    "CREATE": "",
-    "OK": "",
-    "CANCEL": "",
-    "YES": "",
-    "NO": "",
-    "SAVE": ""
+    "CREATE": "Tạo",
+    "OK": "OK",
+    "CANCEL": "Hủy",
+    "YES": "Có",
+    "NO": "Không",
+    "SAVE": "Lưu"
   },
   "CONTEXT_MENU": {
     "SONG_LIST_ITEM": {
-      "ADD_QUEUE": "",
-      "GO_ARTIST": "",
-      "GO_ALBUM": "",
-      "VIEW_EXPLORER": "",
-      "VIEW_FINDER": "",
-      "VIEW_FILEMGR": "",
-      "ADD_FAVOURITE": "",
-      "ADD_PLAYLIST": "",
-      "REMOVE_FAVOURITE": "",
-      "REMOVE_PLAYLIST": "",
-      "DELETE": ""
+      "ADD_QUEUE": "Thêm vào hàng phát",
+      "GO_ARTIST": "Đi đến nghệ sĩ",
+      "GO_ALBUM": "Đi đến đĩa",
+      "VIEW_EXPLORER": "Hiển thị trong File Explorer",
+      "VIEW_FINDER": "Hiển thị trong Finder",
+      "VIEW_FILEMGR": "Hiển thị trong trình quản lý tệp",
+      "ADD_FAVOURITE": "Thêm vào ưa thích",
+      "ADD_PLAYLIST": "Thêm vào danh sách phát",
+      "REMOVE_FAVOURITE": "Xóa khỏi ưa thích",
+      "REMOVE_PLAYLIST": "Xoá khỏi danh sách phát",
+      "DELETE": "Xóa khỏi thư viện"
     },
     "PLAYLIST_SIDE_ITEM": {
-      "EDIT_PLAYLIST": "",
-      "RENAME": "",
-      "REMOVE_PLAYLIST": ""
+      "EDIT_PLAYLIST": "Sửa danh sách phát",
+      "RENAME": "Đổi tên",
+      "REMOVE_PLAYLIST": "Xóa danh sách phát"
     }
   },
-  "APP_NAME": "",
-  "LANG_NAME": ""
+  "APP_NAME": "Firetail",
+  "LANG_NAME": "Tiếng việt"
 }

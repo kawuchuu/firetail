@@ -1,122 +1,139 @@
 {
-    "SIDEBAR": {
-        "HOME": "Home",
-        "SETTINGS": "Settings",
-        "LIBRARY": "Library",
-        "FAVOURITE": "Favourites",
-        "SONGS": "Songs",
-        "ARTISTS": "Artists",
-        "ALBUMS": "Albums",
-        "PLAYLISTS": "Playlists"
+  "SIDEBAR": {
+    "HOME": "Home",
+    "SETTINGS": "Settings",
+    "LIBRARY": "Library",
+    "FAVOURITE": "Favourites",
+    "SONGS": "Songs",
+    "ARTISTS": "Artists",
+    "ALBUMS": "Albums",
+    "PLAYLISTS": "Playlists",
+    "CREATE_PLAYLIST": "Create Playlist"
+  },
+  "ROUTER": {
+    "ALL_SONGS": "Songs",
+    "ARTISTS": "Artists",
+    "ALBUMS": "Albums",
+    "UNKNOWN": "The route you were looking for could not be found.",
+    "UNKNOWN_DESC": "Sorry about that. If you believe this is an error, please create an issue here."
+  },
+  "TOP_TITLE": {
+    "COUNT_TYPE_SONGS": "{count} song | {count} songs"
+  },
+  "SONG_LIST": {
+    "LIST_TITLE": "Title",
+    "LIST_ARTIST": "Artist",
+    "LIST_ALBUM": "Album",
+    "LIST_DURATION": "Duration"
+  },
+  "PLAYING_BAR": {
+    "SONG_TITLE_NOT_PLAYING": "No song playing..."
+  },
+  "TOP_BAR": {
+    "ADD_SONGS": "Add Songs",
+    "NUKE": "Remove Library"
+  },
+  "SETTINGS": {
+    "TITLE": "Settings",
+    "SUBTITLES": {
+      "GENERAL": "General",
+      "LIBRARY": "Library",
+      "APPEARANCE": "Appearance",
+      "ACCESSIBILITY": "Accessibility",
+      "ADVANCED": "Advanced",
+      "UPDATE": "Updates",
+      "ABOUT": "About"
     },
-    "ROUTER": {
-        "ALL_SONGS": "Songs",
-        "ARTISTS": "Artists",
-        "ALBUMS": "Albums",
-        "UNKNOWN": "The route you were looking for could not be found.",
-        "UNKNOWN_DESC": "Sorry about that. If you believe this is an error, please create an issue here."
+    "BUTTON": {
+      "CLEAR_LIBRARY": "Clear Library",
+      "REFRESH": "Refresh",
+      "CHECK_UPDATE": "Check for updates"
     },
-    "TOP_TITLE": {
-        "COUNT_TYPE_SONGS": "1 song | {count} songs"
+    "DROP_DOWN": {
+      "APP_THEME": {
+        "FIRETAIL": "Firetail",
+        "CLASSIC": "Classic",
+        "CYBER": "Cyber"
+      },
+      "COLOUR_THEME": {
+        "SYSTEM": "System",
+        "DARK": "Dark",
+        "LIGHT": "Light"
+      }
     },
-    "SONG_LIST": {
-        "LIST_TITLE": "Title",
-        "LIST_ARTIST": "Artist",
-        "LIST_ALBUM": "Album",
-        "LIST_DURATION": "Duration"
+    "LANGUAGE": "Select a language",
+    "START_PAGE": "Choose which screen is displayed when Firetail is launched",
+    "CLEAR_LIBRARY": "Clear your Firetail music library",
+    "REFRESH_METADATA": "Refresh your library\u0027s metadata",
+    "APP_THEME": "App theme (requires reload for now)",
+    "COLOUR_THEME": "Colour theme",
+    "COLOUR_BAR": "Show album colour on playing bar",
+    "INCREASE_PERFORMANCE": "Reduce effects to increase performance",
+    "USE_HIGH_CONTRAST": "Use high contrast style",
+    "REDUCE_MOTION": "Reduce motion",
+    "BOLD_TEXT": "Increase font weight",
+    "SHOW_FILE_CODEC": "Show file codec information",
+    "FORCE_RTL": "Force UI to right-to-left",
+    "CHECK_UPDATE": "Check for app updates",
+    "UPDATE_BRANCH": "Choose a channel for app updates",
+    "ABOUT": {
+      "VERSION": "Version ",
+      "COPYRIGHT": "Copyright © 2023 ",
+      "BUG_REPORT": "Found a bug? Please report it",
+      "BUG_REPORT_LINK": "here on GitHub."
+    }
+  },
+  "POPUPS": {
+    "CODEC_INFO": {
+      "TITLE": "Codec Information",
+      "CODEC": "Codec: ",
+      "CONTAINER": "Container: ",
+      "BITRATE": "Bit rate: ",
+      "SAMPLE_RATE": "Sample rate: ",
+      "BIT_DEPTH": "Bit depth: ",
+      "CHANNELS": "No. Channels: "
+    }
+  },
+  "PANEL": {
+    "PLAYLIST": {
+      "TITLE": "Create Playlist",
+      "EDIT_TITLE": "Edit Playlist",
+      "NAME_INPUT": "Name",
+      "DESC_INPUT": "Description",
+      "DEFAULT_NAME": "My Playlist",
+      "DEFAULT_DESC": "My playlist description...",
+      "REMOVE_IMAGE": "Remove Image",
+      "CHOOSE_IMAGE": "Choose image"
+    }
+  },
+  "BUTTONS": {
+    "CREATE": "Create",
+    "OK": "OK",
+    "CANCEL": "Cancel",
+    "YES": "Yes",
+    "NO": "No",
+    "SAVE": "Save"
+  },
+  "CONTEXT_MENU": {
+    "SONG_LIST_ITEM": {
+      "ADD_QUEUE": "Add to queue",
+      "GO_ARTIST": "Go to artist",
+      "GO_ALBUM": "Go to album",
+      "VIEW_EXPLORER": "Show in File Explorer",
+      "VIEW_FINDER": "Show in Finder",
+      "VIEW_FILEMGR": "Show in File Manager",
+      "ADD_FAVOURITE": "Add to favourites",
+      "ADD_PLAYLIST": "Add to playlist",
+      "REMOVE_FAVOURITE": "Remove from favourites",
+      "REMOVE_PLAYLIST": "Remove from playlist",
+      "DELETE": "Remove from library"
     },
-    "PLAYING_BAR": {
-        "SONG_TITLE_NOT_PLAYING": "No song playing..."
-    },
-    "TOP_BAR": {
-        "ADD_SONGS": "Add Songs",
-        "NUKE": "Remove Library"
-    },
-    "SETTINGS": {
-        "TITLE": "Settings",
-        "SUBTITLES": {
-            "LIBRARY": "Library",
-            "APPEARANCE": "Appearance",
-            "ACCESSIBILITY": "Accessibility",
-            "ADVANCED": "Advanced",
-            "ABOUT": "About"
-        },
-        "BUTTON": {
-            "CLEAR_LIBRARY": "Clear Library"
-        },
-        "DROP_DOWN": {
-            "APP_THEME": {
-                "FIRETAIL": "Firetail",
-                "CLASSIC": "Classic",
-                "CYBER": "Cyber"
-            },
-            "COLOUR_THEME": {
-                "SYSTEM": "System",
-                "DARK": "Dark",
-                "LIGHT": "Light"
-            }
-        },
-        "CLEAR_LIBRARY": "Clear your Firetail music library",
-        "APP_THEME": "App theme (requires reload for now)",
-        "COLOUR_THEME": "Colour theme",
-        "COLOUR_BAR": "Show album colour on playing bar",
-        "USE_HIGH_CONTRAST": "Use high contrast style",
-        "REDUCE_MOTION": "Reduce motion",
-        "BOLD_TEXT": "Increase font weight",
-        "SHOW_FILE_CODEC": "Show more information in song details",
-        "ABOUT": {
-            "VERSION": "Version ",
-            "COPYRIGHT": "Copyright © 2023 "
-        }
-    },
-    "POPUPS": {
-        "CODEC_INFO": {
-            "TITLE": "Codec Information",
-            "CODEC": "Codec: ",
-            "CONTAINER": "Container: ",
-            "BITRATE": "Bit rate: ",
-            "SAMPLE_RATE": "Sample rate: ",
-            "BIT_DEPTH": "Bit depth: ",
-            "CHANNELS": "No. Channels: "
-        }
-    },
-    "PANEL": {
-        "PLAYLIST": {
-            "TITLE": "Create Playlist",
-            "EDIT_TITLE": "Edit Playlist",
-            "NAME_INPUT": "Name",
-            "DESC_INPUT": "Description",
-            "DEFAULT_NAME": "My Playlist",
-            "DEFAULT_DESC": "My playlist description...",
-            "REMOVE_IMAGE": "Remove Image",
-            "CHOOSE_IMAGE": "Choose image"
-        }
-    },
-    "BUTTONS": {
-        "CREATE": "Create",
-        "OK": "OK",
-        "CANCEL": "Cancel",
-        "YES": "Yes",
-        "NO": "No",
-        "SAVE": "Save"
-    },
-    "CONTEXT_MENU": {
-        "SONG_LIST_ITEM": {
-            "ADD_QUEUE": "Add to queue",
-            "GO_ARTIST": "Go to artist",
-            "GO_ALBUM": "Go to album",
-            "ADD_FAVOURITE": "Add to favourites",
-            "ADD_PLAYLIST": "Add to playlist",
-            "REMOVE_FAVOURITE": "Remove from favourites",
-            "REMOVE_PLAYLIST": "Remove from playlist",
-            "DELETE": "Remove from library"
-        },
-        "PLAYLIST_SIDE_ITEM": {
-            "EDIT_PLAYLIST": "Edit playlist",
-            "RENAME": "Rename",
-            "REMOVE_PLAYLIST": "Remove playlist"
-        }
-    },
-    "APP_NAME": "Firetail",
-    "LANG_NAME": "English (UK)"
+    "PLAYLIST_SIDE_ITEM": {
+      "EDIT_PLAYLIST": "Edit playlist",
+      "RENAME": "Rename",
+      "REMOVE_PLAYLIST": "Remove playlist"
+    }
+  },
+  "APP_NAME": "Firetail",
+  "LANG_NAME": "English (UK)"
 }
