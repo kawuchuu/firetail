@@ -81,13 +81,13 @@
     "ABOUT": {
       "VERSION": "Version ",
       "COPYRIGHT": "Copyright © 2023 ",
-      "BUG_REPORT": "Found a bug? Please report it",
+      "BUG_REPORT": "Found a bug? Please report it ",
       "BUG_REPORT_LINK": "here on GitHub."
     }
   },
   "POPUPS": {
     "CODEC_INFO": {
-      "TITLE": "Codec Information",
+      "TITLE": "Details",
       "ALBUM": "Album: ",
       "YEAR": "Year: ",
       "TRACK_NUMBER": "Track No.: ",
@@ -128,18 +128,18 @@
     "REPEAT": "Repeat",
     "QUEUE": "Queue",
     "VOLUME": "Volume",
-    "ZEN_MODE": "",
-    "FAVOURITE": ""
+    "ZEN_MODE": "Zen Mode",
+    "FAVOURITE": "Favourite"
   },
   "SEARCH": {
     "TITLE": {
-      "SONG": "",
-      "ALBUM": "",
-      "ARTIST": "",
-      "PLAYLIST": ""
+      "SONG": "Songs",
+      "ALBUM": "Albums",
+      "ARTIST": "Artists",
+      "PLAYLIST": "Playlists"
     },
-    "EMPTY_INPUT": "",
-    "NO_RESULTS": ""
+    "EMPTY_INPUT": "Start your search...",
+    "NO_RESULTS": "No results found..."
   },
   "CONTEXT_MENU": {
     "SONG_LIST_ITEM": {
