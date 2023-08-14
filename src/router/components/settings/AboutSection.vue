@@ -77,4 +77,11 @@ a {
     text-decoration: underline;
     cursor: pointer;
 }
+
+.rtl {
+    img {
+        margin-right: 0px;
+        margin-left: 35px;
+    }
+}
 </style>

@@ -262,6 +262,18 @@ export default {
     }
 }
 
+.rtl {
+    .artist-inner {
+        border-right: none;
+        border-left: solid var(--bd) 1px;
+    }
+
+    .artist-inner:hover {
+        padding-left: 0px;
+        padding-right: 15px;
+    }
+}
+
 @media (max-width: 1350px) {
     .artist-inner {
         max-width: 80px;
