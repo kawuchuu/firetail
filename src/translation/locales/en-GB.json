@@ -14,6 +14,8 @@
     "ALL_SONGS": "Songs",
     "ARTISTS": "Artists",
     "ALBUMS": "Albums",
+    "FAVOURITES": "Favourites",
+    "HOME": "Home",
     "UNKNOWN": "The route you were looking for could not be found.",
     "UNKNOWN_DESC": "Sorry about that. If you believe this is an error, please create an issue here."
   },
@@ -86,6 +88,10 @@
   "POPUPS": {
     "CODEC_INFO": {
       "TITLE": "Codec Information",
+      "ALBUM": "Album: ",
+      "YEAR": "Year: ",
+      "TRACK_NUMBER": "Track No.: ",
+      "DISC": "Disc: ",
       "CODEC": "Codec: ",
       "CONTAINER": "Container: ",
       "BITRATE": "Bit rate: ",
@@ -113,6 +119,27 @@
     "YES": "Yes",
     "NO": "No",
     "SAVE": "Save"
+  },
+  "TOOLTIP": {
+    "PLAY_PAUSE": "Play/pause",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next",
+    "SHUFFLE": "Shuffle",
+    "REPEAT": "Repeat",
+    "QUEUE": "Queue",
+    "VOLUME": "Volume",
+    "ZEN_MODE": "",
+    "FAVOURITE": ""
+  },
+  "SEARCH": {
+    "TITLE": {
+      "SONG": "",
+      "ALBUM": "",
+      "ARTIST": "",
+      "PLAYLIST": ""
+    },
+    "EMPTY_INPUT": "",
+    "NO_RESULTS": ""
   },
   "CONTEXT_MENU": {
     "SONG_LIST_ITEM": {
