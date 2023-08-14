@@ -1,5 +1,5 @@
 <template>
-    <div class="root-sl" :class="isSimple" v-show="list.length > 0 || $route.path == '/songs' || $route.path === '/playlist'">
+    <div class="root-sl" :class="isSimple" v-show="list.length > 0 || $route.path == '/songs' || $route.path === '/playlist' || $route.path === '/liked'">
         <div class="standard" v-if="$route.path == '/songs' || $route.path == '/playlist'">
             <div v-if="$route.path == '/songs'" class="bg-gradient" :style="parallax">
                 <div class="list-gradient-fade" />
@@ -51,6 +51,7 @@
             <div class="wrapper">
                 <p v-if="list.length == 0 && !$store.state.audio.isLoadingSongs && $route.path === '/songs'" style="margin-left: 60px;">No songs have been added to Firetail's library. Drag some into this window to get started!</p>
                 <p v-else-if="list.length === 0 && !$store.state.audio.isLoadingSongs && $route.path === '/playlist'" style="margin-left: 60px">No songs have been added to this playlist. You should drag some to this playlist's button on the side bar!</p>
+                <p v-else-if="list.length === 0 && !$store.state.audio.isLoadingSongs && $route.path === '/liked'" style="margin-left: 60px">You haven't favourited any songs yet!</p>
                 <div v-if="$route.path !== '/songs' && $route.path !== '/playlist' && $route.path !== '/liked'">
                     <SongItem v-for="(item, index) in list" :source="item" :key="item.id" :selectedItems="selectedItems" :index="index" :performingMultiDrag="performingMultiDrag"/>
                 </div>
@@ -168,7 +169,7 @@ export default {
                     return this.playlist.name
                 }
                 case '/liked': {
-                    return 'Favourites'
+                    return this.$t('ROUTER.FAVOURITES')
                 }
                 default: {
                     console.log('defaulting to songs')

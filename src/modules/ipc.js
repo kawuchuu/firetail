@@ -25,6 +25,7 @@ export default {
 
         ipcMain.on('getFavouriteSongs', async () => {
             let favouriteSongs = await db.getAllFavouriteSongs()
+            console.log(favouriteSongs)
             win.send('library', favouriteSongs)
         })
 

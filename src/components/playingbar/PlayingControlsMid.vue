@@ -2,11 +2,11 @@
     <div class="track-controls" :class="[queueNotEmpty, enableBtn]">
         <div class="track-controls-inner-container">
             <div class="control-buttons">
-                <i class="ft-icon repeat-shuffle" title="Shuffle" @click="shuffle" :class="isShuffled" role="button" aria-label="Shuffle" tabindex="0">shuffle</i>
-                <i class="ft-icon skip-prev" title="Previous" @click="prev" role="button" aria-label="Previous song" tabindex="0">previous</i>
-                <div class="play-pause-icon" title="Play/pause" @click="playPause" tabindex="0" role="button" :aria-label="playPauseIcon"><i class="ft-icon" aria-hidden="true">{{playPauseIcon}}</i></div>
-                <i class="ft-icon skip-prev" title="Next" @click="next" role="button" aria-label="Next song" tabindex="0">next</i>
-                <i class="ft-icon repeat-shuffle" title="Repeat" @click="repeat" :class="isRepeat" role="button" aria-label="Repeat" tabindex="0">{{repeatIcon}}</i>
+                <i class="ft-icon repeat-shuffle" :title="$t('TOOLTIP.SHUFFLE')" @click="shuffle" :class="isShuffled" role="button" aria-label="Shuffle" tabindex="0">shuffle</i>
+                <i class="ft-icon skip-prev" :title="$t('TOOLTIP.PREVIOUS')" @click="prev" role="button" aria-label="Previous song" tabindex="0">previous</i>
+                <div class="play-pause-icon" :title="$t('TOOLTIP.PLAY_PAUSE')" @click="playPause" tabindex="0" role="button" :aria-label="playPauseIcon"><i class="ft-icon" aria-hidden="true">{{playPauseIcon}}</i></div>
+                <i class="ft-icon skip-prev" :title="$t('TOOLTIP.NEXT')" @click="next" role="button" aria-label="Next song" tabindex="0">next</i>
+                <i class="ft-icon repeat-shuffle" :title="$t('TOOLTIP.REPEAT')" @click="repeat" :class="isRepeat" role="button" aria-label="Repeat" tabindex="0">{{repeatIcon}}</i>
             </div>
             <div class="seek-time-inner-container">
                 <p class="song-duration" >{{ songCurrent }}</p>

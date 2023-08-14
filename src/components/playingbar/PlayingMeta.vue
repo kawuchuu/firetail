@@ -6,11 +6,11 @@
         </div>
         <div v-if="currentSong" class="popup codec-info" :class="[showMoreInfo, showAdvancedFileInfo]">
             <div class="info">
-                <h3>Details</h3>
-                <p>Album: {{ currentSong.album ? currentSong.album : 'Unknown' }}</p>
-                <p>Year: {{ currentSong.year ? currentSong.year : 'Unknown' }}</p>
-                <p>Track No.: {{ currentSong.trackNum ? currentSong.trackNum : 'Unknown' }}</p>
-                <p>Disc: {{ currentSong.disc ? currentSong.disc : 'Unknown' }}</p>
+                <h3>{{ $t('POPUPS.CODEC_INFO.TITLE') }}</h3>
+                <p>{{ $t('POPUPS.CODEC_INFO.ALBUM') }}{{ currentSong.album ? currentSong.album : 'Unknown' }}</p>
+                <p>{{ $t('POPUPS.CODEC_INFO.YEAR') }}{{ currentSong.year ? currentSong.year : 'Unknown' }}</p>
+                <p>{{ $t('POPUPS.CODEC_INFO.TRACK_NUMBER') }}{{ currentSong.trackNum ? currentSong.trackNum : 'Unknown' }}</p>
+                <p>{{ $t('POPUPS.CODEC_INFO.DISC') }}{{ currentSong.disc ? currentSong.disc : 'Unknown' }}</p>
                 <p v-if="advancedFileInfo.bitrate">{{ $t('POPUPS.CODEC_INFO.BITRATE') }}{{ Math.round(advancedFileInfo.bitrate / 1000) }}kb/s</p>
                 <div class="advanced">
                     <p v-if="advancedFileInfo.bitDepth">{{ $t('POPUPS.CODEC_INFO.BIT_DEPTH') }}{{ advancedFileInfo.bitDepth }}-bit</p>

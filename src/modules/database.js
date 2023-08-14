@@ -133,8 +133,10 @@ export default {
         return this.getAllPlaylists()
     },
     getAllFavouriteSongs() {
-        const allFavourites = this.getAllFavouriteSongs()
-        console.log('doing it?')
-        return db.prepare('SELECT * FROM library WHERE id = ?').run(allFavourites)
+        const allFavourites = this.getFavourites()
+        if (!allFavourites || allFavourites.length == 0) return [[], 0]
+        const getSongs = db.prepare('SELECT * FROM library INNER JOIN favourites ON library.id = favourites.id').all()
+        const durSum = db.prepare(`SELECT SUM(realdur) FROM library INNER JOIN favourites ON library.id = favourites.id`).all()
+        return [getSongs, durSum[0]['SUM(realdur)']]
     }
 }

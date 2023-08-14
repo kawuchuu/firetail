@@ -3,14 +3,14 @@
         <div class="search-inner">
             <div v-if="!results" class="placeholder-search">
                 <i class="ft-icon">search</i>
-                <span>Start your search...</span>
+                <span>{{$t('SEARCH.EMPTY_INPUT')}}</span>
             </div>
             <div v-if="results == -1" class="placeholder-search">
                 <i class="ft-icon">search</i>
-                <span>No results found...</span>
+                <span>{{$t('SEARCH.NO_RESULTS')}}</span>
             </div>
             <div v-if="results && results.songs && results.songs.length > 0" class="category songs">
-                <div class="heading">Songs</div>
+                <div class="heading">{{$t('SEARCH.TITLE.SONG')}}</div>
                 <div class="result song" v-for="item in results.songs" :key="item.id">
                     <img v-if="item.hasImage == 1" :src="getImg(item.albumArtist, item.album)">
                     <img v-else src="../assets/no_image.svg">
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div v-if="results && results.albums && results.albums.length > 0" class="category albums">
-                <div class="heading">Albums</div>
+                <div class="heading">{{$t('SEARCH.TITLE.ALBUM')}}</div>
                 <router-link v-for="item in results.albums" :key="item.id" :to="`/albums?column=album&q=${encodeURIComponent(item.album)}&view=album_${encodeURIComponent(item.albumArtist + item.album)}&albumArtist=${encodeURIComponent(item.albumArtist)}`">
                     <div class="result album" @click="closeSearch">
                         <img v-if="item.hasImage == 1" :src="getImg(item.albumArtist, item.album)">
@@ -34,7 +34,7 @@
                 </router-link>
             </div>
             <div v-if="results && results.artists && results.artists.length > 0" class="category artists">
-                <div class="heading">Artists</div>
+                <div class="heading">{{$t('SEARCH.TITLE.ARTIST')}}</div>
                 <router-link v-for="item in results.artists" :key="item.id" :to="`/artists?column=artist&q=${encodeURIComponent(item.artist)}&view=artist_${encodeURIComponent(item.artist)}`">
                     <div class="result artist" @click="closeSearch">
                         <img src="../assets/no_artist.svg">
@@ -43,7 +43,7 @@
                 </router-link>
             </div>
             <div v-if="results && results.playlists && results.playlists.length > 0" class="category playlists">
-                <div class="heading">Playlists</div>
+                <div class="heading">{{$t('SEARCH.TITLE.PLAYLIST')}}</div>
             </div>
         </div>
     </div>
@@ -56,7 +56,6 @@ export default {
     methods: {
         getImg(artist, album) {
             const port = this.$store.state.nav.port
-            console.log(artist)
             return `http://localhost:${port}/images/${encodeURIComponent(artist + album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
         }
     }

@@ -63,8 +63,7 @@ export default {
             this.showSearch = false
             console.log('is it doing it??????????????')
         },
-        async typingSearch(evt) {
-            console.log(this.searchInput)
+        async typingSearch() {
             if (this.searchInput === '') return this.searchOutput = null
             const result = await window.ipcRenderer.invoke('do-full-query', this.searchInput)
             if (result.songs.length == 0 && result.artists.length == 0 && result.albums.length == 0 && result.playlists.length == 0) {
