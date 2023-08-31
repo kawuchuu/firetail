@@ -100,7 +100,7 @@ export default {
     width: 100%;
     max-width: 270px;
     z-index: 4;
-    height: calc(100% - 160px);
+    height: calc(100% - 159px);
     padding: 15px;
     background: var(--bg);
     border-right: solid var(--bd) 1px;

@@ -4,6 +4,7 @@ import db from './database'
 import files from './files'
 import server from './server'
 import { resolve } from 'path'
+import os from 'os'
 
 export default {
     start(win) {
@@ -244,6 +245,10 @@ export default {
 
         ipcMain.on('set-fullscreen', (event, doSwitch) => {
             win.setFullScreen(doSwitch)
+        })
+
+        ipcMain.handle('os-version', () => {
+            return os.release()
         })
     }
 }

@@ -11,10 +11,8 @@
             <div v-if="$route.path == '/artists'" class="tab-album-art" :style="getArtistImage"></div>
             <div v-if="$route.path == '/playlist'" class="tab-album-art" :style="getPlaylistImage"></div>
             <div ref="topTitle" class="top-title-text">
-                <!-- <h1 v-if="$route.path == '/artists' && list[0]" ref="header" :style="topTitleSize" class="top-header">{{list[0].artist}}</h1>
-                <h1 v-else-if="$route.path == '/albums' && list[0]" ref="header" :style="topTitleSize" class="top-header">{{list[0].album}}</h1> -->
+                <p v-if="$route.path == '/albums'" class="album-type">{{ albumType }}</p>
                 <h1 ref="header" :style="topTitleSize" class="top-header" v-show="topTitleText !== ''">{{ topTitleText }}</h1>
-                <!-- <h1 ref="headerTEST" class="top-header-test">{{ topTitleText }}</h1> -->
                 <p v-if="$route.path === '/playlist' && playlist.desc">{{ playlist.desc }}</p>
                 <p v-if="$route.path == '/albums' && list[0]"><span v-if="list[0].albumArtist">{{ list[0].albumArtist }} • </span><span v-if="list[0].year">{{ list[0].year }} • </span>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
                 <p v-else>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
@@ -195,6 +193,11 @@ export default {
                 this.$store.commit('nav/updateAlbumViewCurrentArt', image)
                 return `background-image: url('${image}')`
             } else return ''
+        },
+        albumType() {
+            if (this.list.length === 1) return 'Single'
+            else if (this.list.length <= 6) return 'EP'
+            else return 'Album'
         }
     },
     asyncComputed: {

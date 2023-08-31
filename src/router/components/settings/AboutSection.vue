@@ -4,12 +4,19 @@
         <div class="info">
             <div>
                 <h1>{{$t('APP_NAME')}}</h1>
-                <p>{{$t('SETTINGS.ABOUT.VERSION')}}{{version}}<span v-show="checkBuild"> [{{build}}]</span>, {{ arch }}</p>
+                <p>{{$t('SETTINGS.ABOUT.VERSION')}}{{version}}</p>
                 <p>{{$t('SETTINGS.ABOUT.COPYRIGHT')}}kawuchuu</p>
             </div>
             <div>
                 <p>{{$t('SETTINGS.ABOUT.BUG_REPORT')}}<a @click="openLink">{{$t('SETTINGS.ABOUT.BUG_REPORT_LINK')}}</a></p>
                 <a>Third-party licenses</a>
+            </div>
+            <p @click="isMoreOpen = isMoreOpen ? false : true" class="open-more"><i class="ft-icon">{{ moreIcon }}</i> Advanced information</p>
+            <div class="advanced-info" :class="doShow">
+                <p>Build: {{build}}</p>
+                <p>Platform: {{platform}}</p>
+                <p>Platform version: {{platformVer}}</p>
+                <p>Architecture: {{arch}}</p>
             </div>
         </div>
     </div>
@@ -24,19 +31,39 @@ export default {
         return {
             version: this.$store.state.nav.ver,
             build: this.$store.state.nav.buildNum,
-            arch: window.process.arch
+            arch: window.process.arch,
+            platform: window.process.platform,
+            platformVer: "unknown",
+            isMoreOpen: false
         }
     },
     computed: {
         checkBuild() {
             if (this.build === 'unknown' || this.build === 'CUSTOM') return false
             else return true
+        },
+        moreIcon() {
+            if (this.isMoreOpen) {
+                return 'arrow-head-up'
+            } else {
+                return 'arrow-head-down'
+            }
+        },
+        doShow() {
+            if (this.isMoreOpen) {
+                return 'show'
+            } else {
+                return ''
+            }
         }
     },
     methods: {
         openLink() {
             window.ipcRenderer.send('openLink', `https://github.com/kawuchuu/firetail/issues`)
         }
+    },
+    async mounted() {
+        this.platformVer = await window.os.version()
     }
 }
 </script>
@@ -65,7 +92,7 @@ h1 {
 
 p {
     margin: 10px 0px;
-    opacity: 0.75;
+    /* opacity: 0.75; */
 }
 
 .bold-text h1 {
@@ -76,6 +103,41 @@ a {
     color: #3ea8ff;
     text-decoration: underline;
     cursor: pointer;
+}
+
+.open-more {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 0px;
+
+    i {
+        margin-right: 10px;
+        font-size: 22px;
+    }
+}
+
+.open-more:hover {
+    color: var(--hl-txt);
+}
+
+.open-more:active {
+    color: var(--hl-txt);
+    opacity: 0.5;
+}
+
+.advanced-info {
+    position: absolute;
+    transition: 0.25s;
+    transition-property: transform opacity;
+    opacity: 0;
+    pointer-events: none;
+    display: none;
+}
+
+.advanced-info.show {
+    opacity: 1;
+    display: block;
 }
 
 .rtl {
