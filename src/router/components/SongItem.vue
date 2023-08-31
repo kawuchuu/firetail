@@ -13,7 +13,7 @@
                 <p v-else class="track-num">-</p>
             </div>
             <div v-if="$route.path == '/albums'">
-                <p v-if="source.trackNum !== 'null'" class="track-num">{{source.trackNum}}</p>
+                <p v-if="source.trackNum !== null" class="track-num">{{source.trackNum}}</p>
                 <p v-else class="track-num">-</p>
             </div>
             <div class="artist-title-album" @pointerup="select" @dblclick="playSong">

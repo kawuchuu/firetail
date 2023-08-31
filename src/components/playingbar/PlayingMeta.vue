@@ -315,11 +315,12 @@ export default {
 
 .large-album-art {
     display: flex;
-    transform: translate(-145px, -10px) scale(0);
+    transform: translate(-190px, -10px) scale(0);
+    height: 375px;
 
     .inner {
-        width: 300px;
-        height: 300px;
+        width: 375px;
+        height: 375px;
         border-radius: 10px;
         background-color: var(--back-bg);
         background-position: center;
@@ -425,7 +426,7 @@ export default {
 }
 
 .popup.hover.large-album-art {
-    transform: translateY(-215px);
+    transform: translateY(-253px);
 }
 
 .popup.hover.codec-info {

@@ -33,8 +33,8 @@ export default {
     data() {
         return {
             button: [
-                {id: 'settings', icon: 'settings'},
                 {id: 'addFiles', for: 'addFiles', icon: 'add'},
+                {id: 'settings', icon: 'settings'},
             ],
             nav: [
                 {type: 'back', class: 'littlebitback', nav: -1, icon: 'chevron-left'},

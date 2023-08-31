@@ -276,7 +276,7 @@ export default {
 
 @media (max-width: 1350px) {
     .artist-inner {
-        max-width: 80px;
+        max-width: 62px;
         transition: 0.3s cubic-bezier(0, 1, 0.35, 1);
         //transition-delay: 0.2s;
     }
@@ -302,7 +302,7 @@ export default {
         }
     }
     .albums-container {
-        grid-template-columns: 110px 1fr;
+        grid-template-columns: 92px 1fr;
     }
     .list-fade {
         width: 80px;
@@ -319,7 +319,7 @@ export default {
         }
     }
     .special-gradient-bg-wrapper {
-        width: calc(100% - 111px);
+        width: calc(100% - 92px);
     }
 }
 </style>
