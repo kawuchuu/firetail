@@ -14,6 +14,8 @@
     "ALL_SONGS": "Bài hát",
     "ARTISTS": "Nghệ sĩ",
     "ALBUMS": "Đĩa",
+    "FAVOURITES": "Ưa thích",
+    "HOME": "Bắt đầu",
     "UNKNOWN": "Tuyến bạn đang tìm kiếm không thể thấy được.",
     "UNKNOWN_DESC": "Xin lỗi vì điều đó. Nếu bạn có lý do để tin rằng đã có lỗi nào, vui lòng tạo một vấn đề tại đây."
   },
@@ -85,7 +87,11 @@
   },
   "POPUPS": {
     "CODEC_INFO": {
-      "TITLE": "Thông tin về mã hóa",
+      "TITLE": "Thông tin",
+      "ALBUM": "Đĩa: ",
+      "YEAR": "Năm: ",
+      "TRACK_NUMBER": "Số trên đĩa: ",
+      "DISC": "Số đĩa: ",
       "CODEC": "Loại mã hóa: ",
       "CONTAINER": "Thùng: ",
       "BITRATE": "Tốc độ bit: ",
@@ -113,6 +119,27 @@
     "YES": "Có",
     "NO": "Không",
     "SAVE": "Lưu"
+  },
+  "TOOLTIP": {
+    "PLAY_PAUSE": "Phát/tạm dừng",
+    "PREVIOUS": "Nhảy lại",
+    "NEXT": "Nhảy tiếp",
+    "SHUFFLE": "Ngẫu nhiên",
+    "REPEAT": "Lập lại",
+    "QUEUE": "Hàng phát",
+    "VOLUME": "Âm lượng",
+    "ZEN_MODE": "Chế độ Zen",
+    "FAVOURITE": "Thích"
+  },
+  "SEARCH": {
+    "TITLE": {
+      "SONG": "Bài hát",
+      "ALBUM": "Đĩa",
+      "ARTIST": "Nghệ sĩ",
+      "PLAYLIST": "Danh sách phát"
+    },
+    "EMPTY_INPUT": "Bắt đầu tìm kiếm…",
+    "NO_RESULTS": "Không có kết quả nào…"
   },
   "CONTEXT_MENU": {
     "SONG_LIST_ITEM": {

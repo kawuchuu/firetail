@@ -1,0 +1,166 @@
+{
+  "SIDEBAR": {
+    "HOME": "",
+    "SETTINGS": "Einstellungen",
+    "LIBRARY": "Bibliothek",
+    "FAVOURITE": "Favoriten",
+    "SONGS": "Lieder",
+    "ARTISTS": "Künstler",
+    "ALBUMS": "Alben",
+    "PLAYLISTS": "Playlisten",
+    "CREATE_PLAYLIST": "Playlist erstellen"
+  },
+  "ROUTER": {
+    "ALL_SONGS": "Lieder",
+    "ARTISTS": "Künstler",
+    "ALBUMS": "Alben",
+    "FAVOURITES": "Favoriten",
+    "HOME": "",
+    "UNKNOWN": "",
+    "UNKNOWN_DESC": ""
+  },
+  "TOP_TITLE": {
+    "COUNT_TYPE_SONGS": "{count} Lied | "
+  },
+  "SONG_LIST": {
+    "LIST_TITLE": "Titel",
+    "LIST_ARTIST": "Künstler",
+    "LIST_ALBUM": "Album",
+    "LIST_DURATION": "Länge"
+  },
+  "PLAYING_BAR": {
+    "SONG_TITLE_NOT_PLAYING": ""
+  },
+  "TOP_BAR": {
+    "ADD_SONGS": "Lieder hinzufügen",
+    "NUKE": ""
+  },
+  "SETTINGS": {
+    "TITLE": "Einstellungen",
+    "SUBTITLES": {
+      "GENERAL": "",
+      "LIBRARY": "Bibliothek",
+      "APPEARANCE": "Aussehen",
+      "ACCESSIBILITY": "",
+      "ADVANCED": "Erweitert",
+      "UPDATE": "Aktualisierungen",
+      "ABOUT": "Über"
+    },
+    "BUTTON": {
+      "CLEAR_LIBRARY": "",
+      "REFRESH": "",
+      "CHECK_UPDATE": ""
+    },
+    "DROP_DOWN": {
+      "APP_THEME": {
+        "FIRETAIL": "Firetail",
+        "CLASSIC": "Klassisch",
+        "CYBER": "Cyber"
+      },
+      "COLOUR_THEME": {
+        "SYSTEM": "System",
+        "DARK": "Dunkel",
+        "LIGHT": "Hell"
+      }
+    },
+    "LANGUAGE": "Wähle eine Sprache",
+    "START_PAGE": "",
+    "CLEAR_LIBRARY": "",
+    "REFRESH_METADATA": "",
+    "APP_THEME": "",
+    "COLOUR_THEME": "",
+    "COLOUR_BAR": "",
+    "INCREASE_PERFORMANCE": "",
+    "USE_HIGH_CONTRAST": "",
+    "REDUCE_MOTION": "",
+    "BOLD_TEXT": "",
+    "SHOW_FILE_CODEC": "",
+    "FORCE_RTL": "",
+    "CHECK_UPDATE": "",
+    "UPDATE_BRANCH": "",
+    "ABOUT": {
+      "VERSION": "Version",
+      "COPYRIGHT": "Copyright © 2023 ",
+      "BUG_REPORT": "",
+      "BUG_REPORT_LINK": ""
+    }
+  },
+  "POPUPS": {
+    "CODEC_INFO": {
+      "TITLE": "",
+      "ALBUM": "",
+      "YEAR": "",
+      "TRACK_NUMBER": "",
+      "DISC": "",
+      "CODEC": "",
+      "CONTAINER": "",
+      "BITRATE": "",
+      "SAMPLE_RATE": "",
+      "BIT_DEPTH": "",
+      "CHANNELS": ""
+    }
+  },
+  "PANEL": {
+    "PLAYLIST": {
+      "TITLE": "",
+      "EDIT_TITLE": "",
+      "NAME_INPUT": "",
+      "DESC_INPUT": "",
+      "DEFAULT_NAME": "",
+      "DEFAULT_DESC": "",
+      "REMOVE_IMAGE": "",
+      "CHOOSE_IMAGE": ""
+    }
+  },
+  "BUTTONS": {
+    "CREATE": "",
+    "OK": "",
+    "CANCEL": "",
+    "YES": "",
+    "NO": "",
+    "SAVE": ""
+  },
+  "TOOLTIP": {
+    "PLAY_PAUSE": "",
+    "PREVIOUS": "",
+    "NEXT": "",
+    "SHUFFLE": "",
+    "REPEAT": "",
+    "QUEUE": "",
+    "VOLUME": "",
+    "ZEN_MODE": "",
+    "FAVOURITE": ""
+  },
+  "SEARCH": {
+    "TITLE": {
+      "SONG": "",
+      "ALBUM": "",
+      "ARTIST": "",
+      "PLAYLIST": ""
+    },
+    "EMPTY_INPUT": "",
+    "NO_RESULTS": ""
+  },
+  "CONTEXT_MENU": {
+    "SONG_LIST_ITEM": {
+      "ADD_QUEUE": "",
+      "GO_ARTIST": "",
+      "GO_ALBUM": "",
+      "VIEW_EXPLORER": "",
+      "VIEW_FINDER": "",
+      "VIEW_FILEMGR": "",
+      "ADD_FAVOURITE": "",
+      "ADD_PLAYLIST": "",
+      "REMOVE_FAVOURITE": "",
+      "REMOVE_PLAYLIST": "",
+      "DELETE": ""
+    },
+    "PLAYLIST_SIDE_ITEM": {
+      "EDIT_PLAYLIST": "",
+      "RENAME": "",
+      "REMOVE_PLAYLIST": ""
+    }
+  },
+  "APP_NAME": "",
+  "LANG_NAME": ""
+}
