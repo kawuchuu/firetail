@@ -93,13 +93,13 @@ export default {
         const query = new URLSearchParams({
             'client_id': 'd1084781b7af46d6b6948192e372e4a6',
             'response_type': 'code',
-            'redirect_uri': 'http://localhost:56741/spconnect/',
+            'redirect_uri': 'http://localhost:56742/spconnect/',
             'code_challenge_method': 'S256',
             'code_challenge': codeChallenge,
             'state': state
         }).toString()
-        window.ipcRenderer.send('openLink', `http://localhost:56741/spconnect?redirect=${encodeURIComponent(`https://accounts.spotify.com/authorize?${query}`)}`)
-        window.ipcRenderer.receivece('spotifyAuthFinish', async (evt, args) => {
+        window.ipcRenderer.send('openLink', `http://localhost:56742/spconnect?redirect=${encodeURIComponent(`https://accounts.spotify.com/authorize?${query}`)}`)
+        window.ipcRenderer.receive('spotifyAuthFinish', async (evt, args) => {
             if (args.error) {
                 console.error(args.error)
                 this.error = args.error
@@ -114,7 +114,7 @@ export default {
                     'client_id': 'd1084781b7af46d6b6948192e372e4a6',
                     'grant_type': 'authorization_code',
                     'code': args.code,
-                    'redirect_uri': 'http://localhost:56741/spconnect/',
+                    'redirect_uri': 'http://localhost:56742/spconnect/',
                     'code_verifier': sessionStorage.getItem('code-verifier')
                 })
                 const resp = await fetch('https://accounts.spotify.com/api/token', {

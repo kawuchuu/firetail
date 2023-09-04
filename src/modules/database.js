@@ -21,7 +21,6 @@ export default {
         insertMany(songs)
     },
     addToFavourite(id) {
-        //console.log(id)
         db.prepare('INSERT INTO favourites (id) VALUES (?)').run(id)
     },
     removeFromFavourite(id) {
@@ -50,7 +49,6 @@ export default {
         return rows
     },
     getSomeFromColumn(column, query) {
-        console.log(column, query)
         if (column[0] == 'artist') {
             let rows = db.prepare(`SELECT * FROM library WHERE artist = ?`).all(query)
             const durSum = db.prepare(`SELECT SUM(realdur) FROM library WHERE artist = ?`).all(query)

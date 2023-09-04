@@ -100,7 +100,7 @@ export default {
     width: 100%;
     max-width: 270px;
     z-index: 4;
-    height: calc(100% - 160px);
+    height: calc(100% - 159px);
     padding: 15px;
     background: var(--bg);
     border-right: solid var(--bd) 1px;
@@ -276,7 +276,7 @@ export default {
 
 @media (max-width: 1350px) {
     .artist-inner {
-        max-width: 80px;
+        max-width: 62px;
         transition: 0.3s cubic-bezier(0, 1, 0.35, 1);
         transition-property: max-width;
         //transition-delay: 0.2s;
@@ -303,7 +303,7 @@ export default {
         }
     }
     .albums-container {
-        grid-template-columns: 110px 1fr;
+        grid-template-columns: 92px 1fr;
     }
     .list-fade {
         width: 80px;
@@ -320,7 +320,7 @@ export default {
         }
     }
     .special-gradient-bg-wrapper {
-        width: calc(100% - 111px);
+        width: calc(100% - 92px);
     }
 }
 </style>

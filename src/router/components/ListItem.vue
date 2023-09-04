@@ -37,7 +37,7 @@ export default {
 
 <style lang="scss" scoped>
 .albums-item {
-    height: 60px;
+    height: 62px;
     border-radius: 10px;
 }
 
@@ -83,6 +83,7 @@ export default {
     .album-artist {
         font-size: 0.8em;
         margin-top: 5px;
+        font-weight: normal !important;
     }
 }
 
@@ -113,6 +114,10 @@ export default {
 @media (max-width: 1350px) {
     .albums-item a span {
         padding-right: 0px;
+        margin-left: 6px;
+    }
+    .album-img, .artist-img {
+        margin: 0px 9px;
     }
 }
 </style>

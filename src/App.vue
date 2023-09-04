@@ -10,6 +10,7 @@
                 <p>You can drop music files and folders with music inside</p>
             </div>
         </div>
+        <CommandPalette/>
         <Panel/>
         <ContextMenu/>
         <ItemAdd/>
@@ -41,7 +42,7 @@ import ZenMode from './components/zen/ZenMode.vue'
 import ContextMenu from './components/ContextMenu.vue'
 import ItemAdd from './components/ItemAdd.vue'
 import Notification from './components/NotificationPopup.vue'
-//import PluginComp from './PluginComp'
+import CommandPalette from './components/CommandPalette.vue'
 
 export default {
     name: 'App',
@@ -53,7 +54,8 @@ export default {
         ZenMode,
         ContextMenu,
         ItemAdd,
-        Notification
+        Notification,
+        CommandPalette
     },
     methods: {
         addFiles(evt) {
@@ -323,9 +325,15 @@ body {
     background: var(--back-bg);
     font-family: -apple-system, BlinkMacSystemFont, 'Inter', Arial, Helvetica, sans-serif !important;
     user-select: none;
+    
     -webkit-user-select: none;
     color-scheme: dark;
     height: 100vh;
+}
+
+::selection {
+    background: var(--hl-txt);
+    color: var(--text);
 }
 
 .bold-text body {

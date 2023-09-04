@@ -152,7 +152,7 @@ export default {
     background-color: var(--bg);
     z-index: 21;
     position: fixed;
-    //border: solid 2px var(--bd);
+    border: solid 1px var(--bd);
     opacity: 0;
 }
 

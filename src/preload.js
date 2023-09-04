@@ -1,7 +1,6 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 import {contextBridge, ipcRenderer} from 'electron'
-
 // this is temporary i know it's not good practice
 contextBridge.exposeInMainWorld('ipcRenderer', {
     invoke: async (channel, data) => {
@@ -18,5 +17,14 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 
 contextBridge.exposeInMainWorld('process', {
     platform: process.platform,
-    arch: process.arch
+    arch: process.arch,
+    versions: {
+        electron: process.versions.electron,
+        node: process.versions.node,
+        chrome: process.versions.chrome
+    }
+})
+
+contextBridge.exposeInMainWorld('os', {
+    version: async () => await ipcRenderer.invoke('os-version')
 })

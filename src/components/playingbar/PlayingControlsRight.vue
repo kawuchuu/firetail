@@ -165,7 +165,8 @@ export default {
 }
 
 .vol-bar-inner-container {
-    padding: 3px 15px;
+    padding: 3px 0px;
+    margin: 0px 15px;
     position: relative;
     z-index: 15;
     display: flex;
@@ -176,7 +177,7 @@ export default {
 .vol-bar {
     margin: 10px 0px;
     width: 120px;
-    background: #ffffff23;
+    background: var(--text-op);
     display: flex;
     align-items: center;
     border-radius: 999px;
