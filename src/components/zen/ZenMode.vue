@@ -96,10 +96,11 @@ export default {
     width: 100vw;
     height: 100vh;
     position: fixed;
-    z-index: 11;
+    z-index: 13;
     background: black;
     display: flex;
     align-items: flex-end;
+    color: white;
     //justify-content: center;
 }
 

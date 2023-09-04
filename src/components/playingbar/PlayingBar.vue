@@ -48,7 +48,7 @@ export default {
 .playing-bar {
     position: fixed;
     bottom: 0;
-    z-index: 12;
+    z-index: 13;
     width: 100vw;
     height: 85px;
     background-color: var(--fg-bg);

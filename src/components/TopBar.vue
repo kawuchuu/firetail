@@ -108,6 +108,7 @@ export default {
     pointer-events: none;
     background: var(--back-bg);
     -webkit-app-region: drag;
+    z-index: 12;
 }
 
 .top-bar .inner {

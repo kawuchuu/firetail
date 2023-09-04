@@ -32,7 +32,17 @@ html.light {
     }
 
     .bg-banner {
-        background-image: url('../assets/songs-banner-light.svg');
+        background-image: url('../assets/songs-banner.jpg');
+    }
+
+    .bg-banner, .special-gradient-bg-wrapper .bg-image {
+        filter: invert(1) hue-rotate(170deg);
+    }
+
+    .special-gradient-bg-wrapper .bg-image {
+        background: linear-gradient(transparent, transparent, #0c0c0c), radial-gradient(circle at top, transparent 40%, #0c0c0c), url(../assets/songs-banner.jpg);
+        background-size: cover;
+        background-position: center 80%;
     }
 
     .bg-gradient {
@@ -40,12 +50,7 @@ html.light {
     }
 
     .sticky-bg .bg-inner, .list-section.sticky {
-        background: none;
-    }
-
-    .sticky-bg.sticky {
-        background: #ffffff50 !important;
-        backdrop-filter: blur(20px);
+        background: var(--bg);
     }
 }
 

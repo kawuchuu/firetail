@@ -278,6 +278,7 @@ export default {
     .artist-inner {
         max-width: 80px;
         transition: 0.3s cubic-bezier(0, 1, 0.35, 1);
+        transition-property: max-width;
         //transition-delay: 0.2s;
     }
     .artists-list:hover {

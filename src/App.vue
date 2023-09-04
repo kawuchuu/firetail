@@ -204,7 +204,7 @@ html.dark {
     --back-bg: #0a0a0a;
     --bg: #131313;
     --text: #ffffff;
-    --text-op: #ffffff50;
+    --text-op: #ffffff3b;
     --fg-bg: #1e1e1e;
     --sub-fg: #0e0e0e;
     --bd: #3a3a3a;

@@ -159,7 +159,7 @@ export default {
     .switch {
         width: 45px;
         height: 14px;
-        background-color: #3d3d3d;
+        background-color: var(--text-op);
         border-radius: 50px;
         display: flex;
         align-items: center;

@@ -26,8 +26,8 @@ export default {
             progress: '0/0',
             progPer: 100,
             theClass: '',
-            title: 'blah blah blah',
-            message: "coolswag",
+            title: 'Hiiii',
+            message: "wahoo",
             icon: 'waving_hand'
         }
     },
