@@ -12,14 +12,9 @@ const startServer = async (appLoc, win) => {
         if (err) mkdirSync(`${appLoc}/images/`)
     })
     app.use(cors())
-    let staticRoot = resolve(__dirname, 'static')
+    let staticRoot = resolve(__dirname, 'static/main/')
     console.log(staticRoot)
-    if (process.env.NODE_ENV === 'development') {
-        staticRoot = resolve(__dirname, '../public/static')
-        app.use('/', express.static(staticRoot))
-    } else {
-        app.use('/', express.static(staticRoot))
-    }
+    app.use('/', express.static(staticRoot))
     app.use('/images', express.static(`${appLoc}/images/`))
     app.use(function(req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");
@@ -52,7 +47,7 @@ const startServer = async (appLoc, win) => {
     })
     app.get('/spconnect', (req, res) => {
         if (req.query.error) {
-            res.sendFile(staticRoot + '/spotifyconnect.html')
+            res.sendFile(staticRoot + '/spconnect/spotifyconnect.html')
             win.webContents.send('spotifyAuthFinish', {error: req.query.error})
             return;
         }
@@ -61,7 +56,7 @@ const startServer = async (appLoc, win) => {
             const code = req.query.code
             win.webContents.send('spotifyAuthFinish', {state: state, code: code})
         }
-        res.sendFile(staticRoot + '/spotifyconnect.html')
+        res.sendFile(staticRoot + '/spconnect/spotifyconnect.html')
     })
 }
 

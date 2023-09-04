@@ -325,9 +325,15 @@ body {
     background: var(--back-bg);
     font-family: -apple-system, BlinkMacSystemFont, 'Inter', Arial, Helvetica, sans-serif !important;
     user-select: none;
+    
     -webkit-user-select: none;
     color-scheme: dark;
     height: 100vh;
+}
+
+::selection {
+    background: var(--hl-txt);
+    color: var(--text);
 }
 
 .bold-text body {

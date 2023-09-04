@@ -265,7 +265,7 @@ export default {
 .text {
     margin-top: 10px;
     font-size: 12px;
-    color: var(--text-op);
+    opacity: 0.5;
 }
 
 .bold-text .subtitle, .bold-text .button {

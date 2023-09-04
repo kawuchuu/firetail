@@ -195,8 +195,8 @@ export default {
             } else return ''
         },
         albumType() {
-            if (this.list.length === 1) return 'Single'
-            else if (this.list.length <= 6) return 'EP'
+            if ((this.list.length >= 1 && this.list.length <= 3) || (this.totalDuration.total < 600 && this.list.length <= 6)) return 'Single'
+            else if (this.list.length <= 6 && this.totalDuration.total < 1800) return 'EP'
             else return 'Album'
         }
     },

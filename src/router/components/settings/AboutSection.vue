@@ -17,6 +17,9 @@
                 <p>Platform: {{platform}}</p>
                 <p>Platform version: {{platformVer}}</p>
                 <p>Architecture: {{arch}}</p>
+                <p>Electron: {{processVer.electron}}</p>
+                <p>Chromium: {{processVer.chrome}}</p>
+                <p>Node: {{processVer.node}}</p>
             </div>
         </div>
     </div>
@@ -33,6 +36,7 @@ export default {
             build: this.$store.state.nav.buildNum,
             arch: window.process.arch,
             platform: window.process.platform,
+            processVer: window.process.versions,
             platformVer: "unknown",
             isMoreOpen: false
         }
@@ -131,8 +135,8 @@ a {
     transition: 0.25s;
     transition-property: transform opacity;
     opacity: 0;
-    pointer-events: none;
     display: none;
+    user-select: text;
 }
 
 .advanced-info.show {

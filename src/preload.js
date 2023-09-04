@@ -17,7 +17,12 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 
 contextBridge.exposeInMainWorld('process', {
     platform: process.platform,
-    arch: process.arch
+    arch: process.arch,
+    versions: {
+        electron: process.versions.electron,
+        node: process.versions.node,
+        chrome: process.versions.chrome
+    }
 })
 
 contextBridge.exposeInMainWorld('os', {

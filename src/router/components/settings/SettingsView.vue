@@ -234,22 +234,22 @@ export default {
                 },
                 // TODO: actually add features to spotify integration that people would want to use
                 // for the time being, this feature will remain unused
-                /* {
+                {
                     type: 'subtitle',
                     id: 'subtitleSpotify',
-                    label: 'Spotify Integration'
+                    label: 'Integrations'
                 },
                 {
                     type: 'button',
                     id: 'connectSpotify',
-                    label: 'Connect your Spotify account for extra metadata features',
+                    label: 'Connect your Spotify account for additional metadata features',
                     btnLabel: 'Connect to Spotify',
                     customClass: 'spotify',
                     action(vue) {
                         vue.$store.commit('panel/updatePanelProps', {
                             topMsg: 'Spotify Integration'
                         })
-                        vue.$store.commit('panel/updatePanelComponent', 'SpotifyIntegration')
+                        vue.$store.commit('panel/updatePanelComponent', 'SpotifyIntegration.vue')
                         vue.$store.commit('panel/updateActive', true)
                     },
                     conditions: {
@@ -292,9 +292,36 @@ export default {
                 },
                 {
                     type: 'text',
-                    id: 'spotifyPrivacyWarning',
-                    message: `By using this feature, you agree to Spotify's privacy policy. You can opt-out by removing Firetail's access in your account settings.`
-                }, */
+                    id: 'spotifyDisclaimer',
+                    message: `By using this feature, you agree to Spotify's Terms and Conditions of Use and Privacy Policy. Some information about your Firetail library will be sent to Spotify in order to provide these features. You can opt-out at any time by removing the Firetail application in your Spotify account settings.`
+                },
+                {
+                    type: 'button',
+                    id: 'connectLastfm',
+                    label: 'Connect your Last.fm account to scrobble your listening activity',
+                    btnLabel: 'Connect to Last.fm',
+                    customClass: 'lastfm',
+                    /* action(vue) {
+                        vue.$store.commit('panel/updatePanelProps', {
+                            topMsg: 'Spotify Integration'
+                        })
+                        vue.$store.commit('panel/updatePanelComponent', 'SpotifyIntegration.vue')
+                        vue.$store.commit('panel/updateActive', true)
+                    }, */
+/*                     conditions: {
+                        show: {
+                            type: 'store',
+                            module: 'nav',
+                            state: 'isSpotifyConnected',
+                            onlyShow: false
+                        }
+                    } */
+                },
+                {
+                    type: 'text',
+                    id: 'lastfmDisclaimer',
+                    message: `By using this feature, you agree to Last.fm's Terms of Use and Privacy Policy. Your listening activity will be sent to Last.fm. You can opt-out at any time by removing the Firetail application in your Last.fm account settings.`
+                },
                 {
                     type: 'subtitle',
                     id: 'subtitleUpdates',
@@ -375,6 +402,11 @@ main {
 .spotify {
     --hl-txt: #1DB954;
     --hl-op: #1DB9541a;
+}
+
+.lastfm {
+    --hl-txt: #ff3a3a;
+    --hl-op: #ff3a3a1a;
 }
 
 .option-wrapper {
