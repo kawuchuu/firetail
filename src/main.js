@@ -39,8 +39,11 @@ const createWindow = () => {
       y: 17
     },
     frame: osType === 'darwin' || osType === 'win32' ? false : true,
-    backgroundColor: 'transparent',
     title: 'Firetail',
+    transparent: osType === 'darwin' ? true : false,
+    backgroundColor: '#00000000',
+    vibrancy: osType === 'darwin' ? 'sidebar' : null,
+    visualEffectState: 'active',
     webPreferences: {
       preload: path.join(__dirname, '../renderer/main_window/preload.js'),
       nodeIntegration: false,

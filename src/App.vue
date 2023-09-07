@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="" :class="platform" @dragover="changeDrag($event, true)">
+    <div id="app" class="" @dragover="changeDrag($event, true)">
         <input type="file" multiple accept="audio/*" id="addFiles" @change="addFiles" style="display: none;">
         <div class="drag-detail">
             <p id="dragInfo">Nothing selected</p>
@@ -105,8 +105,7 @@ export default {
         return {
             isDraggedOver: false,
             sidebarwidth: 225,
-            sidebarisResizing: false,
-            platform: process.platform
+            sidebarisResizing: false
         }
     },
     watch: {
@@ -191,6 +190,14 @@ export default {
         if (window.localStorage.getItem('lastPlayed')) {
             this.$store.dispatch('audio/resumeState')
         }
+        if (window.localStorage.getItem('vibrancy')) {
+            const isVibrancyEnabled = window.localStorage.getItem('vibrancy')
+            if (isVibrancyEnabled) document.documentElement.classList.add('vibrancy')
+        } else {
+            window.localStorage.setItem('vibrancy', 'true')
+            document.documentElement.classList.add('vibrancy')
+        }
+        document.documentElement.classList.add(process.platform)
     }
 }
 </script>
@@ -240,7 +247,7 @@ html.light {
 
 .sidebar-resizer {
     width: 10px;
-    height: 100%;
+    height: calc(100% - 85px);
     position: absolute;
     left: calc(var(--sidebar-width) - 5px);
     z-index: 2;
@@ -347,7 +354,6 @@ a {
 
 ::-webkit-scrollbar {
     width: 16px !important;
-    //background: var(--bg);
     -webkit-app-region: no-drag;
 }
 
@@ -408,7 +414,7 @@ a {
     border-radius: 5px;
     max-width: 280px;
     pointer-events: none;
-    left: 280px;
+    left: 400px;
     top: 150px;
 
     p {

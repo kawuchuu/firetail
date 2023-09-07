@@ -54,7 +54,7 @@ export default {
     background-color: var(--fg-bg);
     border-top: solid 1px var(--mono-bd);
     box-sizing: border-box;
-    box-shadow: 0px -1px 5px rgba(0, 0, 0, .15);
+    /* box-shadow: 0px -1px 5px rgba(0, 0, 0, .15); */
     display: flex;
     align-items: center;
     transition: 0.25s;
