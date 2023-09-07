@@ -192,7 +192,7 @@ export default {
         }
         if (window.localStorage.getItem('vibrancy')) {
             const isVibrancyEnabled = window.localStorage.getItem('vibrancy')
-            if (isVibrancyEnabled) document.documentElement.classList.add('vibrancy')
+            if (isVibrancyEnabled == 'true') document.documentElement.classList.add('vibrancy')
         } else {
             window.localStorage.setItem('vibrancy', 'true')
             document.documentElement.classList.add('vibrancy')

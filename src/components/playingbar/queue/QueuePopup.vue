@@ -1,10 +1,39 @@
 <template>
     <div class="popup queue">
         <div class="queue-inner">
-            <span>Queue will go here</span>
+            <virtual-list
+                :data-key="'id'"
+                :data-sources="queue"
+                :data-component="sQueue"
+                :page-mode="true"
+                :page-mode-el="'.queue-inner'"
+            />
+            <span v-if="remainingQueueLength > 70" class="more">...and {{ remainingQueueLength - 70 }} more songs</span>
         </div>
     </div>
 </template>
+
+<script>
+import QueueItem from './QueueItem.vue'
+import { mapState } from 'vuex'
+
+export default {
+    components: {
+        QueueItem
+    },
+    data() {
+        return {
+            sQueue: QueueItem,
+        }
+    },
+    computed: {
+        ...mapState('audio', {
+            queue: state => state.queue.slice(state.currentSongIndex, state.currentSongIndex + 70),
+            remainingQueueLength: state => state.queue.slice(state.currentSongIndex).length
+        })
+    }
+}
+</script>
 
 <style lang="scss" scoped>
 .popup {
@@ -39,7 +68,7 @@
 
 .popup.active {
     opacity: 1;
-    transform: translate(-228px, -315px) scale(1) !important;
+    transform: translate(-198px, -315px) scale(1) !important;
     pointer-events: all;
 }
 
@@ -55,6 +84,13 @@
         border-radius: 20px;
         position: relative;
         z-index: 2;
+        overflow: hidden;
+        overflow-y: auto;
+
+        .more {
+            font-size: 0.9em;
+            padding: 15px 0px 10px 15px;
+        }
     }
 }
 </style>

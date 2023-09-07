@@ -78,6 +78,7 @@ export default {
 
     span {
         font-size: 0.95em;
+        margin-left: 6px;
     }
 
     .album-artist {
@@ -96,8 +97,7 @@ export default {
 .album-img, .artist-img {
     min-width: 45px;
     min-height: 45px;
-    margin-right: 18px;
-    margin-left: 18px;
+    margin: 0px 9px;
     background-color: var(--back-bg);
     border-radius: 3px;
     background-image: url('../../assets/no_album.svg');

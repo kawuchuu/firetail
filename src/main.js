@@ -27,7 +27,7 @@ if (require('electron-squirrel-startup')) {
 const createWindow = () => {
   // Create the browser window.
   const osType = process.platform
-  const mainWindow = new BrowserWindow({
+  const mainWindowConfig = {
     width: 1350,
     height: 815,
     minWidth: 750,
@@ -57,7 +57,14 @@ const createWindow = () => {
       color: '#000000',
       symbolColor: '#ffffff'
     }
-  });
+  }
+
+  if (osType === 'darwin' && app.commandLine.hasSwitch('disable-vibrancy')) {
+    mainWindowConfig.transparent = false
+    mainWindowConfig.vibrancy = null
+  }
+
+  const mainWindow = new BrowserWindow(mainWindowConfig)
 
   //lock app
   if ((app.isPackaged && !app.commandLine.hasSwitch('disable-instance-lock')) || app.commandLine.hasSwitch('enable-instance-lock')) {
