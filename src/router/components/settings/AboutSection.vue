@@ -74,9 +74,9 @@ export default {
 
 <style lang="scss" scoped>
 img {
-    width: 108px;
-    height: 108px;
-    margin-right: 35px;
+    width: 90px;
+    height: 90px;
+    margin-right: 30px;
     aspect-ratio: 1 / 1;
 }
 .about {
@@ -88,6 +88,7 @@ h1 {
     margin: 0px 0px 10px;
     letter-spacing: -0.02em;
     font-weight: 600;
+    font-size: 1.8em;
 }
 
 .darwin h1 {

@@ -111,11 +111,11 @@ export default {
 
 <style lang="scss">
 .subtitle {
-    font-size: 1.6em;
+    font-size: 1.45em;
     font-weight: 600;
     border-bottom: solid 1px var(--bd);
-    padding-bottom: 15px;
-    margin: 30px 0px 20px;
+    padding-bottom: 10px;
+    margin: 24px 0px 12px;
     letter-spacing: -0.02em;
 }
 

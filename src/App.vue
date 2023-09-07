@@ -133,7 +133,7 @@ export default {
             window.localStorage.setItem('sidebarwidth', 225)
         }
         const theme = window.localStorage.getItem('theme')
-        if (!theme) window.localStorage.setItem('theme', 'system')
+        if (!theme) window.localStorage.setItem('theme', 'dark')
         if (theme === 'light') {
             document.documentElement.classList.remove('dark')
             document.documentElement.classList.add('light')

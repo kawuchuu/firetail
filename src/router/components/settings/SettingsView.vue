@@ -142,7 +142,8 @@ export default {
                     id: 'subtitleAppearance',
                     label: this.$t('SETTINGS.SUBTITLES.APPEARANCE')
                 },
-                {
+                // i think this will be left until after 1.0.0 releases
+                /* {
                     type: 'dropdown',
                     id: 'altThemeDropdown',
                     label: this.$t('SETTINGS.APP_THEME'),
@@ -151,7 +152,7 @@ export default {
                     onChange(vue, option) {
                         window.localStorage.setItem('altTheme', option.toLowerCase())
                     }
-                },
+                }, */
                 {
                     type: 'dropdown',
                     id: 'themeDropdown',
@@ -434,7 +435,7 @@ main {
 }
 
 .top-title h1 {
-    font-size: 3.75em;
+    font-size: 3.5em;
     margin: 0;
     letter-spacing: -0.04em;
 }
