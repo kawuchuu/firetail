@@ -161,14 +161,25 @@ export default {
                     option: window.localStorage.getItem('theme'),
                     onChange(vue, option) {
                         window.localStorage.setItem('theme', option.toLowerCase())
+                        // this manual setting of colour for the title bar is temporary :)
                         switch(option) {
                             case 'Light':
                                 document.documentElement.classList.remove('dark')
                                 document.documentElement.classList.add('light')
+                                window.ipcRenderer.send('colour-theme-change', {
+                                    bg: '#dfdfdf',
+                                    fg: '#242424',
+                                    blurFg: '#24242480'
+                                })
                                 break
                             case 'Dark':
                                 document.documentElement.classList.remove('light')
                                 document.documentElement.classList.add('dark')
+                                window.ipcRenderer.send('colour-theme-change', {
+                                    bg: '#000000',
+                                    fg: '#ffffff',
+                                    blurFg: '#ffffff80'
+                                })
                                 break
                             case 'System':
                                 if (window.matchMedia("(prefers-color-scheme: light").matches) {
@@ -178,6 +189,11 @@ export default {
                                     document.documentElement.classList.remove('light')
                                     document.documentElement.classList.add('dark')
                                 }
+                                window.ipcRenderer.send('colour-theme-change', {
+                                    bg: '#000000',
+                                    fg: '#ffffff',
+                                    blurFg: '#ffffff80'
+                                })
                                 break
                             default:
                                 window.localStorage.setItem('theme', 'system')
@@ -188,6 +204,11 @@ export default {
                                     document.documentElement.classList.remove('light')
                                     document.documentElement.classList.add('dark')
                                 }
+                                window.ipcRenderer.send('colour-theme-change', {
+                                    bg: '#000000',
+                                    fg: '#ffffff',
+                                    blurFg: '#ffffff80'
+                                })
                         }
                     }
                 },

@@ -151,6 +151,13 @@ export default {
                 document.documentElement.classList.remove('light')
             }
         }
+        if (theme === 'light') {
+            window.ipcRenderer.send('colour-theme-change', {
+                bg: '#dfdfdf',
+                fg: '#242424',
+                blurFg: '#24242480'
+            })
+        }
         if (window.localStorage.getItem('highContrast') == 'true') {
             document.documentElement.classList.add('high-contrast')
         } else if (await window.ipcRenderer.invoke('isHighContrastEnabled')) {
@@ -224,7 +231,7 @@ html.dark {
 html.light {
     --back-bg: #dfdfdf;
     --bg: #f3f3f3;
-    --text: #242424;
+    --text: #000000;
     --text-op: #2424246c;
     --fg-bg: #ffffff;
     --sub-fg: #dadada;

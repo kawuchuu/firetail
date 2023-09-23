@@ -250,5 +250,17 @@ export default {
         ipcMain.handle('os-version', () => {
             return os.release()
         })
+
+        ipcMain.on('colour-theme-change', (event, colours) => {
+            win.currentThemeColours = colours
+            if (process.platform === 'win32') {
+                win.setTitleBarOverlay({
+                    height: 44,
+                    width: 150,
+                    color: colours.bg,
+                    symbolColor: colours.fg
+                })
+            }
+        })
     }
 }

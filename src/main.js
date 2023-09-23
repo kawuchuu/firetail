@@ -43,6 +43,8 @@ const createWindow = () => {
     transparent: osType === 'darwin' ? true : false,
     backgroundColor: '#00000000',
     vibrancy: osType === 'darwin' ? 'sidebar' : null,
+    // this doesn't appear to be working?
+    backgroundMaterial: osType === 'win32' ? 'mica' : 'none',
     visualEffectState: 'active',
     webPreferences: {
       preload: path.join(__dirname, '../renderer/main_window/preload.js'),
@@ -65,6 +67,12 @@ const createWindow = () => {
   }
 
   const mainWindow = new BrowserWindow(mainWindowConfig)
+
+  mainWindow.currentThemeColours = {
+    bg: '#000000',
+    fg: '#ffffff',
+    blurFg: '#ffffff80'
+  }
 
   //lock app
   if ((app.isPackaged && !app.commandLine.hasSwitch('disable-instance-lock')) || app.commandLine.hasSwitch('enable-instance-lock')) {
@@ -381,8 +389,8 @@ const createWindow = () => {
       mainWindow.setTitleBarOverlay({
         height: 44,
         width: 150,
-        color: '#000000',
-        symbolColor: '#ffffff80'
+        color: mainWindow.currentThemeColours.bg,
+        symbolColor: mainWindow.currentThemeColours.blurFg
       })
     }
   })
@@ -392,8 +400,8 @@ const createWindow = () => {
       mainWindow.setTitleBarOverlay({
         height: 44,
         width: 150,
-        color: '#000000',
-        symbolColor: '#ffffff'
+        color: mainWindow.currentThemeColours.bg,
+        symbolColor: mainWindow.currentThemeColours.fg
       })
     }
   })
