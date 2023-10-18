@@ -88,7 +88,7 @@ export default {
     background: var(--back-bg);
     position: absolute;
     top: -8px;
-    right: 18px;
+    left: 44px;
     border: solid 1px var(--bd);
     border-radius: 2px;
     box-shadow: 0px 5px 10px rgba(0,0,0,.15);
@@ -97,7 +97,7 @@ export default {
 
 .popup.active {
     opacity: 1;
-    transform: translate(-55px, 20px) scale(1) !important;
+    transform: translate(-25px, 20px) scale(1) !important;
     pointer-events: all;
 }
 

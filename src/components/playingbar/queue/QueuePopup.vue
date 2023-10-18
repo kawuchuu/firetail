@@ -8,7 +8,7 @@
                 :page-mode="true"
                 :page-mode-el="'.queue-inner'"
             />
-            <span v-if="remainingQueueLength > 70" class="more">...and {{ remainingQueueLength - 70 }} more songs</span>
+            <span v-if="remainingQueueLength > 40" class="more">...and {{ remainingQueueLength - 40 }} more songs</span>
         </div>
     </div>
 </template>
@@ -28,7 +28,7 @@ export default {
     },
     computed: {
         ...mapState('audio', {
-            queue: state => state.queue.slice(state.currentSongIndex, state.currentSongIndex + 70),
+            queue: state => state.queue.slice(state.currentSongIndex, state.currentSongIndex + 40),
             remainingQueueLength: state => state.queue.slice(state.currentSongIndex).length
         })
     }
@@ -59,7 +59,7 @@ export default {
     background: var(--back-bg);
     position: absolute;
     bottom: -8px;
-    right: 18px;
+    left: 124px;
     border: solid 1px var(--bd);
     border-radius: 2px;
     box-shadow: 0px 5px 10px rgba(0,0,0,.15);
@@ -68,12 +68,12 @@ export default {
 
 .popup.active {
     opacity: 1;
-    transform: translate(-198px, -315px) scale(1) !important;
+    transform: translate(-10px, -315px) scale(1) !important;
     pointer-events: all;
 }
 
 .popup.queue {
-    transform: translate(-80px, 0px) scale(0);
+    transform: translate(-40px, 0px) scale(0);
     width: 350px;
     height: 500px;
 

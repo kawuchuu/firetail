@@ -135,6 +135,8 @@ export default {
                 }
             },
             parallax: state => {
+                const performance = window.localStorage.getItem('performance')
+                if (performance == 'true') return ''
                 return `transform: translateY(${state.scrolled / 2.5}px);`
             }
         }),

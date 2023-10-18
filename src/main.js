@@ -40,9 +40,9 @@ const createWindow = () => {
     },
     frame: osType === 'darwin' || osType === 'win32' ? false : true,
     title: 'Firetail',
-    transparent: osType === 'darwin' ? true : false,
+    transparent: false,
     backgroundColor: '#00000000',
-    vibrancy: osType === 'darwin' ? 'sidebar' : null,
+    vibrancy: null,
     // this doesn't appear to be working?
     backgroundMaterial: osType === 'win32' ? 'mica' : 'none',
     visualEffectState: 'active',
@@ -61,9 +61,9 @@ const createWindow = () => {
     }
   }
 
-  if (osType === 'darwin' && app.commandLine.hasSwitch('disable-vibrancy')) {
-    mainWindowConfig.transparent = false
-    mainWindowConfig.vibrancy = null
+  if (osType === 'darwin' && app.commandLine.hasSwitch('enable-vibrancy')) {
+    mainWindowConfig.transparent = true
+    mainWindowConfig.vibrancy = 'sidebar'
   }
 
   const mainWindow = new BrowserWindow(mainWindowConfig)
