@@ -136,6 +136,7 @@ export default {
     align-items: center;
     justify-content: flex-end;
     padding: 0 15px;
+    position: relative;
 
     i {
         font-size: 22px;

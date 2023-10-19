@@ -1,6 +1,5 @@
 <template>
     <div class="song-info">
-        <div class="colour-bg" :style="getColour" :class="$store.state.nav.colourBarEnabled ? '' : 'hide'"></div>
         <div class="popup large-album-art" :class="hoverShow" >
             <div class="inner" :style="getImage"></div>
         </div>
@@ -80,7 +79,7 @@ export default {
         getColour() {
             let colour = this.$store.state.nav.playingBarColour
             if (colour == null) return ''
-            return `background-color: ${colour}`
+            return `background: radial-gradient(farthest-corner at bottom left, var(--fg-bg), transparent 60%), radial-gradient(farthest-corner at bottom left, ${colour}, transparent 60%)`
         },
         favouriteIcon() {
             if (this.$store.state.nav.favouriteSongs.indexOf(this.$store.state.audio.currentSong) != -1) {
@@ -285,10 +284,10 @@ export default {
 .colour-bg {
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: 500px;
     z-index: -1;
     transform: translateX(-15px);
-    opacity: 0.2;
+    opacity: 0.5;
     transition: .8s;
     left: 15px;
     filter: saturate(0.8);

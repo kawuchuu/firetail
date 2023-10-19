@@ -44,7 +44,7 @@ export default {
 .side-bar {
     width: var(--sidebar-width);
     height: calc(100vh - 86px);
-    background: var(--back-bg);
+    /* background: var(--back-bg); */
     z-index: 2;
 }
 
@@ -61,7 +61,7 @@ export default {
 }
 
 .side-bar-inner-container::-webkit-scrollbar {
-    background: var(--back-bg);
+    /* background: var(--back-bg); */
     width: 12px !important;
 }
 

@@ -29,6 +29,7 @@
             </div>
         </div>
         <PlayingBar/>
+        <BackgroundEffects/>
     </div>
 </template>
 
@@ -43,6 +44,7 @@ import ContextMenu from './components/ContextMenu.vue'
 import ItemAdd from './components/ItemAdd.vue'
 import Notification from './components/NotificationPopup.vue'
 import CommandPalette from './components/CommandPalette.vue'
+import BackgroundEffects from './components/BackgroundEffects.vue'
 
 export default {
     name: 'App',
@@ -55,7 +57,8 @@ export default {
         ContextMenu,
         ItemAdd,
         Notification,
-        CommandPalette
+        CommandPalette,
+        BackgroundEffects
     },
     methods: {
         addFiles(evt) {
@@ -212,6 +215,7 @@ export default {
 <style lang="scss">
 html {
     --main-border-radius: 10px 0px 0px;
+    --sidebar-width: 225px;
     --hl-txt: #1f88ff;
     --hl-op: #1f88ff2a;
 }
@@ -220,7 +224,7 @@ html.dark {
     --back-bg: #0a0a0a;
     --bg: #131313;
     --text: #ffffff;
-    --text-op: #ffffff3b;
+    --text-op: #ffffff2f;
     --fg-bg: #1e1e1e;
     --sub-fg: #0e0e0e;
     --bd: #3a3a3a;
@@ -246,7 +250,6 @@ html.light {
 }
 
 .main-content-wrapper {
-    --sidebar-width: 225px;
     display: grid;
     grid-template-columns: var(--sidebar-width) 0px 1fr;
     height: 100%;

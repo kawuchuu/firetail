@@ -38,6 +38,7 @@ export default {
 <style lang="scss" scoped>
 .popup {
     position: fixed;
+    z-index: 15;
     width: auto;
     height: 300px;
     background: var(--back-bg);
