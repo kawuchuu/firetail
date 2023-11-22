@@ -28,7 +28,6 @@ export default {
                     this.$store.commit('panel/updateActive', false)
                 }
                 if (getComp == 'None') {
-                    console.log('contains nothing so yeah')
                     return undefined
                 }
                 let comp
@@ -64,9 +63,6 @@ export default {
     methods: {
         hidePanel() {
             this.$store.commit('panel/updateActive', false)
-        },
-        escHide(evt) {
-            console.log(evt)
         }
     }
 }

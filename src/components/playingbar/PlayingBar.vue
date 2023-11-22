@@ -54,11 +54,14 @@ export default {
     border-top: solid 1px var(--mono-bd);
     box-sizing: border-box;
     /* box-shadow: 0px -1px 5px rgba(0, 0, 0, .15); */
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 50% 1fr;
+    gap: 15px;
     align-items: center;
     transition: 0.25s;
     transition-property: transform;
     transform: translateY(0px);
+    padding: 0px 15px;
 }
 
 .playing-bar.hidden {

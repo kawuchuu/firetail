@@ -20,7 +20,6 @@ Vue.use(AsyncComputed)
 router.replace({ path: '/songs', query: { view: 'all' } })
 
 window.ipcRenderer.receive('library', (event, library) => {
-    console.log(library)
     store.commit('audio/updateCurrentList', library[0])
     window.ipcRenderer.send('getAllFromColumn', 'artist')
     window.ipcRenderer.send('getAllFromColumnWithArtist')
@@ -129,7 +128,6 @@ const arrowChangeTime = direction => {
 
 window.ipcRenderer.receive('updateHighContrast', (evt, enabled) => {
     window.localStorage.setItem('highContrast', enabled)
-    console.log('highcontrast: ' + enabled)
     store.commit('nav/updateHighContrast', enabled)
     enabled ? document.documentElement.classList.add('high-contrast') : document.documentElement.classList.remove('high-contrast')
 })

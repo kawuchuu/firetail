@@ -46,7 +46,6 @@ export default {
         },
         async delete() {
             const newPlaylists = await window.ipcRenderer.invoke('deletePlaylist', this.playlist.id)
-            console.log(newPlaylists)
             this.$store.commit('playlist/setPlaylists', newPlaylists)
         },
         async openEditDialog() {
@@ -80,7 +79,6 @@ export default {
             const playlist = await window.ipcRenderer.invoke('getSpecificPlaylist', this.playlist.id)
             const songIds = JSON.parse(playlist[0].songIds)
             const currentLength = songIds.length
-            console.log(songs)
             songs.forEach((song, index) => {
                 songIds.push({
                     id: song.id,

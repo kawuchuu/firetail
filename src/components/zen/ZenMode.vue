@@ -13,7 +13,6 @@
 </template>
 
 <script>
-//import * as Vibrant from 'node-vibrant'
 import { mapState } from 'vuex'
 
 export default {
@@ -44,18 +43,13 @@ export default {
                     if (song.id == 'customSong') {
                         artistAlbum = song.customImage
                     } else {
-                        artistAlbum = `http://localhost:${port}/images/${(song.artist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
+                        artistAlbum = `http://localhost:${port}/images/${(song.albumArtist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
                     }
-                    /* Vibrant.from(artistAlbum).getPalette((err, palette) => {
-                        this.$store.commit('nav/updatePlayingBarColour', palette.Vibrant.hex)
-                    }) */
                     return `background-image: url('${artistAlbum}')`
                 } else {
-                    this.$store.commit('nav/updatePlayingBarColour', null)
                     return ''
                 }
             } else {
-                this.$store.commit('nav/updatePlayingBarColour', null)
                 return ''
             }
         },

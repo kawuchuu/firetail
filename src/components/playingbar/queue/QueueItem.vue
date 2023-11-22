@@ -15,7 +15,7 @@ export default {
     methods: {
         getImg(artist, album) {
             const port = this.$store.state.nav.port
-            return `http://localhost:${port}/images/${encodeURIComponent(artist + album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
+            return `http://localhost:${port}/images/${(artist + album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
         }
     }
 }

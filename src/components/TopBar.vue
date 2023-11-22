@@ -61,7 +61,6 @@ export default {
         },
         closeSearch() {
             this.showSearch = false
-            console.log('is it doing it??????????????')
         },
         async typingSearch() {
             if (this.searchInput === '') return this.searchOutput = null

@@ -2,11 +2,11 @@
     <div class="side-bar" :class="platformType">
         <div class="side-bar-inner-container">
             <div class="nav-buttons" :class="platformType">
-                <div class="app-info">
+                <!-- <div class="app-info">
                     <div class="firetail-icon"/>
                     <div class="app-name">{{ $t('APP_NAME') }}</div>
                     <div class="beta-tag">Beta</div>
-                </div>
+                </div> -->
                 <SideButtons v-for="item in getNavs" v-bind:button="item" v-bind:key="item.id"></SideButtons>
                 <SidePlaylists v-for="item in playlists" :playlist="item" :key="item.id" />
             </div>
@@ -168,13 +168,17 @@ export default {
     font-size: 15px;
     opacity: .75;
     //text-transform: uppercase;
-    margin: 30px 0 5px 16px;
+    margin: 22px 0 5px 16px;
     padding-bottom: 10px;
     padding-left: 15px;
     border-bottom: 1px solid var(--text);
     transform: translateX(-15px);
     width: calc(100% - 17px);
 }
+
+/* .list-subtitle:first-of-type {
+    margin-top: 6px !important;
+} */
 
 .firetail-icon {
     width: 35px;

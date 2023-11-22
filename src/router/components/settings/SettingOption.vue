@@ -263,7 +263,7 @@ export default {
 }
 
 .text {
-    margin-top: 10px;
+    margin-top: 0px;
     font-size: 12px;
     opacity: 0.5;
 }

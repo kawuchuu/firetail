@@ -12,7 +12,7 @@
                 <!-- <div ref="hoverIndicate" class="vol-hover-indicate">{{ hoverIndicateNum }}</div> -->
             </div>
         </div>
-        <i @click="enterExitZen" class="ft-icon">expand</i>
+        <i @click="enterExitZen" class="ft-icon">{{ fullscreenIcon }}</i>
     </div>
 </template>
 
@@ -50,8 +50,10 @@ export default {
                 }
             }
         }),
+        fullscreenIcon() {
+            return this.$store.state.nav.fullscreen ? 'decrease' : 'expand'
+        },
         active() {
-            console.log('what')
             return this.showQueue ? 'active' : ''
         }
     },
@@ -131,11 +133,10 @@ export default {
 <style lang="scss" scoped>
 .right-controls {
     height: 100%;
-    width: 25%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 0 15px;
     position: relative;
 
     i {
