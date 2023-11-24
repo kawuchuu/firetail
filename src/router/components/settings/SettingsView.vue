@@ -254,7 +254,7 @@ export default {
                         enabled ? document.documentElement.classList.add('performance') : document.documentElement.classList.remove('performance')
                     }
                 },
-                {
+/*                 {
                     type: 'switch',
                     id: 'macosVibrancySwitch',
                     label: 'Use transparency effects on macOS',
@@ -263,7 +263,7 @@ export default {
                         window.localStorage.setItem('vibrancy', enabled)
                         enabled ? document.documentElement.classList.add('vibrancy') : document.documentElement.classList.remove('vibrancy')
                     }
-                },
+                }, */
                 // TODO: actually add features to spotify integration that people would want to use
                 // for the time being, this feature will remain unused
                 {

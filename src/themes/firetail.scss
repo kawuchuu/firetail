@@ -72,12 +72,6 @@ html {
     border-top: none !important;
 }
 
-.darwin {
-    .panel-container {
-        backdrop-filter: none !important;
-    }
-}
-
 .light.vibrancy {
     html, body, .side-bar, .top-bar, .side-bar-inner-container::-webkit-scrollbar {
         background: transparent !important;

@@ -137,6 +137,8 @@ export default {
             parallax: state => {
                 const performance = window.localStorage.getItem('performance')
                 if (performance == 'true') return ''
+                // helps prevent it jumping around too much when scrolling fast
+                else if (state.scrolled > 550) return ''
                 return `transform: translateY(${state.scrolled / 2.5}px);`
             }
         }),

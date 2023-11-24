@@ -2,8 +2,11 @@ import sort from '../../modules/sort.js'
 import store from '../index.js'
 import tr from '../../translation'
 import {bus} from '../../renderer.js'
+import AudioPlayer from '../../modules/audio.js';
 
 let audio = new Audio();
+
+const audioPlayer = new AudioPlayer()
 
 const state = () => ({
     paused: true,
@@ -261,6 +264,7 @@ const actions = {
         }
         updateLocal = 0
         updateMediaSession(song)
+        //audioPlayer.playSong(song)
     },
     removeTimeUpdate() {
         audio.removeEventListener('timeupdate', timeUpdate)

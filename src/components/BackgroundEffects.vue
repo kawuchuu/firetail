@@ -49,7 +49,7 @@ export default {
     width: calc(100vw - var(--sidebar-width));
     margin-left: var(--sidebar-width);
     margin-top: 44px;
-    box-shadow: 0px 0px 64px var(--back-bg);
+    box-shadow: 0px 0px 64px var(--back-bg), -2px 2px 30px var(--back-bg);
     border-radius: var(--main-border-radius);
     opacity: 0.6;
 }

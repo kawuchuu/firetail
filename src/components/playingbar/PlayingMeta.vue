@@ -1,7 +1,7 @@
 <template>
     <div class="song-info">
         <div class="popup large-album-art" :class="hoverShow" >
-            <div class="inner" :style="getImage"></div>
+            <div class="inner" :style="getImageBg"></div>
         </div>
         <div v-if="currentSong" class="popup codec-info" :class="[showMoreInfo, showAdvancedFileInfo]">
             <div class="info">
@@ -20,7 +20,7 @@
             </div>
         </div>
         <router-link :to="viewLink">
-            <div class="song-album-art" :style="getImage" @mouseover="hoverImage" @mouseleave="leaveImage"></div>
+            <div class="song-album-art" :style="getImageBg" @mouseover="hoverImage" @mouseleave="leaveImage"></div>
         </router-link>
         <div v-if="currentSong" class="title-artist" @mouseover="hoverCodec" @mouseleave="leaveCodec">
             <router-link :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(currentSong.album)}&view=album_${encodeURIComponent(currentSong.albumArtist + currentSong.album)}&albumArtist=${encodeURIComponent(currentSong.albumArtist)}`" class="song-title">{{title}}<div v-if="currentSong.explicit" class="explicit"><span>E</span></div></router-link>
@@ -31,12 +31,14 @@
             <span class="song-artist">{{artist}}</span>
         </div>
         <i class="ft-icon favourite-icon" :class="[isFavourite, isInLibrary]" @click="handleFavourite">{{ favouriteIcon }}</i>
+        <img :src="getImage()" :ref="'albumArt'" class="hidden-img" crossorigin="anonymous" />
     </div>
 </template>
 
 <script>
 import {mapState} from 'vuex'
 import * as Vibrant from 'node-vibrant'
+import ColorThief from 'colorthief/dist/color-thief.mjs'
 
 export default {
     computed: {
@@ -52,29 +54,10 @@ export default {
                 }
             }
         }),
-        getImage() {
-            let song = this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex]
-            if (song) {
-                let port = this.$store.state.nav.port
-                if (song.hasImage == 1) {
-                    let artistAlbum = ''
-                    if (song.id == 'customSong') {
-                        artistAlbum = song.customImage
-                    } else {
-                        artistAlbum = `http://localhost:${port}/images/${(song.albumArtist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
-                    }
-                    Vibrant.from(artistAlbum).getPalette((err, palette) => {
-                        this.$store.commit('nav/updatePlayingBarColour', palette.DarkMuted.hex)
-                    })
-                    return `background-image: url('${artistAlbum}')`
-                } else {
-                    this.$store.commit('nav/updatePlayingBarColour', null)
-                    return ''
-                }
-            } else {
-                this.$store.commit('nav/updatePlayingBarColour', null)
-                return ''
-            }
+        getImageBg() {
+            const image = this.getImage()
+            if (image && image !== '') return `background-image: url('${image}')`
+            else return ''
         },
         getColour() {
             let colour = this.$store.state.nav.playingBarColour
@@ -163,18 +146,50 @@ export default {
         },
         leaveCodec() {
             this.showCodecInfo = false
-        }
+        },
+        getImage() {
+            let song = this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex]
+            if (song) {
+                let port = this.$store.state.nav.port
+                if (song.hasImage == 1) {
+                    let artistAlbum = ''
+                    if (song.id == 'customSong') {
+                        artistAlbum = song.customImage
+                    } else {
+                        artistAlbum = `http://localhost:${port}/images/${(song.albumArtist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
+                    }
+                    return artistAlbum
+                } else {
+                    return ''
+                }
+            } else {
+                return ''
+            }
+        },
     },
     data() {
         return {
             showLargeImage: false,
             showCodecInfo: false,
-            advancedFileInfo: {}
+            advancedFileInfo: {},
+            colorThief: new ColorThief()
         }
     },
     watch: {
         async title() {
             this.advancedFileInfo = await window.ipcRenderer.invoke('getAdvancedFileInfo', this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex].path)
+        }
+    },
+    mounted() {
+        const albumArt = this.$refs.albumArt
+        if (albumArt && albumArt.complete) {
+            const promColour = this.colorThief.getColor(albumArt)
+            this.$store.commit('nav/updatePlayingBarColour', `rgb(${promColour[0]},${promColour[1]},${promColour[2]})`)
+        } else {
+            albumArt.addEventListener('load', () => {
+                const promColour = this.colorThief.getColor(albumArt)
+                this.$store.commit('nav/updatePlayingBarColour', `rgb(${promColour[0]},${promColour[1]},${promColour[2]})`)
+            })
         }
     }
 }
@@ -445,6 +460,14 @@ export default {
     align-items: center;
     margin-left: 8px;
     opacity: 0.5;
+}
+
+.hidden-img {
+    opacity: 0.001;
+    pointer-events: none;
+    position: absolute;
+    width: 32px;
+    height: 32px;
 }
 
 .large-album-art.hover-noimg {

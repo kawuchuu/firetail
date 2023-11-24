@@ -1,15 +1,13 @@
 <template>
     <div class="popup queue">
-        <div class="queue-inner">
-            <virtual-list
+        <!-- <div class="queue-inner"> -->
+            <virtual-list class="queue-inner"
                 :data-key="'id'"
                 :data-sources="queue"
                 :data-component="sQueue"
-                :page-mode="true"
-                :page-mode-el="'.queue-inner'"
             />
-            <span v-if="remainingQueueLength > 40" class="more">...and {{ remainingQueueLength - 40 }} more songs</span>
-        </div>
+            <!-- <span v-if="remainingQueueLength > 40" class="more">...and {{ remainingQueueLength - 40 }} more songs</span> -->
+        <!-- </div> -->
     </div>
 </template>
 
