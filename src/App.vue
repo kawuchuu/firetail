@@ -67,7 +67,6 @@ export default {
                 if (!f.type.startsWith('audio')) return;
                 files.push([f.path,f.name])
             })
-            console.log(evt.target.files)
             window.ipcRenderer.send('addToLibrary', [files, this.$route.path])
         },
         changeDrag(evt, change) {
@@ -114,7 +113,7 @@ export default {
     watch: {
         sidebarwidth() {
             if (this.sidebarwidth < 185 || this.sidebarwidth > 350) return
-            this.$refs.mainContentWrapper.style.setProperty('--sidebar-width', `${this.sidebarwidth}px`)
+            document.documentElement.style.setProperty('--sidebar-width', `${this.sidebarwidth}px`)
         }
     },
     computed: {

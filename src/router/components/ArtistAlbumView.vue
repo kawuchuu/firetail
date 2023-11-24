@@ -83,10 +83,8 @@ export default {
         $route(to, from) {
             if (to.path == '/albums' && from.path == '/artists') {
                 this.$refs.albumList.scrollToOffset(0)
-                console.log('to albums')
             } else if (to.path == '/artists' && from.path == '/albums') {
                 this.$refs.artistList.scrollToOffset(0)
-                console.log('to artists')
             }
         }
     }

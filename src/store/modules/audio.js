@@ -72,10 +72,9 @@ const mutations = {
         state.currentSong = id
     },
     genNewQueue(state, songs) {
+        state.queue = songs
         if (state.shuffled) {
-            state.queue = sort.shuffle(songs)
-        } else {
-            state.queue = songs
+            this.commit('audio/doShuffle', true)
         }
         window.localStorage.setItem('currentQueue', JSON.stringify(state.queue))
         this.commit('nav/updatePlayingView', this.state.nav.currentView)
@@ -93,10 +92,10 @@ const mutations = {
         state.currentList = list
         this.commit('nav/updateScreenCountNum', list.length)
     },
-    doShuffle(state) {
+    doShuffle(state, onlyShuffle) {
         let queue = state.queue
         let currentSong = state.queue[state.currentSongIndex]
-        if (!state.shuffled) {
+        if (!state.shuffled || onlyShuffle) {
             state.queue = sort.shuffle(queue)
             state.shuffled = true
         } else {
@@ -105,14 +104,21 @@ const mutations = {
             state.shuffled = false
         }
         if (store.state.nav.currentView == store.state.nav.playingView) {
-            state.currentList = sort.sortArray(state.currentList, 'artist')
+            state.currentList = sort.sortArray(state.currentList, 'albumArtist')
         }
-        if (state.shuffled) {
+        if (state.shuffled || onlyShuffle) {
             let index = state.queue.indexOf(currentSong)
-            console.log(index)
             state.queue.splice(index, 1)
             state.queue.splice(0, 0, currentSong)
             state.currentSongIndex = 0
+        }
+        window.localStorage.setItem('isShuffled', state.shuffled)
+        window.localStorage.setItem('currentQueue', JSON.stringify(state.queue))
+        let lastPlayed = window.localStorage.getItem('lastPlayed')
+        if (lastPlayed) {
+            lastPlayed = JSON.parse(lastPlayed)
+            lastPlayed.songIndex = state.currentSongIndex
+            window.localStorage.setItem('lastPlayed', JSON.stringify(lastPlayed))
         }
     },
     toggleRepeat(state) {
@@ -169,7 +175,6 @@ const mutations = {
         state.preventSpacePause = option
     },
     notLoadingSongs(state) {
-        console.log("yep " + state.isLoadingSongs)
         state.isLoadingSongs = false
     },
     setCurrentListDur(state, duration) {
@@ -293,6 +298,8 @@ const actions = {
         store.dispatch('audio/playSong', lastPlayedInfo.song)
         context.state.currentSongIndex = lastPlayedInfo.songIndex
         audio.currentTime = window.localStorage.getItem('lastPlayTime')
+        const isShuffled = window.localStorage.getItem('isShuffled')
+        if (isShuffled && isShuffled == 'true') context.state.shuffled = true
     }
 }
 

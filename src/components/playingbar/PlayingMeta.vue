@@ -200,15 +200,17 @@ export default {
     display: flex;
     align-items: center;
     height: 100%;
-    width: 25%;
+    width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    padding: 0px 15px;
 }
 
 .title-artist {
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     margin-left: 15px;
 }
 
@@ -216,7 +218,7 @@ export default {
     min-width: 55px;
     min-height: 55px;
     left: 0;
-    border-radius: 2px;
+    border-radius: 4px;
     z-index: 2;
     background-image: url('../../assets/no_image.svg');
     background-color: var(--bg);
@@ -229,8 +231,6 @@ export default {
     font-size: 15px;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: flex;
-    align-items: center;
     line-height: 20px;
     white-space: nowrap;
     max-width: 350px;
@@ -252,7 +252,6 @@ export default {
     margin: 0;
     opacity: .75;
     font-size: 12px;
-    display: block;
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 15px;

@@ -67,7 +67,6 @@ export default {
                         explicit = result.value
                     }
                 }
-                console.log(meta.common)
                 let metaObj = {
                     title: meta.common.title ? meta.common.title : f[1],
                     artist: meta.common.artist ? meta.common.artist : 'Unknown Artist',

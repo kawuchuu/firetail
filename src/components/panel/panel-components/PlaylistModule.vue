@@ -42,7 +42,6 @@ export default {
             this.$store.commit('panel/updateActive', false)
         },
         async createOrEdit() {
-            console.log(this.name, this.desc)
             let playlists
             let buffer
             if (this.imageBlob) {

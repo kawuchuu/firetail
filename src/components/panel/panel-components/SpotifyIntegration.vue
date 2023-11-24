@@ -107,7 +107,6 @@ export default {
                 this.doShow(3, 1)
                 return
             }
-            console.log('now connecting to spotify wahoo')
             this.message = 'Requesting access tokens...'
             if (sessionStorage.getItem('temp-state') == args.state) {
                 const query = new URLSearchParams({

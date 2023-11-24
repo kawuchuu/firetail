@@ -3,7 +3,8 @@ import tr from '../../translation'
 import store from '..'
 
 const state = () => ({
-    navs: [{
+    navs: [
+    {
         icon: 'home',
         name: tr.t('SIDEBAR.HOME'),
         id: 'homeTab',

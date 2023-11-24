@@ -174,7 +174,6 @@ export default {
                     return this.$t('ROUTER.FAVOURITES')
                 }
                 default: {
-                    console.log('defaulting to songs')
                     return this.$t('ROUTER.ALL_SONGS')
                 }
             }
@@ -259,7 +258,6 @@ export default {
     },
     methods: {
         multiDrag(evt) {
-            console.log('doing multi drag LMAO')
             this.performingMultiDrag = true
             const songsToSelect = []
             this.selectedItems.forEach(songIndex => {

@@ -125,10 +125,10 @@ export default {
     },
     methods: {
         playSong(evt) {
-            console.log(this.selectedItems)
             if (evt && (evt.ctrlKey || evt.shiftKey)) return
             let currentList = []
             this.$store.state.audio.currentList.forEach(f => { currentList.push(f) })
+            this.$store.commit('audio/updateCurrentSong', currentList.indexOf(this.source))
             this.$store.commit('audio/genNewQueue', currentList)
             this.$store.dispatch('audio/playSong', this.source)
         },
@@ -208,7 +208,6 @@ export default {
             evt.preventDefault()
             if (this.$route.path != '/playlist') return
             let songs = evt.dataTransfer.getData('ftsong')
-            console.log(evt)
             if (songs === '') return
             songs = JSON.parse(songs)
             const playlist = await window.ipcRenderer.invoke('getSpecificPlaylist', this.$route.query.id)
@@ -220,22 +219,14 @@ export default {
             if (currentSong > ogPos) {
                 newStartPos = this.dragOverY >= 0 && this.dragOverY <= 21 ? currentSong + 1 : currentSong
             }
-            console.log(newStartPos)
-            console.log(songs[0])
             sortedPlaylistSongs.find(item => item.id == songs[0].id).position = newStartPos
             for (let i = 1; i < currentSong; i++) {
                 sortedPlaylistSongs[i].position = currentSong > ogPos ? sortedPlaylistSongs[i].position - 1 : sortedPlaylistSongs[i].position + 1
-                console.log(sortedPlaylistSongs[i])
-                console.log('down '+i)
             }
-            console.log('now doing up')
             for (let i = newStartPos + 1; i < sortedPlaylistSongs.length - 1; i++) {
                 sortedPlaylistSongs[i].position = currentSong > ogPos ? sortedPlaylistSongs[i].position + 1 : sortedPlaylistSongs[i].position - 1
-                console.log(sortedPlaylistSongs[i])
-                console.log('up '+i)
             }
             sortedPlaylistSongs = sort.sortArrayNum(sortedPlaylistSongs, 'position')
-            console.log(sortedPlaylistSongs)
             window.ipcRenderer.invoke('updatePlaylist', {
                 column: 'songids',
                 id: playlist[0].id,

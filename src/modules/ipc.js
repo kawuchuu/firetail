@@ -26,7 +26,6 @@ export default {
 
         ipcMain.on('getFavouriteSongs', async () => {
             let favouriteSongs = await db.getAllFavouriteSongs()
-            console.log(favouriteSongs)
             win.send('library', favouriteSongs)
         })
 
@@ -161,7 +160,6 @@ export default {
         })
 
         ipcMain.handle('updatePlaylist', (event, playlist) => {
-            console.log(playlist)
             return db.updatePlaylist(playlist.column, playlist.id, playlist.data)
         })
 
