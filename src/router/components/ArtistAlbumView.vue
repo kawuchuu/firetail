@@ -22,10 +22,11 @@
                         <h3 v-else>Albums</h3>
                     </div>
                 </div> -->
-                <div class="special-gradient-bg-wrapper" :style="paralax">
-                    <div class="bg-gradient" :style="imgBackground"></div>
+                <div class="special-gradient-bg-wrapper">
                     <div class="bg-gradient-layer"></div>
-                    <div class="bg-image" />
+                    <div class="bg-noise" />
+                    <div class="bg-gradient" :style="imgBackground"></div>
+                    <div class="bg-image" :style="paralax" />
                 </div>
                 <router-view></router-view>
                 <div class="bg-text" v-if="$store.state.audio.currentList.length == 0">
@@ -172,14 +173,14 @@ export default {
     height: 600px;
     background: linear-gradient(transparent, var(--bg)), radial-gradient(farthest-corner at 5% 10%, transparent 5%, var(--bg));
     top: 0;
-    z-index: -1;
+    z-index: 1;
 }
 
 .bg-image {
     width: 100%;
     height: 100%;
     max-height: 450px;
-    background: linear-gradient(transparent, transparent, var(--bg)), radial-gradient(circle at top, transparent 40%, var(--bg)), url('../../assets/songs-banner.jpg');
+    background: linear-gradient(transparent, transparent, var(--bg)), radial-gradient(circle at top, transparent 40%, var(--bg)), url('../../assets/songs-banner-new.png');
     background-size: cover;
     background-position: center 80%;
     z-index: -2;
@@ -194,6 +195,12 @@ export default {
     overflow: hidden;
     position: absolute;
     top: 0;
+}
+
+.special-gradient-bg-wrapper .bg-noise {
+  max-height: 600px;
+  z-index: 0;
+  background-size: 400px;
 }
 
 /* .sticky-bg {

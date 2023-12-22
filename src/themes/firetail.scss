@@ -14,8 +14,21 @@ html.dark {
     } */
 
     .bg-banner {
-        background-image: url('../assets/songs-banner.jpg');
+        background-image: url('../assets/songs-banner-new.png');
     }
+}
+
+.bg-noise {
+    width: 100%;
+    height: 100%;
+    max-height: 420px;
+    position: absolute;
+    background-image: url('../assets/noise.jpeg');
+    background-size: 612px 612px;
+    mix-blend-mode: overlay;
+    opacity: 0.3;
+    pointer-events: none;
+    filter: hue-rotate(90deg);
 }
 
 html.light {
@@ -32,7 +45,7 @@ html.light {
     } */
 
     .bg-banner {
-        background-image: url('../assets/songs-banner.jpg');
+        background-image: url('../assets/songs-banner-new.png');
     }
 
     .bg-banner, .special-gradient-bg-wrapper .bg-image {
@@ -40,7 +53,7 @@ html.light {
     }
 
     .special-gradient-bg-wrapper .bg-image {
-        background: linear-gradient(transparent, transparent, #0c0c0c), radial-gradient(circle at top, transparent 40%, #0c0c0c), url(../assets/songs-banner.jpg);
+        background: linear-gradient(transparent, transparent, #0c0c0c), radial-gradient(circle at top, transparent 40%, #0c0c0c), url(../assets/songs-banner-new.png);
         background-size: cover;
         background-position: center 80%;
     }

@@ -3,5 +3,5 @@
         <feTurbulence baseFrequency="0.75" stitchTiles="stitch" type="fractalNoise" />
         <feColorMatrix type="saturate" values="0" />
     </filter>
-    <path d="M0 0h300v300H0z" filter="url(#a)" opacity=".05" />
+    <path d="M0 0h300v300H0z" filter="url(#a)" opacity="1" />
 </svg>

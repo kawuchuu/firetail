@@ -1,6 +1,7 @@
 <template>
     <div id="app" class="" @dragover="changeDrag($event, true)">
-        <input type="file" multiple accept="audio/*" id="addFiles" @change="addFiles" style="display: none;">
+      <div class="noise"></div>
+      <input type="file" multiple accept="audio/*" id="addFiles" @change="addFiles" style="display: none;">
         <div class="drag-detail">
             <p id="dragInfo">Nothing selected</p>
         </div>
@@ -325,6 +326,18 @@ html.light {
     width: calc(100% - var(--sidebar-width));
     background: var(--bg);
     border-radius: var(--main-border-radius);
+}
+
+.noise {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-image: url('./assets/noise.jpeg');
+    background-size: 400px 400px;
+    mix-blend-mode: overlay;
+    opacity: 0.12;
+    z-index: 999999;
+    pointer-events: none;
 }
 
 #app {

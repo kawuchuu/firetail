@@ -1,20 +1,22 @@
 <template>
-    <div class="root-sl" :class="isSimple" v-show="list.length > 0 || $route.path == '/songs' || $route.path === '/playlist' || $route.path === '/liked'">
-        <div class="standard" v-if="$route.path == '/songs' || $route.path == '/playlist'">
-            <div v-if="$route.path == '/songs'" class="bg-gradient" :style="parallax">
+    <div class="root-sl" :class="isSimple" v-show="list.length > 0 || $route.path === '/songs' || $route.path === '/playlist' || $route.path === '/liked'">
+        <div class="standard" v-if="$route.path === '/songs' || $route.path === '/playlist'">
+            <div v-if="$route.path === '/songs'" class="bg-gradient">
                 <div class="list-gradient-fade" />
-                <div class="bg-banner"></div>
+                <div class="bg-fade-bottom" />
+                <div class="bg-noise" />
+                <div :style="parallax" class="bg-banner" />
             </div>
         </div>
         <div class="top-title" ref="topTitle">
-            <div v-if="$route.path == '/albums'" class="tab-album-art" :style="getAlbumImage"></div>
-            <div v-if="$route.path == '/artists'" class="tab-album-art" :style="getArtistImage"></div>
-            <div v-if="$route.path == '/playlist'" class="tab-album-art" :style="getPlaylistImage"></div>
+            <div v-if="$route.path === '/albums'" class="tab-album-art" :style="getAlbumImage"></div>
+            <div v-if="$route.path === '/artists'" class="tab-album-art" :style="getArtistImage"></div>
+            <div v-if="$route.path === '/playlist'" class="tab-album-art" :style="getPlaylistImage"></div>
             <div ref="topTitle" class="top-title-text">
-                <p v-if="$route.path == '/albums'" class="album-type">{{ albumType }}</p>
+                <p v-if="$route.path === '/albums'" class="album-type">{{ albumType }}</p>
                 <h1 ref="header" :style="topTitleSize" class="top-header" v-show="topTitleText !== ''">{{ topTitleText }}</h1>
                 <p v-if="$route.path === '/playlist' && playlist.desc">{{ playlist.desc }}</p>
-                <p v-if="$route.path == '/albums' && list[0]"><span v-if="list[0].albumArtist">{{ list[0].albumArtist }} • </span><span v-if="list[0].year">{{ list[0].year }} • </span>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
+                <p v-if="$route.path === '/albums' && list[0]"><span v-if="list[0].albumArtist">{{ list[0].albumArtist }} • </span><span v-if="list[0].year">{{ list[0].year }} • </span>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
                 <p v-else>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
             </div>
         </div>
@@ -29,16 +31,16 @@
                 </div>
                 <div class="list-section" :class="currentScroll">
                     <i class="ft-icon play-pause" style="visibility: hidden;">play</i>
-                    <div class="section" v-if="$route.path == '/albums'">
+                    <div class="section" v-if="$route.path === '/albums'">
                         <i class="ft-icon disc-num">albums</i>
                     </div>
-                    <div class="section" v-if="$route.path == '/albums'">
+                    <div class="section" v-if="$route.path === '/albums'">
                         <p class="track-num">#</p>
                     </div>
                         <div class="artist-title-album section">
                             <p class="list-title">{{ $t('SONG_LIST.LIST_TITLE') }}</p>
-                            <p v-if="$route.path == '/songs' || $route.path == '/playlist' || $route.path == '/liked'" class="list-artist">{{ $t('SONG_LIST.LIST_ARTIST') }}</p>
-                            <p v-if="$route.path == '/songs' || $route.path == '/playlist' || $route.path == '/liked'" class="list-album">{{ $t('SONG_LIST.LIST_ALBUM') }}</p>
+                            <p v-if="$route.path === '/songs' || $route.path === '/playlist' || $route.path === '/liked'" class="list-artist">{{ $t('SONG_LIST.LIST_ARTIST') }}</p>
+                            <p v-if="$route.path === '/songs' || $route.path === '/playlist' || $route.path === '/liked'" class="list-album">{{ $t('SONG_LIST.LIST_ALBUM') }}</p>
                             <i class="ft-icon favourite-icon" style="visibility: hidden">favourite</i>
                             <p class="list-duration"><i class="ft-icon">clock</i></p>
                         </div>
@@ -47,7 +49,7 @@
             </div>
             <p v-if="false">{{$route.path}} || {{$route.path === '/songs' || $route.path === '/playlist'}} || {{ $route.path !== '/songs' || $route.path !== '/playlist' }}</p>
             <div class="wrapper">
-                <p v-if="list.length == 0 && !$store.state.audio.isLoadingSongs && $route.path === '/songs'" style="margin-left: 60px;">No songs have been added to Firetail's library. Drag some into this window to get started!</p>
+                <p v-if="list.length === 0 && !$store.state.audio.isLoadingSongs && $route.path === '/songs'" style="margin-left: 60px;">No songs have been added to Firetail's library. Drag some into this window to get started!</p>
                 <p v-else-if="list.length === 0 && !$store.state.audio.isLoadingSongs && $route.path === '/playlist'" style="margin-left: 60px">No songs have been added to this playlist. You should drag some to this playlist's button on the side bar!</p>
                 <p v-else-if="list.length === 0 && !$store.state.audio.isLoadingSongs && $route.path === '/liked'" style="margin-left: 60px">You haven't favourited any songs yet!</p>
                 <div v-if="$route.path !== '/songs' && $route.path !== '/playlist' && $route.path !== '/liked'">
@@ -109,7 +111,7 @@ export default {
     computed: {
         ...mapState('audio', {
             list: function(state) {
-                if (this.$route.path == '/albums') {
+                if (this.$route.path === '/albums') {
                     let doSort = state.currentList;
                     doSort = sort.sortArray(doSort, 'title')
                     doSort.sort(function (a, b) {
@@ -136,7 +138,7 @@ export default {
             },
             parallax: state => {
                 const performance = window.localStorage.getItem('performance')
-                if (performance == 'true') return ''
+                if (performance === 'true') return ''
                 // helps prevent it jumping around too much when scrolling fast
                 else if (state.scrolled > 550) return ''
                 return `transform: translateY(${state.scrolled / 2.5}px);`
@@ -146,9 +148,9 @@ export default {
             playlist: state => state.currentPlaylist
         }),
         isSimple() {
-            if (this.$route.path == '/albums') return 'simple albums'
-            else if (this.$route.path == '/artists') return 'simple artist'
-            else if (this.$route.path == '/playlist') return 'playlist'
+            if (this.$route.path === '/albums') return 'simple albums'
+            else if (this.$route.path === '/artists') return 'simple artist'
+            else if (this.$route.path === '/playlist') return 'playlist'
             else return ''
         },
         topTitleSize() {
@@ -179,7 +181,7 @@ export default {
             }
         },
         itemSizeCheck() {
-            if (this.$route.path == '/') {
+            if (this.$route.path === '/') {
                 return 42
             } else {
                 return 55
@@ -206,7 +208,7 @@ export default {
     asyncComputed: {
         ...mapState('audio', {
             async getArtistImage() {
-                if (this.$route.path != '/artists' || this.list.length == 0) return ''
+                if (this.$route.path !== '/artists' || this.list.length === 0) return ''
                 let token = localStorage.getItem('sp-token')
                 let artist = this.list[0].artist
                 if (!token) return
@@ -228,14 +230,14 @@ export default {
                 } catch(err) {
                     console.warn("Image doesn't exist for " + artist)
                 }
-                if (img == '') {
+                if (img === '') {
                     return ''
                 } else {
                     return `background-image: url('${img}')`
                 }
             },
             async getAlbumImage() {
-                if (this.$route.path != '/albums' || this.list.length == 0) {
+                if (this.$route.path !== '/albums' || this.list.length === 0) {
                     this.$store.commit('nav/updateAlbumViewCurrentArt', '')
                     return ''
                 }
@@ -245,7 +247,7 @@ export default {
                     this.$store.commit('nav/updateAlbumViewCurrentArt', '')
                     return ''
                 }
-                if (song.hasImage == 1) {
+                if (song.hasImage === 1) {
                     let artistAlbum = `http://localhost:${port}/images/${(song.albumArtist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
                     this.$store.commit('nav/updateAlbumViewCurrentArt', artistAlbum)
                     return `background-image: url('${artistAlbum}')`
@@ -275,7 +277,7 @@ export default {
         },
         contextMenu(evt) {
             let getIndex = this.selectedItems.indexOf(evt[1])
-            if (getIndex == -1) {
+            if (getIndex === -1) {
                 this.selectedItems = [evt[1]]
                 this.lastSelectedIndex = evt[1]
             }
@@ -283,19 +285,18 @@ export default {
             const favourites = this.$store.state.nav.favouriteSongs
             if (this.selectedItems.length > 1) {
                 this.selectedItems.forEach(f => {
-                    if (favourites.indexOf(this.list[f].id) == -1) {
+                    if (favourites.indexOf(this.list[f].id) === -1) {
                         favCompare = true
-                        return
                     }
                 })
-            } else if (favourites.indexOf(this.list[evt[1]].id) == -1) {
+            } else if (favourites.indexOf(this.list[evt[1]].id) === -1) {
                 favCompare = true
             }
             const favouriteOnClick = () => {
                 this.selectedItems.forEach(f => {
                     const item = this.list[f].id
                     if (favCompare) {
-                        if (favourites.indexOf(item) == -1) {
+                        if (favourites.indexOf(item) === -1) {
                             window.ipcRenderer.send('addFavourite', item)
                         }
                     } else {
@@ -329,10 +330,10 @@ export default {
             }
             let menuItems = [
                 {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_QUEUE'), type: 'button'},
-                {type: 'divider', hide: [this.selectedItems.length == 1 ? false : true, this.list[evt[1]].artist == 'Unknown Artist' && this.list[evt[1]].album == 'Unknown Album']},
-                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ARTIST'), type: 'button', hide: [this.selectedItems.length == 1 ? false : true, this.$route.path == '/artists', this.list[evt[1]].artist == 'Unknown Artist'], onClick: goToArtist},
-                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ALBUM'), type: 'button', hide: [this.selectedItems.length == 1 ? false : true, this.$route.path == '/albums', this.list[evt[1]].album == 'Unknown Album'], onClick: goToAlbum},
-                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.VIEW_EXPLORER'), type: 'button', hide: [this.selectedItems.length == 1 ? false : true], onClick: revealInFileExplorer},
+                {type: 'divider', hide: [this.selectedItems.length !== 1, this.list[evt[1]].artist === 'Unknown Artist' && this.list[evt[1]].album === 'Unknown Album']},
+                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ARTIST'), type: 'button', hide: [this.selectedItems.length !== 1, this.$route.path === '/artists', this.list[evt[1]].artist === 'Unknown Artist'], onClick: goToArtist},
+                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ALBUM'), type: 'button', hide: [this.selectedItems.length !== 1, this.$route.path === '/albums', this.list[evt[1]].album === 'Unknown Album'], onClick: goToAlbum},
+                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.VIEW_EXPLORER'), type: 'button', hide: [this.selectedItems.length !== 1], onClick: revealInFileExplorer},
                 {type: 'divider'},
                 {name: favCompare ? this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_FAVOURITE') : this.$t('CONTEXT_MENU.SONG_LIST_ITEM.REMOVE_FAVOURITE'), type: 'button', onClick: favouriteOnClick},
                 {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_PLAYLIST'), type: 'button'},
@@ -349,9 +350,9 @@ export default {
         },
         select(evt) {
             let getIndex = this.selectedItems.indexOf(evt[1])
-            if (evt[0].which == 1) {
+            if (evt[0].which === 1) {
                 if (evt[0].ctrlKey || evt[0].metaKey) {
-                    if (getIndex == -1) {
+                    if (getIndex === -1) {
                         this.selectedItems.push(evt[1])
                     } else {
                         this.selectedItems.splice(getIndex, 1)
@@ -362,7 +363,7 @@ export default {
                     let amountBy = evt[1] - this.lastSelectedIndex
                     const isNegative = Math.sign(amountBy)
                     for (let i = 0; i < Math.abs(amountBy); i++) {
-                        if (isNegative == -1) {
+                        if (isNegative === -1) {
                             this.selectedItems.push(evt[1] + i)
                         } else {
                             this.selectedItems.push(evt[1] - i)
@@ -379,12 +380,12 @@ export default {
     watch: {
         topTitleText() {
             const topHeader = this.$refs.header
-            if (topHeader.getBoundingClientRect().height == 0) return
+            if (topHeader.getBoundingClientRect().height === 0) return
             topHeader.style.fontSize = this.titleSizes.large
             if (topHeader.getBoundingClientRect().height > 190) {
                 topHeader.style.fontSize = this.titleSizes.medium
             }
-            if (topHeader.getBoundingClientRect().height > 140 && topHeader.style.fontSize == this.titleSizes.medium) {
+            if (topHeader.getBoundingClientRect().height > 140 && topHeader.style.fontSize === this.titleSizes.medium) {
                 topHeader.style.fontSize = this.titleSizes.small
             }
             this.selectedItems = []
@@ -413,14 +414,14 @@ export default {
             if (topHeader.getBoundingClientRect().height > 190) {
                 topHeader.style.fontSize = this.titleSizes.medium
             }
-            if (topHeader.getBoundingClientRect().height > 140 && topHeader.style.fontSize == this.titleSizes.medium) {
+            if (topHeader.getBoundingClientRect().height > 140 && topHeader.style.fontSize === this.titleSizes.medium) {
                 topHeader.style.fontSize = this.titleSizes.small
             }
         }
         const mutationObserver = new MutationObserver((mutations) => {
             mutationObserver.disconnect(topHeader)
             for (let mutation of mutations) {
-                if (mutation.type == 'attributes') {
+                if (mutation.type === 'attributes') {
                     doTextResize()
                 }
             }
@@ -458,6 +459,15 @@ export default {
     position: absolute;
 }
 
+.bg-fade-bottom {
+  width: 100%;
+  height: 400px;
+  background: var(--bg);
+  position: absolute;
+  top: 420px;
+  z-index: 2;
+}
+
 .artist-title-album {
     display: grid;
     column-gap: 20px;
@@ -470,8 +480,8 @@ export default {
 }
 
 .artist-title-album p {
-    margin-top: 0px;
-    margin-bottom: 0px;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .list-artist,
@@ -511,10 +521,10 @@ div.section .track-num {
     top: 0;
     z-index: 3;
     //text-transform: uppercase;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     border-bottom: solid 1px var(--bd);
     position: sticky;
-    margin: 0px 20px;
+    margin: 0 20px;
 }
 
 .simple.albums .list-section {
@@ -527,7 +537,7 @@ div.section .track-num {
 
 .list-section.sticky {
     margin: 0;
-    padding: 0px 20px;
+    padding: 0 20px;
     background: var(--fg-bg);
 }
 
@@ -566,7 +576,7 @@ div.section {
 }
 
 .top-title {
-    padding: 50px 75px 0px;
+    padding: 50px 75px 0;
     display: flex;
     align-items: flex-end;
     //background: linear-gradient(#e74e8e, #e74e8ea6);
@@ -596,13 +606,13 @@ div.section {
 }
 
 .top-title p {
-    margin: 8px 0px;
+    margin: 8px 0;
     opacity: .75;
     font-size: 0.9em;
 }
 
 .top-title p:last-child {
-    margin-bottom: 0px ;
+    margin-bottom: 0;
 }
 
 .tab-album-art {
@@ -615,7 +625,7 @@ div.section {
     background-image: url('../../assets/no_artist.svg');
     border-radius: 100px;
     margin-right: 40px;
-    box-shadow: 0px 0px 80px var(--bg-op);
+    box-shadow: 0 0 80px var(--bg-op);
 }
 
 .albums .tab-album-art, .playlist .tab-album-art {
@@ -687,7 +697,6 @@ div.section {
         display: flex;
         align-items: center;
         justify-content: center;
-        display: flex;
         border-radius: 100px;
         color: black;
         margin-right: 25px;
@@ -714,7 +723,7 @@ div.section {
     }
 
     .tab-album-art {
-        margin-right: 0px;
+        margin-right: 0;
         margin-left: 40px;
     }
 }
