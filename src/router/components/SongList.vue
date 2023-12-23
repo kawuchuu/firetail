@@ -20,15 +20,15 @@
                 <p v-else>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
             </div>
         </div>
+        <div class="bg-inner" :class="currentScroll">
+            <h3>{{ topTitleText }}</h3>
+        </div>
         <div class="root-wrapper">
             <!-- <div class="bottom-row">
                 <div class="round-button"><i class="ft-icon">play</i></div>
                 <div class="round-button"><i class="ft-icon">shuffle</i></div>
             </div> -->
             <div class="sticky-bg" :class="currentScroll">
-                <div class="bg-inner">
-                    <h3>{{ topTitleText }}</h3>
-                </div>
                 <div class="list-section" :class="currentScroll">
                     <i class="ft-icon play-pause" style="visibility: hidden;">play</i>
                     <div class="section" v-if="$route.path === '/albums'">
@@ -513,6 +513,7 @@ div.section .track-num {
 .list-section {
     overflow: hidden;
     height: 30px;
+    width: 100%;
     display: grid;
     grid-template-columns: 40px 1fr;
     align-items: center;
@@ -538,7 +539,7 @@ div.section .track-num {
 .list-section.sticky {
     margin: 0;
     padding: 0 20px;
-    background: var(--fg-bg);
+    border-bottom: none;
 }
 
 .list-section .list-artist:hover, .list-section .list-album:hover, .list-section .list-duration:hover {
@@ -635,34 +636,42 @@ div.section {
 
 .sticky-bg {
     position: sticky;
-    top: -1px;
-    height: 81px;
     width: 100%;
+    height: 80px;
+    top: 0;
     z-index: 3;
-    transition: 0.15s;
-    transition-property: opacity;
     pointer-events: all;
     border-radius: var(--main-border-radius);
+    display: flex;
+    align-items: flex-end;
+}
 
-    .bg-inner {
-        height: 50px;
-        display: flex;
-        align-items: center;
-        opacity: 0;
-        width: 100%;
-        background: var(--fg-bg);
+.bg-inner.sticky {
+    opacity: 1;
+}
 
-        h3 {
-            margin: 0 78px;
-            font-size: 20px;
-            letter-spacing: -0.03em;
-            font-weight: 600;
-        }
+.bg-inner {
+    height: 80px;
+    opacity: 0;
+    width: 100%;
+    background: var(--fg-bg);
+    position: fixed;
+    z-index: 3;
+    top: 44px;
+    border-radius: 10px 0 0;
+    transition: 0.1s opacity;
+    border-bottom: solid 1px var(--bd);
+
+    h3 {
+        margin: 15px 78px;
+        font-size: 20px;
+        letter-spacing: -0.03em;
+        font-weight: 600;
     }
 }
 
-.sticky-bg.sticky .bg-inner {
-    opacity: 1;
+.artists .bg-inner {
+    border-radius: 0;
 }
 
 .fixed-songload {
