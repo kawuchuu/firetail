@@ -49,6 +49,7 @@ import store from "../../store";
 
 export default {
     props: ['source', 'index', 'selectedItems', 'prev', 'performingMultiDrag'],
+    inject: ['updateSelectedItems'],
     computed: {
         isActive() {
             let view = this.$route.query.view
@@ -256,6 +257,7 @@ export default {
                 data: JSON.stringify(sortedPlaylistSongs)
             })
             this.dragOverY = -1
+            this.updateSelectedItems([newStartPos])
             const ids = []
             sortedPlaylistSongs.forEach(song => {
                 ids.push(song.id)

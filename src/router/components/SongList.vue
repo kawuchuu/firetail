@@ -321,6 +321,15 @@ export default {
                 this.selectedItems.splice(0)
                 this.lastSelectedIndex = 0
             }
+            const removeFromPlaylist = async () => {
+                const playlist = await window.ipcRenderer.invoke('getSpecificPlaylist', this.$route.query.id)
+                const songIds = JSON.parse(playlist[0].songIds)
+                const idsToDelete = []
+                this.selectedItems.forEach(index => {
+                    idsToDelete.push(songIds.find(item => item.id === this.list[index].id))
+                })
+                console.log(idsToDelete)
+            }
             const revealInFileExplorer = () => {
                 window.ipcRenderer.invoke('open-file-in-explorer', this.list[evt[1]].path)
             }
@@ -334,7 +343,8 @@ export default {
                 {name: favCompare ? this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_FAVOURITE') : this.$t('CONTEXT_MENU.SONG_LIST_ITEM.REMOVE_FAVOURITE'), type: 'button', onClick: favouriteOnClick},
                 {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_PLAYLIST'), type: 'button'},
                 {type: 'divider'},
-                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.DELETE'), type: 'button', style: 'dangerous', onClick: deleteSongs}
+                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.DELETE'), type: 'button', style: 'dangerous', onClick: deleteSongs},
+                {name: "Remove from playlist", type: 'button', hide: [this.$route.path !== '/playlist'], style: 'dangerous', onClick: removeFromPlaylist}
             ]
             contextMenuBus.$emit('updateitems', {
                 items: menuItems,
@@ -371,6 +381,9 @@ export default {
                     this.lastSelectedIndex = evt[1]
                 }
             }
+        },
+        updateSelectedItems(selectedItems) {
+            this.selectedItems = selectedItems
         }
     },
     watch: {
@@ -387,6 +400,11 @@ export default {
             this.selectedItems = []
             this.$refs.virtualList.reset()
             this.$refs.virtualList.updatePageModeFront()
+        }
+    },
+    provide: function() {
+        return {
+            updateSelectedItems: this.updateSelectedItems
         }
     },
     destroyed() {

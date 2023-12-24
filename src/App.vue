@@ -84,7 +84,7 @@ export default {
             Array.from(evt.dataTransfer.files).forEach(f => {
                 /* console.log(f)
                 if (!f.type.startsWith('audio')) return; */
-                files.push([f.path,f.name])
+                files.push(f.path)
             })
             //console.log(files)
             this.isDraggedOver = false
@@ -320,6 +320,7 @@ html.light {
 
 .container {
     // ugh they just HAD to remove overflow overlay right when people start using it. staying on chromium 112 for as long as i can.
+    //noinspection CssInvalidPropertyValue
     overflow: overlay;
     position: fixed;
     height: calc(100% - 129px);

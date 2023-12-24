@@ -16,37 +16,36 @@ let randomString = length => {
     return text
 }
 
+const getFiles = async (dir) => {
+    const dirents = await fs.readdir(dir, { withFileTypes: true });
+    const files = await Promise.all(dirents.map((dirent) => {
+        const res = resolve(dir, dirent.name);
+        return dirent.isDirectory() ? getFiles(res) : res;
+    }));
+    return files.flat()
+}
+
 export default {
-    async processFiles(filesAR) {
+    async processFiles(files) {
         let processFiles = []
-        for (const item of filesAR) {
-            const path = item[0]
-            const name = item[1]
-            const stat = statSync(path)
-            if (stat) {
-                if (stat.isDirectory()) {
-                    const files = readdirSync(path)
-                    for (const file of files) {
-                        const fullPath = `${path}/${file.toString()}`
-                        if (statSync(fullPath).isFile()) {
-                            const ext = file.toString().split('.').pop()
-                            const isAudio = mime.lookup(ext)
-                            if (isAudio && isAudio.startsWith('audio')) {
-                                processFiles.push([fullPath, file.toString()])
-                            }
-                        }
-                    }
-                } else if (stat.isFile()) {
-                    const ext = name.split('.').pop()
-                    const isAudio = mime.lookup(ext)
-                    if (isAudio && isAudio.startsWith('audio')) {
-                        processFiles.push([path, name])
-                    }
+        for (const index in files) {
+            const file = files[index]
+            const stat = statSync(file)
+            if (stat.isDirectory()) {
+                const dirFiles = await getFiles(file)
+                processFiles = processFiles.concat(await this.processFiles(dirFiles))
+            } else {
+                const fileName = resolve(file).split('/')
+                const ext = fileName[fileName.length - 1].split('.').pop()
+                const isAudio = mime.lookup(ext)
+                if (isAudio && isAudio.startsWith('audio')) {
+                    processFiles.push([file, fileName[fileName.length - 1]])
                 }
             }
         }
-        const stuff = await this.addFiles(processFiles)
-        return stuff
+        return processFiles
+        /*const stuff = await this.addFiles(processFiles)
+        return stuff*/
     },
     async addFiles(songs) {
         let path = app.getPath('userData')

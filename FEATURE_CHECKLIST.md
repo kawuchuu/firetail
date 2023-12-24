@@ -1,12 +1,12 @@
 # Firetail Feature Checklist
-*Created: 02/01/2023, Updated: 02/09/2023*
+*Created: 02/01/2023, Updated: 24/12/2023*
 
 ## Features required for completion before releasing v1.0.0
 - Library
   - ~~Improve artist detection (use 'artists' and 'albumartist' tags)~~
-  - Recursive directory importing
+  - ~~Recursive directory importing~~
 - Playlists
-  - Manually change song position
+  - ~~Manually change song position~~
   - Change playlist position on sidebar
   - Remove images from playlists
   - Generally fix jankiness
@@ -22,14 +22,14 @@
   - Add specific colourblind colour mode? (?)
   - Screen reader support
   - Better keyboard-only navigation
-- Queue
-  - Queue management popup
-  - Only view current queue
+- ~~Queue~~
+  - ~~Queue management popup~~
+  - ~~Only view current queue~~
 - Bug fixes & improvements
   - Random scrolling between pages
-  - Try to make the sticky bar on song list pages work better
+  - ~~Try to make the sticky bar on song list pages work better~~
   - Make UI as smooth and quality as possible
-  - Fix shuffling
+  - ~~Fix shuffling~~
   - Clean up A LOT of code. Make things like audio and settings a proper system instead of the current jank
 - ~~Explicit tag~~
 - RTL UI

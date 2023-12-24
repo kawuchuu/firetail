@@ -12,7 +12,9 @@ export default {
             if (locations[0].length <= 0) return
             win.webContents.send('startOrFinish', true)
             let songs = await files.processFiles(locations[0])
-            db.addToLibrary(songs)
+            const performAddFiles = await files.addFiles(songs)
+            //console.log(performAddFiles)
+            db.addToLibrary(performAddFiles)
             if (locations[1] == '/songs') {
                 let library = db.getLibrary()
                 win.send('library', library)
