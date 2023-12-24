@@ -8,22 +8,23 @@
                 <div :style="parallax" class="bg-banner" />
             </div>
         </div>
-        <div class="top-title" ref="topTitle">
-            <div v-if="$route.path === '/albums'" class="tab-album-art" :style="getAlbumImage"></div>
-            <div v-if="$route.path === '/artists'" class="tab-album-art" :style="getArtistImage"></div>
-            <div v-if="$route.path === '/playlist'" class="tab-album-art" :style="getPlaylistImage"></div>
-            <div ref="topTitle" class="top-title-text">
-                <p v-if="$route.path === '/albums'" class="album-type">{{ albumType }}</p>
-                <h1 ref="header" :style="topTitleSize" class="top-header" v-show="topTitleText !== ''">{{ topTitleText }}</h1>
-                <p v-if="$route.path === '/playlist' && playlist.desc">{{ playlist.desc }}</p>
-                <p v-if="$route.path === '/albums' && list[0]"><span v-if="list[0].albumArtist">{{ list[0].albumArtist }} • </span><span v-if="list[0].year">{{ list[0].year }} • </span>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
-                <p v-else>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
-            </div>
-        </div>
         <div class="bg-inner" :class="currentScroll">
             <h3>{{ topTitleText }}</h3>
         </div>
         <div class="root-wrapper">
+            <div class="top-title" ref="topTitle">
+                <div v-if="$route.path === '/albums'" class="tab-album-art" :style="getAlbumImage"></div>
+                <div v-if="$route.path === '/artists'" class="tab-album-art" :style="getArtistImage"></div>
+                <div v-if="$route.path === '/playlist'" class="tab-album-art" :style="getPlaylistImage"></div>
+                <div ref="topTitle" class="top-title-text">
+                    <p v-if="$route.path === '/albums'" class="album-type">{{ albumType }}</p>
+                    <h1 ref="header" :style="topTitleSize" class="top-header" v-show="topTitleText !== ''">{{ topTitleText }}</h1>
+                    <p v-if="$route.path === '/playlist' && playlist.desc">{{ playlist.desc }}</p>
+                    <p v-if="$route.path === '/albums' && list[0]"><span v-if="list[0].albumArtist">{{ list[0].albumArtist }} • </span><span v-if="list[0].year">{{ list[0].year }} • </span>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
+                    <p v-else>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
+                </div>
+            </div>
+
             <!-- <div class="bottom-row">
                 <div class="round-button"><i class="ft-icon">play</i></div>
                 <div class="round-button"><i class="ft-icon">shuffle</i></div>
@@ -52,23 +53,18 @@
                 <p v-if="list.length === 0 && !$store.state.audio.isLoadingSongs && $route.path === '/songs'" style="margin-left: 60px;">No songs have been added to Firetail's library. Drag some into this window to get started!</p>
                 <p v-else-if="list.length === 0 && !$store.state.audio.isLoadingSongs && $route.path === '/playlist'" style="margin-left: 60px">No songs have been added to this playlist. You should drag some to this playlist's button on the side bar!</p>
                 <p v-else-if="list.length === 0 && !$store.state.audio.isLoadingSongs && $route.path === '/liked'" style="margin-left: 60px">You haven't favourited any songs yet!</p>
-                <div v-if="$route.path !== '/songs' && $route.path !== '/playlist' && $route.path !== '/liked'">
-                    <SongItem v-for="(item, index) in list" :source="item" :key="item.id" :selectedItems="selectedItems" :index="index" :performingMultiDrag="performingMultiDrag"/>
-                </div>
-                <div v-if="$route.path === '/songs' || $route.path === '/playlist' || $route.path === '/liked'">
-                    <virtual-list
-                        :data-key="'id'"
-                        :data-sources="list"
-                        :data-component="sItem"
-                        :page-mode="true"
-                        :page-mode-el="'#main-container'"
-                        :top-threshold="-200"
-                        :extra-props="{selectedItems: selectedItems}"
-                        :estimate-size="itemSizeCheck"
-                        :keeps="40"
-                        @selected="select"
-                    />
-                </div>
+                <virtual-list
+                    :data-key="'id'"
+                    :data-sources="list"
+                    :data-component="sItem"
+                    :page-mode="true"
+                    :page-mode-el="'#main-container'"
+                    :extra-props="{selectedItems: selectedItems}"
+                    :estimate-size="itemSizeCheck"
+                    :keeps="40"
+                    ref="virtualList"
+                    @selected="select"
+                />
                 <div class="fixed-songload" v-if="list.length < 1 && $store.state.audio.isLoadingSongs">
                     <div class="inner-songload">
                         <SongLoadItem v-for="index in 30" :key="index" />
@@ -389,6 +385,8 @@ export default {
                 topHeader.style.fontSize = this.titleSizes.small
             }
             this.selectedItems = []
+            this.$refs.virtualList.reset()
+            this.$refs.virtualList.updatePageModeFront()
         }
     },
     destroyed() {
@@ -434,6 +432,10 @@ export default {
         })
         const resizeObserver = new ResizeObserver(doTextResize)
         resizeObserver.observe(topTitle)
+        this.$nextTick(() => {
+            this.$refs.virtualList.updatePageModeFront()
+            console.log(this.$refs.virtualList.getScrollSize(), "mounted")
+        })
     }
 }
 </script>

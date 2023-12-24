@@ -45,6 +45,7 @@
 <script>
 import { bus, contextMenuBus } from '../../renderer.js'
 import sort from '../../modules/sort.js'
+import store from "../../store";
 
 export default {
     props: ['source', 'index', 'selectedItems', 'prev', 'performingMultiDrag'],
@@ -216,23 +217,55 @@ export default {
             const currentSong = songIds.find(item => item.id == this.source.id).position
             let newStartPos = this.dragOverY >= 0 && this.dragOverY <= 21 ? currentSong : currentSong + 1
             const ogPos = songIds.find(item => item.id == songs[0].id).position
+            if (ogPos === currentSong) return
             if (currentSong > ogPos) {
                 newStartPos = this.dragOverY >= 0 && this.dragOverY <= 21 ? currentSong + 1 : currentSong
             }
-            sortedPlaylistSongs.find(item => item.id == songs[0].id).position = newStartPos
-            for (let i = 1; i < currentSong; i++) {
-                sortedPlaylistSongs[i].position = currentSong > ogPos ? sortedPlaylistSongs[i].position - 1 : sortedPlaylistSongs[i].position + 1
+            const toBeUpdated = sortedPlaylistSongs.find(item => item.id == songs[0].id)
+            toBeUpdated.position = newStartPos
+
+            // i think this is working now?? need to test it more.
+            if (newStartPos > ogPos) {
+                let checkIndex = ogPos
+                for (let i = ogPos; i < newStartPos + 1; i++) {
+                    if (sortedPlaylistSongs[i].id === toBeUpdated.id) {
+                        checkIndex++
+                        continue
+                    }
+                    sortedPlaylistSongs[checkIndex].position = checkIndex - 1
+                    checkIndex++
+                }
+            } else {
+                let checkIndex = newStartPos
+                for (let i = newStartPos; i < sortedPlaylistSongs.length - 1; i++) {
+                    if (sortedPlaylistSongs[i].id === toBeUpdated.id) {
+                        checkIndex--
+                        break
+                    }
+                    sortedPlaylistSongs[checkIndex].position = checkIndex + 1
+                    checkIndex++
+                }
             }
-            for (let i = newStartPos + 1; i < sortedPlaylistSongs.length - 1; i++) {
-                sortedPlaylistSongs[i].position = currentSong > ogPos ? sortedPlaylistSongs[i].position + 1 : sortedPlaylistSongs[i].position - 1
-            }
+            //toBeUpdated.position = newStartPos
+
             sortedPlaylistSongs = sort.sortArrayNum(sortedPlaylistSongs, 'position')
+            console.log(sortedPlaylistSongs, newStartPos, ogPos, currentSong)
             window.ipcRenderer.invoke('updatePlaylist', {
                 column: 'songids',
                 id: playlist[0].id,
                 data: JSON.stringify(sortedPlaylistSongs)
             })
             this.dragOverY = -1
+            const ids = []
+            sortedPlaylistSongs.forEach(song => {
+                ids.push(song.id)
+            })
+            const updatedSongs = await window.ipcRenderer.invoke('getSomeFromColumnMatches', ids)
+            const sortedSongsToUse = []
+            sortedPlaylistSongs.forEach(song => {
+                sortedSongsToUse.push(updatedSongs[0].find(item => item.id == song.id))
+            })
+            store.commit('audio/updateCurrentListNoSort', sortedSongsToUse)
         }
     }
 }

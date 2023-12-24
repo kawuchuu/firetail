@@ -125,7 +125,7 @@ router.beforeEach(async (to, from, next) => {
         const songs = await window.ipcRenderer.invoke('getSomeFromColumnMatches', ids)
         const sortedSongsToUse = []
         sortedSongs.forEach(song => {
-            sortedSongsToUse.push(songs.find(item => item.id == song.id))
+            sortedSongsToUse.push(songs[0].find(item => item.id == song.id))
         })
         store.commit('audio/updateCurrentListNoSort', sortedSongsToUse)
         store.commit('playlist/setCurrentPlaylist', playlist[0])

@@ -82,7 +82,7 @@ export default {
             songs.forEach((song, index) => {
                 songIds.push({
                     id: song.id,
-                    position: currentLength + index + 1
+                    position: currentLength + index
                 })
             })
             window.ipcRenderer.invoke('updatePlaylist', {
