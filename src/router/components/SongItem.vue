@@ -265,7 +265,7 @@ export default {
             const updatedSongs = await window.ipcRenderer.invoke('getSomeFromColumnMatches', ids)
             const sortedSongsToUse = []
             sortedPlaylistSongs.forEach(song => {
-                sortedSongsToUse.push(updatedSongs[0].find(item => item.id == song.id))
+                sortedSongsToUse.push(updatedSongs[0].find(item => item.id === song.id))
             })
             store.commit('audio/updateCurrentListNoSort', sortedSongsToUse)
         }

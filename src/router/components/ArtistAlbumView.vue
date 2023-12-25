@@ -259,6 +259,7 @@ export default {
     animation: fadeIn 2s;
     opacity: 1;
     position: relative;
+    z-index: 1;
 
     i {
         font-size: 8em;

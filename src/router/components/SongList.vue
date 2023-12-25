@@ -82,6 +82,7 @@ import { bus, contextMenuBus } from '../../renderer.js'
 import { mapState } from 'vuex'
 import sort from '../../modules/sort.js'
 import axios from 'axios'
+import store from "../../store";
 
 export default {
     components: {
@@ -324,11 +325,29 @@ export default {
             const removeFromPlaylist = async () => {
                 const playlist = await window.ipcRenderer.invoke('getSpecificPlaylist', this.$route.query.id)
                 const songIds = JSON.parse(playlist[0].songIds)
-                const idsToDelete = []
                 this.selectedItems.forEach(index => {
-                    idsToDelete.push(songIds.find(item => item.id === this.list[index].id))
+                    songIds.splice(songIds.indexOf(songIds.find(item => item.id === this.list[index].id)), 1)
                 })
-                console.log(idsToDelete)
+                for (const index in songIds) {
+                    songIds[index].position = index
+                }
+                console.log(songIds)
+                await window.ipcRenderer.invoke('updatePlaylist', {
+                    column: 'songids',
+                    id: this.playlist.id,
+                    data: JSON.stringify(songIds)
+                })
+                const ids = []
+                songIds.forEach(song => {
+                    ids.push(song.id)
+                })
+                const updatedSongs = await window.ipcRenderer.invoke('getSomeFromColumnMatches', ids)
+                const sortedSongsToUse = []
+                songIds.forEach(song => {
+                    sortedSongsToUse.push(updatedSongs[0].find(item => item.id === song.id))
+                })
+                store.commit('audio/updateCurrentListNoSort', sortedSongsToUse)
+                this.selectedItems = []
             }
             const revealInFileExplorer = () => {
                 window.ipcRenderer.invoke('open-file-in-explorer', this.list[evt[1]].path)

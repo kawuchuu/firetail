@@ -176,6 +176,7 @@ export default {
     background-color: var(--sub-fg);
     background-image: url('../../../assets/no_album.svg');
     background-size: cover;
+    background-position: center;
     border-radius: 5px;
     overflow: hidden;
 

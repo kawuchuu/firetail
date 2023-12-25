@@ -1,7 +1,7 @@
 <template>
     <router-link :to="link">
         <div draggable="true" :class="isDragOverClass" @pointerdown="context" @dragover="handleDragOver" @dragleave="handleDragLeave" @dragend="handleDragLeave" @drop="handleDrop" class="item-sidebar playlist-sidename">
-            <div v-if="playlist.hasImage === 1" class="playlist-image" :style="`background-image: url('http://localhost:${port}/images/playlist/${playlist.id}.jpg')`" />
+            <div v-if="playlist.hasImage === 1" class="playlist-image" :style="playlistImage" />
             <div v-else class="playlist-image" />
             <span>{{ playlist.name }}</span>
         </div>
@@ -25,6 +25,9 @@ export default {
             if (this.isDragOver) return 'drag-over'
             else return ''
         },
+        playlistImage() {
+            return `background-image: url('http://localhost:${this.port}/images/playlist/${this.playlist.id}.jpg?${window.performance.now()}')`
+        }
     },
     methods: {
         context(evt) {
@@ -85,7 +88,7 @@ export default {
                     position: currentLength + index
                 })
             })
-            window.ipcRenderer.invoke('updatePlaylist', {
+            await window.ipcRenderer.invoke('updatePlaylist', {
                 column: 'songids',
                 id: this.playlist.id,
                 data: JSON.stringify(songIds)

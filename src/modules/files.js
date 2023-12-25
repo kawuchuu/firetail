@@ -6,6 +6,7 @@ import { app, BrowserWindow } from 'electron'
 import mime from 'mime-types'
 //import sharp from 'sharp'
 import { resolve } from 'path'
+import sharp from "sharp";
 
 let randomString = length => {
     let text = ''
@@ -109,7 +110,7 @@ export default {
             } catch(e) {
                 await fs.mkdir(playlistImgPath)
             }
-            /* sharp(Buffer.from(buffer))
+             sharp(Buffer.from(buffer))
                 .toFormat('jpg')
                 .resize({
                     width: 256,
@@ -120,7 +121,7 @@ export default {
                 .toFile(`${playlistImgPath}/${id}.jpg`)
                 .catch(err => {
                     console.error(err)
-                }) */
+                })
         }
     }
 }

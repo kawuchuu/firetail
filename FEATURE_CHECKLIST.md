@@ -1,42 +1,44 @@
 # Firetail Feature Checklist
-*Created: 02/01/2023, Updated: 24/12/2023*
+*Created: 02/01/2023, Updated: 25/12/2023*
+
+---
 
 ## Features required for completion before releasing v1.0.0
 - Library
-  - ~~Improve artist detection (use 'artists' and 'albumartist' tags)~~
-  - ~~Recursive directory importing~~
+  - ~~Improve artist detection (use 'artists' and 'albumartist' tags)~~ ✅
+  - ~~Recursive directory importing~~ ✅
 - Playlists
-  - ~~Manually change song position~~
+  - ~~Manually change song position~~ ✅
   - Change playlist position on sidebar
   - Remove images from playlists
   - Generally fix jankiness
 - Home
   - Make dynamic sections, not hard-coded
   - Come up with new ideas as I build it
-- ~~Finally start making the favourites page~~
+- ~~Finally start making the favourites page~~ ✅
 - Search
-  - ~~General search on the top bar (search for everything)~~
+  - ~~General search on the top bar (search for everything)~~ ✅
   - Search in current viewing list
 - Accessibility
   - Finish high contrast mode
   - Add specific colourblind colour mode? (?)
   - Screen reader support
   - Better keyboard-only navigation
-- ~~Queue~~
-  - ~~Queue management popup~~
-  - ~~Only view current queue~~
+- ~~Queue~~ ✅
+  - ~~Queue management popup~~ ✅
+  - ~~Only view current queue~~ ✅
 - Bug fixes & improvements
   - Random scrolling between pages
-  - ~~Try to make the sticky bar on song list pages work better~~
+  - ~~Try to make the sticky bar on song list pages work better~~ ✅
   - Make UI as smooth and quality as possible
-  - ~~Fix shuffling~~
+  - ~~Fix shuffling~~ ✅
   - Clean up A LOT of code. Make things like audio and settings a proper system instead of the current jank
-- ~~Explicit tag~~
+- ~~Explicit tag~~ ✅
 - RTL UI
 - Updates
   - Let user check for updates
   - Choose update branch
-- ~~Migrate to Electron Forge~~
+- ~~Migrate to Electron Forge~~ ✅
 
 
 ## Features that can (probably) wait for later versions
@@ -46,7 +48,7 @@
   - Edit current queue
   - Add song to queue in context menu
 - Spotify integration
-  - ~~Authorisation~~
+  - ~~Authorisation~~ ❓
   - Artist images
   - Pull metadata for songs missing it
   - Add local song to playlist

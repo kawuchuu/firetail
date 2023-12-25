@@ -23,12 +23,11 @@ html.dark {
     height: 100%;
     max-height: 420px;
     position: absolute;
-    background-image: url('../assets/noise.jpeg');
+    background-image: url('../assets/noise-colour.jpg');
     background-size: 612px 612px;
     mix-blend-mode: overlay;
     opacity: 0.3;
     pointer-events: none;
-    filter: hue-rotate(90deg);
 }
 
 html.light {
