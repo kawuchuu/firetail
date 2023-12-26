@@ -1,10 +1,12 @@
 import { app, ipcMain, nativeTheme, shell } from 'electron'
 import fs from 'fs'
+import {promises as fsPromises} from 'fs'
 import db from './database'
 import files from './files'
 import server from './server'
 import { resolve } from 'path'
 import os from 'os'
+import {marked} from "marked";
 
 export default {
     start(win) {
@@ -261,6 +263,11 @@ export default {
                     symbolColor: colours.fg
                 })
             }
+        })
+
+        ipcMain.handle('parse-markdown', async (event, file) => {
+            const markdown = await fsPromises.readFile(resolve(__dirname, 'static/main/' + file))
+            return marked.parse(markdown.toString())
         })
     }
 }

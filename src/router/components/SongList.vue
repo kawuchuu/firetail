@@ -760,7 +760,7 @@ div.section {
         display: none;
     }
     .artist-title-album {
-        grid-template-columns: 3fr 2fr 0fr;
+        grid-template-columns: 3fr 1.5fr 0fr 20px 0fr;
     }
 }
 

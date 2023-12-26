@@ -1,3 +1,4 @@
+<script src="../../../modules/ipc.js"></script>
 <template>
     <div class="prompt-container">
         <p class="prompt-msg">{{props.msg}}</p>

@@ -1,5 +1,5 @@
 <template>
-    <div class="side-bar" :class="platformType">
+    <div class="side-bar" :class="platformType" role="navigation">
         <div class="side-bar-inner-container">
             <div class="nav-buttons" :class="platformType">
                 <!-- <div class="app-info">

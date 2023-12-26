@@ -67,4 +67,10 @@ export default {
 .playing-bar.hidden {
     transform: translateY(90px);
 }
+
+@media (max-width: 970px) {
+    .playing-bar {
+        grid-template-columns: 30% 1fr 30px;
+    }
+}
 </style>

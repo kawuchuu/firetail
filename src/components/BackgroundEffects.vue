@@ -31,7 +31,7 @@ export default {
 .colour-bg {
     position: absolute;
     width: 600px;
-    height: 300px;
+    height: 250px;
     z-index: -1;
     transform: translateX(-15px);
     opacity: 0.4;

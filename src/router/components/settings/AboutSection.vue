@@ -9,7 +9,7 @@
             </div>
             <div>
                 <p>{{$t('SETTINGS.ABOUT.BUG_REPORT')}}<a @click="openLink">{{$t('SETTINGS.ABOUT.BUG_REPORT_LINK')}}</a></p>
-                <a>Third-party licenses</a>
+                <span><a>Third-party licenses</a>, <a @click="viewChangelog">view changelog</a></span>
             </div>
             <p @click="isMoreOpen = isMoreOpen ? false : true" class="open-more"><i class="ft-icon">{{ moreIcon }}</i> Advanced information</p>
             <div class="advanced-info" :class="doShow">
@@ -64,6 +64,13 @@ export default {
     methods: {
         openLink() {
             window.ipcRenderer.send('openLink', `https://github.com/kawuchuu/firetail/issues`)
+        },
+        viewChangelog() {
+            this.$store.commit('panel/updatePanelProps', {
+                topMsg: 'Changelog'
+            })
+            this.$store.commit('panel/updatePanelComponent', 'MarkdownModule.vue')
+            this.$store.commit('panel/updateActive', true)
         }
     },
     async mounted() {

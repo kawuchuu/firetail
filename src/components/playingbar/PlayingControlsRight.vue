@@ -1,18 +1,21 @@
 <template>
-    <div class="right-controls">
-        <i @click="showQueue = !showQueue" class="ft-icon">queue</i>
-        <QueuePopup :class="active" />
-        <!-- <i class="material-icons">blur_on</i> -->
-        <i @click="mute" class="ft-icon">{{volIcon}}</i>
-        <div ref="volBarWrapper" class="vol-bar-inner-container" @mousemove="moveHover" @mouseover="hover" @mouseleave="leave" @mousedown="down">
-            <div class="vol-bar" ref="volBar">
-                <div ref="volFill" :style="fill" class="fill"></div>
-                <div ref="volFillHover" class="fill-hover"></div>
-                <div ref="handle" class="handle"></div>
-                <!-- <div ref="hoverIndicate" class="vol-hover-indicate">{{ hoverIndicateNum }}</div> -->
+    <div class="right-controls-root">
+        <i class="ft-icon expand" @click="rightControlsActive = !rightControlsActive">arrow-head-up</i>
+        <div class="right-controls" :class="rightControlsActive ? 'active' : ''">
+            <i @click="showQueue = !showQueue" class="ft-icon">queue</i>
+            <QueuePopup :class="active" />
+            <!-- <i class="material-icons">blur_on</i> -->
+            <i @click="mute" class="ft-icon">{{volIcon}}</i>
+            <div ref="volBarWrapper" class="vol-bar-inner-container" @mousemove="moveHover" @mouseover="hover" @mouseleave="leave" @mousedown="down">
+                <div class="vol-bar" ref="volBar">
+                    <div ref="volFill" :style="fill" class="fill"></div>
+                    <div ref="volFillHover" class="fill-hover"></div>
+                    <div ref="handle" class="handle"></div>
+                    <!-- <div ref="hoverIndicate" class="vol-hover-indicate">{{ hoverIndicateNum }}</div> -->
+                </div>
             </div>
+            <i @click="enterExitZen" class="ft-icon">{{ fullscreenIcon }}</i>
         </div>
-        <i @click="enterExitZen" class="ft-icon">{{ fullscreenIcon }}</i>
     </div>
 </template>
 
@@ -62,7 +65,8 @@ export default {
             volMouseDown: false,
             volMouseDownHover: false,
             unmuteVol: null,
-            showQueue: false
+            showQueue: false,
+            rightControlsActive: false
         }
     },
     methods: {
@@ -131,14 +135,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.right-controls {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    position: relative;
-
+.right-controls-root {
     i {
         font-size: 22px;
         cursor: pointer;
@@ -154,9 +151,18 @@ export default {
         opacity: 0.5;
     }
 
-    i:last-child {
-        margin-left: 0px;
+    i:first-child, i:last-child {
+        margin-left: 0;
     }
+}
+
+.right-controls {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
 }
 
 .vol-time-inner-container {
@@ -262,6 +268,35 @@ export default {
             margin-left: 0px;
             margin-right: 20px;
         }
+    }
+}
+
+.expand {
+    display: none;
+}
+
+@media (max-width: 970px) {
+    .right-controls {
+        position: fixed;
+        background: var(--back-bg);
+        bottom: 100px;
+        right: 14px;
+        width: initial;
+        height: 50px;
+        border-radius: 10px;
+        padding: 5px 18px;
+        outline: solid 1px var(--bd);
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .right-controls.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .expand {
+        display: block;
     }
 }
 </style>
