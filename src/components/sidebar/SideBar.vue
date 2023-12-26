@@ -211,7 +211,6 @@ export default {
 }
 
 .beta-tag {
-    font-size: 10px;
     padding: 2px 3px;
     border: solid 1px white;
     color: white;
@@ -228,13 +227,12 @@ export default {
 .special-button {
     display: flex;
     width: 100%;
-    height: 42px;
+    height: 38px;
     align-items: center;
     cursor: pointer;
     opacity: 0.75;
-    border-radius: 5px;
+    border-radius: 10px;
     color: var(--text);
-    transform: translatex(-4px);
 }
 
 .special-button:hover {
@@ -246,7 +244,7 @@ export default {
 }
 
 .special-button i {
-    margin: 0 12px 0 16px;
+    margin: 0 12px;
     pointer-events: none;
     font-size: 20px;
     border: var(--text) 2px solid;

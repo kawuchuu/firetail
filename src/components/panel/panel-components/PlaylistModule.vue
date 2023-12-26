@@ -236,6 +236,11 @@ export default {
     height: 80px;
 }
 
+.input textarea::placeholder {
+    color: var(--text);
+    opacity: 0.5;
+}
+
 .input input:focus, .input textarea:focus {
     background: var(--fg-bg)
 }
@@ -244,5 +249,6 @@ export default {
     grid-area: buttons;
     justify-self: end;
     display: flex;
+    gap: 10px;
 }
 </style>

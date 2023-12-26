@@ -403,6 +403,7 @@ export default {
 .control-buttons i {
     margin: 5px 7px;
     padding: 5px;
+    border-radius: 100px;
 }
 
 .control-buttons .play-pause-icon {
@@ -451,7 +452,6 @@ export default {
 
 .active {
     background-color: var(--hl-op);
-    border-radius: 100px;
     color: var(--hl-txt)
 }
 

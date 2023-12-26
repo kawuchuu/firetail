@@ -470,6 +470,8 @@ html.light {
     font-size: 23px;
     cursor: pointer;
     opacity: 0;
+    min-width: 23px;
+    border-radius: 100px;
 }
 
 .results-link:hover .favourite-icon, .results-link.hactive .favourite-icon {

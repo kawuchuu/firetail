@@ -143,6 +143,7 @@ export default {
         font-size: 22px;
         cursor: pointer;
         margin-left: 20px;
+        border-radius: 100px;
     }
 
     i:hover {

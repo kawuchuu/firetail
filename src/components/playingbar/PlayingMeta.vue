@@ -220,6 +220,7 @@ export default {
     left: 0;
     border-radius: 4px;
     z-index: 2;
+    position: relative;
     background-image: url('../../assets/no_image.svg');
     background-color: var(--bg);
     background-position: center !important;
@@ -262,6 +263,7 @@ export default {
     opacity: 0.5;
     margin-left: 12px;
     cursor: pointer;
+    border-radius: 100px;
 }
 
 .favourite-icon:hover {
@@ -323,7 +325,7 @@ export default {
     //transition: .15s;
     border: solid 1px var(--bd);
     transition: 0.2s cubic-bezier(0.17, 0.88, 0.25, 1.1);
-    transition-property: transform opacity;
+    transition-property: transform, opacity;
 }
 
 .large-album-art {

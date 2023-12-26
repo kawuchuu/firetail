@@ -162,7 +162,7 @@ export default {
     }
 
     input[type=text] {
-        width: 0px;
+        width: 0;
         background: transparent;
         border: none;
         outline: none;
@@ -170,7 +170,6 @@ export default {
         font-family: 'Inter', sans-serif;
         font-size: 14px;
         color: white;
-        margin-left: 6px;
         opacity: 0;
         pointer-events: none;
         transition: 0.15s;
@@ -187,6 +186,7 @@ export default {
         width: 165px;
         opacity: 1;
         pointer-events: all;
+        margin-left: 6px;
     }
 }
 

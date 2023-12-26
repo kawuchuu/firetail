@@ -166,18 +166,18 @@ html.light.high-contrast {
 .high-contrast {
     .container {
         outline: solid 2px var(--bd);
-        z-index: 2;
+        z-index: 10;
     }
 
     .bg-banner {
         background-image: none !important;
     }
 
-    .top-title-text p, .artist-title-album span, div.section, .options option, .about p, .list-subtitle, .special-button {
+    .top-title-text p, .artist-title-album span, div.section, .options option, .about p, .list-subtitle, .special-button, .favourite-icon, .song-artist {
         opacity: 1 !important;
     }
 
-    .item-sidebar {
+    .item-sidebar, .special-button {
         outline: solid 2px var(--bd);
         width: calc(100% - 2px);
         margin: 6px 0px;
@@ -188,11 +188,80 @@ html.light.high-contrast {
         outline-color: var(--hl-txt);
     }
 
-    .nav-button, .top-button, .search-btn, .dropdown, .dropdown .options, .results-link:hover {
-        outline: solid 2px var(--bd);
+    .nav-button, .top-button, .search-btn, .dropdown, .dropdown .options, .results-link:hover, div.control-buttons i, div.right-controls i, .switch, .favourite-icon,
+    .panel input[type="text"], .panel textarea, .pl-img, .albums-item a {
+        outline: solid 2px var(--bd) !important;
     }
 
-    .special-gradient-bg-wrapper {
+    .panel input[type="text"]:focus, .panel textarea:focus {
+        background: var(--text) !important;
+        color: var(--back-bg) !important;
+    }
+
+    .panel textarea::placeholder {
+        color: var(--bd);
+        opacity: 1 !important;
+    }
+
+    .panel textarea:focus::placeholder {
+        color: var(--back-bg);
+    }
+
+    .song-album-art {
+        border: solid 2px var(--bd);
+    }
+
+    .circle-inner, .play-pause-icon, .seek-bar, .vol-bar {
+        outline: solid 2px var(--back-bg);
+    }
+
+    .circle-inner::after, .play-pause-icon::before, .seek-bar::before, .vol-bar::before, .handle::before {
+        content: "";
+        outline: solid 2px var(--bd);
+        width: 28px;
+        height: 28px;
+        display: block;
+        transform: translate(-2px, -2px);
+        border-radius: 100px;
+        transition-duration: 0.15s;
+        transition-property: width;
+    }
+
+    .play-pause-icon::before {
+        width: 38px;
+        height: 38px;
+        transform: none;
+        position: absolute;
+    }
+
+    .seek-bar::before, .vol-bar::before {
+        width: calc(100% + 4px);
+        height: 8px;
+        position: absolute;
+        transform: translate(-2px);
+    }
+
+    .handle-hover {
+        outline: solid 2px var(--back-bg);
+    }
+
+    .handle::before {
+        width: 0;
+        height: 0;
+        outline-color: transparent;
+    }
+
+    .handle.handle-hover::before {
+        width: 14px;
+        height: 14px;
+        outline-color: var(--bd);
+    }
+
+    .switch:active .circle-inner::after {
+        width: 34px;
+    }
+
+    .special-gradient-bg-wrapper, .bg-gradient, .bg-noise, .noise, .background-effects {
         display: none;
     }
 
@@ -226,6 +295,22 @@ html.light.high-contrast {
     ::-webkit-scrollbar-thumb {
         background: var(--text);
         background-clip: content-box;
+    }
+
+    .button {
+        outline: solid 2px var(--bd);
+    }
+
+    .panel-container .panel {
+        border-width: 2px;
+    }
+
+    .artist-inner .item-root {
+        margin-bottom: 10px;
+    }
+
+    .albums-item a span {
+        opacity: 1 !important;
     }
 }
 

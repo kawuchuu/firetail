@@ -62,7 +62,7 @@ export default {
     background: var(--hl-txt);
     color: black;
     transition: 0.08s;
-    transition-property: transform text-shadow;
+    transition-property: transform, text-shadow;
 }
 
 :root.light .button.primary {

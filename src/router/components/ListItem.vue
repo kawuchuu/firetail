@@ -68,6 +68,7 @@ export default {
     display: flex;
     align-items: center;
     height: 100%;
+    border-radius: 10px;
 }
 
 .album-info {
