@@ -61,6 +61,13 @@
         "SYSTEM": "System",
         "DARK": "Dark",
         "LIGHT": "Light"
+      },
+      "START_SCREEN": {
+        "HOME": "Home",
+        "SONGS": "Songs",
+        "ARTISTS": "Artists",
+        "ALBUMS": "Albums",
+        "FAVOURITES": "Favourites"
       }
     },
     "LANGUAGE": "Select a language",
