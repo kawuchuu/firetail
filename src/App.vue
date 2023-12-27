@@ -416,8 +416,8 @@ a {
 }
 
 .load-spinner {
-    border: 2px solid var(--text);
-    border-left: 2px solid transparent;
+    border: 3px solid var(--text);
+    border-left: 3px solid transparent;
     border-radius: 50%;
     width: 30px;
     height: 30px;
@@ -448,6 +448,6 @@ a {
 }
 
 .rtl {
-    --main-border-radius: 0px 10px 0px 0px;
+    --main-border-radius: 0px 10px 10px 0px;
 }
 </style>

@@ -18,7 +18,7 @@
                 <i class="ft-icon">{{dropdownEnabled ? 'arrow-head-up' : 'arrow-head-down'}}</i>
             </div>
             <div class="options">
-                <option v-for="item in option.options" :key="item" @click="optionClick(item)">{{ item }}</option>
+                <option v-for="item in option.options" :key="item.value" @click="optionClick(item)">{{ item.label }}</option>
             </div>
         </div>
     </div>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import About from './AboutSection.vue'
+import About from './sections/AboutSection.vue'
 
 export default {
     props: ['option'],
@@ -61,7 +61,7 @@ export default {
             this.dropdownEnabled = !this.dropdownEnabled
         },
         optionClick(item) {
-            this.option.option = item
+            this.option.option = item.label
             this.option.onChange(this.$root, item)
         }
     },
@@ -110,18 +110,7 @@ export default {
 </script>
 
 <style lang="scss">
-.subtitle {
-    font-size: 1.45em;
-    font-weight: 600;
-    border-bottom: solid 1px var(--bd);
-    padding-bottom: 10px;
-    margin: 24px 0px 12px;
-    letter-spacing: -0.02em;
-}
 
-.darwin .subtitle {
-    letter-spacing: -0.01em;
-}
 
 .button-option, .switch-option, .dropdown-option {
     display: flex;

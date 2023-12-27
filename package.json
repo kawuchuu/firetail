@@ -6,6 +6,7 @@
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
+    "start-rtl": "electron-forge start -- --force-ui-direction=rtl",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",

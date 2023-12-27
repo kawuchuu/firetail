@@ -1,35 +1,39 @@
 <template>
-    <div class="about">
-        <img draggable="false" src="../../../assets/firetail.png">
-        <div class="info">
-            <div>
-                <h1>{{$t('APP_NAME')}}</h1>
-                <p>{{$t('SETTINGS.ABOUT.VERSION')}}{{version}}</p>
-                <p>{{$t('SETTINGS.ABOUT.COPYRIGHT')}}kawuchuu</p>
-            </div>
-            <div>
-                <p>{{$t('SETTINGS.ABOUT.BUG_REPORT')}}<a @click="openLink">{{$t('SETTINGS.ABOUT.BUG_REPORT_LINK')}}</a></p>
-                <span><a>Third-party licenses</a>, <a @click="viewChangelog">view changelog</a></span>
-            </div>
-            <p @click="isMoreOpen = isMoreOpen ? false : true" class="open-more"><i class="ft-icon">{{ moreIcon }}</i> Advanced information</p>
-            <div class="advanced-info" :class="doShow">
-                <p>Build: {{build}}</p>
-                <p>Platform: {{platform}}</p>
-                <p>Platform version: {{platformVer}}</p>
-                <p>Architecture: {{arch}}</p>
-                <p>Electron: {{processVer.electron}}</p>
-                <p>Chromium: {{processVer.chrome}}</p>
-                <p>Node: {{processVer.node}}</p>
+    <section>
+        <SubtitleOption>{{$t("SETTINGS.SUBTITLES.ABOUT")}}</SubtitleOption>
+        <div class="about">
+            <img draggable="false" src="../../../../assets/firetail.png">
+            <div class="info">
+                <div>
+                    <h1>{{$t('APP_NAME')}}</h1>
+                    <p>{{$t('SETTINGS.ABOUT.VERSION')}}{{version}}</p>
+                    <p>{{$t('SETTINGS.ABOUT.COPYRIGHT')}}kawuchuu</p>
+                </div>
+                <div>
+                    <p>{{$t('SETTINGS.ABOUT.BUG_REPORT')}}<a @click="openLink">{{$t('SETTINGS.ABOUT.BUG_REPORT_LINK')}}</a></p>
+                    <span><a @click="viewTpl">Third-party licenses</a>, <a @click="viewChangelog">view changelog</a></span>
+                </div>
+                <p @click="isMoreOpen = isMoreOpen ? false : true" class="open-more"><i class="ft-icon">{{ moreIcon }}</i> Advanced information</p>
+                <div class="advanced-info" :class="doShow">
+                    <p>Build: {{build}}</p>
+                    <p>Platform: {{platform}}</p>
+                    <p>Platform version: {{platformVer}}</p>
+                    <p>Architecture: {{arch}}</p>
+                    <p>Electron: {{processVer.electron}}</p>
+                    <p>Chromium: {{processVer.chrome}}</p>
+                    <p>Node: {{processVer.node}}</p>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>
-import StandardButton from '../../../components/StandardButton.vue'
+import StandardButton from "../../../../components/StandardButton.vue";
+import SubtitleOption from "../options/SubtitleOption.vue"
 
 export default {
-  components: { StandardButton },
+  components: {SubtitleOption, StandardButton },
     data() {
         return {
             version: this.$store.state.nav.ver,
@@ -67,7 +71,16 @@ export default {
         },
         viewChangelog() {
             this.$store.commit('panel/updatePanelProps', {
-                topMsg: 'Changelog'
+                topMsg: 'Changelog',
+                file: 'changelog.md'
+            })
+            this.$store.commit('panel/updatePanelComponent', 'MarkdownModule.vue')
+            this.$store.commit('panel/updateActive', true)
+        },
+        viewTpl() {
+            this.$store.commit('panel/updatePanelProps', {
+                topMsg: 'Third-party licenses',
+                file: 'tpl.txt'
             })
             this.$store.commit('panel/updatePanelComponent', 'MarkdownModule.vue')
             this.$store.commit('panel/updateActive', true)

@@ -32,6 +32,7 @@ let i18n = new VueI18n({
     locale: navigator.language,
     fallbackLocale: 'en-US',
     messages: loadLocaleMessages(),
+    silentTranslationWarn: true,
     silentFallbackWarn: true,
 })
 

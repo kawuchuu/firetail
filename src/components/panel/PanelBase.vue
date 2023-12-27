@@ -179,6 +179,7 @@ export default {
 .top i {
     font-size: 26px;
     cursor: pointer;
+    border-radius: 100px;
 }
 
 .top i:hover {

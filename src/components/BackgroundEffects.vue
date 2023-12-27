@@ -53,4 +53,8 @@ export default {
     border-radius: var(--main-border-radius);
     opacity: 0.6;
 }
+
+.rtl {
+
+}
 </style>

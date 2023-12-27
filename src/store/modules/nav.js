@@ -6,7 +6,7 @@ const state = () => ({
     navs: [
     {
         icon: 'home',
-        name: tr.t('SIDEBAR.HOME'),
+        name: 'SIDEBAR.HOME',
         id: 'homeTab',
         type: 'large_button',
         link: '/home'
@@ -19,33 +19,33 @@ const state = () => ({
         link: '/settings'
     }, */
     {
-        name: tr.t('SIDEBAR.LIBRARY'),
+        name: 'SIDEBAR.LIBRARY',
         type: 'subtitle'
     },
     {
         icon: 'note',
-        name: tr.t('SIDEBAR.SONGS'),
+        name: 'SIDEBAR.SONGS',
         id: 'songsTab',
         type: 'large_button',
         link: `/songs?view=all`
     },
     {
         icon: 'person',
-        name: tr.t('SIDEBAR.ARTISTS'),
+        name: 'SIDEBAR.ARTISTS',
         id: 'artistsTab',
         type: 'large_button',
         link: '/artists?view=firetailnoselect'
     },
     {
         icon: 'album',
-        name: tr.t('SIDEBAR.ALBUMS'),
+        name: 'SIDEBAR.ALBUMS',
         id: 'albumsTab',
         type: 'large_button',
         link: '/albums?view=firetailnoselect'
     },
     {
         icon: 'heart',
-        name: tr.t('SIDEBAR.FAVOURITE'),
+        name: 'SIDEBAR.FAVOURITE',
         id: 'likedTab',
         type: 'large_button',
         link: '/liked'
@@ -77,11 +77,11 @@ const state = () => ({
         link: '/podcasts'
     }, */
     {
-        name: tr.t('SIDEBAR.PLAYLISTS'),
+        name: 'SIDEBAR.PLAYLISTS',
         type: 'subtitle'
     },
     {
-        name: tr.t('SIDEBAR.CREATE_PLAYLIST'),
+        name: 'SIDEBAR.CREATE_PLAYLIST',
         id: 'createPlaylist',
         icon: 'add',
         type: 'special_button',
