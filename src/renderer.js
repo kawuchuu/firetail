@@ -17,6 +17,23 @@ new Vue({
 
 Vue.use(AsyncComputed)
 
+// switch to translation key if string is empty to prevent missing text
+Vue.prototype.$t = function (...args) {
+    const result = this.$i18n.t.apply(this.$i18n, args)
+    if (result === '') {
+        return args[0]
+    }
+    return result
+}
+
+Vue.prototype.$tc = function (...args) {
+    const result = this.$i18n.tc.apply(this.$i18n, args)
+    if (result === '') {
+        return args[0]
+    }
+    return result
+}
+
 router.replace({ path: '/songs', query: { view: 'all' } })
 
 window.ipcRenderer.receive('library', (event, library) => {
