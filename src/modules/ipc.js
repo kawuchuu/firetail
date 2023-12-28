@@ -7,9 +7,12 @@ import server from './server'
 import { resolve } from 'path'
 import os from 'os'
 import {marked} from "marked";
+import FiretailStorage from "./storage";
 
 export default {
     start(win) {
+        const ftStorage = new FiretailStorage()
+
         ipcMain.on('addToLibrary', async (event, locations) => {
             if (locations[0].length <= 0) return
             win.webContents.send('startOrFinish', true)
@@ -268,6 +271,26 @@ export default {
         ipcMain.handle('parse-markdown', async (event, file) => {
             const markdown = await fsPromises.readFile(resolve(__dirname, 'static/main/' + file))
             return marked.parse(markdown.toString())
+        })
+
+        ipcMain.handle('getKey', (event, key) => {
+            return ftStorage.getItem(key)
+        })
+
+        ipcMain.on('setKey', (event, values) => {
+            ftStorage.setKey(values[0], values[1])
+        })
+
+        ipcMain.on('deleteKey', (event, key) => {
+            ftStorage.deleteKey(key)
+        })
+
+        ipcMain.handle('keyExists', (event, key) => {
+            return ftStorage.keyExists(key)
+        })
+
+        ipcMain.handle('keys', () => {
+            return ftStorage.keys
         })
     }
 }

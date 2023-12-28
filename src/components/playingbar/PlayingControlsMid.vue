@@ -2,11 +2,13 @@
     <div class="track-controls" :class="[queueNotEmpty, enableBtn]">
         <div class="track-controls-inner-container">
             <div class="control-buttons">
+                <PlayingControlsRight class="mid" :class="rightControlsActive ? 'shown' : ''" />
+                <i class="ft-icon expand" :class="rightControlsActive ? 'shown' : ''" @click="rightControlsActive = !rightControlsActive">arrow-head-up</i>
                 <i class="ft-icon repeat-shuffle" :title="$t('TOOLTIP.SHUFFLE')" @click="shuffle" :class="isShuffled" role="button" aria-label="Shuffle" tabindex="0">shuffle</i>
                 <i class="ft-icon skip-prev" :title="$t('TOOLTIP.PREVIOUS')" @click="prev" role="button" aria-label="Previous song" tabindex="0">previous</i>
                 <div class="play-pause-icon" :title="$t('TOOLTIP.PLAY_PAUSE')" @click="playPause" tabindex="0" role="button" :aria-label="playPauseIcon"><i class="ft-icon" aria-hidden="true">{{playPauseIcon}}</i></div>
-                <i class="ft-icon skip-prev" :title="$t('TOOLTIP.NEXT')" @click="next" role="button" aria-label="Next song" tabindex="0">next</i>
-                <i class="ft-icon repeat-shuffle" :title="$t('TOOLTIP.REPEAT')" @click="repeat" :class="isRepeat" role="button" aria-label="Repeat" tabindex="0">{{repeatIcon}}</i>
+                <i class="ft-icon skip-prev next" :title="$t('TOOLTIP.NEXT')" @click="next" role="button" aria-label="Next song" tabindex="0">next</i>
+                <i class="ft-icon repeat-shuffle repeat" :title="$t('TOOLTIP.REPEAT')" @click="repeat" :class="isRepeat" role="button" aria-label="Repeat" tabindex="0">{{repeatIcon}}</i>
             </div>
             <div class="seek-time-inner-container">
                 <p class="song-duration" >{{ songCurrent }}</p>
@@ -29,8 +31,10 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import time from '../../modules/timeformat.js'
+import PlayingControlsRight from "./PlayingControlsRight.vue";
 
 export default {
+    components: {PlayingControlsRight},
     computed: {
         ...mapState('audio', {
             fill: state => {
@@ -92,7 +96,8 @@ export default {
         return {
             seekMouseDown: false,
             seekMouseOver: false,
-            hoverIndicateNum: '-:--'
+            hoverIndicateNum: '-:--',
+            rightControlsActive: false
         }
     },
     methods: {
@@ -223,7 +228,7 @@ export default {
 }
 
 .seek-time-inner-container {
-    width: 95%;
+    width: 100%;
     display: flex;
     position: relative;
     align-items: center;
@@ -432,6 +437,11 @@ export default {
     opacity: 1;
 }
 
+.expand {
+    display: none;
+    font-size: 24px;
+}
+
 :root.light .control-buttons .play-pause-icon {
     background: var(--text);
     color: white;
@@ -492,5 +502,55 @@ export default {
 
 .rtl .track-controls {
     direction: ltr;
+}
+
+.right-controls-root.mid {
+    display: none;
+}
+
+@media (max-width: 970px) {
+    .expand {
+        display: block;
+        transition: 0.3s cubic-bezier(0.15, 0.85, 0.25, 1.17);
+        transition-property: transform;
+    }
+
+    .expand.shown {
+        transform: rotate(180deg);
+    }
+
+    .right-controls-root.mid {
+        display: block;
+    }
+
+    .track-controls-inner-container {
+        align-items: flex-end;
+    }
+
+    .seek-time-inner-container {
+        width: 100%;
+    }
+
+    .control-buttons {
+        .play-pause-icon {
+            order: 4;
+        }
+
+        .skip-prev {
+            order: 3;
+        }
+
+        .skip-prev.next {
+            order: 5;
+        }
+
+        .repeat-shuffle {
+            order: 1;
+        }
+
+        .repeat-shuffle.repeat {
+            order: 2;
+        }
+    }
 }
 </style>

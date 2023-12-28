@@ -687,6 +687,7 @@ div.section {
 
 .bg-inner.sticky {
     opacity: 1;
+    pointer-events: initial;
 }
 
 .bg-inner {
@@ -700,6 +701,7 @@ div.section {
     border-radius: 10px 0 0;
     transition: 0.1s opacity;
     border-bottom: solid 1px var(--bd);
+    pointer-events: none;
 
     h3 {
         margin: 15px 78px;

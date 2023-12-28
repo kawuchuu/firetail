@@ -1,7 +1,6 @@
 <template>
     <div class="right-controls-root">
-        <i class="ft-icon expand" @click="rightControlsActive = !rightControlsActive">arrow-head-up</i>
-        <div class="right-controls" :class="rightControlsActive ? 'active' : ''">
+        <div class="right-controls">
             <i @click="showQueue = !showQueue" class="ft-icon">queue</i>
             <QueuePopup :class="active" />
             <!-- <i class="material-icons">blur_on</i> -->
@@ -276,23 +275,28 @@ export default {
 }
 
 @media (max-width: 970px) {
-    .right-controls {
+    .right-controls-root {
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(-110px, 25px) scale(0);
+        transition: 0.2s cubic-bezier(0.17, 0.88, 0.25, 1.1);
+        transition-property: transform, opacity;
         position: fixed;
+    }
+
+    .right-controls {
         background: var(--back-bg);
-        bottom: 100px;
-        right: 14px;
         width: initial;
         height: 50px;
         border-radius: 10px;
         padding: 5px 18px;
         outline: solid 1px var(--bd);
-        opacity: 0;
-        pointer-events: none;
     }
 
-    .right-controls.active {
+    .right-controls-root.shown {
         opacity: 1;
         pointer-events: all;
+        transform: translate(-110px, -82px) scale(1);
     }
 
     .expand {

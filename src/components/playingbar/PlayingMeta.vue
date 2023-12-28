@@ -22,12 +22,12 @@
         <router-link :to="viewLink">
             <div class="song-album-art" :style="getImageBg" @mouseover="hoverImage" @mouseleave="leaveImage"></div>
         </router-link>
-        <div v-if="currentSong" class="title-artist" @mouseover="hoverCodec" @mouseleave="leaveCodec">
-            <router-link :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(currentSong.album)}&view=album_${encodeURIComponent(currentSong.albumArtist + currentSong.album)}&albumArtist=${encodeURIComponent(currentSong.albumArtist)}`" class="song-title">{{title}}<div v-if="currentSong.explicit" class="explicit"><span>E</span></div></router-link>
+        <div v-if="currentSong" ref="titleArtist" class="title-artist" @mouseover="hoverCodec" @mouseleave="leaveCodec">
+            <router-link ref="songTitle" :style="songTitleStyle" :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(currentSong.album)}&view=album_${encodeURIComponent(currentSong.albumArtist + currentSong.album)}&albumArtist=${encodeURIComponent(currentSong.albumArtist)}`" class="song-title">{{title}}<div v-if="currentSong.explicit" class="explicit"><span>E</span></div></router-link>
             <router-link :to="`/artists?hideTop=true&column=artist&q=${encodeURIComponent(artist)}&view=artist_${encodeURIComponent(artist)}`" class="song-artist">{{artist}}</router-link>
         </div>
-        <div v-else class="title-artist" @mouseover="hoverCodec" @mouseleave="leaveCodec">
-            <span class="song-title">{{title}}<div v-if="currentSong && currentSong.explicit" class="explicit"><span>E</span></div></span>
+        <div v-else ref="titleArtist" class="title-artist" @mouseover="hoverCodec" @mouseleave="leaveCodec">
+            <span ref="songTitle" class="song-title">{{title}}<div v-if="currentSong && currentSong.explicit" class="explicit"><span>E</span></div></span>
             <span class="song-artist">{{artist}}</span>
         </div>
         <i class="ft-icon favourite-icon" :class="[isFavourite, isInLibrary]" @click="handleFavourite">{{ favouriteIcon }}</i>
@@ -166,18 +166,28 @@ export default {
                 return ''
             }
         },
+        songTitleScroll() {
+            const songTitle = this.$refs.songTitle.$el
+            const titleArtist = this.$refs.titleArtist
+            if (!songTitle || !titleArtist) return ''
+            if (songTitle.getBoundingClientRect().width > titleArtist.getBoundingClientRect().width) {
+                return `--scrollBy: -${songTitle.getBoundingClientRect().width - titleArtist.getBoundingClientRect().width}px`
+            } else return ''
+        }
     },
     data() {
         return {
             showLargeImage: false,
             showCodecInfo: false,
             advancedFileInfo: {},
-            colorThief: new ColorThief()
+            colorThief: new ColorThief(),
+            songTitleStyle: ''
         }
     },
     watch: {
         async title() {
             this.advancedFileInfo = await window.ipcRenderer.invoke('getAdvancedFileInfo', this.$store.state.audio.queue[this.$store.state.audio.currentSongIndex].path)
+            this.songTitleStyle = this.songTitleScroll()
         }
     },
     mounted() {
@@ -212,6 +222,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     margin-left: 15px;
+    -webkit-mask-image: -webkit-linear-gradient(180deg, transparent, #000 20px);
 }
 
 .song-album-art {
@@ -228,17 +239,36 @@ export default {
     transition: .1s;
 }
 
+@keyframes scroll {
+    0% {
+        transform: translateX(0px);
+    }
+    25% {
+        transform: translateX(0px);
+    }
+    50% {
+        transform: translateX(var(--scrollBy));
+    }
+    75% {
+        transform: translateX(var(--scrollBy));
+    }
+    100% {
+        transform: translateX(0px);
+    }
+}
+
 .song-title {
+    --scrollBy: 0px;
     font-size: 15px;
     overflow: hidden;
-    text-overflow: ellipsis;
     line-height: 20px;
     white-space: nowrap;
-    max-width: 350px;
+    width: fit-content;
     font-weight: 600;
-    margin-right: 10px;
+    padding-right: 20px;
     margin-bottom: 3px;
     letter-spacing: -0.01em;
+    //animation: scroll 15s infinite linear;
 }
 
 .song-title:hover, .song-artist:hover {
@@ -251,10 +281,10 @@ export default {
 
 .song-artist {
     margin: 0;
+    margin-right: 20px;
     opacity: .75;
     font-size: 12px;
     overflow: hidden;
-    text-overflow: ellipsis;
     line-height: 15px;
 }
 

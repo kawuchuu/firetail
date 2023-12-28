@@ -55,7 +55,7 @@ export default {
     box-sizing: border-box;
     /* box-shadow: 0px -1px 5px rgba(0, 0, 0, .15); */
     display: grid;
-    grid-template-columns: 1fr 50% 1fr;
+    grid-template-columns: 1fr 45% 1fr;
     gap: 15px;
     align-items: center;
     transition: 0.25s;
@@ -70,7 +70,7 @@ export default {
 
 @media (max-width: 970px) {
     .playing-bar {
-        grid-template-columns: 30% 1fr 30px;
+        grid-template-columns: 1fr 1.5fr;
     }
 }
 </style>
