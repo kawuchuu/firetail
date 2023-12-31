@@ -1,13 +1,18 @@
 <template>
     <div class="popup queue">
-        <!-- <div class="queue-inner"> -->
+         <div class="queue-inner">
             <virtual-list class="queue-inner"
                 :data-key="'id'"
                 :data-sources="queue"
                 :data-component="sQueue"
             />
             <!-- <span v-if="remainingQueueLength > 40" class="more">...and {{ remainingQueueLength - 40 }} more songs</span> -->
-        <!-- </div> -->
+         </div>
+        <div class="queue-info">
+            <div class="queue-info-inner">
+                <span>{{currentPosition}}/{{fullQueueLength}}</span>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -27,7 +32,9 @@ export default {
     computed: {
         ...mapState('audio', {
             queue: state => state.queue.slice(state.currentSongIndex, state.currentSongIndex + 40),
-            remainingQueueLength: state => state.queue.slice(state.currentSongIndex).length
+            fullQueueLength: state => state.queue.length,
+            remainingQueueLength: state => state.queue.slice(state.currentSongIndex).length,
+            currentPosition: state => state.currentSongIndex + 1
         })
     }
 }
@@ -75,12 +82,14 @@ export default {
     transform: translate(-40px, 0px) scale(0);
     width: 350px;
     height: 500px;
+    display: grid;
+    grid-template-rows: 1fr 40px;
 
     .queue-inner {
         width: 100%;
         height: 100%;
         background: var(--back-bg);
-        border-radius: 20px;
+        border-radius: 12px;
         position: relative;
         z-index: 2;
         overflow: hidden;
@@ -89,6 +98,20 @@ export default {
         .more {
             font-size: 0.9em;
             padding: 15px 0px 10px 15px;
+        }
+    }
+
+    .queue-info {
+        width: 100%;
+        height: 100%;
+        background: var(--back-bg);
+        z-index: 2;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+
+        .queue-info-inner {
+            padding: 12px;
         }
     }
 }

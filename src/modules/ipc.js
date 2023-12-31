@@ -278,7 +278,7 @@ export default {
         })
 
         ipcMain.on('setKey', (event, values) => {
-            ftStorage.setKey(values[0], values[1])
+            ftStorage.setKey(values[0], values[1], values[2])
         })
 
         ipcMain.on('deleteKey', (event, key) => {
@@ -291,6 +291,10 @@ export default {
 
         ipcMain.handle('keys', () => {
             return ftStorage.keys
+        })
+
+        ipcMain.handle('getCategory', (event, category) => {
+            return ftStorage.getCategory(category)
         })
     }
 }

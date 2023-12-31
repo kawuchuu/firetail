@@ -1,21 +1,21 @@
 {
   "SIDEBAR": {
-    "HOME": "Home",
+    "HOME": "منزل",
     "SETTINGS": "Settings",
     "LIBRARY": "Library",
-    "FAVOURITE": "Favourites",
-    "SONGS": "Songs",
-    "ARTISTS": "Artists",
-    "ALBUMS": "Albums",
+    "FAVOURITE": "مفضل",
+    "SONGS": "أغنية",
+    "ARTISTS": "فنان",
+    "ALBUMS": "ألبوم تواقيع",
     "PLAYLISTS": "Playlists",
     "CREATE_PLAYLIST": "Create Playlist"
   },
   "ROUTER": {
-    "ALL_SONGS": "Songs",
-    "ARTISTS": "Artists",
-    "ALBUMS": "Albums",
-    "FAVOURITES": "Favourites",
-    "HOME": "Home",
+    "ALL_SONGS": "أغنية",
+    "ARTISTS": "فنان",
+    "ALBUMS": "ألبوم تواقيع",
+    "FAVOURITES": "مفضل",
+    "HOME": "منزل",
     "UNKNOWN": "The route you were looking for could not be found.",
     "UNKNOWN_DESC": "Sorry about that. If you believe this is an error, please create an issue here."
   },
@@ -52,6 +52,7 @@
       "CHECK_UPDATE": "Check for updates"
     },
     "DROP_DOWN": {
+      "LANG_AUTO": "Auto",
       "APP_THEME": {
         "FIRETAIL": "Firetail",
         "CLASSIC": "Classic",
@@ -67,7 +68,12 @@
         "SONGS": "Songs",
         "ARTISTS": "Artists",
         "ALBUMS": "Albums",
-        "FAVOURITES": "Favourites"
+        "FAVOURITES": "Favorites"
+      },
+      "UPDATE_BRANCH": {
+        "STABLE": "Stable",
+        "PREVIEW": "Preview",
+        "DEVELOPMENT": "Development"
       }
     },
     "LANGUAGE": "Select a language",
@@ -75,8 +81,8 @@
     "CLEAR_LIBRARY": "Clear your Firetail music library",
     "REFRESH_METADATA": "Refresh your library\u0027s metadata",
     "APP_THEME": "App theme (requires reload for now)",
-    "COLOUR_THEME": "Colour theme",
-    "COLOUR_BAR": "Show album colour on playing bar",
+    "COLOUR_THEME": "Color theme",
+    "COLOUR_BAR": "Show album color on playing bar",
     "INCREASE_PERFORMANCE": "Reduce effects to increase performance",
     "USE_HIGH_CONTRAST": "Use high contrast style",
     "REDUCE_MOTION": "Reduce motion",
@@ -89,7 +95,20 @@
       "VERSION": "Version {version}",
       "COPYRIGHT": "© {year} {author}",
       "BUG_REPORT": "Found a bug? Please report it {link}",
-      "BUG_REPORT_LINK": "here on GitHub."
+      "BUG_REPORT_LINK": "here on GitHub.",
+      "LICENSE_CHANGELOG": "{license}, {changelog}",
+      "THIRD_PARTY_LICENSE": "Third-party licenses",
+      "VIEW_CHANGELOG": "view changelog",
+      "ADVANCED_INFO_LABEL": "Advanced information",
+      "ADVANCED_INFO": {
+        "BUILD": "Build: {build}",
+        "PLATFORM": "Platform: {platform}",
+        "PLATFORM_VER": "Platform version: {version}",
+        "ARCHITECTURE": "Architecture: {arch}",
+        "ELECTRON": "Electron: {version}",
+        "CHROMIUM": "Chromium: {version}",
+        "NODE": "Node: {version}"
+      }
     }
   },
   "POPUPS": {
@@ -117,11 +136,17 @@
       "DEFAULT_DESC": "My playlist description...",
       "REMOVE_IMAGE": "Remove Image",
       "CHOOSE_IMAGE": "Choose image"
+    },
+    "PROMPT": {
+      "RESTART": {
+        "TITLE": "إعادة التشغيل مطلوبة",
+        "MESSAGE": "يتطلب هذا الخيار إعادة تشغيل Firetail ليصبح ساري المفعول بالكامل."
+      }
     }
   },
   "BUTTONS": {
     "CREATE": "Create",
-    "OK": "OK",
+    "OK": "نعم",
     "CANCEL": "Cancel",
     "YES": "Yes",
     "NO": "No",
@@ -136,7 +161,7 @@
     "QUEUE": "Queue",
     "VOLUME": "Volume",
     "ZEN_MODE": "Zen Mode",
-    "FAVOURITE": "Favourite"
+    "FAVOURITE": "Favorite"
   },
   "SEARCH": {
     "TITLE": {
@@ -156,9 +181,9 @@
       "VIEW_EXPLORER": "Show in File Explorer",
       "VIEW_FINDER": "Show in Finder",
       "VIEW_FILEMGR": "Show in File Manager",
-      "ADD_FAVOURITE": "Add to favourites",
+      "ADD_FAVOURITE": "Add to favorites",
       "ADD_PLAYLIST": "Add to playlist",
-      "REMOVE_FAVOURITE": "Remove from favourites",
+      "REMOVE_FAVOURITE": "Remove from favorites",
       "REMOVE_PLAYLIST": "Remove from playlist",
       "DELETE": "Remove from library"
     },
@@ -169,5 +194,6 @@
     }
   },
   "APP_NAME": "Firetail",
-  "LANG_NAME": "English (UK)"
+  "LANG_NAME": "عربي",
+  "RTL": true
 }

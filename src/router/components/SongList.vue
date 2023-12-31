@@ -776,5 +776,13 @@ div.section {
         margin-right: 0;
         margin-left: 40px;
     }
+
+    .top-title h1, .bg-inner h3 {
+        letter-spacing: 0;
+    }
+
+    .bg-inner {
+        border-radius: 0 10px 0;
+    }
 }
 </style>

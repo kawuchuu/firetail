@@ -1,4 +1,5 @@
 import store from ".."
+import tr from '../../translation'
 
 const state = () => ({
     currentPanelComponent: 'None',
@@ -59,6 +60,16 @@ const mutations = {
                     label: 'OK',
                     onClick() {
                         window.ipcRenderer.send('deleteLibrary')
+                        store.commit('panel/updateActive', false)
+                    }
+                }
+            ]
+        }
+        if (content.buttons === 'dismiss') {
+            newProps['buttons'] = [
+                {
+                    label: tr.t('BUTTONS.OK'),
+                    onClick() {
                         store.commit('panel/updateActive', false)
                     }
                 }

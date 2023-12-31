@@ -260,17 +260,4 @@ export default {
 .bold-text .subtitle, .bold-text .button {
     font-weight: 800;
 }
-
-.rtl {
-    .switch.enabled {
-        .circle-inner {
-            transform: translateX(-21px);
-        }
-    }
-    .switch.enabled:active {
-        .circle-inner {
-            transform: translateX(-15px);
-        }
-    }
-}
 </style>

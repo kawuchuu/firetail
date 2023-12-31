@@ -112,7 +112,12 @@ export default {
             let getPosition = (pBar * 100 * seekBarWidth) / 100
             let getHalfHoverIndicate = this.$refs.hoverIndicate.clientWidth / 2
             this.hoverIndicateNum = time.timeFormat(pBar * this.rawSongDuration)
+            this.$refs.hoverIndicate.style.right = 'initial'
             this.$refs.hoverIndicate.style.left = this.$refs.seekBar.getBoundingClientRect().left + getPosition - getHalfHoverIndicate + 'px'
+            if (this.$store.state.nav.rtl) {
+                this.$refs.hoverIndicate.style.right = this.$refs.seekBar.getBoundingClientRect().right + getPosition - 75 + 'px'
+                this.$refs.hoverIndicate.style.left = 'initial'
+            }
         },
         up(evt) {
             window.removeEventListener('mousemove', this.move)
@@ -125,7 +130,12 @@ export default {
             let seekBarWidth = this.$refs.seekBar.clientWidth
             let getPosition = (pBar * 100 * seekBarWidth) / 100
             let getHalfHoverIndicate = this.$refs.hoverIndicate.clientWidth / 2
+            this.$refs.hoverIndicate.style.right = 'initial'
             this.$refs.hoverIndicate.style.left = this.$refs.seekBar.getBoundingClientRect().left + getPosition - getHalfHoverIndicate + 'px'
+            if (this.$store.state.nav.rtl) {
+                this.$refs.hoverIndicate.style.right = this.$refs.seekBar.getBoundingClientRect().right + getPosition - 75 + 'px'
+                this.$refs.hoverIndicate.style.left = 'initial'
+            }
             this.$store.dispatch('audio/addTimeUpdate')
             this.$store.commit('audio/newAudioTime', pBar * this.rawSongDuration)
             if (!this.seekMouseOver) {
@@ -140,7 +150,12 @@ export default {
             let getPosition = (pBar * 100 * seekBarWidth) / 100
             let getHalfHoverIndicate = this.$refs.hoverIndicate.clientWidth / 2
             this.hoverIndicateNum = time.timeFormat(pBar * this.rawSongDuration)
+            this.$refs.hoverIndicate.style.right = 'initial'
             this.$refs.hoverIndicate.style.left = this.$refs.seekBar.getBoundingClientRect().left + getPosition - getHalfHoverIndicate + 'px'
+            if (this.$store.state.nav.rtl) {
+                this.$refs.hoverIndicate.style.right = this.$refs.seekBar.getBoundingClientRect().right + getPosition - 75 + 'px'
+                this.$refs.hoverIndicate.style.left = 'initial'
+            }
             this.seekMouseDown = true
             this.$store.dispatch('audio/removeTimeUpdate')
             window.addEventListener('mousemove', this.move)
@@ -161,7 +176,12 @@ export default {
             let getPosition = (pBar * 100 * seekBarWidth) / 100
             let getHalfHoverIndicate = this.$refs.hoverIndicate.clientWidth / 2
             this.hoverIndicateNum = time.timeFormat(pBar * this.rawSongDuration)
+            this.$refs.hoverIndicate.style.right = 'initial'
             this.$refs.hoverIndicate.style.left = this.$refs.seekBar.getBoundingClientRect().left + getPosition - getHalfHoverIndicate + 'px'
+            if (this.$store.state.nav.rtl) {
+                this.$refs.hoverIndicate.style.right = this.$refs.seekBar.getBoundingClientRect().right + getPosition - 75 + 'px'
+                this.$refs.hoverIndicate.style.left = 'initial'
+            }
             this.$refs.seekFillHover.style.width = pBar * 100 + '%'
         },
         leave() {
@@ -200,6 +220,7 @@ export default {
         getP(e, el) {
             let pBar = (e.clientX - el.getBoundingClientRect().x) / el.clientWidth;
             pBar = this.clamp(0, pBar, 1);
+            if (this.$store.state.nav.rtl) pBar = Math.abs(pBar - 1)
             return pBar;
         },
         clamp(min, val, max) {
@@ -498,10 +519,6 @@ export default {
     .handle, .handle-hover, .fill, .control-buttons .play-pause-icon {
         transition-duration: 0s !important;
     }
-}
-
-.rtl .track-controls {
-    direction: ltr;
 }
 
 .right-controls-root.mid {

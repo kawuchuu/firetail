@@ -107,6 +107,7 @@ const state = () => ({
     scrolled: 0,
     playingBarColour: null,
     ver: 'unknown',
+    year: '2023',
     buildNum: 'unknown',
     port: '0',
     albumViewCurrentArt: '',
@@ -125,6 +126,7 @@ const state = () => ({
     reduceMotionEnabled: false,
     advancedFileInfo: window.localStorage.getItem('advancedFileInfo') === 'true',
     colourBarEnabled: true,
+    rtl: false
 })
 
 const mutations = {
@@ -207,6 +209,9 @@ const mutations = {
     },
     updateColourBar(state, enabled) {
         state.colourBarEnabled = enabled
+    },
+    updateRTL(state, enabled) {
+        state.rtl = enabled
     }
 }
 

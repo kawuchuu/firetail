@@ -79,9 +79,9 @@
     "CHECK_UPDATE": "Kiểm tra cập nhật ứng dụng",
     "UPDATE_BRANCH": "Chọn kênh cho cập nhật ứng dụng",
     "ABOUT": {
-      "VERSION": "Phiên bản",
-      "COPYRIGHT": "Copyright © 2023 ",
-      "BUG_REPORT": "Đã thấy một lỗi? Vui lòng báo cáo",
+      "VERSION": "Phiên bản {version}",
+      "COPYRIGHT": "© {year} {author}",
+      "BUG_REPORT": "Đã thấy một lỗi? Vui lòng báo cáo {link}",
       "BUG_REPORT_LINK": "đây trên GitHub."
     }
   },

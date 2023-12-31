@@ -12,9 +12,9 @@ export default {
     data() {
         return {
             updateBranches: [
-                { label: 'Stable', value: 'stable' },
-                { label: 'Preview', value: 'preview' },
-                { label: 'Development', value: 'dev' },
+                { label: 'SETTINGS.DROP_DOWN.UPDATE_BRANCH.STABLE', value: 'stable' },
+                { label: 'SETTINGS.DROP_DOWN.UPDATE_BRANCH.PREVIEW', value: 'preview' },
+                { label: 'SETTINGS.DROP_DOWN.UPDATE_BRANCH.DEVELOPMENT', value: 'dev' },
             ]
         }
     }

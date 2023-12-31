@@ -96,7 +96,7 @@ export default {
         <SubtitleOption>{{$t("SETTINGS.SUBTITLES.APPEARANCE")}}</SubtitleOption>
         <DropdownOption :label="$t('SETTINGS.COLOUR_THEME')" :init-selected="selectedTheme" :options="themes" :on-change="changeTheme" />
         <SwitchOption :label="$t('SETTINGS.COLOUR_BAR')" :init-enabled="colourBarEnabled" :action="colourBarAction" />
-        <SwitchOption :label="$t('SETTINGS.INCREASE_PERFORMANCE')" :init-enabled="performanceEnabled" :action="performanceAction" />
+        <SwitchOption :label="$t('SETTINGS.INCREASE_PERFORMANCE')" :init-enabled="performanceEnabled" :store-key="'performance'" :action="performanceAction" />
     </section>
 </template>
 

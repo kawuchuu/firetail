@@ -7,6 +7,10 @@ export default {
         action: {
             default: () => {},
             type: Function
+        },
+        storeKey: {
+            optional: true,
+            type: String
         }
     },
     data() {
@@ -17,6 +21,7 @@ export default {
     methods: {
         onClick() {
             this.enabled = !this.enabled
+            if (this.storeKey) ftStore.setKey(this.storeKey, this.enabled)
             this.action(this.enabled)
         }
     }
@@ -87,6 +92,19 @@ export default {
 .switch.enabled:active {
     .circle-inner {
         transform: translateX(15px);
+    }
+}
+
+.rtl {
+    .switch.enabled {
+        .circle-inner {
+            transform: translateX(-21px);
+        }
+    }
+    .switch.enabled:active {
+        .circle-inner {
+            transform: translateX(-15px);
+        }
     }
 }
 </style>

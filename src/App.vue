@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="" @dragover="changeDrag($event, true)">
+    <div id="app" :class="this.rtl ? 'rtl' : ''" @dragover="changeDrag($event, true)">
       <div class="noise"></div>
       <input type="file" multiple accept="audio/*" id="addFiles" @change="addFiles" style="display: none;">
         <div class="drag-detail">
@@ -92,16 +92,19 @@ export default {
         },
         resizeSidebar(evt) {
             if (!this.sidebarisResizing) return
-            //if (evt.clientX < 185 || evt.clientX > 350) return
-            if (evt.clientX < 185) {
+            const pos = Math.abs(evt.clientX - (this.rtl ? window.innerWidth : 0))
+            if (pos < 185) {
                 this.sidebarwidth = 185
-            } else if (evt.clientX >= 217 && evt.clientX <= 233) {
+            } else if (pos >= 217 && pos <= 233) {
                 this.sidebarwidth = 225
-            } else if (evt.clientX > 350) {
+            } else if (pos > 350) {
                 this.sidebarwidth = 350
             } else {
-                this.sidebarwidth = evt.clientX
+                this.sidebarwidth = pos
             }
+        },
+        applySettings() {
+
         }
     },
     data() {
@@ -127,9 +130,13 @@ export default {
         },
         isFullscreen() {
             return this.$store.state.nav.fullscreen
+        },
+        rtl() {
+            return this.$store.state.nav.rtl
         }
     },
     async mounted() {
+        if (this.$i18n.messages[this.$i18n.locale]['RTL']) this.$store.commit('nav/updateRTL', true)
         if (window.localStorage.getItem('sidebarwidth')) {
             this.sidebarwidth = window.localStorage.getItem('sidebarwidth')
         } else {
@@ -200,13 +207,6 @@ export default {
         if (window.localStorage.getItem('lastPlayed')) {
             this.$store.dispatch('audio/resumeState')
         }
-        if (window.localStorage.getItem('vibrancy')) {
-            const isVibrancyEnabled = window.localStorage.getItem('vibrancy')
-            if (isVibrancyEnabled == 'true') document.documentElement.classList.add('vibrancy')
-        } else {
-            window.localStorage.setItem('vibrancy', 'true')
-            document.documentElement.classList.add('vibrancy')
-        }
         document.documentElement.classList.add(process.platform)
     }
 }
@@ -275,6 +275,11 @@ html.light {
         transition: 0.25s;
         transition-property: opacity;
     }
+}
+
+.rtl .sidebar-resizer {
+    left: initial;
+    right: calc(var(--sidebar-width) - 5px);
 }
 
 .sidebar-resizer:hover, .sidebar-resizer:active {
@@ -347,6 +352,10 @@ html.light {
 
 #app.rtl {
     direction: rtl;
+}
+
+#app.rtl i {
+    transform: rotate3d(0, 1, 0, 180deg);
 }
 
 body {

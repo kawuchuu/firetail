@@ -11,7 +11,8 @@ export default {
         getColour() {
             let colour = this.$store.state.nav.playingBarColour
             if (colour == null) return 'background: transparent'
-            return `background: radial-gradient(farthest-corner at bottom left, var(--fg-bg), transparent 60%), radial-gradient(farthest-corner at bottom left, ${colour}, transparent 60%)`
+            if (this.$store.state.nav.rtl) return `background: radial-gradient(farthest-corner at bottom right, var(--fg-bg), transparent 60%), radial-gradient(farthest-corner at bottom right, ${colour}, transparent 60%)`
+            else return `background: radial-gradient(farthest-corner at bottom left, var(--fg-bg), transparent 60%), radial-gradient(farthest-corner at bottom left, ${colour}, transparent 60%)`
         }
     }
 }
@@ -55,6 +56,13 @@ export default {
 }
 
 .rtl {
+    .shadow {
+        margin-left: 0;
+        margin-right: var(--sidebar-width);
+    }
 
+    .colour-bg {
+        transform: none;
+    }
 }
 </style>

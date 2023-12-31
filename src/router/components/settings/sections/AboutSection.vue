@@ -6,22 +6,33 @@
             <div class="info">
                 <div>
                     <h1>{{$t('APP_NAME')}}</h1>
-                    <p>{{$t('SETTINGS.ABOUT.VERSION')}}{{version}}</p>
-                    <p>{{$t('SETTINGS.ABOUT.COPYRIGHT')}}kawuchuu</p>
+                    <p>{{$t('SETTINGS.ABOUT.VERSION', { version })}}</p>
+                    <p>{{$t('SETTINGS.ABOUT.COPYRIGHT', {year, author: 'kawuchuu'})}}</p>
                 </div>
                 <div>
-                    <p>{{$t('SETTINGS.ABOUT.BUG_REPORT')}}<a @click="openLink">{{$t('SETTINGS.ABOUT.BUG_REPORT_LINK')}}</a></p>
-                    <span><a @click="viewTpl">Third-party licenses</a>, <a @click="viewChangelog">view changelog</a></span>
+                    <i18n path="SETTINGS.ABOUT.BUG_REPORT" tag="p">
+                        <template v-slot:link>
+                            <a @click="openLink">{{$t('SETTINGS.ABOUT.BUG_REPORT_LINK')}}</a>
+                        </template>
+                    </i18n>
+                    <i18n path="SETTINGS.ABOUT.LICENSE_CHANGELOG" tag="span">
+                        <template v-slot:license>
+                            <a @click="viewTpl">{{$t('SETTINGS.ABOUT.THIRD_PARTY_LICENSE')}}</a>
+                        </template>
+                        <template v-slot:changelog>
+                            <a @click="viewChangelog">{{$t('SETTINGS.ABOUT.VIEW_CHANGELOG')}}</a>
+                        </template>
+                    </i18n>
                 </div>
-                <p @click="isMoreOpen = isMoreOpen ? false : true" class="open-more"><i class="ft-icon">{{ moreIcon }}</i> Advanced information</p>
+                <p @click="isMoreOpen = isMoreOpen ? false : true" class="open-more"><i class="ft-icon">{{ moreIcon }}</i>{{$t('SETTINGS.ABOUT.ADVANCED_INFO_LABEL')}}</p>
                 <div class="advanced-info" :class="doShow">
-                    <p>Build: {{build}}</p>
-                    <p>Platform: {{platform}}</p>
-                    <p>Platform version: {{platformVer}}</p>
-                    <p>Architecture: {{arch}}</p>
-                    <p>Electron: {{processVer.electron}}</p>
-                    <p>Chromium: {{processVer.chrome}}</p>
-                    <p>Node: {{processVer.node}}</p>
+                    <p>{{$t('SETTINGS.ABOUT.ADVANCED_INFO.BUILD', {build})}}</p>
+                    <p>{{$t('SETTINGS.ABOUT.ADVANCED_INFO.PLATFORM', {platform})}}</p>
+                    <p>{{$t('SETTINGS.ABOUT.ADVANCED_INFO.PLATFORM_VER', {version: platformVer})}}</p>
+                    <p>{{$t('SETTINGS.ABOUT.ADVANCED_INFO.ARCHITECTURE', {arch})}}</p>
+                    <p>{{$t('SETTINGS.ABOUT.ADVANCED_INFO.ELECTRON', {version: processVer.electron})}}</p>
+                    <p>{{$t('SETTINGS.ABOUT.ADVANCED_INFO.CHROMIUM', {version: processVer.chrome})}}</p>
+                    <p>{{$t('SETTINGS.ABOUT.ADVANCED_INFO.NODE', {version: processVer.node})}}</p>
                 </div>
             </div>
         </div>
@@ -42,7 +53,8 @@ export default {
             platform: window.process.platform,
             processVer: window.process.versions,
             platformVer: "unknown",
-            isMoreOpen: false
+            isMoreOpen: false,
+            year: this.$store.state.nav.year
         }
     },
     computed: {
@@ -135,9 +147,9 @@ a {
     align-items: center;
     cursor: pointer;
     margin-bottom: 0px;
+    gap: 10px;
 
     i {
-        margin-right: 10px;
         font-size: 22px;
     }
 }

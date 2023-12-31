@@ -40,8 +40,9 @@ contextBridge.exposeInMainWorld('marked', {
 
 contextBridge.exposeInMainWorld('ftStore', {
     getItem: key => ipcRenderer.invoke('getKey', key),
-    setKey: (key, value) => ipcRenderer.send('setKey', [key, value]),
+    setKey: (key, value, category) => ipcRenderer.send('setKey', [key, value, category]),
     deleteKey: key => ipcRenderer.send('deleteKey', key),
     keyExists: key => ipcRenderer.invoke('keyExists', key),
-    keys: ipcRenderer.invoke('keys')
+    keys: ipcRenderer.invoke('keys'),
+    getCategory: category => ipcRenderer.invoke('getCategory', category)
 })

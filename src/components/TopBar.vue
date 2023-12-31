@@ -131,7 +131,6 @@ export default {
     align-items: center;
     margin-left: 10px;
     pointer-events: all;
-    direction: ltr;
 }
 
 .nav-top-buttons {

@@ -520,14 +520,16 @@ export default {
 }
 
 .rtl {
-    .song-title {
-        margin-right: 0px;
-        margin-left: 10px;
+    .song-title, .song-artist {
+        margin-right: 0;
+        padding-right: 0;
+        padding-left: 20px;
     }
 
     .title-artist {
-        margin-left: 0px;
+        margin-left: 0;
         margin-right: 15px;
+        -webkit-mask-image: -webkit-linear-gradient(0deg, transparent, #000 20px);
     }
 
     .favourite-icon {

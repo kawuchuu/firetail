@@ -79,8 +79,8 @@
     "CHECK_UPDATE": "",
     "UPDATE_BRANCH": "",
     "ABOUT": {
-      "VERSION": "Version",
-      "COPYRIGHT": "Copyright © 2023 ",
+      "VERSION": "Version {version}",
+      "COPYRIGHT": "© {year} {author}",
       "BUG_REPORT": "",
       "BUG_REPORT_LINK": ""
     }
