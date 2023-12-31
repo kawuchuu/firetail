@@ -21,7 +21,7 @@ Vue.use(AsyncComputed)
 Vue.prototype.$t = function (...args) {
     const result = this.$i18n.t.apply(this.$i18n, args)
     if (result === '') {
-        return args[0]
+        return this.$t(args[0], 'en-US')
     }
     return result
 }
@@ -29,7 +29,7 @@ Vue.prototype.$t = function (...args) {
 Vue.prototype.$tc = function (...args) {
     const result = this.$i18n.tc.apply(this.$i18n, args)
     if (result === '') {
-        return args[0]
+        return this.$tc(args[0], args[1], 'en-US')
     }
     return result
 }

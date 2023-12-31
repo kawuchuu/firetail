@@ -107,7 +107,7 @@ const state = () => ({
     scrolled: 0,
     playingBarColour: null,
     ver: 'unknown',
-    year: '2023',
+    year: '2024',
     buildNum: 'unknown',
     port: '0',
     albumViewCurrentArt: '',

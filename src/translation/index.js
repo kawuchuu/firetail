@@ -34,6 +34,8 @@ let i18n = new VueI18n({
     messages: loadLocaleMessages(),
     silentTranslationWarn: true,
     silentFallbackWarn: true,
+    fallbackRoot: true,
+    fallbackRootWithEmptyString: true
 })
 
 export default i18n
