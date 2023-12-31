@@ -115,7 +115,7 @@ export default {
             this.$refs.hoverIndicate.style.right = 'initial'
             this.$refs.hoverIndicate.style.left = this.$refs.seekBar.getBoundingClientRect().left + getPosition - getHalfHoverIndicate + 'px'
             if (this.$store.state.nav.rtl) {
-                this.$refs.hoverIndicate.style.right = this.$refs.seekBar.getBoundingClientRect().right + getPosition - 75 + 'px'
+                this.$refs.hoverIndicate.style.right = this.$refs.seekBar.getBoundingClientRect().left + getPosition - getHalfHoverIndicate + 'px'
                 this.$refs.hoverIndicate.style.left = 'initial'
             }
         },
@@ -133,7 +133,7 @@ export default {
             this.$refs.hoverIndicate.style.right = 'initial'
             this.$refs.hoverIndicate.style.left = this.$refs.seekBar.getBoundingClientRect().left + getPosition - getHalfHoverIndicate + 'px'
             if (this.$store.state.nav.rtl) {
-                this.$refs.hoverIndicate.style.right = this.$refs.seekBar.getBoundingClientRect().right + getPosition - 75 + 'px'
+                this.$refs.hoverIndicate.style.right = this.$refs.seekBar.getBoundingClientRect().left + getPosition - getHalfHoverIndicate + 'px'
                 this.$refs.hoverIndicate.style.left = 'initial'
             }
             this.$store.dispatch('audio/addTimeUpdate')
@@ -153,7 +153,7 @@ export default {
             this.$refs.hoverIndicate.style.right = 'initial'
             this.$refs.hoverIndicate.style.left = this.$refs.seekBar.getBoundingClientRect().left + getPosition - getHalfHoverIndicate + 'px'
             if (this.$store.state.nav.rtl) {
-                this.$refs.hoverIndicate.style.right = this.$refs.seekBar.getBoundingClientRect().right + getPosition - 75 + 'px'
+                this.$refs.hoverIndicate.style.right = this.$refs.seekBar.getBoundingClientRect().left + getPosition - getHalfHoverIndicate + 'px'
                 this.$refs.hoverIndicate.style.left = 'initial'
             }
             this.seekMouseDown = true
@@ -179,7 +179,7 @@ export default {
             this.$refs.hoverIndicate.style.right = 'initial'
             this.$refs.hoverIndicate.style.left = this.$refs.seekBar.getBoundingClientRect().left + getPosition - getHalfHoverIndicate + 'px'
             if (this.$store.state.nav.rtl) {
-                this.$refs.hoverIndicate.style.right = this.$refs.seekBar.getBoundingClientRect().right + getPosition - 75 + 'px'
+                this.$refs.hoverIndicate.style.right = this.$refs.seekBar.getBoundingClientRect().left + getPosition - getHalfHoverIndicate + 'px'
                 this.$refs.hoverIndicate.style.left = 'initial'
             }
             this.$refs.seekFillHover.style.width = pBar * 100 + '%'
