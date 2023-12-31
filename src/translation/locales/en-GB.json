@@ -52,6 +52,7 @@
       "CHECK_UPDATE": "Check for updates"
     },
     "DROP_DOWN": {
+      "LANG_AUTO": "Auto",
       "APP_THEME": {
         "FIRETAIL": "Firetail",
         "CLASSIC": "Classic",
@@ -68,6 +69,11 @@
         "ARTISTS": "Artists",
         "ALBUMS": "Albums",
         "FAVOURITES": "Favourites"
+      },
+      "UPDATE_BRANCH": {
+        "STABLE": "Stable",
+        "PREVIEW": "Preview",
+        "DEVELOPMENT": "Development"
       }
     },
     "LANGUAGE": "Select a language",
@@ -89,7 +95,20 @@
       "VERSION": "Version {version}",
       "COPYRIGHT": "© {year} {author}",
       "BUG_REPORT": "Found a bug? Please report it {link}",
-      "BUG_REPORT_LINK": "here on GitHub."
+      "BUG_REPORT_LINK": "here on GitHub.",
+      "LICENSE_CHANGELOG": "{license}, {changelog}",
+      "THIRD_PARTY_LICENSE": "Third-party licenses",
+      "VIEW_CHANGELOG": "view changelog",
+      "ADVANCED_INFO_LABEL": "Advanced information",
+      "ADVANCED_INFO": {
+        "BUILD": "Build: {build}",
+        "PLATFORM": "Platform: {platform}",
+        "PLATFORM_VER": "Platform version: {version}",
+        "ARCHITECTURE": "Architecture: {arch}",
+        "ELECTRON": "Electron: {version}",
+        "CHROMIUM": "Chromium: {version}",
+        "NODE": "Node: {version}"
+      }
     }
   },
   "POPUPS": {
@@ -117,6 +136,12 @@
       "DEFAULT_DESC": "My playlist description...",
       "REMOVE_IMAGE": "Remove Image",
       "CHOOSE_IMAGE": "Choose image"
+    },
+    "PROMPT": {
+      "RESTART": {
+        "TITLE": "Restart Required",
+        "MESSAGE": "Changing this option requires a restart of Firetail to take full effect."
+      }
     }
   },
   "BUTTONS": {
