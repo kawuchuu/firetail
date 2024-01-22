@@ -74,6 +74,21 @@ const createWindow = () => {
     blurFg: '#ffffff80'
   }
 
+  mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
+      (details, callback) => {
+        callback({ requestHeaders: { Origin: '*', ...details.requestHeaders } });
+      },
+  );
+
+  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        'Access-Control-Allow-Origin': ['*'],
+        ...details.responseHeaders,
+      },
+    });
+  });
+
   //lock app
   if ((app.isPackaged && !app.commandLine.hasSwitch('disable-instance-lock')) || app.commandLine.hasSwitch('enable-instance-lock')) {
     const getLock = app.requestSingleInstanceLock()

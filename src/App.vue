@@ -136,6 +136,7 @@ export default {
         }
     },
     async mounted() {
+        console.log(this.$i18n)
         if (this.$i18n.messages[this.$i18n.locale]['RTL']) this.$store.commit('nav/updateRTL', true)
         if (window.localStorage.getItem('sidebarwidth')) {
             this.sidebarwidth = window.localStorage.getItem('sidebarwidth')
@@ -354,9 +355,9 @@ html.light {
     direction: rtl;
 }
 
-#app.rtl i {
+/*#app.rtl i {
     transform: rotate3d(0, 1, 0, 180deg);
-}
+}*/
 
 body {
     margin: 0;

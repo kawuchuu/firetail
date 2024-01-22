@@ -64,4 +64,8 @@ export default {
 .littlebitforward {
     transform: translate(0px);
 }
+
+.rtl .nav-button i {
+    transform: rotate3d(0, 1, 0, 180deg);
+}
 </style>

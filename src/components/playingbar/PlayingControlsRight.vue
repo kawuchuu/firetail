@@ -4,7 +4,7 @@
             <i @click="showQueue = !showQueue" class="ft-icon">queue</i>
             <QueuePopup :class="active" />
             <!-- <i class="material-icons">blur_on</i> -->
-            <i @click="mute" class="ft-icon">{{volIcon}}</i>
+            <i @click="mute" class="ft-icon vol-btn">{{volIcon}}</i>
             <div ref="volBarWrapper" class="vol-bar-inner-container" @mousemove="moveHover" @mouseover="hover" @mouseleave="leave" @mousedown="down">
                 <div class="vol-bar" ref="volBar">
                     <div ref="volFill" :style="fill" class="fill"></div>
@@ -21,15 +21,6 @@
 <script>
 import { mapState } from 'vuex'
 import QueuePopup from './queue/QueuePopup.vue'
-let clamp = (min, val, max) => {
-    return Math.min(Math.max(min, val), max);
-}
-
-let getP = (e, el) => {
-    let pBar = (e.clientX - el.getBoundingClientRect().x) / el.clientWidth;
-    pBar = clamp(0, pBar, 1);
-    return pBar;
-}
 
 export default {
     components: {
@@ -79,7 +70,7 @@ export default {
         move(evt) {
             if (!this.volMouseDown) return
             this.$refs.volFill.style.transition = 'none'
-            let pBar = getP(evt, this.$refs.volBar)
+            let pBar = this.getP(evt, this.$refs.volBar)
             this.$store.commit('audio/setVolume', pBar)
             window.addEventListener('mousemove', this.move)
             window.addEventListener('mouseup', this.up)
@@ -91,7 +82,7 @@ export default {
             if (!this.volMouseDown) return
             this.volMouseDown = false
             this.$refs.volFill.style.removeProperty('transition')
-            let pBar = getP(evt, this.$refs.volBar)
+            let pBar = this.getP(evt, this.$refs.volBar)
             this.$store.commit('audio/setVolume', pBar)
             window.addEventListener('mousemove', this.move)
             window.addEventListener('mouseup', this.up)
@@ -103,7 +94,7 @@ export default {
         down(evt) {
             this.unmuteVol = null
             this.$store.commit('audio/setMute', false)
-            let pBar = getP(evt, this.$refs.volBar)
+            let pBar = this.getP(evt, this.$refs.volBar)
             this.volMouseDown = true
             this.$store.commit('audio/setVolume', pBar)
             window.addEventListener('mousemove', this.move)
@@ -116,7 +107,7 @@ export default {
             //this.$refs.volFillHover.classList.add('hover')
         },
         moveHover(evt) {
-            let pBar = getP(evt, this.$refs.volBar)
+            let pBar = this.getP(evt, this.$refs.volBar)
             this.$refs.volFillHover.style.width = pBar * 100 + '%'
         },
         leave() {
@@ -128,6 +119,15 @@ export default {
         enterExitZen() {
             this.$store.commit('nav/updateFullscreen', !this.$store.state.nav.fullscreen)
             window.ipcRenderer.send('set-fullscreen', this.$store.state.nav.fullscreen)
+        },
+        getP(e, el) {
+            let pBar = (e.clientX - el.getBoundingClientRect().x) / el.clientWidth;
+            pBar = this.clamp(0, pBar, 1);
+            if (this.$store.state.nav.rtl) pBar = Math.abs(pBar - 1)
+            return pBar;
+        },
+        clamp(min, val, max) {
+            return Math.min(Math.max(min, val), max);
         }
     }
 }
@@ -266,6 +266,10 @@ export default {
         i {
             margin-left: 0px;
             margin-right: 20px;
+        }
+
+        .vol-btn {
+            transform: rotate3d(0, 1, 0, 180deg);
         }
     }
 }

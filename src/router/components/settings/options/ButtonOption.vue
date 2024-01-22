@@ -57,4 +57,14 @@ export default {
         opacity: 0.5;
     }
 }
+
+.spotify {
+    --hl-txt: #1DB954;
+    --hl-op: #1DB9541a;
+}
+
+.lastfm {
+    --hl-txt: #ff3a3a;
+    --hl-op: #ff3a3a1a;
+}
 </style>

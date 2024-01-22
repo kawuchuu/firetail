@@ -2,7 +2,7 @@
     <div class="queue-item" :class="isActive">
         <!-- i think the images are causing slowdown, either needs tweaks or removal entirely -->
         <div class="image">
-            <img v-if="source.hasImage == 1" :src="getImg(source.albumArtist, source.album)">
+            <img v-if="source.hasImage == 1" loading="lazy" :src="getImg(source.albumArtist, source.album)">
             <img v-else src="../../../assets/no_image.svg">
             <div v-if="isActive == 'active'" class="nowplaying">
                 <div class="playing-ani">

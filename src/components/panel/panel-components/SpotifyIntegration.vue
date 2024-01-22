@@ -108,6 +108,7 @@ export default {
                 return
             }
             this.message = 'Requesting access tokens...'
+            console.log(args)
             if (sessionStorage.getItem('temp-state') === args.state) {
                 const query = new URLSearchParams({
                     'client_id': 'd1084781b7af46d6b6948192e372e4a6',
@@ -118,12 +119,12 @@ export default {
                 })
                 const resp = await fetch('https://accounts.spotify.com/api/token', {
                     method: 'POST',
-                    mode: "no-cors",
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     body: query.toString()
                 })
+                console.log(resp)
                 const data = await resp.json()
                 if (data.error) {
                     console.error(data)

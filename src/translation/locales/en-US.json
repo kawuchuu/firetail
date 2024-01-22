@@ -41,6 +41,7 @@
       "GENERAL": "General",
       "LIBRARY": "Library",
       "APPEARANCE": "Appearance",
+      "INTEGRATION": "Integrations",
       "ACCESSIBILITY": "Accessibility",
       "ADVANCED": "Advanced",
       "UPDATE": "Updates",
@@ -49,7 +50,10 @@
     "BUTTON": {
       "CLEAR_LIBRARY": "Clear Library",
       "REFRESH": "Refresh",
-      "CHECK_UPDATE": "Check for updates"
+      "CHECK_UPDATE": "Check for updates",
+      "CONNECT_SPOTIFY": "Connect to Spotify",
+      "CONNECT_LASTFM": "Connect to Last.fm",
+      "DISCONNECT": "Disconnect"
     },
     "DROP_DOWN": {
       "LANG_AUTO": "Auto",
@@ -84,6 +88,11 @@
     "COLOUR_THEME": "Color theme",
     "COLOUR_BAR": "Show album color on playing bar",
     "INCREASE_PERFORMANCE": "Reduce effects to increase performance",
+    "SPOTIFY_INTEGRATION_DISCONNECTED": "Connect your Spotify account for additional metadata features",
+    "SPOTIFY_INTEGRATION_CONNECTED": "Hi, {user}! Your Spotify account is currently connected to Firetail.",
+    "SPOTIFY_DISCLAIMER": "By using this feature, you agree to Spotify's Terms and Conditions of Use and Privacy Policy. Some information about your Firetail library will be sent to Spotify in order to provide these features. You can opt-out at any time by removing the Firetail application in your Spotify account settings.",
+    "LASTFM_INTEGRATION_DISCONNECTED": "Connect your Last.fm account to scrobble your listening activity",
+    "LASTFM_DISCLAIMER": "By using this feature, you agree to Last.fm's Terms of Use and Privacy Policy. Your listening activity will be sent to Last.fm. You can opt-out at any time by removing the Firetail application in your Last.fm account settings.",
     "USE_HIGH_CONTRAST": "Use high contrast style",
     "REDUCE_MOTION": "Reduce motion",
     "BOLD_TEXT": "Increase font weight",

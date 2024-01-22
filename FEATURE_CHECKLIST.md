@@ -1,5 +1,5 @@
 # Firetail Feature Checklist
-*Created: 02/01/2023, Updated: 25/12/2023*
+*Created: 02/01/2023, Updated: 01/01/2024*
 
 ---
 
@@ -34,11 +34,15 @@
   - ~~Fix shuffling~~ ✅
   - Clean up A LOT of code. Make things like audio and settings a proper system instead of the current jank
 - ~~Explicit tag~~ ✅
-- RTL UI
+- ~~RTL UI~~ (mostly done needs a little more tweaking though)
 - Updates
   - Let user check for updates
   - Choose update branch
 - ~~Migrate to Electron Forge~~ ✅
+- Settings
+  - ~~Improve way settings view is rendered~~
+  - Add new setting storage solution
+  - Implement new setting application solution
 
 
 ## Features that can (probably) wait for later versions

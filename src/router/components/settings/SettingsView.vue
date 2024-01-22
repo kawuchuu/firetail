@@ -9,6 +9,7 @@
                 <AccessibilitySection />
                 <LibrarySection />
                 <AppearanceSection />
+                <IntegrationSection />
                 <UpdatesSection />
                 <AdvancedSection />
                 <AboutSection />
@@ -25,10 +26,12 @@ import AppearanceSection from "./sections/AppearanceSection.vue";
 import UpdatesSection from "./sections/UpdatesSection.vue";
 import AdvancedSection from "./sections/AdvancedSection.vue";
 import AboutSection from "./sections/AboutSection.vue";
+import IntegrationSection from "./sections/IntegrationSection.vue";
 
 export default {
     name: "SettingsView.vue",
     components: {
+        IntegrationSection,
         AboutSection,
         AdvancedSection,
         UpdatesSection,
@@ -52,16 +55,6 @@ main {
     align-items: center;
     flex-direction: column;
     width: 100%;
-}
-
-.spotify {
-    --hl-txt: #1DB954;
-    --hl-op: #1DB9541a;
-}
-
-.lastfm {
-    --hl-txt: #ff3a3a;
-    --hl-op: #ff3a3a1a;
 }
 
 .option-wrapper {
