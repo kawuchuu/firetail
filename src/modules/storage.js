@@ -10,7 +10,7 @@ class FiretailStorage {
     constructor() {
         access(this.configFilePath, constants.F_OK, (err) => {
             if (err) {
-                writeFileSync(this.configFilePath, '{categories: {}}')
+                writeFileSync(this.configFilePath, '{"categories": {}}')
             }
             readFile(this.configFilePath, {}, (err, data) => {
                 if (err) throw err;

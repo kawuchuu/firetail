@@ -200,6 +200,9 @@ export default {
                 const promColour = this.colorThief.getColor(albumArt)
                 this.$store.commit('nav/updatePlayingBarColour', `rgb(${promColour[0]},${promColour[1]},${promColour[2]})`)
             })
+            albumArt.addEventListener('error', () => {
+              this.$store.commit('nav/updatePlayingBarColour', 'transparent')
+            })
         }
     }
 }
