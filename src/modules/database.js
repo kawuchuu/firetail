@@ -3,14 +3,15 @@ import {app} from 'electron'
 import files from './files'
 
 const db = new Database(`${app.getPath('userData')}/library.db`, {  })
-db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, allArtists text, albumArtist text, album text, duration text, realdur number, path text, id text, hasImage number, trackNum number, year text, disc number, explicit number)').run()
+db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, allArtists text, albumArtist text, album text, duration text, realdur number, path text, id text, hasImage number, trackNum number, year text, disc number, explicit number, genre text)').run()
 db.prepare('CREATE TABLE IF NOT EXISTS favourites (id text)').run()
 db.prepare('CREATE TABLE IF NOT EXISTS playlists (name text, desc text, id text, songIds text, hasImage number)').run()
+db.prepare('CREATE TABLE IF NOT EXISTS stats (id text, plays number, lastplay number)').run()
 
 export default {
     addToLibrary(songs) {
         let existingSongs = this.getLibrary()[0]
-        let insert = db.prepare(`INSERT INTO library (title, artist, allArtists, albumArtist, album, duration, realdur, path, id, hasImage, trackNum, year, disc, explicit) VALUES (@title, @artist, @allArtists, @albumArtist, @album, @duration, @realdur, @path, @id, @hasImage, @trackNum, @year, @disc, @explicit)`)
+        let insert = db.prepare(`INSERT INTO library (title, artist, allArtists, albumArtist, album, duration, realdur, path, id, hasImage, trackNum, year, disc, explicit, genre) VALUES (@title, @artist, @allArtists, @albumArtist, @album, @duration, @realdur, @path, @id, @hasImage, @trackNum, @year, @disc, @explicit, @genre)`)
         let insertMany = db.transaction((newSongs) => {
             for (let song of newSongs){
                 if (existingSongs.map(e => { return e.path }).indexOf(song.path) == -1){
@@ -136,5 +137,13 @@ export default {
         const getSongs = db.prepare('SELECT * FROM library INNER JOIN favourites ON library.id = favourites.id').all()
         const durSum = db.prepare(`SELECT SUM(realdur) FROM library INNER JOIN favourites ON library.id = favourites.id`).all()
         return [getSongs, durSum[0]['SUM(realdur)']]
+    },
+    addStatPlay(id) {
+        const findStatPlay = db.prepare('SELECT * FROM stats WHERE id = ?').all(id)
+        if (findStatPlay.length === 0) {
+            db.prepare('INSERT INTO stats (id, plays, lastplay) VALUES (?, ?, ?)').run(id, 1, Date.now())
+        } else {
+            db.prepare('UPDATE stats SET plays = ?, lastplay = ? WHERE id = ?').run(findStatPlay[0].plays + 1, Date.now(), id)
+        }
     }
 }

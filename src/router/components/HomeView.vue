@@ -84,7 +84,7 @@ main {
     max-width: 1050px;
 
     h1 {
-        font-size: 3.75em;
+        font-size: 3.5em;
         margin: 0;
         letter-spacing: -0.04em;
     }
@@ -108,7 +108,7 @@ main {
         .horiz-list {
             display: flex;
             overflow-x: auto;
-            padding: 0px 70px 25px;
+            padding: 0px 70px 10px;
 
             .home-list-item {
                 padding: 0px 20px;
@@ -149,22 +149,16 @@ main {
             }
         }
 
-        .horiz-list:hover {
-            padding: 0px 70px 10px;
-        }
 
-        .horiz-list::-webkit-scrollbar {
-            display: none;
-        }
-
-        .horiz-list:hover::-webkit-scrollbar {
-            display: block;
+        .horiz-list:hover::-webkit-scrollbar-thumb {
+            background: var(--text-op);
+            border: solid 4px var(--bg);
+            border-left-width: 70px;
+            border-right-width: 70px;
         }
 
         .horiz-list::-webkit-scrollbar-thumb {
-            border-right-width: 70px;
-            border-left-width: 70px;
-            border-radius: 100px;
+            background: transparent;
         }
     }
 }

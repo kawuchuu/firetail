@@ -104,7 +104,7 @@ export default {
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url('../../assets/no_image.svg');
+    background-image: url('../../assets/no_imagealt.svg');
     border-radius: 10px;
     transition: 0.25s;
 }

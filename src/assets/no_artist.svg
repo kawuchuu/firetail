@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 24.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 27.4.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1"
-	 id="Layer_1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg"
+	 id="Layer_1" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:cc="http://creativecommons.org/ns#" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1080 1080"
 	 style="enable-background:new 0 0 1080 1080;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:none;stroke:url(#SVGID_1_);stroke-width:55;stroke-miterlimit:10;}
-	.st1{fill:none;stroke:#EB6E64;stroke-width:55;stroke-miterlimit:10;}
+	.st0{fill:none;stroke:#EB6E64;stroke-width:55;stroke-linecap:round;stroke-miterlimit:10;}
 </style>
 <sodipodi:namedview  bordercolor="#666666" borderopacity="1" gridtolerance="10" guidetolerance="10" id="namedview3805" inkscape:current-layer="Layer_1" inkscape:cx="300.07509" inkscape:cy="885.46554" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-height="1006" inkscape:window-maximized="1" inkscape:window-width="1920" inkscape:window-x="0" inkscape:window-y="0" inkscape:zoom="0.73981481" objecttolerance="10" pagecolor="#ffffff" showgrid="false">
 	</sodipodi:namedview>
-<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-681.4565" y1="-154.7491" x2="-681.4565" y2="-154.7491" gradientTransform="matrix(-0.5 -0.866 0.866 -0.5 303.2844 -12.8159)">
-	<stop  offset="0" style="stop-color:#EF9135"/>
-	<stop  offset="1" style="stop-color:#E74E8E"/>
-</linearGradient>
-<path class="st0" d="M510,654.7"/>
-<path class="st1" d="M233.9,1080c0-138.9,141.4-292.2,315.8-292.2S865.6,941.1,865.6,1080"/>
-<circle class="st1" cx="549.7" cy="460" r="186.9"/>
+<path class="st0" d="M338.6,808.6c0-97.3,90.2-176.3,201.4-176.3s201.4,78.9,201.4,176.3"/>
+<circle class="st0" cx="540" cy="397.3" r="125.9"/>
 </svg>

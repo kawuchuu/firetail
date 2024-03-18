@@ -1,4 +1,4 @@
-import { app, ipcMain, nativeTheme, shell } from 'electron'
+import { app, ipcMain, nativeTheme, shell, Menu } from 'electron'
 import fs from 'fs'
 import {promises as fsPromises} from 'fs'
 import db from './database'
@@ -295,6 +295,15 @@ export default {
 
         ipcMain.handle('getCategory', (event, category) => {
             return ftStorage.getCategory(category)
+        })
+
+        ipcMain.on('createPopup', (event, options) => {
+            const menu = Menu.buildFromTemplate(options)
+            menu.popup()
+        })
+
+        ipcMain.on('addStatPlay', (event, id) => {
+            db.addStatPlay(id)
         })
     }
 }

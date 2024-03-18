@@ -1,6 +1,6 @@
 <template>
     <div id="app" :class="this.rtl ? 'rtl' : ''" @dragover="changeDrag($event, true)">
-      <div class="noise"></div>
+<!--      <div class="noise"></div>-->
       <input type="file" multiple accept="audio/*" id="addFiles" @change="addFiles" style="display: none;">
         <div class="drag-detail">
             <p id="dragInfo">Nothing selected</p>

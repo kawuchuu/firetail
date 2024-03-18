@@ -46,3 +46,7 @@ contextBridge.exposeInMainWorld('ftStore', {
     keys: ipcRenderer.invoke('keys'),
     getCategory: category => ipcRenderer.invoke('getCategory', category)
 })
+
+contextBridge.exposeInMainWorld('contextmenu', {
+    popup: options => ipcRenderer.send('createPopup', options)
+})

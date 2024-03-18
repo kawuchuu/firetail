@@ -4,8 +4,8 @@
         <div class="ctx-container" :style="getPosStyle">
             <div class="context-menu" ref="ctxMenu">
                 <div class="menu-item" v-for="(item, index) in menuItems" :key="index">
-                    <div v-show="doShow(item.hide)" v-if="item.type == 'button'" @click="doAction(item)" class="button" :class="item.style">{{item.name}}</div>
-                    <div v-show="doShow(item.hide)" v-else-if="item.type == 'divider'" class="divider"></div>
+                    <div v-show="doShow(item.hide)" v-if="item.type === 'normal'" @click="doAction(item)" class="button" :class="item.style">{{item.label}}</div>
+                    <div v-show="doShow(item.hide)" v-else-if="item.type === 'separator'" class="divider"></div>
                 </div>
                 <div v-if="menuItems.length == 0" class="menu-item"><span>Nothing to show here ~^0^~</span></div>
             </div>
@@ -81,15 +81,23 @@ export default {
             return willShow
         }
     },
-    mounted() {
+    created() {
         contextMenuBus.$on('updateitems', evt => {
             this.updateItems(evt.items)
             if (evt.position) {
                 this.x = evt.position.clientX
                 this.y = evt.position.clientY
             }
-            this.isShown = true
+            if (window.process.platform === 'darwin') {
+                //window.contextmenu.popup(evt.items)
+                this.isShown = true
+            } else {
+                this.isShown = true
+            }
         })
+    },
+    destroyed() {
+        contextMenuBus.$destroy()
     }
 }
 </script>

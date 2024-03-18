@@ -83,7 +83,7 @@
     "APP_THEME": "App theme (requires reload for now)",
     "COLOUR_THEME": "Colour theme",
     "COLOUR_BAR": "Show album colour on playing bar",
-    "INCREASE_PERFORMANCE": "Reduce effects to increase performance",
+    "INCREASE_PERFORMANCE": "Reduce visual effects to increase performance",
     "USE_HIGH_CONTRAST": "Use high contrast style",
     "REDUCE_MOTION": "Reduce motion",
     "BOLD_TEXT": "Increase font weight",

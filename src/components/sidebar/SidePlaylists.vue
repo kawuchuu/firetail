@@ -63,7 +63,7 @@ export default {
         },
         handleDragOver(evt) {
             evt.preventDefault()
-            if (evt.dataTransfer && evt.dataTransfer.types[0] === 'ftsong') {
+            if (evt.dataTransfer && evt.dataTransfer.types.indexOf('ftsong') !== -1) {
                 evt.dataTransfer.dropEffect = 'copy'
                 this.isDragOver = true
             } else if (evt.dataTransfer) {
@@ -122,12 +122,8 @@ export default {
 }
 
 .playlist-sidename.drag-over {
-    border: dashed var(--hl-txt) 2px;
+    outline: dashed var(--hl-txt) 2px;
     opacity: 1;
-
-    span {
-        transform: translate(-2px, 1px);
-    }
 }
 
 .router-link-active .item-sidebar {

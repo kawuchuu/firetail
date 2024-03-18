@@ -213,7 +213,6 @@ const createWindow = () => {
     {
       label: 'Controls',
       submenu: [
-        // this one is still registering when hidden even though acceleratorWorksWhenHidden is false...
         {
           label: 'Play / Pause',
           //accelerator: 'Space',

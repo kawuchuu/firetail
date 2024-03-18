@@ -5,6 +5,7 @@
                 :data-key="'id'"
                 :data-sources="queue"
                 :data-component="sQueue"
+                :estimate-size="60"
             />
             <!-- <span v-if="remainingQueueLength > 40" class="more">...and {{ remainingQueueLength - 40 }} more songs</span> -->
          </div>

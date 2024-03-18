@@ -13,7 +13,7 @@
                 <div class="heading">{{$t('SEARCH.TITLE.SONG')}}</div>
                 <div class="result song" v-for="item in results.songs" :key="item.id">
                     <img v-if="item.hasImage == 1" :src="getImg(item.albumArtist, item.album)">
-                    <img v-else src="../assets/no_image.svg">
+                    <img v-else src="../assets/no_imagealt.svg">
                     <div class="song-info">
                         <span class="title">{{item.title}}</span>
                         <span class="artist">{{item.artist}}</span>

@@ -137,6 +137,7 @@ export default {
 
     h4 {
         letter-spacing: -0.02em;
+        font-weight: 600;
     }
 
     p {

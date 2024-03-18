@@ -80,7 +80,8 @@ export default {
                     trackNum: meta.common.track.no ? meta.common.track.no : null,
                     year: meta.common.year ? `${meta.common.year}` : null,
                     disc: meta.common.disk ? meta.common.disk.no : null,
-                    explicit
+                    explicit,
+                    genre: meta.common.genre ? JSON.stringify(meta.common.genre) : null
                 }
                 let artistAlbum = `${metaObj.albumArtist}${meta.common.album}`.replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')
                 toAdd.push(metaObj)

@@ -128,6 +128,7 @@ router.beforeEach(async (to, from, next) => {
             sortedSongsToUse.push(songs[0].find(item => item.id == song.id))
         })
         store.commit('audio/updateCurrentListNoSort', sortedSongsToUse)
+        store.commit('audio/setCurrentListDur', songs[1])
         store.commit('playlist/setCurrentPlaylist', playlist[0])
     } else if (to.path == '/liked') {
         store.dispatch('audio/getAllFavourites')

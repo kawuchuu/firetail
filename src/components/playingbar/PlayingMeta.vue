@@ -22,9 +22,9 @@
         <router-link :to="viewLink">
             <div class="song-album-art" :style="getImageBg" @mouseover="hoverImage" @mouseleave="leaveImage"></div>
         </router-link>
-        <div v-if="currentSong" ref="titleArtist" class="title-artist" @mouseover="hoverCodec" @mouseleave="leaveCodec">
-            <router-link ref="songTitle" :style="songTitleStyle" :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(currentSong.album)}&view=album_${encodeURIComponent(currentSong.albumArtist + currentSong.album)}&albumArtist=${encodeURIComponent(currentSong.albumArtist)}`" class="song-title">{{title}}<div v-if="currentSong.explicit" class="explicit"><span>E</span></div></router-link>
-            <router-link :to="`/artists?hideTop=true&column=artist&q=${encodeURIComponent(artist)}&view=artist_${encodeURIComponent(artist)}`" class="song-artist">{{artist}}</router-link>
+        <div v-if="currentSong" ref="titleArtist" class="title-artist" @mouseover="hoverCodec" @mouseleave="leaveCodec" @dragstart="drag" @dragend="stopDrag">
+            <router-link ref="songTitle" :title="title" :style="songTitleStyle" :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(currentSong.album)}&view=album_${encodeURIComponent(currentSong.albumArtist + currentSong.album)}&albumArtist=${encodeURIComponent(currentSong.albumArtist)}`" class="song-title">{{title}}<div v-if="currentSong.explicit" class="explicit"><span>E</span></div></router-link>
+            <router-link :title="artist" :to="`/artists?hideTop=true&column=artist&q=${encodeURIComponent(artist)}&view=artist_${encodeURIComponent(artist)}`" class="song-artist">{{artist}}</router-link>
         </div>
         <div v-else ref="titleArtist" class="title-artist" @mouseover="hoverCodec" @mouseleave="leaveCodec">
             <span ref="songTitle" class="song-title">{{title}}<div v-if="currentSong && currentSong.explicit" class="explicit"><span>E</span></div></span>
@@ -39,6 +39,7 @@
 import {mapState} from 'vuex'
 import * as Vibrant from 'node-vibrant'
 import ColorThief from 'colorthief/dist/color-thief.mjs'
+import {bus} from "../../renderer";
 
 export default {
     computed: {
@@ -142,7 +143,7 @@ export default {
             this.showLargeImage = false
         },
         hoverCodec() {
-            this.showCodecInfo = true
+            if (!this.doingDrag) this.showCodecInfo = true
         },
         leaveCodec() {
             this.showCodecInfo = false
@@ -173,7 +174,25 @@ export default {
             if (songTitle.getBoundingClientRect().width > titleArtist.getBoundingClientRect().width) {
                 return `--scrollBy: -${songTitle.getBoundingClientRect().width - titleArtist.getBoundingClientRect().width}px`
             } else return ''
-        }
+        },
+        drag(evt) {
+            this.doingDrag = true
+            this.showCodecInfo = false
+            if (!evt.dataTransfer) return
+            evt.dataTransfer.setData('ftsong', JSON.stringify([{
+                title: this.currentSong.title,
+                artist: this.currentSong.artist,
+                album: this.currentSong.album,
+                id: this.currentSong.id
+            }]))
+            document.querySelector('#dragInfo').textContent = `${this.currentSong.artist} - ${this.currentSong.title}`
+            evt.dataTransfer.setDragImage(document.querySelector('.drag-detail'), -15, 10)
+            this.doingDrag = false
+            this.showCodecInfo = true
+        },
+        stopDrag() {
+            bus.$emit('stopDrag')
+        },
     },
     data() {
         return {
@@ -181,7 +200,8 @@ export default {
             showCodecInfo: false,
             advancedFileInfo: {},
             colorThief: new ColorThief(),
-            songTitleStyle: ''
+            songTitleStyle: '',
+            doingDrag: false
         }
     },
     watch: {
@@ -235,7 +255,7 @@ export default {
     border-radius: 4px;
     z-index: 2;
     position: relative;
-    background-image: url('../../assets/no_image.svg');
+    background-image: url('../../assets/no_imagealt.svg');
     background-color: var(--bg);
     background-position: center !important;
     background-size: cover !important;

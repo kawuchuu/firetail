@@ -264,6 +264,7 @@ const actions = {
                 songIndex: context.state.currentSongIndex
             }))
             window.localStorage.setItem('lastPlayTime', 0.1)
+            window.ipcRenderer.send('addStatPlay', song.id)
         } else {
             context.state.isResumeState = false
         }

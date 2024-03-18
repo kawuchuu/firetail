@@ -208,21 +208,21 @@ export default {
         },
         async songDragFinish(evt) {
             evt.preventDefault()
-            if (this.$route.path != '/playlist') return
+            if (this.$route.path !== '/playlist') return
             let songs = evt.dataTransfer.getData('ftsong')
             if (songs === '') return
             songs = JSON.parse(songs)
             const playlist = await window.ipcRenderer.invoke('getSpecificPlaylist', this.$route.query.id)
             const songIds = JSON.parse(playlist[0].songIds)
             let sortedPlaylistSongs = sort.sortArrayNum(songIds, 'position')
-            const currentSong = songIds.find(item => item.id == this.source.id).position
+            const currentSong = songIds.find(item => item.id === this.source.id).position
             let newStartPos = this.dragOverY >= 0 && this.dragOverY <= 21 ? currentSong : currentSong + 1
-            const ogPos = songIds.find(item => item.id == songs[0].id).position
+            const ogPos = songIds.find(item => item.id === songs[0].id).position
             if (ogPos === currentSong) return
             if (currentSong > ogPos) {
                 newStartPos = this.dragOverY >= 0 && this.dragOverY <= 21 ? currentSong + 1 : currentSong
             }
-            const toBeUpdated = sortedPlaylistSongs.find(item => item.id == songs[0].id)
+            const toBeUpdated = sortedPlaylistSongs.find(item => item.id === songs[0].id)
             toBeUpdated.position = newStartPos
 
             // i think this is working now?? need to test it more.

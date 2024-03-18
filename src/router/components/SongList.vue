@@ -20,7 +20,12 @@
                     <p v-if="$route.path === '/albums'" class="album-type">{{ albumType }}</p>
                     <h1 ref="header" :style="topTitleSize" class="top-header" v-show="topTitleText !== ''">{{ topTitleText }}</h1>
                     <p v-if="$route.path === '/playlist' && playlist.desc">{{ playlist.desc }}</p>
-                    <p v-if="$route.path === '/albums' && list[0]"><span v-if="list[0].albumArtist">{{ list[0].albumArtist }} • </span><span v-if="list[0].year">{{ list[0].year }} • </span>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
+                    <p v-if="$route.path === '/albums' && list[0]">
+                        <span v-if="list[0].albumArtist">{{ list[0].albumArtist }} • </span>
+                        <span v-if="list[0].year">{{ list[0].year }} • </span>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span>
+                        <span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span>
+                        <span v-if="list[0].genre"> • <span v-for="item in JSON.parse(list[0].genre)">{{item}}, </span></span>
+                    </p>
                     <p v-else>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
                 </div>
             </div>
@@ -353,17 +358,17 @@ export default {
                 window.ipcRenderer.invoke('open-file-in-explorer', this.list[evt[1]].path)
             }
             let menuItems = [
-                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_QUEUE'), type: 'button'},
-                {type: 'divider', hide: [this.selectedItems.length !== 1, this.list[evt[1]].artist === 'Unknown Artist' && this.list[evt[1]].album === 'Unknown Album']},
-                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ARTIST'), type: 'button', hide: [this.selectedItems.length !== 1, this.$route.path === '/artists', this.list[evt[1]].artist === 'Unknown Artist'], onClick: goToArtist},
-                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ALBUM'), type: 'button', hide: [this.selectedItems.length !== 1, this.$route.path === '/albums', this.list[evt[1]].album === 'Unknown Album'], onClick: goToAlbum},
-                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.VIEW_EXPLORER'), type: 'button', hide: [this.selectedItems.length !== 1], onClick: revealInFileExplorer},
-                {type: 'divider'},
-                {name: favCompare ? this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_FAVOURITE') : this.$t('CONTEXT_MENU.SONG_LIST_ITEM.REMOVE_FAVOURITE'), type: 'button', onClick: favouriteOnClick},
-                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_PLAYLIST'), type: 'button'},
-                {type: 'divider'},
-                {name: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.DELETE'), type: 'button', style: 'dangerous', onClick: deleteSongs},
-                {name: "Remove from playlist", type: 'button', hide: [this.$route.path !== '/playlist'], style: 'dangerous', onClick: removeFromPlaylist}
+                {label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_QUEUE'), type: 'normal'},
+                {type: 'separator', hide: [this.selectedItems.length !== 1, this.list[evt[1]].artist === 'Unknown Artist' && this.list[evt[1]].album === 'Unknown Album']},
+                {label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ARTIST'), type: 'normal', hide: [this.selectedItems.length !== 1, this.$route.path === '/artists', this.list[evt[1]].artist === 'Unknown Artist'], onClick: goToArtist},
+                {label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ALBUM'), type: 'normal', hide: [this.selectedItems.length !== 1, this.$route.path === '/albums', this.list[evt[1]].album === 'Unknown Album'], onClick: goToAlbum},
+                {label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.VIEW_EXPLORER'), type: 'normal', hide: [this.selectedItems.length !== 1], onClick: revealInFileExplorer},
+                {type: 'separator'},
+                {label: favCompare ? this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_FAVOURITE') : this.$t('CONTEXT_MENU.SONG_LIST_ITEM.REMOVE_FAVOURITE'), type: 'normal', onClick: favouriteOnClick},
+                {label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_PLAYLIST'), type: 'normal'},
+                {type: 'separator'},
+                {label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.DELETE'), type: 'normal', style: 'dangerous', onClick: deleteSongs},
+                {label: "Remove from playlist", type: 'normal', hide: [this.$route.path !== '/playlist'], style: 'dangerous', onClick: removeFromPlaylist}
             ]
             contextMenuBus.$emit('updateitems', {
                 items: menuItems,
@@ -669,7 +674,7 @@ div.section {
 }
 
 .albums .tab-album-art, .playlist .tab-album-art {
-    border-radius: 5px;
+    border-radius: 10px;
     background-image: url('../../assets/no_album.svg');
 }
 
