@@ -16,6 +16,7 @@
                     <p v-if="advancedFileInfo.sampleRate">{{ $t('POPUPS.CODEC_INFO.SAMPLE_RATE') }}{{ advancedFileInfo.sampleRate }}Hz</p>
                     <p v-if="advancedFileInfo.codec">{{ $t('POPUPS.CODEC_INFO.CODEC') }}{{ advancedFileInfo.codec }}</p>
                     <p v-if="advancedFileInfo.container">{{ $t('POPUPS.CODEC_INFO.CONTAINER') }}{{ advancedFileInfo.container }}</p>
+                    <p v-if="$store.state.nav.buildNum === 'dev'">ID: {{currentSong.id}}</p>
                 </div>
             </div>
         </div>
@@ -421,9 +422,9 @@ export default {
         border-radius: 10px;
 
         h3 {
-            margin-top: 2px;
+            margin: 2px 0 10px;
             font-weight: 600;
-            font-size: 1.1em;
+            font-size: 0.95em;
         }
 
         p {
