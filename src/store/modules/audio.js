@@ -30,6 +30,12 @@ const state = () => ({
         hours: 0,
         mins: 0,
         secs: 0
+    },
+    currentListDurNoZero: {
+        total: 0,
+        hours: 0,
+        mins: 0,
+        secs: 0
     }
 })
 
@@ -183,6 +189,12 @@ const mutations = {
             hours: ("0" + Math.floor(duration / 3600)).slice(-2),
             mins: ("0" + Math.floor((duration % 3600) / 60)).slice(-2),
             secs: ("0" + Math.floor(duration % 60)).slice(-2)
+        }
+        state.currentListDurNoZero = {
+            total: duration,
+            hours: Math.floor(duration / 3600),
+            mins: Math.floor((duration % 3600) / 60),
+            secs: Math.floor(duration % 60)
         }
     }
 }

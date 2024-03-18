@@ -1,5 +1,5 @@
 # Firetail Feature Checklist
-*Created: 02/01/2023, Updated: 01/01/2024*
+*Created: 02/01/2023, Updated: 18/03/2024*
 
 ---
 
@@ -51,6 +51,8 @@
 - Queue
   - Edit current queue
   - Add song to queue in context menu
+- Library
+  - Genre metadata
 - Spotify integration
   - ~~Authorisation~~ ❓
   - Artist images

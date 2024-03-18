@@ -21,12 +21,11 @@
                     <h1 ref="header" :style="topTitleSize" class="top-header" v-show="topTitleText !== ''">{{ topTitleText }}</h1>
                     <p v-if="$route.path === '/playlist' && playlist.desc">{{ playlist.desc }}</p>
                     <p v-if="$route.path === '/albums' && list[0]">
-                        <span v-if="list[0].albumArtist">{{ list[0].albumArtist }} • </span>
-                        <span v-if="list[0].year">{{ list[0].year }} • </span>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span>
-                        <span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span>
-                        <span v-if="list[0].genre"> • <span v-for="item in JSON.parse(list[0].genre)">{{item}}, </span></span>
+                      <span v-if="list[0].albumArtist">{{ list[0].albumArtist }} • </span>
+                      <span v-if="list[0].year">{{ list[0].year }}</span>
+                      <span v-if="list[0].genre"> • <span v-for="item in JSON.parse(list[0].genre)">{{item}}, </span></span>
                     </p>
-                    <p v-else>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}} • <span v-if="totalDuration.hours > 0">{{ totalDuration.hours }}:</span><span>{{ totalDuration.mins }}:</span><span>{{ totalDuration.secs }}</span></p>
+                    <p v-else>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}}</p>
                 </div>
             </div>
 
@@ -70,6 +69,10 @@
                     ref="virtualList"
                     @selected="select"
                 />
+                <div class="extra-list-info">
+                  <p>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}}</p>
+                  <p><span v-if="totalDuration.hours > 0">{{ totalDuration.hours }} hours, </span><span v-if="totalDuration.mins > 0">{{ totalDuration.mins }} minutes, </span><span>{{ totalDuration.secs }} seconds</span></p>
+                </div>
                 <div class="fixed-songload" v-if="list.length < 1 && $store.state.audio.isLoadingSongs">
                     <div class="inner-songload">
                         <SongLoadItem v-for="index in 30" :key="index" />
@@ -127,7 +130,7 @@ export default {
                     return state.currentList
                 }
             },
-            totalDuration: state => state.currentListDur
+            totalDuration: state => state.currentListDurNoZero
         }),
         ...mapState('nav', {
             screenCountNum: state => state.screenCountNum,
@@ -760,6 +763,16 @@ div.section {
 
 .bold-text .top-title h1 {
     font-weight: 800;
+}
+
+.extra-list-info {
+  margin: 20px 0 20px 55px;
+  font-size: 14px;
+  opacity: 0.75;
+
+  p {
+    margin: 6px 0;
+  }
 }
 
 @media (max-width: 900px) {
