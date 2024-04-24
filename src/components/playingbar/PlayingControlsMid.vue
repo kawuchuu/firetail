@@ -486,7 +486,7 @@ export default {
     pointer-events: none;
 }
 
-.reduce-motion {
+.reduceMotion {
     .seek-hover-indicate {
         animation: indicate-reduce 0.15s;
     }

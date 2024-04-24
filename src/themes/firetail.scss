@@ -141,7 +141,7 @@ html {
     height: 421px !important;
 }
 
-html.dark.high-contrast {
+html.dark.highContrast {
     --back-bg: #000000 !important;
     --bg: #18171c !important;
     --fg-bg: #2b2838 !important;
@@ -153,7 +153,7 @@ html.dark.high-contrast {
     --hl-op: #ff98912a !important;
 }
 
-html.light.high-contrast {
+html.light.highContrast {
     --back-bg: #dfdfdf !important;
     --sub-fg: #dedbe4 !important;
     --fg-bg: #d7d2e8 !important;
@@ -163,7 +163,7 @@ html.light.high-contrast {
     --hl-op: #9d1f0e2a !important;
 }
 
-.high-contrast {
+.highContrast {
     .container {
         outline: solid 2px var(--bd);
         z-index: 10;
@@ -314,7 +314,7 @@ html.light.high-contrast {
     }
 }
 
-html.light.high-contrast {
+html.light.highContrast {
     .sticky-bg.sticky {
         backdrop-filter: none;
         background-color: #fff !important;

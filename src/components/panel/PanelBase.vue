@@ -213,7 +213,7 @@ html.light .panel-bg {
     transition-property: height;
 }
 
-.reduce-motion {
+.reduceMotion {
     @keyframes showPanelReduce {
         from {
             opacity: 0;

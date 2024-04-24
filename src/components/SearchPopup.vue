@@ -157,7 +157,7 @@ export default {
     }
 }
 
-.reduce-motion {
+.reduceMotion {
     .popup.search {
         transform: translate(-160px, -315px);
     }

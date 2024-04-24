@@ -90,7 +90,7 @@ main {
     z-index: -1;
 }
 
-.bold-text .top-title h1 {
+.boldText .top-title h1 {
     font-weight: 800;
 }
 </style>

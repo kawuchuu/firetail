@@ -145,5 +145,17 @@ export default {
         } else {
             db.prepare('UPDATE stats SET plays = ?, lastplay = ? WHERE id = ?').run(findStatPlay[0].plays + 1, Date.now(), id)
         }
+    },
+    getMostPlayed() {
+        return db.prepare("SELECT * FROM library INNER JOIN stats ON library.id = stats.id ORDER BY stats.plays DESC LIMIT 10").all()
+    },
+    getRecentlyPlayed() {
+        return db.prepare("SELECT * FROM library INNER JOIN stats ON library.id = stats.id ORDER BY stats.lastplay DESC LIMIT 10").all()
+    },
+    getGenres() {
+        return db.prepare('SELECT DISTINCT g.value FROM library, json_each(genre) g WHERE genre IS NOT NULL').all()
+    },
+    getGenreResults(genre) {
+        return db.prepare('SELECT * FROM library, json_each(genre) genre WHERE genre IS NOT NULL AND genre.value = ?').all(genre)
     }
 }

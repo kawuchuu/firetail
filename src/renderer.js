@@ -43,6 +43,9 @@ window.ipcRenderer.receive('library', (event, library) => {
     window.ipcRenderer.receive('getAllWithColumnArtist', (event, args) => {
         store.commit('nav/updateAlbums', args)
     })
+    window.ipcRenderer.invoke('getAllGenres').then(genres => {
+        store.commit('nav/updateGenres', genres)
+    })
     store.commit('audio/notLoadingSongs')
     store.commit('audio/setCurrentListDur', library[1])
 })
@@ -185,6 +188,12 @@ window.ipcRenderer.receive('control', (evt, action) => {
             break
         case 'repeat':
             store.commit('audio/toggleRepeat')
+            break
+        case 'backPage':
+            router.back()
+            break
+        case 'forPage':
+            router.forward()
             break
         case 'preferences':
             if (router.currentRoute.path == '/settings') {

@@ -6,7 +6,7 @@
             </div>
             <div class="content">
                 <section class="home-list most-played">
-                    <h2>Jump right back in</h2>
+                    <h2>Most played songs</h2>
                     <div class="horiz-list">
                         <div class="home-list-item" v-for="item in mostPlayed" :key="item.id">
                             <img :src="getAlbumImage(item)">
@@ -18,9 +18,9 @@
                     </div>
                 </section>
                 <section class="home-list most-played">
-                    <h2>Most played songs</h2>
+                    <h2>Recently played</h2>
                     <div class="horiz-list">
-                        <div class="home-list-item" v-for="item in mostPlayed" :key="item.id">
+                        <div class="home-list-item" v-for="item in lastPlayed" :key="item.id">
                             <img :src="getAlbumImage(item)">
                             <div class="song-info">
                                 <p class="song-title">{{item.title}}</p>
@@ -38,29 +38,26 @@
 export default {
     data() {
         return {
-            mostPlayed: [
-                {"title":"Humans","artist":"Night Tapes","album":"Humans","duration":"4:11","path":"/Users/temmiefox/Music/Night Tapes/Humans/01 Night Tapes - Humans.mp3","id":"SoWiyKAFwP","hasImage":1,"trackNum":1,"year":"2022.0","disc":null},
-                {"title":"Humans (live)","artist":"Night Tapes","album":"Humans (Volt live)","duration":"4:23","path":"/Users/temmiefox/Music/Night Tapes - Humans (live).mp3","id":"P9MPTiECYp","hasImage":1,"trackNum":1,"year":"2022.0","disc":null},
-                {"title":"Forever","artist":"Night Tapes","album":"Dream Forever In Glorious Stereo","duration":"4:10","path":"/Users/temmiefox/Music/Night Tapes/Dream Forever In Glorious Stereo/02 Night Tapes - Forever.mp3","id":"cGylHuapou","hasImage":1,"trackNum":2,"year":"2019.0","disc":null},
-                {"title":"Fever Dream Kids","artist":"Night Tapes","album":"Download Spirit","duration":"4:12","path":"/Users/temmiefox/Music/Night Tapes/Download Spirit/01 Night Tapes - Fever Dream Kids.mp3","id":"tazuU7SGkX","hasImage":1,"trackNum":1,"year":"2020.0","disc":null},
-                {"title":"Humans","artist":"Night Tapes","album":"Humans","duration":"4:11","path":"/Users/temmiefox/Music/Night Tapes/Humans/01 Night Tapes - Humans.mp3","id":"SoWiyKAFwP","hasImage":1,"trackNum":1,"year":"2022.0","disc":null},
-                {"title":"Humans (live)","artist":"Night Tapes","album":"Humans (Volt live)","duration":"4:23","path":"/Users/temmiefox/Music/Night Tapes - Humans (live).mp3","id":"P9MPTiECYp","hasImage":1,"trackNum":1,"year":"2022.0","disc":null},
-                {"title":"Forever","artist":"Night Tapes","album":"Dream Forever In Glorious Stereo","duration":"4:10","path":"/Users/temmiefox/Music/Night Tapes/Dream Forever In Glorious Stereo/02 Night Tapes - Forever.mp3","id":"cGylHuapou","hasImage":1,"trackNum":2,"year":"2019.0","disc":null},
-                {"title":"Fever Dream Kids","artist":"Night Tapes","album":"Download Spirit","duration":"4:12","path":"/Users/temmiefox/Music/Night Tapes/Download Spirit/01 Night Tapes - Fever Dream Kids.mp3","id":"tazuU7SGkX","hasImage":1,"trackNum":1,"year":"2020.0","disc":null}
-
-            ]
+            mostPlayed: [],
+            lastPlayed: []
         }
     },
     methods: {
         getAlbumImage(song) {
             let port = this.$store.state.nav.port
             if (song.hasImage == 1) {
-                let artistAlbum = `http://localhost:${port}/images/${(song.artist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
+                let artistAlbum = `http://localhost:${port}/images/${(song.albumArtist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
                 return artistAlbum
             } else {
                 return '../../assets/no_album.svg'
             }
         }
+    },
+    async created() {
+        const mostPlayed = await window.ipcRenderer.invoke('getMostPlayed')
+        const lastPlayed = await window.ipcRenderer.invoke('getRecentlyPlayed')
+        this.mostPlayed = mostPlayed
+        this.lastPlayed = lastPlayed
     }
 }
 </script>

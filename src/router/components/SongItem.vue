@@ -26,14 +26,14 @@
                     <span v-if="$route.path == '/artists'">{{source.album}}</span>
                     <span v-if="$route.path == '/albums'">{{source.artist}}</span>
                 </div>
-                <div class="list-artist" v-if="$route.path == '/songs' || $route.path == '/playlist' || $route.path == '/liked'">
+                <div class="list-artist" v-if="$route.path == '/songs' || $route.path == '/playlist' || $route.path == '/liked' || $route.path === '/genres'">
                     <p v-for="(item, index) in artists" :key="index">
                         <router-link :to="`/artists?hideTop=true&column=artist&q=${encodeURIComponent(item)}&view=artist_${encodeURIComponent(item)}`">
                             <span class="artist-item">{{item}}<span v-if="index !== artists.length - 1">,</span></span>
                         </router-link>
                     </p>
                 </div>
-                <p v-if="$route.path == '/songs' || $route.path == '/playlist' || $route.path == '/liked'" class="list-album"><router-link :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(source.album)}&view=album_${encodeURIComponent(source.albumArtist + source.album)}&albumArtist=${encodeURIComponent(source.albumArtist)}`"><span>{{source.album}}</span></router-link></p>
+                <p v-if="$route.path == '/songs' || $route.path == '/playlist' || $route.path == '/liked' || $route.path === '/genres'" class="list-album"><router-link :to="`/albums?hideTop=true&column=album&q=${encodeURIComponent(source.album)}&view=album_${encodeURIComponent(source.albumArtist + source.album)}&albumArtist=${encodeURIComponent(source.albumArtist)}`"><span>{{source.album}}</span></router-link></p>
                 <i class="ft-icon favourite-icon" @click="handleFavourite" :style="showFavourite">{{ favouriteIcon }}</i>
                 <p class="list-duration"><span>{{source.duration}}</span></p>
             </div>
@@ -562,7 +562,7 @@ html.light {
     opacity: 0.5;
 }
 
-.reduce-motion .playing-ani, html.blur .playing-ani {
+.reduceMotion .playing-ani, html.blur .playing-ani {
     .bar {
         animation: none;
     }

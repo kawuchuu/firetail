@@ -16,18 +16,12 @@ export default {
     },
     methods: {
         highContrastAction(enabled) {
-            window.localStorage.setItem('highContrast', enabled)
-            enabled ? document.documentElement.classList.add('high-contrast') : document.documentElement.classList.remove('high-contrast')
             this.highContrastEnabled = enabled
         },
         reducedMotionAction(enabled) {
-            window.localStorage.setItem('reduceMotion', enabled)
-            enabled ? document.documentElement.classList.add('reduce-motion') : document.documentElement.classList.remove('reduce-motion')
             this.reducedMotionEnabled = enabled
         },
         boldTextAction(enabled) {
-            window.localStorage.setItem('boldText', enabled)
-            enabled ? document.documentElement.classList.add('bold-text') : document.documentElement.classList.remove('bold-text')
             this.boldTextEnabled = enabled
         }
     }
@@ -37,9 +31,9 @@ export default {
 <template>
     <section class="accessibility">
         <SubtitleOption>{{$t("SETTINGS.SUBTITLES.ACCESSIBILITY")}}</SubtitleOption>
-        <SwitchOption :label="$t('SETTINGS.USE_HIGH_CONTRAST')" :init-enabled="highContrastEnabled" :action="highContrastAction" />
-        <SwitchOption :label="$t('SETTINGS.REDUCE_MOTION')" :init-enabled="reducedMotionEnabled" :action="reducedMotionAction" />
-        <SwitchOption :label="$t('SETTINGS.BOLD_TEXT')" :init-enabled="boldTextEnabled" :action="boldTextAction" />
+        <SwitchOption :label="$t('SETTINGS.USE_HIGH_CONTRAST')" :init-enabled="highContrastEnabled" :store-key="'highContrast'" :store-category="'class'" :action="highContrastAction" />
+        <SwitchOption :label="$t('SETTINGS.REDUCE_MOTION')" :init-enabled="reducedMotionEnabled" :store-key="'reduceMotion'" :store-category="'class'" :action="reducedMotionAction" />
+        <SwitchOption :label="$t('SETTINGS.BOLD_TEXT')" :init-enabled="boldTextEnabled" :store-key="'boldText'" :store-category="'class'" :action="boldTextAction" />
     </section>
 </template>
 

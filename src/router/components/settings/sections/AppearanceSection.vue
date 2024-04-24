@@ -16,9 +16,7 @@ export default {
                 { label: 'SETTINGS.DROP_DOWN.COLOUR_THEME.DARK', value: 'dark' },
                 { label: 'SETTINGS.DROP_DOWN.COLOUR_THEME.LIGHT', value: 'light' },
             ],
-            selectedTheme: null,
-            colourBarEnabled: window.localStorage.getItem('colourBar') === 'true',
-            performanceEnabled: window.localStorage.getItem('performance') === 'true'
+            selectedTheme: null
         }
     },
     beforeMount() {
@@ -76,16 +74,6 @@ export default {
                         blurFg: '#ffffff80'
                     })
             }
-        },
-        colourBarAction(enabled) {
-            window.localStorage.setItem('colourBar', enabled)
-            this.$store.commit('nav/updateColourBar', enabled)
-            this.colourBarEnabled = enabled
-        },
-        performanceAction(enabled) {
-            window.localStorage.setItem('performance', enabled)
-            enabled ? document.documentElement.classList.add('performance') : document.documentElement.classList.remove('performance')
-            this.performanceEnabled = enabled
         }
     }
 }
@@ -95,8 +83,8 @@ export default {
     <section class="appearance-section">
         <SubtitleOption>{{$t("SETTINGS.SUBTITLES.APPEARANCE")}}</SubtitleOption>
         <DropdownOption :label="$t('SETTINGS.COLOUR_THEME')" :init-selected="selectedTheme" :options="themes" :on-change="changeTheme" />
-        <SwitchOption :label="$t('SETTINGS.COLOUR_BAR')" :init-enabled="colourBarEnabled" :action="colourBarAction" />
-        <SwitchOption :label="$t('SETTINGS.INCREASE_PERFORMANCE')" :init-enabled="performanceEnabled" :store-key="'performance'" :action="performanceAction" />
+        <SwitchOption :label="$t('SETTINGS.COLOUR_BAR')" :store-key="'colourBar'" :store-category="'class'" />
+        <SwitchOption :label="$t('SETTINGS.INCREASE_PERFORMANCE')" :store-key="'performance'" :store-category="'class'" />
     </section>
 </template>
 

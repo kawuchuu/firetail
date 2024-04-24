@@ -44,6 +44,13 @@ const state = () => ({
         link: '/albums?view=firetailnoselect'
     },
     {
+        icon: 'genre',
+        name: 'SIDEBAR.GENRES',
+        id: 'genresTab',
+        type: 'large_button',
+        link: '/genres?view=firetailnoselect'
+    },
+    {
         icon: 'heart',
         name: 'SIDEBAR.FAVOURITE',
         id: 'likedTab',
@@ -101,6 +108,7 @@ const state = () => ({
     showScreenTop: true,
     artists: [],
     albums: [],
+    genres: [],
     currentView: 'all',
     playingView: null,
     favouriteSongs: [],
@@ -146,6 +154,10 @@ const mutations = {
     updateAlbums(state, albums) {
         let sortedAlbums = sort.sortArray(albums, 'album')
         state.albums = sortedAlbums
+    },
+    updateGenres(state, genres) {
+        const sortedGenres = sort.sortArray(genres, 'value')
+        state.genres = sortedGenres
     },
     updateCurrentView(state, view) {
         state.currentView = view

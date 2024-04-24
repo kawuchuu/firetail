@@ -251,7 +251,7 @@ export default {
     opacity: 1;
 }
 
-.reduce-motion {
+.reduceMotion {
     .popup.queue {
         transform: translate(-160px, -315px);
     }

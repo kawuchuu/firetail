@@ -28,6 +28,7 @@ export default {
         <SubtitleOption>{{$t("SETTINGS.SUBTITLES.ADVANCED")}}</SubtitleOption>
         <SwitchOption :label="$t('SETTINGS.SHOW_FILE_CODEC')" :init-enabled="advancedFileInfoEnabled" :action="advancedFileInfoAction" />
         <SwitchOption :label="$t('SETTINGS.FORCE_RTL')" :init-enabled="false" />
+        <SwitchOption :label="$t('SETTINGS.DEV_MODE')" />
     </section>
 </template>
 

@@ -63,6 +63,17 @@ const router = new VueRouter({
             ]
         },
         {
+            path: '/genres',
+            component: ArtistAlbumView,
+            name: 'Genres',
+            children: [
+                {
+                    path: '',
+                    component: SongList,
+                }
+            ]
+        },
+        {
             path: '/playlist',
             component: SongList,
             name: 'Playlist'
@@ -134,6 +145,10 @@ router.beforeEach(async (to, from, next) => {
         store.dispatch('audio/getAllFavourites')
     } else {
         store.dispatch('audio/getAllSongs')
+    }
+    if (to.path === '/genres') {
+        const genreSongs = await window.ipcRenderer.invoke('getGenreResults', to.query.genre)
+        store.commit('audio/updateCurrentList', genreSongs)
     }
     if (to.query.view) {
         store.commit('nav/updateCurrentView', to.query.view)

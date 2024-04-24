@@ -132,7 +132,7 @@ p {
     /* opacity: 0.75; */
 }
 
-.bold-text h1 {
+.boldText h1 {
     font-weight: 800;
 }
 

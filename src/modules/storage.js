@@ -21,12 +21,12 @@ class FiretailStorage {
     }
 
     getItem(key) {
-        if (!this.config[key]) throw `Key "${key}" does not exist`;
+        if (this.config[key] === undefined) throw `Key "${key}" does not exist`;
         return this.config[key]
     }
 
     setKey(key, value, category) {
-        if (!key || !value) throw `No key or value was provided`
+        if (!key || value === undefined) throw `No key or value was provided`
         if (key === 'categories') throw 'The "categories" key is reserved and cannot be set'
         this.config[key] = value
         if (category) {
@@ -68,7 +68,7 @@ class FiretailStorage {
         Object.keys(this.categories).forEach(item => {
             const index = this.categories[item].indexOf(key)
             console.log(index)
-            if (index) this.categories[item].splice(index, 1)
+            if (index !== -1) this.categories[item].splice(index, 1)
             console.log(this.categories[item])
         })
     }

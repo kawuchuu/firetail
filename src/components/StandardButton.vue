@@ -41,7 +41,7 @@ export default {
     }
 }
 
-.bold-text .button span {
+.boldText .button span {
     font-weight: bold;
 }
 

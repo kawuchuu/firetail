@@ -3,7 +3,6 @@ export default {
     name: "SwitchOption",
     props: {
         label: String,
-        initEnabled: Boolean,
         action: {
             default: () => {},
             type: Function
@@ -11,18 +10,39 @@ export default {
         storeKey: {
             optional: true,
             type: String
+        },
+        storeCategory: {
+            optional: true,
+            type: String
         }
     },
     data() {
         return {
-            enabled: this.initEnabled
+            enabled: false
         }
     },
     methods: {
         onClick() {
             this.enabled = !this.enabled
-            if (this.storeKey) ftStore.setKey(this.storeKey, this.enabled)
+            console.log(this.storeKey, this.enabled)
+            if (this.storeKey) window.ftStore.setKey(this.storeKey, this.enabled, this.storeCategory)
+            switch(this.storeCategory) {
+                case "class":
+                    if (this.enabled) {
+                        document.documentElement.classList.add(this.storeKey)
+                    } else {
+                        document.documentElement.classList.remove(this.storeKey)
+                    }
+            }
             this.action(this.enabled)
+        }
+    },
+    async created() {
+        if (this.storeKey && await window.ftStore.keyExists(this.storeKey)) {
+            const result = await window.ftStore.getItem(this.storeKey)
+            if (typeof result === "boolean" && result) {
+                this.enabled = true
+            }
         }
     }
 }

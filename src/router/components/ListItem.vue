@@ -15,6 +15,12 @@
                 </div>
             </router-link>
         </div>
+        <div v-else-if="$route.path === '/genres'" class="albums-item">
+            <router-link :to="`?hideTop=true&genre=${encodeURIComponent(source.value)}&view=genres_${encodeURIComponent(source.value)}`" draggable="false">
+                <div class="genre-img"/>
+                <span>{{ source.value }}</span>
+            </router-link>
+        </div>
     </div>
 </template>
 
@@ -95,7 +101,7 @@ export default {
     }
 }
 
-.album-img, .artist-img {
+.album-img, .artist-img, .genre-img {
     min-width: 45px;
     min-height: 45px;
     margin: 0px 9px;
@@ -110,6 +116,11 @@ export default {
 .artist-img {
     border-radius: 999px;
     background-image: url('../../assets/no_artist.svg')
+}
+
+.genre-img {
+    border-radius: 999px;
+    background-image: url('../../assets/no_genre.svg')
 }
 
 @media (max-width: 1350px) {

@@ -13,6 +13,11 @@
                     :data-sources="artistItems"
                     :dataComponent="lItem"
                 />
+                <virtual-list :ref="'genreList'" class="artist-inner" v-show="$route.path === '/genres'"
+                      :data-key="'value'"
+                      :data-sources="genreItems"
+                      :dataComponent="lItem"
+                />
                 <!-- <ListItem v-for="item in artistItems" :item="item" :key="item.id"/> -->
             </section>
             <section class="song-list">
@@ -30,7 +35,9 @@
                 </div>
                 <router-view></router-view>
                 <div class="bg-text" v-if="$store.state.audio.currentList.length == 0">
-                    <i class="ft-icon">{{ $route.path == '/artists' ? "person" : "album" }}</i>
+                    <i class="ft-icon" v-if="$route.path === '/artists'">person</i>
+                    <i class="ft-icon" v-if="$route.path === '/albums'">album</i>
+                    <i class="ft-icon" v-if="$route.path === '/genres'">genre</i>
                 </div>
             </section>
         </div>
@@ -59,6 +66,10 @@ export default {
             if (this.$route.path === '/artists') return this.$store.state.nav.artists
             else return []
         },
+        genreItems() {
+            if (this.$route.path === '/genres') return this.$store.state.nav.genres
+            else return []
+        },
         ...mapState('nav', {
             currentScroll: state => {
                 if (state.scrolled > 278) {
@@ -76,6 +87,7 @@ export default {
                 }
             },
             paralax: state => {
+                if (document.documentElement.classList.contains('performance')) return ''
                 return `transform: translateY(${state.scrolled / 2.5}px);`
             }
         })
@@ -320,7 +332,7 @@ export default {
         transition: 0.2s;
         transition-property: opacity;
     }
-    .reduce-motion {
+    .reduceMotion {
         .artist-inner, .list-fade, .albums-item a span {
             transition-duration: 0s;
         }

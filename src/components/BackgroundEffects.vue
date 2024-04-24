@@ -1,6 +1,7 @@
 <template>
     <div class="background-effects">
         <div class="shadow" />
+        <div class="gradient" />
         <div class="colour-bg" :style="getColour" :class="$store.state.nav.colourBarEnabled ? '' : 'hide'" />
     </div>
 </template>
@@ -11,8 +12,7 @@ export default {
         getColour() {
             let colour = this.$store.state.nav.playingBarColour
             if (colour === null) return 'background: transparent'
-            if (this.$store.state.nav.rtl) return `background: radial-gradient(farthest-corner at bottom right, var(--fg-bg), transparent 60%), radial-gradient(farthest-corner at bottom right, ${colour}, transparent 60%)`
-            else return `background: radial-gradient(farthest-corner at bottom left, ${colour} -30%, transparent 50%)`
+            return `background-color: ${colour}`
         }
     }
 }
@@ -29,6 +29,14 @@ export default {
     z-index: -1;
 }
 
+.gradient {
+    position: absolute;
+    width: 700px;
+    height: 275px;
+    bottom: 0;
+    background: radial-gradient(farthest-corner at bottom left, transparent -30%, var(--back-bg) 50%)
+}
+
 .colour-bg {
     position: absolute;
     width: 600px;
@@ -38,10 +46,11 @@ export default {
     opacity: 0.5;
     transition: .8s;
     bottom: 0;
+    display: none;
 }
 
-.colour-bg.hide {
-    display: none;
+.colourBar .colour-bg {
+    display: block;
 }
 
 .shadow {

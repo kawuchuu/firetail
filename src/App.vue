@@ -103,8 +103,17 @@ export default {
                 this.sidebarwidth = pos
             }
         },
-        applySettings() {
-
+        async applyClassSettings() {
+            const keys = await window.ftStore.getCategory('class')
+            if (keys) {
+                keys.forEach(key => {
+                    window.ftStore.getItem(key).then((result) => {
+                        if (result) {
+                            document.documentElement.classList.add(key)
+                        }
+                    })
+                })
+            }
         }
     },
     data() {
@@ -137,6 +146,7 @@ export default {
     },
     async mounted() {
         console.log(this.$i18n)
+        await this.applyClassSettings()
         if (this.$i18n.messages[this.$i18n.locale]['RTL']) this.$store.commit('nav/updateRTL', true)
         if (window.localStorage.getItem('sidebarwidth')) {
             this.sidebarwidth = window.localStorage.getItem('sidebarwidth')
@@ -376,7 +386,7 @@ body {
     color: var(--text);
 }
 
-.bold-text body {
+html.boldText body {
     font-weight: 600;
 }
 

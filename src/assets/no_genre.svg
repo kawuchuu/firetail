@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 28.3.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1080 1080" style="enable-background:new 0 0 1080 1080;" xml:space="preserve">
+<style type="text/css">
+	.st0{display:none;}
+	.st1{display:inline;fill:none;stroke:url(#SVGID_1_);stroke-width:55;stroke-miterlimit:10;}
+	.st2{display:inline;}
+	.st3{fill:none;stroke:#B3B3B3;stroke-width:2;stroke-miterlimit:10;}
+	.st4{fill:none;stroke:#EB6E64;stroke-width:55;stroke-linecap:round;stroke-miterlimit:10;}
+	.st5{fill:#EB6E64;}
+</style>
+<g id="Layer_1_1_" class="st0">
+	
+		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="82" y1="1459.1" x2="82" y2="1847.1" gradientTransform="matrix(1 0 0 -1 0 2112)">
+		<stop  offset="0" style="stop-color:#EF9135"/>
+		<stop  offset="1" style="stop-color:#E74E8E"/>
+	</linearGradient>
+	<path class="st1" d="M82,264.9v388"/>
+	<g class="st2">
+		<circle class="st3" cx="540" cy="540" r="93.5"/>
+		<circle class="st3" cx="540" cy="540" r="148.5"/>
+		<circle class="st3" cx="540" cy="540" r="296.5"/>
+		<circle class="st3" cx="540" cy="540" r="241.5"/>
+		<rect x="243.5" y="243.5" class="st3" width="593" height="593"/>
+		<line class="st3" x1="540" y1="243" x2="540" y2="837"/>
+		<line class="st3" x1="837" y1="540" x2="243" y2="540"/>
+		<line class="st3" x1="836.5" y1="243.5" x2="243.5" y2="836.5"/>
+		<line class="st3" x1="243.5" y1="243.5" x2="836.5" y2="836.5"/>
+		<rect x="298.5" y="298.5" class="st3" width="483" height="483"/>
+		<rect x="391.5" y="391.5" class="st3" width="297" height="297"/>
+	</g>
+</g>
+<path class="st4" d="M656.1,545.4c0,57.9-40.9,106.1-95.4,117.4v1.3c0,79.7-64.6,144.4-144.5,144.4c-79.7,0-144.4-64.6-144.4-144.4
+	s64.6-144.4,144.4-144.4c0.9,0,1.8,0,2.7,0.1c11.8-53.9,59.8-94.2,117.2-94.2C602.4,425.6,656.1,479.3,656.1,545.4z"/>
+<line class="st4" x1="622.6" y1="457.1" x2="784.6" y2="295"/>
+<line class="st4" x1="808.1" y1="317.1" x2="762.6" y2="271.5"/>
+<line class="st4" x1="380.7" y1="659.1" x2="420.5" y2="698.9"/>
+<circle class="st5" cx="537.9" cy="545.4" r="50.9"/>
+</svg>

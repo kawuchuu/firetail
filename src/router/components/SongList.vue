@@ -44,8 +44,8 @@
                     </div>
                         <div class="artist-title-album section">
                             <p class="list-title">{{ $t('SONG_LIST.LIST_TITLE') }}</p>
-                            <p v-if="$route.path === '/songs' || $route.path === '/playlist' || $route.path === '/liked'" class="list-artist">{{ $t('SONG_LIST.LIST_ARTIST') }}</p>
-                            <p v-if="$route.path === '/songs' || $route.path === '/playlist' || $route.path === '/liked'" class="list-album">{{ $t('SONG_LIST.LIST_ALBUM') }}</p>
+                            <p v-if="$route.path === '/songs' || $route.path === '/playlist' || $route.path === '/liked' || $route.path === '/genres'" class="list-artist">{{ $t('SONG_LIST.LIST_ARTIST') }}</p>
+                            <p v-if="$route.path === '/songs' || $route.path === '/playlist' || $route.path === '/liked' || $route.path === '/genres'" class="list-album">{{ $t('SONG_LIST.LIST_ALBUM') }}</p>
                             <i class="ft-icon favourite-icon" style="visibility: hidden">favourite</i>
                             <p class="list-duration"><i class="ft-icon">clock</i></p>
                         </div>
@@ -135,18 +135,20 @@ export default {
         ...mapState('nav', {
             screenCountNum: state => state.screenCountNum,
             currentScroll: function(state) {
-                if (this.$route.path === '/songs' && state.scrolled > 174 || this.$route.path !== '/songs' && state.scrolled > 250) {
+                if ((this.$route.path === '/songs' || this.$route.path === '/genres') && state.scrolled > 174 || this.$route.path !== '/songs' && state.scrolled > 250) {
                     return 'sticky'
                 } else {
                     return ''
                 }
             },
             parallax: state => {
-                const performance = window.localStorage.getItem('performance')
-                if (performance === 'true') return ''
+                const performance = document.documentElement.classList.contains('performance')
+                if (performance) return ''
                 // helps prevent it jumping around too much when scrolling fast
                 else if (state.scrolled > 550) return ''
-                return `transform: translateY(${state.scrolled / 2.5}px);`
+                let opacity = (state.scrolled / 3) / 100
+                //console.log(opacity)
+                return `transform: translateY(${state.scrolled / 2.5}px)`
             }
         }),
         ...mapState('playlist', {
@@ -179,6 +181,9 @@ export default {
                 }
                 case '/liked': {
                     return this.$t('ROUTER.FAVOURITES')
+                }
+                case '/genres': {
+                    return this.$route.query.genre
                 }
                 default: {
                     return this.$t('ROUTER.ALL_SONGS')
@@ -761,7 +766,7 @@ div.section {
     }
 }
 
-.bold-text .top-title h1 {
+.boldText .top-title h1 {
     font-weight: 800;
 }
 

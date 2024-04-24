@@ -299,7 +299,7 @@ export default {
     text-decoration: underline;
 }
 
-.bold-text .song-title {
+.boldText .song-title {
     font-weight: bold;
 }
 
@@ -471,7 +471,7 @@ export default {
     transform: translate(70px, -215px) !important;
 }
 
-.bold-text .codec-info h3 {
+.boldText .codec-info h3 {
     font-weight: bold;
 }
 
@@ -533,7 +533,7 @@ export default {
     }
 }
 
-.reduce-motion {
+.reduceMotion {
     .popup.large-album-art {
         transform: translateY(-215px);
     }

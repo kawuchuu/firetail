@@ -7,6 +7,7 @@
     "SONGS": "Songs",
     "ARTISTS": "Artists",
     "ALBUMS": "Albums",
+    "GENRES": "Genres",
     "PLAYLISTS": "Playlists",
     "CREATE_PLAYLIST": "Create Playlist"
   },
@@ -98,6 +99,7 @@
     "BOLD_TEXT": "Increase font weight",
     "SHOW_FILE_CODEC": "Show file codec information",
     "FORCE_RTL": "Force UI to right-to-left",
+    "DEV_MODE": "Enable developer mode",
     "CHECK_UPDATE": "Check for app updates",
     "UPDATE_BRANCH": "Choose a channel for app updates",
     "ABOUT": {

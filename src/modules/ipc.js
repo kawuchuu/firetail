@@ -305,5 +305,21 @@ export default {
         ipcMain.on('addStatPlay', (event, id) => {
             db.addStatPlay(id)
         })
+
+        ipcMain.handle('getMostPlayed', () => {
+            return db.getMostPlayed()
+        })
+
+        ipcMain.handle('getRecentlyPlayed', () => {
+            return db.getRecentlyPlayed()
+        })
+
+        ipcMain.handle('getAllGenres', () => {
+            return db.getGenres()
+        })
+
+        ipcMain.handle('getGenreResults', (event, genre) => {
+            return db.getGenreResults(genre)
+        })
     }
 }

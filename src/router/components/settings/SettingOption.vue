@@ -245,7 +245,7 @@ export default {
     }
 }
 
-.reduce-motion {
+.reduceMotion {
     .switch, .switch .circle-inner {
         transition-duration: 0s;
     }
@@ -257,7 +257,7 @@ export default {
     opacity: 0.5;
 }
 
-.bold-text .subtitle, .bold-text .button {
+.boldText .subtitle, .boldText .button {
     font-weight: 800;
 }
 </style>
