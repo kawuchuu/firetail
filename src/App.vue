@@ -7,7 +7,7 @@
         </div>
         <div :class="showDragIndicator" @dragleave="changeDrag(false)" @drop="filesDropped" class="drag-indicator">
             <div class="drag-msg">
-                <h1>Drop your music here!</h1>
+                <h1>Drop your music here</h1>
                 <p>You can drop music files and folders with music inside</p>
             </div>
         </div>
@@ -114,6 +114,20 @@ export default {
                     })
                 })
             }
+        },
+        async applyStoreSwitchSettings() {
+            try {
+                const keys = await window.ftStore.getCategory('switchVx')
+                if (keys) {
+                    keys.forEach(key => {
+                        window.ftStore.getItem(key).then(result => {
+                            this.$store.commit(`nav/${key}`, result)
+                        })
+                    })
+                }
+            } catch(err) {
+                console.error(`Could not get and apply switchVx keys: ${err}`)
+            }
         }
     },
     data() {
@@ -147,6 +161,7 @@ export default {
     async mounted() {
         console.log(this.$i18n)
         await this.applyClassSettings()
+        await this.applyStoreSwitchSettings()
         if (this.$i18n.messages[this.$i18n.locale]['RTL']) this.$store.commit('nav/updateRTL', true)
         if (window.localStorage.getItem('sidebarwidth')) {
             this.sidebarwidth = window.localStorage.getItem('sidebarwidth')
@@ -278,13 +293,19 @@ html.light {
     z-index: 11;
 
     .resize-line {
-        width: 1px;
+        width: 35px;
         border-left: solid 1px #8a8a8a;
+        border-bottom: solid 1px #8a8a8a;
+        border-radius: 0 0 0 10px;
         box-sizing: border-box;
         height: 100%;
         opacity: 0;
         transition: 0.25s;
         transition-property: opacity;
+        transform: translateX(17px);
+        -webkit-mask-image: -webkit-linear-gradient(180deg, transparent, #000 25px);
+        position: absolute;
+        pointer-events: none;
     }
 }
 
@@ -322,9 +343,25 @@ html.light {
 
     .drag-msg {
         pointer-events: none;
+        padding: 65px 70px;
+        border: dashed 4px var(--hl-txt);
+        border-radius: 20px;
+        background: var(--hl-op);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        h1 {
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin: 0;
+        }
 
         p {
-            opacity: 0.65;
+            opacity: 1;
+            margin-bottom: 0;
         }
     }
 }

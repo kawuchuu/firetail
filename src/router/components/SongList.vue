@@ -56,7 +56,7 @@
             <div class="wrapper">
                 <p v-if="list.length === 0 && !$store.state.audio.isLoadingSongs && $route.path === '/songs'" style="margin-left: 60px;">No songs have been added to Firetail's library. Drag some into this window to get started!</p>
                 <p v-else-if="list.length === 0 && !$store.state.audio.isLoadingSongs && $route.path === '/playlist'" style="margin-left: 60px">No songs have been added to this playlist. You should drag some to this playlist's button on the side bar!</p>
-                <p v-else-if="list.length === 0 && !$store.state.audio.isLoadingSongs && $route.path === '/liked'" style="margin-left: 60px">You haven't favourited any songs yet!</p>
+                <p v-else-if="list.length === 0 && !$store.state.audio.isLoadingSongs && $route.path === '/liked'" style="margin-left: 60px">To add a favourite song, press the heart icon next to a song.</p>
                 <virtual-list
                     :data-key="'id'"
                     :data-sources="list"

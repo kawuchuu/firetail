@@ -134,7 +134,8 @@ const state = () => ({
     reduceMotionEnabled: false,
     advancedFileInfo: window.localStorage.getItem('advancedFileInfo') === 'true',
     colourBarEnabled: true,
-    rtl: false
+    rtl: false,
+    debugMode: false
 })
 
 const mutations = {
@@ -224,6 +225,9 @@ const mutations = {
     },
     updateRTL(state, enabled) {
         state.rtl = enabled
+    },
+    debugMode(state, enabled) {
+        state.debugMode = enabled
     }
 }
 

@@ -1,7 +1,6 @@
 <template>
-    <label @click="click" class="std-top-btn top-button" :for="checkFor">
+    <label @click="click" class="std-top-btn top-button" :for="checkFor" :class="active ? 'active' : ''">
         <i class="ft-icon">{{button.icon}}</i>
-        <!-- <span>{{button.name}}</span> -->
     </label>
 </template>
 
@@ -16,6 +15,17 @@ export default {
                 return
             }
             return item.button.for;
+        },
+        active() {
+            switch(this.button.id) {
+                case "settings": {
+                    if (this.$route.path === '/settings') return 'active'
+                    else return ''
+                }
+                default: {
+                    return ''
+                }
+            }
         }
     },
     methods: {
@@ -25,6 +35,7 @@ export default {
                     this.$store.commit('panel/showNewPrompt', {title: 'Remove Library', message: "Are you sure you want to remove your current library? Your music files will not be removed.", buttons: 'clearLibrary'})
                     break;
                 case "settings":
+                    if (this.$route.path === '/settings') return
                     this.$router.push('/settings') 
                     break;
                 case "test":
@@ -55,6 +66,10 @@ export default {
     cursor: pointer;
     -webkit-app-region: no-drag;
     margin-right: 20px;
+}
+
+.top-button.active {
+    background: var(--button);
 }
 
 .top-button:last-child {

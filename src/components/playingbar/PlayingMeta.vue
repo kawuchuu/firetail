@@ -16,7 +16,7 @@
                     <p v-if="advancedFileInfo.sampleRate">{{ $t('POPUPS.CODEC_INFO.SAMPLE_RATE') }}{{ advancedFileInfo.sampleRate }}Hz</p>
                     <p v-if="advancedFileInfo.codec">{{ $t('POPUPS.CODEC_INFO.CODEC') }}{{ advancedFileInfo.codec }}</p>
                     <p v-if="advancedFileInfo.container">{{ $t('POPUPS.CODEC_INFO.CONTAINER') }}{{ advancedFileInfo.container }}</p>
-                    <p v-if="$store.state.nav.buildNum === 'dev'">ID: {{currentSong.id}}</p>
+                    <p v-if="$store.state.nav.debugMode">ID: {{currentSong.id}}</p>
                 </div>
             </div>
         </div>

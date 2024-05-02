@@ -6,7 +6,7 @@
             </div>
             <div class="nav-top-buttons">
                 <div class="std-top-btn search-btn" :class="showSearch ? 'active' : ''">
-                    <i class="ft-icon" @click="showSearch = !showSearch">search</i>
+                    <i class="ft-icon" @click="showSearch = !showSearch">{{showSearch ? 'close' : 'search'}}</i>
                     <input @keydown="checkEsc" @focus="focused" @blur="unfocused" type="text" ref="search" placeholder="Search..." v-model="searchInput" @input="typingSearch">
                 </div>
                 <div class="top-button-container">
@@ -195,6 +195,11 @@ export default {
 
 .search-btn.active:hover i {
     opacity: 1;
+}
+
+.search-btn.active i:hover {
+    opacity: 0.5;
+    cursor: pointer;
 }
 
 .search-btn:active {

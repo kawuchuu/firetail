@@ -33,6 +33,10 @@ export default {
                     } else {
                         document.documentElement.classList.remove(this.storeKey)
                     }
+                    break;
+                case "switchVx": {
+                    this.$store.commit(`nav/${this.storeKey}`, this.enabled)
+                }
             }
             this.action(this.enabled)
         }
