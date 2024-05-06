@@ -43,7 +43,7 @@ export default {
 
 <style lang="scss" scoped>
 .albums-item {
-    height: 62px;
+    height: 63px;
     border-radius: 10px;
 }
 
@@ -64,10 +64,6 @@ export default {
 .albums-item a.router-link-exact-active span {
     opacity: 1;
     font-weight: 600;
-}
-
-.albums-item a.router-link-exact-active div {
-    background-color: var(--bg)
 }
 
 .albums-item a {

@@ -292,6 +292,8 @@ export default {
     padding-right: 20px;
     margin-bottom: 3px;
     letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
     //animation: scroll 15s infinite linear;
 }
 

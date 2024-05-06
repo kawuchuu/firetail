@@ -294,7 +294,7 @@ export default {
 
 @media (max-width: 1350px) {
     .artist-inner {
-        max-width: 62px;
+        max-width: 63px;
         transition: 0.3s cubic-bezier(0, 1, 0.35, 1);
         transition-property: max-width;
         //transition-delay: 0.2s;

@@ -104,15 +104,19 @@ export default {
             }
         },
         async applyClassSettings() {
-            const keys = await window.ftStore.getCategory('class')
-            if (keys) {
+            try {
+              const keys = await window.ftStore.getCategory('class')
+              if (keys) {
                 keys.forEach(key => {
-                    window.ftStore.getItem(key).then((result) => {
-                        if (result) {
-                            document.documentElement.classList.add(key)
-                        }
-                    })
+                  window.ftStore.getItem(key).then((result) => {
+                    if (result) {
+                      document.documentElement.classList.add(key)
+                    }
+                  })
                 })
+              }
+            } catch(err) {
+              console.error(err)
             }
         },
         async applyStoreSwitchSettings() {

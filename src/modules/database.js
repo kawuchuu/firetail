@@ -156,6 +156,6 @@ export default {
         return db.prepare('SELECT DISTINCT g.value FROM library, json_each(genre) g WHERE genre IS NOT NULL').all()
     },
     getGenreResults(genre) {
-        return db.prepare('SELECT * FROM library, json_each(genre) genre WHERE genre IS NOT NULL AND genre.value = ?').all(genre)
+        return db.prepare('SELECT library.* FROM library, json_each(genre) genre WHERE genre IS NOT NULL AND genre.value = ?').all(genre)
     }
 }

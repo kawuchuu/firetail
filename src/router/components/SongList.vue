@@ -484,7 +484,7 @@ export default {
         resizeObserver.observe(topTitle)
         this.$nextTick(() => {
             this.$refs.virtualList.updatePageModeFront()
-            console.log(this.$refs.virtualList.getScrollSize(), "mounted")
+            //console.log(this.$refs.virtualList.getScrollSize(), "mounted")
         })
     }
 }
