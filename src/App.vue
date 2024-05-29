@@ -132,6 +132,24 @@ export default {
             } catch(err) {
                 console.error(`Could not get and apply switchVx keys: ${err}`)
             }
+        },
+        async applyMultiOptionSettings() {
+            try {
+                const keys = await window.ftStore.getCategory('multiOption')
+                if (keys) {
+                    keys.forEach(key => {
+                        window.ftStore.getItem(key).then(result => {
+                            switch(key) {
+                                case "lang":
+                                    if (result === 'system') return
+                                    this.$root.$i18n.locale = result
+                            }
+                        })
+                    })
+                }
+            } catch(err) {
+                console.error('Could not get and apply multiOption keys: ', err)
+            }
         }
     },
     data() {
@@ -166,6 +184,7 @@ export default {
         console.log(this.$i18n)
         await this.applyClassSettings()
         await this.applyStoreSwitchSettings()
+        await this.applyMultiOptionSettings()
         if (this.$i18n.messages[this.$i18n.locale]['RTL']) this.$store.commit('nav/updateRTL', true)
         if (window.localStorage.getItem('sidebarwidth')) {
             this.sidebarwidth = window.localStorage.getItem('sidebarwidth')

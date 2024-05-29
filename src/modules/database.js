@@ -156,6 +156,8 @@ export default {
         return db.prepare('SELECT DISTINCT g.value FROM library, json_each(genre) g WHERE genre IS NOT NULL').all()
     },
     getGenreResults(genre) {
-        return db.prepare('SELECT library.* FROM library, json_each(genre) genre WHERE genre IS NOT NULL AND genre.value = ?').all(genre)
+        const getSongs = db.prepare('SELECT library.* FROM library, json_each(genre) genre WHERE genre IS NOT NULL AND genre.value = ?').all(genre)
+        const durSum = db.prepare('SELECT SUM(library.realdur) AS dur FROM library, json_each(genre) genre WHERE genre IS NOT NULL AND genre.value = ?').all(genre)
+        return [getSongs, durSum[0].dur]
     }
 }

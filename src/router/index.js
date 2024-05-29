@@ -148,7 +148,8 @@ router.beforeEach(async (to, from, next) => {
     }
     if (to.path === '/genres') {
         const genreSongs = await window.ipcRenderer.invoke('getGenreResults', to.query.genre)
-        store.commit('audio/updateCurrentList', genreSongs)
+        store.commit('audio/updateCurrentList', genreSongs[0])
+        store.commit('audio/setCurrentListDur', genreSongs[1])
     }
     if (to.query.view) {
         store.commit('nav/updateCurrentView', to.query.view)

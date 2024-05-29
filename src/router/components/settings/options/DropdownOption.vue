@@ -8,6 +8,14 @@ export default {
         onChange: {
             default: () => {},
             type: Function
+        },
+        storeKey: {
+            optional: true,
+            type: String
+        },
+        storeCategory: {
+            optional: true,
+            type: String
         }
     },
     data() {
@@ -19,6 +27,7 @@ export default {
     methods: {
         select(item) {
             this.selected = item
+            if (this.storeKey) window.ftStore.setKey(this.storeKey, item.value, this.storeCategory)
             this.onChange(item)
         }
     }

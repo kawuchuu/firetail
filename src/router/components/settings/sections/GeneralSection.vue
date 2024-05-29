@@ -45,7 +45,7 @@ export default {
 <template>
     <section class="general">
         <SubtitleOption>{{$t('SETTINGS.SUBTITLES.GENERAL')}}</SubtitleOption>
-        <DropdownOption :label="$t('SETTINGS.LANGUAGE')" :init-selected="locales[0]" :options="locales" :on-change="changeLocale"/>
+        <DropdownOption :label="$t('SETTINGS.LANGUAGE')" :store-key="'lang'" :store-category="'multiOption'" :init-selected="locales[0]" :options="locales" :on-change="changeLocale"/>
         <DropdownOption :label="$t('SETTINGS.START_PAGE')" :init-selected="startPages[1]" :options="startPages"/>
     </section>
 </template>
