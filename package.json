@@ -53,7 +53,7 @@
     "vue": "2.7.0",
     "vue-async-computed": "3.9.0",
     "vue-i18n": "8.28.2",
-    "vue-router": "3.5.1",
+    "vue-router": "3.6.5",
     "vue-virtual-scroll-list": "https://github.com/kawuchuu/vue-virtual-scroll-list",
     "vuex": "3.6.2"
   }
