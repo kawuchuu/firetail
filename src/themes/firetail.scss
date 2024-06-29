@@ -1,4 +1,4 @@
-html.dark {
+#app.dark {
     --back-bg: #000000 !important;
     --bg: #18171c !important;
     --bg-op: #18171ca8 !important;
@@ -30,7 +30,7 @@ html.dark {
     pointer-events: none;
 }
 
-html.light {
+#app.light {
     --back-bg: #dfdfdf !important;
     --sub-fg: #dedbe4 !important;
     --fg-bg: #d7d2e8 !important;
@@ -75,7 +75,7 @@ html.light {
     }
 }
 
-html {
+#app {
     --main-border-radius: 10px 0px 0px 10px !important;
 }
 
@@ -141,7 +141,7 @@ html {
     height: 421px !important;
 }
 
-html.dark.highContrast {
+#app.dark.highContrast {
     --back-bg: #000000 !important;
     --bg: #18171c !important;
     --fg-bg: #2b2838 !important;
@@ -153,7 +153,7 @@ html.dark.highContrast {
     --hl-op: #ff98912a !important;
 }
 
-html.light.highContrast {
+#app.light.highContrast {
     --back-bg: #dfdfdf !important;
     --sub-fg: #dedbe4 !important;
     --fg-bg: #d7d2e8 !important;
@@ -314,7 +314,7 @@ html.light.highContrast {
     }
 }
 
-html.light.highContrast {
+#app.light.highContrast {
     .sticky-bg.sticky {
         backdrop-filter: none;
         background-color: #fff !important;

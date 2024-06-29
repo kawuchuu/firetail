@@ -1,48 +1,12 @@
+<script setup lang="ts">
+import PlayingMeta from "./PlayingMeta.vue";
+</script>
+
 <template>
-    <div :class="canShowBar" @mouseover="over" @mouseleave="leave" class="playing-bar">
-        <PlayingMeta/>
-        <PlayingControlsMid/>
-        <PlayingControlsRight/>
+    <div class="playing-bar">
+        <PlayingMeta />
     </div>
 </template>
-
-<script>
-import PlayingMeta from './PlayingMeta.vue'
-import PlayingControlsMid from './PlayingControlsMid.vue'
-import PlayingControlsRight from './PlayingControlsRight.vue'
-import {mapState} from 'vuex'
-
-export default {
-    components: {
-        PlayingMeta,
-        PlayingControlsMid,
-        PlayingControlsRight
-    },
-    computed: mapState('nav', {
-        canShowBar: function(state) {
-            if (!state.fullscreen || this.isMouseOver) return ''
-            if (state.zenMoveMouseActive) {
-                return ''
-            } else {
-                return 'hidden'
-            }
-        }
-    }),
-    methods: {
-        over() {
-            this.isMouseOver = true
-        },
-        leave() {
-            this.isMouseOver = false
-        }
-    },
-    data() {
-        return {
-            isMouseOver: false
-        }
-    }
-}
-</script>
 
 <style scoped>
 .playing-bar {

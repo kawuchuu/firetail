@@ -3,7 +3,7 @@
     "subprojects": [{
         "name": "Firetail",
         "type": "vue-i18n",
-        "path": "/src/translation/locales/{lang}.json",
+        "path": "/src/locales/{lang}.json",
         "baseLang": "en-US"
     }]
 }
