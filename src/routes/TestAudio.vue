@@ -21,6 +21,8 @@ function updateTime(evt:InputEvent) {
   <button @click="audioPlayer.nextSong()">Next</button>
   <input type="range" @input="updateTime" min="0" :max="audioPlayer.reactive.duration" :value="audioPlayer.reactive.currentTime">
   <span>{{timeFormat(audioPlayer.reactive.currentTime)}} / {{timeFormat(audioPlayer.reactive.duration)}}</span>
+  <p>currentTime: {{audioPlayer.reactive.currentTime}}</p>
+  <p>index: {{audioPlayer.index}}</p>
 </template>
 
 <style scoped>

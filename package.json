@@ -1,8 +1,8 @@
 {
-  "name": "firetail-vue3",
-  "productName": "firetail-vue3",
-  "version": "1.0.0",
-  "description": "My Electron application description",
+  "name": "firetail",
+  "productName": "Firetail",
+  "version": "2.0.0",
+  "description": "An open source music player",
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -34,14 +34,15 @@
   "keywords": [],
   "author": {
     "name": "kawuchuu",
-    "email": "kawuchuu@users.noreply.github.com"
+    "email": "kawuchuu@gmail.com"
   },
-  "license": "MIT",
+  "license": "GPL-3.0",
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",
     "sass": "^1.77.5",
     "vue": "^3.4.27",
     "vue-i18n": "9",
-    "vue-router": "4"
+    "vue-router": "4",
+    "vue-virtual-scroller": "^2.0.0-beta.8"
   }
 }

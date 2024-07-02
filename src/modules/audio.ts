@@ -1,5 +1,6 @@
 import FiretailSong from "../types/FiretailSong";
 import {reactive} from "vue";
+import {audioPlayer} from "../renderer";
 
 interface AudioStore {
     title: string;
@@ -7,6 +8,7 @@ interface AudioStore {
     currentTime: number;
     duration: number;
     currentSong: FiretailSong;
+    paused: boolean;
 }
 
 class AudioPlayer {
@@ -29,16 +31,21 @@ class AudioPlayer {
         this.#audio.addEventListener("ended", () => {
             this.nextSong();
         });
-        this.#audio.addEventListener("timeupdate", evt => {
-            this.timeUpdate(evt);
+        this.#audio.addEventListener("timeupdate", this.timeUpdate);
+        this.#audio.addEventListener("pause", () => {
+            this.paused = true;
         });
+        this.#audio.addEventListener("playing", () => {
+            this.paused = false;
+        })
         this.metadata = new Metadata(this);
         this.reactive = reactive({
             title: this.metadata.title,
             artist: this.metadata.artist,
             currentTime: this.currentTime,
             duration: this.duration,
-            currentSong: this.currentSong
+            currentSong: this.currentSong,
+            paused: this.paused
         });
     }
 
@@ -66,7 +73,12 @@ class AudioPlayer {
     }
 
     get paused() {
-        return this.#paused
+        return this.#paused;
+    }
+
+    set paused(pause: boolean) {
+        this.#paused = pause;
+        this.reactive.paused = pause;
     }
 
     get queue() {
@@ -93,6 +105,11 @@ class AudioPlayer {
     set currentSong(song) {
         this.#currentSong = song;
         this.reactive.currentSong = song;
+    }
+
+    doTimeUpdate(willDo:boolean) {
+        if (willDo) this.#audio.addEventListener('timeupdate', this.timeUpdate);
+        else this.#audio.removeEventListener('timeupdate', this.timeUpdate);
     }
 
     async playSong(song: FiretailSong) {
@@ -122,8 +139,11 @@ class AudioPlayer {
     }
 
     togglePlay() {
-        if (this.#audio.paused) this.#audio.play()
-        else this.#audio.pause()
+        if (this.#audio.paused) {
+            this.#audio.play()
+        } else {
+            this.#audio.pause()
+        }
         return this.#audio.paused
     }
 
@@ -135,11 +155,12 @@ class AudioPlayer {
     }
 
     prevSong() {
-        if (this.#currentTime > 5) {
-            this.#currentTime = 0
+        if (this.currentTime > 5) {
+            console.log('TEST')
+            this.setCurrentTime(0)
         } else {
             this.index--
-            this.currentSong = this.#queue[this.index]
+            this.currentSong = this.queue[this.index]
             this.playSong(this.currentSong)
         }
     }
@@ -150,7 +171,7 @@ class AudioPlayer {
         } else {
             this.updateLocal++
         }
-        this.currentTime = (evt.target as HTMLAudioElement).currentTime
+        audioPlayer.currentTime = (evt.target as HTMLAudioElement).currentTime
     }
 }
 
