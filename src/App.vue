@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Sidebar from './components/sidebar/Sidebar.vue'
+import SideBar from './components/sidebar/SideBar.vue'
 import './assets/ft-icon/ft-icon.css'
 import './themes/firetail.scss';
 import PlayingBar from "./components/playingbar/PlayingBar.vue";
@@ -9,7 +9,7 @@ import PlayingBar from "./components/playingbar/PlayingBar.vue";
     <main id="app" class="dark">
 
         <div class="main-content">
-            <Sidebar />
+            <SideBar />
             <div class="content">
                 <RouterView />
             </div>

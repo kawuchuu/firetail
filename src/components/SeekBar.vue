@@ -36,6 +36,7 @@ function clamp(min: number, val: number, max: number) {
 
 function seekMove(evt: MouseEvent) {
   if (!seekMouse.value.down) return
+  seekFill.value.style.transition = 'none';
   const pBar = getP(evt, seekBar.value)
   seekFill.value.style.width = pBar * 100 + '%'
   if (props.changeOnMove) {
@@ -46,11 +47,16 @@ function seekMove(evt: MouseEvent) {
 function seekUp(evt: MouseEvent) {
   window.removeEventListener('mousemove', seekMove)
   window.removeEventListener('mouseup', seekUp)
+  seekFill.value.style.removeProperty('transition');
   if (!seekMouse.value.down) return
   seekMouse.value.down = false
   const pBar = getP(evt, seekBar.value)
   seekFill.value.style.width = pBar * 100 + '%'
   emit('rangeChange', pBar * props.rangeLength);
+  if (!seekMouse.value.over) {
+    handle.value.classList.remove('hover');
+    seekFillHover.value.classList.remove('hover');
+  }
 }
 
 function seekDown(evt: MouseEvent) {
@@ -136,6 +142,9 @@ function seekLeave() {
   border-radius: 10px;
   position: absolute;
   opacity: 0;
+  z-index: 3;
+  transition: 100ms;
+  transition-property: opacity;
 }
 
 .handle {

@@ -1,5 +1,7 @@
 import {app, BrowserWindow, protocol} from 'electron';
 import path from 'path';
+import Database from "./modules/database";
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -7,6 +9,8 @@ if (require('electron-squirrel-startup')) {
 }
 
 const createWindow = () => {
+  const database = new Database();
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
@@ -30,7 +34,13 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', () => {
+app.on('ready', async () => {
+  try {
+    await installExtension(VUEJS_DEVTOOLS)
+    console.log('Vue Devtools installed!')
+  } catch (e) {
+    console.error('Vue Devtools failed to install:', e.toString())
+  }
   registerLocalResourceProtocol();
   createWindow();
 });

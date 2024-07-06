@@ -4,6 +4,7 @@ import App from './App.vue';
 import router from "./router";
 import AudioPlayer from "./modules/audio";
 import virtualScroller from 'vue-virtual-scroller';
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 export const audioPlayer = new AudioPlayer();
 const app = createApp(App);

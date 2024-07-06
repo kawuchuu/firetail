@@ -127,14 +127,15 @@ class AudioPlayer {
         })
     }
 
-    enqueue(newQueue: FiretailSong[], playNow?: boolean, replace?: boolean) {
+    enqueue(newQueue: FiretailSong[], replace?: boolean, playNow?: boolean, atIndex?: number) {
         if (replace) {
             this.queue = newQueue;
         } else {
             this.queue.concat(newQueue);
         }
         if (playNow) {
-            this.playSong(this.queue[0]);
+            if (atIndex) this.index = atIndex;
+            this.playSong(this.queue[atIndex]);
         }
     }
 

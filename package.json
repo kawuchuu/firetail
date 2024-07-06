@@ -25,6 +25,7 @@
     "@typescript-eslint/parser": "^5.0.0",
     "@vitejs/plugin-vue": "^5.0.5",
     "electron": "31.0.1",
+    "electron-devtools-installer": "^3.2.0",
     "eslint": "^8.0.1",
     "eslint-plugin-import": "^2.25.0",
     "ts-node": "^10.0.0",
@@ -38,6 +39,8 @@
   },
   "license": "GPL-3.0",
   "dependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "better-sqlite3": "^11.1.2",
     "electron-squirrel-startup": "^1.0.1",
     "sass": "^1.77.5",
     "vue": "^3.4.27",
