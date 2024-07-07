@@ -1,9 +1,8 @@
 import { createMemoryHistory, createRouter } from 'vue-router'
 
 import SongListView from './routes/SongListView.vue'
-import TestAudio from "./routes/TestAudio.vue";
-import SongListItem from "./components/SongListItem.vue";
-import BaseSongView from "./routes/BaseSongView.vue";
+import BaseSongTop from "./components/songlistviews/BaseSongTop.vue";
+import BaseSongBottom from "./components/songlistviews/BaseSongBottom.vue";
 
 const routes = [
     {
@@ -11,8 +10,12 @@ const routes = [
         component: SongListView,
         children: [
             {
+                name: 'top-view',
                 path: '',
-                component: BaseSongView
+                components: {
+                    top: BaseSongTop,
+                    bottom: BaseSongBottom
+                }
             }
         ]
     },

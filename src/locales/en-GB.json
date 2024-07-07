@@ -20,7 +20,7 @@
     "UNKNOWN_DESC": "Sorry about that. If you believe this is an error, please create an issue here."
   },
   "TOP_TITLE": {
-    "COUNT_TYPE_SONGS": "{count} song | {count} songs"
+    "COUNT_TYPE_SONGS": "No songs | 1 song | {count} songs"
   },
   "SONG_LIST": {
     "LIST_TITLE": "Title",

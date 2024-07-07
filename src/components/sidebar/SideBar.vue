@@ -6,13 +6,13 @@ import SidebarTitle from "./SidebarTitle.vue";
 <template>
     <div class="side-bar">
         <div class="item-container">
-            <SidebarItem :icon="'home'" :label="'HOME'"></SidebarItem>
+            <SidebarItem to="/home" :icon="'home'" :label="'HOME'"></SidebarItem>
             <SidebarTitle :title="'LIBRARY'"></SidebarTitle>
-            <SidebarItem :icon="'note'" :label="'SONGS'"></SidebarItem>
-            <SidebarItem :icon="'person'" :label="'ARTISTS'"></SidebarItem>
-            <SidebarItem :icon="'album'" :label="'ALBUMS'"></SidebarItem>
-            <SidebarItem :icon="'genre'" :label="'GENRES'"></SidebarItem>
-            <SidebarItem :icon="'heart'" :label="'FAVOURITE'"></SidebarItem>
+            <SidebarItem to="/" :icon="'note'" :label="'SONGS'"></SidebarItem>
+            <SidebarItem to="/artists" :icon="'person'" :label="'ARTISTS'"></SidebarItem>
+            <SidebarItem to="/albums" :icon="'album'" :label="'ALBUMS'"></SidebarItem>
+            <SidebarItem to="/genres" :icon="'genre'" :label="'GENRES'"></SidebarItem>
+            <SidebarItem to="/likes" :icon="'heart'" :label="'FAVOURITE'"></SidebarItem>
             <SidebarTitle :title="'PLAYLISTS'"></SidebarTitle>
         </div>
     </div>
@@ -30,7 +30,7 @@ import SidebarTitle from "./SidebarTitle.vue";
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: scroll;
-    height: 100%;
+    height: calc(100% - 24px);
     padding: 12px 0px 12px 12px;
 }
 </style>

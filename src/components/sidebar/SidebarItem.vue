@@ -1,15 +1,18 @@
 <script setup lang="ts">
 const props = defineProps({
     icon: String,
-    label: String
+    label: String,
+  path: String
 })
 </script>
 
 <template>
-    <div class="sidebar-item">
+    <router-link :to="path">
+      <div class="sidebar-item">
         <i class="ft-icon">{{ icon }}</i>
         <span>{{ $t(`SIDEBAR.${label}`) }}</span>
-    </div>
+      </div>
+    </router-link>
 </template>
 
 <style scoped lang="scss">
@@ -30,5 +33,15 @@ const props = defineProps({
         pointer-events: none;
         font-size: 24px;
     }
+
+  span {
+    font-size: 15px;
+  }
+}
+
+.router-link-active .sidebar-item {
+  background: var(--button);
+  opacity: 1;
+  font-weight: 600;
 }
 </style>

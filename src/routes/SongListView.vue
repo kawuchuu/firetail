@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import FiretailSong from "../types/FiretailSong";
 import {audioPlayer} from "../renderer";
-import BaseSongView from "./BaseSongView.vue";
+import BaseSongView from "../components/songlistviews/BaseSongTop.vue";
 import {onMounted, provide, Ref, ref} from "vue";
 import SongListItem from "../components/SongListItem.vue";
 
@@ -32,13 +32,13 @@ onMounted(() => {
         class="scroller"
     >
       <template #before>
-        <RouterView v-slot="{ Component }">
-          <component :is="Component" is-top-or-bottom="top"/>
+        <RouterView v-slot="{ Component }" name="top">
+          <component :is="Component" list-name="Songs" :list-size="songList.length" />
         </RouterView>
       </template>
       <template #after>
-        <RouterView v-slot="{ Component }">
-          <component :is="Component" is-top-or-bottom="bottom"/>
+        <RouterView v-slot="{ Component }" name="bottom">
+          <component :is="Component" />
         </RouterView>
       </template>
       <template #default="{ item, index, active }">
@@ -48,7 +48,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .wrapper {
   overflow: hidden;
   position: absolute;
@@ -58,8 +58,9 @@ onMounted(() => {
 }
 
 .scroller {
-  width: calc(100% - 40px);
+  width: calc(100%);
   height: 100%;
-  padding: 0 20px;
+  // padding: 0 20px;
+  scrollbar-gutter: stable both-edges;
 }
 </style>

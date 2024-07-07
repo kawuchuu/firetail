@@ -24,6 +24,12 @@ import PlayingBar from "./components/playingbar/PlayingBar.vue";
     src: url('./assets/Inter.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'Inter Display';
+  font-weight: 600;
+  src: url('./assets/InterDisplay-Bold.ttf') format('truetype');
+}
+
 #app {
     --main-border-radius: 10px 0px 0px;
     --sidebar-width: 225px;
@@ -53,6 +59,38 @@ import PlayingBar from "./components/playingbar/PlayingBar.vue";
     --bd: #b4b4b4;
     --mono-bd: #b4b4b4;
     --button: var(--fg-bg);
+}
+
+::-webkit-scrollbar {
+  width: 16px !important;
+  -webkit-app-region: no-drag;
+  background: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-op);
+  border-radius: 20px;
+  min-height: 60px;
+  background-clip: content-box;
+  border: 4px solid transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text);
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--hl-txt);
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-button {
+  display: none
+}
+
+::-webkit-scrollbar-corner {
+  display: none;
 }
 
 body {
@@ -85,5 +123,10 @@ body {
 a {
   color: var(--text);
   text-decoration: none;
+}
+
+h1 {
+  font-family: 'Inter Display', 'Inter', sans-serif;
+  font-weight: 600;
 }
 </style>
