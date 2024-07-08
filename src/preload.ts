@@ -1,5 +1,8 @@
 import {contextBridge, ipcRenderer} from 'electron';
 
 contextBridge.exposeInMainWorld('library', {
-  getAllSongs: async () => await ipcRenderer.invoke('getAllSongs')
+  getAllSongs: async () => await ipcRenderer.invoke('getAllSongs'),
+  getAllAlbums: async () => await ipcRenderer.invoke('getAllAlbums'),
+  getAllFromMatchingColumns: async (column: string, value: string) => await ipcRenderer.invoke('getAllFromMatchingColumns', [column, value]),
+  getAllFromAlbum: async (album: string, albumArtist: string) => await ipcRenderer.invoke('getAllFromAlbum', [album, albumArtist]),
 });

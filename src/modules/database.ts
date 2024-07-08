@@ -15,10 +15,36 @@ class FiretailDB {
     return rows;
   }
 
+  getAllAlbums() {
+    const rows = this.db.prepare("SELECT DISTINCT albumArtist,album FROM library").all();
+    return rows;
+  }
+
+  getAllFromMatchingColumn(column: string, value: string) {
+    const rows = this.db.prepare("SELECT * FROM library WHERE ? = ?").all(column, value);
+    return rows;
+  }
+
+  getAllFromAlbum(album: string, albumArtist: string) {
+    return this.db.prepare("SELECT * FROM library WHERE album = ? AND albumArtist = ?").all(album, albumArtist);
+  }
+
   startDBIpc() {
     ipcMain.handle('getAllSongs', () => {
       return this.getAllSongs();
     });
+
+    ipcMain.handle('getAllAlbums', () => {
+      return this.getAllAlbums();
+    });
+
+    ipcMain.handle('getAllFromMatchingColumn', (event, args) => {
+      return this.getAllFromMatchingColumn(args[0], args[1]);
+    });
+
+    ipcMain.handle('getAllFromAlbum', (event, args) => {
+      return this.getAllFromAlbum(args[0], args[1]);
+    })
   }
 }
 
