@@ -11,12 +11,12 @@ class FiretailDB {
   }
 
   getAllSongs() {
-    const rows = this.db.prepare("SELECT * FROM library").all();
+    const rows = this.db.prepare("SELECT * FROM library ORDER BY albumArtist COLLATE NOCASE,album COLLATE NOCASE,trackNum COLLATE NOCASE").all();
     return rows;
   }
 
   getAllAlbums() {
-    const rows = this.db.prepare("SELECT DISTINCT albumArtist,album FROM library").all();
+    const rows = this.db.prepare("SELECT DISTINCT albumArtist,album FROM library ORDER BY album COLLATE NOCASE").all();
     return rows;
   }
 
@@ -26,7 +26,7 @@ class FiretailDB {
   }
 
   getAllFromAlbum(album: string, albumArtist: string) {
-    return this.db.prepare("SELECT * FROM library WHERE album = ? AND albumArtist = ?").all(album, albumArtist);
+    return this.db.prepare("SELECT * FROM library WHERE album = ? AND albumArtist = ? ORDER BY disc,trackNum").all(album, albumArtist);
   }
 
   startDBIpc() {

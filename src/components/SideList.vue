@@ -9,7 +9,13 @@ const props = defineProps<{
 <template>
   <div class="side-list-container">
     <div class="list-items" v-for="item in albums" :key="`${item.album}_${item.albumArtist}`">
-      <router-link :to="`/albums/${item.albumArtist}/${item.album}`">{{item.album}} - {{item.albumArtist}}</router-link>
+      <router-link :to="`/albums/${item.albumArtist}/${item.album}`">
+        <div class="item-img"/>
+        <div class="item-info">
+          <span>{{ item.album }}</span>
+          <span class="album-artist">{{ item.albumArtist }}</span>
+        </div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -18,8 +24,83 @@ const props = defineProps<{
 .side-list-container {
   position: fixed;
   width: var(--song-list-width);
-  height: calc(100% - 85px - 44px);
+  height: calc(100% - 85px - 44px - 30px);
   overflow: hidden;
   overflow-y: auto;
+  scrollbar-gutter: stable both-edges;
+
+  max-width: 300px;
+  z-index: 4;
+  padding: 15px 0;
+  background: var(--bg);
+  border-right: solid var(--bd) 1px;
+  border-radius: var(--main-border-radius);
+}
+
+.list-items {
+  height: 63px;
+  border-radius: 10px;
+}
+
+.list-items a span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.65;
+  padding-right: 10px;
+}
+
+.router-link-exact-active {
+  background-color: var(--button);
+  border-radius: 10px;
+  cursor: default;
+}
+
+.list-items a.router-link-exact-active span {
+  opacity: 1;
+  font-weight: 600;
+}
+
+.list-items a {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: transparent !important;
+
+  span {
+    font-size: 0.95em;
+    margin-left: 6px;
+  }
+
+  .album-artist {
+    font-size: 0.8em;
+    margin-top: 5px;
+    font-weight: normal !important;
+  }
+}
+
+.list-items:hover {
+  a span {
+    opacity: 1;
+  }
+}
+
+.item-img {
+  min-width: 45px;
+  min-height: 45px;
+  margin: 0px 9px;
+  background-color: var(--back-bg);
+  border-radius: 3px;
+  background-image: url('../assets/no_album.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 </style>

@@ -189,7 +189,7 @@
     }
 
     .nav-button, .top-button, .search-btn, .dropdown, .dropdown .options, .results-link:hover, div.control-buttons i, div.right-controls i, .switch, .favourite-icon,
-    .panel input[type="text"], .panel textarea, .pl-img, .albums-item a, .panel .top i {
+    .panel input[type="text"], .panel textarea, .pl-img, .list-items a, .panel .top i {
         outline: solid 2px var(--bd) !important;
     }
 
@@ -309,7 +309,7 @@
         margin-bottom: 10px;
     }
 
-    .albums-item a span {
+    .list-items a span {
         opacity: 1 !important;
     }
 }

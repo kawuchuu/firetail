@@ -7,7 +7,7 @@ import SideList from "../components/SideList.vue";
 
 const songList: Ref<FiretailSong[]> = ref([]);
 const albumList: Ref<Albums[]> = ref([]);
-const listName = "Albums";
+const listName = ref("Albums");
 
 const route = useRoute();
 
@@ -16,7 +16,8 @@ watch(() => route.params, getNewAlbumData, { immediate: true });
 function getNewAlbumData(album: Albums) {
   window.library.getAllFromAlbum(album.album, album.albumArtist).then((allSongs:FiretailSong[]) => {
     songList.value = allSongs;
-  })
+  });
+  listName.value = album.album;
 }
 
 onMounted(() => {

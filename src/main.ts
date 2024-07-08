@@ -10,14 +10,37 @@ if (require('electron-squirrel-startup')) {
 
 const createWindow = () => {
   const database = new Database();
+  const osType = process.platform;
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1350,
+    height: 815,
+    minWidth: 750,
+    minHeight: 400,
+    show: false,
+    titleBarStyle: osType === 'darwin' || osType === 'win32' ? 'hidden' : 'default',
+    trafficLightPosition: {
+      x: 25,
+      y: 17
+    },
+    frame: !(osType === 'darwin' || osType === 'win32'),
+    title: "Firetail",
+    backgroundColor: '#000000',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      disableBlinkFeatures: "Auxclick"
     },
+    titleBarOverlay: {
+      height: 44,
+      width: 150,
+      color: '#000000',
+      symbolColor: '#ffffff'
+    }
+  });
+
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.show();
   });
 
   // and load the index.html of the app.
