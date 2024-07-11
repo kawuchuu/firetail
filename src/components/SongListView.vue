@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import FiretailSong from "../types/FiretailSong";
-import {audioPlayer} from "../renderer";
+import {audioPlayer, viewStore} from "../renderer";
 import BaseSongView from "./songlistviews/BaseSongTop.vue";
-import {computed, nextTick, onMounted, provide, Ref, ref} from "vue";
+import {computed, nextTick, onMounted, provide, Ref, ref, watch} from "vue";
 import SongListItem from "./SongListItem.vue";
+import SongViewInfoView from "./songlistviews/SongViewInfoView.vue";
+import Albums from "../types/Albums";
 
 provide('play', play);
 
 const props = defineProps<{
   songList: FiretailSong[],
-  listName: String
+  listName: string,
+  isSimple?: boolean,
+  showInfoView?: boolean,
+  artistName?: string
 }>();
 
 const isSticky = ref(false);
@@ -22,12 +27,14 @@ function play(index:number) {
   audioPlayer.enqueue(props.songList, true, true, index);
 }
 
-function updateScroll(evt:Event) {
+function updateScroll() {
   const scrollWrapperPos = document.querySelector('.scroll-wrapper').getBoundingClientRect().y;
-  isSticky.value = scrollWrapperPos < columnSortInfo.value.clientHeight + 86;
+  isSticky.value = scrollWrapperPos < columnSortInfo.value.clientHeight + 86 + 5;
   const actualScrollBy = opacityToScrollBy.value - 80;
-  sortInfoOpacity.value = 1 - (((actualScrollBy - (evt.target as HTMLElement).scrollTop + 80) / actualScrollBy));
+  sortInfoOpacity.value = 1 - (((actualScrollBy - viewStore.scroll + 80) / actualScrollBy));
 }
+
+watch(() => viewStore.scroll, updateScroll);
 
 const getColumnSortOffset = computed(() => {
   if (!columnSortInfo.value || !columnSortInfo.value.clientHeight) return 'top: 0'
@@ -42,32 +49,43 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="wrapper">
+  <div class="wrapper" :class="showInfoView ? 'show-info-view' : ''">
+    <div class="bg-gradient">
+      <div class="list-gradient-fade" />
+      <div class="bg-fade-bottom" />
+      <div class="bg-noise" />
+      <div class="bg-banner" />
+    </div>
     <RecycleScroller
         :items="songList"
-        :item-size="42"
+        :item-size="isSimple ? 55 : 42"
         :emit-update="true"
+        :page-mode="true"
         key-field="id"
         list-class="scroll-wrapper"
         class="scroller"
-        @scroll="updateScroll"
     >
       <template #before>
         <RouterView v-slot="{ Component }" name="top">
-          <component :is="Component" :list-name="listName" :list-size="songList.length" />
+          <component
+             :is="Component"
+             :list-name="listName"
+             :list-size="songList.length"
+             :artist-name="artistName"
+          />
         </RouterView>
         <div class="column-sort-info" ref="columnSortInfo" :style="`opacity: ${sortInfoOpacity}`">
           <h2>{{listName}}</h2>
         </div>
-        <div class="column-sort-wrapper">
+        <div class="column-sort-wrapper" :class="isSimple ? 'simple' : ''">
           <div class="column-sort" :class="isSticky ? 'sticky' : ''" :style="getColumnSortOffset">
-            <i class="ft-icon play-pause"></i>
+            <span class="a">#</span>
             <div class="artist-title-album">
-              <div class="list-title">Title</div>
-              <div class="list-artist">Artist</div>
-              <p>Album</p>
-              <i class="ft-icon favourite-icon">heart</i>
-              <i class="ft-icon list-duration">clock</i>
+              <span class="list-title">Title</span>
+              <span v-if="!isSimple" class="list-artist">Artist</span>
+              <span v-if="!isSimple" class="list-album">Album</span>
+              <i class="ft-icon favourite-icon"></i>
+              <span class="list-duration"><i class="ft-icon">clock</i></span>
             </div>
             <div class="bg"></div>
           </div>
@@ -79,29 +97,38 @@ onMounted(() => {
         </RouterView>
       </template>-->
       <template #default="{ item, index, active }" ref="test">
-        <SongListItem :song="item" :index="index" />
+        <SongListItem :song="item" :index="index" :is-simple="isSimple" />
       </template>
     </RecycleScroller>
+    <SongViewInfoView v-if="showInfoView" />
   </div>
 </template>
 
 <style lang="scss" scoped>
 .wrapper {
-  width: calc(100%);
+  width: calc(100% - 16px);
   height: 100%;
   --fixed-width: calc(100vw - var(--sidebar-width) - 16px);
+
+  padding-left: 16px;
+
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.wrapper.show-info-view {
+  grid-template-columns: 1fr 450px;
 }
 
 .scroller {
   width: calc(100%);
   height: 100%;
-  // padding: 0 20px;
-  scrollbar-gutter: stable both-edges;
 }
 
 .column-sort-wrapper {
   width: 100%;
   height: 42px;
+  margin-bottom: 5px;
 }
 
 .column-sort {
@@ -124,6 +151,10 @@ onMounted(() => {
     width: calc(100% - 25px);
     font-size: 14px;
   }
+}
+
+.column-sort-wrapper.simple .column-sort .artist-title-album {
+  grid-template-columns: 3fr 20px 0fr;
 }
 
 .column-sort.sticky {
@@ -166,5 +197,42 @@ onMounted(() => {
 
 .list-duration {
   min-width: 40px;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.list-duration i, .disc-num {
+  font-size: 20px;
+  padding: 0 6px;
+}
+
+.bg-gradient {
+  position: absolute;
+  width: calc(100% + 20px);
+  height: 600px;
+  top: 0;
+  left: -20px;
+  z-index: -1;
+}
+
+.list-gradient-fade {
+  width: 100%;
+  height: 600px;
+  position: absolute;
+}
+
+.bg-fade-bottom {
+  width: 100%;
+  height: 400px;
+  background: var(--bg);
+  position: absolute;
+  top: 420px;
+  z-index: 2;
+}
+
+.bg-banner {
+  opacity: 0.75;
 }
 </style>

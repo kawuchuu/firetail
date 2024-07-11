@@ -5,7 +5,8 @@ import {audioPlayer} from "../renderer";
 
 const props = defineProps<{
   song: FiretailSong,
-  index: number
+  index: number,
+  isSimple?: boolean
 }>();
 
 /*onMounted(() => {
@@ -31,22 +32,23 @@ const listIcon = computed(() => {
   }
 })
 
+function startPlaying() {
+  console.log(`FROM SONGLISTITEM: ${props.index}`);
+  play(props.index);
+}
+
 const play:Function = inject("play");
 </script>
 
 <template>
-  <div class="song-item" :class="isActive" @dblclick="play(index)"  @mouseover="hovering = true" @mouseleave="hovering = false">
-    <i v-if="listIcon !== 'volume-up'" class="ft-icon play-pause" :style="(hovering || (isActive === 'active')) ? 'opacity: 1' : 'opacity: 0'" @click="play(index)">{{ listIcon }}</i>
+  <div class="song-item" :class="[isActive, isSimple ? 'simple' : '']" @dblclick="startPlaying"  @mouseover="hovering = true" @mouseleave="hovering = false">
+    <i v-if="(listIcon !== 'volume-up' && !isSimple) || (isSimple && hovering && listIcon !== 'volume-up')" class="ft-icon play-pause" :style="(hovering || (isActive === 'active')) ? 'opacity: 1' : 'opacity: 0'" @click="play(index)">{{ listIcon }}</i>
     <div v-if="listIcon == 'volume-up'" class="playing-ani" @click="">
       <div class="bar one"></div>
       <div class="bar two"></div>
       <div class="bar three"></div>
     </div>
-    <div v-if="$route.path == '/albums'">
-      <p v-if="song.disc !== null" class="track-num">{{song.disc}}</p>
-      <p v-else class="track-num">-</p>
-    </div>
-    <div v-if="$route.path == '/albums'">
+    <div v-if="isSimple && listIcon !== 'volume-up' && !hovering">
       <p v-if="song.trackNum !== null" class="track-num">{{song.trackNum}}</p>
       <p v-else class="track-num">-</p>
     </div>
@@ -55,10 +57,11 @@ const play:Function = inject("play");
         <div class="title-name">
           <p>{{ song.title }}</p>
 <!--            <div class="explicit" v-if="song.explicit == 1"><span>E</span></div>-->
-          <span v-if="song.trackNum" v-show="$route.path !== '/albums'" class="track-num-list">{{ song.trackNum }}</span>
+          <span v-if="song.trackNum && !isSimple" class="track-num-list">{{ song.trackNum }}</span>
         </div>
+        <span v-if="isSimple">{{song.artist}}</span>
       </div>
-      <div class="list-artist">
+      <div v-if="!isSimple" class="list-artist">
 <!--        <p v-for="(item, index) in artists" :key="index">
           <router-link :to="`/artists?hideTop=true&column=artist&q=${encodeURIComponent(item)}&view=artist_${encodeURIComponent(item)}`">
             <span class="artist-item">{{item}}<span v-if="index !== artists.length - 1">,</span></span>
@@ -66,7 +69,7 @@ const play:Function = inject("play");
         </p>-->
         <p>{{song.artist}}</p>
       </div>
-      <p><span>{{song.album}}</span></p>
+      <p v-if="!isSimple"><span>{{song.album}}</span></p>
       <i class="ft-icon favourite-icon" :style="hovering ? 'opacity: 1' : 'opacity: 0'">heart</i>
       <p class="list-duration"><span>{{song.duration}}</span></p>
     </div>

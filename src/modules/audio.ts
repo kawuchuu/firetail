@@ -113,7 +113,7 @@ class AudioPlayer {
     }
 
     async playSong(song: FiretailSong) {
-        if (!song.path) return
+        if (!song || !song.path) return console.warn("Could not find song", song);
         this.#audio.src = `local-resource://${song.path}`
         //console.log(this.audio.currentTime)
         this.#id = song.id;

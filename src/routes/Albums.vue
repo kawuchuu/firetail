@@ -8,6 +8,7 @@ import SideList from "../components/SideList.vue";
 const songList: Ref<FiretailSong[]> = ref([]);
 const albumList: Ref<Albums[]> = ref([]);
 const listName = ref("Albums");
+const artistName = ref("Artists");
 
 const route = useRoute();
 
@@ -18,6 +19,7 @@ function getNewAlbumData(album: Albums) {
     songList.value = allSongs;
   });
   listName.value = album.album;
+  artistName.value = album.albumArtist;
 }
 
 onMounted(() => {
@@ -32,7 +34,14 @@ onMounted(() => {
     <SideList :albums="albumList" />
     <div class="song-list-container">
       <RouterView v-slot="{ Component }">
-        <component :is="Component" :song-list="songList" :list-name="listName" />
+        <component
+            :is="Component"
+            :song-list="songList"
+            :list-name="listName"
+            :is-simple="true"
+            :show-info-view="true"
+            :artist-name="artistName"
+        />
       </RouterView>
     </div>
   </div>
@@ -44,9 +53,9 @@ onMounted(() => {
 }
 
 .song-list-container {
-  position: fixed;
-  left: calc(var(--song-list-width) + var(--sidebar-width));
-  width: calc(100% - var(--song-list-width) - var(--sidebar-width));
+  position: relative;
+  left: calc(var(--song-list-width));
+  width: calc(100% - var(--song-list-width));
   height: calc(100vh - 44px - 85px);
 }
 </style>

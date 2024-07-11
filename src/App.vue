@@ -4,6 +4,12 @@ import './assets/ft-icon/ft-icon.css'
 import './themes/firetail.scss';
 import PlayingBar from "./components/playingbar/PlayingBar.vue";
 import TopBar from "./components/TopBar.vue";
+import {viewStore} from "./renderer";
+import {onMounted} from "vue";
+
+function onScroll(evt:Event) {
+  viewStore.scroll = (evt.target as HTMLElement).scrollTop;
+}
 </script>
 
 <template>
@@ -12,7 +18,7 @@ import TopBar from "./components/TopBar.vue";
       <SideBar />
       <div class="screen-container">
         <TopBar />
-        <div class="content">
+        <div class="content" @scroll="onScroll">
           <RouterView />
         </div>
       </div>
@@ -116,7 +122,8 @@ body {
 }
 
 .content {
-  overflow: overlay;
+  overflow: hidden;
+  overflow-y: auto;
   position: fixed;
   height: calc(100% - 129px);
   width: calc(100% - var(--sidebar-width));
