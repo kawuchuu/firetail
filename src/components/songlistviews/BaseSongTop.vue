@@ -11,7 +11,7 @@ const props = defineProps<{
     <h1 class="list-name">{{listName}}</h1>
     <div class="additional-info">
       <span v-if="artistName" class="icon-label"><i class="ft-icon">person</i>{{artistName}}</span>
-      <span>{{ $t('TOP_TITLE.COUNT_TYPE_SONGS', { count: listSize })}}</span>
+      <span>{{ $t('TOP_TITLE.COUNT_TYPE_SONGS', listSize, { named: {count: $n(listSize) } })}}</span>
       <span>11 hrs 14 mins</span>
     </div>
   </div>

@@ -5,8 +5,13 @@ import BaseSongTop from "./components/songlistviews/BaseSongTop.vue";
 import BaseSongBottom from "./components/songlistviews/BaseSongBottom.vue";
 import AllSongs from "./routes/AllSongs.vue";
 import Albums from "./routes/Albums.vue";
+import TestAudio from "./routes/TestAudio.vue";
 
 const routes = [
+    {
+        path: '/home',
+        component: TestAudio,
+    },
     {
         path: '/',
         component: AllSongs,

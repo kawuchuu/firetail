@@ -8,7 +8,7 @@ interface FiretailSong {
     realdur: number;
     path: string;
     id: string;
-    hasImage: boolean;
+    hasImage: number;
     trackNum?: number;
     year?: string;
     disc?: number;

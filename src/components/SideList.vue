@@ -9,7 +9,7 @@ const props = defineProps<{
 <template>
   <div class="side-list-container">
     <div class="list-items" v-for="item in albums" :key="`${item.album}_${item.albumArtist}`">
-      <router-link :to="`/albums/${item.albumArtist}/${item.album}`">
+      <router-link :to="`/albums/${encodeURIComponent(item.albumArtist)}/${encodeURIComponent(item.album)}`">
         <div class="item-img"/>
         <div class="item-info">
           <span>{{ item.album }}</span>
@@ -35,6 +35,9 @@ const props = defineProps<{
   background: var(--bg);
   border-right: solid var(--bd) 1px;
   border-radius: var(--main-border-radius);
+
+  transition: 0.3s cubic-bezier(0, 1, 0.35, 1);
+  transition-property: width;
 }
 
 .list-items {
@@ -102,5 +105,11 @@ const props = defineProps<{
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+@media (max-width: 1350px) {
+  .side-list-container:hover {
+    width: 300px;
+  }
 }
 </style>

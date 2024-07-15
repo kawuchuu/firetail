@@ -6,6 +6,8 @@ import {computed, nextTick, onMounted, provide, Ref, ref, watch} from "vue";
 import SongListItem from "./SongListItem.vue";
 import SongViewInfoView from "./songlistviews/SongViewInfoView.vue";
 import Albums from "../types/Albums";
+import {useRoute} from "vue-router";
+import {getArt} from "../modules/art";
 
 provide('play', play);
 
@@ -17,10 +19,13 @@ const props = defineProps<{
   artistName?: string
 }>();
 
+const route = useRoute();
+
 const isSticky = ref(false);
 const columnSortInfo = ref(null);
 const sortInfoOpacity = ref(0);
 let opacityToScrollBy = ref(0);
+const bgImagePath = ref('');
 
 function play(index:number) {
   console.log(index);
@@ -34,7 +39,20 @@ function updateScroll() {
   sortInfoOpacity.value = 1 - (((actualScrollBy - viewStore.scroll + 80) / actualScrollBy));
 }
 
+async function updateBackgroundArt() {
+  if (route.params.albumArtist && route.params.album) {
+    bgImagePath.value = await getArt(route.params.albumArtist, route.params.album);
+  } else bgImagePath = '';
+}
+
+const getImage = computed( () => {
+  if (bgImagePath.value !== '') {
+    return `background-image: url(${bgImagePath.value}); filter: blur(25px) brightness(0.7) saturate(1.8);`;
+  } else return ''
+});
+
 watch(() => viewStore.scroll, updateScroll);
+watch(() => route.params, updateBackgroundArt);
 
 const getColumnSortOffset = computed(() => {
   if (!columnSortInfo.value || !columnSortInfo.value.clientHeight) return 'top: 0'
@@ -44,7 +62,10 @@ const getColumnSortOffset = computed(() => {
 onMounted(() => {
   nextTick(() => {
     opacityToScrollBy.value = document.querySelector('.scroll-wrapper').getBoundingClientRect().y - columnSortInfo.value.clientHeight;
-  })
+  });
+  onMounted(() => {
+    updateBackgroundArt();
+  });
 })
 </script>
 
@@ -52,9 +73,9 @@ onMounted(() => {
   <div class="wrapper" :class="showInfoView ? 'show-info-view' : ''">
     <div class="bg-gradient">
       <div class="list-gradient-fade" />
-      <div class="bg-fade-bottom" />
+      <div class="bg-art" :style="getImage" />
       <div class="bg-noise" />
-      <div class="bg-banner" />
+      <div class="bg-image" />
     </div>
     <RecycleScroller
         :items="songList"
@@ -81,9 +102,9 @@ onMounted(() => {
           <div class="column-sort" :class="isSticky ? 'sticky' : ''" :style="getColumnSortOffset">
             <span class="a">#</span>
             <div class="artist-title-album">
-              <span class="list-title">Title</span>
-              <span v-if="!isSimple" class="list-artist">Artist</span>
-              <span v-if="!isSimple" class="list-album">Album</span>
+              <span class="list-title">{{$t('SONG_LIST.LIST_TITLE')}}</span>
+              <span v-if="!isSimple" class="list-artist">{{$t('SONG_LIST.LIST_ARTIST')}}</span>
+              <span v-if="!isSimple" class="list-album">{{$t('SONG_LIST.LIST_ALBUM')}}</span>
               <i class="ft-icon favourite-icon"></i>
               <span class="list-duration"><i class="ft-icon">clock</i></span>
             </div>
@@ -191,7 +212,7 @@ onMounted(() => {
   pointer-events: none;
 
   h2 {
-    margin: 15px 76px;
+    margin: 15px 75px;
   }
 }
 
@@ -217,6 +238,22 @@ onMounted(() => {
   z-index: -1;
 }
 
+.bg-art {
+  position: absolute;
+  width: 100%;
+  height: 300px;
+  max-height: 400px;
+  //background-color: #5e00da;
+  background-position: center;
+  background-size: 150%;
+  background-repeat: no-repeat;
+  top: 0;
+  z-index: -1;
+  overflow: hidden;
+  transform: scale(1.3);
+  opacity: 0.55;
+}
+
 .list-gradient-fade {
   width: 100%;
   height: 600px;
@@ -230,9 +267,30 @@ onMounted(() => {
   position: absolute;
   top: 420px;
   z-index: 2;
+  display: none;
 }
 
-.bg-banner {
-  opacity: 0.75;
+.bg-image {
+  width: 100%;
+  height: 100%;
+  max-height: 400px;
+  background: linear-gradient(transparent, transparent, var(--bg)), radial-gradient(circle at top, transparent 40%, var(--bg)), url('../assets/songs-banner-new.png');
+  background-size: cover;
+  background-position: center 80%;
+  z-index: -2;
+  position: absolute;
+  animation: fadeIn 1s;
+}
+
+@media (max-width: 1600px) {
+  .wrapper.show-info-view {
+    grid-template-columns: 1fr 350px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .wrapper.show-info-view {
+    grid-template-columns: 1fr 250px;
+  }
 }
 </style>

@@ -6,3 +6,7 @@ contextBridge.exposeInMainWorld('library', {
   getAllFromMatchingColumns: async (column: string, value: string) => await ipcRenderer.invoke('getAllFromMatchingColumns', [column, value]),
   getAllFromAlbum: async (album: string, albumArtist: string) => await ipcRenderer.invoke('getAllFromAlbum', [album, albumArtist]),
 });
+
+contextBridge.exposeInMainWorld('path', {
+  getImages: async () => await ipcRenderer.invoke('getImagePath'),
+});

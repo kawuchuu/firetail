@@ -2,7 +2,7 @@
 import {onMounted, Ref, ref, watch} from "vue";
 import FiretailSong from "../types/FiretailSong";
 import Albums from "../types/Albums";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import SideList from "../components/SideList.vue";
 
 const songList: Ref<FiretailSong[]> = ref([]);
@@ -11,6 +11,7 @@ const listName = ref("Albums");
 const artistName = ref("Artists");
 
 const route = useRoute();
+const router = useRouter();
 
 watch(() => route.params, getNewAlbumData, { immediate: true });
 
@@ -25,6 +26,8 @@ function getNewAlbumData(album: Albums) {
 onMounted(() => {
   window.library.getAllAlbums().then((albums:Albums[]) => {
     albumList.value = albums;
+    if (route.params.album) return;
+    router.replace(`/albums/${encodeURIComponent(albums[0].albumArtist)}/${encodeURIComponent(albums[0].album)}`);
   })
 })
 </script>
@@ -57,5 +60,11 @@ onMounted(() => {
   left: calc(var(--song-list-width));
   width: calc(100% - var(--song-list-width));
   height: calc(100vh - 44px - 85px);
+}
+
+@media (max-width: 1350px) {
+  .albums-view-container {
+    --song-list-width: 95px;
+  }
 }
 </style>

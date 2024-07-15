@@ -69,7 +69,7 @@ const play:Function = inject("play");
         </p>-->
         <p>{{song.artist}}</p>
       </div>
-      <p v-if="!isSimple"><span>{{song.album}}</span></p>
+      <div v-if="!isSimple" class="list-album"><p>{{song.album}}</p></div>
       <i class="ft-icon favourite-icon" :style="hovering ? 'opacity: 1' : 'opacity: 0'">heart</i>
       <p class="list-duration"><span>{{song.duration}}</span></p>
     </div>

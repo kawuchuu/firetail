@@ -1,12 +1,30 @@
 <script setup lang="ts">
-import {ref} from "vue";
-import {audioPlayer} from '../../renderer'
+import {computed, ref, watch} from "vue";
+import {audioPlayer} from '../../renderer';
+import {getArt} from "../../modules/art";
+
+const imagePath = ref('');
+
+const getImage = computed( () => {
+  if (imagePath.value !== '') {
+    return `background-image: url(${imagePath.value})`;
+  } else return ''
+});
+
+async function changeImagePath() {
+  if (audioPlayer.currentSong && audioPlayer.currentSong.hasImage === 1) {
+    imagePath.value = await getArt(audioPlayer.currentSong.albumArtist, audioPlayer.currentSong.album);
+  } else imagePath.value = '';
+}
+
+//watch(() => audioPlayer.reactive.title, changeImagePath);
+watch(() => audioPlayer.reactive.currentSong, changeImagePath);
 </script>
 
 <template>
     <div class="song-info">
         <RouterLink>
-            <div class="song-album-art"></div>
+            <div class="song-album-art" :style="getImage"></div>
         </RouterLink>
         <div ref="titleArtist" class="title-artist">
             <RouterLink class="song-title">{{audioPlayer.reactive.title}}</RouterLink>

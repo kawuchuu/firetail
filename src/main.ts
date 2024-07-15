@@ -1,5 +1,5 @@
-import {app, BrowserWindow, protocol} from 'electron';
-import path from 'path';
+import {app, BrowserWindow, ipcMain, protocol} from 'electron';
+import path from 'path/posix';
 import Database from "./modules/database";
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 
@@ -42,6 +42,10 @@ const createWindow = () => {
   mainWindow.on('ready-to-show', () => {
     mainWindow.show();
   });
+
+  ipcMain.handle('getImagePath', () => {
+    return path.join(app.getPath('userData').split('\\').join('/'), 'images');
+  })
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
