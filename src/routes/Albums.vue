@@ -5,7 +5,13 @@ import Albums from "../types/Albums";
 import {useRoute, useRouter} from "vue-router";
 import SideList from "../components/SideList.vue";
 
+interface SongsGenre {
+  songs: FiretailSong[],
+  genres: string[]
+}
+
 const songList: Ref<FiretailSong[]> = ref([]);
+const genres: Ref<string[]> = ref([]);
 const albumList: Ref<Albums[]> = ref([]);
 const listName = ref("Albums");
 const artistName = ref("Artists");
@@ -16,8 +22,9 @@ const router = useRouter();
 watch(() => route.params, getNewAlbumData, { immediate: true });
 
 function getNewAlbumData(album: Albums) {
-  window.library.getAllFromAlbum(album.album, album.albumArtist).then((allSongs:FiretailSong[]) => {
-    songList.value = allSongs;
+  window.library.getAllFromAlbum(album.album, album.albumArtist).then((songsAndGenres: SongsGenre) => {
+    songList.value = songsAndGenres.songs;
+    genres.value = songsAndGenres.genres;
   });
   listName.value = album.album;
   artistName.value = album.albumArtist;
@@ -44,6 +51,7 @@ onMounted(() => {
             :is-simple="true"
             :show-info-view="true"
             :artist-name="artistName"
+            :genres="genres"
         />
       </RouterView>
     </div>
@@ -57,14 +65,14 @@ onMounted(() => {
 
 .song-list-container {
   position: relative;
-  left: calc(var(--song-list-width));
+  left: calc(var(--song-list-width) + 16px);
   width: calc(100% - var(--song-list-width));
   height: calc(100vh - 44px - 85px);
 }
 
 @media (max-width: 1350px) {
   .albums-view-container {
-    --song-list-width: 95px;
+    --song-list-width: 80px;
   }
 }
 </style>

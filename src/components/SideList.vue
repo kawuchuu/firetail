@@ -27,11 +27,10 @@ const props = defineProps<{
   height: calc(100% - 85px - 44px - 30px);
   overflow: hidden;
   overflow-y: auto;
-  scrollbar-gutter: stable both-edges;
 
   max-width: 300px;
   z-index: 4;
-  padding: 15px 0;
+  padding: 16px 0 16px 16px;
   background: var(--bg);
   border-right: solid var(--bd) 1px;
   border-radius: var(--main-border-radius);
