@@ -31,13 +31,13 @@ onMounted(() => {
     <div class="album-art">
       <img :src="imagePath" alt="Album art"/>
     </div>
-    <p class="subtitle">Genres</p>
-    <div class="genres">
+    <p v-if="genres && genres.length > 0" class="subtitle">Genres</p>
+    <div v-if="genres && genres.length > 0" class="genres">
       <span v-for="item in genres" :key="item">{{item.genre}}</span>
     </div>
-    <p class="subtitle">Artists</p>
-    <div class="artists">
-      <span v-for="item in artists" :key="item"><img src="../../assets/no_artist.svg">{{item.artist}}</span>
+    <p v-if="artists && artists.length > 0" class="subtitle">Artists</p>
+    <div v-if="artists && artists.length > 0" class="artists">
+      <div v-for="item in artists" :key="item"><img src="../../assets/no_artist.svg"><span>{{item.artist}}</span></div>
     </div>
   </div>
 </template>
@@ -66,6 +66,10 @@ onMounted(() => {
 
 .subtitle {
   margin: 10px 0 0 40px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  opacity: 0.75;
 }
 
 .genres {
@@ -88,20 +92,27 @@ onMounted(() => {
   gap: 10px;
   flex-wrap: wrap;
 
-  span {
-    padding: 0 16px 0 3px;
+  div {
+    padding: 0 12px 0 4px;
     background: var(--fg-bg);
     border-radius: 200px;
     height: 30px;
     display: flex;
     align-items: center;
+    overflow: hidden;
 
     img {
-      width: 25px;
-      height: 25px;
+      width: 23px;
+      height: 23px;
       background: var(--bg);
       border-radius: 200px;
       margin-right: 6px;
+    }
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 }

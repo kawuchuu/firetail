@@ -71,13 +71,13 @@ onMounted(() => {
 .song-list-container {
   position: relative;
   left: calc(var(--song-list-width) + 16px);
-  width: calc(100% - var(--song-list-width));
+  width: calc(100% - var(--song-list-width) - 16px);
   height: calc(100vh - 44px - 85px);
 }
 
 @media (max-width: 1350px) {
   .albums-view-container {
-    --song-list-width: 80px;
+    --song-list-width: 79px;
   }
 }
 </style>

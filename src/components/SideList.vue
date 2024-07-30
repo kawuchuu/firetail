@@ -24,7 +24,7 @@ const props = defineProps<{
 .side-list-container {
   position: fixed;
   width: var(--song-list-width);
-  height: calc(100% - 85px - 44px - 30px);
+  height: calc(100% - 85px - 44px - 32px);
   overflow: hidden;
   overflow-y: auto;
 

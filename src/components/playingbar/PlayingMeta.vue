@@ -57,7 +57,7 @@ watch(() => audioPlayer.reactive.currentSong, changeImagePath);
 .song-album-art {
     min-width: 55px;
     min-height: 55px;
-    left: 0;
+    left: 1px;
     border-radius: 4px;
     z-index: 2;
     position: relative;
@@ -66,6 +66,7 @@ watch(() => audioPlayer.reactive.currentSong, changeImagePath);
     background-position: center !important;
     background-size: cover !important;
     transition: .1s;
+    outline: solid 1px rgba(255, 255, 255, 0.12);
 }
 
 @keyframes scroll {

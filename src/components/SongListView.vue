@@ -49,7 +49,7 @@ async function updateBackgroundArt() {
 
 const getImage = computed( () => {
   if (bgImagePath.value !== '') {
-    return `background-image: url(${bgImagePath.value}); filter: blur(25px) brightness(0.7) saturate(1.8);`;
+    return `background-image: url(${bgImagePath.value}); filter: blur(25px) saturate(0.7);`;
   } else return ''
 });
 
@@ -75,6 +75,7 @@ onMounted(() => {
   <div class="wrapper" :class="showInfoView ? 'show-info-view' : ''">
     <div class="bg-gradient">
       <div class="list-gradient-fade" />
+      <div class="bg-fade-bottom" />
       <div class="bg-art" :style="getImage" />
       <div class="bg-noise" />
       <div class="bg-image" />
@@ -243,8 +244,8 @@ onMounted(() => {
 .bg-art {
   position: absolute;
   width: 100%;
-  height: 300px;
-  max-height: 400px;
+  height: 420px;
+  max-height: 420px;
   //background-color: #5e00da;
   background-position: center;
   background-size: 150%;
@@ -253,7 +254,8 @@ onMounted(() => {
   z-index: -1;
   overflow: hidden;
   transform: scale(1.3);
-  opacity: 0.55;
+  //opacity: 0.55;
+  mix-blend-mode: color;
 }
 
 .list-gradient-fade {
@@ -264,19 +266,19 @@ onMounted(() => {
 
 .bg-fade-bottom {
   width: 100%;
-  height: 400px;
+  height: 200px;
   background: var(--bg);
   position: absolute;
   top: 420px;
   z-index: 2;
-  display: none;
 }
 
 .bg-image {
   width: 100%;
   height: 100%;
-  max-height: 400px;
-  background: linear-gradient(transparent, transparent, var(--bg)), radial-gradient(circle at top, transparent 40%, var(--bg)), url('../assets/songs-banner-new.png');
+  max-height: 420px;
+  //background: linear-gradient(transparent, transparent, var(--bg)), radial-gradient(circle at top, transparent 40%, var(--bg)), url('../assets/songs-banner-new.png');
+  background-image: url('../assets/songs-banner-new.png');
   background-size: cover;
   background-position: center 80%;
   z-index: -2;
