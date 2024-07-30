@@ -17,7 +17,8 @@ const props = defineProps<{
   isSimple?: boolean,
   showInfoView?: boolean,
   artistName?: string,
-  genres?: string[]
+  genres?: string[],
+  artists?: string[]
 }>();
 
 const route = useRoute();
@@ -122,7 +123,7 @@ onMounted(() => {
         <SongListItem :song="item" :index="index" :is-simple="isSimple" />
       </template>
     </RecycleScroller>
-    <SongViewInfoView v-if="showInfoView" :genres="genres" />
+    <SongViewInfoView v-if="showInfoView" :genres="genres" :artists="artists" />
   </div>
 </template>
 

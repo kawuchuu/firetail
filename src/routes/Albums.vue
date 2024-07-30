@@ -7,11 +7,13 @@ import SideList from "../components/SideList.vue";
 
 interface SongsGenre {
   songs: FiretailSong[],
-  genres: string[]
+  genres: string[],
+  artists: string[]
 }
 
 const songList: Ref<FiretailSong[]> = ref([]);
 const genres: Ref<string[]> = ref([]);
+const artists: Ref<string[]> = ref([]);
 const albumList: Ref<Albums[]> = ref([]);
 const listName = ref("Albums");
 const artistName = ref("Artists");
@@ -25,6 +27,8 @@ function getNewAlbumData(album: Albums) {
   window.library.getAllFromAlbum(album.album, album.albumArtist).then((songsAndGenres: SongsGenre) => {
     songList.value = songsAndGenres.songs;
     genres.value = songsAndGenres.genres;
+    artists.value = songsAndGenres.artists;
+    console.log(artists.value);
   });
   listName.value = album.album;
   artistName.value = album.albumArtist;
@@ -52,6 +56,7 @@ onMounted(() => {
             :show-info-view="true"
             :artist-name="artistName"
             :genres="genres"
+            :artists="artists"
         />
       </RouterView>
     </div>
