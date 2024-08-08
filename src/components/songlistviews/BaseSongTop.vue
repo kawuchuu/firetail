@@ -1,9 +1,37 @@
 <script setup lang="ts">
+import {onMounted, ref, Ref, watch} from "vue";
+
+interface ListLengthNums {
+  hours: number,
+  minutes: number,
+  seconds: number
+}
+
 const props = defineProps<{
   listName: string,
   listSize: number,
-  artistName?: string
-}>()
+  artistName?: string,
+  listLength?: number
+}>();
+
+const listLengthLabel:Ref<ListLengthNums> = ref({
+  hours: 0,
+  minutes: 0,
+  seconds: 0,
+});
+
+function updateListLengthLabel() {
+  listLengthLabel.value = {
+    hours: Math.floor(props.listLength / 3600),
+    minutes: Math.floor((props.listLength % 3600) / 60),
+    seconds: Math.floor(props.listLength % 60)
+  }
+}
+
+watch(() => props.listLength, updateListLengthLabel);
+onMounted(() => {
+  updateListLengthLabel();
+})
 </script>
 
 <template>
@@ -12,7 +40,11 @@ const props = defineProps<{
     <div class="additional-info">
       <span v-if="artistName" class="icon-label"><i class="ft-icon">person</i>{{artistName}}</span>
       <span>{{ $t('TOP_TITLE.COUNT_TYPE_SONGS', listSize, { named: {count: $n(listSize) } })}}</span>
-      <span>11 hrs 14 mins</span>
+      <span>
+        <span v-if="listLengthLabel.hours > 0">{{ $t('TOP_TITLE.LIST_LENGTH.HOURS', listLengthLabel.hours, { named: { count: $n(listLengthLabel.hours) } }) }}</span>
+        <span>{{ $t('TOP_TITLE.LIST_LENGTH.MINUTES', listLengthLabel.minutes, { named: { count: $n(listLengthLabel.minutes) } }) }}</span>
+        <span v-if="listLengthLabel.hours < 1">{{ $t('TOP_TITLE.LIST_LENGTH.SECONDS', listLengthLabel.seconds, { named: { count: $n(listLengthLabel.seconds) } }) }}</span>
+      </span>
     </div>
   </div>
 </template>
@@ -37,6 +69,11 @@ const props = defineProps<{
   span {
     font-size: 14px;
     opacity: 0.65;
+
+    span {
+      opacity: 1;
+      margin-right: 5px;
+    }
   }
 
   span.icon-label {
@@ -58,5 +95,10 @@ const props = defineProps<{
 .additional-info span:not(:last-child)::after {
   content: "\2022";
   padding: 0px 10px;
+}
+
+.additional-info span span:not(:last-child)::after {
+  content: "";
+  padding: 0px;
 }
 </style>

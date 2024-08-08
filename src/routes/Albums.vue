@@ -8,10 +8,12 @@ import SideList from "../components/SideList.vue";
 interface SongsGenre {
   songs: FiretailSong[],
   genres: string[],
-  artists: string[]
+  artists: string[],
+  sum: number
 }
 
 const songList: Ref<FiretailSong[]> = ref([]);
+const listLength: Ref<number> = ref(0);
 const genres: Ref<string[]> = ref([]);
 const artists: Ref<string[]> = ref([]);
 const albumList: Ref<Albums[]> = ref([]);
@@ -28,6 +30,7 @@ function getNewAlbumData(album: Albums) {
     songList.value = songsAndGenres.songs;
     genres.value = songsAndGenres.genres;
     artists.value = songsAndGenres.artists;
+    listLength.value = songsAndGenres.sum;
     console.log(artists.value);
   });
   listName.value = album.album;
@@ -51,6 +54,7 @@ onMounted(() => {
         <component
             :is="Component"
             :song-list="songList"
+            :list-length="listLength"
             :list-name="listName"
             :is-simple="true"
             :show-info-view="true"

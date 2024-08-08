@@ -7,7 +7,7 @@ const imagePath = ref('');
 
 const getImage = computed( () => {
   if (imagePath.value !== '') {
-    return `background-image: url(${imagePath.value})`;
+    return `background-image: url('${imagePath.value}')`;
   } else return ''
 });
 

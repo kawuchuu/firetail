@@ -13,6 +13,7 @@ provide('play', play);
 
 const props = defineProps<{
   songList: FiretailSong[],
+  listLength?: number,
   listName: string,
   isSimple?: boolean,
   showInfoView?: boolean,
@@ -25,6 +26,8 @@ const route = useRoute();
 
 const isSticky = ref(false);
 const columnSortInfo = ref(null);
+const columnSortWrapper = ref(null);
+const topView = ref(null);
 const sortInfoOpacity = ref(0);
 let opacityToScrollBy = ref(0);
 const bgImagePath = ref('');
@@ -35,10 +38,12 @@ function play(index:number) {
 }
 
 function updateScroll() {
-  const scrollWrapperPos = document.querySelector('.scroll-wrapper').getBoundingClientRect().y;
-  isSticky.value = scrollWrapperPos < columnSortInfo.value.clientHeight + 86 + 5;
-  const actualScrollBy = opacityToScrollBy.value - 80;
-  sortInfoOpacity.value = 1 - (((actualScrollBy - viewStore.scroll + 80) / actualScrollBy));
+  //console.log(columnSortInfo.value.clientHeight);
+  const scrollWrapperPos = document.querySelector('.column-sort-wrapper').getBoundingClientRect().y;
+  sortInfoOpacity.value = 1 - (((opacityToScrollBy.value - viewStore.scroll) / opacityToScrollBy.value));
+  //isSticky.value = scrollWrapperPos < columnSortInfo.value.clientHeight + 86 + 5;
+  isSticky.value = sortInfoOpacity.value >= 1;
+  console.log(topView.value.clientHeight);
 }
 
 async function updateBackgroundArt() {
@@ -49,12 +54,18 @@ async function updateBackgroundArt() {
 
 const getImage = computed( () => {
   if (bgImagePath.value !== '') {
-    return `background-image: url(${bgImagePath.value}); filter: blur(25px) saturate(0.7);`;
+    console.log(bgImagePath.value);
+    return `background-image: url('${bgImagePath.value}'); filter: blur(25px) saturate(0.7);`;
   } else return ''
 });
 
 watch(() => viewStore.scroll, updateScroll);
-watch(() => route.params, updateBackgroundArt);
+watch(() => route.params, () => {
+  updateBackgroundArt();
+  nextTick(() => {
+    opacityToScrollBy.value = document.querySelector('.scroll-wrapper').getBoundingClientRect().y - columnSortInfo.value.clientHeight - columnSortWrapper.value.clientHeight - 44;
+  })
+});
 
 const getColumnSortOffset = computed(() => {
   if (!columnSortInfo.value || !columnSortInfo.value.clientHeight) return 'top: 0'
@@ -63,7 +74,7 @@ const getColumnSortOffset = computed(() => {
 
 onMounted(() => {
   nextTick(() => {
-    opacityToScrollBy.value = document.querySelector('.scroll-wrapper').getBoundingClientRect().y - columnSortInfo.value.clientHeight;
+    opacityToScrollBy.value = document.querySelector('.scroll-wrapper').getBoundingClientRect().y - columnSortInfo.value.clientHeight - columnSortWrapper.value.clientHeight - 44;
   });
   onMounted(() => {
     updateBackgroundArt();
@@ -90,18 +101,21 @@ onMounted(() => {
         class="scroller"
     >
       <template #before>
-        <RouterView v-slot="{ Component }" name="top">
-          <component
-             :is="Component"
-             :list-name="listName"
-             :list-size="songList.length"
-             :artist-name="artistName"
-          />
-        </RouterView>
+        <div class="top-view" ref="topView">
+          <RouterView v-slot="{ Component }" name="top">
+            <component
+                :is="Component"
+                :list-name="listName"
+                :list-size="songList.length"
+                :artist-name="artistName"
+                :list-length="listLength"
+            />
+          </RouterView>
+        </div>
         <div class="column-sort-info" ref="columnSortInfo" :style="`opacity: ${sortInfoOpacity}`">
           <h2>{{listName}}</h2>
         </div>
-        <div class="column-sort-wrapper" :class="isSimple ? 'simple' : ''">
+        <div class="column-sort-wrapper" ref="columnSortWrapper" :class="isSimple ? 'simple' : ''">
           <div class="column-sort" :class="isSticky ? 'sticky' : ''" :style="getColumnSortOffset">
             <span class="a">#</span>
             <div class="artist-title-album">

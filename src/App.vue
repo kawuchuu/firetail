@@ -10,10 +10,14 @@ import {onMounted} from "vue";
 function onScroll(evt:Event) {
   viewStore.scroll = (evt.target as HTMLElement).scrollTop;
 }
+
+function getPlatform() {
+  return window.process.platform
+}
 </script>
 
 <template>
-  <main id="app" class="dark">
+  <main id="app" class="dark" :class="getPlatform()">
     <div class="main-content">
       <SideBar />
       <div class="screen-container">

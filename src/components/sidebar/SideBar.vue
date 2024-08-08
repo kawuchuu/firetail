@@ -33,4 +33,8 @@ import SidebarTitle from "./SidebarTitle.vue";
     height: calc(100% - 24px);
     padding: 12px 0px 12px 12px;
 }
+
+.darwin .item-container {
+  padding-top: 40px;
+}
 </style>
