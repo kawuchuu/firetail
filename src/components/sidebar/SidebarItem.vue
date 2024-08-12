@@ -39,6 +39,10 @@ const props = defineProps({
   }
 }
 
+.sidebar-item:hover {
+  opacity: 1;
+}
+
 .router-link-active .sidebar-item {
   background: var(--button);
   opacity: 1;

@@ -70,6 +70,7 @@ onMounted(() => {
 <style scoped>
 .albums-view-container {
   --song-list-width: 300px;
+  --info-view-width: 350px;
 }
 
 .song-list-container {
@@ -77,6 +78,7 @@ onMounted(() => {
   left: calc(var(--song-list-width) + 16px);
   width: calc(100% - var(--song-list-width) - 16px);
   height: calc(100vh - 44px - 85px);
+  --main-border-radius-element: 0px;
 }
 
 @media (max-width: 1350px) {

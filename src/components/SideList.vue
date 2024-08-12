@@ -18,7 +18,7 @@ function getImage(item: Albums) {
       <router-link :to="`/albums/${encodeURIComponent(item.albumArtist)}/${encodeURIComponent(item.album)}`">
         <div class="item-img" :style="getImage(item)"/>
         <div class="item-info">
-          <span>{{ item.album }}</span>
+          <span class="title">{{ item.album }}</span>
           <span class="album-artist">{{ item.albumArtist }}</span>
         </div>
       </router-link>
@@ -64,9 +64,13 @@ function getImage(item: Albums) {
   cursor: default;
 }
 
-.list-items a.router-link-exact-active span {
+.list-items a.router-link-exact-active .title {
   opacity: 1;
   font-weight: 600;
+}
+
+.list-items a.router-link-exact-active .album-artist {
+  opacity: 1;
 }
 
 .list-items a {
@@ -82,7 +86,7 @@ function getImage(item: Albums) {
   overflow: hidden;
   background-color: transparent !important;
 
-  span {
+  .title {
     font-size: 0.95em;
     margin-left: 6px;
   }
@@ -91,6 +95,7 @@ function getImage(item: Albums) {
     font-size: 0.8em;
     margin-top: 5px;
     font-weight: normal !important;
+    margin-left: 6px;
   }
 }
 
@@ -115,6 +120,16 @@ function getImage(item: Albums) {
 @media (max-width: 1350px) {
   .side-list-container:hover {
     width: 300px;
+  }
+
+  .side-list-container::-webkit-scrollbar-thumb {
+    background: transparent;
+    background-clip: content-box;
+  }
+
+  .side-list-container:hover::-webkit-scrollbar-thumb {
+    background: var(--text-op);
+    background-clip: content-box;
   }
 }
 </style>

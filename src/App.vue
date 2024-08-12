@@ -5,7 +5,7 @@ import './themes/firetail.scss';
 import PlayingBar from "./components/playingbar/PlayingBar.vue";
 import TopBar from "./components/TopBar.vue";
 import {viewStore} from "./renderer";
-import {onMounted} from "vue";
+import {onBeforeMount, onMounted} from "vue";
 
 function onScroll(evt:Event) {
   viewStore.scroll = (evt.target as HTMLElement).scrollTop;
@@ -14,10 +14,15 @@ function onScroll(evt:Event) {
 function getPlatform() {
   return window.process.platform
 }
+
+onBeforeMount(async () => {
+  document.documentElement.classList.add('dark');
+  viewStore.defaultImagePath = await window.path.getImages();
+})
 </script>
 
 <template>
-  <main id="app" class="dark" :class="getPlatform()">
+  <main :class="getPlatform()">
     <div class="main-content">
       <SideBar />
       <div class="screen-container">
@@ -43,7 +48,12 @@ function getPlatform() {
   src: url('./assets/InterDisplay-Bold.ttf') format('truetype');
 }
 
-#app {
+@font-face {
+  font-family: 'Figtree';
+  src: url('./assets/figtree-variable.woff2') format('woff');
+}
+
+html {
   --main-border-radius: 10px 0px 0px 10px;
   --main-border-radius-element: 10px 0px 0px;
   --sidebar-width: 225px;
@@ -52,7 +62,7 @@ function getPlatform() {
   --song-list-width: 0px;
 }
 
-#app.dark {
+html.dark {
   --back-bg: #0a0a0a;
   --bg: #131313;
   --text: #ffffff;
@@ -64,7 +74,7 @@ function getPlatform() {
   --button: #242424;
 }
 
-#app.light {
+html.light {
   --back-bg: #dfdfdf;
   --bg: #f3f3f3;
   --text: #000000;
@@ -110,9 +120,9 @@ function getPlatform() {
 
 body {
   margin: 0;
-  color: white;
-  background: black;
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', Arial, Helvetica, sans-serif !important;
+  color: var(--text);
+  background: var(--back-bg);
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, Inter, Arial, Helvetica, sans-serif !important;
   user-select: none;
   -webkit-user-select: none;
   color-scheme: dark;
@@ -142,7 +152,8 @@ a {
 }
 
 h1, h2 {
-  font-family: 'Inter Display', 'Inter', sans-serif;
-  font-weight: 700;
+  /*font-family: 'Inter Display', 'Inter', sans-serif;*/
+  font-weight: 650;
+  letter-spacing: -0.015em;
 }
 </style>

@@ -2,7 +2,7 @@
 import {onMounted, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 import {getArt} from "../../modules/art";
-import {audioPlayer} from "../../renderer";
+import {audioPlayer, viewStore} from "../../renderer";
 
 const route = useRoute();
 const imagePath = ref('../../assets/no_album.svg');
@@ -23,6 +23,7 @@ watch(() => route.params, updateAlbumArt);
 onMounted(() => {
   updateAlbumArt();
   console.log(props.artists);
+  console.log(viewStore.defaultImagePath);
 })
 </script>
 
@@ -65,10 +66,8 @@ onMounted(() => {
 }
 
 .subtitle {
-  margin: 10px 0 0 40px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  font-size: 0.8em;
+  margin: 10px 0 -10px 40px;
+  font-size: 0.9em;
   opacity: 0.75;
 }
 

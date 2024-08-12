@@ -147,6 +147,7 @@ onMounted(() => {
   width: calc(100% - 16px);
   height: 100%;
   --fixed-width: calc(100vw - var(--sidebar-width) - 16px);
+  --info-view-width: 0px;
 
   padding-left: 16px;
 
@@ -197,7 +198,7 @@ onMounted(() => {
 
 .column-sort.sticky {
   position: fixed;
-  width: calc(var(--fixed-width) - 16px - var(--song-list-width));
+  width: calc(var(--fixed-width) - 16px - var(--song-list-width) - var(--info-view-width));
   pointer-events: none;
 }
 
@@ -248,10 +249,10 @@ onMounted(() => {
 
 .bg-gradient {
   position: absolute;
-  width: calc(100% + 20px);
+  width: 100%;
   height: 600px;
   top: 0;
-  left: -20px;
+  left: 0;
   z-index: -1;
 }
 
@@ -260,16 +261,15 @@ onMounted(() => {
   width: 100%;
   height: 420px;
   max-height: 420px;
-  //background-color: #5e00da;
   background-position: center;
-  background-size: 150%;
+  background-size: 100%;
   background-repeat: no-repeat;
   top: 0;
   z-index: -1;
   overflow: hidden;
-  transform: scale(1.3);
-  //opacity: 0.55;
   mix-blend-mode: color;
+  transition: 0.5s linear;
+  transition-property: background-image;
 }
 
 .list-gradient-fade {
