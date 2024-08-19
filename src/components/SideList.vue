@@ -1,15 +1,27 @@
 <script setup lang="ts">
 import Albums from "../types/Albums";
+import {formatArtPath, getImagePath} from "../modules/art";
+import {onMounted, ref} from "vue";
 
 const props = defineProps<{
   albums: Albums[]
 }>();
 
+const path = ref('');
+
+// TODO: improve performance of this.
 function getImage(item: Albums) {
+  console.log('IS IT WORKING')
   if (item.album && item.albumArtist) {
-    return ``
-  }
+    const imagePath = formatArtPath(path.value, item.albumArtist, item.album);
+    console.log(imagePath);
+    return `background-image: url('${imagePath}')`;
+  } else return '';
 }
+
+onMounted(() => {
+  path.value = getImagePath();
+})
 </script>
 
 <template>

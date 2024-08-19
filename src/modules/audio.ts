@@ -9,13 +9,14 @@ interface AudioStore {
     duration: number;
     currentSong: FiretailSong;
     paused: boolean;
+    volume: number;
 }
 
 class AudioPlayer {
     #audio = new Audio();
     #currentTime = 0;
     #duration = 0;
-    volume = 1;
+    #volume = 1;
     muted = false;
     #queue:FiretailSong[] = [];
     #index = 0;
@@ -45,7 +46,8 @@ class AudioPlayer {
             currentTime: this.currentTime,
             duration: this.duration,
             currentSong: this.currentSong,
-            paused: this.paused
+            paused: this.paused,
+            volume: this.volume,
         });
     }
 
@@ -105,6 +107,16 @@ class AudioPlayer {
     set currentSong(song) {
         this.#currentSong = song;
         this.reactive.currentSong = song;
+    }
+
+    get volume() {
+        return this.#audio.volume
+    }
+
+    set volume(level: number) {
+        this.#volume = level;
+        this.reactive.volume = level;
+        this.#audio.volume = level;
     }
 
     doTimeUpdate(willDo:boolean) {

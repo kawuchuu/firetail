@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld('library', {
 
 contextBridge.exposeInMainWorld('path', {
   getImages: async () => await ipcRenderer.invoke('getImagePath'),
+  getImagesSync: () => ipcRenderer.sendSync('getImagePathSync')
 });
 
 contextBridge.exposeInMainWorld('process', {

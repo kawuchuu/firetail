@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import PlayingMeta from "./PlayingMeta.vue";
 import PlayingControlsMid from "./PlayingControlsMid.vue";
+import PlayingControlsRight from "./PlayingControlsRight.vue";
 </script>
 
 <template>
     <div class="playing-bar">
         <PlayingMeta />
         <PlayingControlsMid />
+        <PlayingControlsRight />
     </div>
 </template>
 

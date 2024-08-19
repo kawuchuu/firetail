@@ -42,9 +42,10 @@ onMounted(() => {
       <span>{{ $t('TOP_TITLE.COUNT_TYPE_SONGS', listSize, { named: {count: $n(listSize) } })}}</span>
       <span>
         <span v-if="listLengthLabel.hours > 0">{{ $t('TOP_TITLE.LIST_LENGTH.HOURS', listLengthLabel.hours, { named: { count: $n(listLengthLabel.hours) } }) }}</span>
-        <span>{{ $t('TOP_TITLE.LIST_LENGTH.MINUTES', listLengthLabel.minutes, { named: { count: $n(listLengthLabel.minutes) } }) }}</span>
-        <span v-if="listLengthLabel.hours < 1">{{ $t('TOP_TITLE.LIST_LENGTH.SECONDS', listLengthLabel.seconds, { named: { count: $n(listLengthLabel.seconds) } }) }}</span>
+        <span v-if="listLengthLabel.minutes !== 0">{{ $t('TOP_TITLE.LIST_LENGTH.MINUTES', listLengthLabel.minutes, { named: { count: $n(listLengthLabel.minutes) } }) }}</span>
+        <span v-if="listLengthLabel.hours < 1 && listLengthLabel.seconds !== 0">{{ $t('TOP_TITLE.LIST_LENGTH.SECONDS', listLengthLabel.seconds, { named: { count: $n(listLengthLabel.seconds) } }) }}</span>
       </span>
+      <span class="worlds-egg" v-if="artistName === 'Porter Robinson' && (listName === 'Worlds' || listName === 'Worlds 10th Anniversary Edition')">【=◈︿◈=】</span>
     </div>
   </div>
 </template>
@@ -100,5 +101,9 @@ onMounted(() => {
 .additional-info span span:not(:last-child)::after {
   content: "";
   padding: 0px;
+}
+
+span.worlds-egg {
+  font-family: sans-serif;
 }
 </style>

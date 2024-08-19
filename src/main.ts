@@ -45,7 +45,11 @@ const createWindow = () => {
 
   ipcMain.handle('getImagePath', () => {
     return path.join(app.getPath('userData').split('\\').join('/'), 'images');
-  })
+  });
+
+  ipcMain.on('getImagePathSync', (event) => {
+    event.returnValue = path.join(app.getPath('userData').split('\\').join('/'), 'images');
+  });
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {

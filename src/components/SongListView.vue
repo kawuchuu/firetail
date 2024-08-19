@@ -31,6 +31,7 @@ const topView = ref(null);
 const sortInfoOpacity = ref(0);
 let opacityToScrollBy = ref(0);
 const bgImagePath = ref('');
+const isNurture = ref(false);
 
 function play(index:number) {
   console.log(index);
@@ -60,6 +61,9 @@ const getImage = computed( () => {
 });
 
 watch(() => viewStore.scroll, updateScroll);
+watch(() => props.listName, () => {
+  isNurture.value = props.artistName === 'Porter Robinson' && props.listName === 'Nurture';
+})
 watch(() => route.params, () => {
   updateBackgroundArt();
   nextTick(() => {
@@ -83,13 +87,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="wrapper" :class="showInfoView ? 'show-info-view' : ''">
+  <div class="wrapper" :class="[showInfoView ? 'show-info-view' : '', isNurture ? 'is-nurture' : '']">
     <div class="bg-gradient">
       <div class="list-gradient-fade" />
       <div class="bg-fade-bottom" />
       <div class="bg-art" :style="getImage" />
       <div class="bg-noise" />
       <div class="bg-image" />
+      <div v-if="isNurture" class="nurture-egg" />
     </div>
     <RecycleScroller
         :items="songList"
@@ -162,6 +167,7 @@ onMounted(() => {
 .scroller {
   width: calc(100%);
   height: 100%;
+  margin-bottom: 15px;
 }
 
 .column-sort-wrapper {
@@ -180,7 +186,7 @@ onMounted(() => {
   top: 44px;
   height: 42px;
   z-index: 3;
-  border-bottom: solid 1px var(--bd);
+  border-bottom: solid 1px var(--text-op);
 
   .artist-title-album {
     display: grid;
@@ -200,6 +206,7 @@ onMounted(() => {
   position: fixed;
   width: calc(var(--fixed-width) - 16px - var(--song-list-width) - var(--info-view-width));
   pointer-events: none;
+  border-color: var(--bd);
 }
 
 .column-sort .bg {
@@ -287,7 +294,7 @@ onMounted(() => {
   z-index: 2;
 }
 
-.bg-image {
+.bg-image, .nurture-egg {
   width: 100%;
   height: 100%;
   max-height: 420px;
@@ -298,6 +305,11 @@ onMounted(() => {
   z-index: -2;
   position: absolute;
   animation: fadeIn 1s;
+}
+
+.nurture-egg {
+  background-image: url('../assets/squiggle2-transparent.png') !important;
+  opacity: 0.75;
 }
 
 @media (max-width: 1600px) {

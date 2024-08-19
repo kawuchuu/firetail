@@ -214,7 +214,7 @@ html.light {
   }
 
   span {
-    font-size: 12px;
+    font-size: 13px;
     opacity: 0.75;
     overflow: hidden;
     text-overflow: ellipsis;
