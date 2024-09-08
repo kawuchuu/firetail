@@ -14,4 +14,18 @@ contextBridge.exposeInMainWorld('path', {
 
 contextBridge.exposeInMainWorld('process', {
   platform: process.platform,
+
+});
+
+contextBridge.exposeInMainWorld('ftStore', {
+  getItem: (key: string) => ipcRenderer.invoke('getKey', key),
+  setKey: (key: string, value: any, category: string) => ipcRenderer.send('setKey', [key, value, category]),
+  deleteKey: (key: string) => ipcRenderer.send('deleteKey', key),
+  keyExists: (key: string) => ipcRenderer.invoke('keyExists', key),
+  keys: ipcRenderer.invoke('keys'),
+  getCategory: (category: string) => ipcRenderer.invoke('getCategory', category)
+});
+
+contextBridge.exposeInMainWorld('misc', {
+  openLink: (link: string) => ipcRenderer.invoke('openLink', link),
 });

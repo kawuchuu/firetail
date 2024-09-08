@@ -1,7 +1,7 @@
 interface FiretailSong {
     title: string;
     artist: string;
-    allArtists: string[];
+    allArtists: string[] | string;
     albumArtist: string;
     album: string;
     duration: string;
@@ -12,7 +12,7 @@ interface FiretailSong {
     trackNum?: number;
     year?: string;
     disc?: number;
-    explicit?: boolean;
+    explicit?: boolean | number;
     genre?: string;
 }
 

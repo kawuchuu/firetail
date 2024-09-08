@@ -1,6 +1,7 @@
 import {app, BrowserWindow, ipcMain, protocol} from 'electron';
 import path from 'path/posix';
 import Database from "./modules/database";
+import FiretailStorage from "./modules/storage";
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -11,6 +12,7 @@ if (require('electron-squirrel-startup')) {
 const createWindow = () => {
   const database = new Database();
   const osType = process.platform;
+  const ftStore = new FiretailStorage();
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({

@@ -24,7 +24,7 @@ const platform = window.process.platform;
         <div class="std-top-btn">
           <i class="ft-icon">add</i>
         </div>
-        <div class="std-top-btn">
+        <div @click="router.push('/settings')" class="std-top-btn">
           <i class="ft-icon">settings</i>
         </div>
         <div v-if="platform === 'win32'" class="divider" />
