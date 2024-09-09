@@ -4,17 +4,17 @@
         <div class="image">
             <img v-if="source.hasImage === 1" loading="lazy" :src="getImg(source.albumArtist, source.album)">
             <img v-else src="../../../assets/no_imagealt.svg">
-            <div v-if="isActive === 'active'" class="nowplaying">
-                <div class="playing-ani">
-                    <div class="bar one"></div>
-                    <div class="bar two"></div>
-                    <div class="bar three"></div>
-                </div>
-            </div>
         </div>
         <div class="song-info">
             <span class="title">{{source.title}}</span>
             <span class="artist">{{source.artist}}</span>
+        </div>
+        <div v-if="isActive === 'active'" class="nowplaying">
+            <div class="playing-ani">
+                <div class="bar one"></div>
+                <div class="bar two"></div>
+                <div class="bar three"></div>
+            </div>
         </div>
     </div>
 </template>
@@ -80,18 +80,12 @@ export default {
 
 .queue-item.active {
     color: var(--hl-txt);
-
-    img {
-        opacity: 0.4;
-    }
 }
 
 .nowplaying {
     display: flex;
-    position: absolute;
     width: 45px;
     height: 45px;
-    transform: translateY(-50px);
     justify-content: center;
     align-items: center;
 }

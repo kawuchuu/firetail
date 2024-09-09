@@ -83,7 +83,7 @@ export default {
                     explicit,
                     genre: meta.common.genre ? JSON.stringify(meta.common.genre) : null
                 }
-                let artistAlbum = `${metaObj.albumArtist}${meta.common.album}`.replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')
+                let artistAlbum = `${metaObj.albumArtist}${meta.common.album}`.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<> \{\}\[\]\\\/]/gi, '')
                 toAdd.push(metaObj)
                 progress++
                 BrowserWindow.getAllWindows()[0].webContents.send('doneProgress', [progress, songs.length])

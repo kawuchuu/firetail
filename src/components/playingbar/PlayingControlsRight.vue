@@ -2,7 +2,7 @@
     <div class="right-controls-root">
         <div class="right-controls">
             <i @click="showQueue = !showQueue" class="ft-icon">queue</i>
-            <QueuePopup :class="active" />
+            <QueuePopup ref="popup" :class="active" />
             <!-- <i class="material-icons">blur_on</i> -->
             <i @click="mute" class="ft-icon vol-btn">{{volIcon}}</i>
             <div ref="volBarWrapper" class="vol-bar-inner-container" @mousemove="moveHover" @mouseover="hover" @mouseleave="leave" @mousedown="down">
@@ -128,7 +128,21 @@ export default {
         },
         clamp(min, val, max) {
             return Math.min(Math.max(min, val), max);
+        },
+        popupClick(evt) {
+            console.log('CONTAINS ' + this.$refs.popup.$el.contains(evt.target))
+            console.log('SHOWQUEUE ' + this.showQueue)
+            if (!this.$refs.popup.$el.contains(evt.target) && this.showQueue) {
+                this.showQueue = false
+            }
         }
+    },
+    destroyed() {
+        window.removeEventListener('click', this.popupClick)
+    },
+    created() {
+        console.log('CREATED')
+        window.addEventListener('click', this.popupClick)
     }
 }
 </script>

@@ -30,6 +30,11 @@ export default {
             if (this.storeKey) window.ftStore.setKey(this.storeKey, item.value, this.storeCategory)
             this.onChange(item)
         }
+    },
+    watch: {
+        initSelected() {
+            this.selected = this.initSelected;
+        }
     }
 }
 </script>

@@ -18,6 +18,7 @@ export default {
                 { label: 'SETTINGS.DROP_DOWN.START_SCREEN.ALBUMS', value: 'albums' },
                 { label: 'SETTINGS.DROP_DOWN.START_SCREEN.FAVOURITES', value: 'favourites' },
             ],
+            currentLocale: {label: 'SETTINGS.DROP_DOWN.LANG_AUTO', value: "system"}
         }
     },
     methods: {
@@ -33,7 +34,11 @@ export default {
             }
         }
     },
-    mounted() {
+    async beforeCreate() {
+        const result = await window.ftStore.getItem('lang')
+        console.log('ITEM IS ' + result)
+        console.log(this)
+        if (result !== 'system') this.currentLocale = {label: this.$root.$i18n.messages[this.$root.$i18n.locale].LANG_NAME, value: this.$root.$i18n.locale}
         this.$i18n.availableLocales.forEach(locale => {
             if (this.$i18n.messages[locale].LANG_NAME === "") this.locales.push({label: locale, value: locale})
             else this.locales.push({label: this.$i18n.messages[locale].LANG_NAME, value: locale})
@@ -45,7 +50,7 @@ export default {
 <template>
     <section class="general">
         <SubtitleOption>{{$t('SETTINGS.SUBTITLES.GENERAL')}}</SubtitleOption>
-        <DropdownOption :label="$t('SETTINGS.LANGUAGE')" :store-key="'lang'" :store-category="'multiOption'" :init-selected="locales[0]" :options="locales" :on-change="changeLocale"/>
+        <DropdownOption :label="$t('SETTINGS.LANGUAGE')" :store-key="'lang'" :store-category="'multiOption'" :init-selected="currentLocale" :options="locales" :on-change="changeLocale"/>
         <DropdownOption :label="$t('SETTINGS.START_PAGE')" :init-selected="startPages[1]" :options="startPages"/>
     </section>
 </template>
