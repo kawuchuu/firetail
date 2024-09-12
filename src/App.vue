@@ -103,16 +103,15 @@ export default {
                 this.sidebarwidth = pos
             }
         },
-        async applyClassSettings() {
+        applyClassSettings() {
             try {
-              const keys = await window.ftStore.getCategory('class')
+              const keys = window.ftStoreSync.getCategory('class')
               if (keys) {
                 keys.forEach(key => {
-                  window.ftStore.getItem(key).then((result) => {
+                    const result = window.ftStoreSync.getItem(key)
                     if (result) {
-                      document.documentElement.classList.add(key)
+                        document.documentElement.classList.add(key)
                     }
-                  })
                 })
               }
             } catch(err) {
@@ -121,12 +120,11 @@ export default {
         },
         async applyStoreSwitchSettings() {
             try {
-                const keys = await window.ftStore.getCategory('switchVx')
+                const keys = window.ftStoreSync.getCategory('switchVx')
                 if (keys) {
                     keys.forEach(key => {
-                        window.ftStore.getItem(key).then(result => {
-                            this.$store.commit(`nav/${key}`, result)
-                        })
+                        const result = window.ftStoreSync.getItem(key)
+                        this.$store.commit(`nav/${key}`, result)
                     })
                 }
             } catch(err) {
@@ -135,16 +133,15 @@ export default {
         },
         async applyMultiOptionSettings() {
             try {
-                const keys = await window.ftStore.getCategory('multiOption')
+                const keys = window.ftStoreSync.getCategory('multiOption')
                 if (keys) {
                     keys.forEach(key => {
-                        window.ftStore.getItem(key).then(result => {
-                            switch(key) {
-                                case "lang":
-                                    if (result === 'system') return
-                                    this.$root.$i18n.locale = result
-                            }
-                        })
+                        const result = window.ftStoreSync.getItem(key)
+                        switch(key) {
+                            case "lang":
+                                if (result === 'system') return
+                                this.$root.$i18n.locale = result
+                        }
                     })
                 }
             } catch(err) {
@@ -180,12 +177,14 @@ export default {
             return this.$store.state.nav.rtl
         }
     },
-    async mounted() {
+    created() {
         console.log(this.$i18n)
-        await this.applyClassSettings()
-        await this.applyStoreSwitchSettings()
-        await this.applyMultiOptionSettings()
+        this.applyClassSettings()
+        this.applyStoreSwitchSettings()
+        this.applyMultiOptionSettings()
         if (this.$i18n.messages[this.$i18n.locale]['RTL']) this.$store.commit('nav/updateRTL', true)
+    },
+    async mounted() {
         if (window.localStorage.getItem('sidebarwidth')) {
             this.sidebarwidth = window.localStorage.getItem('sidebarwidth')
         } else {

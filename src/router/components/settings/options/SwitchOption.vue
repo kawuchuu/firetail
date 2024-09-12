@@ -41,9 +41,9 @@ export default {
             this.action(this.enabled)
         }
     },
-    async created() {
-        if (this.storeKey && await window.ftStore.keyExists(this.storeKey)) {
-            const result = await window.ftStore.getItem(this.storeKey)
+    created() {
+        if (this.storeKey && window.ftStoreSync.keyExists(this.storeKey)) {
+            const result = window.ftStoreSync.getItem(this.storeKey)
             if (typeof result === "boolean" && result) {
                 this.enabled = true
             }

@@ -297,6 +297,18 @@ export default {
             return ftStorage.getCategory(category)
         })
 
+        ipcMain.on('getKeySync', (event, key) => {
+            event.returnValue = ftStorage.getItem(key);
+        })
+
+        ipcMain.on('keyExistsSync', (event, key) => {
+            event.returnValue = ftStorage.keyExists(key);
+        })
+
+        ipcMain.on('getCategorySync', (event, category) => {
+            event.returnValue = ftStorage.getCategory(category);
+        })
+
         ipcMain.on('createPopup', (event, options) => {
             const menu = Menu.buildFromTemplate(options)
             menu.popup()

@@ -47,6 +47,12 @@ contextBridge.exposeInMainWorld('ftStore', {
     getCategory: category => ipcRenderer.invoke('getCategory', category)
 })
 
+contextBridge.exposeInMainWorld('ftStoreSync', {
+    getItem: key => ipcRenderer.sendSync('getKeySync', key),
+    keyExists: key => ipcRenderer.sendSync('keyExistsSync', key),
+    getCategory: category => ipcRenderer.sendSync('getCategorySync', category),
+})
+
 contextBridge.exposeInMainWorld('contextmenu', {
     popup: options => ipcRenderer.send('createPopup', options)
 })

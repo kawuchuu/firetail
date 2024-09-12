@@ -51,13 +51,13 @@ const mutations = {
         if (content.buttons == 'clearLibrary') {
             newProps['buttons'] = [
                 {
-                    label: 'Cancel',
+                    label: tr.t('BUTTONS.CANCEL'),
                     onClick() {
                         store.commit('panel/updateActive', false)
                     }
                 },
                 {
-                    label: 'OK',
+                    label: tr.t('BUTTONS.OK'),
                     onClick() {
                         window.ipcRenderer.send('deleteLibrary')
                         store.commit('panel/updateActive', false)

@@ -97,7 +97,7 @@
       "BUG_REPORT": "Found a bug? Please report it {link}",
       "BUG_REPORT_LINK": "here on GitHub.",
       "LICENSE_CHANGELOG": "{license}, {changelog}",
-      "THIRD_PARTY_LICENSE": "Third-party licenses",
+      "THIRD_PARTY_LICENSE": "Third-party licences",
       "VIEW_CHANGELOG": "view changelog",
       "ADVANCED_INFO_LABEL": "Advanced information",
       "ADVANCED_INFO": {
@@ -142,7 +142,9 @@
         "TITLE": "Restart Required",
         "MESSAGE": "Changing this option requires a restart of Firetail to take full effect."
       }
-    }
+    },
+    "THIRD_PARTY_LICENSE": "Third-party licences",
+    "CHANGELOG": "Changelog"
   },
   "BUTTONS": {
     "CREATE": "Create",

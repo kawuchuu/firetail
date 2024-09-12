@@ -152,8 +152,14 @@
       "RESTART": {
         "TITLE": "Restart Required",
         "MESSAGE": "Changing this option requires a restart of Firetail to take full effect."
+      },
+      "CLEAR_LIBRARY": {
+        "TITLE": "Clear Library",
+        "MESSAGE": "Are you sure you want to clear your current library? This will not affect your music files on disk."
       }
-    }
+    },
+    "THIRD_PARTY_LICENSE": "Third-party licenses",
+    "CHANGELOG": "Changelog"
   },
   "BUTTONS": {
     "CREATE": "Create",

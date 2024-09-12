@@ -1,5 +1,5 @@
 # Firetail Feature Checklist
-*Created: 02/01/2023, Updated: 18/03/2024*
+*Created: 02/01/2023, Updated: 12/09/2024*
 
 ---
 
@@ -12,9 +12,6 @@
   - Change playlist position on sidebar
   - Remove images from playlists
   - Generally fix jankiness
-- Home
-  - Make dynamic sections, not hard-coded
-  - Come up with new ideas as I build it
 - ~~Finally start making the favourites page~~ ✅
 - Search
   - ~~General search on the top bar (search for everything)~~ ✅
@@ -23,7 +20,6 @@
   - Finish high contrast mode
   - Add specific colourblind colour mode? (?)
   - Screen reader support
-  - Better keyboard-only navigation
 - ~~Queue~~ ✅
   - ~~Queue management popup~~ ✅
   - ~~Only view current queue~~ ✅
@@ -32,12 +28,11 @@
   - ~~Try to make the sticky bar on song list pages work better~~ ✅
   - Make UI as smooth and quality as possible
   - ~~Fix shuffling~~ ✅
-  - Clean up A LOT of code. Make things like audio and settings a proper system instead of the current jank
+  - ~~Clean up A LOT of code.~~ ❓ I'll do a little bit of cleaning up, but this is now a focus for Firetail 2.0.
 - ~~Explicit tag~~ ✅
 - ~~RTL UI~~ (mostly done needs a little more tweaking though)
 - Updates
   - Let user check for updates
-  - Choose update branch
 - ~~Migrate to Electron Forge~~ ✅
 - Settings
   - ~~Improve way settings view is rendered~~
@@ -69,5 +64,12 @@
 - Playlists
   - Import m3u playlists?
 - Plugins
-  - I don't know how well I can make this work with Webpack, tried it a couple years ago with no luck
+  - Firetail 2.0 now uses Vite, so I'll experiment with this.
   - API for stuff like sidebar, screens, settings etc.
+- Updates
+  - Choose update branch
+- Accessibility
+  - Better keyboard-only navigation
+- Home
+  - Make dynamic sections, not hard-coded
+  - Come up with new ideas as I build it

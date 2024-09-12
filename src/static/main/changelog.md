@@ -13,11 +13,12 @@
   * Screen reader support
 * Added performance mode for low-end devices
 * Added total time in song list headers
+* Added genres in album song list headers
 * Added album artist name to album view
 * Added song details when hovering over song title/artist in playing bar
 * Added additional 'advanced' information to about section in settings page
 * Added link to GitHub issues page to about section in settings page
-* Added third-party license and changelog information
+* Added third-party licence and changelog information
 * Added right-to-left appearance
 * Added more languages
 * Added light colour theme
@@ -35,12 +36,12 @@
 * Settings navigation button moved to top bar
 * New header backgrounds
 * Refreshed icon set
-* New appearance for artist and album view with nothing selected
+* New appearance for artist and alb[storage.js](..%2F..%2Fmodules%2Fstorage.js)um view with nothing selected
 * Refreshed fullscreen/zen mode UI
 * Main content container now rounded, playing bar no longer appears separate
 * Album colour now appears as a soft glow in bottom-left corner
 * Numerous UI tweaks
-* Removed 'Firetail' name and logo from sidebar
+* Removed Firetail name and logo from sidebar
 * Moved favourite icon in song list to second-last column
 
 ### Other changes
@@ -118,7 +119,7 @@ Additions/changes since 0.3.1:
 * New library system
 * Ability to drag songs into app to add them to library
 * Artists/albums tabs are now functional
-* Sidebar can now hidden/shown
+* Sidebar can now be hidden/shown
 * Song lists now show title and number of songs
 * Artist and song name are now shown on song lists (if they exist)
 * Effects now work properly

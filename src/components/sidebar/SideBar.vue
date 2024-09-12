@@ -176,9 +176,9 @@ export default {
     width: calc(100% - 17px);
 }
 
-/* .list-subtitle:first-of-type {
-    margin-top: 6px !important;
-} */
+ .list-subtitle:first-of-type {
+    margin-top: 12px !important;
+}
 
 .firetail-icon {
     width: 35px;

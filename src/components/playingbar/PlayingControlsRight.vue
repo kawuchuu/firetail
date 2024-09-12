@@ -1,7 +1,7 @@
 <template>
     <div class="right-controls-root">
         <div class="right-controls">
-            <i @click="showQueue = !showQueue" class="ft-icon">queue</i>
+            <i ref="queueButton" class="ft-icon">queue</i>
             <QueuePopup ref="popup" :class="active" />
             <!-- <i class="material-icons">blur_on</i> -->
             <i @click="mute" class="ft-icon vol-btn">{{volIcon}}</i>
@@ -130,11 +130,7 @@ export default {
             return Math.min(Math.max(min, val), max);
         },
         popupClick(evt) {
-            console.log('CONTAINS ' + this.$refs.popup.$el.contains(evt.target))
-            console.log('SHOWQUEUE ' + this.showQueue)
-            if (!this.$refs.popup.$el.contains(evt.target) && this.showQueue) {
-                this.showQueue = false
-            }
+            this.showQueue = !!(((this.$refs.queueButton === evt.target) && !this.showQueue) || this.$refs.popup.$el.contains(evt.target));
         }
     },
     destroyed() {

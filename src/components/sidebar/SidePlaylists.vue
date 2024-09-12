@@ -34,10 +34,10 @@ export default {
             // everything below is temporary, will develop a proper context menu system :)
             if (evt.which !== 3) return
             let menuItems = [
-                {name: this.$t('CONTEXT_MENU.PLAYLIST_SIDE_ITEM.EDIT_PLAYLIST'), type: 'button', onClick: this.openEditDialog},
-                {name: this.$t('CONTEXT_MENU.PLAYLIST_SIDE_ITEM.RENAME'), type: 'button'},
-                {type: 'divider'},
-                {name: this.$t('CONTEXT_MENU.PLAYLIST_SIDE_ITEM.REMOVE_PLAYLIST'), type: 'button', style: 'dangerous', onClick: this.delete}
+                {label: this.$t('CONTEXT_MENU.PLAYLIST_SIDE_ITEM.EDIT_PLAYLIST'), type: 'normal', onClick: this.openEditDialog},
+                /*{label: this.$t('CONTEXT_MENU.PLAYLIST_SIDE_ITEM.RENAME'), type: 'normal', onClick: this.openEditDialog},*/
+                {type: 'separator'},
+                {label: this.$t('CONTEXT_MENU.PLAYLIST_SIDE_ITEM.REMOVE_PLAYLIST'), type: 'normal', style: 'dangerous', onClick: this.delete}
             ]
             contextMenuBus.$emit('updateitems', {
                 items: menuItems,

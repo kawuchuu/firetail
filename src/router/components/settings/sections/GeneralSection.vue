@@ -1,10 +1,12 @@
 <script>
 import SubtitleOption from "../options/SubtitleOption.vue";
 import DropdownOption from "../options/DropdownOption.vue";
+import ButtonOption from "../options/ButtonOption.vue";
 
 export default {
     name: "GeneralSection",
     components: {
+      ButtonOption,
         DropdownOption,
         SubtitleOption
     },
@@ -32,10 +34,13 @@ export default {
                 if (this.$store.state.nav.rtl) this.$store.commit('panel/showNewPrompt', {title: this.$t('PANEL.PROMPT.RESTART.TITLE'), message: this.$t('PANEL.PROMPT.RESTART.MESSAGE'), buttons: 'dismiss'})
                 this.$store.commit('nav/updateRTL', false)
             }
+        },
+        clearLibrary() {
+            this.$store.commit('panel/showNewPrompt', {title: this.$t('PANEL.PROMPT.CLEAR_LIBRARY.TITLE'), message: this.$t('PANEL.PROMPT.CLEAR_LIBRARY.MESSAGE'), buttons: 'clearLibrary'})
         }
     },
-    async beforeCreate() {
-        const result = await window.ftStore.getItem('lang')
+    created() {
+        const result = window.ftStoreSync.getItem('lang')
         console.log('ITEM IS ' + result)
         console.log(this)
         if (result !== 'system') this.currentLocale = {label: this.$root.$i18n.messages[this.$root.$i18n.locale].LANG_NAME, value: this.$root.$i18n.locale}
@@ -51,7 +56,9 @@ export default {
     <section class="general">
         <SubtitleOption>{{$t('SETTINGS.SUBTITLES.GENERAL')}}</SubtitleOption>
         <DropdownOption :label="$t('SETTINGS.LANGUAGE')" :store-key="'lang'" :store-category="'multiOption'" :init-selected="currentLocale" :options="locales" :on-change="changeLocale"/>
-        <DropdownOption :label="$t('SETTINGS.START_PAGE')" :init-selected="startPages[1]" :options="startPages"/>
+<!--        <DropdownOption :label="$t('SETTINGS.START_PAGE')" :init-selected="startPages[1]" :options="startPages"/>-->
+        <ButtonOption :action="clearLibrary" :label="$t('SETTINGS.CLEAR_LIBRARY')" :btn-label="this.$t('SETTINGS.BUTTON.CLEAR_LIBRARY')" />
+        <ButtonOption :label="$t('SETTINGS.CHECK_UPDATE')" :btn-label="$t('SETTINGS.BUTTON.CHECK_UPDATE')" />
     </section>
 </template>
 

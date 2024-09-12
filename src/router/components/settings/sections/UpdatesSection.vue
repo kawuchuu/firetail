@@ -25,7 +25,7 @@ export default {
     <section class="updates">
         <SubtitleOption>{{$t("SETTINGS.SUBTITLES.UPDATE")}}</SubtitleOption>
         <ButtonOption :label="$t('SETTINGS.CHECK_UPDATE')" :btn-label="$t('SETTINGS.BUTTON.CHECK_UPDATE')" />
-        <DropdownOption :label="$t('SETTINGS.UPDATE_BRANCH')" :init-selected="updateBranches[0]" :options="updateBranches" />
+<!--        <DropdownOption :label="$t('SETTINGS.UPDATE_BRANCH')" :init-selected="updateBranches[0]" :options="updateBranches" />-->
     </section>
 </template>
 

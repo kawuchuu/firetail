@@ -7,10 +7,10 @@
             <div class="option-wrapper">
                 <GeneralSection />
                 <AccessibilitySection />
-                <LibrarySection />
+<!--                <LibrarySection />-->
                 <AppearanceSection />
-                <IntegrationSection />
-                <UpdatesSection />
+<!--                <IntegrationSection />-->
+<!--                <UpdatesSection />-->
                 <AdvancedSection />
                 <AboutSection />
             </div>

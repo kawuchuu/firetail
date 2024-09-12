@@ -73,8 +73,8 @@ export default {
             if (x) {
                 x.forEach(f => {
                     if (f) {
+                        console.log("YES")
                         willShow = false
-                        return
                     }
                 })
             }

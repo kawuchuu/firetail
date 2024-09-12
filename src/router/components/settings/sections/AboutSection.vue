@@ -10,11 +10,11 @@
                     <p>{{$t('SETTINGS.ABOUT.COPYRIGHT', {year, author: 'kawuchuu'})}}</p>
                 </div>
                 <div>
-                    <i18n path="SETTINGS.ABOUT.BUG_REPORT" tag="p">
+<!--                    <i18n path="SETTINGS.ABOUT.BUG_REPORT" tag="p">
                         <template v-slot:link>
                             <a @click="openLink">{{$t('SETTINGS.ABOUT.BUG_REPORT_LINK')}}</a>
                         </template>
-                    </i18n>
+                    </i18n>-->
                     <i18n path="SETTINGS.ABOUT.LICENSE_CHANGELOG" tag="span">
                         <template v-slot:license>
                             <a @click="viewTpl">{{$t('SETTINGS.ABOUT.THIRD_PARTY_LICENSE')}}</a>
@@ -83,7 +83,7 @@ export default {
         },
         viewChangelog() {
             this.$store.commit('panel/updatePanelProps', {
-                topMsg: 'Changelog',
+                topMsg: this.$t('PANEL.CHANGELOG'),
                 file: 'changelog.md'
             })
             this.$store.commit('panel/updatePanelComponent', 'MarkdownModule.vue')
@@ -91,7 +91,7 @@ export default {
         },
         viewTpl() {
             this.$store.commit('panel/updatePanelProps', {
-                topMsg: 'Third-party licenses',
+                topMsg: this.$t('PANEL.THIRD_PARTY_LICENSE'),
                 file: 'tpl.txt'
             })
             this.$store.commit('panel/updatePanelComponent', 'MarkdownModule.vue')

@@ -204,10 +204,30 @@ export default {
             }
             if (this.playlist.hasImage === 1) {
                 const port = this.$store.state.nav.port
-                const image = `http://localhost:${port}/images/playlist/${this.playlist.id}.jpg?${performance.now()}`
+                const image = `http://localhost:${port}/images/playlist/${this.playlist.id}.jpg`
                 this.$store.commit('nav/updateAlbumViewCurrentArt', image)
                 return `background-image: url('${image}')`
             } else return ''
+        },
+        getAlbumImage() {
+            if (this.$route.path !== '/albums' || this.list.length === 0) {
+                this.$store.commit('nav/updateAlbumViewCurrentArt', '')
+                return ''
+            }
+            let port = this.$store.state.nav.port
+            let song = this.$store.state.audio.currentList[0]
+            if (!song) {
+                this.$store.commit('nav/updateAlbumViewCurrentArt', '')
+                return ''
+            }
+            if (song.hasImage === 1) {
+                let artistAlbum = `http://localhost:${port}/images/${(song.albumArtist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
+                this.$store.commit('nav/updateAlbumViewCurrentArt', artistAlbum)
+                return `background-image: url('${artistAlbum}')`
+            } else {
+                this.$store.commit('nav/updateAlbumViewCurrentArt', '')
+                return ''
+            }
         },
         albumType() {
             if ((this.list.length >= 1 && this.list.length <= 3) || (this.totalDuration.total < 600 && this.list.length <= 6)) return 'Single'
@@ -244,26 +264,6 @@ export default {
                     return ''
                 } else {
                     return `background-image: url('${img}')`
-                }
-            },
-            async getAlbumImage() {
-                if (this.$route.path !== '/albums' || this.list.length === 0) {
-                    this.$store.commit('nav/updateAlbumViewCurrentArt', '')
-                    return ''
-                }
-                let port = this.$store.state.nav.port
-                let song = this.$store.state.audio.currentList[0]
-                if (!song) {
-                    this.$store.commit('nav/updateAlbumViewCurrentArt', '')
-                    return ''
-                }
-                if (song.hasImage === 1) {
-                    let artistAlbum = `http://localhost:${port}/images/${(song.albumArtist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
-                    this.$store.commit('nav/updateAlbumViewCurrentArt', artistAlbum)
-                    return `background-image: url('${artistAlbum}')`
-                } else {
-                    this.$store.commit('nav/updateAlbumViewCurrentArt', '')
-                    return ''
                 }
             }
         })
@@ -366,9 +366,9 @@ export default {
                 window.ipcRenderer.invoke('open-file-in-explorer', this.list[evt[1]].path)
             }
             let menuItems = [
-                {label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_QUEUE'), type: 'normal'},
+                /*{label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_QUEUE'), type: 'normal'},
                 {type: 'separator', hide: [this.selectedItems.length !== 1, this.list[evt[1]].artist === 'Unknown Artist' && this.list[evt[1]].album === 'Unknown Album']},
-                {label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ARTIST'), type: 'normal', hide: [this.selectedItems.length !== 1, this.$route.path === '/artists', this.list[evt[1]].artist === 'Unknown Artist'], onClick: goToArtist},
+                */{label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ARTIST'), type: 'normal', hide: [this.selectedItems.length !== 1, this.$route.path === '/artists', this.list[evt[1]].artist === 'Unknown Artist'], onClick: goToArtist},
                 {label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ALBUM'), type: 'normal', hide: [this.selectedItems.length !== 1, this.$route.path === '/albums', this.list[evt[1]].album === 'Unknown Album'], onClick: goToAlbum},
                 {label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.VIEW_EXPLORER'), type: 'normal', hide: [this.selectedItems.length !== 1], onClick: revealInFileExplorer},
                 {type: 'separator'},

@@ -4,13 +4,14 @@ import store from '..'
 
 const state = () => ({
     navs: [
-    {
+        // I think I'll leave the home tab for Firetail 2.0
+/*    {
         icon: 'home',
         name: 'SIDEBAR.HOME',
         id: 'homeTab',
         type: 'large_button',
         link: '/home'
-    },
+    },*/
 /*     {
         icon: 'settings',
         name: tr.t('SIDEBAR.SETTINGS'),
@@ -43,13 +44,14 @@ const state = () => ({
         type: 'large_button',
         link: '/albums?view=firetailnoselect'
     },
-    {
+        // This will be left for Firetail 2.0.
+    /*{
         icon: 'genre',
         name: 'SIDEBAR.GENRES',
         id: 'genresTab',
         type: 'large_button',
         link: '/genres?view=firetailnoselect'
-    },
+    },*/
     {
         icon: 'heart',
         name: 'SIDEBAR.FAVOURITE',
