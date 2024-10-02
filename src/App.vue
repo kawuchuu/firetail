@@ -5,7 +5,9 @@ import './themes/firetail.scss';
 import PlayingBar from "./components/playingbar/PlayingBar.vue";
 import TopBar from "./components/TopBar.vue";
 import {viewStore} from "./renderer";
-import {onBeforeMount, onMounted} from "vue";
+import {onBeforeMount, onMounted, ref} from "vue";
+
+const isDraggedOver = ref(false);
 
 function onScroll(evt:Event) {
   viewStore.scroll = (evt.target as HTMLElement).scrollTop;
@@ -15,6 +17,14 @@ function getPlatform() {
   return window.process.platform
 }
 
+function changeDrag(evt:DragEvent, change:boolean) {
+  if (evt.dataTransfer && evt.dataTransfer.types[0] !== 'Files') return
+  if (evt.preventDefault) {
+    evt.preventDefault();
+  }
+  isDraggedOver.value = change
+}
+
 onBeforeMount(async () => {
   document.documentElement.classList.add('dark');
   viewStore.defaultImagePath = await window.path.getImages();
@@ -22,7 +32,13 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <main :class="getPlatform()">
+  <main :class="getPlatform()" @dragover="changeDrag($event, true)">
+    <div :class="isDraggedOver ? 'dragactive': ''" @dragleave="changeDrag($event,false)" class="drag-indicator">
+      <div class="drag-msg">
+        <h1>Drop your music here</h1>
+        <p>You can drop music files and folders with music inside</p>
+      </div>
+    </div>
     <div class="main-content">
       <SideBar />
       <div class="screen-container">
@@ -155,5 +171,49 @@ h1, h2 {
   /*font-family: 'Inter Display', 'Inter', sans-serif;*/
   font-weight: 650;
   letter-spacing: -0.015em;
+}
+
+.drag-indicator {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 20;
+  background: rgba(0,0,0,.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: 0.15s;
+
+  .drag-msg {
+    pointer-events: none;
+    padding: 65px 70px;
+    border: dashed 4px var(--hl-txt);
+    border-radius: 20px;
+    background: var(--hl-op);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    h1 {
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+
+    p {
+      opacity: 1;
+      margin-bottom: 0;
+    }
+  }
+}
+
+.drag-indicator.dragactive {
+  opacity: 1;
+  pointer-events: all;
 }
 </style>

@@ -1,5 +1,8 @@
 import DatabaseConstructor, {Database} from 'better-sqlite3';
 import {app, ipcMain} from 'electron';
+import FiretailSong from "../types/FiretailSong";
+import {addFiles, processFiles} from "./import";
+import {mainWindow} from "../main";
 
 class FiretailDB {
   db: Database;
@@ -34,6 +37,19 @@ class FiretailDB {
     return { songs, genres, artists, sum: sum[0].sum };
   }
 
+  addToLibrary(songs:FiretailSong[]) {
+    const existingSongs:FiretailSong[] = this.getAllSongs().songs;
+    const insert = db.prepare(`INSERT INTO library (title, artist, allArtists, albumArtist, album, duration, realdur, path, id, hasImage, trackNum, year, disc, explicit, genre) VALUES (@title, @artist, @allArtists, @albumArtist, @album, @duration, @realdur, @path, @id, @hasImage, @trackNum, @year, @disc, @explicit, @genre)`);
+    const insertMany = db.transaction((newSongs) => {
+      for (const song:FiretailSong of newSongs) {
+        if (existingSongs.map(e => { return e.path }).indexOf(song.path) === -1) {
+          insert.run(song);
+        }
+      }
+    })
+    insertMany(songs);
+  }
+
   startDBIpc() {
     ipcMain.on('getAllSongs', (event) => {
       event.returnValue = this.getAllSongs();
@@ -49,7 +65,15 @@ class FiretailDB {
 
     ipcMain.on('getAllFromAlbum', (event, args) => {
       event.returnValue = this.getAllFromAlbum(args[0], args[1]);
-    })
+    });
+
+    ipcMain.on('addToLibrary', async (event, locations:string[]) => {
+      if (locations.length <= 0) return;
+      const finalPaths = await processFiles(locations);
+      const performAddFiles = await addFiles(finalPaths);
+      this.addToLibrary(performAddFiles);
+      mainWindow.webContents.send('refreshView');
+    });
   }
 }
 

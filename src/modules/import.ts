@@ -27,7 +27,7 @@ async function getFiles(dir:string) {
     return files.flat();
 }
 
-async function processFiles(files:string[]) {
+export async function processFiles(files:string[]) {
     let processFiles:Array<string[]> = []
     for (const index in files) {
         const file = files[index];
@@ -47,7 +47,7 @@ async function processFiles(files:string[]) {
     return processFiles;
 }
 
-async function addFiles(songs:Array<string[]>) {
+export async function addFiles(songs:Array<string[]>) {
     const path = app.getPath('userData');
     const getData = new Promise(resolve => {
         const toAdd:FiretailSong[] = [];

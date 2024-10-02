@@ -5,6 +5,8 @@ contextBridge.exposeInMainWorld('library', {
   getAllAlbums: () =>  ipcRenderer.sendSync('getAllAlbums'),
   getAllFromMatchingColumns: (column: string, value: string) => ipcRenderer.sendSync('getAllFromMatchingColumns', [column, value]),
   getAllFromAlbum: (album: string, albumArtist: string) => ipcRenderer.sendSync('getAllFromAlbum', [album, albumArtist]),
+  addToLibrary: (locations:string[]) => ipcRenderer.send('addToLibrary', locations),
+  refreshView: (callback) => ipcRenderer.on('refreshView', (_event, value) => callback(value))
 });
 
 contextBridge.exposeInMainWorld('path', {

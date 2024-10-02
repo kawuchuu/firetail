@@ -8,14 +8,14 @@ import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
-
+export let mainWindow;
 const createWindow = () => {
   const database = new Database();
   const osType = process.platform;
   const ftStore = new FiretailStorage();
 
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1350,
     height: 815,
     minWidth: 750,
