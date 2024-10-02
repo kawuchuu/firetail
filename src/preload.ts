@@ -1,10 +1,10 @@
 import {contextBridge, ipcRenderer} from 'electron';
 
 contextBridge.exposeInMainWorld('library', {
-  getAllSongs: async () => await ipcRenderer.invoke('getAllSongs'),
-  getAllAlbums: async () => await ipcRenderer.invoke('getAllAlbums'),
-  getAllFromMatchingColumns: async (column: string, value: string) => await ipcRenderer.invoke('getAllFromMatchingColumns', [column, value]),
-  getAllFromAlbum: async (album: string, albumArtist: string) => await ipcRenderer.invoke('getAllFromAlbum', [album, albumArtist]),
+  getAllSongs: () => ipcRenderer.sendSync('getAllSongs'),
+  getAllAlbums: () =>  ipcRenderer.sendSync('getAllAlbums'),
+  getAllFromMatchingColumns: (column: string, value: string) => ipcRenderer.sendSync('getAllFromMatchingColumns', [column, value]),
+  getAllFromAlbum: (album: string, albumArtist: string) => ipcRenderer.sendSync('getAllFromAlbum', [album, albumArtist]),
 });
 
 contextBridge.exposeInMainWorld('path', {
@@ -24,6 +24,12 @@ contextBridge.exposeInMainWorld('ftStore', {
   keyExists: (key: string) => ipcRenderer.invoke('keyExists', key),
   keys: ipcRenderer.invoke('keys'),
   getCategory: (category: string) => ipcRenderer.invoke('getCategory', category)
+});
+
+contextBridge.exposeInMainWorld('ftStoreSync', {
+  getItem: (key: string) => ipcRenderer.sendSync('getKeySync', key),
+  keyExists: (key: string) => ipcRenderer.sendSync('keyExistsSync', key),
+  getCategory: (category: string) => ipcRenderer.sendSync('getCategorySync', category),
 });
 
 contextBridge.exposeInMainWorld('misc', {

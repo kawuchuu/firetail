@@ -35,20 +35,20 @@ class FiretailDB {
   }
 
   startDBIpc() {
-    ipcMain.handle('getAllSongs', () => {
-      return this.getAllSongs();
+    ipcMain.on('getAllSongs', (event) => {
+      event.returnValue = this.getAllSongs();
     });
 
-    ipcMain.handle('getAllAlbums', () => {
-      return this.getAllAlbums();
+    ipcMain.on('getAllAlbums', (event) => {
+      event.returnValue = this.getAllAlbums();
     });
 
-    ipcMain.handle('getAllFromMatchingColumn', (event, args) => {
-      return this.getAllFromMatchingColumn(args[0], args[1]);
+    ipcMain.on('getAllFromMatchingColumn', (event, args) => {
+      event.returnValue = this.getAllFromMatchingColumn(args[0], args[1]);
     });
 
-    ipcMain.handle('getAllFromAlbum', (event, args) => {
-      return this.getAllFromAlbum(args[0], args[1]);
+    ipcMain.on('getAllFromAlbum', (event, args) => {
+      event.returnValue = this.getAllFromAlbum(args[0], args[1]);
     })
   }
 }

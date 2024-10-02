@@ -43,6 +43,18 @@ class FiretailStorage {
         ipcMain.handle('getCategory', (event, category) => {
             return this.getCategory(category)
         })
+
+        ipcMain.on('getKeySync', (event, key) => {
+            event.returnValue = this.getItem(key);
+        })
+
+        ipcMain.on('keyExistsSync', (event, key) => {
+            event.returnValue = this.keyExists(key);
+        })
+
+        ipcMain.on('getCategorySync', (event, category) => {
+            event.returnValue = this.getCategory(category);
+        })
     }
 
     getItem(key: string) {
@@ -92,9 +104,7 @@ class FiretailStorage {
     searchKeyInCategoryAndRemove(key:string) {
         Object.keys(this.categories).forEach(item => {
             const index = this.categories[item].indexOf(key)
-            console.log(index)
             if (index !== -1) this.categories[item].splice(index, 1)
-            console.log(this.categories[item])
         })
     }
 

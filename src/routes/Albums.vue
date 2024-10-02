@@ -26,23 +26,21 @@ const router = useRouter();
 watch(() => route.params, getNewAlbumData, { immediate: true });
 
 function getNewAlbumData(album: Albums) {
-  window.library.getAllFromAlbum(album.album, album.albumArtist).then((songsAndGenres: SongsGenre) => {
-    songList.value = songsAndGenres.songs;
-    genres.value = songsAndGenres.genres;
-    artists.value = songsAndGenres.artists;
-    listLength.value = songsAndGenres.sum;
-    console.log(artists.value);
-  });
+  const songsAndGenres:SongsGenre = window.library.getAllFromAlbum(album.album, album.albumArtist);
+  songList.value = songsAndGenres.songs;
+  genres.value = songsAndGenres.genres;
+  artists.value = songsAndGenres.artists;
+  listLength.value = songsAndGenres.sum;
+  console.log(artists.value);
   listName.value = album.album;
   artistName.value = album.albumArtist;
 }
 
 onMounted(() => {
-  window.library.getAllAlbums().then((albums:Albums[]) => {
-    albumList.value = albums;
-    if (route.params.album) return;
-    router.replace(`/albums/${encodeURIComponent(albums[0].albumArtist)}/${encodeURIComponent(albums[0].album)}`);
-  })
+  const albums:Albums[] = window.library.getAllAlbums();
+  albumList.value = albums;
+  if (route.params.album) return;
+  router.replace(`/albums/${encodeURIComponent(albums[0].albumArtist)}/${encodeURIComponent(albums[0].album)}`);
 })
 </script>
 

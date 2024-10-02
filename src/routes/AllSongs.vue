@@ -11,12 +11,11 @@ interface SongsSum {
 }
 
 onMounted(() => {
-  window.library.getAllSongs().then((allSongs:SongsSum) => {
-    console.log(allSongs);
-    songList.value = allSongs.songs;
-    listLength.value = allSongs.sum;
-  });
-})
+  const allSongs:SongsSum = window.library.getAllSongs();
+  console.log(allSongs);
+  songList.value = allSongs.songs;
+  listLength.value = allSongs.sum;
+});
 </script>
 
 <template>

@@ -1,55 +1,41 @@
-<script>
-export default {
-    name: "SwitchOption",
-    props: {
-        label: String,
-        action: {
-            default: () => {},
-            type: Function
-        },
-        storeKey: {
-            optional: true,
-            type: String
-        },
-        storeCategory: {
-            optional: true,
-            type: String
-        }
-    },
-    data() {
-        return {
-            enabled: false
-        }
-    },
-    methods: {
-        onClick() {
-            this.enabled = !this.enabled
-            console.log(this.storeKey, this.enabled)
-            if (this.storeKey) window.ftStore.setKey(this.storeKey, this.enabled, this.storeCategory)
-            switch(this.storeCategory) {
-                case "class":
-                    if (this.enabled) {
-                        document.documentElement.classList.add(this.storeKey)
-                    } else {
-                        document.documentElement.classList.remove(this.storeKey)
-                    }
-                    break;
-                case "switchVx": {
-                    this.$store.commit(`nav/${this.storeKey}`, this.enabled)
-                }
+<script setup lang="ts">
+import {onBeforeMount, ref} from "vue";
+
+const props = defineProps<{
+    label: string,
+    action: Function,
+    storeKey: string,
+    storeCategory: string,
+}>();
+
+const enabled = ref(false);
+
+function onClick() {
+    enabled.value = !enabled.value;
+    if (props.storeKey) window.ftStore.setKey(props.storeKey, enabled.value, props.storeCategory);
+    switch(props.storeCategory) {
+        case "class":
+            if (enabled.value) {
+                document.documentElement.classList.add(props.storeKey);
+            } else {
+                document.documentElement.classList.remove(props.storeKey);
             }
-            this.action(this.enabled)
-        }
-    },
-    async created() {
-        if (this.storeKey && await window.ftStore.keyExists(this.storeKey)) {
-            const result = await window.ftStore.getItem(this.storeKey)
-            if (typeof result === "boolean" && result) {
-                this.enabled = true
-            }
+            break;
+        case "switchVx": {
+            //this.$store.commit(`nav/${this.storeKey}`, this.enabled)
         }
     }
+    props.action(enabled.value);
 }
+
+onBeforeMount(() => {
+    if (props.storeKey && window.ftStoreSync.keyExists(props.storeKey)) {
+        const result = window.ftStoreSync.getItem(props.storeKey)
+        if (typeof result === "boolean" && result) {
+            enabled.value = true
+        }
+    }
+})
 </script>
 
 <template>
