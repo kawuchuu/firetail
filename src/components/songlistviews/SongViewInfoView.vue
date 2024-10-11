@@ -55,13 +55,14 @@ onMounted(() => {
 .album-art {
   width: auto;
   height: auto;
-  padding: 40px 40px 0;
+  padding: 40px 24px 0 40px;
 
   img {
     background: var(--back-bg);
     width: 100%;
     height: 100%;
     border-radius: 10px;
+    box-shadow: 0 0 80px var(--bg-op);
   }
 }
 

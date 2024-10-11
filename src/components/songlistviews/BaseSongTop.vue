@@ -61,6 +61,7 @@ onMounted(() => {
 .list-name {
   font-size: 3em;
   margin: 0;
+  text-shadow: 0 0 80px var(--bg-op);
 }
 
 .additional-info {

@@ -44,6 +44,8 @@
     "electron-squirrel-startup": "^1.0.1",
     "mime-types": "^2.1.35",
     "music-metadata": "^10.3.1",
+    "overlayscrollbars": "^2.10.0",
+    "overlayscrollbars-vue": "^0.5.9",
     "sass": "^1.77.5",
     "vue": "^3.4.27",
     "vue-i18n": "9",

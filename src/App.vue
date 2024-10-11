@@ -6,23 +6,41 @@ import PlayingBar from "./components/playingbar/PlayingBar.vue";
 import TopBar from "./components/TopBar.vue";
 import {viewStore} from "./renderer";
 import {onBeforeMount, onMounted, ref} from "vue";
+import {OverlayScrollbarsComponent} from "overlayscrollbars-vue";
 
 const isDraggedOver = ref(false);
 
-function onScroll(evt:Event) {
+function onScroll(instance, evt: Event) {
+  console.log(evt.target)
   viewStore.scroll = (evt.target as HTMLElement).scrollTop;
 }
 
 function getPlatform() {
-  return window.process.platform
+  return window.process.platform;
 }
 
 function changeDrag(evt:DragEvent, change:boolean) {
+  if (evt.dataTransfer && evt.dataTransfer.types[0] !== 'Files') return;
+  evt.preventDefault();
+  isDraggedOver.value = change;
+}
+
+function filesDropped(evt:DragEvent) {
   if (evt.dataTransfer && evt.dataTransfer.types[0] !== 'Files') return
-  if (evt.preventDefault) {
-    evt.preventDefault();
-  }
-  isDraggedOver.value = change
+  evt.preventDefault();
+  const files:string[] = [];
+  Array.from(evt.dataTransfer.files).forEach(f => {
+    /* console.log(f)
+    if (!f.type.startsWith('audio')) return; */
+    files.push(f.path)
+  })
+  //console.log(files)
+  isDraggedOver.value = false;
+  window.library.addToLibrary(files);
+}
+
+function initScrollbar() {
+  viewStore.isOverlayScrollInit = true;
 }
 
 onBeforeMount(async () => {
@@ -43,9 +61,22 @@ onBeforeMount(async () => {
       <SideBar />
       <div class="screen-container">
         <TopBar />
-        <div class="content" @scroll="onScroll">
-          <RouterView />
-        </div>
+        <OverlayScrollbarsComponent
+            class="content"
+            :events="{scroll: onScroll}"
+            :options="{
+              scrollbars: {
+                theme: 'os-theme-light',
+                autoHide: 'move',
+                autoHideSuspend: true
+              }
+            }"
+            @os-initialized="initScrollbar">
+          <router-view />
+        </OverlayScrollbarsComponent>
+<!--        <div class="content" @scroll="onScroll($event)">
+          <router-view/>
+        </div>-->
       </div>
     </div>
     <PlayingBar/>
@@ -152,14 +183,25 @@ body {
 }
 
 .content {
-  overflow: hidden;
-  overflow-y: auto;
+  /*overflow: hidden;
+  overflow-y: auto;*/
   position: fixed;
   height: calc(100% - 129px);
   width: calc(100% - var(--sidebar-width));
   background: var(--bg);
   border-radius: var(--main-border-radius);
   right: 0;
+}
+/* seems to fix overlayscrollbars not really being fully initialised before vue-virtual-scroller checks for parent scroller sighh */
+div.content div[data-overlayscrollbars-contents] {
+  overflow: auto !important;
+}
+
+div.content .os-scrollbar {
+  --os-size: 18px;
+  --os-padding-perpendicular: 6px;
+  --os-padding-axis: 6px;
+  --os-handle-border-radius: 18px;
 }
 
 a {

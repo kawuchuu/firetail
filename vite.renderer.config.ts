@@ -21,5 +21,8 @@ export default defineConfig((env) => {
       preserveSymlinks: true,
     },
     clearScreen: false,
+    optimizeDeps: {
+      exclude: ['overlayscrollbars', 'overlayscrollbars-vue'],
+    }
   } as UserConfig;
 });

@@ -1,0 +1,13 @@
+i.std-icon-btn {
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+i.std-icon-btn:hover {
+  opacity: 1;
+}
+
+i.std-icon-btn:active {
+  opacity: 1;
+  color: var(--hl-txt);
+}

@@ -8,7 +8,8 @@ const emit = defineEmits<{
 const props = defineProps<{
   rangeCurrent: number,
   rangeLength: number,
-  changeOnMove?: boolean
+  changeOnMove?: boolean,
+  mono?: boolean
 }>()
 
 const seekMouse = ref({
@@ -87,7 +88,7 @@ function seekLeave() {
 </script>
 
 <template>
-  <div ref="seekBarWrapper" class="seek-bar-inner-container" @pointermove="hoverMove" @mouseover="seekHover" @mouseleave="seekLeave" @mousedown="seekDown">
+  <div ref="seekBarWrapper" :class="mono ? 'mono' : ''" class="seek-bar-inner-container" @pointermove="hoverMove" @mouseover="seekHover" @mouseleave="seekLeave" @mousedown="seekDown">
     <div class="seek-bar" ref="seekBar">
       <div ref="seekFill" :style="fill" class="fill"></div>
       <div ref="seekFillHover" class="fill-hover"></div>
@@ -100,6 +101,10 @@ function seekLeave() {
 </template>
 
 <style scoped>
+.mono {
+  --hl-txt: var(--text);
+}
+
 .seek-bar-inner-container {
   padding-top: 3px;
   padding-bottom: 3px;
@@ -109,7 +114,6 @@ function seekLeave() {
   display: flex;
   justify-content: center;
   cursor: pointer;
-
 }
 
 .seek-bar {

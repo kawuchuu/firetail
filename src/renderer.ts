@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-unresolved
+import 'overlayscrollbars/overlayscrollbars.css';
 import { createApp } from 'vue';
 import { setupI18n } from './translate';
 import App from './App.vue';

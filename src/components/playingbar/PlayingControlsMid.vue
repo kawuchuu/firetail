@@ -18,11 +18,11 @@ const playPauseIcon = computed(() => {
   <div class="track-controls">
     <div class="track-controls-inner-container">
       <div class="control-buttons">
-        <i class="ft-icon repeat-shuffle" :title="$t('TOOLTIP.SHUFFLE')" role="button" aria-label="Shuffle" tabindex="0">shuffle</i>
-        <i class="ft-icon skip-prev" @click="audioPlayer.prevSong()" :title="$t('TOOLTIP.PREVIOUS')" role="button" aria-label="Previous song" tabindex="0">previous</i>
+        <i class="ft-icon repeat-shuffle std-icon-btn" :title="$t('TOOLTIP.SHUFFLE')" role="button" aria-label="Shuffle" tabindex="0">shuffle</i>
+        <i class="ft-icon skip-prev std-icon-btn" @click="audioPlayer.prevSong()" :title="$t('TOOLTIP.PREVIOUS')" role="button" aria-label="Previous song" tabindex="0">previous</i>
         <div class="play-pause-icon" @click="audioPlayer.togglePlay()" :title="$t('TOOLTIP.PLAY_PAUSE')" tabindex="0" role="button"><i class="ft-icon" aria-hidden="true">{{playPauseIcon}}</i></div>
-        <i class="ft-icon skip-prev next" @click="audioPlayer.nextSong()" :title="$t('TOOLTIP.NEXT')" role="button" aria-label="Next song" tabindex="0">next</i>
-        <i class="ft-icon repeat-shuffle repeat" :title="$t('TOOLTIP.REPEAT')" role="button" aria-label="Repeat" tabindex="0">repeat</i>
+        <i class="ft-icon skip-prev next std-icon-btn" @click="audioPlayer.nextSong()" :title="$t('TOOLTIP.NEXT')" role="button" aria-label="Next song" tabindex="0">next</i>
+        <i class="ft-icon repeat-shuffle repeat std-icon-btn" :title="$t('TOOLTIP.REPEAT')" role="button" aria-label="Repeat" tabindex="0">repeat</i>
       </div>
       <div class="seek-time-inner-container">
         <p class="song-duration" >{{ timeFormat(audioPlayer.reactive.currentTime) }}</p>
@@ -136,11 +136,6 @@ const playPauseIcon = computed(() => {
 .active {
   background-color: var(--hl-op);
   color: var(--hl-txt)
-}
-
-.control-buttons i:hover, #closeSidemenu:hover, #albumArtistBack:hover, .playing-bar-hidden i:hover, .top-controls i:hover {
-  opacity: 0.6;
-  cursor: pointer;
 }
 
 .play-pause-icon:hover, .play-pause-icon:active {

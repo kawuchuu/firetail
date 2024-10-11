@@ -80,9 +80,7 @@ onMounted(() => {
   nextTick(() => {
     opacityToScrollBy.value = document.querySelector('.scroll-wrapper').getBoundingClientRect().y - columnSortInfo.value.clientHeight - columnSortWrapper.value.clientHeight - 44;
   });
-  onMounted(() => {
-    updateBackgroundArt();
-  });
+  updateBackgroundArt();
 })
 </script>
 
@@ -97,6 +95,7 @@ onMounted(() => {
       <div v-if="isNurture" class="nurture-egg" />
     </div>
     <RecycleScroller
+        v-if="viewStore.isOverlayScrollInit"
         :items="songList"
         :item-size="isSimple ? 55 : 42"
         :emit-update="true"
@@ -149,12 +148,12 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .wrapper {
-  width: calc(100% - 16px);
+  width: calc(100% - 32px);
   height: 100%;
-  --fixed-width: calc(100vw - var(--sidebar-width) - 16px);
+  --fixed-width: calc(100vw - var(--sidebar-width));
   --info-view-width: 0px;
 
-  padding-left: 16px;
+  padding: 0 16px;
 
   display: grid;
   grid-template-columns: 1fr;
@@ -204,7 +203,7 @@ onMounted(() => {
 
 .column-sort.sticky {
   position: fixed;
-  width: calc(var(--fixed-width) - 16px - var(--song-list-width) - var(--info-view-width));
+  width: calc(var(--fixed-width) - 32px - var(--song-list-width) - var(--info-view-width));
   pointer-events: none;
   border-color: var(--bd);
 }
@@ -215,7 +214,7 @@ onMounted(() => {
   background: var(--bg);
   border-bottom: solid 1px var(--bd);
   position: absolute;
-  right: 0;
+  right: -16px;
   z-index: -1;
   opacity: 0;
   transition: 0.2s;
@@ -277,6 +276,7 @@ onMounted(() => {
   mix-blend-mode: color;
   transition: 0.5s linear;
   transition-property: background-image;
+  animation: fadeIn 2s;
 }
 
 .list-gradient-fade {
@@ -294,6 +294,15 @@ onMounted(() => {
   z-index: 2;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .bg-image, .nurture-egg {
   width: 100%;
   height: 100%;
@@ -304,12 +313,21 @@ onMounted(() => {
   background-position: center 80%;
   z-index: -2;
   position: absolute;
-  animation: fadeIn 1s;
+}
+
+@keyframes fadeInNurture {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.75;
+  }
 }
 
 .nurture-egg {
   background-image: url('../assets/squiggle2-transparent.png') !important;
   opacity: 0.75;
+  animation: fadeInNurture 2s ease-out;
 }
 
 @media (max-width: 1600px) {
