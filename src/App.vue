@@ -11,7 +11,6 @@ import {OverlayScrollbarsComponent} from "overlayscrollbars-vue";
 const isDraggedOver = ref(false);
 
 function onScroll(instance, evt: Event) {
-  console.log(evt.target)
   viewStore.scroll = (evt.target as HTMLElement).scrollTop;
 }
 

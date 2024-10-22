@@ -42,6 +42,7 @@ function updateScroll() {
   //console.log(columnSortInfo.value.clientHeight);
   const scrollWrapperPos = document.querySelector('.column-sort-wrapper').getBoundingClientRect().y;
   sortInfoOpacity.value = 1 - (((opacityToScrollBy.value - viewStore.scroll) / opacityToScrollBy.value));
+  sortInfoOpacity.value = Math.round((sortInfoOpacity.value - Number.EPSILON) * 100) / 100;
   //isSticky.value = scrollWrapperPos < columnSortInfo.value.clientHeight + 86 + 5;
   isSticky.value = sortInfoOpacity.value >= 1;
   console.log(topView.value.clientHeight);
@@ -67,7 +68,7 @@ watch(() => props.listName, () => {
 watch(() => route.params, () => {
   updateBackgroundArt();
   nextTick(() => {
-    opacityToScrollBy.value = document.querySelector('.scroll-wrapper').getBoundingClientRect().y - columnSortInfo.value.clientHeight - columnSortWrapper.value.clientHeight - 44;
+    opacityToScrollBy.value = document.querySelector('.scroll-wrapper').getBoundingClientRect().y - columnSortInfo.value.clientHeight - columnSortWrapper.value.clientHeight - 48;
   })
 });
 
@@ -78,7 +79,7 @@ const getColumnSortOffset = computed(() => {
 
 onMounted(() => {
   nextTick(() => {
-    opacityToScrollBy.value = document.querySelector('.scroll-wrapper').getBoundingClientRect().y - columnSortInfo.value.clientHeight - columnSortWrapper.value.clientHeight - 44;
+    opacityToScrollBy.value = document.querySelector('.scroll-wrapper').getBoundingClientRect().y - columnSortInfo.value.clientHeight - columnSortWrapper.value.clientHeight - 48;
   });
   updateBackgroundArt();
 })
@@ -119,7 +120,7 @@ onMounted(() => {
         <div class="column-sort-info" ref="columnSortInfo" :style="`opacity: ${sortInfoOpacity}`">
           <h2>{{listName}}</h2>
         </div>
-        <div class="column-sort-wrapper" ref="columnSortWrapper" :class="isSimple ? 'simple' : ''">
+        <div class="column-sort-wrapper" ref="columnSortWrapper" :class="[isSimple ? 'simple' : '', ]">
           <div class="column-sort" :class="isSticky ? 'sticky' : ''" :style="getColumnSortOffset">
             <span class="a">#</span>
             <div class="artist-title-album">
@@ -234,6 +235,8 @@ onMounted(() => {
   z-index: 2;
   border-radius: var(--main-border-radius-element);
   pointer-events: none;
+  transition: 100ms;
+  transition-property: opacity;
 
   h2 {
     margin: 15px 75px;
