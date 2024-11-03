@@ -17,6 +17,7 @@
         <ItemAdd/>
         <Notification/>
         <ZenMode v-if="isFullscreen"/>
+        <TourInterface v-if="tourMode" />
         <div class="main-content-wrapper" ref="mainContentWrapper">
             <SideBar/>
             <div class="sidebar-resizer" @mousedown="sidebarisResizing = true" @mouseup="sidebarisResizing = false">
@@ -46,10 +47,12 @@ import ItemAdd from './components/ItemAdd.vue'
 import Notification from './components/NotificationPopup.vue'
 import CommandPalette from './components/CommandPalette.vue'
 import BackgroundEffects from './components/BackgroundEffects.vue'
+import TourInterface from "./components/tour/TourInterface.vue";
 
 export default {
     name: 'App',
     components: {
+      TourInterface,
         TopBar,
         SideBar,
         PlayingBar,
@@ -175,6 +178,9 @@ export default {
         },
         rtl() {
             return this.$store.state.nav.rtl
+        },
+        tourMode() {
+          return this.$store.state.nav.tourMode
         }
     },
     created() {

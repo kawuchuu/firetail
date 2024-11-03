@@ -158,7 +158,7 @@ export default {
                     if (song.id == 'customSong') {
                         artistAlbum = song.customImage
                     } else {
-                        artistAlbum = `http://localhost:${port}/images/${(song.albumArtist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`
+                        artistAlbum = `http://localhost:${port}/images/${(song.albumArtist + song.album).replace(/[`~!@#$%^&*()_|+\-=?;:'",.<> {}[\]\\/]/gi, '')}.jpg`
                     }
                     return artistAlbum
                 } else {

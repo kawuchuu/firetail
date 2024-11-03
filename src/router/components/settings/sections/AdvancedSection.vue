@@ -1,10 +1,12 @@
 <script>
 import SubtitleOption from '../options/SubtitleOption.vue'
 import SwitchOption from "../options/SwitchOption.vue";
+import ButtonOption from '../options/ButtonOption.vue'
 
 export default {
     name: "AdvancedSection",
     components: {
+      ButtonOption,
         SwitchOption,
         SubtitleOption
     },
@@ -18,6 +20,10 @@ export default {
             window.localStorage.setItem('advancedFileInfo', enabled)
             this.$store.commit('nav/updateAdvancedFileInfo', enabled)
             this.advancedFileInfoEnabled = enabled
+        },
+        showTour() {
+          this.$store.commit('panel/updatePanelComponent', 'Welcome.vue')
+          this.$store.commit('panel/updateActive', true)
         }
     }
 }
@@ -29,6 +35,7 @@ export default {
         <SwitchOption :label="$t('SETTINGS.SHOW_FILE_CODEC')" :init-enabled="advancedFileInfoEnabled" :action="advancedFileInfoAction" />
         <SwitchOption :label="$t('SETTINGS.FORCE_RTL')" :init-enabled="false" />
         <SwitchOption :label="$t('SETTINGS.DEBUG_MODE')" :store-key="'debugMode'" :store-category="'switchVx'" />
+        <ButtonOption v-if="$store.state.nav.debugMode" :action="showTour" :label="'Launch first start tour'" :btn-label="'Start tour'" />
     </section>
 </template>
 

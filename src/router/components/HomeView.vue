@@ -46,7 +46,7 @@ export default {
         getAlbumImage(song) {
             let port = this.$store.state.nav.port
             if (song.hasImage == 1) {
-                let artistAlbum = `http://localhost:${port}/images/${(song.albumArtist + song.album).replace(/[.:<>"*?/{}()'|[\]\\]/g, '_')}.jpg`;
+                let artistAlbum = `http://localhost:${port}/images/${(song.albumArtist + song.album).replace(/[`~!@#$%^&*()_|+\-=?;:'",.<> {}[\]\\/]/gi, '')}.jpg`;
                 return artistAlbum
             } else {
                 return '../../assets/no_album.svg'

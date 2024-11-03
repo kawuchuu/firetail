@@ -10,7 +10,7 @@
                     </label>
                 </div>
                 <input style="display: none" type="file" id="playlistImg" accept="image/*" @change="updateImage">
-                <span class="remove-image">{{ $t('PANEL.PLAYLIST.REMOVE_IMAGE') }}</span>
+                <span v-if="image" class="remove-image" @click="removeImage">{{ $t('PANEL.PLAYLIST.REMOVE_IMAGE') }}</span>
             </div>
             <div class="pl-info">
                 <div class="input">
@@ -105,6 +105,19 @@ export default {
                 this.image = URL.createObjectURL(evt.target.files[0])
                 this.imageBlob = evt.target.files[0]
             }
+        },
+        async removeImage() {
+          this.image = null;
+          this.imageBlob = null;
+          const playlist = this.$attrs.props.playlist
+          console.log(playlist)
+          if (playlist.hasImage) {
+            await window.ipcRenderer.invoke('updatePlaylist', {
+              column: 'hasImage',
+              id: playlist.id,
+              data: 0,
+            })
+          }
         }
     },
     computed: {

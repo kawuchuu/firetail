@@ -137,7 +137,8 @@ const state = () => ({
     advancedFileInfo: window.localStorage.getItem('advancedFileInfo') === 'true',
     colourBarEnabled: true,
     rtl: false,
-    debugMode: false
+    debugMode: false,
+    tourMode: false
 })
 
 const mutations = {
@@ -230,6 +231,9 @@ const mutations = {
     },
     debugMode(state, enabled) {
         state.debugMode = enabled
+    },
+    updateTourMode(state, enabled) {
+        state.tourMode = enabled
     }
 }
 

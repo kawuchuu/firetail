@@ -119,6 +119,7 @@ export default {
     border-radius: 10px;
 
     opacity: 0;
+    pointer-events: none;
 
     animation: leave 0.3s cubic-bezier(0.17, 0.88, 0.23, 1.15) reverse;
     //animation-delay: 1s;
