@@ -6,9 +6,13 @@ export default {
   components: {StandardButton},
   methods: {
     next() {
-      this.$store.commit('nav/updateTourMode', false)
+      this.advancePart();
+    },
+    prev() {
+      this.backPart();
     }
-  }
+  },
+  inject: ['part', 'advancePart', 'backPart'],
 }
 </script>
 
@@ -17,7 +21,7 @@ export default {
     <div class="tour-inner">
       <slot />
       <div class="buttons">
-        <StandardButton class="button-right" :button="{label: 'Back'}"></StandardButton>
+        <StandardButton class="button-right" :button="{label: 'Back', onClick: prev}"></StandardButton>
         <StandardButton class="button-right" :button="{label: 'Next', style: 'primary', onClick: next}"></StandardButton>
       </div>
     </div>
@@ -34,6 +38,14 @@ export default {
 
   position: fixed;
   pointer-events: all;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: inherit;
+
+  transition: 0.5s cubic-bezier(0, 1, 0.35, 1);
+  transition-property: width, height, top, left, right, bottom;
 }
 
 .tour-inner {

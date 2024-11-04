@@ -21,7 +21,7 @@ export default {
   <div class="welcome">
     <img class="firetail-welcome" src="../../../assets/firetail.png" />
     <h1>Welcome to Firetail</h1>
-    <p>Would you like a tour to show you around?</p>
+    <p>Would you like a quick tour to show you around?</p>
     <div class="buttons">
       <StandardButton class="button-right" :button="{label: 'No thanks', onClick: close}"></StandardButton>
       <StandardButton class="button-right" :button="{label: 'Start tour', style: 'primary', onClick: startTour}"></StandardButton>

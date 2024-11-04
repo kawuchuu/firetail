@@ -371,7 +371,7 @@ export default {
                 */{label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ARTIST'), type: 'normal', hide: [this.selectedItems.length !== 1, this.$route.path === '/artists', this.list[evt[1]].artist === 'Unknown Artist'], onClick: goToArtist},
                 {label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ALBUM'), type: 'normal', hide: [this.selectedItems.length !== 1, this.$route.path === '/albums', this.list[evt[1]].album === 'Unknown Album'], onClick: goToAlbum},
                 {label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.VIEW_EXPLORER'), type: 'normal', hide: [this.selectedItems.length !== 1], onClick: revealInFileExplorer},
-                {type: 'separator'},
+                {type: 'separator', hide: [this.selectedItems.length !== 1]},
                 {label: favCompare ? this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_FAVOURITE') : this.$t('CONTEXT_MENU.SONG_LIST_ITEM.REMOVE_FAVOURITE'), type: 'normal', onClick: favouriteOnClick},
                 {label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_PLAYLIST'), type: 'normal'},
                 {type: 'separator'},

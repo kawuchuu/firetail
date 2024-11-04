@@ -35,6 +35,13 @@ export default {
 <style scoped lang="scss">
 .arrow {
   font-size: 40px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  transition: 0.5s cubic-bezier(0, 1, 0.35, 1);
+  transition-property: top, left, right, bottom;
 }
 
 @keyframes up-down {
