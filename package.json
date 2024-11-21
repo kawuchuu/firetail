@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@jimp/plugin-cover": "^0.22.10",
-    "axios": "1.6.2",
+    "axios": "1.7.4",
     "better-sqlite3": "9.5.0",
     "colorthief": "^2.4.0",
     "copy-webpack-plugin": "^11.0.0",
