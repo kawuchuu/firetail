@@ -42,16 +42,17 @@
 <script setup lang="ts">
 import StandardButton from "../../StandardButton.vue";
 import SubtitleOption from "../options/SubtitleOption.vue";
+import {infoStore} from "../../../renderer";
 import {computed, ref} from "vue";
 
-const version = ref('unknown');
+const version = ref(infoStore.version);
 const build = ref('unknown');
-const arch = ref('unknown');
-const platform = ref('unknown');
+const arch = ref(window.process.arch);
+const platform = ref(window.process.platform);
 const processVer = ref('unknown');
 const platformVer = ref('unknown');
 const isMoreOpen = ref(false);
-const year = ref('unknown');
+const year = ref(infoStore.year);
 
 const checkUnknownBuild = computed(() => {
   return build.value === 'unknown' || build.value === 'CUSTOM';

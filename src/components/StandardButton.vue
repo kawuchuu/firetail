@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
         <div class="button" @click="doOnClick" :class="button.style">
-            <i v-if="button.icon" class="material-icons-outlined">{{ button.icon }}</i>
+            <i v-if="button.icon" class="ft-icon">{{ button.icon }}</i>
             <span>{{ button.label }}</span>
         </div>
     </div>

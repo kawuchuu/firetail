@@ -16,7 +16,7 @@ contextBridge.exposeInMainWorld('path', {
 
 contextBridge.exposeInMainWorld('process', {
   platform: process.platform,
-
+  arch: process.arch,
 });
 
 contextBridge.exposeInMainWorld('ftStore', {
@@ -36,4 +36,8 @@ contextBridge.exposeInMainWorld('ftStoreSync', {
 
 contextBridge.exposeInMainWorld('misc', {
   openLink: (link: string) => ipcRenderer.invoke('openLink', link),
+});
+
+contextBridge.exposeInMainWorld('setupApp', {
+  generalInfo: async () => ipcRenderer.invoke('getGeneralInfo')
 });

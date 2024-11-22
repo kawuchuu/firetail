@@ -3,6 +3,7 @@ import path from 'path/posix';
 import Database from "./modules/database";
 import FiretailStorage from "./modules/storage";
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import startIpc from "./modules/ipc";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -45,13 +46,7 @@ const createWindow = () => {
     mainWindow.show();
   });
 
-  ipcMain.handle('getImagePath', () => {
-    return path.join(app.getPath('userData').split('\\').join('/'), 'images');
-  });
-
-  ipcMain.on('getImagePathSync', (event) => {
-    event.returnValue = path.join(app.getPath('userData').split('\\').join('/'), 'images');
-  });
+  startIpc();
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
