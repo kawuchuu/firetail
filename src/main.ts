@@ -1,4 +1,4 @@
-import {app, BrowserWindow, ipcMain, protocol} from 'electron';
+import {app, BrowserWindow, protocol} from 'electron';
 import path from 'path/posix';
 import Database from "./modules/database";
 import FiretailStorage from "./modules/storage";
@@ -9,7 +9,7 @@ import startIpc from "./modules/ipc";
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
-export let mainWindow;
+export let mainWindow:BrowserWindow;
 const createWindow = () => {
   const database = new Database();
   const osType = process.platform;
@@ -36,7 +36,6 @@ const createWindow = () => {
     },
     titleBarOverlay: {
       height: 44,
-      width: 160,
       color: '#000000',
       symbolColor: '#ffffff'
     }
@@ -59,10 +58,36 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 };
 
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'audio-resource',
+    privileges: {
+      standard: false,
+      bypassCSP: true,
+    },
+  },
+]);
+
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'local-resource',
+    privileges: {
+      secure: true,
+      supportFetchAPI: true,
+      bypassCSP: true,
+      stream: true
+    },
+  },
+]);
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
+  const thing = app.setAsDefaultProtocolClient('firetail');
+  if (thing) {
+    console.log('DONE WOO')
+  } else console.log("NOT DONE NO")
   try {
     await installExtension(VUEJS_DEVTOOLS)
     console.log('Vue Devtools installed!')
@@ -91,8 +116,14 @@ app.on('activate', () => {
 });
 
 function registerLocalResourceProtocol() {
+  /*protocol.handle('local-resource', async (request: GlobalRequest) => {
+    const filePath = decodeURIComponent(request.url.slice('local-resource://'.length))
+    console.log(request.url);
+    return net.fetch(url.pathToFileURL(filePath).toString())
+  })*/
+  // ughhh this is being deprecated and i haven't found a great solution to this yet
   protocol.registerFileProtocol('local-resource', (request, callback) => {
-    const url = request.url.replace(/^local-resource:\/\//, '')
+    const url = decodeURIComponent(request.url.replace(/^local-resource:\/\//, ''))
     // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
     const decodedUrl = decodeURI(url) // Needed in case URL contains spaces
     try {

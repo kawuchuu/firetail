@@ -1,6 +1,7 @@
 import FiretailSong from "../types/FiretailSong";
 import {reactive} from "vue";
 import {audioPlayer} from "../renderer";
+import {getAudioResource} from "./get-resource";
 
 interface AudioStore {
     title: string;
@@ -12,33 +13,22 @@ interface AudioStore {
     volume: number;
 }
 
-class AudioPlayer {
-    #audio = new Audio();
-    #currentTime = 0;
-    #duration = 0;
-    #volume = 1;
-    muted = false;
+class AudioPlayer extends Audio {
     #queue:FiretailSong[] = [];
     #index = 0;
     #id:string;
     #currentSong: FiretailSong;
-    #paused = true;
-    stopped = true;
     updateLocal = 0;
-    playbackRate = 1;
     metadata: Metadata;
     reactive: AudioStore;
     constructor() {
-        this.#audio.addEventListener("ended", () => {
+        super();
+        this.addEventListener("ended", () => {
             this.nextSong();
         });
-        this.#audio.addEventListener("timeupdate", this.timeUpdate);
-        this.#audio.addEventListener("pause", () => {
-            this.paused = true;
-        });
-        this.#audio.addEventListener("playing", () => {
-            this.paused = false;
-        })
+        this.addEventListener("timeupdate", this.timeUpdate);
+        this.addEventListener("pause", this.updateReactivePause);
+        this.addEventListener("playing", this.updateReactivePause);
         this.metadata = new Metadata(this);
         this.reactive = reactive({
             title: this.metadata.title,
@@ -51,36 +41,12 @@ class AudioPlayer {
         });
     }
 
-    get currentTime() {
-        return this.#currentTime
-    }
-
-    set currentTime(time) {
-        this.#currentTime = time
-        this.reactive.currentTime = time;
+    updateReactivePause() {
+        this.reactive.paused = this.paused;
     }
 
     setCurrentTime(time:number) {
-        this.#audio.currentTime = time;
         this.currentTime = time;
-    }
-
-    get duration() {
-        return this.#duration;
-    }
-
-    set duration(time) {
-        this.#duration = time;
-        this.reactive.duration = time;
-    }
-
-    get paused() {
-        return this.#paused;
-    }
-
-    set paused(pause: boolean) {
-        this.#paused = pause;
-        this.reactive.paused = pause;
     }
 
     get queue() {
@@ -109,32 +75,22 @@ class AudioPlayer {
         this.reactive.currentSong = song;
     }
 
-    get volume() {
-        return this.#audio.volume
-    }
-
-    set volume(level: number) {
-        this.#volume = level;
-        this.reactive.volume = level;
-        this.#audio.volume = level;
-    }
-
     doTimeUpdate(willDo:boolean) {
-        if (willDo) this.#audio.addEventListener('timeupdate', this.timeUpdate);
-        else this.#audio.removeEventListener('timeupdate', this.timeUpdate);
+        if (willDo) this.addEventListener('timeupdate', this.timeUpdate);
+        else this.removeEventListener('timeupdate', this.timeUpdate);
     }
 
     async playSong(song: FiretailSong) {
         if (!song || !song.path) return console.warn("Could not find song", song);
-        this.#audio.src = `local-resource://${song.path}`
+        this.src = getAudioResource(song.path);
         //console.log(this.audio.currentTime)
         this.#id = song.id;
         this.currentSong = song;
-        this.duration = song.realdur;
+        this.reactive.duration = song.realdur;
         this.metadata.title = song.title;
         this.metadata.artist = song.artist;
         this.metadata.setSongMetadata(song)
-        await this.#audio.play().catch(err => {
+        await this.play().catch(err => {
             console.error(err);
         })
     }
@@ -152,12 +108,12 @@ class AudioPlayer {
     }
 
     togglePlay() {
-        if (this.#audio.paused) {
-            this.#audio.play()
+        if (this.paused) {
+            this.play()
         } else {
-            this.#audio.pause()
+            this.pause()
         }
-        return this.#audio.paused
+        return this.paused
     }
 
     nextSong() {
@@ -184,7 +140,7 @@ class AudioPlayer {
         } else {
             this.updateLocal++
         }
-        audioPlayer.currentTime = (evt.target as HTMLAudioElement).currentTime
+        audioPlayer.reactive.currentTime = audioPlayer.currentTime;
     }
 }
 
