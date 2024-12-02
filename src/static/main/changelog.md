@@ -1,57 +1,68 @@
-## 1.0.0
+All notable changes to this project will be documented in this file.
 
-### Additions
-* Added favourites page
-* Added playlists system
-* Added global search
-* Added queue viewer
-* Added sidebar resizing
-* Added accessibility features:
-  * High contrast style
-  * Reduced motion
-  * Increased font weight
-  * Screen reader support
-* Added performance mode for low-end devices
-* Added total time in song list headers
-* Added genres in album song list headers
-* Added album artist name to album view
-* Added song details when hovering over song title/artist in playing bar
-* Added additional 'advanced' information to about section in settings page
-* Added link to GitHub issues page to about section in settings page
-* Added third-party licence and changelog information
-* Added right-to-left appearance
-* Added more languages
-* Added light colour theme
-* Added ability to use system colour theme
-* Added ability to view selected song in OS default file manager
-* Added the following song metadata:
-  * Disc number
-  * Album artist
-  * All artists
-  * Explicit
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### UI Changes
-* Now uses custom title bar on Windows and macOS platforms
-* Top bar icons no longer display text
-* Settings navigation button moved to top bar
-* New header backgrounds
-* Refreshed icon set
-* New appearance for artist and alb[storage.js](..%2F..%2Fmodules%2Fstorage.js)um view with nothing selected
-* Refreshed fullscreen/zen mode UI
-* Main content container now rounded, playing bar no longer appears separate
-* Album colour now appears as a soft glow in bottom-left corner
-* Numerous UI tweaks
-* Removed Firetail name and logo from sidebar
-* Moved favourite icon in song list to second-last column
+## [Unreleased]
 
-### Other changes
-* Shuffle now works correctly
-* Artist/album list now uses virtual scrolling
-* Improved language/i18n support
-* File importing is now recursive
+### Added
+
+- Added favourites page
+- Added playlists system
+- Added global search
+- Added queue viewer
+-Added sidebar resizing
+- Added accessibility features:
+  - High contrast style
+  - Reduced motion
+  - Increased font weight
+  - Screen reader support
+- Added performance mode for low-end devices
+- Added total time in song list headers
+- Added genres in album song list headers
+- Added album artist name to album view
+- Added song details when hovering over song title/artist in playing bar
+- Added additional 'advanced' information to about section in settings page
+- Added link to GitHub issues page to about section in settings page
+- Added third-party licence and changelog information
+- Added right-to-left appearance
+- Added more languages
+- Added light colour theme
+- Added ability to use system colour theme
+- Added ability to view selected song in OS default file manager
+- Added the following song metadata:
+  - Disc number
+  - Album artist
+  - All artists
+  - Explicit
+
+### Changed
+- Now uses custom title bar on Windows and macOS platforms
+- Top bar icons no longer display text
+- Settings navigation button moved to top bar
+- New header backgrounds
+- Refreshed icon set
+- New appearance for artist and album view with nothing selected
+- Refreshed fullscreen/zen mode UI
+- Main content container now rounded, playing bar no longer appears separate
+- Album colour now appears as a soft glow in bottom-left corner
+- Numerous UI tweaks
+- Removed Firetail name and logo from sidebar
+- Moved favourite icon in song list to second-last column
+- Artist/album list now uses virtual scrolling
+- Improved language/i18n support
+- File importing is now recursive
+
+### Removed
+- Spotify integration. Will likely be added again in future versions.
+- Unused home navigation in sidebar
+- Unused 'Add to queue' button in context menu
+
+### Fixed
+- Shuffling now works as expected
+- Repeat queue loops correctly
 
 ## 0.7.0
-Released: 12 August 2021
 
 Additions/changes since 0.6.0:
 * Full UI overhaul

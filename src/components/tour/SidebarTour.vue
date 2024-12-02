@@ -96,17 +96,17 @@ export default {
 
 .pa-1 {
   position: fixed;
-  top: 90px;
+  top: 60px;
   left: calc(var(--sidebar-width) + 16px);
 }
 .ts-1 {
-  top: 80px;
+  top: 50px;
   left: calc(var(--sidebar-width) + 80px);
 }
 .highlight-tour.sidebar-1 {
-  top: 77px;
+  top: 47px;
   width: calc(var(--sidebar-width) - 20px);
-  height: 47px;
+  height: 46px;
   border-radius: 14px;
 }
 
@@ -201,5 +201,67 @@ export default {
   top: calc(100vh - 85px);
   width: calc(100vw - 20px);
   height: 65px;
+}
+
+.macos {
+  .pa-1 {
+    top: 90px;
+  }
+  .ts-1 {
+    top: 80px;
+  }
+  .highlight-tour.sidebar-1 {
+    top: 77px;
+  }
+
+  .pa-2 {
+    top: 135px;
+  }
+  .ts-2 {
+    top: 125px;
+  }
+  .highlight-tour.sidebar-2 {
+    top: 119px;
+  }
+
+  .pa-3 {
+    top: 180px;
+  }
+  .ts-3 {
+    top: 170px;
+  }
+  .highlight-tour.sidebar-3 {
+    top: 161px;
+  }
+
+  .pa-4 {
+    top: 225px;
+  }
+  .ts-4 {
+    top: 215px;
+  }
+  .highlight-tour.sidebar-4 {
+    top: 203px;
+  }
+
+  .pa-5 {
+    top: 295px;
+  }
+  .ts-5 {
+    top: 285px;
+  }
+  .highlight-tour.sidebar-5 {
+    top: 260px;
+  }
+
+  .pa-5 {
+    top: 295px;
+  }
+  .ts-5 {
+    top: 285px;
+  }
+  .highlight-tour.sidebar-5 {
+    top: 260px;
+  }
 }
 </style>

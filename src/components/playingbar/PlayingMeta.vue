@@ -213,10 +213,10 @@ export default {
     },
     mounted() {
         const albumArt = this.$refs.albumArt
-        if (albumArt && albumArt.complete) {
+        /*if (albumArt && albumArt.complete) {
             const promColour = this.colorThief.getColor(albumArt)
             this.$store.commit('nav/updatePlayingBarColour', `rgb(${promColour[0]},${promColour[1]},${promColour[2]})`)
-        } else {
+        } else {*/
             albumArt.addEventListener('load', () => {
                 const promColour = this.colorThief.getColor(albumArt)
                 this.$store.commit('nav/updatePlayingBarColour', `rgb(${promColour[0]},${promColour[1]},${promColour[2]})`)
@@ -224,8 +224,13 @@ export default {
             albumArt.addEventListener('error', () => {
               this.$store.commit('nav/updatePlayingBarColour', 'transparent')
             })
-        }
-    }
+        //}
+    },
+  destroyed() {
+    const albumArt = this.$refs.albumArt
+      albumArt.removeEventListener('load')
+      albumArt.removeEventListener('error')
+  }
 }
 </script>
 

@@ -8,6 +8,7 @@ import { resolve } from 'path'
 import os from 'os'
 import {marked} from "marked";
 import FiretailStorage from "./storage";
+import * as musicMetadata from 'music-metadata'
 
 export default {
     start(win) {
@@ -185,14 +186,14 @@ export default {
         })
 
         ipcMain.handle('getAdvancedFileInfo', async (event, path) => {
-            const { format } = await require('music-metadata').parseFile(path)
+            const metadata = await musicMetadata.parseFile(path)
             return {
-                container: format.container,
-                codec: format.codec,
-                bitrate: format.bitrate,
-                sampleRate: format.sampleRate,
-                bitDepth: format.bitsPerSample,
-                noChannels: format.numberOfChannels
+                container: metadata.format.container,
+                codec: metadata.format.codec,
+                bitrate: metadata.format.bitrate,
+                sampleRate: metadata.format.sampleRate,
+                bitDepth: metadata.format.bitsPerSample,
+                noChannels: metadata.format.numberOfChannels
             }
         })
 
