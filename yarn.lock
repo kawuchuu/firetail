@@ -2646,10 +2646,10 @@ electron-winstaller@^5.0.0:
   optionalDependencies:
     "@electron/windows-sign" "^1.1.2"
 
-electron@32.2.5:
-  version "32.2.5"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-32.2.5.tgz#2c9efead9f03b28fee864da69a069cf4cec31194"
-  integrity sha512-8t5IGOvms/JTcLNnlOH7rFCAJIZJAazwYrF7kQsKQSLzDHh4z8mGFrU11NN3W4bIT6Yg5DJNniSWz3O5wJLmCw==
+electron@^32.2.5:
+  version "32.2.7"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-32.2.7.tgz#4eaf78534c99ba060da5bb002c737206be33f225"
+  integrity sha512-y8jbQRG3xogF70XPlk5c+dWe5iRfUBo28o2NMpKd/CcW7ENIaWtBlGima8/8nmRdAaYTy1+yIt6KB0Lon9H8cA==
   dependencies:
     "@electron/get" "^2.0.0"
     "@types/node" "^20.9.0"
@@ -4489,9 +4489,9 @@ nan@^2.4.0:
   integrity sha512-nbajikzWTMwsW+eSsNm3QwlOs7het9gGJU5dDZzRTQGk03vyBOauxgI4VakDzE0PtsGTmXPsXTbbjVhRwR5mpw==
 
 nanoid@^3.3.7:
-  version "3.3.7"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.7.tgz#d0c301a691bc8d54efa0a2226ccf3fe2fd656bd8"
-  integrity sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==
+  version "3.3.8"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.8.tgz#b1be3030bee36aaff18bacb375e5cce521684baf"
+  integrity sha512-WNLf5Sd8oZxOm+TzppcYk8gVOgP+l58xNy58D0nbUnOxOWRWvlcCV4kUF7ltmI6PsrLl/BgKEyS4mqsGChFN0w==
 
 napi-build-utils@^1.0.1:
   version "1.0.2"
