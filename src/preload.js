@@ -1,6 +1,6 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
-import {contextBridge, ipcRenderer} from 'electron'
+import {contextBridge, ipcRenderer, webUtils} from 'electron'
 import {marked} from "marked";
 // this is temporary i know it's not good practice
 contextBridge.exposeInMainWorld('ipcRenderer', {
@@ -55,4 +55,8 @@ contextBridge.exposeInMainWorld('ftStoreSync', {
 
 contextBridge.exposeInMainWorld('contextmenu', {
     popup: options => ipcRenderer.send('createPopup', options)
+})
+
+contextBridge.exposeInMainWorld('webUtils', {
+    getPathForFile: file => webUtils.getPathForFile(file),
 })

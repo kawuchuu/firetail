@@ -299,15 +299,27 @@ export default {
         })
 
         ipcMain.on('getKeySync', (event, key) => {
-            event.returnValue = ftStorage.getItem(key);
+            try {
+                event.returnValue = ftStorage.getItem(key);
+            } catch(err) {
+                event.returnValue = null;
+            }
         })
 
         ipcMain.on('keyExistsSync', (event, key) => {
-            event.returnValue = ftStorage.keyExists(key);
+            try {
+                event.returnValue = ftStorage.keyExists(key);
+            } catch(err) {
+                event.returnValue = null;
+            }
         })
 
         ipcMain.on('getCategorySync', (event, category) => {
-            event.returnValue = ftStorage.getCategory(category);
+            try {
+                event.returnValue = ftStorage.getCategory(category);
+            } catch(err) {
+                event.returnValue = null;
+            }
         })
 
         ipcMain.on('createPopup', (event, options) => {

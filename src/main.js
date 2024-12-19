@@ -328,8 +328,12 @@ const createWindow = () => {
     }
   ]
 
-  const menu = Menu.buildFromTemplate(macMenu)
-  Menu.setApplicationMenu(menu)
+  if (osType === 'darwin') {
+    const menu = Menu.buildFromTemplate(macMenu)
+    Menu.setApplicationMenu(menu)
+  } else {
+    Menu.setApplicationMenu(null);
+  }
 
   const openSong = filePath => {
     let lastElement = filePath
@@ -372,6 +376,7 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+  //mainWindow.loadURL('chrome://gpu')
 
   if (isDevelopment) {
     // Open the DevTools.

@@ -69,7 +69,7 @@ export default {
             let files = []
             Array.from(evt.target.files).forEach(f => {
                 if (!f.type.startsWith('audio')) return;
-                files.push([f.path,f.name])
+                files.push([window.webUtils.getPathForFile(f),f.name])
             })
             window.ipcRenderer.send('addToLibrary', [files, this.$route.path])
         },
@@ -85,11 +85,9 @@ export default {
             evt.preventDefault();
             let files = []
             Array.from(evt.dataTransfer.files).forEach(f => {
-                /* console.log(f)
-                if (!f.type.startsWith('audio')) return; */
-                files.push(f.path)
+              console.log(f)
+                files.push(window.webUtils.getPathForFile(f))
             })
-            //console.log(files)
             this.isDraggedOver = false
             window.ipcRenderer.send('addToLibrary', [files, this.$route.path])
         },
