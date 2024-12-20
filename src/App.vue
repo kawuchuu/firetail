@@ -74,13 +74,17 @@ export default {
             window.ipcRenderer.send('addToLibrary', [files, this.$route.path])
         },
         changeDrag(evt, change) {
-            if (evt.dataTransfer && evt.dataTransfer.types[0] !== 'Files') return
+            if (evt.dataTransfer && evt.dataTransfer.types[0] !== 'Files') {
+              console.log('inVALID')
+              return
+            }
             if (evt.preventDefault) {
                 evt.preventDefault();
             }
             this.isDraggedOver = change
         },
         filesDropped(evt) {
+          console.log(evt.dataTransfer.types, 'wow')
             if (evt.dataTransfer && evt.dataTransfer.types[0] !== 'Files') return
             evt.preventDefault();
             let files = []

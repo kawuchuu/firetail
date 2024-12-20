@@ -328,11 +328,11 @@ const createWindow = () => {
     }
   ]
 
-  if (osType === 'darwin') {
-    const menu = Menu.buildFromTemplate(macMenu)
-    Menu.setApplicationMenu(menu)
-  } else {
-    Menu.setApplicationMenu(null);
+  const menu = Menu.buildFromTemplate(macMenu)
+  Menu.setApplicationMenu(menu)
+
+  if (osType !== 'darwin') {
+    mainWindow.setMenuBarVisibility(false)
   }
 
   const openSong = filePath => {

@@ -20,7 +20,8 @@ export default {
                 { label: 'SETTINGS.DROP_DOWN.START_SCREEN.ALBUMS', value: 'albums' },
                 { label: 'SETTINGS.DROP_DOWN.START_SCREEN.FAVOURITES', value: 'favourites' },
             ],
-            currentLocale: {label: 'SETTINGS.DROP_DOWN.LANG_AUTO', value: "system"}
+            currentLocale: {label: 'SETTINGS.DROP_DOWN.LANG_AUTO', value: "system"},
+          platform: window.process.platform,
         }
     },
     methods: {
@@ -58,7 +59,7 @@ export default {
         <DropdownOption :label="$t('SETTINGS.LANGUAGE')" :store-key="'lang'" :store-category="'multiOption'" :init-selected="currentLocale" :options="locales" :on-change="changeLocale"/>
 <!--        <DropdownOption :label="$t('SETTINGS.START_PAGE')" :init-selected="startPages[1]" :options="startPages"/>-->
         <ButtonOption :action="clearLibrary" :label="$t('SETTINGS.CLEAR_LIBRARY')" :btn-label="this.$t('SETTINGS.BUTTON.CLEAR_LIBRARY')" />
-        <ButtonOption :label="$t('SETTINGS.CHECK_UPDATE')" :btn-label="$t('SETTINGS.BUTTON.CHECK_UPDATE')" />
+        <ButtonOption v-if="platform !== 'linux'" :label="$t('SETTINGS.CHECK_UPDATE')" :btn-label="$t('SETTINGS.BUTTON.CHECK_UPDATE')" />
     </section>
 </template>
 

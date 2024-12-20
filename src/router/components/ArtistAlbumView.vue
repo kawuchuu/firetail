@@ -107,7 +107,7 @@ export default {
 <style lang="scss" scoped>
 .artist-inner {
     overflow: hidden;
-    overflow-y: auto;
+    overflow-y: scroll;
     width: 100%;
     max-width: 270px;
     z-index: 4;
