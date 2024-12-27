@@ -218,8 +218,15 @@ export default {
             this.$store.commit('nav/updatePlayingBarColour', `rgb(${promColour[0]},${promColour[1]},${promColour[2]})`)
         } else {*/
             albumArt.addEventListener('load', () => {
-                const promColour = this.colorThief.getColor(albumArt)
+                let promColour = this.colorThief.getColor(albumArt)
+                const lightestColor = this.colorThief.getPalette(albumArt).reduce(function(previousValue, currentValue){
+                    const currLightNess = (0.2126*currentValue[0] + 0.7152*currentValue[1] + 0.0722*currentValue[2]);
+                    const prevLightNess = (0.2126*previousValue[0] + 0.7152*previousValue[1] + 0.0722*previousValue[2]);
+                    return (prevLightNess < currLightNess) ? currentValue : previousValue;
+                });
+                if (promColour[0] <= 10 && promColour[1] <= 10 && promColour[2] <= 10) promColour = lightestColor;
                 this.$store.commit('nav/updatePlayingBarColour', `rgb(${promColour[0]},${promColour[1]},${promColour[2]})`)
+                this.$store.commit('nav/updatePlayingBarSecondaryColour', `rgb(${lightestColor[0]},${lightestColor[1]},${lightestColor[2]})`)
             })
             albumArt.addEventListener('error', () => {
               this.$store.commit('nav/updatePlayingBarColour', 'transparent')

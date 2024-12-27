@@ -38,14 +38,10 @@ const createWindow = () => {
       x: 25,
       y: 17
     },
-    frame: osType === 'darwin' || osType === 'win32' ? false : true,
+    frame: !(osType === 'darwin' || osType === 'win32'),
     title: 'Firetail',
     transparent: false,
     backgroundColor: '#00000000',
-    vibrancy: null,
-    // this doesn't appear to be working?
-    backgroundMaterial: osType === 'win32' ? 'mica' : 'none',
-    visualEffectState: 'active',
     webPreferences: {
       preload: path.join(__dirname, '../renderer/main_window/preload.js'),
       nodeIntegration: false,

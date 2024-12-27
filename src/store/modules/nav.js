@@ -116,6 +116,7 @@ const state = () => ({
     favouriteSongs: [],
     scrolled: 0,
     playingBarColour: null,
+    playingBarSecondaryColour: null,
     ver: 'unknown',
     year: '2024',
     buildNum: 'unknown',
@@ -177,6 +178,9 @@ const mutations = {
     },
     updatePlayingBarColour(state, colour) {
         state.playingBarColour = colour
+    },
+    updatePlayingBarSecondaryColour(state, colour) {
+        state.playingBarSecondaryColour = colour
     },
     updateVer(state, ver) {
         state.ver = ver
