@@ -145,6 +145,8 @@ export default {
 
 <style lang="scss" scoped>
 .right-controls-root {
+    padding-right: 15px;
+
     i {
         font-size: 22px;
         cursor: pointer;

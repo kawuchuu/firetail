@@ -61,7 +61,6 @@ export default {
     transition: 0.25s;
     transition-property: transform;
     transform: translateY(0px);
-    padding: 0px 15px;
 }
 
 .playing-bar.hidden {

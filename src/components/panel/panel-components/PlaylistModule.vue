@@ -249,7 +249,7 @@ export default {
     height: 80px;
 }
 
-.input textarea::placeholder {
+.input textarea::placeholder, .input input::placeholder {
     color: var(--text);
     opacity: 0.5;
 }

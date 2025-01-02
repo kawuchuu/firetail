@@ -75,7 +75,6 @@ export default {
         },
         changeDrag(evt, change) {
             if (evt.dataTransfer && evt.dataTransfer.types[0] !== 'Files') {
-              console.log('inVALID')
               return
             }
             if (evt.preventDefault) {

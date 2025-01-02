@@ -122,6 +122,7 @@ export default {
             isHover: false,
             isIconHover: false,
             dragOverY: -1,
+            isThisDragging: false,
             artists: JSON.parse(this.source.allArtists)
         }
     },
@@ -188,9 +189,11 @@ export default {
             }]))
             document.querySelector('#dragInfo').textContent = `${this.source.artist} - ${this.source.title}`
             evt.dataTransfer.setDragImage(document.querySelector('.drag-detail'), -15, 10)
+            this.isThisDragging = true
         },
         stopDrag() {
             bus.$emit('stopDrag')
+            this.isThisDragging = false
         },
         songDragOver(evt) {
             evt.preventDefault()
@@ -200,7 +203,11 @@ export default {
             } else if (evt.dataTransfer) {
                 evt.dataTransfer.dropEffect = 'none'
             }
-            this.dragOverY = evt.layerY
+            if (this.isThisDragging) {
+                this.dragOverY = -1
+            } else {
+                this.dragOverY = evt.layerY
+            }
         },
         songDragLeave() {
             if (this.$route.path != '/playlist') return
@@ -208,6 +215,7 @@ export default {
         },
         async songDragFinish(evt) {
             evt.preventDefault()
+            this.isThisDragging = false
             if (this.$route.path !== '/playlist') return
             let songs = evt.dataTransfer.getData('ftsong')
             if (songs === '') return
@@ -220,7 +228,7 @@ export default {
             const ogPos = songIds.find(item => item.id === songs[0].id).position
             if (ogPos === currentSong) return
             if (currentSong > ogPos) {
-                newStartPos = this.dragOverY >= 0 && this.dragOverY <= 21 ? currentSong + 1 : currentSong
+                newStartPos = this.dragOverY >= 0 && this.dragOverY <= 21 ? currentSong - 1 : currentSong
             }
             const toBeUpdated = sortedPlaylistSongs.find(item => item.id === songs[0].id)
             toBeUpdated.position = newStartPos
@@ -250,7 +258,6 @@ export default {
             //toBeUpdated.position = newStartPos
 
             sortedPlaylistSongs = sort.sortArrayNum(sortedPlaylistSongs, 'position')
-            console.log(sortedPlaylistSongs, newStartPos, ogPos, currentSong)
             window.ipcRenderer.invoke('updatePlaylist', {
                 column: 'songids',
                 id: playlist[0].id,

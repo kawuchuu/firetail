@@ -1,5 +1,3 @@
-All notable changes to this project will be documented in this file.
-
 Starting from version 1.0.0, the format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
@@ -11,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added playlists system
 - Added global search
 - Added queue viewer
--Added sidebar resizing
+- Added sidebar resizing
 - Added accessibility features:
   - High contrast style
   - Reduced motion
@@ -23,7 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added album artist name to album view
 - Added song details when hovering over song title/artist in playing bar
 - Added additional 'advanced' information to about section in settings page
-- Added link to GitHub issues page to about section in settings page
 - Added third-party licence and changelog information
 - Added right-to-left appearance
 - Added more languages
@@ -34,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Disc number
   - Album artist
   - All artists
+  - Genres
   - Explicit
 
 ### Changed
@@ -46,12 +44,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refreshed fullscreen/zen mode UI
 - Main content container now rounded, playing bar no longer appears separate
 - Album colour now appears as a soft glow in bottom-left corner
-- Numerous UI tweaks
 - Removed Firetail name and logo from sidebar
 - Moved favourite icon in song list to second-last column
 - Artist/album list now uses virtual scrolling
 - Improved language/i18n support
 - File importing is now recursive
+- Numerous UI tweaks
 
 ### Removed
 - Spotify integration. Will likely be added again in future versions.

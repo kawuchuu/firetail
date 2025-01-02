@@ -250,6 +250,7 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    padding-left: 15px;
 }
 
 .title-artist {
@@ -259,6 +260,7 @@ export default {
     justify-content: center;
     margin-left: 15px;
     -webkit-mask-image: -webkit-linear-gradient(180deg, transparent, #000 20px);
+    z-index: 2;
 }
 
 .song-album-art {
@@ -273,6 +275,7 @@ export default {
     background-position: center !important;
     background-size: cover !important;
     transition: .1s;
+    box-shadow: 0 0 50px var(--back-bg);
 }
 
 @keyframes scroll {
