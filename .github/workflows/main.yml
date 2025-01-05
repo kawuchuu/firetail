@@ -1,0 +1,45 @@
+name: Continuous
+
+on:
+  push:
+    branches:
+      - main
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    defaults:
+      run:
+        shell: bash
+
+    strategy:
+      matrix:
+        os: [ macos-latest, ubuntu-latest, windows-latest ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+      - name: Get Version
+        id: package-version
+        run: |
+          PACKAGE_JSON_PATH="${1-.}"
+          PACKAGE_VERSION=$(cat ${PACKAGE_JSON_PATH}/package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+          echo ::set-output name=current-version::$PACKAGE_VERSION
+      - name: Get Build Number
+        id: get-ver-build
+        run: |
+          build=$(echo ${{ github.sha }} | cut -c1-7)
+          echo "::set-output name=build::$build"
+      - uses: actions/setup-node@v4.1.0
+        name: Setup Node
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: |
+          yarn install
+          yarn run publish

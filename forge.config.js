@@ -40,6 +40,21 @@ module.exports = {
       config: {},
     },
   ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'kawuchuu',
+          name: 'firetail'
+        },
+        prerelease: true,
+        force: true,
+        generateRelease: true,
+        draft: true
+      }
+    }
+  ],
   plugins: [
     {
       name: '@electron-forge/plugin-auto-unpack-natives',
