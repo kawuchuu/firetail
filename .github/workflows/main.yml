@@ -42,4 +42,8 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install
+      - name: Build and publish artifacts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
           yarn run publish
