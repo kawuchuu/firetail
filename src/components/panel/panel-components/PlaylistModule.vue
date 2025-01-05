@@ -76,7 +76,7 @@ export default {
                     await window.ipcRenderer.invoke('updatePlaylist', {
                         column: 'hasImage',
                         id: playlist.id,
-                        data: 1,
+                        data: 0,
                     })
                 }
                 playlists = await window.ipcRenderer.invoke('updatePlaylist', {
@@ -109,15 +109,6 @@ export default {
         async removeImage() {
           this.image = null;
           this.imageBlob = null;
-          const playlist = this.$attrs.props.playlist
-          console.log(playlist)
-          if (playlist.hasImage) {
-            await window.ipcRenderer.invoke('updatePlaylist', {
-              column: 'hasImage',
-              id: playlist.id,
-              data: 0,
-            })
-          }
         }
     },
     computed: {

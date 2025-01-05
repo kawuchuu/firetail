@@ -58,6 +58,8 @@ export default {
     overflow-x: hidden;
     overflow-y: scroll;
     height: 100%;
+    mask-image: linear-gradient(to top, transparent, #000 30px);
+    margin-bottom: 20px;
 }
 
 .side-bar-inner-container::-webkit-scrollbar {

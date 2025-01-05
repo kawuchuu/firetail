@@ -1,11 +1,10 @@
 <template>
     <div class="root-sl" :class="isSimple" v-show="list.length > 0 || $route.path === '/songs' || $route.path === '/playlist' || $route.path === '/liked'">
         <div class="standard" v-if="$route.path === '/songs' || $route.path === '/playlist'">
-            <div v-if="$route.path === '/songs'" class="bg-gradient">
-                <div class="list-gradient-fade" />
-                <div class="bg-fade-bottom" />
+            <div class="special-gradient-bg-wrapper">
+                <div class="bg-gradient-layer"></div>
                 <div class="bg-noise" />
-                <div :style="parallax" class="bg-banner" />
+                <div class="bg-image" :style="parallax" />
             </div>
         </div>
         <div class="bg-inner" :class="currentScroll">
@@ -500,15 +499,53 @@ export default {
 .bg-gradient {
     position: absolute;
     width: 100%;
-    height: 600px;
+    height: 450px;
+    max-height: 450px;
+    //background-color: #5e00da;
+    background-position: center;
+    background-size: 150%;
+    background-repeat: no-repeat;
     top: 0;
-    z-index: 0;
+    z-index: -1;
+    overflow: hidden;
+    transform: scale(1.3);
+    opacity: 0.55;
 }
 
-.list-gradient-fade {
+.bg-gradient-layer {
+    position: absolute;
     width: 100%;
     height: 600px;
+    background: linear-gradient(transparent, var(--bg)), radial-gradient(farthest-corner at 5% 10%, transparent 5%, var(--bg));
+    top: 0;
+    z-index: 1;
+}
+
+.bg-image {
+    width: 100%;
+    height: 100%;
+    max-height: 450px;
+    background: linear-gradient(transparent, transparent, var(--bg)), radial-gradient(circle at top, transparent 40%, var(--bg)), url('../../assets/songs-banner-new.png');
+    background-size: cover;
+    background-position: center 80%;
+    z-index: -2;
     position: absolute;
+    animation: fadeIn 1s;
+}
+
+.special-gradient-bg-wrapper {
+    max-height: 600px;
+    height: 600px;
+    width: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+}
+
+.special-gradient-bg-wrapper .bg-noise {
+    max-height: 600px;
+    z-index: 0;
+    background-size: 400px;
 }
 
 .bg-fade-bottom {

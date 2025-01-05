@@ -37,8 +37,8 @@ export default {
 
 .gradient {
     position: absolute;
-    width: 450px;
-    height: 165px;
+    width: 520px;
+    height: 205px;
     bottom: 0;
     background: radial-gradient(
             100% 100% at bottom left,

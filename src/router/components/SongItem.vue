@@ -430,9 +430,12 @@ html.light {
 .list-album,
 .list-duration {
     overflow: hidden;
-    text-overflow: ellipsis;
     pointer-events: none;
     white-space: nowrap;
+}
+
+.list-title, .list-artist, .list-album {
+    mask-image: -webkit-linear-gradient(180deg, transparent, #000 25px);
 }
 
 .list-artist {

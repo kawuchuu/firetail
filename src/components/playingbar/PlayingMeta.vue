@@ -259,7 +259,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     margin-left: 15px;
-    -webkit-mask-image: -webkit-linear-gradient(180deg, transparent, #000 20px);
+    mask-image: linear-gradient(to left, transparent, #000 20px);
     z-index: 2;
 }
 
@@ -327,6 +327,8 @@ export default {
     font-size: 12px;
     overflow: hidden;
     line-height: 15px;
+    white-space: nowrap;
+    width: fit-content;
 }
 
 .favourite-icon {

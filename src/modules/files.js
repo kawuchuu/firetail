@@ -5,7 +5,7 @@ import { promises as fs, constants as fsConstants } from 'fs'
 import { app, BrowserWindow } from 'electron'
 import mime from 'mime-types'
 import { resolve } from 'path'
-import jimp from "jimp";
+import { Jimp } from "jimp";
 
 let randomString = length => {
     let text = ''
@@ -103,6 +103,7 @@ export default {
         return await getData
     },
     async savePlaylistImage(buffer, id) {
+        console.log(buffer, id)
         if (buffer) {
             const playlistImgPath = resolve(app.getPath('userData'), 'images/playlist')
             try {
@@ -110,21 +111,13 @@ export default {
             } catch(e) {
                 await fs.mkdir(playlistImgPath)
             }
-             /*sharp(Buffer.from(buffer))
-                .toFormat('jpg')
-                .resize({
-                    width: 256,
-                    height: 256,
-                    fit: 'cover',
-                    withoutEnlargement: true
-                })
-                .toFile(`${playlistImgPath}/${id}.jpg`)
-                .catch(err => {
-                    console.error(err)
-                })*/
-            const image = await jimp.read(Buffer.from(buffer))
-            await image.cover(256, 256)
-            await image.writeAsync(`${playlistImgPath}/${id}.jpg`)
+            try {
+                const image = await Jimp.read(Buffer.from(buffer))
+                await image.cover({w: 256, h: 256})
+                await image.write(`${playlistImgPath}/${id}.jpg`)
+            } catch(err) {
+                console.error(err)
+            }
         }
     }
 }

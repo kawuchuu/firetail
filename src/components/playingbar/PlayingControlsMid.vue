@@ -2,7 +2,7 @@
     <div class="track-controls" :class="[queueNotEmpty, enableBtn]">
         <div class="track-controls-inner-container">
             <div class="control-buttons">
-<!--                <PlayingControlsRight class="mid" :class="rightControlsActive ? 'shown' : ''" />-->
+                <PlayingControlsRight class="mid" :class="rightControlsActive ? 'shown' : ''" />
                 <i class="ft-icon expand" :class="rightControlsActive ? 'shown' : ''" @click="rightControlsActive = !rightControlsActive">arrow-head-up</i>
                 <i class="ft-icon repeat-shuffle" :title="$t('TOOLTIP.SHUFFLE')" @click="shuffle" :class="isShuffled" role="button" aria-label="Shuffle" tabindex="0">shuffle</i>
                 <i class="ft-icon skip-prev" :title="$t('TOOLTIP.PREVIOUS')" @click="prev" role="button" aria-label="Previous song" tabindex="0">previous</i>
