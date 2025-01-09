@@ -1,5 +1,6 @@
 html.dark {
     --back-bg: #000000 !important;
+    --back-bg-rgb: 0,0,0 !important;
     --bg: #18171c !important;
     --bg-op: #18171ca8 !important;
     --fg-bg: #2b2838 !important;
@@ -32,9 +33,10 @@ html.dark {
 
 html.light {
     --back-bg: #e8e5f3 !important;
+    --back-bg-rgb: 232,229,243 !important;
     --sub-fg: #dedbe4 !important;
     --fg-bg: #d3cbf3 !important;
-    --bd: #b4b4b4 !important;
+    --bd: #b5aed3 !important;
     --button: #c6bde8 !important;
     --hl-txt: #d44835 !important;
     --hl-op: #eb6e642a !important;
@@ -43,15 +45,9 @@ html.light {
         background-color: var(--bg) !important;
     } */
 
-    .bg-banner {
-        background-image: url('../assets/songs-banner-new.png');
-    }
-
     .bg-banner, .special-gradient-bg-wrapper .bg-image {
-        filter: invert(1) hue-rotate(170deg);
-    }
-
-    .special-gradient-bg-wrapper .bg-image {
+        opacity: 0.45;
+        filter: invert(1) hue-rotate(170deg) saturate(2) !important;
         background: linear-gradient(transparent, transparent, #0c0c0c), radial-gradient(circle at top, transparent 40%, #0c0c0c), url(../assets/songs-banner-new.png);
         background-size: cover;
         background-position: center 80%;

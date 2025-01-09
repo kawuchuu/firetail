@@ -275,7 +275,6 @@ export default {
     background-position: center !important;
     background-size: cover !important;
     transition: .1s;
-    box-shadow: 0 0 50px var(--back-bg);
 }
 
 @keyframes scroll {

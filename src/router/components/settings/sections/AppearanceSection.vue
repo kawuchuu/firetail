@@ -31,7 +31,7 @@ export default {
                     document.documentElement.classList.remove('dark')
                     document.documentElement.classList.add('light')
                     window.ipcRenderer.send('colour-theme-change', {
-                        bg: '#dfdfdf',
+                        bg: '#e8e5f3',
                         fg: '#242424',
                         blurFg: '#24242480'
                     })

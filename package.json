@@ -5,7 +5,7 @@
   "description": "Audio Player",
   "main": ".webpack/main",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "electron-forge start -- --enable-logging",
     "start-rtl": "electron-forge start -- --force-ui-direction=rtl",
     "start-wayland": "electron-forge start -- --enable-features=UseOzonePlatform --ozone-platform=wayland",
     "package": "electron-forge package",
