@@ -21,7 +21,12 @@
     "UNKNOWN_DESC": "Sorry about that. If you believe this is an error, please create an issue here."
   },
   "TOP_TITLE": {
-    "COUNT_TYPE_SONGS": "{count} song | {count} songs"
+    "COUNT_TYPE_SONGS": "{count} song | {count} songs",
+    "TIME": {
+      "HOURS": "{count} hour | {count} hours",
+      "MINUTES": "{count} minute | {count} minutes",
+      "SECONDS": "{count} second | {count} seconds"
+    }
   },
   "SONG_LIST": {
     "LIST_TITLE": "Title",

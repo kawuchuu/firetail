@@ -32,7 +32,7 @@ export default {
 <template>
     <section class="advanced">
         <SubtitleOption>{{$t("SETTINGS.SUBTITLES.ADVANCED")}}</SubtitleOption>
-        <SwitchOption :label="$t('SETTINGS.SHOW_FILE_CODEC')" :init-enabled="advancedFileInfoEnabled" :action="advancedFileInfoAction" />
+        <SwitchOption :label="$t('SETTINGS.SHOW_FILE_CODEC')" :store-key="'fileCodec'" :store-category="'switchVx'" />
         <SwitchOption :label="$t('SETTINGS.FORCE_RTL')" :init-enabled="false" />
         <SwitchOption :label="$t('SETTINGS.DEBUG_MODE')" :store-key="'debugMode'" :store-category="'switchVx'" />
         <ButtonOption v-if="$store.state.nav.debugMode" :action="showTour" :label="'Launch first start tour'" :btn-label="'Start tour'" />

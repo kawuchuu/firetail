@@ -22,7 +22,7 @@
                     <p v-if="$route.path === '/albums' && list[0]">
                       <span v-if="list[0].albumArtist">{{ list[0].albumArtist }} • </span>
                       <span v-if="list[0].year">{{ list[0].year }}</span>
-                      <span v-if="list[0].genre"> • <span v-for="item in JSON.parse(list[0].genre)">{{item}}, </span></span>
+<!--                      <span v-if="list[0].genre"> • <span v-for="item in JSON.parse(list[0].genre)">{{`item`}}</span></span>-->
                     </p>
                     <p v-else>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}}</p>
                 </div>
@@ -70,7 +70,7 @@
                 />
                 <div class="extra-list-info">
                   <p>{{ $tc('TOP_TITLE.COUNT_TYPE_SONGS', screenCountNum, { count: $n(screenCountNum) })}}</p>
-                  <p><span v-if="totalDuration.hours > 0">{{ totalDuration.hours }} hours, </span><span v-if="totalDuration.mins > 0">{{ totalDuration.mins }} minutes, </span><span>{{ totalDuration.secs }} seconds</span></p>
+                  <p><span v-if="totalDuration.hours > 0">{{ $tc('TOP_TITLE.TIME.HOURS', totalDuration.hours, { count: $n(totalDuration.hours) })}}, </span><span v-if="totalDuration.mins > 0">{{ $tc('TOP_TITLE.TIME.MINUTES', totalDuration.mins, { count: $n(totalDuration.mins) })}}, </span><span>{{ $tc('TOP_TITLE.TIME.SECONDS', totalDuration.secs, { count: $n(totalDuration.secs) })}}</span></p>
                 </div>
                 <div class="fixed-songload" v-if="list.length < 1 && $store.state.audio.isLoadingSongs">
                     <div class="inner-songload">
@@ -109,7 +109,8 @@ export default {
             activeSize: 'large',
             topTitleTxt: this.$t('ROUTER.ALL_SONGS'),
             justChanged: false,
-            performingMultiDrag: false
+            performingMultiDrag: false,
+            routeQuery: this.$route.query,
         }
     },
     computed: {
@@ -418,7 +419,8 @@ export default {
         }
     },
     watch: {
-        topTitleText() {
+        routeQuery() {
+            console.log(this.routeQuery)
             const topHeader = this.$refs.header
             if (topHeader.getBoundingClientRect().height === 0) return
             topHeader.style.fontSize = this.titleSizes.large

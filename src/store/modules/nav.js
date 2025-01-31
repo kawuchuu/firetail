@@ -135,7 +135,7 @@ const state = () => ({
     },
     highContrastEnabled: false,
     reduceMotionEnabled: false,
-    advancedFileInfo: window.localStorage.getItem('advancedFileInfo') === 'true',
+    advancedFileInfo: false,
     colourBarEnabled: true,
     rtl: false,
     debugMode: false,
@@ -218,7 +218,7 @@ const mutations = {
     updateCheckNav(state, nav) {
         state.checkNav = nav
     },
-    updateAdvancedFileInfo(state, enabled) {
+    fileCodec(state, enabled) {
         state.advancedFileInfo = enabled
     },
     updateHighContrast(state, enabled) {

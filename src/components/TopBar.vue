@@ -5,7 +5,7 @@
                 <TopNav v-for="item in nav" :key="item.type" :nav="item"/>
             </div>
             <div class="nav-top-buttons">
-                <div class="std-top-btn search-btn" :class="showSearch ? 'active' : ''">
+                <div class="std-top-btn search-btn" ref="searchButton" :class="showSearch ? 'active' : ''">
                     <i class="ft-icon" @click="showSearch = !showSearch">{{showSearch ? 'close' : 'search'}}</i>
                     <input @keydown="checkEsc" @focus="focused" @blur="unfocused" type="text" ref="search" placeholder="Search..." v-model="searchInput" @input="typingSearch">
                 </div>
@@ -15,7 +15,7 @@
                 <div v-if="platform === 'win32'" class="divider" />
             </div>
         </div>
-        <SearchPopup :results="searchOutput" :active="showSearch ? 'active' : ''" />
+        <SearchPopup ref="popup" :results="searchOutput" :active="showSearch ? 'active' : ''" />
     </div>
 </template>
 
@@ -70,6 +70,9 @@ export default {
                 return
             }
             this.searchOutput = result
+        },
+        popupClick(evt) {
+            this.showSearch = this.$refs.popup.$el.contains(evt.target) || this.$refs.searchButton.contains(evt.target)
         }
     },
     watch: {
@@ -84,6 +87,12 @@ export default {
         return {
             closeSearch: this.closeSearch
         }
+    },
+    destroyed() {
+        window.removeEventListener('click', this.popupClick)
+    },
+    created() {
+        window.addEventListener('click', this.popupClick)
     }
 }
 </script>

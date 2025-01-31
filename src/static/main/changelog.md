@@ -17,7 +17,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Screen reader support
 - Added performance mode for low-end devices
 - Added total time in song list headers
-- Added genres in album song list headers
 - Added album artist name to album view
 - Added song details when hovering over song title/artist in playing bar
 - Added additional 'advanced' information to about section in settings page

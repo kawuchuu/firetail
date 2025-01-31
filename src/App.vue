@@ -218,7 +218,7 @@ export default {
         }
         if (theme === 'light') {
             window.ipcRenderer.send('colour-theme-change', {
-                bg: '#dfdfdf',
+                bg: '#e8e5f3',
                 fg: '#242424',
                 blurFg: '#24242480'
             })
@@ -403,7 +403,7 @@ html.light {
 .container {
     // ugh they just HAD to remove overflow overlay right when people start using it. staying on chromium 112 for as long as i can.
     //noinspection CssInvalidPropertyValue
-    overflow: overlay;
+    overflow: auto;
     position: fixed;
     height: calc(100% - 129px);
     width: calc(100% - var(--sidebar-width));
