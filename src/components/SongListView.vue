@@ -51,7 +51,7 @@ function updateScroll() {
 async function updateBackgroundArt() {
   if (route.params.albumArtist && route.params.album) {
     bgImagePath.value = await getArt(route.params.albumArtist, route.params.album);
-  } else bgImagePath = '';
+  } else bgImagePath.value = '';
 }
 
 const getImage = computed( () => {

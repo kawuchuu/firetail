@@ -10,11 +10,15 @@ interface SongsSum {
   sum: number
 }
 
-onMounted(() => {
+function getSongs() {
   const allSongs:SongsSum = window.library.getAllSongs();
-  console.log(allSongs);
   songList.value = allSongs.songs;
   listLength.value = allSongs.sum;
+}
+
+onMounted(() => {
+  getSongs();
+  window.library.onRefreshView(getSongs);
 });
 </script>
 

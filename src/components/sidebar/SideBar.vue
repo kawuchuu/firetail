@@ -28,10 +28,8 @@ import SidebarTitle from "./SidebarTitle.vue";
 .item-container {
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
-    overflow-y: scroll;
     height: calc(100% - 24px);
-    padding: 12px 0px 12px 12px;
+    padding: 12px;
 }
 
 .darwin .item-container {

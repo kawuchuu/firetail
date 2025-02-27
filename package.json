@@ -12,15 +12,18 @@
     "lint": "eslint --ext .ts,.tsx ."
   },
   "devDependencies": {
-    "@electron-forge/cli": "^7.4.0",
-    "@electron-forge/maker-deb": "^7.4.0",
-    "@electron-forge/maker-rpm": "^7.4.0",
-    "@electron-forge/maker-squirrel": "^7.4.0",
-    "@electron-forge/maker-zip": "^7.4.0",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
-    "@electron-forge/plugin-fuses": "^7.4.0",
-    "@electron-forge/plugin-vite": "^7.4.0",
+    "@electron-forge/cli": "^7.7.0",
+    "@electron-forge/maker-deb": "^7.7.0",
+    "@electron-forge/maker-rpm": "^7.7.0",
+    "@electron-forge/maker-squirrel": "^7.7.0",
+    "@electron-forge/maker-zip": "^7.7.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.7.0",
+    "@electron-forge/plugin-fuses": "^7.7.0",
+    "@electron-forge/plugin-vite": "^7.7.0",
+    "@electron-forge/shared-types": "^7.7.0",
     "@electron/fuses": "^1.8.0",
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/mime": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "@vitejs/plugin-vue": "^5.0.5",
@@ -30,7 +33,7 @@
     "eslint-plugin-import": "^2.25.0",
     "ts-node": "^10.0.0",
     "typescript": "~4.5.4",
-    "vite": "^5.0.12"
+    "vite": "^6.2.0"
   },
   "keywords": [],
   "author": {
@@ -39,11 +42,10 @@
   },
   "license": "GPL-3.0",
   "dependencies": {
-    "@types/better-sqlite3": "^7.6.11",
     "better-sqlite3": "^11.1.2",
     "electron-squirrel-startup": "^1.0.1",
-    "mime-types": "^2.1.35",
-    "music-metadata": "^10.3.1",
+    "mime": "3",
+    "music-metadata": "^10.8.2",
     "overlayscrollbars": "^2.10.0",
     "overlayscrollbars-vue": "^0.5.9",
     "sass": "^1.77.5",
@@ -51,5 +53,6 @@
     "vue-i18n": "9",
     "vue-router": "4",
     "vue-virtual-scroller": "^2.0.0-beta.8"
-  }
+  },
+  "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
 }

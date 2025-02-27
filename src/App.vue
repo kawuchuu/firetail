@@ -31,9 +31,9 @@ function filesDropped(evt:DragEvent) {
   Array.from(evt.dataTransfer.files).forEach(f => {
     /* console.log(f)
     if (!f.type.startsWith('audio')) return; */
-    files.push(f.path)
+    files.push(window.misc.getPathForFile(f));
   })
-  //console.log(files)
+  console.log(files)
   isDraggedOver.value = false;
   window.library.addToLibrary(files);
 }
@@ -50,7 +50,7 @@ onBeforeMount(async () => {
 
 <template>
   <main :class="getPlatform()" @dragover="changeDrag($event, true)">
-    <div :class="isDraggedOver ? 'dragactive': ''" @dragleave="changeDrag($event,false)" class="drag-indicator">
+    <div :class="isDraggedOver ? 'dragactive': ''" @dragleave="changeDrag($event,false)" @drop="filesDropped" class="drag-indicator">
       <div class="drag-msg">
         <h1>Drop your music here</h1>
         <p>You can drop music files and folders with music inside</p>

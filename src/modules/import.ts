@@ -1,13 +1,12 @@
 import {promises as fs, statSync, writeFile} from "fs";
 import {resolve} from "path";
-import mime from 'mime-types';
+import mime from 'mime';
 import {app, BrowserWindow} from "electron";
 import FiretailSong from "../types/FiretailSong";
 import {timeFormat} from "./timeformat";
 // eslint-disable-next-line import/no-unresolved
-import * as metadata from 'music-metadata';
+import {IAudioMetadata} from 'music-metadata';
 // eslint-disable-next-line import/no-unresolved
-import {IAudioMetadata} from "music-metadata";
 
 function randomString(length:number) {
     let text = '';
@@ -31,6 +30,7 @@ export async function processFiles(files:string[]) {
     let processFiles:Array<string[]> = []
     for (const index in files) {
         const file = files[index];
+        console.log(files)
         const stat = statSync(file);
         if (stat.isDirectory()) {
             const dirFiles = await getFiles(file);
@@ -38,7 +38,7 @@ export async function processFiles(files:string[]) {
         } else {
             const fileName = resolve(file).split('/');
             const ext = fileName[fileName.length - 1].split('.').pop();
-            const isAudio = mime.lookup(ext);
+            const isAudio = mime.getType(ext);
             if (isAudio && isAudio.startsWith('audio')) {
                 processFiles.push([file, fileName[fileName.length - 1]]);
             }
@@ -49,13 +49,16 @@ export async function processFiles(files:string[]) {
 
 export async function addFiles(songs:Array<string[]>) {
     const path = app.getPath('userData');
-    const getData = new Promise(resolve => {
+    const getData:Promise<FiretailSong[]> = new Promise(resolve => {
         const toAdd:FiretailSong[] = [];
         const imgUsed:string[] = [];
         let progress = 0;
         songs.forEach(async f => {
             const id =  randomString(10)
-            const meta:IAudioMetadata | void = await metadata.parseFile(f[0]).catch(err => {
+            // we have to do this because of dumb cjs/esm stuff
+            // eslint-disable-next-line import/no-unresolved
+            const musicMetadata = await import('music-metadata');
+            const meta:IAudioMetadata | void = await musicMetadata.parseFile(f[0]).catch(err => {
                 console.log(err);
             })
             if (!meta) return;

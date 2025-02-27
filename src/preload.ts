@@ -1,4 +1,4 @@
-import {contextBridge, ipcRenderer} from 'electron';
+import {contextBridge, ipcRenderer, webUtils} from 'electron';
 
 contextBridge.exposeInMainWorld('library', {
   getAllSongs: () => ipcRenderer.sendSync('getAllSongs'),
@@ -6,7 +6,7 @@ contextBridge.exposeInMainWorld('library', {
   getAllFromMatchingColumns: (column: string, value: string) => ipcRenderer.sendSync('getAllFromMatchingColumns', [column, value]),
   getAllFromAlbum: (album: string, albumArtist: string) => ipcRenderer.sendSync('getAllFromAlbum', [album, albumArtist]),
   addToLibrary: (locations:string[]) => ipcRenderer.send('addToLibrary', locations),
-  refreshView: (callback) => ipcRenderer.on('refreshView', (_event, value) => callback(value))
+  onRefreshView: (callback) => ipcRenderer.on('refreshView', (_event, value) => callback(value))
 });
 
 contextBridge.exposeInMainWorld('path', {
@@ -36,6 +36,7 @@ contextBridge.exposeInMainWorld('ftStoreSync', {
 
 contextBridge.exposeInMainWorld('misc', {
   openLink: (link: string) => ipcRenderer.invoke('openLink', link),
+  getPathForFile: (file: File) => webUtils.getPathForFile(file),
 });
 
 contextBridge.exposeInMainWorld('setupApp', {

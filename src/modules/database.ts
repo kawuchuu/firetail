@@ -8,8 +8,12 @@ class FiretailDB {
   db: Database;
 
   constructor() {
-    this.db = new DatabaseConstructor(`${app.getPath('userData')}/library.db`);
+    this.db = new DatabaseConstructor(`${app.getPath('userData')}/${app.isPackaged ? 'library' : 'library-dev'}.db`);
     this.db.pragma('journal_mode = WAL');
+    const tableCount:any = this.db.prepare("SELECT COUNT(*) AS amount FROM sqlite_master WHERE type='table'").all();
+    if (tableCount[0].amount <= 0) {
+      this.setupNewDatabase();
+    }
     this.startDBIpc();
   }
 
@@ -39,9 +43,9 @@ class FiretailDB {
 
   addToLibrary(songs:FiretailSong[]) {
     const existingSongs:FiretailSong[] = this.getAllSongs().songs;
-    const insert = db.prepare(`INSERT INTO library (title, artist, allArtists, albumArtist, album, duration, realdur, path, id, hasImage, trackNum, year, disc, explicit, genre) VALUES (@title, @artist, @allArtists, @albumArtist, @album, @duration, @realdur, @path, @id, @hasImage, @trackNum, @year, @disc, @explicit, @genre)`);
-    const insertMany = db.transaction((newSongs) => {
-      for (const song:FiretailSong of newSongs) {
+    const insert = this.db.prepare(`INSERT INTO library (title, artist, allArtists, albumArtist, album, duration, realdur, path, id, hasImage, trackNum, year, disc, explicit, genre) VALUES (@title, @artist, @allArtists, @albumArtist, @album, @duration, @realdur, @path, @id, @hasImage, @trackNum, @year, @disc, @explicit, @genre)`);
+    const insertMany = this.db.transaction((newSongs: FiretailSong[]) => {
+      for (const song of newSongs) {
         if (existingSongs.map(e => { return e.path }).indexOf(song.path) === -1) {
           insert.run(song);
         }
@@ -70,10 +74,18 @@ class FiretailDB {
     ipcMain.on('addToLibrary', async (event, locations:string[]) => {
       if (locations.length <= 0) return;
       const finalPaths = await processFiles(locations);
-      const performAddFiles = await addFiles(finalPaths);
+      const performAddFiles:FiretailSong[] = await addFiles(finalPaths);
       this.addToLibrary(performAddFiles);
       mainWindow.webContents.send('refreshView');
     });
+  }
+
+  setupNewDatabase() {
+    this.db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, allArtists text, albumArtist text, album text, duration text, realdur number, path text, id text, hasImage number, trackNum number, year text, disc number, explicit number, genre text)').run()
+    this.db.prepare('CREATE TABLE IF NOT EXISTS albums (title text, albumArtist text, albumType text)')
+    this.db.prepare('CREATE TABLE IF NOT EXISTS favourites (id text)').run()
+    this.db.prepare('CREATE TABLE IF NOT EXISTS playlists (name text, desc text, id text, songIds text, hasImage number)').run()
+    this.db.prepare('CREATE TABLE IF NOT EXISTS stats (id text, plays number, lastplay number)').run()
   }
 }
 
