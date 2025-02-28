@@ -1,23 +1,16 @@
 <script setup lang="ts">
-import Albums from "../types/Albums";
+import {Albums, AlbumsDB} from "../types/Albums";
 import {formatArtPath, getImagePath} from "../modules/art";
 import {onMounted, ref} from "vue";
+import SideListItem from "./SideListItem.vue";
 
 const props = defineProps<{
-  albums: Albums[]
+  albums: AlbumsDB[],
+  eps: AlbumsDB[],
+  singles: AlbumsDB[]
 }>();
 
 const path = ref('');
-
-// TODO: improve performance of this.
-function getImage(item: Albums) {
-  console.log('IS IT WORKING')
-  if (item.album && item.albumArtist) {
-    const imagePath = formatArtPath(path.value, item.albumArtist, item.album);
-    console.log(imagePath);
-    return `background-image: url('${imagePath}')`;
-  } else return '';
-}
 
 onMounted(() => {
   path.value = getImagePath();
@@ -26,15 +19,12 @@ onMounted(() => {
 
 <template>
   <div class="side-list-container">
-    <div class="list-items" v-for="item in albums" :key="`${item.album}_${item.albumArtist}`">
-      <router-link :to="`/albums/${encodeURIComponent(item.albumArtist)}/${encodeURIComponent(item.album)}`">
-        <div class="item-img" :style="getImage(item)"/>
-        <div class="item-info">
-          <span class="title">{{ item.album }}</span>
-          <span class="album-artist">{{ item.albumArtist }}</span>
-        </div>
-      </router-link>
-    </div>
+    <p class="album-category-label"><span>Albums</span></p>
+    <SideListItem v-for="item in albums" :key="`${item.title}_${item.albumArtist}`" :item="item" :path="path" />
+    <p class="album-category-label"><span>EPs</span></p>
+    <SideListItem v-for="item in eps" :key="`${item.title}_${item.albumArtist}`" :item="item" :path="path" />
+    <p class="album-category-label"><span>Singles</span></p>
+    <SideListItem v-for="item in singles" :key="`${item.title}_${item.albumArtist}`" :item="item" :path="path" />
   </div>
 </template>
 
@@ -57,81 +47,31 @@ onMounted(() => {
   transition-property: width;
 }
 
-.list-items {
-  height: 63px;
-  border-radius: 10px;
-}
-
-.list-items a span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  opacity: 0.65;
-  padding-right: 10px;
-}
-
-.router-link-exact-active {
-  background-color: var(--button);
-  border-radius: 10px;
-  cursor: default;
-}
-
-.list-items a.router-link-exact-active .title {
-  opacity: 1;
-  font-weight: 600;
-}
-
-.list-items a.router-link-exact-active .album-artist {
-  opacity: 1;
-}
-
-.list-items a {
+.album-category-label {
+  border-bottom: solid 1px var(--bd);
+  padding: 0 0 10px 10px;
+  margin: 30px 0 10px 0;
+  transition: font-size 0.5s cubic-bezier(0, 1, 0.35, 1);
+  height: 20px;
   display: flex;
-  align-items: center;
-  height: 100%;
-  border-radius: 10px;
+  align-items: flex-end;
 }
 
-.item-info {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background-color: transparent !important;
-
-  .title {
-    font-size: 0.95em;
-    margin-left: 6px;
-  }
-
-  .album-artist {
-    font-size: 0.8em;
-    margin-top: 5px;
-    font-weight: normal !important;
-    margin-left: 6px;
-  }
-}
-
-.list-items:hover {
-  a span {
-    opacity: 1;
-  }
-}
-
-.item-img {
-  min-width: 45px;
-  min-height: 45px;
-  margin: 0px 9px;
-  background-color: var(--back-bg);
-  border-radius: 3px;
-  background-image: url('../assets/no_album.svg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+.album-category-label:first-child {
+  margin-top: 10px;
 }
 
 @media (max-width: 1350px) {
   .side-list-container:hover {
     width: 300px;
+  }
+
+  .side-list-container .album-category-label {
+    font-size: 0.8em;
+  }
+
+  .side-list-container:hover .album-category-label {
+    font-size: 1em;
   }
 
   .side-list-container::-webkit-scrollbar-thumb {

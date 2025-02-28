@@ -3,6 +3,7 @@ import {app, ipcMain} from 'electron';
 import FiretailSong from "../types/FiretailSong";
 import {addFiles, processFiles} from "./import";
 import {mainWindow} from "../main";
+import {Albums, AlbumsDB} from "../types/Albums";
 
 interface Sum {
   sum: number;
@@ -29,6 +30,7 @@ class FiretailDB {
       //TODO: handle unexpected newer database versions
     }
     this.startDBIpc();
+    this.determineAlbums();
   }
 
   getAllSongs() {
@@ -39,7 +41,12 @@ class FiretailDB {
   }
 
   getAllAlbums() {
-    return this.db.prepare("SELECT DISTINCT albumArtist,album FROM library ORDER BY album COLLATE NOCASE").all();
+    const albumTypes:Map<string, AlbumsDB[]> = new Map();
+    ["album", "ep", "single"].forEach((albumType) => {
+      const getAlbums = this.db.prepare("SELECT * FROM albums WHERE albumType = ? ORDER BY title COLLATE NOCASE").all(albumType) as AlbumsDB[];
+      albumTypes.set(albumType, getAlbums);
+    });
+    return albumTypes;
   }
 
   getAllFromMatchingColumn(column: string, value: string) {
@@ -66,6 +73,23 @@ class FiretailDB {
       }
     })
     insertMany(songs);
+  }
+
+  determineAlbums() {
+    const getAllAlbums = this.db.prepare("SELECT album, albumArtist, SUM(realdur) AS dur, COUNT(*) AS amount FROM library GROUP BY album, albumArtist").all() as Albums[];
+    const insert = this.db.prepare("INSERT OR IGNORE INTO albums (title, albumArtist, albumType) VALUES (@title, @albumArtist, @albumType)");
+    this.db.transaction((newAlbums: Albums[]) => {
+      for (const album of newAlbums) {
+        let albumType = 'album';
+        if ((album.amount >= 1 && album.amount <= 3) || (album.dur < 600 && album.amount <= 6)) albumType = 'single';
+        else if (album.amount <= 6 && album.dur < 1800) albumType = 'ep';
+        insert.run({
+          title: album.album,
+          albumArtist: album.albumArtist,
+          albumType
+        })
+      }
+    })(getAllAlbums);
   }
 
   startDBIpc() {
@@ -96,7 +120,7 @@ class FiretailDB {
 
   setupNewDatabase() {
     this.db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, allArtists text, albumArtist text, album text, duration text, realdur number, path text, id text, hasImage number, trackNum number, year text, disc number, explicit number, genre text)').run();
-    this.db.prepare('CREATE TABLE IF NOT EXISTS albums (title text, albumArtist text, albumType text)').run();
+    this.db.prepare('CREATE TABLE IF NOT EXISTS albums (title text, albumArtist text, albumType text, UNIQUE(title, albumArtist))').run();
     this.db.prepare('CREATE TABLE IF NOT EXISTS favourites (id text)').run();
     this.db.prepare('CREATE TABLE IF NOT EXISTS playlists (name text, desc text, id text, songIds text, hasImage number)').run();
     this.db.prepare('CREATE TABLE IF NOT EXISTS stats (id text, plays number, lastplay number)').run();
@@ -104,12 +128,14 @@ class FiretailDB {
   }
 
   upgradeDatabase(userVersion: number) {
+    console.log(`Provided database version ${userVersion}. Upgrading to version ${this.targetVersion}...`);
     switch(userVersion) {
       case 0: {
-        this.db.prepare('CREATE TABLE IF NOT EXISTS albums (title text, albumArtist text, albumType text)').run()
+        this.db.prepare('CREATE TABLE IF NOT EXISTS albums (title text, albumArtist text, albumType text, UNIQUE(title, albumArtist))').run()
       }
     }
     this.db.pragma(`user_version=${this.targetVersion}`);
+    console.log(`Database upgrade successful.`);
   }
 
   determineNumber(data: unknown) {

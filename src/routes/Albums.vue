@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, Ref, ref, watch} from "vue";
 import FiretailSong from "../types/FiretailSong";
-import Albums from "../types/Albums";
+import {Albums, AlbumsDB} from "../types/Albums";
 import {useRoute, useRouter} from "vue-router";
 import SideList from "../components/SideList.vue";
 
@@ -12,41 +12,55 @@ interface SongsGenre {
   sum: number
 }
 
+interface Parameters {
+  album: string;
+  albumArtist: string;
+}
+
 const songList: Ref<FiretailSong[]> = ref([]);
 const listLength: Ref<number> = ref(0);
 const genres: Ref<string[]> = ref([]);
 const artists: Ref<string[]> = ref([]);
-const albumList: Ref<Albums[]> = ref([]);
+const albumList: Ref<Map<string,AlbumsDB[]>> = ref();
 const listName = ref("Albums");
 const artistName = ref("Artists");
+
+const regularAlbums: Ref<AlbumsDB[]> = ref();
+const eps: Ref<AlbumsDB[]> = ref();
+const singles: Ref<AlbumsDB[]> = ref();
 
 const route = useRoute();
 const router = useRouter();
 
 watch(() => route.params, getNewAlbumData, { immediate: true });
 
-function getNewAlbumData(album: Albums) {
+function getNewAlbumData(album: Parameters) {
   const songsAndGenres:SongsGenre = window.library.getAllFromAlbum(album.album, album.albumArtist);
   songList.value = songsAndGenres.songs;
   genres.value = songsAndGenres.genres;
   artists.value = songsAndGenres.artists;
   listLength.value = songsAndGenres.sum;
-  console.log(artists.value);
+  console.log(album);
   listName.value = album.album;
   artistName.value = album.albumArtist;
 }
 
 onMounted(() => {
-  const albums:Albums[] = window.library.getAllAlbums();
+  const albums:Map<string, AlbumsDB[]> = window.library.getAllAlbums();
   albumList.value = albums;
+  regularAlbums.value = albums.get('album');
+  eps.value = albums.get('ep');
+  singles.value = albums.get('single');
   if (route.params.album) return;
-  router.replace(`/albums/${encodeURIComponent(albums[0].albumArtist)}/${encodeURIComponent(albums[0].album)}`);
+  router.replace(`/albums/${encodeURIComponent(albums.get('album')[0].albumArtist)}/${encodeURIComponent(albums.get('album')[0].title)}`);
 })
 </script>
 
 <template>
   <div class="albums-view-container">
-    <SideList :albums="albumList" />
+    <SideList :albums="regularAlbums"
+              :eps="eps"
+              :singles="singles" />
     <div class="song-list-container">
       <RouterView v-slot="{ Component }">
         <component
