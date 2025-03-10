@@ -49,15 +49,15 @@ export async function processFiles(files:string[]) {
 
 export async function addFiles(songs:Array<string[]>) {
     const path = app.getPath('userData');
+    // we have to do this because of dumb cjs/esm stuff
+    // eslint-disable-next-line import/no-unresolved
+    const musicMetadata = await import('music-metadata');
     const getData:Promise<FiretailSong[]> = new Promise(resolve => {
         const toAdd:FiretailSong[] = [];
         const imgUsed:string[] = [];
         let progress = 0;
         songs.forEach(async f => {
             const id =  randomString(10)
-            // we have to do this because of dumb cjs/esm stuff
-            // eslint-disable-next-line import/no-unresolved
-            const musicMetadata = await import('music-metadata');
             const meta:IAudioMetadata | void = await musicMetadata.parseFile(f[0]).catch(err => {
                 console.log(err);
             })

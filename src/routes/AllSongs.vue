@@ -23,11 +23,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <RouterView v-slot="{ Component }">
+  <RouterView v-slot="{ Component }" class="wrapper">
     <component :is="Component" :song-list="songList" :list-length="listLength" :list-name="$t('ROUTER.ALL_SONGS')" />
   </RouterView>
 </template>
 
 <style scoped>
-
+.wrapper {
+  --info-view-width: -16px;
+}
 </style>

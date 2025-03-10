@@ -82,7 +82,7 @@ onMounted(() => {
 <style scoped>
 .albums-view-container {
   --song-list-width: 300px;
-  --info-view-width: 350px;
+  --info-view-width: 450px;
 }
 
 .song-list-container {
@@ -91,6 +91,18 @@ onMounted(() => {
   width: calc(100% - var(--song-list-width) - 16px);
   height: calc(100vh - 44px - 85px);
   --main-border-radius-element: 0px;
+}
+
+@media (max-width: 1600px) {
+  .albums-view-container {
+    --info-view-width: 350px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .albums-view-container {
+    --info-view-width: 250px;
+  }
 }
 
 @media (max-width: 1350px) {

@@ -120,8 +120,8 @@ onMounted(() => {
         <div class="column-sort-info" ref="columnSortInfo" :style="`opacity: ${sortInfoOpacity}`">
           <h2>{{listName}}</h2>
         </div>
-        <div class="column-sort-wrapper" ref="columnSortWrapper" :class="[isSimple ? 'simple' : '', ]">
-          <div class="column-sort" :class="isSticky ? 'sticky' : ''" :style="getColumnSortOffset">
+        <div class="column-sort-wrapper" ref="columnSortWrapper" :class="[isSimple ? 'simple' : '', isSticky ? 'sticky' : '']">
+          <div class="column-sort" :style="getColumnSortOffset">
             <span class="a">#</span>
             <div class="artist-title-album">
               <span class="list-title">{{$t('SONG_LIST.LIST_TITLE')}}</span>
@@ -130,8 +130,8 @@ onMounted(() => {
               <i class="ft-icon favourite-icon"></i>
               <span class="list-duration"><i class="ft-icon">clock</i></span>
             </div>
-            <div class="bg"></div>
           </div>
+          <div class="bg" :style="getColumnSortOffset"></div>
         </div>
       </template>
 <!--      <template #after>
@@ -152,7 +152,6 @@ onMounted(() => {
   width: calc(100% - 32px);
   height: 100%;
   --fixed-width: calc(100vw - var(--sidebar-width));
-  --info-view-width: 0px;
 
   padding: 0 16px;
 
@@ -202,27 +201,27 @@ onMounted(() => {
   grid-template-columns: 3fr 20px 0fr;
 }
 
-.column-sort.sticky {
+.column-sort-wrapper.sticky .column-sort {
   position: fixed;
-  width: calc(var(--fixed-width) - 32px - var(--song-list-width) - var(--info-view-width));
+  width: calc(var(--fixed-width) - 48px - var(--song-list-width) - var(--info-view-width));
   pointer-events: none;
-  border-color: var(--bd);
+  border-color: transparent;
 }
 
-.column-sort .bg {
+.column-sort-wrapper .bg {
   width: calc(var(--fixed-width) - var(--song-list-width));
   height: 42px;
   background: var(--bg);
   border-bottom: solid 1px var(--bd);
-  position: absolute;
-  right: -16px;
-  z-index: -1;
+  position: fixed;
+  right: 0;
+  z-index: 1;
   opacity: 0;
   transition: 0.2s;
   transition-property: opacity;
 }
 
-.column-sort.sticky .bg {
+.column-sort-wrapper.sticky .bg {
   opacity: 1;
 }
 
@@ -334,12 +333,18 @@ onMounted(() => {
 }
 
 @media (max-width: 1600px) {
+  .wrapper {
+    --info-view-width: 350px;
+  }
   .wrapper.show-info-view {
     grid-template-columns: 1fr 350px;
   }
 }
 
 @media (max-width: 1200px) {
+  .wrapper {
+    --info-view-width: 250px;
+  }
   .wrapper.show-info-view {
     grid-template-columns: 1fr 250px;
   }

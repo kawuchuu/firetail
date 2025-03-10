@@ -8,12 +8,12 @@ const props = defineProps<{
   path: string;
 }>();
 
-function getImage(item: AlbumsDB) {
+function getImage() {
   console.log('IS IT WORKING')
-  if (item.title && item.albumArtist) {
-    const imagePath = formatArtPath(props.path, item.albumArtist, item.title);
+  if (props.item.title && props.item.albumArtist) {
+    const imagePath = formatArtPath(props.path, props.item.albumArtist, props.item.title);
     console.log(imagePath);
-    return `background-image: url('${imagePath}')`;
+    return imagePath;
   } else return '';
 }
 </script>
@@ -21,7 +21,7 @@ function getImage(item: AlbumsDB) {
 <template>
   <div class="list-items">
     <router-link :to="`/albums/${encodeURIComponent(item.albumArtist)}/${encodeURIComponent(item.title)}`">
-      <div class="item-img" :style="getImage(item)"/>
+      <img alt="" loading="lazy" class="item-img" :src="getImage()"/>
       <div class="item-info">
         <span class="title">{{ item.title }}</span>
         <span class="album-artist">{{ item.albumArtist }}</span>
@@ -94,6 +94,8 @@ function getImage(item: AlbumsDB) {
 .item-img {
   min-width: 45px;
   min-height: 45px;
+  max-width: 45px;
+  max-height: 45px;
   margin: 0px 9px;
   background-color: var(--back-bg);
   border-radius: 3px;
