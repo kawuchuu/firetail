@@ -12,7 +12,7 @@ module.exports = {
         setupIcon: './build/other/icon.ico'
       },
     },
-    {
+    /*{
       name: '@electron-forge/maker-dmg',
       config: {
         title: "Firetail",
@@ -23,7 +23,7 @@ module.exports = {
           { "x": 192, "y": 344, "type": "file", "path": opts.appPath }
         ]}
       }
-    },
+    },*/
     {
       name: '@electron-forge/maker-deb',
       config: {
@@ -40,6 +40,9 @@ module.exports = {
     {
       name: '@electron-forge/maker-rpm',
       config: {},
+    },
+    {
+      name: '@electron-forge/maker-zip'
     }
   ],
   publishers: [
