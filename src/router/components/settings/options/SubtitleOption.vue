@@ -21,4 +21,10 @@ export default {
 .darwin .subtitle {
     letter-spacing: -0.01em;
 }
+
+.boldText {
+    .subtitle {
+        font-weight: bold;
+    }
+}
 </style>

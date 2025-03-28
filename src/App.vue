@@ -332,7 +332,7 @@ html.light {
         transition: 0.25s;
         transition-property: opacity;
         transform: translateX(17px);
-        -webkit-mask-image: -webkit-linear-gradient(180deg, transparent, #000 25px);
+        mask-image: linear-gradient(-90deg, transparent, #000 25px);
         position: absolute;
         pointer-events: none;
     }
@@ -341,6 +341,10 @@ html.light {
 .rtl .sidebar-resizer {
     left: initial;
     right: calc(var(--sidebar-width) - 5px);
+
+    .resize-line {
+        transform: translateX(-17px) rotate(180deg) rotateX(180deg)
+    }
 }
 
 .sidebar-resizer:hover, .sidebar-resizer:active {

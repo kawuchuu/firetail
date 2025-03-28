@@ -58,6 +58,12 @@ export default {
     }
 }
 
+.boldText {
+    .button {
+        font-weight: 800;
+    }
+}
+
 .spotify {
     --hl-txt: #1DB954;
     --hl-op: #1DB9541a;

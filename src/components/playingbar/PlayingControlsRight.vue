@@ -13,7 +13,7 @@
                     <!-- <div ref="hoverIndicate" class="vol-hover-indicate">{{ hoverIndicateNum }}</div> -->
                 </div>
             </div>
-            <i @click="enterExitZen" class="ft-icon">{{ fullscreenIcon }}</i>
+            <i @click="enterExitZen" class="ft-icon fullscreen-icon">{{ fullscreenIcon }}</i>
         </div>
     </div>
 </template>
@@ -273,6 +273,10 @@ export default {
 }
 
 .rtl {
+    .right-controls-root {
+        padding-right: 0;
+        padding-left: 15px;
+    }
     .right-controls {
 
         i {
@@ -280,7 +284,7 @@ export default {
             margin-right: 20px;
         }
 
-        .vol-btn {
+        .vol-btn, .fullscreen-icon {
             transform: rotate3d(0, 1, 0, 180deg);
         }
     }

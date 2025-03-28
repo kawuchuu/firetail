@@ -118,6 +118,21 @@ export default {
     }
 }
 
+.rtl {
+    .popup {
+        left: 0;
+    }
+    .popup::before {
+        right: 72px;
+    }
+    .popup.search {
+
+    }
+    .popup.active {
+        transform: translate(40px, 20px) scale(1) !important;
+    }
+}
+
 .win32 .popup.search {
     transform: translate(-100px, -300px) scale(0) !important;
 }
@@ -159,7 +174,7 @@ export default {
 
 .reduceMotion {
     .popup.search {
-        transform: translate(-160px, -315px);
+        transform: translate(-25px, 20px) !important;
     }
 }
 
@@ -167,6 +182,7 @@ export default {
     display: flex;
     align-items: center;
     padding: 8px;
+    gap: 10px;
 
     img {
         width: 45px;
@@ -181,7 +197,6 @@ export default {
     }
 
     .song-info {
-        margin-left: 10px;
         display: flex;
         flex-direction: column;
         justify-content: center;

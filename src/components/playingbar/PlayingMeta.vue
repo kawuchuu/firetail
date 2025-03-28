@@ -553,7 +553,7 @@ export default {
 
 .reduceMotion {
     .popup.large-album-art {
-        transform: translateY(-215px);
+        transform: translateY(-253px);
     }
 
     .popup.codec-info {
@@ -577,6 +577,11 @@ export default {
     .favourite-icon {
         margin-left: 0px;
         margin-right: 12px;
+    }
+
+    .song-info {
+        padding-left: 0;
+        padding-right: 15px;
     }
 }
 </style>

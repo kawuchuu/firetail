@@ -597,5 +597,9 @@ html.light {
         margin-left: 0px;
         margin-right: 15px;
     }
+
+    .list-title, .list-artist, .list-album {
+        mask-image: -webkit-linear-gradient(0deg, transparent, #000 25px);
+    }
 }
 </style>

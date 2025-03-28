@@ -55,7 +55,7 @@ export default {
     //transition: .15s;
     border: solid 1px var(--bd);
     transition: 0.2s cubic-bezier(0.17, 0.88, 0.25, 1.1);
-    transition-property: transform opacity;
+    transition-property: transform, opacity;
 }
 
 .popup::after {
@@ -71,6 +71,15 @@ export default {
     border-radius: 2px;
     box-shadow: 0px 5px 10px rgba(0,0,0,.15);
     z-index: 1;
+}
+
+.rtl {
+    .popup.queue {
+        transform: translate(90px, 0px) scale(0);
+    }
+    .popup.active {
+        transform: translate(108px, -315px) scale(1) !important;
+    }
 }
 
 .popup.active {
@@ -114,6 +123,12 @@ export default {
         .queue-info-inner {
             padding: 12px;
         }
+    }
+}
+
+.reduceMotion {
+    .popup.queue {
+        transform: translate(-10px, -315px) !important;
     }
 }
 </style>

@@ -44,7 +44,8 @@ export default {
 .queue-item {
     display: flex;
     align-items: center;
-    padding: 12px 12px 0px 12px;
+    padding: 12px 12px 0 12px;
+    gap: 10px;
 
     img {
         width: 45px;
@@ -54,7 +55,6 @@ export default {
     }
 
     .song-info {
-        margin-left: 10px;
         display: flex;
         flex-direction: column;
         justify-content: center;

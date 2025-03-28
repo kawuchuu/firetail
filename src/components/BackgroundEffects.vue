@@ -128,6 +128,10 @@ export default {
         margin-right: var(--sidebar-width);
     }
 
+    .gradient {
+        transform: rotate(180deg) rotateX(180deg);
+    }
+
     .colour-bg {
         transform: none;
     }
