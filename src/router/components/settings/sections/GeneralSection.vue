@@ -30,10 +30,12 @@ export default {
             this.$root.$i18n.locale = locale.value
             if (this.$i18n.messages[locale.value]['RTL']) {
                 if (!this.$store.state.nav.rtl) this.$store.commit('panel/showNewPrompt', {title: this.$t('PANEL.PROMPT.RESTART.TITLE'), message: this.$t('PANEL.PROMPT.RESTART.MESSAGE'), buttons: 'dismiss'})
-                this.$store.commit('nav/updateRTL', true)
+                this.$store.commit('nav/rtl', true)
+                window.ftStore.setKey('rtl', true)
             } else {
                 if (this.$store.state.nav.rtl) this.$store.commit('panel/showNewPrompt', {title: this.$t('PANEL.PROMPT.RESTART.TITLE'), message: this.$t('PANEL.PROMPT.RESTART.MESSAGE'), buttons: 'dismiss'})
-                this.$store.commit('nav/updateRTL', false)
+                this.$store.commit('nav/rtl', false)
+                window.ftStore.setKey('rtl', false)
             }
         },
         clearLibrary() {

@@ -99,8 +99,8 @@ export default {
 }
 
 .album-art {
-    min-width: 275px;
-    min-height: 275px;
+    min-width: 290px;
+    min-height: 290px;
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
@@ -110,7 +110,7 @@ export default {
 }
 
 .song-info {
-    padding: 50px 0px 20px 50px;
+    padding: 50px 0 20px 0;
     //text-align: center;
 
     h1 {
@@ -134,6 +134,7 @@ export default {
 .info-wrapper {
     display: flex;
     align-items: flex-end;
+    gap: 50px;
     width: 100%;
     pointer-events: none;
     margin-left: 100px;
@@ -161,5 +162,12 @@ export default {
     position: fixed;
     background: radial-gradient(farthest-corner at 5% 10%, transparent 5%, #000000e1);
     z-index: 2;
+}
+
+.rtl {
+    .info-wrapper  {
+        margin-left: 0;
+        margin-right: 100px;
+    }
 }
 </style>

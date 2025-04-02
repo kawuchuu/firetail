@@ -394,7 +394,6 @@ export default {
     box-shadow: 0px 5px 10px rgba(0,0,0,.15);
     pointer-events: none;
     opacity: 0;
-    //transition: .15s;
     border: solid 1px var(--bd);
     transition: 0.2s cubic-bezier(0.17, 0.88, 0.25, 1.1);
     transition-property: transform, opacity;
@@ -582,6 +581,18 @@ export default {
     .song-info {
         padding-left: 0;
         padding-right: 15px;
+    }
+
+    .large-album-art {
+        transform: translate(190px, -10px) scale(0);
+    }
+
+    .codec-info.show.hover {
+        transform: translate(-70px, -215px) !important;
+    }
+
+    .popup::after {
+        right: 18px;
     }
 }
 </style>

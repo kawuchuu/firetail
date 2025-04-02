@@ -230,7 +230,7 @@ const mutations = {
     updateColourBar(state, enabled) {
         state.colourBarEnabled = enabled
     },
-    updateRTL(state, enabled) {
+    rtl(state, enabled) {
         state.rtl = enabled
     },
     debugMode(state, enabled) {

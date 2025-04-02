@@ -189,7 +189,7 @@ export default {
         this.applyClassSettings()
         this.applyStoreSwitchSettings()
         this.applyMultiOptionSettings()
-        if (this.$i18n.messages[this.$i18n.locale]['RTL']) this.$store.commit('nav/updateRTL', true)
+        if (this.$i18n.messages[this.$i18n.locale]['RTL']) this.$store.commit('nav/rtl', true)
     },
     async mounted() {
         if (window.localStorage.getItem('sidebarwidth')) {

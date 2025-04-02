@@ -1,6 +1,6 @@
 import {app} from 'electron'
 import {resolve} from 'path'
-import {readFile, writeFileSync, writeFile, access, constants} from 'fs'
+import {readFileSync, writeFileSync, writeFile, accessSync, constants} from 'fs'
 
 class FiretailStorage {
     configFilePath = resolve(app.getPath('userData'), 'config.json')
@@ -8,16 +8,23 @@ class FiretailStorage {
     categories = null
 
     constructor() {
-        access(this.configFilePath, constants.F_OK, (err) => {
-            if (err) {
-                writeFileSync(this.configFilePath, '{"categories": {}}')
-            }
-            readFile(this.configFilePath, {}, (err, data) => {
-                if (err) throw err;
-                this.config = JSON.parse(data)
-                this.categories = this.config['categories']
-            })
-        })
+        try {
+            this.initConfig();
+        } catch(err) {
+            writeFileSync(this.configFilePath, '{"categories": {}}');
+            this.initConfig();
+        }
+    }
+
+    initConfig() {
+        try {
+            accessSync(this.configFilePath, constants.F_OK)
+            const data = readFileSync(this.configFilePath, {});
+            this.config = JSON.parse(data)
+            this.categories = this.config['categories']
+        } catch(err) {
+            throw err;
+        }
     }
 
     getItem(key) {

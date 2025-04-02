@@ -1,3 +1,5 @@
+import FiretailStorage from "./modules/storage";
+
 const {
   app,
   protocol,
@@ -22,6 +24,13 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
+}
+
+const ftStorage = new FiretailStorage()
+
+if (ftStorage.keyExists('rtl') && ftStorage.getItem('rtl') === true) {
+  console.log('Setting UI direction mode to RTL.')
+  app.commandLine.appendSwitch('force-ui-direction', 'rtl')
 }
 
 const createWindow = () => {
