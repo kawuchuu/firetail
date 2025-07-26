@@ -31,7 +31,7 @@
     "@electron-forge/publisher-github": "^7.6.0",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",
     "css-loader": "^6.0.0",
-    "electron": "^32.2.5",
+    "electron": "^32.3.3",
     "electron-devtools-installer": "^3.2.0",
     "node-loader": "^2.0.0",
     "sass": "^1.81.0",
