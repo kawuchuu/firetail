@@ -108,6 +108,7 @@ const play:Function = inject("play");
 
 .song-item:hover {
   background: #ffffff18;
+  box-shadow: inset 0 0 0 1px var(--bd-op);
 }
 
 .song-item.nohover:hover {

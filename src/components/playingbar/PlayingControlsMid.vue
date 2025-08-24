@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import {audioPlayer} from "../../renderer";
 import {timeFormat} from "../../modules/timeformat";
-import audio from "../../modules/audio";
 import SeekBar from "../SeekBar.vue";
 import {computed} from "vue";
 
 function onTimeChange(time:number) {
   audioPlayer.setCurrentTime(time);
+  audioPlayer.doTimeUpdate(true);
 }
 
 const playPauseIcon = computed(() => {

@@ -31,10 +31,8 @@ const topView = ref(null);
 const sortInfoOpacity = ref(0);
 let opacityToScrollBy = ref(0);
 const bgImagePath = ref('');
-const isNurture = ref(false);
 
 function play(index:number) {
-  console.log(index);
   audioPlayer.enqueue(props.songList, true, true, index);
 }
 
@@ -62,9 +60,6 @@ const getImage = computed( () => {
 });
 
 watch(() => viewStore.scroll, updateScroll);
-watch(() => props.listName, () => {
-  isNurture.value = props.artistName === 'Porter Robinson' && props.listName === 'Nurture';
-})
 watch(() => route.params, () => {
   updateBackgroundArt();
   nextTick(() => {
@@ -86,14 +81,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="wrapper" :class="[showInfoView ? 'show-info-view' : '', isNurture ? 'is-nurture' : '']">
+  <div class="wrapper" :class="showInfoView ? 'show-info-view' : ''">
     <div class="bg-gradient">
       <div class="list-gradient-fade" />
       <div class="bg-fade-bottom" />
       <div class="bg-art" :style="getImage" />
       <div class="bg-noise" />
       <div class="bg-image" />
-      <div v-if="isNurture" class="nurture-egg" />
     </div>
     <RecycleScroller
         v-if="viewStore.isOverlayScrollInit"
@@ -219,6 +213,7 @@ onMounted(() => {
   opacity: 0;
   transition: 0.2s;
   transition-property: opacity;
+  pointer-events: none;
 }
 
 .column-sort-wrapper.sticky .bg {
@@ -305,31 +300,16 @@ onMounted(() => {
   }
 }
 
-.bg-image, .nurture-egg {
+.bg-image {
   width: 100%;
   height: 100%;
   max-height: 420px;
   //background: linear-gradient(transparent, transparent, var(--bg)), radial-gradient(circle at top, transparent 40%, var(--bg)), url('../assets/songs-banner-new.png');
   background-image: url('../assets/songs-banner-new.png');
   background-size: cover;
-  background-position: center 80%;
+  background-position: top 80%;
   z-index: -2;
   position: absolute;
-}
-
-@keyframes fadeInNurture {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 0.75;
-  }
-}
-
-.nurture-egg {
-  background-image: url('../assets/squiggle2-transparent.png') !important;
-  opacity: 0.75;
-  animation: fadeInNurture 2s ease-out;
 }
 
 @media (max-width: 1600px) {

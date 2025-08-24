@@ -50,11 +50,13 @@ export default {
 }
 
 .button:hover {
-    background-color: var(--hl-op)
+    background-color: var(--hl-op);
+    box-shadow: inset 0 0 0 1px var(--bd-op);
 }
 
 .button:active {
     background-color: var(--hl-op);
+    box-shadow: inset 0 0 0 1px var(--bd-op);
     opacity: 0.5;
 }
 

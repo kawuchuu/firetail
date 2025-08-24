@@ -66,7 +66,7 @@ watch(() => audioPlayer.reactive.currentSong, changeImagePath);
     background-position: center !important;
     background-size: cover !important;
     transition: .1s;
-    outline: solid 1px rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 0 0 1px var(--bd-op);
 }
 
 @keyframes scroll {

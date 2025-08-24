@@ -47,5 +47,6 @@ const props = defineProps({
   background: var(--button);
   opacity: 1;
   font-weight: 600;
+  box-shadow: inset 0 0 0 1px var(--bd-op);
 }
 </style>

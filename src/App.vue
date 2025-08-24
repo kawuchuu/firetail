@@ -73,6 +73,7 @@ onBeforeMount(async () => {
             @os-initialized="initScrollbar">
           <router-view />
         </OverlayScrollbarsComponent>
+        <div class="content-overlay"/>
 <!--        <div class="content" @scroll="onScroll($event)">
           <router-view/>
         </div>-->
@@ -190,6 +191,17 @@ body {
   background: var(--bg);
   border-radius: var(--main-border-radius);
   right: 0;
+}
+
+.content-overlay {
+  position: fixed;
+  height: calc(100% - 129px);
+  width: calc(100% - var(--sidebar-width));
+  border-radius: var(--main-border-radius);
+  right: 0;
+  box-shadow: inset 0 0 0 1px var(--bd-op);
+  pointer-events: none;
+  z-index: 10;
 }
 /* seems to fix overlayscrollbars not really being fully initialised before vue-virtual-scroller checks for parent scroller sighh */
 div.content div[data-overlayscrollbars-contents] {

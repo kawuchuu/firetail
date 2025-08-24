@@ -34,7 +34,7 @@ class FiretailDB {
   }
 
   getAllSongs() {
-    const rows = this.db.prepare("SELECT * FROM library ORDER BY albumArtist COLLATE NOCASE,album COLLATE NOCASE,trackNum COLLATE NOCASE").all();
+    const rows = this.db.prepare("SELECT * FROM library ORDER BY albumArtist COLLATE NOCASE,album COLLATE NOCASE,disc COLLATE NOCASE,trackNum COLLATE NOCASE").all();
     if (rows.length === 0) return {songs: rows, sum: 0}
     const sum:number = this.determineNumber(this.db.prepare("SELECT SUM(realdur) AS sum FROM library").pluck().get() as Sum);
     return {songs: rows, sum};

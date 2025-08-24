@@ -102,7 +102,7 @@ class AudioPlayer extends Audio {
             this.queue.concat(newQueue);
         }
         if (playNow) {
-            if (atIndex) this.index = atIndex;
+            if (atIndex !== null) this.index = atIndex;
             this.playSong(this.queue[atIndex]);
         }
     }
