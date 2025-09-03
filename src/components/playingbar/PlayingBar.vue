@@ -16,7 +16,6 @@ import PlayingControlsRight from "./PlayingControlsRight.vue";
 .playing-bar {
     position: fixed;
     bottom: 0;
-    z-index: 13;
     width: 100vw;
     height: 85px;
     border-top: solid 1px var(--mono-bd);

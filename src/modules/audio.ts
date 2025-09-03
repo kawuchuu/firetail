@@ -2,6 +2,7 @@ import FiretailSong from "../types/FiretailSong";
 import {reactive} from "vue";
 import {audioPlayer} from "../renderer";
 import {getAudioResource} from "./get-resource";
+import {scrobble, updateNowPlaying} from "./lastfm";
 
 interface AudioStore {
     title: string;
@@ -21,6 +22,8 @@ class AudioPlayer extends Audio {
     updateLocal = 0;
     metadata: Metadata;
     reactive: AudioStore;
+    haveScrobbledCurrent = false;
+    lastPlayedTimestamp: number;
     constructor() {
         super();
         this.addEventListener("ended", () => {
@@ -93,6 +96,9 @@ class AudioPlayer extends Audio {
         await this.play().catch(err => {
             console.error(err);
         })
+        updateNowPlaying(this.metadata.artist, this.metadata.title);
+        this.lastPlayedTimestamp = Math.floor(Date.now() / 1000);
+        this.haveScrobbledCurrent = false;
     }
 
     enqueue(newQueue: FiretailSong[], replace?: boolean, playNow?: boolean, atIndex?: number) {
@@ -141,6 +147,10 @@ class AudioPlayer extends Audio {
             this.updateLocal++
         }
         audioPlayer.reactive.currentTime = audioPlayer.currentTime;
+        if (!this.haveScrobbledCurrent && ((this.currentTime > this.duration / 2) || this.currentTime > 240) && this.lastPlayedTimestamp && this.duration > 30) {
+          this.haveScrobbledCurrent = true;
+          scrobble(this.metadata.artist, this.metadata.title, this.lastPlayedTimestamp);
+        }
     }
 }
 

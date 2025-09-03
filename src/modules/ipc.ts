@@ -1,4 +1,4 @@
-import {app, ipcMain} from "electron";
+import {app, ipcMain, shell, safeStorage} from "electron";
 import path from "path/posix";
 
 export default function startIpc() {
@@ -19,5 +19,21 @@ export default function startIpc() {
         return {
             version: app.getVersion(),
         }
+    });
+
+    // OPEN BROWSER
+
+    ipcMain.on('openBrowser', async (event, url: string) => {
+        await shell.openExternal(url);
+    });
+
+    // SAFESTORAGE
+
+    ipcMain.handle('encryptString', (event, text: string) => {
+        return safeStorage.encryptString(text);
+    });
+
+    ipcMain.handle('decryptString', (event, text: Buffer) => {
+      return safeStorage.decryptString(text);
     });
 }

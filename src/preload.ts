@@ -25,7 +25,9 @@ contextBridge.exposeInMainWorld('ftStore', {
   deleteKey: (key: string) => ipcRenderer.send('deleteKey', key),
   keyExists: (key: string) => ipcRenderer.invoke('keyExists', key),
   keys: ipcRenderer.invoke('keys'),
-  getCategory: (category: string) => ipcRenderer.invoke('getCategory', category)
+  getCategory: (category: string) => ipcRenderer.invoke('getCategory', category),
+  secureSetKey: (key: string, value: string, category: string) => ipcRenderer.send('secureSetKey', [key, value, category]),
+  secureGetItem: (key: string) => ipcRenderer.invoke('secureGetKey', key),
 });
 
 contextBridge.exposeInMainWorld('ftStoreSync', {
@@ -35,10 +37,15 @@ contextBridge.exposeInMainWorld('ftStoreSync', {
 });
 
 contextBridge.exposeInMainWorld('misc', {
-  openLink: (link: string) => ipcRenderer.invoke('openLink', link),
+  openBrowser: (url: string) => ipcRenderer.send('openBrowser', url),
   getPathForFile: (file: File) => webUtils.getPathForFile(file),
 });
 
 contextBridge.exposeInMainWorld('setupApp', {
   generalInfo: async () => ipcRenderer.invoke('getGeneralInfo')
+});
+
+contextBridge.exposeInMainWorld('safeStorage', {
+  encryptString: (text: string) => ipcRenderer.invoke('encryptString', text),
+  decryptString: (text: Buffer) => ipcRenderer.invoke('decryptString', text),
 });

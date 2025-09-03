@@ -1,23 +1,18 @@
+<script setup lang="ts">
+defineProps<{
+  icon?: string;
+  style?: string;
+}>();
+</script>
+
 <template>
     <div class="wrapper">
-        <div class="button" @click="doOnClick" :class="button.style">
-            <i v-if="button.icon" class="ft-icon">{{ button.icon }}</i>
-            <span>{{ button.label }}</span>
+        <div class="button" @click="doOnClick" :class="style">
+            <i v-if="icon" class="ft-icon">{{ button.icon }}</i>
+            <span><slot/></span>
         </div>
     </div>
 </template>
-
-<script>
-export default {
-    props: ['button'],
-    name: 'Button',
-    methods: {
-        doOnClick() {
-            if (this.button.onClick) this.button.onClick()
-        }
-    }
-}
-</script>
 
 <style lang="scss" scoped>
 .button {

@@ -9,7 +9,7 @@
                 <AccessibilitySection />
                 <LibrarySection />
 <!--                <AppearanceSection />-->
-<!--                <IntegrationSection />-->
+                <IntegrationSection />
                 <UpdatesSection />
                 <AdvancedSection />
                 <AboutSection />

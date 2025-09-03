@@ -22,7 +22,6 @@ import SidebarTitle from "./SidebarTitle.vue";
 .side-bar {
     width: var(--sidebar-width);
     height: calc(100vh - 86px);
-    z-index: 2;
 }
 
 .item-container {

@@ -1,4 +1,4 @@
-import {app, ipcMain} from 'electron'
+import {app, ipcMain, safeStorage} from 'electron'
 import {resolve} from 'path'
 import {readFile, writeFileSync, writeFile, access, constants} from 'fs'
 
@@ -54,6 +54,14 @@ class FiretailStorage {
 
         ipcMain.on('getCategorySync', (event, category) => {
             event.returnValue = this.getCategory(category);
+        })
+
+        ipcMain.on('secureSetKey', (event, values) => {
+            this.setKey(values[0], safeStorage.encryptString(values[1]), values[2])
+        })
+
+        ipcMain.handle('secureGetKey', (event, key: string) => {
+            return safeStorage.decryptString(this.getItem(key));
         })
     }
 
