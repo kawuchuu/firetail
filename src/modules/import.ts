@@ -27,14 +27,14 @@ async function getFiles(dir:string) {
 }
 
 export async function processFiles(files:string[]) {
-    let processFiles:Array<string[]> = []
+    let processFilesAr:Array<string[]> = []
     for (const index in files) {
         const file = files[index];
         console.log(files)
         const stat = statSync(file);
         if (stat.isDirectory()) {
             const dirFiles = await getFiles(file);
-            processFiles = processFiles.concat(await this.processFiles(dirFiles));
+            processFilesAr = processFilesAr.concat(await processFiles(dirFiles));
         } else {
             const fileName = resolve(file).split('/');
             const ext = fileName[fileName.length - 1].split('.').pop();

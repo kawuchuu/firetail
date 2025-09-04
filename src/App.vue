@@ -196,9 +196,9 @@ body {
 .content-overlay {
   position: fixed;
   height: calc(100% - 129px);
-  width: calc(100% - var(--sidebar-width));
+  width: calc(100% - var(--sidebar-width) + 4px);
   border-radius: var(--main-border-radius);
-  right: 0;
+  right: -4px;
   box-shadow: inset 0 0 0 1px var(--bd-op);
   pointer-events: none;
   z-index: 10;

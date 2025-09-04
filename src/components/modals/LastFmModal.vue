@@ -14,8 +14,13 @@ function openBrowserScreen() {
 }
 
 async function openAuthPage() {
-  if (!token.value) token.value = await getToken();
-  await window.misc.openBrowser(`https://last.fm/api/auth?api_key=${apiKey}&token=${token.value}`);
+  try {
+      if (!token.value) token.value = await getToken();
+      await window.misc.openBrowser(`https://last.fm/api/auth?api_key=${apiKey}&token=${token.value}`);
+  } catch {
+      didFail.value = true;
+      currentPart.value = 3;
+  }
 }
 
 async function reqSession() {
@@ -27,6 +32,7 @@ async function reqSession() {
     window.ftStore.setKey("lastfmName", resp.session.name, "lastfm");
     currentPart.value++;
   } else {
+    console.log(resp);
     didFail.value = true;
   }
 }
@@ -69,6 +75,9 @@ async function reqSession() {
     </div>
     <div v-if="currentPart === 2">
       <p>Great! Your Last.fm account is successfully connected to Firetail!</p>
+    </div>
+    <div v-if="currentPart === 3">
+      <p>Failed to get token from Last.fm. Either Last.fm or the proxy is having issues currently.</p>
     </div>
   </div>
 </template>

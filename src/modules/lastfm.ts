@@ -36,8 +36,8 @@ export async function getToken() {
     const token = await req.json();
     return token.token;
   } catch(err) {
-    console.log(err);
-    return err;
+    console.error(err);
+    throw err;
   }
 }
 
@@ -46,8 +46,8 @@ export async function getSession(token: string):Promise<LastFMSession> {
     const req = await fetch(`${infoStore.lastfmProxyUrl}getSession?token=${token}`);
     return await req.json();
   } catch(err) {
-    console.log(err);
-    return err;
+    console.error(err);
+    throw err;
   }
 }
 
