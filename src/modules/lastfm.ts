@@ -1,13 +1,19 @@
 import {infoStore} from "../renderer";
 import {LastFMSession} from "../types/LastFM";
 
-export async function updateNowPlaying(artist: string, track: string) {
-  if (await !window.ftStore.keyExists('lastfmSk')) return;
+async function preparePost(artist: string, track: string) {
+  if (await !window.ftStore.keyExists('lastfmSk') || await window.ftStore.getItem('lastfmPause') === true) return;
   const sk = await window.ftStore.secureGetItem('lastfmSk');
   const query = new URLSearchParams();
   query.set('artist', artist);
   query.set('track', track);
   query.set('sk', sk);
+  return query;
+}
+
+export async function updateNowPlaying(artist: string, track: string) {
+  const query = await preparePost(artist, track);
+  if (!query) return;
   fetch(`${infoStore.lastfmProxyUrl}updateNowPlaying?${query.toString()}`, {
     method: 'POST',
   }).then(r => {
@@ -16,12 +22,8 @@ export async function updateNowPlaying(artist: string, track: string) {
 }
 
 export async function scrobble(artist: string, track: string, timestamp: number) {
-  if (await !window.ftStore.keyExists('lastfmSk')) return;
-  const sk = await window.ftStore.secureGetItem('lastfmSk');
-  const query = new URLSearchParams();
-  query.set('artist', artist);
-  query.set('track', track);
-  query.set('sk', sk);
+  const query = await preparePost(artist, track);
+  if (!query) return;
   query.set('timestamp', timestamp.toString());
   fetch(`${infoStore.lastfmProxyUrl}scrobble?${query.toString()}`, {
     method: 'POST',
