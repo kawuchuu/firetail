@@ -239,7 +239,9 @@ export default {
             switch(process.platform) {
                 case "win32":
                     command = 'explorer /e,/select,'
-                    break
+                    break;
+                case "darwin":
+                    command = 'open -R '
             }
             require('child_process').exec(`${command}"${resolve(path)}"`)
         })

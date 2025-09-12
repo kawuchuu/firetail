@@ -2,7 +2,7 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 import {contextBridge, ipcRenderer, webUtils} from 'electron'
 import {marked} from "marked";
-// this is temporary i know it's not good practice
+// i'm aware you shouldn't do this. fixed in firetail 2.0 and won't fix here.
 contextBridge.exposeInMainWorld('ipcRenderer', {
     invoke: async (channel, data) => {
         return await ipcRenderer.invoke(channel, data)

@@ -308,6 +308,14 @@ html.light.highContrast {
     .albums-item a span {
         opacity: 1 !important;
     }
+
+    .artist-inner {
+        border-right-width: 2px !important;
+    }
+
+    .bg-inner {
+        border-bottom-width: 2px !important;
+    }
 }
 
 html.light.highContrast {

@@ -283,4 +283,10 @@ html.blur {
         opacity: 0.5;
     }
 }
+
+.reduceMotion {
+    .search-btn, .search-btn input {
+        transition: none;
+    }
+}
 </style>

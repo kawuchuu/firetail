@@ -11,7 +11,6 @@
                 <p>You can drop music files and folders with music inside</p>
             </div>
         </div>
-        <CommandPalette/>
         <Panel/>
         <ContextMenu/>
         <ItemAdd/>
@@ -45,7 +44,6 @@ import ZenMode from './components/zen/ZenMode.vue'
 import ContextMenu from './components/ContextMenu.vue'
 import ItemAdd from './components/ItemAdd.vue'
 import Notification from './components/NotificationPopup.vue'
-import CommandPalette from './components/CommandPalette.vue'
 import BackgroundEffects from './components/BackgroundEffects.vue'
 import TourInterface from "./components/tour/TourInterface.vue";
 
@@ -61,7 +59,6 @@ export default {
         ContextMenu,
         ItemAdd,
         Notification,
-        CommandPalette,
         BackgroundEffects
     },
     methods: {

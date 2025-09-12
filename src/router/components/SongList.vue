@@ -365,12 +365,31 @@ export default {
             const revealInFileExplorer = () => {
                 window.ipcRenderer.invoke('open-file-in-explorer', this.list[evt[1]].path)
             }
+            let openFileLabel;
+            switch(window.process.platform) {
+              case "win32": {
+                openFileLabel = this.$t('CONTEXT_MENU.SONG_LIST_ITEM.VIEW_EXPLORER');
+                break;
+              }
+              case "darwin": {
+                openFileLabel = this.$t('CONTEXT_MENU.SONG_LIST_ITEM.VIEW_FINDER');
+                break;
+              }
+              case "linux": {
+                openFileLabel = this.$t('CONTEXT_MENU.SONG_LIST_ITEM.VIEW_FILEMGR');
+                break;
+              }
+              default: {
+                openFileLabel = this.$t('CONTEXT_MENU.SONG_LIST_ITEM.VIEW_FILEMGR');
+                break;
+              }
+            }
             let menuItems = [
                 /*{label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_QUEUE'), type: 'normal'},
                 {type: 'separator', hide: [this.selectedItems.length !== 1, this.list[evt[1]].artist === 'Unknown Artist' && this.list[evt[1]].album === 'Unknown Album']},
                 */{label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ARTIST'), type: 'normal', hide: [this.selectedItems.length !== 1, this.$route.path === '/artists', this.list[evt[1]].artist === 'Unknown Artist'], onClick: goToArtist},
                 {label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ALBUM'), type: 'normal', hide: [this.selectedItems.length !== 1, this.$route.path === '/albums', this.list[evt[1]].album === 'Unknown Album'], onClick: goToAlbum},
-                {label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.VIEW_EXPLORER'), type: 'normal', hide: [this.selectedItems.length !== 1], onClick: revealInFileExplorer},
+                {label: openFileLabel, type: 'normal', hide: [this.selectedItems.length !== 1], onClick: revealInFileExplorer},
                 {type: 'separator', hide: [this.selectedItems.length !== 1]},
                 {label: favCompare ? this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_FAVOURITE') : this.$t('CONTEXT_MENU.SONG_LIST_ITEM.REMOVE_FAVOURITE'), type: 'normal', onClick: favouriteOnClick},
                 {label: this.$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_PLAYLIST'), type: 'normal'},

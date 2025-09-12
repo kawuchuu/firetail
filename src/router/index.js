@@ -115,7 +115,7 @@ window.ipcRenderer.receive('updateNav', (event, checkNav) => {
 })
 
 router.beforeEach(async (to, from, next) => {
-    window.scrollTo(0, 0)
+    document.getElementById('main-container').scrollTo(0, 0)
     if (to.path != '/playlist') {
         store.commit('audio/updateCurrentList', [])
     }
