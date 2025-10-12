@@ -1,7 +1,7 @@
 import FiretailSong from "../types/FiretailSong";
 import {reactive} from "vue";
 import {audioPlayer} from "../renderer";
-import {getAudioResource} from "./get-resource";
+import {getResource} from "./get-resource";
 import {scrobble, updateNowPlaying} from "./lastfm";
 
 interface AudioStore {
@@ -85,8 +85,7 @@ class AudioPlayer extends Audio {
 
     async playSong(song: FiretailSong) {
         if (!song || !song.path) return console.warn("Could not find song", song);
-        this.src = getAudioResource(song.path);
-        //console.log(this.audio.currentTime)
+        this.src = getResource(song.path);
         this.#id = song.id;
         this.currentSong = song;
         this.reactive.duration = song.realdur;
@@ -124,14 +123,12 @@ class AudioPlayer extends Audio {
 
     nextSong() {
         this.index++
-        console.log('NEXT SONG ' + this.index)
         this.currentSong = this.#queue[this.index]
         this.playSong(this.currentSong)
     }
 
     prevSong() {
         if (this.currentTime > 5) {
-            console.log('TEST')
             this.setCurrentTime(0)
         } else {
             this.index--
@@ -140,7 +137,7 @@ class AudioPlayer extends Audio {
         }
     }
 
-    timeUpdate(evt:Event) {
+    timeUpdate() {
         if (this.updateLocal === 10) {
             this.updateLocal = 0
         } else {

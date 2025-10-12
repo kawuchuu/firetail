@@ -40,11 +40,11 @@ export async function processFiles(files:string[]) {
             const ext = fileName[fileName.length - 1].split('.').pop();
             const isAudio = mime.getType(ext);
             if (isAudio && isAudio.startsWith('audio')) {
-                processFiles.push([file, fileName[fileName.length - 1]]);
+                processFilesAr.push([file, fileName[fileName.length - 1]]);
             }
         }
     }
-    return processFiles;
+    return processFilesAr;
 }
 
 export async function addFiles(songs:Array<string[]>) {

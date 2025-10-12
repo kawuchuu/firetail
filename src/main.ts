@@ -1,9 +1,30 @@
-import {app, BrowserWindow, protocol} from 'electron';
+import {app, BrowserWindow, protocol, net} from 'electron';
 import path from 'path/posix';
 import Database from "./modules/database";
 import FiretailStorage from "./modules/storage";
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import startIpc from "./modules/ipc";
+import { stat as pstat } from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
+import { Readable } from 'node:stream';
+import {Mime} from 'mime/lite';
+import standardTypes from 'mime/types/standard.js';
+import otherTypes from 'mime/types/other.js';
+
+protocol.registerSchemesAsPrivileged([{
+  scheme: 'media',
+  privileges: {
+    standard: true,
+    secure: true,
+    supportFetchAPI: true,
+    corsEnabled: true,
+    stream: true
+  }
+}]);
+
+// manually redefining some mime types to ensure content-type is correct
+const mime = new Mime(standardTypes, otherTypes);
+mime.define({'audio/flac': ['flac']}, true);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -58,28 +79,6 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 };
 
-protocol.registerSchemesAsPrivileged([
-  {
-    scheme: 'audio-resource',
-    privileges: {
-      standard: false,
-      bypassCSP: true,
-    },
-  },
-]);
-
-protocol.registerSchemesAsPrivileged([
-  {
-    scheme: 'local-resource',
-    privileges: {
-      secure: true,
-      supportFetchAPI: true,
-      bypassCSP: true,
-      stream: true
-    },
-  },
-]);
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -94,7 +93,7 @@ app.on('ready', async () => {
   } catch (e) {
     console.error('Vue Devtools failed to install:', e.toString())
   }
-  registerLocalResourceProtocol();
+  setupLocalResourceProtocol();
   createWindow();
 });
 
@@ -114,25 +113,78 @@ app.on('activate', () => {
     createWindow();
   }
 });
-
-function registerLocalResourceProtocol() {
-  /*protocol.handle('local-resource', async (request: GlobalRequest) => {
-    const filePath = decodeURIComponent(request.url.slice('local-resource://'.length))
-    console.log(request.url);
-    return net.fetch(url.pathToFileURL(filePath).toString())
-  })*/
-  // ughhh this is being deprecated and i haven't found a great solution to this yet
-  protocol.registerFileProtocol('local-resource', (request, callback) => {
-    const url = decodeURIComponent(request.url.replace(/^local-resource:\/\//, ''))
-    // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
-    const decodedUrl = decodeURI(url) // Needed in case URL contains spaces
+// holy fuck this was annoying, seems to work now. needs more testing though
+function setupLocalResourceProtocol() {
+  protocol.handle('media', async (request) => {
     try {
-      return callback(decodedUrl)
-    } catch (error) {
-      console.error('ERROR: registerLocalResourceProtocol: Could not get file path:', error)
+      const filePath = mediaUrlToPath(request.url);
+      const stat = await pstat(filePath);
+      if (!stat.isFile()) return new Response('not a file', { status: 400 });
+      const range = request.headers.get('range');
+      const headers: Record<string, string> = {
+        'Accept-Ranges': 'bytes',
+        'Vary': 'Range',
+        'Cache-Control': 'no-store',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': mime.getType(path.extname(filePath))
+      };
+      if (request.method === 'HEAD') {
+        headers['Content-Length'] = String(stat.size);
+        return new Response(null, { status: 200, headers });
+      }
+      if (range?.startsWith('bytes=')) {
+        const { start, end } = parseRange(range, stat.size);
+        if (start > end || start >= stat.size) {
+          return new Response('incorrect range', {
+            status: 416,
+            headers: { 'Content-Range': `bytes */${stat.size}` },
+          });
+        }
+        const node = createReadStream(filePath, { start, end });
+        headers['Content-Range'] = `bytes ${start}-${end}/${stat.size}`;
+        headers['Content-Length'] = String(end - start + 1);
+        return new Response(Readable.toWeb(node) as any, { status: 206, headers });
+      }
+      const node = createReadStream(filePath);
+      headers['Content-Length'] = String(stat.size);
+      return new Response(Readable.toWeb(node) as any, { status: 200, headers });
+    } catch(err) {
+      console.error(err);
+      const code = err?.code === 'ENOENT' ? 404 : 500;
+      return new Response('internal error', { status: code });
     }
-  })
+  });
 }
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
+// handling all the many different path formats (thanks windows for being non-standard)
+function mediaUrlToPath(thing: string) {
+  const url = new URL(thing);
+  const hostname = url.hostname;
+  const pathname = decodeURIComponent(url.pathname || '');
+  if (process.platform !== 'win32') return pathname;
+  if (hostname && !/^[a-zA-Z]$/.test(hostname)) return `\\\\${hostname}${pathname.replace(/\//g, '\\')}`;
+  if (/^\/[a-zA-Z]:\//.test(pathname)) return pathname.slice(1).replace(/\//g, '\\');
+  if (hostname && /^[a-zA-Z]$/.test(hostname)) {
+    const rest = pathname.replace(/^\//, '').replace(/\//g, '\\');
+    return `${hostname.toUpperCase()}:\\${rest}`;
+  }
+  let p = pathname.replace(/\//g, '\\');
+  if (/^\\[a-zA-Z]:/.test(p)) p = p.slice(1);
+  return p;
+}
+
+// getting the correct content-range
+function parseRange(h: string, size: number) {
+  const [, spec] = h.split('=');
+  const [a, b] = spec.split(',')[0].trim().split('-');
+  let start = a ? Number(a) : NaN;
+  let end   = b ? Number(b) : NaN;
+  if (Number.isNaN(start) && !Number.isNaN(end)) {
+    const n = Math.max(0, Math.min(end, size));
+    start = size - n; end = size - 1;
+  } else {
+    if (Number.isNaN(start) || start < 0) start = 0;
+    if (Number.isNaN(end) || end >= size) end = size - 1;
+  }
+  return { start, end };
+}

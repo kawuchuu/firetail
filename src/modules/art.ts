@@ -1,13 +1,13 @@
-import {getImageResource} from "./get-resource";
+import {getResource} from "./get-resource";
 
 export async function getArt(artist:string, album:string) {
   const imagePath = await window.path.getImages();
-  return getImageResource(`${imagePath}/${(artist + album).replace(/[`~!@#$%^&*()_|+\-=?;:'",.<> \{\}\[\]\\\/]/gi, '')}.jpg`);
+  return getResource(`${imagePath}/${(artist + album).replace(/[`~!@#$%^&*()_|+\-=?;:'",.<> \{\}\[\]\\\/]/gi, '')}.jpg`);
 }
 
 export function getArtSync(artist:string, album:string) {
   const imagePath = window.path.getImagesSync();
-  return getImageResource(`${imagePath}/${(artist + album).replace(/[`~!@#$%^&*()_|+\-=?;:'",.<> \{\}\[\]\\\/]/gi, '')}.jpg`);
+  return getResource(`${imagePath}/${(artist + album).replace(/[`~!@#$%^&*()_|+\-=?;:'",.<> \{\}\[\]\\\/]/gi, '')}.jpg`);
 }
 
 export function getImagePath() {
@@ -15,5 +15,5 @@ export function getImagePath() {
 }
 
 export function formatArtPath(path:string, artist:string, album:string) {
-  return getImageResource(`${path}/${(artist + album).replace(/[`~!@#$%^&*()_|+\-=?;:'",.<> \{\}\[\]\\\/]/gi, '')}.jpg`);
+  return getResource(`${path}/${(artist + album).replace(/[`~!@#$%^&*()_|+\-=?;:'",.<> \{\}\[\]\\\/]/gi, '')}.jpg`);
 }

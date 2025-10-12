@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import FiretailSong from "../types/FiretailSong";
 import {audioPlayer, viewStore} from "../renderer";
-import BaseSongView from "./songlistviews/BaseSongTop.vue";
-import {computed, nextTick, onMounted, provide, Ref, ref, watch} from "vue";
+import {computed, nextTick, onMounted, provide, ref, watch} from "vue";
 import SongListItem from "./SongListItem.vue";
 import SongViewInfoView from "./songlistviews/SongViewInfoView.vue";
-import Albums from "../types/Albums";
 import {useRoute} from "vue-router";
 import {getArt} from "../modules/art";
 
@@ -37,13 +35,9 @@ function play(index:number) {
 }
 
 function updateScroll() {
-  //console.log(columnSortInfo.value.clientHeight);
-  const scrollWrapperPos = document.querySelector('.column-sort-wrapper').getBoundingClientRect().y;
   sortInfoOpacity.value = 1 - (((opacityToScrollBy.value - viewStore.scroll) / opacityToScrollBy.value));
   sortInfoOpacity.value = Math.round((sortInfoOpacity.value - Number.EPSILON) * 100) / 100;
-  //isSticky.value = scrollWrapperPos < columnSortInfo.value.clientHeight + 86 + 5;
   isSticky.value = sortInfoOpacity.value >= 1;
-  console.log(topView.value.clientHeight);
 }
 
 async function updateBackgroundArt() {
@@ -54,7 +48,6 @@ async function updateBackgroundArt() {
 
 const getImage = computed( () => {
   if (bgImagePath.value !== '') {
-    console.log(bgImagePath.value);
     return `background-image: url('${bgImagePath.value}'); filter: blur(25px) saturate(0.7);`;
   } else return ''
 });
@@ -69,7 +62,7 @@ watch(() => route.params, () => {
 
 const getColumnSortOffset = computed(() => {
   if (!columnSortInfo.value || !columnSortInfo.value.clientHeight) return 'top: 0'
-  return `top: ${columnSortInfo.value.clientHeight + 44}px`;
+  return `top: ${columnSortInfo.value.clientHeight + 43}px`;
 });
 
 onMounted(() => {
