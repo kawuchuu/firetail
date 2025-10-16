@@ -1,30 +1,20 @@
-<script>
+<script setup lang="ts">
 import SubtitleOption from "../options/SubtitleOption.vue";
 import SwitchOption from "../options/SwitchOption.vue";
-export default {
-    name: "AccessibilitySection",
-    components: {
-        SwitchOption,
-        SubtitleOption
-    },
-    data() {
-        return {
-            highContrastEnabled: window.localStorage.getItem('highContrast') === 'true',
-            reducedMotionEnabled: window.localStorage.getItem('reduceMotion') === 'true',
-            boldTextEnabled: window.localStorage.getItem('boldText') === 'true'
-        }
-    },
-    methods: {
-        highContrastAction(enabled) {
-            this.highContrastEnabled = enabled
-        },
-        reducedMotionAction(enabled) {
-            this.reducedMotionEnabled = enabled
-        },
-        boldTextAction(enabled) {
-            this.boldTextEnabled = enabled
-        }
-    }
+import {ref} from "vue";
+
+const highContrastEnabled = ref(window.localStorage.getItem('highContrast') === 'true');
+const reducedMotionEnabled = ref(window.localStorage.getItem('reduceMotion') === 'true');
+const boldTextEnabled = ref(window.localStorage.getItem('boldText') === 'true');
+
+function highContrastAction(enabled) {
+  highContrastEnabled.value = enabled
+}
+function reducedMotionAction(enabled) {
+  reducedMotionEnabled.value = enabled
+}
+function boldTextAction(enabled) {
+  boldTextEnabled.value = enabled
 }
 </script>
 

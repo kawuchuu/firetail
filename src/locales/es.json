@@ -1,0 +1,214 @@
+{
+  "SIDEBAR": {
+    "HOME": "Inicio",
+    "SETTINGS": "Ajustes",
+    "LIBRARY": "Biblioteca",
+    "FAVOURITE": "Favoritos",
+    "SONGS": "Canciones",
+    "ARTISTS": "Artistas",
+    "ALBUMS": "Álbumes",
+    "GENRES": "Géneros",
+    "PLAYLISTS": "Playlists",
+    "CREATE_PLAYLIST": "Crear Playlist"
+  },
+  "ROUTER": {
+    "ALL_SONGS": "Canciones",
+    "ARTISTS": "Artistas",
+    "ALBUMS": "Álbumes",
+    "FAVOURITES": "Favoritos",
+    "HOME": "Inicio",
+    "UNKNOWN": "The route you were looking for could not be found.",
+    "UNKNOWN_DESC": "Sorry about that. If you believe this is an error, please create an issue here."
+  },
+  "TOP_TITLE": {
+    "COUNT_TYPE_SONGS": "No hay canciones | 1 canción | {count} canciones",
+    "LIST_LENGTH": {
+      "HOURS": "0 h | 1 h | {count} h",
+      "MINUTES": "0 mins | 1 min | {count} mins",
+      "SECONDS": "0 s | 1 s | {count} s"
+    }
+  },
+  "SONG_LIST": {
+    "LIST_TITLE": "Título",
+    "LIST_ARTIST": "Artista",
+    "LIST_ALBUM": "Álbum",
+    "LIST_DURATION": "Duración"
+  },
+  "PLAYING_BAR": {
+    "SONG_TITLE_NOT_PLAYING": "No hay música en reproducción..."
+  },
+  "TOP_BAR": {
+    "ADD_SONGS": "Add Songs",
+    "NUKE": "Remove Library"
+  },
+  "SETTINGS": {
+    "TITLE": "Ajustes",
+    "SUBTITLES": {
+      "GENERAL": "General",
+      "LIBRARY": "Biblioteca",
+      "APPEARANCE": "Apariencia",
+      "INTEGRATION": "Integraciones",
+      "ACCESSIBILITY": "Accesibilidad",
+      "ADVANCED": "Avanzados",
+      "UPDATE": "Actualizaciones",
+      "ABOUT": "Acerca de"
+    },
+    "BUTTON": {
+      "CLEAR_LIBRARY": "Eliminar biblioteca",
+      "REFRESH": "Refrescar",
+      "CHECK_UPDATE": "Buscar actualizaciones",
+      "CONNECT_SPOTIFY": "Connect to Spotify",
+      "CONNECT_LASTFM": "Connect to Last.fm",
+      "DISCONNECT": "Disconnect"
+    },
+    "DROP_DOWN": {
+      "LANG_AUTO": "Auto",
+      "APP_THEME": {
+        "FIRETAIL": "Firetail",
+        "CLASSIC": "Classic",
+        "CYBER": "Cyber"
+      },
+      "COLOUR_THEME": {
+        "SYSTEM": "Sistema",
+        "DARK": "Oscuro",
+        "LIGHT": "Claro"
+      },
+      "START_SCREEN": {
+        "HOME": "Inicio",
+        "SONGS": "Canciones",
+        "ARTISTS": "Artistas",
+        "ALBUMS": "Álbumes",
+        "FAVOURITES": "Favoritos"
+      },
+      "UPDATE_BRANCH": {
+        "STABLE": "Stable",
+        "PREVIEW": "Preview",
+        "DEVELOPMENT": "Development"
+      }
+    },
+    "LANGUAGE": "Elige un idioma",
+    "START_PAGE": "Elige la pantalla que se muestra al abrir Firetail",
+    "CLEAR_LIBRARY": "Borra tu biblioteca de música de Firetail",
+    "REFRESH_METADATA": "Refresh your library\u0027s metadata",
+    "APP_THEME": "App theme (requires reload for now)",
+    "COLOUR_THEME": "Tema de color",
+    "COLOUR_BAR": "Mostrar el color del álbum en la barra de reproducción",
+    "INCREASE_PERFORMANCE": "Reducir los efectos visuales para mejorar el rendimiento",
+    "SPOTIFY_INTEGRATION_DISCONNECTED": "Connect your Spotify account for additional metadata features",
+    "SPOTIFY_INTEGRATION_CONNECTED": "Hi, {user}! Your Spotify account is currently connected to Firetail.",
+    "SPOTIFY_DISCLAIMER": "By using this feature, you agree to Spotify's Terms and Conditions of Use and Privacy Policy. Some information about your Firetail library will be sent to Spotify in order to provide these features. You can opt-out at any time by removing the Firetail application in your Spotify account settings.",
+    "LASTFM_INTEGRATION_DISCONNECTED": "Connect your Last.fm account to scrobble your listening activity",
+    "LASTFM_DISCLAIMER": "By using this feature, you agree to Last.fm's Terms of Use and Privacy Policy. Your listening activity will be sent to Last.fm. You can opt-out at any time by removing the Firetail application in your Last.fm account settings.",
+    "USE_HIGH_CONTRAST": "Modo de alto contraste",
+    "REDUCE_MOTION": "Reducir movimiento",
+    "BOLD_TEXT": "Activar texto en negrita",
+    "SHOW_FILE_CODEC": "Mostrar la información del códec del archivo",
+    "FORCE_RTL": "Forzar interfaz de derecha a izquierda",
+    "DEBUG_MODE": "Habilitar el modo de depuración",
+    "CHECK_UPDATE": "Buscar actualizaciones",
+    "UPDATE_BRANCH": "Choose a channel for app updates",
+    "ABOUT": {
+      "VERSION": "Versión {version}",
+      "COPYRIGHT": "© {year} {author}",
+      "BUG_REPORT": "Found a bug? Please report it {link}",
+      "BUG_REPORT_LINK": "here on GitHub.",
+      "LICENSE_CHANGELOG": "{license}, {changelog}",
+      "THIRD_PARTY_LICENSE": "Licencias de terceros",
+      "VIEW_CHANGELOG": "mostrar registro de cambios",
+      "ADVANCED_INFO_LABEL": "Detalles avanzados",
+      "ADVANCED_INFO": {
+        "BUILD": "Compilación: {build}",
+        "PLATFORM": "Plataforma: {platform}",
+        "PLATFORM_VER": "Versión de la plataforma: {version}",
+        "ARCHITECTURE": "Arquitectura: {arch}",
+        "ELECTRON": "Electron: {version}",
+        "CHROMIUM": "Chromium: {version}",
+        "NODE": "Node: {version}"
+      }
+    }
+  },
+  "POPUPS": {
+    "CODEC_INFO": {
+      "TITLE": "Detalles",
+      "ALBUM": "Álbum: ",
+      "YEAR": "Año: ",
+      "TRACK_NUMBER": "N.º pista: ",
+      "DISC": "Disco: ",
+      "CODEC": "Códec: ",
+      "CONTAINER": "Contenedor: ",
+      "BITRATE": "Velocidad de bits: ",
+      "SAMPLE_RATE": "Frecuencia de muestreo: ",
+      "BIT_DEPTH": "Profundidad de bits: ",
+      "CHANNELS": "N.º canales: "
+    }
+  },
+  "PANEL": {
+    "PLAYLIST": {
+      "TITLE": "Crear Playlist",
+      "EDIT_TITLE": "Editar Playlist",
+      "NAME_INPUT": "Nombre",
+      "DESC_INPUT": "Descripción",
+      "DEFAULT_NAME": "Mi Playlist",
+      "DEFAULT_DESC": "Descripción de mi playlist...",
+      "REMOVE_IMAGE": "Eliminar imagen",
+      "CHOOSE_IMAGE": "Elegir imagen"
+    },
+    "PROMPT": {
+      "RESTART": {
+        "TITLE": "Restart Required",
+        "MESSAGE": "Changing this option requires a restart of Firetail to take full effect."
+      }
+    }
+  },
+  "BUTTONS": {
+    "CREATE": "Crear",
+    "OK": "Aceptar",
+    "CANCEL": "Cancelar",
+    "YES": "Sí",
+    "NO": "No",
+    "SAVE": "Guardar"
+  },
+  "TOOLTIP": {
+    "PLAY_PAUSE": "Reproducir/pausar",
+    "PREVIOUS": "Anterior",
+    "NEXT": "Siguiente",
+    "SHUFFLE": "Aleatorio",
+    "REPEAT": "Repetir",
+    "QUEUE": "Cola",
+    "VOLUME": "Volumen",
+    "ZEN_MODE": "Zen Mode",
+    "FAVOURITE": "Favorito"
+  },
+  "SEARCH": {
+    "TITLE": {
+      "SONG": "Canciones",
+      "ALBUM": "Álbumes",
+      "ARTIST": "Artistas",
+      "PLAYLIST": "Playlists"
+    },
+    "EMPTY_INPUT": "Empieza tu búsqueda...",
+    "NO_RESULTS": "Sin resultados..."
+  },
+  "CONTEXT_MENU": {
+    "SONG_LIST_ITEM": {
+      "ADD_QUEUE": "Add to queue",
+      "GO_ARTIST": "Go to artist",
+      "GO_ALBUM": "Go to album",
+      "VIEW_EXPLORER": "Show in File Explorer",
+      "VIEW_FINDER": "Show in Finder",
+      "VIEW_FILEMGR": "Show in File Manager",
+      "ADD_FAVOURITE": "Add to favorites",
+      "ADD_PLAYLIST": "Add to playlist",
+      "REMOVE_FAVOURITE": "Remove from favorites",
+      "REMOVE_PLAYLIST": "Remove from playlist",
+      "DELETE": "Remove from library"
+    },
+    "PLAYLIST_SIDE_ITEM": {
+      "EDIT_PLAYLIST": "Edit playlist",
+      "RENAME": "Rename",
+      "REMOVE_PLAYLIST": "Remove playlist"
+    }
+  },
+  "APP_NAME": "Firetail",
+  "LANG_NAME": "Español"
+}

@@ -10,11 +10,6 @@
                     <p>{{$t('SETTINGS.ABOUT.COPYRIGHT', {year, author: 'kawuchuu'})}}</p>
                 </div>
                 <div>
-                    <i18n-t keypath="SETTINGS.ABOUT.BUG_REPORT" tag="p">
-                        <template v-slot:link>
-                            <a @click="openLink">{{$t('SETTINGS.ABOUT.BUG_REPORT_LINK')}}</a>
-                        </template>
-                    </i18n-t>
                     <i18n-t keypath="SETTINGS.ABOUT.LICENSE_CHANGELOG" tag="span">
                         <template v-slot:license>
                             <a @click="viewTpl">{{$t('SETTINGS.ABOUT.THIRD_PARTY_LICENSE')}}</a>
@@ -40,7 +35,6 @@
 </template>
 
 <script setup lang="ts">
-import StandardButton from "../../StandardButton.vue";
 import SubtitleOption from "../options/SubtitleOption.vue";
 import {infoStore} from "../../../renderer";
 import {computed, ref} from "vue";
@@ -95,9 +89,7 @@ img {
     margin-top: 30px;
 }
 h1 {
-    margin: 0px 0px 10px;
-    letter-spacing: -0.02em;
-    font-weight: 600;
+    margin: 0 0 10px;
     font-size: 1.8em;
 }
 
@@ -106,8 +98,7 @@ h1 {
 }
 
 p {
-    margin: 10px 0px;
-    /* opacity: 0.75; */
+    margin: 10px 0;
 }
 
 .boldText h1 {
@@ -124,7 +115,7 @@ a {
     display: flex;
     align-items: center;
     cursor: pointer;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     gap: 10px;
 
     i {
@@ -157,7 +148,7 @@ a {
 
 .rtl {
     img {
-        margin-right: 0px;
+        margin-right: 0;
         margin-left: 35px;
     }
 }

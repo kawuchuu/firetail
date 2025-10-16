@@ -74,11 +74,6 @@ main {
 .top-title h1 {
     font-size: 3em;
     margin: 0;
-    letter-spacing: -0.04em;
-}
-
-.darwin .top-title h1 {
-    letter-spacing: -0.02em;
 }
 
 .bg-gradient {

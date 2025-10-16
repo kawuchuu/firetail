@@ -60,17 +60,17 @@ onBeforeMount(() => {
 }
 
 .switch {
-    width: 45px;
-    height: 14px;
+    width: 54px;
+    height: 30px;
     background-color: var(--text-op);
     border-radius: 50px;
     display: flex;
     align-items: center;
     transition-duration: 0.15s;
     transition-property: background-color;
-    margin: 13px;
-    margin-right: 0px;
+    margin: 4px 0 4px 4px;
     cursor: pointer;
+    overflow: hidden;
 
     .circle-inner {
         width: 24px;
@@ -78,9 +78,9 @@ onBeforeMount(() => {
         border-radius: 50px;
         transition-duration: 0.15s;
         transition-property: transform, background-color, width;
-        transform: translateX(0px);
+        transform: translateX(3px);
         background-color: var(--text);
-        box-shadow: 0px 1px 5px rgba(0,0,0,.25);
+        box-shadow: 0 2px 6px rgba(0,0,0,.6);
     }
 }
 
@@ -91,17 +91,17 @@ onBeforeMount(() => {
 }
 
 .switch.enabled {
-    background-color: var(--hl-op);
+    background-color: var(--hl-txt);
 
     .circle-inner {
-        background-color: var(--hl-txt);
-        transform: translateX(21px);
+        //background-color: var(--hl-txt);
+        transform: translateX(27px);
     }
 }
 
 .switch.enabled:active {
     .circle-inner {
-        transform: translateX(15px);
+        transform: translateX(21px);
     }
 }
 

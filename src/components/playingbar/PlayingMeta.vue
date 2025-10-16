@@ -17,7 +17,6 @@ async function changeImagePath() {
   } else imagePath.value = '';
 }
 
-//watch(() => audioPlayer.reactive.title, changeImagePath);
 watch(() => audioPlayer.reactive.currentSong, changeImagePath);
 </script>
 
@@ -40,13 +39,12 @@ watch(() => audioPlayer.reactive.currentSong, changeImagePath);
     align-items: center;
     height: 100%;
     width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .title-artist {
     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -65,8 +63,20 @@ watch(() => audioPlayer.reactive.currentSong, changeImagePath);
     background-color: var(--bg);
     background-position: center !important;
     background-size: cover !important;
-    transition: .1s;
+    transition:
+        background-image 0.1s,
+        transform 0.4s cubic-bezier(0, 1, 0.35, 1) 0.2s,
+        border-radius 0.4s cubic-bezier(0, 1, 0.35, 1) 0.2s,
+        box-shadow 0.4s cubic-bezier(0, 1, 0.35, 1) 0.2s;
     box-shadow: inset 0 0 0 1px var(--bd-op);
+    transform-origin: bottom left;
+}
+
+.song-album-art:hover {
+  transform: scale(8);
+  border-radius: 1px;
+  box-shadow: inset 0 0 0 0.01em var(--bd-op);
+  z-index: 99999;
 }
 
 @keyframes scroll {
@@ -100,7 +110,7 @@ watch(() => audioPlayer.reactive.currentSong, changeImagePath);
     letter-spacing: -0.01em;
     display: flex;
     align-items: center;
-    //animation: scroll 15s infinite linear;
+    /*animation: scroll 15s infinite linear;*/
 }
 
 .song-title:hover, .song-artist:hover {

@@ -16,11 +16,8 @@ import PlayingControlsRight from "./PlayingControlsRight.vue";
 .playing-bar {
     position: fixed;
     bottom: 0;
-    width: 100vw;
+    width: calc(100vw - 30px);
     height: 85px;
-    border-top: solid 1px var(--mono-bd);
-    box-sizing: border-box;
-    /* box-shadow: 0px -1px 5px rgba(0, 0, 0, .15); */
     display: grid;
     grid-template-columns: 1fr 45% 1fr;
     gap: 15px;
@@ -28,7 +25,7 @@ import PlayingControlsRight from "./PlayingControlsRight.vue";
     transition: 0.25s;
     transition-property: transform;
     transform: translateY(0px);
-    padding: 0px 15px;
+    padding: 0 15px;
 }
 
 .playing-bar.hidden {
