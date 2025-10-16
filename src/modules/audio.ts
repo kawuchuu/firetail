@@ -14,7 +14,7 @@ interface AudioStore {
     volume: number;
 }
 
-class AudioPlayer extends Audio {
+class AudioPlayer {
     #queue:FiretailSong[] = [];
     #index = 0;
     #id:string;
@@ -24,32 +24,28 @@ class AudioPlayer extends Audio {
     reactive: AudioStore;
     haveScrobbledCurrent = false;
     lastPlayedTimestamp: number;
+    timeInterval: number | undefined;
+    currentTime: number;
+    duration: number;
     constructor() {
-        super();
-        this.addEventListener("ended", () => {
-            this.nextSong();
-        });
-        this.addEventListener("timeupdate", this.timeUpdate);
-        this.addEventListener("pause", this.updateReactivePause);
-        this.addEventListener("playing", this.updateReactivePause);
         this.metadata = new Metadata(this);
         this.reactive = reactive({
             title: this.metadata.title,
             artist: this.metadata.artist,
-            currentTime: this.currentTime,
-            duration: this.duration,
+            currentTime: 0,
+            duration: 0,
             currentSong: this.currentSong,
-            paused: this.paused,
-            volume: this.volume,
+            paused: true,
+            volume: 1,
         });
     }
 
-    updateReactivePause() {
+    /*updateReactivePause() {
         this.reactive.paused = this.paused;
-    }
+    }*/
 
-    setCurrentTime(time:number) {
-        this.currentTime = time;
+    async setCurrentTime(time:number) {
+        await window.audioBackend.seek(time);
     }
 
     get queue() {
@@ -78,24 +74,23 @@ class AudioPlayer extends Audio {
         this.reactive.currentSong = song;
     }
 
-    doTimeUpdate(willDo:boolean) {
+    /*doTimeUpdate(willDo:boolean) {
         if (willDo) this.addEventListener('timeupdate', this.timeUpdate);
         else this.removeEventListener('timeupdate', this.timeUpdate);
-    }
+    }*/
 
     async playSong(song: FiretailSong) {
         if (!song || !song.path) return console.warn("Could not find song", song);
-        this.src = getResource(song.path);
         this.#id = song.id;
         this.currentSong = song;
         this.reactive.duration = song.realdur;
         this.metadata.title = song.title;
         this.metadata.artist = song.artist;
         this.metadata.setSongMetadata(song)
-        await this.play().catch(err => {
-            console.error(err);
-        })
-        updateNowPlaying(this.metadata.artist, this.metadata.title);
+        await window.audioBackend.play(song.path, 0);
+        //await window.audioBackend.playGapless(this.queue[this.index + 1].path);
+        this.timeInterval = setInterval(this.timeUpdate, 500);
+      updateNowPlaying(this.metadata.artist, this.metadata.title);
         this.lastPlayedTimestamp = Math.floor(Date.now() / 1000);
         this.haveScrobbledCurrent = false;
     }
@@ -112,23 +107,25 @@ class AudioPlayer extends Audio {
         }
     }
 
-    togglePlay() {
+    /*togglePlay() {
         if (this.paused) {
             this.play()
         } else {
             this.pause()
         }
         return this.paused
-    }
+    }*/
 
     nextSong() {
         this.index++
+        console.log('NEXT SONG ' + this.index)
         this.currentSong = this.#queue[this.index]
         this.playSong(this.currentSong)
     }
 
     prevSong() {
         if (this.currentTime > 5) {
+            console.log('TEST')
             this.setCurrentTime(0)
         } else {
             this.index--
@@ -137,13 +134,14 @@ class AudioPlayer extends Audio {
         }
     }
 
-    timeUpdate() {
+    async timeUpdate() {
+        this.currentTime = await window.audioBackend.getCurrentTime();
         if (this.updateLocal === 10) {
             this.updateLocal = 0
         } else {
             this.updateLocal++
         }
-        audioPlayer.reactive.currentTime = audioPlayer.currentTime;
+        audioPlayer.reactive.currentTime = this.currentTime;
         if (!this.haveScrobbledCurrent && ((this.currentTime > this.duration / 2) || this.currentTime > 240) && this.lastPlayedTimestamp && this.duration > 30) {
           this.haveScrobbledCurrent = true;
           scrobble(this.metadata.artist, this.metadata.title, this.lastPlayedTimestamp);

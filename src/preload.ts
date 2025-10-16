@@ -1,5 +1,13 @@
 import {contextBridge, ipcRenderer, webUtils} from 'electron';
 
+contextBridge.exposeInMainWorld('audioBackend', {
+  play: (filePath: string, startPosition?: number) => ipcRenderer.invoke('play', filePath, startPosition),
+  stop: () => ipcRenderer.invoke('stop'),
+  playGapless: (filePath: string) => ipcRenderer.invoke('play', filePath),
+  seek: (positionSeconds: number) => ipcRenderer.invoke('seek', positionSeconds),
+  getCurrentTime: () => ipcRenderer.invoke('getCurrentTime'),
+});
+
 contextBridge.exposeInMainWorld('library', {
   getAllSongs: () => ipcRenderer.sendSync('getAllSongs'),
   getAllAlbums: () =>  ipcRenderer.sendSync('getAllAlbums'),

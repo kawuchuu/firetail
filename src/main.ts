@@ -10,6 +10,7 @@ import { Readable } from 'node:stream';
 import {Mime} from 'mime/lite';
 import standardTypes from 'mime/types/standard.js';
 import otherTypes from 'mime/types/other.js';
+import {AudioBackend} from "./modules/audio-backend";
 
 protocol.registerSchemesAsPrivileged([{
   scheme: 'media',
@@ -30,11 +31,13 @@ mime.define({'audio/flac': ['flac']}, true);
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
+
 export let mainWindow:BrowserWindow;
 const createWindow = () => {
   const database = new Database();
   const osType = process.platform;
   const ftStore = new FiretailStorage();
+  const nativeAudio = new AudioBackend();
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -83,10 +86,10 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
-  const thing = app.setAsDefaultProtocolClient('firetail');
+  /*const thing = app.setAsDefaultProtocolClient('firetail');
   if (thing) {
     console.log('DONE WOO')
-  } else console.log("NOT DONE NO")
+  } else console.log("NOT DONE NO")*/
   try {
     await installExtension(VUEJS_DEVTOOLS)
     console.log('Vue Devtools installed!')

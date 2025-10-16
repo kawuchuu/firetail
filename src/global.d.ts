@@ -1,6 +1,14 @@
 import FiretailSong from "./types/FiretailSong";
 import {Albums} from "./types/Albums";
 
+interface AudioBackendPreload {
+  play: (filePath: string, startPosition?: number) => Promise<void>;
+  stop: () => Promise<void>;
+  playGapless: (filePath: string) => Promise<void>;
+  seek: (positionSeconds: number) => Promise<void>;
+  getCurrentTime: () => Promise<number>;
+}
+
 interface LibraryPreload {
   getAllSongs: () => FiretailSong[];
   getAllAlbums: () => Albums[];
@@ -54,6 +62,7 @@ interface SafeStoragePreload {
 
 declare global {
   interface Window {
+    audioBackend: AudioBackendPreload;
     library: LibraryPreload;
     path: PathPreload;
     processPreload: ProcessPreload;
