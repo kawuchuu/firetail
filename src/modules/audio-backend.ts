@@ -5,6 +5,8 @@ export class AudioBackend extends AudioPlayer {
   constructor() {
     super();
     ipcMain.handle('play', this.wrap(this.play.bind(this)));
+    ipcMain.handle('pause', this.wrap(this.pause.bind(this)));
+    ipcMain.handle('resume', this.wrap(this.resume.bind(this)));
     ipcMain.handle('stop', this.wrap(this.stop.bind(this)));
     ipcMain.handle('playGapless', this.wrap(this.playGapless.bind(this)));
     ipcMain.handle('seek', this.wrap(this.seek.bind(this)));
@@ -13,6 +15,14 @@ export class AudioBackend extends AudioPlayer {
 
   play(filePath: string, startPosition: number) {
     return super.play(filePath, startPosition);
+  }
+
+  pause() {
+    return super.pause();
+  }
+
+  resume(): Promise<void> {
+    return super.resume();
   }
 
   stop() {

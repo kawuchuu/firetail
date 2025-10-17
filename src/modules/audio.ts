@@ -27,6 +27,7 @@ class AudioPlayer {
     timeInterval: number | undefined;
     currentTime: number;
     duration: number;
+    paused = true;
     constructor() {
         this.metadata = new Metadata(this);
         this.reactive = reactive({
@@ -40,9 +41,9 @@ class AudioPlayer {
         });
     }
 
-    /*updateReactivePause() {
+    updateReactivePause() {
         this.reactive.paused = this.paused;
-    }*/
+    }
 
     async setCurrentTime(time:number) {
         await window.audioBackend.seek(time);
@@ -74,10 +75,14 @@ class AudioPlayer {
         this.reactive.currentSong = song;
     }
 
-    /*doTimeUpdate(willDo:boolean) {
-        if (willDo) this.addEventListener('timeupdate', this.timeUpdate);
-        else this.removeEventListener('timeupdate', this.timeUpdate);
-    }*/
+    doTimeUpdate(willDo:boolean) {
+        if (willDo) {
+          this.timeInterval ??= setInterval(this.timeUpdate, 500);
+        } else {
+          clearInterval(this.timeInterval);
+          this.timeInterval = null;
+        }
+    }
 
     async playSong(song: FiretailSong) {
         if (!song || !song.path) return console.warn("Could not find song", song);
@@ -88,9 +93,13 @@ class AudioPlayer {
         this.metadata.artist = song.artist;
         this.metadata.setSongMetadata(song)
         await window.audioBackend.play(song.path, 0);
+        this.paused = false;
+        this.updateReactivePause();
         //await window.audioBackend.playGapless(this.queue[this.index + 1].path);
-        this.timeInterval = setInterval(this.timeUpdate, 500);
-      updateNowPlaying(this.metadata.artist, this.metadata.title);
+        clearInterval(this.timeInterval);
+        this.timeInterval = null;
+        this.timeInterval ??= setInterval(this.timeUpdate, 500);
+        updateNowPlaying(this.metadata.artist, this.metadata.title);
         this.lastPlayedTimestamp = Math.floor(Date.now() / 1000);
         this.haveScrobbledCurrent = false;
     }
@@ -107,14 +116,20 @@ class AudioPlayer {
         }
     }
 
-    /*togglePlay() {
+    async togglePlay() {
         if (this.paused) {
-            this.play()
+            await window.audioBackend.resume();
+            this.timeInterval ??= setInterval(this.timeUpdate, 500);
+            this.paused = false;
         } else {
-            this.pause()
+            await window.audioBackend.pause();
+            clearInterval(this.timeInterval);
+            this.timeInterval = null;
+            this.paused = true;
         }
-        return this.paused
-    }*/
+        this.updateReactivePause();
+        return this.paused;
+    }
 
     nextSong() {
         this.index++

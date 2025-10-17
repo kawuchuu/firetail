@@ -3,6 +3,8 @@ import {Albums} from "./types/Albums";
 
 interface AudioBackendPreload {
   play: (filePath: string, startPosition?: number) => Promise<void>;
+  pause: () => Promise<void>;
+  resume: () => Promise<void>;
   stop: () => Promise<void>;
   playGapless: (filePath: string) => Promise<void>;
   seek: (positionSeconds: number) => Promise<void>;

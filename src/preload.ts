@@ -2,6 +2,8 @@ import {contextBridge, ipcRenderer, webUtils} from 'electron';
 
 contextBridge.exposeInMainWorld('audioBackend', {
   play: (filePath: string, startPosition?: number) => ipcRenderer.invoke('play', filePath, startPosition),
+  pause: () => ipcRenderer.invoke('pause'),
+  resume: () => ipcRenderer.invoke('resume'),
   stop: () => ipcRenderer.invoke('stop'),
   playGapless: (filePath: string) => ipcRenderer.invoke('play', filePath),
   seek: (positionSeconds: number) => ipcRenderer.invoke('seek', positionSeconds),
