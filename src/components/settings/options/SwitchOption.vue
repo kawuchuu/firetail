@@ -62,7 +62,8 @@ onBeforeMount(() => {
 .switch {
     width: 54px;
     height: 30px;
-    background-color: var(--text-op);
+    background-color: var(--fg-bg);
+    box-shadow: inset 0 0 0 1px var(--bd-op);
     border-radius: 50px;
     display: flex;
     align-items: center;

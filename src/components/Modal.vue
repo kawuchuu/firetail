@@ -14,63 +14,43 @@ defineExpose({setModalActive});
 </script>
 
 <template>
-  <teleport v-if="modalActive" to="body">
-    <div class="modal-container">
-      <div class="modal">
-        <div class="modal-header">
-          <h3>{{title}}</h3>
-          <i @click="setModalActive(false)" class="ft-icon">close</i>
-        </div>
-        <div class="modal-body">
-          <slot/>
+  <teleport to="body">
+    <transition name="backdrop" appear>
+      <div v-if="modalActive" class="bg" @click="setModalActive(false)"/>
+    </transition>
+    <transition name="panel" appear>
+      <div v-if="modalActive" class="modal-container">
+        <div class="modal">
+          <div class="modal-header">
+            <h3>{{title}}</h3>
+            <i @click="setModalActive(false)" class="ft-icon std-icon-btn">close</i>
+          </div>
+          <div class="modal-body">
+            <slot />
+          </div>
         </div>
       </div>
-      <div class="bg" @click="setModalActive(false)" />
-    </div>
+    </transition>
   </teleport>
 </template>
 
 <style scoped lang="scss">
 .modal-container {
-  width: 100vw;
-  height: 100vh;
   position: fixed;
-  left: 0;
-  top: 0;
+  inset: 0;
   z-index: 20;
-
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  pointer-events: none;
 }
 
 .bg {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  background: rgba(0,0,0,.5);
-  animation: fade-in 250ms;
+  position: fixed;
+  inset: 0;
+  z-index: 19;
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
-}
-
-@keyframes open {
-  from {
-    transform: scale(0.98);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
 }
 
 .modal {
@@ -79,10 +59,40 @@ defineExpose({setModalActive});
   max-height: 80%;
   border-radius: 10px;
   background-color: var(--bg);
-  border: solid 1px var(--bd);
+  border: 1px solid var(--bd);
   position: relative;
   z-index: 21;
-  animation: open 250ms;
+  pointer-events: all;
+}
+
+.backdrop-enter-active, .backdrop-leave-active {
+  transition: opacity 250ms ease, backdrop-filter 250ms ease;
+  will-change: opacity, backdrop-filter;
+}
+
+.backdrop-enter-from, .backdrop-leave-to {
+  opacity: 0;
+  backdrop-filter: blur(0);
+}
+
+.backdrop-enter-to, .backdrop-leave-from {
+  opacity: 1;
+  backdrop-filter: blur(8px);
+}
+
+.panel-enter-active, .panel-leave-active {
+  transition: opacity 250ms ease, transform 250ms ease;
+  will-change: opacity, transform;
+}
+
+.panel-enter-from, .panel-leave-to {
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+.panel-enter-to, .panel-leave-from {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .modal-header {
