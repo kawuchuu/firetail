@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import FiretailSong from "../types/FiretailSong";
 import {audioPlayer, viewStore} from "../renderer";
-import {computed, nextTick, onMounted, provide, ref, watch} from "vue";
+import {computed, nextTick, onMounted, provide, ref, watch, Ref} from "vue";
 import SongListItem from "./SongListItem.vue";
 import SongViewInfoView from "./songlistviews/SongViewInfoView.vue";
 import {useRoute} from "vue-router";
 import {getArt} from "../modules/art";
+import ContextMenu from "./ContextMenu.vue";
+import {Vector2} from "../types/Common";
 
 provide('play', play);
+provide("closeContextMenu", closeContextMenu);
 
 const props = defineProps<{
   songList: FiretailSong[],
@@ -29,9 +32,20 @@ const topView = ref(null);
 const sortInfoOpacity = ref(0);
 let opacityToScrollBy = ref(0);
 const bgImagePath = ref('');
+const isContextMenuVisible = ref(false);
+const contextMenuPos:Ref<Vector2> = ref(new Vector2(0, 0));
 
 function play(index:number) {
   audioPlayer.enqueue(props.songList, true, true, index);
+}
+
+function closeContextMenu() {
+  isContextMenuVisible.value = false;
+}
+
+function openContextMenu(evt: PointerEvent) {
+  isContextMenuVisible.value = true;
+  contextMenuPos.value.set(evt.x, evt.y);
 }
 
 function updateScroll() {
@@ -127,9 +141,10 @@ onMounted(() => {
         </RouterView>
       </template>-->
       <template #default="{ item, index, active }" ref="test">
-        <SongListItem :song="item" :index="index" :is-simple="isSimple" />
+        <SongListItem :song="item" :index="index" :is-simple="isSimple" @contextmenu="openContextMenu" />
       </template>
     </RecycleScroller>
+    <ContextMenu :top="contextMenuPos.y" :left="contextMenuPos.x" v-if="isContextMenuVisible" />
     <SongViewInfoView v-if="showInfoView" :genres="genres" :artists="artists" />
   </div>
 </template>

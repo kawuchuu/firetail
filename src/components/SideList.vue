@@ -45,6 +45,7 @@ onMounted(() => {
 
   transition: 0.3s cubic-bezier(0, 1, 0.35, 1);
   transition-property: width;
+  transition-delay: 0.2s;
 }
 
 .album-category-label {
@@ -52,6 +53,7 @@ onMounted(() => {
   padding: 0 0 10px 10px;
   margin: 30px 0 10px 0;
   transition: font-size 0.5s cubic-bezier(0, 1, 0.35, 1);
+  transition-delay: 0.2s;
   height: 20px;
   display: flex;
   align-items: flex-end;

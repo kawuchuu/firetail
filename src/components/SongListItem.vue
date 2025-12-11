@@ -37,7 +37,7 @@ function startPlaying() {
   play(props.index);
 }
 
-const play:Function = inject("play");
+const play = inject<(index: number) => void>("play");
 </script>
 
 <template>
