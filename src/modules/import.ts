@@ -1,6 +1,6 @@
 import {promises as fs, statSync, writeFile} from "fs";
 import {resolve} from "path";
-import mime from 'mime';
+import {mime} from "../main";
 import {app, BrowserWindow} from "electron";
 import FiretailSong from "../types/FiretailSong";
 import {timeFormat} from "./timeformat";

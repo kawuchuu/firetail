@@ -23,7 +23,7 @@ protocol.registerSchemesAsPrivileged([{
 }]);
 
 // manually redefining some mime types to ensure content-type is correct
-const mime = new Mime(standardTypes, otherTypes);
+export const mime = new Mime(standardTypes, otherTypes);
 mime.define({'audio/flac': ['flac']}, true);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -65,6 +65,8 @@ const createWindow = () => {
   mainWindow.on('ready-to-show', () => {
     mainWindow.show();
   });
+
+  mainWindow.setMenuBarVisibility(false);
 
   startIpc();
 
@@ -161,7 +163,7 @@ function mediaUrlToPath(thing: string) {
   const url = new URL(thing);
   const hostname = url.hostname;
   const pathname = decodeURIComponent(url.pathname || '');
-  if (process.platform !== 'win32') return pathname;
+  if (process.platform !== 'win32') return hostname ? `/${hostname}${pathname}` : pathname;
   if (hostname && !/^[a-zA-Z]$/.test(hostname)) return `\\\\${hostname}${pathname.replace(/\//g, '\\')}`;
   if (/^\/[a-zA-Z]:\//.test(pathname)) return pathname.slice(1).replace(/\//g, '\\');
   if (hostname && /^[a-zA-Z]$/.test(hostname)) {

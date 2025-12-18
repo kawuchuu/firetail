@@ -8,6 +8,7 @@ import {useRoute} from "vue-router";
 import {getArt} from "../modules/art";
 import ContextMenu from "./ContextMenu.vue";
 import {Vector2} from "../types/Common";
+import ContextMenuItem from "./ContextMenuItem.vue";
 
 provide('play', play);
 provide("closeContextMenu", closeContextMenu);
@@ -144,7 +145,9 @@ onMounted(() => {
         <SongListItem :song="item" :index="index" :is-simple="isSimple" @contextmenu="openContextMenu" />
       </template>
     </RecycleScroller>
-    <ContextMenu :top="contextMenuPos.y" :left="contextMenuPos.x" v-if="isContextMenuVisible" />
+    <ContextMenu :top="contextMenuPos.y" :left="contextMenuPos.x" v-if="isContextMenuVisible">
+      <ContextMenuItem></ContextMenuItem>
+    </ContextMenu>
     <SongViewInfoView v-if="showInfoView" :genres="genres" :artists="artists" />
   </div>
 </template>

@@ -87,8 +87,8 @@ onMounted(() => {
 
 .song-list-container {
   position: relative;
-  left: calc(var(--song-list-width) + 16px);
-  width: calc(100% - var(--song-list-width) - 16px);
+  left: calc(var(--song-list-width) + 32px);
+  width: calc(100% - var(--song-list-width) - 32px);
   height: calc(100vh - 44px - 85px);
   --main-border-radius-element: 0px;
 }
@@ -107,7 +107,7 @@ onMounted(() => {
 
 @media (max-width: 1350px) {
   .albums-view-container {
-    --song-list-width: 79px;
+    --song-list-width: 64px;
   }
 }
 </style>

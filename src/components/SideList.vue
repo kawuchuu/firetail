@@ -3,6 +3,7 @@ import {Albums, AlbumsDB} from "../types/Albums";
 import {formatArtPath, getImagePath} from "../modules/art";
 import {onMounted, ref} from "vue";
 import SideListItem from "./SideListItem.vue";
+import {OverlayScrollbarsComponent} from "overlayscrollbars-vue";
 
 const props = defineProps<{
   albums: AlbumsDB[],
@@ -18,14 +19,19 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="side-list-container">
+  <OverlayScrollbarsComponent class="side-list-container" :options="{
+      scrollbars: {
+        theme: 'os-theme-light',
+        autoHide: 'move'
+      }
+    }">
     <p class="album-category-label"><span>Albums</span></p>
     <SideListItem v-for="item in albums" :key="`${item.title}_${item.albumArtist}`" :item="item" :path="path" />
     <p class="album-category-label"><span>EPs</span></p>
     <SideListItem v-for="item in eps" :key="`${item.title}_${item.albumArtist}`" :item="item" :path="path" />
     <p class="album-category-label"><span>Singles</span></p>
     <SideListItem v-for="item in singles" :key="`${item.title}_${item.albumArtist}`" :item="item" :path="path" />
-  </div>
+  </OverlayScrollbarsComponent>
 </template>
 
 <style scoped>
@@ -34,11 +40,10 @@ onMounted(() => {
   width: var(--song-list-width);
   height: calc(100% - 85px - 44px - 32px);
   overflow: hidden;
-  overflow-y: auto;
 
   max-width: 300px;
   z-index: 4;
-  padding: 16px 0 16px 16px;
+  padding: 16px;
   background: var(--bg);
   border-right: solid var(--bd) 1px;
   border-radius: var(--main-border-radius);

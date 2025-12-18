@@ -51,5 +51,6 @@ const offset = computed(() => {
   border-radius: 10px;
   box-shadow: 0 8px 16px var(--bg);
   position: absolute;
+  padding: 5px;
 }
 </style>
