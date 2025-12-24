@@ -10,6 +10,7 @@ import { Readable } from 'node:stream';
 import {Mime} from 'mime/lite';
 import standardTypes from 'mime/types/standard.js';
 import otherTypes from 'mime/types/other.js';
+import {initMPRIS} from "./modules/mpris";
 
 protocol.registerSchemesAsPrivileged([{
   scheme: 'media',
@@ -30,12 +31,17 @@ mime.define({'audio/flac': ['flac']}, true);
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
+
+if (process.platform === 'linux') {
+  app.commandLine.appendSwitch('disable-features', 'HardwareMediaKeyHandling,MediaSessionService');
+}
+
 export let mainWindow:BrowserWindow;
 const createWindow = () => {
   const database = new Database();
   const osType = process.platform;
   const ftStore = new FiretailStorage();
-
+  initMPRIS();
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1350,

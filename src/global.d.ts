@@ -10,6 +10,18 @@ interface LibraryPreload {
   onRefreshView: (callback: any) => Electron.IpcRenderer;
 }
 
+interface PlayerPreload {
+  next: (callback: any) => Electron.IpcRenderer;
+  previous: (callback: any) => Electron.IpcRenderer;
+  pause: (callback: any) => Electron.IpcRenderer;
+  playPause: (callback: any) => Electron.IpcRenderer;
+  stop: (callback: any) => Electron.IpcRenderer;
+  play: (callback: any) => Electron.IpcRenderer;
+  seek: (callback: any) => Electron.IpcRenderer;
+  setPosition: (callback: any) => Electron.IpcRenderer;
+  updateMetadata: (song: FiretailSong) => void;
+}
+
 interface PathPreload {
   getImages: () => Promise<string>;
   getImagesSync: () => string;
@@ -55,6 +67,7 @@ interface SafeStoragePreload {
 declare global {
   interface Window {
     library: LibraryPreload;
+    player: PlayerPreload;
     path: PathPreload;
     processPreload: ProcessPreload;
     ftStore: FTStorePreload;

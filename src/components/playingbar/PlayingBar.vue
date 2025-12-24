@@ -8,7 +8,7 @@ import PlayingControlsRight from "./PlayingControlsRight.vue";
     <div class="playing-bar">
         <PlayingMeta />
         <PlayingControlsMid />
-        <PlayingControlsRight />
+        <PlayingControlsRight class="playing-controls-right" />
     </div>
 </template>
 
@@ -35,6 +35,10 @@ import PlayingControlsRight from "./PlayingControlsRight.vue";
 @media (max-width: 970px) {
     .playing-bar {
         grid-template-columns: 1fr 1.5fr;
+    }
+
+    .playing-controls-right {
+      display: none;
     }
 }
 </style>

@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "experimentalDecorators": true,
+    "target": "ES2019",
     "module": "commonjs",
+    "useDefineForClassFields": false,
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

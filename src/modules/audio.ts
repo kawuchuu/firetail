@@ -1,5 +1,5 @@
 import FiretailSong from "../types/FiretailSong";
-import {reactive} from "vue";
+import {reactive, toRaw} from "vue";
 import {audioPlayer} from "../renderer";
 import {getResource} from "./get-resource";
 import {scrobble, updateNowPlaying} from "./lastfm";
@@ -42,6 +42,12 @@ class AudioPlayer extends Audio {
             paused: this.paused,
             volume: this.volume,
         });
+        window.player.next(this.nextSong.bind(this));
+        window.player.previous(this.prevSong.bind(this));
+        window.player.pause(this.pause.bind(this));
+        window.player.playPause(this.togglePlay.bind(this));
+        window.player.stop(this.stop.bind(this));
+        window.player.play(this.play.bind(this));
     }
 
     updateReactivePause() {
@@ -91,7 +97,8 @@ class AudioPlayer extends Audio {
         this.reactive.duration = song.realdur;
         this.metadata.title = song.title;
         this.metadata.artist = song.artist;
-        this.metadata.setSongMetadata(song)
+        this.metadata.setSongMetadata(song);
+        window.player.updateMetadata(toRaw(song));
         await this.play().catch(err => {
             console.error(err);
         })
@@ -135,6 +142,10 @@ class AudioPlayer extends Audio {
             this.currentSong = this.queue[this.index]
             this.playSong(this.currentSong)
         }
+    }
+
+    stop() {
+        //
     }
 
     timeUpdate() {
@@ -181,10 +192,11 @@ class Metadata {
     }
 
     setSongMetadata(song:FiretailSong) {
-        this.updateMediaSession(song)
+        this.updateMediaSession(song);
     }
 
     updateMediaSession(song:FiretailSong) {
+        if (window.process.platform === 'linux') return;
         const metadata = {
             title: song.title,
             artist: song.artist,

@@ -1,4 +1,5 @@
 import {contextBridge, ipcRenderer, webUtils} from 'electron';
+import FiretailSong from "./types/FiretailSong";
 
 contextBridge.exposeInMainWorld('library', {
   getAllSongs: () => ipcRenderer.sendSync('getAllSongs'),
@@ -7,6 +8,18 @@ contextBridge.exposeInMainWorld('library', {
   getAllFromAlbum: (album: string, albumArtist: string) => ipcRenderer.sendSync('getAllFromAlbum', [album, albumArtist]),
   addToLibrary: (locations:string[]) => ipcRenderer.send('addToLibrary', locations),
   onRefreshView: (callback) => ipcRenderer.on('refreshView', (_event, value) => callback(value))
+});
+
+contextBridge.exposeInMainWorld('player', {
+  next: (callback) => ipcRenderer.on('playerNext', () => callback()),
+  previous: (callback) => ipcRenderer.on('playerPrevious', () => callback()),
+  pause: (callback) => ipcRenderer.on('playerPause', () => callback()),
+  playPause: (callback) => ipcRenderer.on('playerPlayPause', () => callback()),
+  stop: (callback) => ipcRenderer.on('playerStop', () => callback()),
+  play: (callback) => ipcRenderer.on('playerPlay', () => callback()),
+  seek: (callback) => ipcRenderer.on('playerSeek', (_event, Offset: bigint) => callback(Offset)),
+  setPosition: (callback) => ipcRenderer.on('playerSetPosition', (_event, TrackId: string, Position: bigint) => callback(TrackId, Position)),
+  updateMetadata: (song: FiretailSong) => ipcRenderer.send('updateMetadata', song),
 });
 
 contextBridge.exposeInMainWorld('path', {
