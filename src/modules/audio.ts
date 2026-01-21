@@ -48,6 +48,12 @@ class AudioPlayer extends Audio {
         window.player.playPause(this.togglePlay.bind(this));
         window.player.stop(this.stop.bind(this));
         window.player.play(this.play.bind(this));
+        window.player.seek((Offset: bigint) => {
+            this.setCurrentTime(this.currentTime += (Number(Offset) / 1000000));
+        });
+        window.player.setPosition((TrackId: string, Position: bigint) => {
+            this.setCurrentTime(Number(Position) / 1000000);
+        });
     }
 
     updateReactivePause() {
@@ -56,6 +62,7 @@ class AudioPlayer extends Audio {
 
     setCurrentTime(time:number) {
         this.currentTime = time;
+        window.player.updatePosition(this.currentTime, true);
     }
 
     get queue() {
@@ -99,6 +106,8 @@ class AudioPlayer extends Audio {
         this.metadata.artist = song.artist;
         this.metadata.setSongMetadata(song);
         window.player.updateMetadata(toRaw(song));
+        window.player.onPlay();
+        window.player.updatePosition(this.currentTime, true);
         await this.play().catch(err => {
             console.error(err);
         })
@@ -121,11 +130,14 @@ class AudioPlayer extends Audio {
 
     togglePlay() {
         if (this.paused) {
-            this.play()
+            this.play();
+            window.player.onPlay();
         } else {
-            this.pause()
+            this.pause();
+            window.player.onPause();
         }
-        return this.paused
+        window.player.updatePosition(this.currentTime, true);
+        return this.paused;
     }
 
     nextSong() {
@@ -159,6 +171,7 @@ class AudioPlayer extends Audio {
           this.haveScrobbledCurrent = true;
           scrobble(this.metadata.artist, this.metadata.title, this.lastPlayedTimestamp);
         }
+        window.player.updatePosition(this.currentTime, false);
     }
 }
 

@@ -17,3 +17,7 @@ export function getImagePath() {
 export function formatArtPath(path:string, artist:string, album:string) {
   return getResource(`${path}/${(artist + album).replace(/[`~!@#$%^&*()_|+\-=?;:'",.<> \{\}\[\]\\\/]/gi, '')}.jpg`);
 }
+
+export function getFileArtPath(path: string, artist: string, album: string) {
+  return `file:///${path}/${(artist + album).replace(/[`~!@#$%^&*()_|+\-=?;:'",.<> \{\}\[\]\\\/]/gi, '')}.jpg`;
+}

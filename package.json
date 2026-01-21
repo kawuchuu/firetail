@@ -22,6 +22,7 @@
     "@electron-forge/plugin-vite": "^7.7.0",
     "@electron-forge/shared-types": "^7.7.0",
     "@electron/fuses": "^1.8.0",
+    "@reforged/maker-appimage": "^5.1.1",
     "@types/better-sqlite3": "^7.6.11",
     "@types/mime": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^5.0.0",

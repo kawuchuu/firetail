@@ -20,6 +20,9 @@ interface PlayerPreload {
   seek: (callback: any) => Electron.IpcRenderer;
   setPosition: (callback: any) => Electron.IpcRenderer;
   updateMetadata: (song: FiretailSong) => void;
+  onPause: () => void;
+  onPlay: () => void;
+  updatePosition: (position: number, emit: boolean) => void;
 }
 
 interface PathPreload {

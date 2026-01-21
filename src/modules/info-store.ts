@@ -2,7 +2,7 @@ import {reactive} from "vue";
 
 const infoStore = reactive({
     version: 'unknown',
-    year: '2025',
+    year: '2026',
     lastfmProxyUrl: 'http://localhost:3000/'
 });
 

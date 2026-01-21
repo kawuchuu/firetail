@@ -20,6 +20,9 @@ contextBridge.exposeInMainWorld('player', {
   seek: (callback) => ipcRenderer.on('playerSeek', (_event, Offset: bigint) => callback(Offset)),
   setPosition: (callback) => ipcRenderer.on('playerSetPosition', (_event, TrackId: string, Position: bigint) => callback(TrackId, Position)),
   updateMetadata: (song: FiretailSong) => ipcRenderer.send('updateMetadata', song),
+  onPause: () => ipcRenderer.send('onPause'),
+  onPlay: () => ipcRenderer.send('onPlay'),
+  updatePosition: (position: number, emit: boolean) => ipcRenderer.send('updatePosition', position, emit),
 });
 
 contextBridge.exposeInMainWorld('path', {

@@ -6,13 +6,22 @@ import { MakerRpm } from '@electron-forge/maker-rpm';
 import { VitePlugin } from '@electron-forge/plugin-vite';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
+import MakerAppImage from "@reforged/maker-appimage";
+import AutoUnpackNativesPlugin from "@electron-forge/plugin-auto-unpack-natives";
 
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
+    executableName: 'firetail',
+    ignore: [],
   },
   rebuildConfig: {},
-  makers: [new MakerSquirrel({}), new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})],
+  makers: [new MakerSquirrel({}), new MakerZIP({}, ['darwin']), new MakerAppImage({
+    options: {
+      categories: ["Music"],
+      icon: "./src/assets/firetail.png",
+    }
+  })],
   plugins: [
     new VitePlugin({
       // `build` can specify multiple entry builds, which can be Main process, Preload scripts, Worker process, etc.
@@ -46,6 +55,7 @@ const config: ForgeConfig = {
       [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
       [FuseV1Options.OnlyLoadAppFromAsar]: true,
     }),
+      new AutoUnpackNativesPlugin({}),
   ],
 };
 

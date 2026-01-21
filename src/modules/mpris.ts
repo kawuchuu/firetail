@@ -6,6 +6,8 @@ import dbus, {Variant} from 'dbus-next';
 import {app, ipcMain} from "electron";
 import {mainWindow} from "../main";
 import FiretailSong from "../types/FiretailSong";
+import {getFileArtPath} from "./art";
+import path from "path/posix";
 
 const {Interface, ACCESS_READWRITE, ACCESS_READ} = dbus.interface;
 let bus: dbus.MessageBus | null = null;
@@ -63,26 +65,35 @@ class PlayerInterface extends Interface {
 
   Pause() {
     mainWindow.webContents.send('playerPause');
+    this.updatePlayingStatus('Paused');
   }
 
   PlayPause() {
     mainWindow.webContents.send('playerPlayPause');
+    if (this.PlaybackStatus === 'Paused') {
+      this.updatePlayingStatus('Playing');
+    }
+    if (this.PlaybackStatus === 'Playing') {
+      this.updatePlayingStatus('Paused');
+    }
   }
 
   Stop() {
     mainWindow.webContents.send('playerStop');
+    this.updatePlayingStatus('Stopped');
   }
 
   Play() {
     mainWindow.webContents.send('playerPlay');
+    this.updatePlayingStatus('Playing');
   }
 
   Seek(Offset: bigint) {
-    //
+    mainWindow.webContents.send('playerSeek', Offset);
   }
 
   SetPosition(TrackId: string, Position: bigint) {
-    //
+    mainWindow.webContents.send('playerSetPosition', TrackId, Position);
   }
 
   OpenUri(Uri: string) {
@@ -93,23 +104,17 @@ class PlayerInterface extends Interface {
     //
   }
 
-  PlaybackStatus = "Paused";
+  updatePlayingStatus(status: string) {
+    this.PlaybackStatus = status;
+    propUpdate(this, {PlaybackStatus: this.PlaybackStatus});
+  }
+
+  PlaybackStatus = "Stopped";
   LoopStatus = "None";
   Rate = 1;
   Shuffle = false;
 
-  _Metadata = {
-    'mpris:trackid': new Variant('s', '/dev/firetail/track/notrack'),
-    'mpris:length': new Variant('x', BigInt(0)),
-    'mpris:artUrl': new Variant('s', ''),
-    'xesam:album': new Variant('s', ''),
-    'xesam:albumArtist': new Variant('as', []),
-    'xesam:artist': new Variant('as', []),
-    'xesam:genre': new Variant('as', []),
-    'xesam:title': new Variant('s', 'Firetail'),
-    'xesam:trackNumber': new Variant('i', 0),
-    'xesam:url': new Variant('s', ''),
-  }
+  _Metadata = {};
 
   get Metadata() {
     return this._Metadata;
@@ -120,11 +125,11 @@ class PlayerInterface extends Interface {
   }
 
   Volume = 1;
-  Position = BigInt(1);
+  Position = BigInt(0);
   MinimumRate = 1;
   MaximumRate = 1;
-  CanGoNext = false;
-  CanGoPrevious = false;
+  CanGoNext = true;
+  CanGoPrevious = true;
   CanPlay = true;
   CanPause = true;
   CanSeek = true;
@@ -132,9 +137,22 @@ class PlayerInterface extends Interface {
 }
 
 async function setup(base: InstanceType<typeof BaseInterface>, player: InstanceType<typeof PlayerInterface>) {
-  await bus.requestName('org.mpris.MediaPlayer2.firetail', dbus.NameFlag.DO_NOT_QUEUE);
+
   bus.export('/org/mpris/MediaPlayer2', base);
   bus.export('/org/mpris/MediaPlayer2', player);
+  await bus.requestName('org.mpris.MediaPlayer2.firetail', dbus.NameFlag.REPLACE_EXISTING);
+  /*propUpdate(player, {
+    "PlaybackStatus": "Stopped",
+    "Volume": 1,
+    "CanPlay": true,
+    "CanPause": true,
+    "CanSeek": true,
+    "CanControl": true,
+    "CanGoNext": true,
+    "CanGoPrevious": true,
+    "Position": BigInt(0),
+    "Metadata": {}
+  });*/
 }
 
 // have to do it this way since dbus-next doesn't support typescript decorators
@@ -309,16 +327,30 @@ export async function initMPRIS() {
     player.Metadata = {
       'mpris:trackid': new Variant('s', `/dev/firetail/track/${song.id}`),
       'mpris:length': new Variant('x', BigInt(Math.trunc(song.realdur * 1000000))),
-      'mpris:artUrl': new Variant('s', ''),
+      'mpris:artUrl': new Variant('s', song.hasImage === 1 ? getFileArtPath(path.join(app.getPath('userData').split('\\').join('/'), 'images'), song.artist, song.album) : ''),
       'xesam:album': new Variant('s', song.album),
       'xesam:albumArtist': new Variant('as', [song.albumArtist]),
       'xesam:artist': new Variant('as', JSON.parse(song.allArtists as string)),
-      'xesam:genre': new Variant('as', song.genre ? song.genre : []),
+      'xesam:genre': new Variant('as', song.genre ? JSON.parse(song.genre as string) : []),
       'xesam:title': new Variant('s', song.title),
       'xesam:trackNumber': new Variant('i', song.trackNum),
       'xesam:url': new Variant('s', song.path),
     }
     propUpdate(player, {Metadata: player.Metadata});
+  });
+  ipcMain.on('onPlay', () => {
+    player.PlaybackStatus = 'Playing';
+    propUpdate(player, {PlaybackStatus: player.PlaybackStatus});
+    console.log('onPlay');
+  });
+  ipcMain.on('onPause', () => {
+    player.PlaybackStatus = 'Paused';
+    propUpdate(player, {PlaybackStatus: player.PlaybackStatus});
+    console.log('onPause');
+  });
+  ipcMain.on('updatePosition', (event, position: number, emit: boolean) => {
+    player.Position = BigInt(Math.trunc(position * 1000000));
+    if (emit) propUpdate(player, {Position: player.Position});
   });
 }
 
