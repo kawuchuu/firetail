@@ -19,7 +19,7 @@ const config: ForgeConfig = {
   makers: [new MakerSquirrel({}), new MakerZIP({}, ['darwin']), new MakerAppImage({
     options: {
       categories: ["Music"],
-      icon: "./src/assets/firetail.png",
+      icon: "./firetail.png",
     }
   })],
   plugins: [

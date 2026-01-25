@@ -1,7 +1,3 @@
-/*
-    INCOMPLETE
- */
-
 import dbus, {Variant} from 'dbus-next';
 import {app, ipcMain} from "electron";
 import {mainWindow} from "../main";
@@ -115,6 +111,7 @@ class PlayerInterface extends Interface {
   Shuffle = false;
 
   _Metadata = {};
+  _Volume = 1;
 
   get Metadata() {
     return this._Metadata;
@@ -124,7 +121,15 @@ class PlayerInterface extends Interface {
     this._Metadata = song
   }
 
-  Volume = 1;
+  get Volume() {
+    return this._Volume;
+  }
+
+  set Volume(Volume: number) {
+    this._Volume = Volume;
+    mainWindow.webContents.send('updateVolume', Volume);
+  }
+
   Position = BigInt(0);
   MinimumRate = 1;
   MaximumRate = 1;
@@ -141,18 +146,6 @@ async function setup(base: InstanceType<typeof BaseInterface>, player: InstanceT
   bus.export('/org/mpris/MediaPlayer2', base);
   bus.export('/org/mpris/MediaPlayer2', player);
   await bus.requestName('org.mpris.MediaPlayer2.firetail', dbus.NameFlag.REPLACE_EXISTING);
-  /*propUpdate(player, {
-    "PlaybackStatus": "Stopped",
-    "Volume": 1,
-    "CanPlay": true,
-    "CanPause": true,
-    "CanSeek": true,
-    "CanControl": true,
-    "CanGoNext": true,
-    "CanGoPrevious": true,
-    "Position": BigInt(0),
-    "Metadata": {}
-  });*/
 }
 
 // have to do it this way since dbus-next doesn't support typescript decorators
@@ -352,6 +345,10 @@ export async function initMPRIS() {
     player.Position = BigInt(Math.trunc(position * 1000000));
     if (emit) propUpdate(player, {Position: player.Position});
   });
+  ipcMain.on('onVolumeChange', (event, volume: number) => {
+    player.Volume = volume;
+    propUpdate(player, {Volume: volume});
+  })
 }
 
 function propUpdate(inter: InstanceType<typeof Interface>, toUpdate: { [p: string]: any }) {

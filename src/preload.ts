@@ -23,6 +23,8 @@ contextBridge.exposeInMainWorld('player', {
   onPause: () => ipcRenderer.send('onPause'),
   onPlay: () => ipcRenderer.send('onPlay'),
   updatePosition: (position: number, emit: boolean) => ipcRenderer.send('updatePosition', position, emit),
+  onVolumeChange: (volume: number) => ipcRenderer.send('onVolumeChange', volume),
+  updateVolume: (callback: any) => ipcRenderer.on('updateVolume', (_event, Volume: number) => callback(Volume)),
 });
 
 contextBridge.exposeInMainWorld('path', {

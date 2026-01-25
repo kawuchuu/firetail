@@ -15,7 +15,7 @@ const props = defineProps({
     margin: 22px 0 5px 16px;
     padding-bottom: 10px;
     padding-left: 15px;
-    border-bottom: 1px solid var(--text);
+    border-bottom: 1px solid rgba(255,255,255,0.35);
     transform: translateX(-15px);
     width: calc(100% - 17px);
 }

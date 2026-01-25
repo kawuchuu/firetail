@@ -15,17 +15,19 @@ interface AudioStore {
 }
 
 class AudioPlayer extends Audio {
-    #queue:FiretailSong[] = [];
-    #index = 0;
-    #id:string;
-    #currentSong: FiretailSong;
+    private _queue:FiretailSong[] = [];
+    private _index = 0;
+    private _id:string;
+    private _currentSong: FiretailSong;
     updateLocal = 0;
     metadata: Metadata;
     reactive: AudioStore;
     haveScrobbledCurrent = false;
     lastPlayedTimestamp: number;
+    private _appVolume = 1.0;
     constructor() {
         super();
+        this.volume = this._appVolume;
         this.addEventListener("ended", () => {
             this.nextSong();
         });
@@ -54,6 +56,24 @@ class AudioPlayer extends Audio {
         window.player.setPosition((TrackId: string, Position: bigint) => {
             this.setCurrentTime(Number(Position) / 1000000);
         });
+        window.player.updateVolume((Volume: number) => {
+            const clamp = Math.max(0, Math.min(1, Volume));
+            this._appVolume = clamp;
+            this.reactive.volume = clamp;
+            super.volume = clamp;
+        });
+    }
+
+    get appVolume() {
+        return this._appVolume;
+    }
+
+    set appVolume(value: number) {
+        const clamp = Math.max(0, Math.min(1, value));
+        this._appVolume = clamp;
+        this.reactive.volume = clamp;
+        super.volume = clamp;
+        window.player.onVolumeChange(clamp);
     }
 
     updateReactivePause() {
@@ -66,28 +86,28 @@ class AudioPlayer extends Audio {
     }
 
     get queue() {
-        return this.#queue
+        return this._queue
     }
 
     set queue(songs) {
-        this.#queue = songs
+        this._queue = songs
     }
 
     get index() {
-        return this.#index
+        return this._index
     }
 
     set index(id) {
-        this.#index = id
+        this._index = id
         console.log(this.index)
     }
 
     get currentSong() {
-        return this.#currentSong;
+        return this._currentSong;
     }
 
     set currentSong(song) {
-        this.#currentSong = song;
+        this._currentSong = song;
         this.reactive.currentSong = song;
     }
 
@@ -99,7 +119,7 @@ class AudioPlayer extends Audio {
     async playSong(song: FiretailSong) {
         if (!song || !song.path) return console.warn("Could not find song", song);
         this.src = getResource(song.path);
-        this.#id = song.id;
+        this._id = song.id;
         this.currentSong = song;
         this.reactive.duration = song.realdur;
         this.metadata.title = song.title;
@@ -142,7 +162,7 @@ class AudioPlayer extends Audio {
 
     nextSong() {
         this.index++
-        this.currentSong = this.#queue[this.index]
+        this.currentSong = this._queue[this.index]
         this.playSong(this.currentSong)
     }
 

@@ -3,7 +3,7 @@ import {audioPlayer} from "../../renderer";
 import SeekBar from "../SeekBar.vue";
 
 function rangeChange(level:number) {
-  audioPlayer.volume = level;
+  audioPlayer.appVolume = level;
 }
 </script>
 

@@ -25,11 +25,11 @@ onMounted(() => {
         autoHide: 'move'
       }
     }">
-    <p class="album-category-label"><span>Albums</span></p>
+    <p class="album-category-label" v-if="albums && albums.length > 0"><span>Albums</span></p>
     <SideListItem v-for="item in albums" :key="`${item.title}_${item.albumArtist}`" :item="item" :path="path" />
-    <p class="album-category-label"><span>EPs</span></p>
+    <p class="album-category-label" v-if="eps && eps.length > 0"><span>EPs</span></p>
     <SideListItem v-for="item in eps" :key="`${item.title}_${item.albumArtist}`" :item="item" :path="path" />
-    <p class="album-category-label"><span>Singles</span></p>
+    <p class="album-category-label" v-if="singles && singles.length > 0"><span>Singles</span></p>
     <SideListItem v-for="item in singles" :key="`${item.title}_${item.albumArtist}`" :item="item" :path="path" />
   </OverlayScrollbarsComponent>
 </template>
@@ -65,7 +65,7 @@ onMounted(() => {
 }
 
 .album-category-label:first-child {
-  margin-top: 10px;
+  margin-top: 4px;
 }
 
 @media (max-width: 1350px) {

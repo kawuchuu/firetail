@@ -23,6 +23,8 @@ interface PlayerPreload {
   onPause: () => void;
   onPlay: () => void;
   updatePosition: (position: number, emit: boolean) => void;
+  onVolumeChange: (volume: number) => void;
+  updateVolume: (callback: any) => Electron.IpcRenderer;
 }
 
 interface PathPreload {
