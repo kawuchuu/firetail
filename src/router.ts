@@ -8,6 +8,7 @@ import Albums from "./routes/Albums.vue";
 import TestAudio from "./routes/TestAudio.vue";
 import SettingsView from "./routes/SettingsView.vue";
 import Unknown from "./routes/Unknown.vue";
+import Artists from "./routes/Artists.vue";
 
 const routes = [
     {
@@ -44,6 +45,20 @@ const routes = [
                 components: {
                     top: BaseSongTop,
                     bottom: BaseSongBottom
+                }
+            }]
+        }]
+    },
+    {
+        path: '/artists',
+        component: Artists,
+        children: [{
+            path: ':artist',
+            component: SongListView,
+            children: [{
+                path: '',
+                components: {
+                    top: BaseSongTop,
                 }
             }]
         }]

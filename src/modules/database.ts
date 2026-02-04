@@ -49,6 +49,10 @@ class FiretailDB {
     return albumTypes;
   }
 
+  getAllArtists() {
+    return (this.db.prepare("SELECT DISTINCT artist FROM library ORDER BY artist ASC").all() as { artist: string }[]).map(x => x.artist);
+  }
+
   getAllFromMatchingColumn(column: string, value: string) {
     return this.db.prepare("SELECT * FROM library WHERE ? = ?").all(column, value);
   }
@@ -60,6 +64,14 @@ class FiretailDB {
     if (songs.length === 0) return { songs, genres, artists, sum: 0 };
     const sum:number = this.determineNumber(this.db.prepare("SELECT SUM(realdur) AS sum FROM library WHERE album = ? AND albumArtist = ? ORDER BY disc,trackNum").pluck().get(album, albumArtist) as Sum);
     return { songs, genres, artists, sum };
+  }
+
+  getAllFromArtist(artist: string) {
+    const songs = this.db.prepare("SELECT * FROM library WHERE artist = ? ORDER BY album,disc,trackNum").all(artist);
+    const genres = this.db.prepare("SELECT DISTINCT g.value AS genre FROM library, json_each(genre) g WHERE genre IS NOT NULL AND genre IS NOT '' AND library.artist = ?").all(artist);
+    if (songs.length === 0) return { songs, genres, sum: 0 };
+    const sum:number = this.determineNumber(this.db.prepare("SELECT SUM(realdur) AS sum FROM library WHERE artist = ?").pluck().get(artist));
+    return { songs, genres, sum };
   }
 
   addToLibrary(songs:FiretailSong[]) {
@@ -101,6 +113,10 @@ class FiretailDB {
       event.returnValue = this.getAllAlbums();
     });
 
+    ipcMain.on('getAllArtists', (event) => {
+      event.returnValue = this.getAllArtists();
+    });
+
     ipcMain.on('getAllFromMatchingColumn', (event, args) => {
       event.returnValue = this.getAllFromMatchingColumn(args[0], args[1]);
     });
@@ -109,10 +125,14 @@ class FiretailDB {
       event.returnValue = this.getAllFromAlbum(args[0], args[1]);
     });
 
+    ipcMain.on('getAllFromArtist', (event, args) => {
+      event.returnValue = this.getAllFromArtist(args);
+    });
+
     ipcMain.on('addToLibrary', async (event, locations:string[]) => {
       if (locations.length <= 0) return;
       const finalPaths = await processFiles(locations);
-      const performAddFiles:FiretailSong[] = await addFiles(finalPaths);
+      const performAddFiles:FiretailSong[] = await addFiles(finalPaths.processFilesAr, finalPaths.coverImagePaths);
       this.addToLibrary(performAddFiles);
       mainWindow.webContents.send('refreshView');
     });

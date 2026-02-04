@@ -1,21 +1,5 @@
 <script setup lang="ts">
-import {Albums, AlbumsDB} from "../types/Albums";
-import {formatArtPath, getImagePath} from "../modules/art";
-import {onMounted, ref} from "vue";
-import SideListItem from "./SideListItem.vue";
 import {OverlayScrollbarsComponent} from "overlayscrollbars-vue";
-
-const props = defineProps<{
-  albums: AlbumsDB[],
-  eps: AlbumsDB[],
-  singles: AlbumsDB[]
-}>();
-
-const path = ref('');
-
-onMounted(() => {
-  path.value = getImagePath();
-})
 </script>
 
 <template>
@@ -25,12 +9,7 @@ onMounted(() => {
         autoHide: 'move'
       }
     }">
-    <p class="album-category-label" v-if="albums && albums.length > 0"><span>Albums</span></p>
-    <SideListItem v-for="item in albums" :key="`${item.title}_${item.albumArtist}`" :item="item" :path="path" />
-    <p class="album-category-label" v-if="eps && eps.length > 0"><span>EPs</span></p>
-    <SideListItem v-for="item in eps" :key="`${item.title}_${item.albumArtist}`" :item="item" :path="path" />
-    <p class="album-category-label" v-if="singles && singles.length > 0"><span>Singles</span></p>
-    <SideListItem v-for="item in singles" :key="`${item.title}_${item.albumArtist}`" :item="item" :path="path" />
+    <slot/>
   </OverlayScrollbarsComponent>
 </template>
 
@@ -53,7 +32,7 @@ onMounted(() => {
   transition-delay: 0.2s;
 }
 
-.album-category-label {
+.side-list-container:deep(.category-label) {
   border-bottom: solid 1px var(--bd);
   padding: 0 0 10px 10px;
   margin: 30px 0 10px 0;
@@ -64,7 +43,7 @@ onMounted(() => {
   align-items: flex-end;
 }
 
-.album-category-label:first-child {
+.side-list-container:deep(.category-label:first-child) {
   margin-top: 4px;
 }
 
@@ -73,11 +52,11 @@ onMounted(() => {
     width: 300px;
   }
 
-  .side-list-container .album-category-label {
+  .side-list-container:deep(.category-label) {
     font-size: 0.8em;
   }
 
-  .side-list-container:hover .album-category-label {
+  .side-list-container:hover:deep(.category-label) {
     font-size: 1em;
   }
 

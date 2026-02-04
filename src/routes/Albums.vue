@@ -4,13 +4,9 @@ import FiretailSong from "../types/FiretailSong";
 import {Albums, AlbumsDB} from "../types/Albums";
 import {useRoute, useRouter} from "vue-router";
 import SideList from "../components/SideList.vue";
-
-interface SongsGenre {
-  songs: FiretailSong[],
-  genres: string[],
-  artists: string[],
-  sum: number
-}
+import SideListItem from "../components/SideListItem.vue";
+import {formatArtPath, getImagePath} from "../modules/art";
+import {SongsGenre} from "../types/Common";
 
 interface Parameters {
   album: string;
@@ -32,6 +28,8 @@ const singles: Ref<AlbumsDB[]> = ref();
 const route = useRoute();
 const router = useRouter();
 
+const path = ref('');
+
 watch(() => route.params, getNewAlbumData, { immediate: true });
 
 function getNewAlbumData(album: Parameters) {
@@ -45,6 +43,15 @@ function getNewAlbumData(album: Parameters) {
   artistName.value = album.albumArtist;
 }
 
+function getImage(item: AlbumsDB) {
+  console.log('IS IT WORKING')
+  if (item.title && item.albumArtist) {
+    const imagePath = formatArtPath(path.value, item.albumArtist, item.title);
+    console.log(imagePath);
+    return imagePath;
+  } else return '';
+}
+
 onMounted(() => {
   const albums:Map<string, AlbumsDB[]> = window.library.getAllAlbums();
   albumList.value = albums;
@@ -53,14 +60,20 @@ onMounted(() => {
   singles.value = albums.get('single');
   if (route.params.album) return;
   router.replace(`/albums/${encodeURIComponent(albums.get('album')[0].albumArtist)}/${encodeURIComponent(albums.get('album')[0].title)}`);
+  path.value = getImagePath();
 })
 </script>
 
 <template>
   <div class="albums-view-container">
-    <SideList :albums="regularAlbums"
-              :eps="eps"
-              :singles="singles" />
+    <SideList>
+      <p class="category-label" v-if="regularAlbums && regularAlbums.length > 0"><span>Albums</span></p>
+      <SideListItem v-for="item in regularAlbums" :key="`${item.title}_${item.albumArtist}`" :title="item.title" :url="`/albums/${encodeURIComponent(item.albumArtist)}/${encodeURIComponent(item.title)}`" :subtitle="item.albumArtist" :image-path="getImage(item)"/>
+      <p class="category-label" v-if="eps && eps.length > 0"><span>EPs</span></p>
+      <SideListItem v-for="item in eps" :key="`${item.title}_${item.albumArtist}`" :title="item.title" :url="`/albums/${encodeURIComponent(item.albumArtist)}/${encodeURIComponent(item.title)}`" :subtitle="item.albumArtist" :image-path="getImage(item)"/>
+      <p class="category-label" v-if="singles && singles.length > 0"><span>Singles</span></p>
+      <SideListItem v-for="item in singles" :key="`${item.title}_${item.albumArtist}`" :title="item.title" :url="`/albums/${encodeURIComponent(item.albumArtist)}/${encodeURIComponent(item.title)}`" :subtitle="item.albumArtist" :image-path="getImage(item)" />
+    </SideList>
     <div class="song-list-container">
       <RouterView v-slot="{ Component }">
         <component

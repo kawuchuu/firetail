@@ -17,7 +17,7 @@ interface MetadataMap {
   'xesam:artist': Variant;
   'xesam:genre': Variant;
   'xesam:title': Variant;
-  'xesam:trackNumber': Variant;
+  'xesam:trackNumber'?: Variant;
   'xesam:url': Variant;
 }
 
@@ -326,8 +326,10 @@ export async function initMPRIS() {
       'xesam:artist': new Variant('as', JSON.parse(song.allArtists as string)),
       'xesam:genre': new Variant('as', song.genre ? JSON.parse(song.genre as string) : []),
       'xesam:title': new Variant('s', song.title),
-      'xesam:trackNumber': new Variant('i', song.trackNum),
       'xesam:url': new Variant('s', song.path),
+    }
+    if (song.trackNum) {
+      player.Metadata['xesam:trackNumber'] = new Variant('i', song.trackNum);
     }
     propUpdate(player, {Metadata: player.Metadata});
   });

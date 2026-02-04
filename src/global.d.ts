@@ -1,11 +1,14 @@
 import FiretailSong from "./types/FiretailSong";
 import {Albums} from "./types/Albums";
+import {Ref} from "vue";
 
 interface LibraryPreload {
   getAllSongs: () => FiretailSong[];
   getAllAlbums: () => Albums[];
+  getAllArtists: () => string[];
   getAllFromMatchingColumns: (column: string, value: string) => FiretailSong[];
   getAllFromAlbum: (album: string, albumArtist: string) => FiretailSong[];
+  getAllFromArtist: (artist: string) => FiretailSong[];
   addToLibrary: (locations: string[]) => void;
   onRefreshView: (callback: any) => Electron.IpcRenderer;
 }

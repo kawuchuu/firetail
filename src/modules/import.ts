@@ -1,5 +1,5 @@
 import {promises as fs, statSync, writeFile} from "fs";
-import {resolve} from "path";
+import {resolve, dirname} from "path";
 import {mime} from "../main";
 import {app, BrowserWindow} from "electron";
 import FiretailSong from "../types/FiretailSong";
@@ -27,14 +27,18 @@ async function getFiles(dir:string) {
 }
 
 export async function processFiles(files:string[]) {
-    let processFilesAr:Array<string[]> = []
+    let processFilesAr:Array<string[]> = [];
+    let coverImagePaths: Array<string> = [];
     for (const index in files) {
         const file = files[index];
-        console.log(files)
         const stat = statSync(file);
         if (stat.isDirectory()) {
             const dirFiles = await getFiles(file);
-            processFilesAr = processFilesAr.concat(await processFiles(dirFiles));
+            const processing = await processFiles(dirFiles);
+            processFilesAr = processFilesAr.concat(processing.processFilesAr);
+            if (processing.processFilesAr.length > 0) {
+                coverImagePaths = coverImagePaths.concat(processing.coverImagePaths);
+            }
         } else {
             const fileName = resolve(file).split('/');
             const ext = fileName[fileName.length - 1].split('.').pop();
@@ -42,17 +46,20 @@ export async function processFiles(files:string[]) {
             if (isAudio && isAudio.startsWith('audio')) {
                 processFilesAr.push([file, fileName[fileName.length - 1]]);
             }
+            if (isAudio && (isAudio === 'image/jpeg' || isAudio === 'image/png') && fileName[fileName.length - 1].startsWith('cover')) {
+                coverImagePaths.push(dirname(resolve(file)));
+            }
         }
     }
-    return processFilesAr;
+    return {processFilesAr, coverImagePaths};
 }
 
-export async function addFiles(songs:Array<string[]>) {
+export async function addFiles(songs:Array<string[]>, coverImagePaths:string[]) {
     const path = app.getPath('userData');
     // we have to do this because of dumb cjs/esm stuff
     // eslint-disable-next-line import/no-unresolved
     const musicMetadata = await import('music-metadata');
-    const getData:Promise<FiretailSong[]> = new Promise(resolve => {
+    const getData:Promise<FiretailSong[]> = new Promise(presolve => {
         const toAdd:FiretailSong[] = [];
         const imgUsed:string[] = [];
         let progress = 0;
@@ -79,7 +86,7 @@ export async function addFiles(songs:Array<string[]>) {
                 realdur: meta.format.duration ? meta.format.duration : 0,
                 path: f[0],
                 id: id,
-                hasImage: meta.common.picture ? 1 : 0,
+                hasImage: 0,
                 trackNum: meta.common.track.no ? meta.common.track.no : null,
                 year: meta.common.year ? `${meta.common.year}` : null,
                 disc: meta.common.disk ? meta.common.disk.no : null,
@@ -87,14 +94,27 @@ export async function addFiles(songs:Array<string[]>) {
                 genre: meta.common.genre ? JSON.stringify(meta.common.genre) : null
             }
             const artistAlbum = `${metaObj.albumArtist}${meta.common.album}`.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<> {}[\]\\/]/gi, '')
+            let usingCoverImage = false;
+            if (coverImagePaths.indexOf(dirname(f[0])) !== -1) {
+                statSync(resolve(dirname(f[0]), 'cover.jpg'));
+                usingCoverImage = true;
+                metaObj.hasImage = 1;
+            }
+            if (!usingCoverImage && meta.common.picture) {
+                metaObj.hasImage = 1;
+            }
             toAdd.push(metaObj)
             progress++
             BrowserWindow.getAllWindows()[0].webContents.send('doneProgress', [progress, songs.length])
             if (toAdd.length == songs.length) {
                 BrowserWindow.getAllWindows()[0].webContents.send('startOrFinish', false)
-                resolve(toAdd)
+                presolve(toAdd)
             }
-            if (meta.common.picture && imgUsed.indexOf(artistAlbum) == -1) {
+            if (usingCoverImage) {
+                await fs.copyFile(resolve(dirname(f[0]), 'cover.jpg'), `${path}/images/${artistAlbum}.jpg`);
+                imgUsed.push(artistAlbum);
+            }
+            if (!usingCoverImage && meta.common.picture && imgUsed.indexOf(artistAlbum) == -1) {
                 imgUsed.push(artistAlbum)
                 const pic = meta.common.picture[0]
                 writeFile(`${path}/images/${artistAlbum}.jpg`, pic.data, err => {

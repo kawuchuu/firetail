@@ -1,30 +1,19 @@
 <script setup lang="ts">
-// TODO: improve performance of this.
-import {AlbumsDB} from "../types/Albums";
-import {formatArtPath} from "../modules/art";
-
-const props = defineProps<{
-  item: AlbumsDB;
-  path: string;
+defineProps<{
+  title: string;
+  url: string;
+  subtitle?: string;
+  imagePath?: string;
 }>();
-
-function getImage() {
-  console.log('IS IT WORKING')
-  if (props.item.title && props.item.albumArtist) {
-    const imagePath = formatArtPath(props.path, props.item.albumArtist, props.item.title);
-    console.log(imagePath);
-    return imagePath;
-  } else return '';
-}
 </script>
 
 <template>
   <div class="list-items">
-    <router-link :to="`/albums/${encodeURIComponent(item.albumArtist)}/${encodeURIComponent(item.title)}`">
-      <img alt="" loading="lazy" class="item-img" :src="getImage()"/>
+    <router-link :to="url">
+      <img v-if="imagePath" alt="" loading="lazy" class="item-img" :src="imagePath"/>
       <div class="item-info">
-        <span class="title">{{ item.title }}</span>
-        <span class="album-artist">{{ item.albumArtist }}</span>
+        <span class="title">{{ title }}</span>
+        <span class="album-artist">{{ subtitle }}</span>
       </div>
     </router-link>
   </div>
