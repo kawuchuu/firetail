@@ -208,7 +208,7 @@ onMounted(() => {
 
 .column-sort-wrapper.sticky .column-sort {
   position: fixed;
-  width: calc(var(--fixed-width) - 48px - var(--song-list-width) - var(--info-view-width));
+  width: calc(var(--fixed-width) - 46px - var(--song-list-width) - var(--info-view-width));
   pointer-events: none;
   border-color: transparent;
 }

@@ -46,6 +46,7 @@ function getNewAlbumData(album: Parameters) {
 function getImage(item: AlbumsDB) {
   console.log('IS IT WORKING')
   if (item.title && item.albumArtist) {
+    if (!path.value) path.value = getImagePath();
     const imagePath = formatArtPath(path.value, item.albumArtist, item.title);
     console.log(imagePath);
     return imagePath;
@@ -53,6 +54,7 @@ function getImage(item: AlbumsDB) {
 }
 
 onMounted(() => {
+  path.value = getImagePath();
   const albums:Map<string, AlbumsDB[]> = window.library.getAllAlbums();
   albumList.value = albums;
   regularAlbums.value = albums.get('album');
@@ -60,7 +62,6 @@ onMounted(() => {
   singles.value = albums.get('single');
   if (route.params.album) return;
   router.replace(`/albums/${encodeURIComponent(albums.get('album')[0].albumArtist)}/${encodeURIComponent(albums.get('album')[0].title)}`);
-  path.value = getImagePath();
 })
 </script>
 
@@ -120,7 +121,7 @@ onMounted(() => {
 
 @media (max-width: 1350px) {
   .albums-view-container {
-    --song-list-width: 64px;
+    --song-list-width: 63px;
   }
 }
 </style>

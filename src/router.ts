@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router'
 
 import SongListView from './components/SongListView.vue'
 import BaseSongTop from "./components/songlistviews/BaseSongTop.vue";
@@ -9,6 +9,7 @@ import TestAudio from "./routes/TestAudio.vue";
 import SettingsView from "./routes/SettingsView.vue";
 import Unknown from "./routes/Unknown.vue";
 import Artists from "./routes/Artists.vue";
+import BlankChild from "./components/BlankChild.vue";
 
 const routes = [
     {
@@ -37,31 +38,43 @@ const routes = [
     {
         path: '/albums',
         component: Albums,
-        children: [{
-            path: ':albumArtist/:album',
-            component: SongListView,
-            children: [{
+        children: [
+            {
+                path: ':albumArtist/:album',
+                component: SongListView,
+                children: [{
+                    path: '',
+                    components: {
+                        top: BaseSongTop,
+                        bottom: BaseSongBottom
+                    }
+                }]
+            },
+            {
                 path: '',
-                components: {
-                    top: BaseSongTop,
-                    bottom: BaseSongBottom
-                }
-            }]
-        }]
+                component: BlankChild
+            }
+        ]
     },
     {
         path: '/artists',
         component: Artists,
-        children: [{
-            path: ':artist',
-            component: SongListView,
-            children: [{
+        children: [
+            {
+                path: ':artist',
+                component: SongListView,
+                children: [{
+                    path: '',
+                    components: {
+                        top: BaseSongTop,
+                    }
+                }]
+            },
+            {
                 path: '',
-                components: {
-                    top: BaseSongTop,
-                }
-            }]
-        }]
+                component: BlankChild
+            }
+        ]
     },
     {
         path: '/settings',
@@ -70,7 +83,7 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes,
 })
 
