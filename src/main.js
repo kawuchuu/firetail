@@ -29,6 +29,9 @@ import otherTypes from 'mime/types/other.js';
 export const mime = new Mime(standardTypes, otherTypes);
 mime.define({'audio/flac': ['flac']}, true);
 
+app.setName('Firetail');
+process.title = 'firetail';
+
 protocol.registerSchemesAsPrivileged([{
   scheme: 'media',
   privileges: {
@@ -141,7 +144,6 @@ const createWindow = () => {
     if (osType == 'darwin') {
       app.dock.setIcon(path.resolve(__dirname, 'static/main/macos.png'))
     }
-    app.setName('Firetail')
 /*     if (!app.commandLine.hasSwitch('enable-instance-lock')) {
       server.startServer(app.getPath('userData'), win)
     } */
