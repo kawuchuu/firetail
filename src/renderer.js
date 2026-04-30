@@ -146,11 +146,11 @@ const arrowChangeTime = direction => {
     store.commit('audio/newAudioTime', newTime)
 }
 
-window.ipcRenderer.receive('updateHighContrast', (evt, enabled) => {
+/*window.ipcRenderer.receive('updateHighContrast', (evt, enabled) => {
     window.localStorage.setItem('highContrast', enabled)
     store.commit('nav/updateHighContrast', enabled)
     enabled ? document.documentElement.classList.add('high-contrast') : document.documentElement.classList.remove('high-contrast')
-})
+})*/
 
 window.ipcRenderer.receive('control', (evt, action) => {
     switch(action) {

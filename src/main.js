@@ -18,6 +18,27 @@ import ipc from './modules/ipc'
 import installExtension, {
   VUEJS_DEVTOOLS
 } from 'electron-devtools-installer'
+import {stat as pstat} from "node:fs/promises";
+import {createReadStream} from "node:fs";
+import {Readable} from "node:stream";
+import {Mime} from 'mime/lite';
+import standardTypes from 'mime/types/standard.js';
+import otherTypes from 'mime/types/other.js';
+
+// manually redefining some mime types to ensure content-type is correct
+export const mime = new Mime(standardTypes, otherTypes);
+mime.define({'audio/flac': ['flac']}, true);
+
+protocol.registerSchemesAsPrivileged([{
+  scheme: 'media',
+  privileges: {
+    standard: true,
+    secure: true,
+    supportFetchAPI: true,
+    corsEnabled: true,
+    stream: true
+  }
+}]);
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -404,9 +425,9 @@ const createWindow = () => {
     mainWindow.webContents.send('fullscreenUpdate', false)
   })
 
-  nativeTheme.on('updated', evt => {
+  /*nativeTheme.on('updated', evt => {
     mainWindow.webContents.send('updateHighContrast', evt.sender.shouldUseHighContrastColors)
-  })
+  })*/
 
   mainWindow.on('blur', () => {
     if (osType == 'win32') {
@@ -454,7 +475,7 @@ app.on('ready', async () => {
       },
     });
   });
-  registerLocalResourceProtocol()
+  setupLocalResourceProtocol()
   try {
     await installExtension(VUEJS_DEVTOOLS)
     console.log('Vue Devtools installed!')
@@ -464,17 +485,78 @@ app.on('ready', async () => {
   createWindow()
 });
 
-function registerLocalResourceProtocol() {
-  protocol.registerFileProtocol('local-resource', (request, callback) => {
-    const url = request.url.replace(/^local-resource:\/\//, '')
-    // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
-    const decodedUrl = decodeURI(url) // Needed in case URL contains spaces
+function setupLocalResourceProtocol() {
+  protocol.handle('media', async (request) => {
     try {
-      return callback(decodedUrl)
-    } catch (error) {
-      console.error('ERROR: registerLocalResourceProtocol: Could not get file path:', error)
+      const filePath = mediaUrlToPath(request.url);
+      const stat = await pstat(filePath);
+      if (!stat.isFile()) return new Response('not a file', { status: 400 });
+      const range = request.headers.get('range');
+      const headers = {
+        'Accept-Ranges': 'bytes',
+        'Vary': 'Range',
+        'Cache-Control': 'no-store',
+        'Content-Type': mime.getType(path.extname(filePath))
+      };
+      if (request.method === 'HEAD') {
+        headers['Content-Length'] = String(stat.size);
+        return new Response(null, { status: 200, headers });
+      }
+      if (range?.startsWith('bytes=')) {
+        const { start, end } = parseRange(range, stat.size);
+        if (start > end || start >= stat.size) {
+          return new Response('incorrect range', {
+            status: 416,
+            headers: { 'Content-Range': `bytes */${stat.size}` },
+          });
+        }
+        const node = createReadStream(filePath, { start, end });
+        headers['Content-Range'] = `bytes ${start}-${end}/${stat.size}`;
+        headers['Content-Length'] = String(end - start + 1);
+        return new Response(Readable.toWeb(node), { status: 206, headers });
+      }
+      const node = createReadStream(filePath);
+      headers['Content-Length'] = String(stat.size);
+      return new Response(Readable.toWeb(node), { status: 200, headers });
+    } catch(err) {
+      console.error(err);
+      const code = err?.code === 'ENOENT' ? 404 : 500;
+      return new Response('internal error', { status: code });
     }
-  })
+  });
+}
+
+// handling all the many different path formats (thanks windows for being non-standard)
+function mediaUrlToPath(thing) {
+  const url = new URL(thing);
+  const hostname = url.hostname;
+  const pathname = decodeURIComponent(url.pathname || '');
+  if (process.platform !== 'win32') return hostname ? `/${hostname}${pathname}` : pathname;
+  if (hostname && !/^[a-zA-Z]$/.test(hostname)) return `\\\\${hostname}${pathname.replace(/\//g, '\\')}`;
+  if (/^\/[a-zA-Z]:\//.test(pathname)) return pathname.slice(1).replace(/\//g, '\\');
+  if (hostname && /^[a-zA-Z]$/.test(hostname)) {
+    const rest = pathname.replace(/^\//, '').replace(/\//g, '\\');
+    return `${hostname.toUpperCase()}:\\${rest}`;
+  }
+  let p = pathname.replace(/\//g, '\\');
+  if (/^\\[a-zA-Z]:/.test(p)) p = p.slice(1);
+  return p;
+}
+
+// getting the correct content-range
+function parseRange(h, size) {
+  const [, spec] = h.split('=');
+  const [a, b] = spec.split(',')[0].trim().split('-');
+  let start = a ? Number(a) : NaN;
+  let end   = b ? Number(b) : NaN;
+  if (Number.isNaN(start) && !Number.isNaN(end)) {
+    const n = Math.max(0, Math.min(end, size));
+    start = size - n; end = size - 1;
+  } else {
+    if (Number.isNaN(start) || start < 0) start = 0;
+    if (Number.isNaN(end) || end >= size) end = size - 1;
+  }
+  return { start, end };
 }
 
 // Quit when all windows are closed, except on macOS. There, it's common

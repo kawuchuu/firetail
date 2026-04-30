@@ -3,6 +3,7 @@ import store from '../index.js'
 import tr from '../../translation'
 import {bus} from '../../renderer.js'
 import AudioPlayer from '../../modules/audio.js';
+import {getResource} from "../../modules/load-resource";
 
 let audio = new Audio();
 
@@ -226,7 +227,7 @@ const actions = {
                 }
             })
         }
-        audio.src = `local-resource://${song.path}`
+        audio.src = getResource(song.path)
         if (isCustom) {
             context.commit('updateCurrentSong', 0)
             context.commit('updateCurrentSongString', song.id)

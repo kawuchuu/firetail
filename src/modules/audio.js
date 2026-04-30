@@ -5,6 +5,7 @@
 
 import store from '../store/index.js'
 import {bus} from '../renderer.js'
+import {getResource} from "./load-resource";
 
 class AudioPlayer {
     audio = new Audio()
@@ -74,7 +75,7 @@ class AudioPlayer {
 
     async playSong(song) {
         if (!song.path) return
-        this.audio.src = `local-resource://${song.path}`
+        this.audio.src = getResource(song.path)
         //console.log(this.audio.currentTime)
         this.currentSong = song.id
         store.commit('audio/updatePause', false)

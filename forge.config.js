@@ -2,7 +2,10 @@ module.exports = {
   packagerConfig: {
     asar: true,
     icon: './build/other/icon',
-    executableName: process.platform === 'linux' ? 'firetail' : 'Firetail'
+    executableName: process.platform === 'linux' ? 'firetail' : 'Firetail',
+    extraResource: [
+        "build/icons"
+    ]
   },
   rebuildConfig: {},
   makers: [
@@ -24,7 +27,7 @@ module.exports = {
         ]}
       }
     },*/
-    {
+    /*{
       name: '@electron-forge/maker-deb',
       config: {
         options: {
@@ -40,7 +43,7 @@ module.exports = {
     {
       name: '@electron-forge/maker-rpm',
       config: {},
-    },
+    },*/
     {
       name: '@electron-forge/maker-zip'
     }
@@ -69,7 +72,7 @@ module.exports = {
       name: '@electron-forge/plugin-webpack',
       config: {
         mainConfig: './webpack.main.config.js',
-        devContentSecurityPolicy: 'default-src \'self\' \'unsafe-inline\' data: accounts.spotify.com api.spotify.com; script-src \'self\' \'unsafe-eval\' \'unsafe-inline\' data:; media-src \'self\' localhost local-resource:; img-src * \'self\' blob: data:;',
+        devContentSecurityPolicy: 'default-src \'self\' \'unsafe-inline\' data: accounts.spotify.com api.spotify.com; script-src \'self\' \'unsafe-eval\' \'unsafe-inline\' data:; media-src \'self\' localhost media: local-resource:; img-src * \'self\' blob: data:;',
         devServer: {
           hot: true,
           liveReload: false

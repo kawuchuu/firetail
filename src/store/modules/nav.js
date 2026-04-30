@@ -118,7 +118,7 @@ const state = () => ({
     playingBarColour: null,
     playingBarSecondaryColour: null,
     ver: 'unknown',
-    year: '2025',
+    year: '2026',
     buildNum: 'unknown',
     port: '0',
     albumViewCurrentArt: '',
