@@ -439,19 +439,23 @@ export default {
     },
     watch: {
         routeQuery() {
-            console.log(this.routeQuery)
-            const topHeader = this.$refs.header
-            if (topHeader.getBoundingClientRect().height === 0) return
-            topHeader.style.fontSize = this.titleSizes.large
-            if (topHeader.getBoundingClientRect().height > 190) {
-                topHeader.style.fontSize = this.titleSizes.medium
+            const topHeader = this.$refs.header;
+            if (topHeader.getBoundingClientRect().height === 0) return;
+            topHeader.style.fontSize = this.titleSizes.large;
+            topHeader.style.wordBreak = 'normal';
+            const containerWidth = this.$refs.topTitle.getBoundingClientRect().width;
+            if (topHeader.getBoundingClientRect().height > 190 || topHeader.scrollWidth > containerWidth) {
+                topHeader.style.fontSize = this.titleSizes.medium;
             }
-            if (topHeader.getBoundingClientRect().height > 140 && topHeader.style.fontSize === this.titleSizes.medium) {
-                topHeader.style.fontSize = this.titleSizes.small
+            if ((topHeader.getBoundingClientRect().height > 140 || topHeader.scrollWidth > containerWidth) && topHeader.style.fontSize === this.titleSizes.medium) {
+                topHeader.style.fontSize = this.titleSizes.small;
             }
-            this.selectedItems = []
-            this.$refs.virtualList.reset()
-            this.$refs.virtualList.updatePageModeFront()
+            if (topHeader.scrollWidth > containerWidth) {
+                topHeader.style.wordBreak = 'break-all';
+            }
+            this.selectedItems = [];
+            this.$refs.virtualList.reset();
+            this.$refs.virtualList.updatePageModeFront();
         }
     },
     provide: function() {
@@ -478,12 +482,14 @@ export default {
         const topHeader = this.$refs.header
         const topTitle = this.$refs.topTitle
         const doTextResize = () => {
-            topHeader.style.fontSize = this.titleSizes.large
-            if (topHeader.getBoundingClientRect().height > 190) {
-                topHeader.style.fontSize = this.titleSizes.medium
+            topHeader.style.wordBreak = 'normal';
+            const sizes = [this.titleSizes.large, this.titleSizes.medium, this.titleSizes.small];
+            for (const size of sizes) {
+                topHeader.style.fontSize = size;
+                if (topHeader.getBoundingClientRect().height <= 190 && topHeader.scrollWidth <= topHeader.offsetWidth) break;
             }
-            if (topHeader.getBoundingClientRect().height > 140 && topHeader.style.fontSize === this.titleSizes.medium) {
-                topHeader.style.fontSize = this.titleSizes.small
+            if (topHeader.scrollWidth > topHeader.offsetWidth) {
+                topHeader.style.wordBreak = 'break-all';
             }
         }
         const mutationObserver = new MutationObserver((mutations) => {
@@ -698,6 +704,10 @@ div.section {
 .top-title-text {
     max-width: calc(100% - 200px);
     max-height: 200px;
+    min-width: 0;
+    overflow: hidden;
+    width: 0;
+    flex-grow: 1;
 }
 
 .top-header-test {
@@ -710,10 +720,10 @@ div.section {
 .top-title h1 {
     font-size: 6rem;
     margin: 0;
-/*     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; */
     letter-spacing: -0.04em;
+    max-width: 100%;
+    min-width: 0;
+    word-break: break-word;
 }
 
 .top-title p {
