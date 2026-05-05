@@ -68,7 +68,7 @@ export default {
 
 .dropdown {
     width: 150px;
-    background: var(--fg-bg);
+    background: var(--button);
     box-shadow: inset 0 0 0 1px var(--bd-op);
     border-radius: 10px;
     position: relative;
@@ -93,7 +93,7 @@ export default {
     .options {
         display: none;
         position: absolute;
-        background: var(--fg-bg);
+        background: var(--button);
         width: 150px;
         border-radius: 0px 0px 10px 10px;
         z-index: 3;
@@ -116,7 +116,7 @@ export default {
 
     .options {
         display: block;
-        box-shadow: 0px 4px 4px rgba(0,0,0,.2);
+        box-shadow: 0px 4px 4px rgba(0,0,0,.2), inset 0 0 0 1px var(--bd-op);
     }
 }
 </style>

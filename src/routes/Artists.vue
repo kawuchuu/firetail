@@ -36,7 +36,7 @@ onMounted(() => {
 <template>
   <div class="artists-view-container">
     <SideList>
-      <SideListItem v-for="item in artists" :key="item" :title="item" :url="`/artists/${encodeURIComponent(item)}`" />
+      <SideListItem v-for="item in artists" :key="item" :title="item" :circleImage="true" :url="`/artists/${encodeURIComponent(item)}`" />
     </SideList>
     <div class="song-list-container">
       <RouterView v-slot="{ Component }">
@@ -79,7 +79,7 @@ onMounted(() => {
 
 @media (max-width: 1350px) {
   .artists-view-container {
-    --song-list-width: 64px;
+    --song-list-width: 63px;
   }
 }
 </style>

@@ -62,7 +62,7 @@ onBeforeMount(() => {
 .switch {
     width: 54px;
     height: 30px;
-    background-color: var(--fg-bg);
+    background-color: var(--button);
     box-shadow: inset 0 0 0 1px var(--bd-op);
     border-radius: 50px;
     display: flex;
@@ -80,7 +80,7 @@ onBeforeMount(() => {
         transition-duration: 0.15s;
         transition-property: transform, background-color, width;
         transform: translateX(3px);
-        background-color: var(--text);
+        background-color: color-mix(in srgb, var(--text) 55%, transparent);
         box-shadow: 0 2px 6px rgba(0,0,0,.6);
     }
 }
@@ -95,7 +95,7 @@ onBeforeMount(() => {
     background-color: var(--hl-txt);
 
     .circle-inner {
-        //background-color: var(--hl-txt);
+        background-color: var(--text);
         transform: translateX(27px);
     }
 }

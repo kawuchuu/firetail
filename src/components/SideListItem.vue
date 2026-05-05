@@ -4,16 +4,17 @@ defineProps<{
   url: string;
   subtitle?: string;
   imagePath?: string;
+  circleImage?: boolean;
 }>();
 </script>
 
 <template>
   <div class="list-items">
     <router-link :to="url">
-      <img v-if="imagePath" alt="" loading="lazy" class="item-img" :src="imagePath"/>
+      <img alt="" loading="lazy" :class="['item-img', circleImage ? 'circle' : '']" :src="imagePath ?? imagePath"/>
       <div class="item-info">
         <span class="title">{{ title }}</span>
-        <span class="album-artist">{{ subtitle }}</span>
+        <span v-if="subtitle" class="album-artist">{{ subtitle }}</span>
       </div>
     </router-link>
   </div>
@@ -93,5 +94,10 @@ defineProps<{
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.item-img.circle {
+  border-radius: 100%;
+  background-image: url('../assets/no_artist.svg');
 }
 </style>

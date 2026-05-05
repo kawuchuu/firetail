@@ -77,7 +77,7 @@ async function reqSession() {
       <p>Great! Your Last.fm account is successfully connected to Firetail!</p>
     </div>
     <div v-if="currentPart === 3">
-      <p>Failed to get token from Last.fm. Either Last.fm or the proxy is having issues currently.</p>
+      <p>Failed to get token from Last.fm. Either Last.fm or the proxy is having issues right now.</p>
     </div>
   </div>
 </template>

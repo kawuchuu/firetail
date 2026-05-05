@@ -57,11 +57,12 @@ class FiretailStorage {
         })
 
         ipcMain.on('secureSetKey', (event, values) => {
-            this.setKey(values[0], safeStorage.encryptString(values[1]), values[2])
+            this.setKey(values[0], safeStorage.encryptString(values[1]).toString('base64'), values[2])
         })
 
         ipcMain.handle('secureGetKey', (event, key: string) => {
-            return safeStorage.decryptString(this.getItem(key));
+            const buffer = Buffer.from(this.getItem(key), "base64");
+            return safeStorage.decryptString(buffer);
         })
     }
 
