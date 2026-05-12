@@ -4,6 +4,7 @@ import {mainWindow} from "../main";
 import FiretailSong from "../types/FiretailSong";
 import {getFileArtPath} from "./art";
 import path from "path/posix";
+import {RepeatMode} from "../types/Common";
 
 const {Interface, ACCESS_READWRITE, ACCESS_READ} = dbus.interface;
 let bus: dbus.MessageBus | null = null;
@@ -106,9 +107,59 @@ class PlayerInterface extends Interface {
   }
 
   PlaybackStatus = "Stopped";
-  LoopStatus = "None";
   Rate = 1;
-  Shuffle = false;
+  _Shuffle = false;
+  _LoopStatus = "None";
+
+  get Shuffle() {
+    return this._Shuffle;
+  }
+
+  set Shuffle(shuffled: boolean) {
+    this._Shuffle = shuffled;
+    mainWindow.webContents.send('updateShuffled', shuffled);
+  }
+
+  noUpdateShuffle(shuffled: boolean) {
+    this._Shuffle = shuffled;
+  }
+
+  get LoopStatus() {
+    return this._LoopStatus;
+  }
+
+  set LoopStatus(status: string) {
+    if (status !== ("None" || "Playlist" || "Track")) {
+      this._LoopStatus = "None";
+    } else {
+      this._LoopStatus = status;
+    }
+    switch(status) {
+      case "None": {
+        mainWindow.webContents.send('updateRepeat', 0);
+        break;
+      }
+      case "Playlist": {
+        mainWindow.webContents.send('updateRepeat', 1);
+        break;
+      }
+      case "Track": {
+        mainWindow.webContents.send('updateRepeat', 2);
+        break;
+      }
+      default: {
+        mainWindow.webContents.send('updateRepeat', 0);
+      }
+    }
+  }
+
+  noUpdateLoopStatus(status: string) {
+    if (status !== ("None" || "Playlist" || "Track")) {
+      this._LoopStatus = "None";
+    } else {
+      this._LoopStatus = status;
+    }
+  }
 
   _Metadata = {};
   _Volume = 1;
@@ -350,7 +401,29 @@ export async function initMPRIS() {
   ipcMain.on('onVolumeChange', (event, volume: number) => {
     player.Volume = volume;
     propUpdate(player, {Volume: volume});
-  })
+  });
+  ipcMain.on('onShuffleUpdate', (event, shuffled: boolean) => {
+    player.noUpdateShuffle(shuffled);
+    propUpdate(player, {Shuffle: shuffled});
+  });
+  ipcMain.on('onRepeatUpdate', (event, mode: RepeatMode) => {
+    switch(mode) {
+      case RepeatMode.NO_REPEAT: {
+        player.noUpdateLoopStatus('None');
+        propUpdate(player, {LoopStatus: 'None'});
+        break;
+      }
+      case RepeatMode.REPEAT_ALL: {
+        player.noUpdateLoopStatus('Playlist');
+        propUpdate(player, {LoopStatus: 'Playlist'});
+        break;
+      }
+      case RepeatMode.REPEAT_ONE: {
+        player.noUpdateLoopStatus('Track');
+        propUpdate(player, {LoopStatus: 'Track'});
+      }
+    }
+  });
 }
 
 function propUpdate(inter: InstanceType<typeof Interface>, toUpdate: { [p: string]: any }) {

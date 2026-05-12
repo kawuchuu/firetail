@@ -3,6 +3,7 @@ import {audioPlayer} from "../../renderer";
 import {timeFormat} from "../../modules/timeformat";
 import SeekBar from "../SeekBar.vue";
 import {computed} from "vue";
+import {RepeatMode} from "../../types/Common";
 
 function onTimeChange(time:number) {
   audioPlayer.setCurrentTime(time);
@@ -11,18 +12,22 @@ function onTimeChange(time:number) {
 
 const playPauseIcon = computed(() => {
   return audioPlayer.reactive.paused ? "play-visual-centre" : "pause";
-})
+});
+
+const repeatIcon = computed(() => {
+  return audioPlayer.reactive.repeat === RepeatMode.REPEAT_ONE ? "repeat-one" : "repeat";
+});
 </script>
 
 <template>
   <div class="track-controls">
     <div class="track-controls-inner-container">
       <div class="control-buttons">
-        <i class="ft-icon repeat-shuffle std-icon-btn" :title="$t('TOOLTIP.SHUFFLE')" role="button" aria-label="Shuffle" tabindex="0">shuffle</i>
+        <i class="ft-icon repeat-shuffle std-icon-btn" :class="audioPlayer.reactive.shuffled ? 'active' : ''" @click="audioPlayer.shuffled = !audioPlayer.shuffled" :title="$t('TOOLTIP.SHUFFLE')" role="button" aria-label="Shuffle" tabindex="0">shuffle</i>
         <i class="ft-icon skip-prev std-icon-btn" @click="audioPlayer.prevSong()" :title="$t('TOOLTIP.PREVIOUS')" role="button" aria-label="Previous song" tabindex="0">previous</i>
         <div class="play-pause-icon" @click="audioPlayer.togglePlay()" :title="$t('TOOLTIP.PLAY_PAUSE')" tabindex="0" role="button"><i class="ft-icon" aria-hidden="true">{{playPauseIcon}}</i></div>
         <i class="ft-icon skip-prev next std-icon-btn" @click="audioPlayer.nextSong()" :title="$t('TOOLTIP.NEXT')" role="button" aria-label="Next song" tabindex="0">next</i>
-        <i class="ft-icon repeat-shuffle repeat std-icon-btn" :title="$t('TOOLTIP.REPEAT')" role="button" aria-label="Repeat" tabindex="0">repeat</i>
+        <i class="ft-icon repeat-shuffle repeat std-icon-btn" :class="audioPlayer.reactive.repeat != RepeatMode.NO_REPEAT ? 'active' : ''" @click="audioPlayer.repeat++" :title="$t('TOOLTIP.REPEAT')" role="button" aria-label="Repeat" tabindex="0">{{repeatIcon}}</i>
       </div>
       <div class="seek-time-inner-container">
         <p class="song-duration" >{{ timeFormat(audioPlayer.reactive.currentTime) }}</p>

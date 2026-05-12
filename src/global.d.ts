@@ -1,6 +1,7 @@
 import FiretailSong from "./types/FiretailSong";
 import {Albums} from "./types/Albums";
 import {Ref} from "vue";
+import {RepeatMode} from "./types/Common";
 
 interface LibraryPreload {
   getAllSongs: () => FiretailSong[];
@@ -21,6 +22,10 @@ interface PlayerPreload {
   stop: (callback: any) => Electron.IpcRenderer;
   play: (callback: any) => Electron.IpcRenderer;
   seek: (callback: any) => Electron.IpcRenderer;
+  updateShuffled: (callback: any) => Electron.IpcRenderer;
+  onShuffleUpdate: (shuffle: boolean) => void;
+  updateRepeat: (callback: any) => Electron.IpcRenderer;
+  onRepeatUpdate: (mode: RepeatMode) => void;
   setPosition: (callback: any) => Electron.IpcRenderer;
   updateMetadata: (song: FiretailSong) => void;
   onPause: () => void;

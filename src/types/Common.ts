@@ -15,3 +15,9 @@ export interface SongsGenre {
   artists?: string[],
   sum: number
 }
+
+export enum RepeatMode {
+  NO_REPEAT,
+  REPEAT_ALL,
+  REPEAT_ONE
+}

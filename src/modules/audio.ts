@@ -3,6 +3,7 @@ import {reactive, toRaw} from "vue";
 import {audioPlayer} from "../renderer";
 import {getResource} from "./get-resource";
 import {scrobble, updateNowPlaying} from "./lastfm";
+import {RepeatMode} from "../types/Common";
 
 interface AudioStore {
     title: string;
@@ -12,6 +13,8 @@ interface AudioStore {
     currentSong: FiretailSong;
     paused: boolean;
     volume: number;
+    shuffled: boolean;
+    repeat: RepeatMode;
 }
 
 class AudioPlayer extends Audio {
@@ -25,11 +28,36 @@ class AudioPlayer extends Audio {
     haveScrobbledCurrent = false;
     lastPlayedTimestamp: number;
     private _appVolume = 1.0;
+    private _shuffled = false;
+    private _repeat = RepeatMode.NO_REPEAT;
     constructor() {
         super();
         this.volume = this._appVolume;
         this.addEventListener("ended", () => {
-            this.nextSong();
+            switch(this.repeat) {
+                case RepeatMode.NO_REPEAT: {
+                    this.nextSong();
+                    break;
+                }
+                case RepeatMode.REPEAT_ALL: {
+                    if (this.index + 1 > this.queue.length - 1) {
+                        this.index = 0;
+                        this.currentSong = this.queue[0];
+                        this.playSong(this.currentSong);
+                    } else {
+                        this.nextSong();
+                    }
+                    break;
+                }
+                case RepeatMode.REPEAT_ONE: {
+                    this.currentTime = 0;
+                    if (this.paused) this.play();
+                    break;
+                }
+                default: {
+                    this.nextSong();
+                }
+            }
         });
         this.addEventListener("timeupdate", this.timeUpdate);
         this.addEventListener("pause", this.updateReactivePause);
@@ -43,6 +71,8 @@ class AudioPlayer extends Audio {
             currentSong: this.currentSong,
             paused: this.paused,
             volume: this.volume,
+            shuffled: this.shuffled,
+            repeat: this.repeat
         });
         window.player.next(this.nextSong.bind(this));
         window.player.previous(this.prevSong.bind(this));
@@ -61,6 +91,12 @@ class AudioPlayer extends Audio {
             this._appVolume = clamp;
             this.reactive.volume = clamp;
             super.volume = clamp;
+        });
+        window.player.updateShuffled((shuffled: boolean) => {
+            this.shuffled = shuffled;
+        });
+        window.player.updateRepeat((mode: RepeatMode) => {
+            this.repeat = mode;
         });
     }
 
@@ -111,6 +147,48 @@ class AudioPlayer extends Audio {
         this.reactive.currentSong = song;
     }
 
+    get shuffled() {
+        return this._shuffled;
+    }
+
+    set shuffled(setTo: boolean) {
+        if (setTo) {
+            const spliced = this.queue.splice(this.index, 1);
+            this.queue.sort(() => {
+                return Math.random() - 0.5;
+            });
+            this.queue.unshift(spliced[0]);
+            this.index = 0;
+        } else {
+            this.queue.sort((a, b) => {
+                return (
+                    a.albumArtist.localeCompare(b.albumArtist, undefined, { sensitivity: 'base' }) ||
+                    a.album.localeCompare(b.album, undefined, { sensitivity: 'base' }) ||
+                    a.disc - b.disc ||
+                    a.trackNum - b.trackNum
+                );
+            });
+        }
+        this._shuffled = setTo;
+        this.reactive.shuffled = setTo;
+        window.player.onShuffleUpdate(this.shuffled);
+    }
+
+    get repeat() {
+        return this._repeat;
+    }
+
+    set repeat(mode: RepeatMode) {
+        if (!Object.values(RepeatMode).includes(mode)) {
+            this._repeat = RepeatMode.NO_REPEAT;
+            this.reactive.repeat = RepeatMode.NO_REPEAT;
+        } else {
+            this._repeat = mode;
+            this.reactive.repeat = mode;
+        }
+        window.player.onRepeatUpdate(this.repeat);
+    }
+
     doTimeUpdate(willDo:boolean) {
         if (willDo) this.addEventListener('timeupdate', this.timeUpdate);
         else this.removeEventListener('timeupdate', this.timeUpdate);
@@ -138,14 +216,15 @@ class AudioPlayer extends Audio {
 
     enqueue(newQueue: FiretailSong[], replace?: boolean, playNow?: boolean, atIndex?: number) {
         if (replace) {
-            this.queue = newQueue;
+            this.queue = [...newQueue];
         } else {
-            this.queue.concat(newQueue);
+            this.queue = [...this.queue, ...newQueue];
         }
         if (playNow) {
-            if (atIndex !== null) this.index = atIndex;
+            if (atIndex != null) this.index = atIndex;
             this.playSong(this.queue[atIndex]);
         }
+        if (this.shuffled) this.shuffled = true;
     }
 
     togglePlay() {

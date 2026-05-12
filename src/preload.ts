@@ -1,5 +1,6 @@
 import {contextBridge, ipcRenderer, webUtils} from 'electron';
 import FiretailSong from "./types/FiretailSong";
+import {RepeatMode} from "./types/Common";
 
 contextBridge.exposeInMainWorld('library', {
   getAllSongs: () => ipcRenderer.sendSync('getAllSongs'),
@@ -20,6 +21,10 @@ contextBridge.exposeInMainWorld('player', {
   stop: (callback) => ipcRenderer.on('playerStop', () => callback()),
   play: (callback) => ipcRenderer.on('playerPlay', () => callback()),
   seek: (callback) => ipcRenderer.on('playerSeek', (_event, Offset: bigint) => callback(Offset)),
+  updateShuffled: (callback) => ipcRenderer.on('updateShuffled', (_event, shuffled: boolean) => callback(shuffled)),
+  onShuffleUpdate: (shuffled: boolean)=> ipcRenderer.send('onShuffleUpdate', shuffled),
+  updateRepeat: (callback) => ipcRenderer.on('updateRepeat', (_event, mode: RepeatMode) => callback(mode)),
+  onRepeatUpdate: (mode: RepeatMode) => ipcRenderer.send('onRepeatUpdate', mode),
   setPosition: (callback) => ipcRenderer.on('playerSetPosition', (_event, TrackId: string, Position: bigint) => callback(TrackId, Position)),
   updateMetadata: (song: FiretailSong) => ipcRenderer.send('updateMetadata', song),
   onPause: () => ipcRenderer.send('onPause'),
