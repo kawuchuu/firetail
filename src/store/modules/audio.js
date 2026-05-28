@@ -216,11 +216,11 @@ const actions = {
             return
         }
         if (!audio.src) {
-            audio.addEventListener('ended', () => {  
+            audio.addEventListener('ended', () => {
                 if (context.state.repeat == 'one') {
                     context.state.currentTime = 0
                     audio.play()
-                } else if (context.state.repeat == 'all') {
+                } else if (context.state.repeat == 'all' && context.state.currentSongIndex === context.state.queue.length - 1) {
                     context.dispatch('playSong', context.state.queue[0])
                 } else {
                     context.dispatch('playSong', context.state.queue[context.state.currentSongIndex + 1])
