@@ -17,7 +17,7 @@ const routes = [
       component: Unknown
     },
     {
-        path: '/home',
+        path: '/audiodebug',
         component: TestAudio,
     },
     {

@@ -12,4 +12,8 @@
     padding-bottom: 10px;
     margin: 24px 0 12px;
 }
+
+.boldText .subtitle {
+  font-weight: bold;
+}
 </style>

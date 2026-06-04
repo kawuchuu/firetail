@@ -136,11 +136,6 @@ onMounted(() => {
           <div class="bg" :style="getColumnSortOffset"></div>
         </div>
       </template>
-<!--      <template #after>
-        <RouterView v-slot="{ Component }" name="bottom">
-          <component :is="Component" />
-        </RouterView>
-      </template>-->
       <template #default="{ item, index, active }" ref="test">
         <SongListItem :song="item" :index="index" :is-simple="isSimple" @contextmenu="openContextMenu" />
       </template>
@@ -246,6 +241,10 @@ onMounted(() => {
   h2 {
     margin: 15px 75px;
   }
+}
+
+html.boldText .column-sort-info h2 {
+  font-weight: 800;
 }
 
 .list-duration {

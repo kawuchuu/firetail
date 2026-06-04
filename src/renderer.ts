@@ -28,5 +28,16 @@ async function setupApp() {
     infoStore.version = generalInfo.version;
 }
 
+function loadSettings() {
+    const classSettings = window.ftStoreSync.getCategory('class');
+    for (const item in classSettings) {
+        const setting = window.ftStoreSync.getItem(classSettings[item]);
+        if (setting) {
+            document.documentElement.classList.add(classSettings[item]);
+        }
+    }
+}
+
+loadSettings();
 setupVue();
 setupApp();

@@ -64,6 +64,10 @@ onMounted(() => {
   text-shadow: 0 0 35px var(--bg);
 }
 
+html.boldText .list-name {
+  font-weight: 800;
+}
+
 .additional-info {
   display: flex;
   align-items: center;

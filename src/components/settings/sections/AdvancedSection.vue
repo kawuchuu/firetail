@@ -1,25 +1,18 @@
-<script>
+<script setup lang="ts">
 import SubtitleOption from '../options/SubtitleOption.vue'
 import SwitchOption from "../options/SwitchOption.vue";
+import {ref} from "vue";
+import {viewStore} from "../../../renderer";
 
-export default {
-    name: "AdvancedSection",
-    components: {
-        SwitchOption,
-        SubtitleOption
-    },
-    data() {
-        return {
-            advancedFileInfoEnabled: window.localStorage.getItem('advancedFileInfo') === 'true'
-        }
-    },
-    methods: {
-        advancedFileInfoAction(enabled) {
-            window.localStorage.setItem('advancedFileInfo', enabled)
-            this.$store.commit('nav/updateAdvancedFileInfo', enabled)
-            this.advancedFileInfoEnabled = enabled
-        }
-    }
+const advancedFileInfoEnabled = ref(window.localStorage.getItem('advancedFileInfo') === 'true');
+
+function advancedFileInfoAction(enabled) {
+  window.localStorage.setItem('advancedFileInfo', enabled);
+  advancedFileInfoEnabled.value = enabled;
+}
+
+function toggleDebugMode() {
+  viewStore.debugMode = !viewStore.debugMode;
 }
 </script>
 
@@ -28,7 +21,7 @@ export default {
         <SubtitleOption>{{$t("SETTINGS.SUBTITLES.ADVANCED")}}</SubtitleOption>
         <SwitchOption :label="$t('SETTINGS.SHOW_FILE_CODEC')" :init-enabled="advancedFileInfoEnabled" :action="advancedFileInfoAction" />
         <SwitchOption :label="$t('SETTINGS.FORCE_RTL')" :init-enabled="false" />
-        <SwitchOption :label="$t('SETTINGS.DEBUG_MODE')" :store-key="'debugMode'" :store-category="'switchVx'" />
+        <SwitchOption :label="$t('SETTINGS.DEBUG_MODE')" :store-key="'debugMode'" :store-category="'switchVx'" @click="toggleDebugMode" />
     </section>
 </template>
 

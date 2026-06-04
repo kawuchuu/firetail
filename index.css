@@ -11,3 +11,7 @@ i.std-icon-btn:active {
   opacity: 1;
   color: var(--hl-txt);
 }
+
+.boldText {
+    font-weight: 600;
+}

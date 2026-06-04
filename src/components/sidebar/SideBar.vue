@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import SidebarItem from "./SidebarItem.vue";
 import SidebarTitle from "./SidebarTitle.vue";
+import {viewStore} from "../../renderer";
 </script>
 
 <template>
     <div class="side-bar">
         <div class="item-container">
             <SidebarItem to="/home" :icon="'home'" :label="'HOME'"></SidebarItem>
+            <SidebarItem v-if="viewStore.debugMode" to="/audiodebug" icon="volume-up" label="AUDIO_DEBUG"/>
             <SidebarTitle :title="'LIBRARY'"></SidebarTitle>
             <SidebarItem to="/" :icon="'note'" :label="'SONGS'"></SidebarItem>
             <SidebarItem to="/artists" :icon="'person'" :label="'ARTISTS'"></SidebarItem>
