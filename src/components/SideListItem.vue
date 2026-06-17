@@ -37,7 +37,6 @@ defineProps<{
 .router-link-exact-active {
   background-color: var(--button);
   border-radius: 10px;
-  cursor: default;
   box-shadow: inset 0 0 0 1px var(--bd-op);
 }
 

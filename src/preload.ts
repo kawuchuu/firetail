@@ -36,7 +36,8 @@ contextBridge.exposeInMainWorld('player', {
 
 contextBridge.exposeInMainWorld('path', {
   getImages: async () => await ipcRenderer.invoke('getImagePath'),
-  getImagesSync: () => ipcRenderer.sendSync('getImagePathSync')
+  getImagesSync: () => ipcRenderer.sendSync('getImagePathSync'),
+  join: (...paths: string[]) => ipcRenderer.invoke('pathJoin', ...paths)
 });
 
 contextBridge.exposeInMainWorld('process', {
@@ -74,3 +75,8 @@ contextBridge.exposeInMainWorld('safeStorage', {
   encryptString: (text: string) => ipcRenderer.invoke('encryptString', text),
   decryptString: (text: Buffer) => ipcRenderer.invoke('decryptString', text),
 });
+
+contextBridge.exposeInMainWorld('plugins', {
+  getPluginManifests: () => ipcRenderer.invoke('getPluginManifests'),
+  readPluginFile: (filePath: string) => ipcRenderer.invoke('readPluginFile', filePath),
+})

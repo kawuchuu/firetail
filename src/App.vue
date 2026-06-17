@@ -61,7 +61,7 @@ onBeforeMount(async () => {
       <div class="screen-container">
         <TopBar />
         <OverlayScrollbarsComponent
-            class="content"
+            class="content inner-outline"
             :events="{scroll: onScroll}"
             :options="{
               scrollbars: {
@@ -73,7 +73,7 @@ onBeforeMount(async () => {
             @os-initialized="initScrollbar">
           <router-view />
         </OverlayScrollbarsComponent>
-        <div class="content-overlay"/>
+<!--        <div class="content-overlay"/>-->
 <!--        <div class="content" @scroll="onScroll($event)">
           <router-view/>
         </div>-->
@@ -191,6 +191,11 @@ body {
   background: var(--bg);
   border-radius: var(--main-border-radius);
   right: 0;
+}
+
+.content::after {
+  border-radius: var(--main-border-radius);
+  border-right: none;
 }
 
 .content-overlay {

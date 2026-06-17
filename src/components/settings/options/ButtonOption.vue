@@ -40,7 +40,6 @@ export default {
         width: auto;
         //text-transform: uppercase;
         font-weight: 600;
-        cursor: pointer;
     }
 
     .button span {

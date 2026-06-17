@@ -113,7 +113,6 @@ function seekLeave() {
   width: 100%;
   display: flex;
   justify-content: center;
-  cursor: pointer;
 }
 
 .seek-bar {

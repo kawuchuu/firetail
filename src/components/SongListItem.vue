@@ -152,7 +152,6 @@ html.light {
 .play-pause {
   font-size: 24px !important;
   padding: 0;
-  cursor: pointer;
   opacity: 0;
 }
 
@@ -260,7 +259,6 @@ html.light {
 .list-artist span:hover, .list-album span:hover {
   color: var(--hl-txt);
   text-decoration: underline;
-  cursor: pointer;
   opacity: 1;
 }
 
@@ -272,7 +270,6 @@ html.light {
 
 .favourite-icon {
   font-size: 23px;
-  cursor: pointer;
   opacity: 0;
   min-width: 23px;
   border-radius: 100px;

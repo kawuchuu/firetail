@@ -42,12 +42,12 @@ export default {
 <template>
     <div class="dropdown-option">
         <p>{{label}}</p>
-        <div class="dropdown" @click="enabled = !enabled" :class="enabled ? 'active' : ''" role="combobox" aria-disabled="false" aria-selected="false" :aria-label="`${label}. ${selected} selected`" tabindex=0>
+        <div class="dropdown inner-outline" @click="enabled = !enabled" :class="enabled ? 'active' : ''" role="combobox" aria-disabled="false" aria-selected="false" :aria-label="`${label}. ${selected} selected`" tabindex=0>
             <div class="default-option" aria-hidden="true">
                 <span>{{$t(selected.label)}}</span>
                 <i class="ft-icon">{{enabled ? 'arrow-head-up' : 'arrow-head-down'}}</i>
             </div>
-            <div class="options">
+            <div class="options inner-outline">
                 <div class="option" v-for="item in options" :key="item.value" @click="select(item)">{{ $t(item.label) }}</div>
             </div>
         </div>
@@ -69,11 +69,9 @@ export default {
 .dropdown {
     width: 150px;
     background: var(--button);
-    box-shadow: inset 0 0 0 1px var(--bd-op);
     border-radius: 10px;
     position: relative;
     z-index: 2;
-    cursor: pointer;
 
     .default-option {
         display: flex;
@@ -108,15 +106,27 @@ export default {
     }
 }
 
+.dropdown::after {
+  border-radius: 10px;
+}
+
 .dropdown.active {
     border-radius: 10px 10px 0px 0px;
-    box-shadow: 0px 4px 4px rgba(0,0,0,.2), inset 0 0 0 1px var(--bd-op);
+    box-shadow: 0px 4px 4px rgba(0,0,0,.2);
     position: relative;
     z-index: 55;
 
     .options {
         display: block;
-        box-shadow: 0px 4px 4px rgba(0,0,0,.2), inset 0 0 0 1px var(--bd-op);
+        box-shadow: 0px 4px 4px rgba(0,0,0,.2);
     }
+
+    .options::after {
+      border-radius: 0 0 10px 10px;
+    }
+}
+
+.dropdown.active::after {
+  border-radius: 10px 10px 0 0;
 }
 </style>

@@ -1,6 +1,5 @@
 i.std-icon-btn {
   opacity: 0.7;
-  cursor: pointer;
 }
 
 i.std-icon-btn:hover {
@@ -12,6 +11,18 @@ i.std-icon-btn:active {
   color: var(--hl-txt);
 }
 
+a {
+  cursor: default;
+}
+
 .boldText {
     font-weight: 600;
+}
+
+.inner-outline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: 1px solid var(--bd-op);
 }

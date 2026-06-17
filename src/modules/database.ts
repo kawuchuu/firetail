@@ -85,6 +85,7 @@ class FiretailDB {
       }
     })
     insertMany(songs);
+    this.determineAlbums();
   }
 
   determineAlbums() {

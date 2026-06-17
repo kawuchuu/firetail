@@ -22,10 +22,10 @@ watch(() => audioPlayer.reactive.currentSong, changeImagePath);
 
 <template>
     <div class="song-info">
-        <RouterLink>
-            <div class="song-album-art" :style="getImage"></div>
-        </RouterLink>
-        <div ref="titleArtist" class="title-artist">
+      <teleport defer to="#songImage">
+        <div class="song-album-art inner-outline" :style="getImage" />
+      </teleport>
+      <div ref="titleArtist" class="title-artist">
             <RouterLink class="song-title">{{audioPlayer.reactive.title}}</RouterLink>
             <RouterLink class="song-artist">{{audioPlayer.reactive.artist}}</RouterLink>
         </div>
@@ -39,6 +39,7 @@ watch(() => audioPlayer.reactive.currentSong, changeImagePath);
     align-items: center;
     height: 100%;
     width: 100%;
+    overflow: hidden;
 }
 
 .title-artist {
@@ -48,8 +49,8 @@ watch(() => audioPlayer.reactive.currentSong, changeImagePath);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-left: 15px;
     -webkit-mask-image: -webkit-linear-gradient(180deg, transparent, #000 20px);
+    width: 100%;
 }
 
 .song-album-art {
@@ -66,17 +67,26 @@ watch(() => audioPlayer.reactive.currentSong, changeImagePath);
     transition:
         background-image 0.1s,
         transform 0.4s cubic-bezier(0, 1, 0.35, 1) 0.2s,
-        border-radius 0.4s cubic-bezier(0, 1, 0.35, 1) 0.2s,
-        box-shadow 0.4s cubic-bezier(0, 1, 0.35, 1) 0.2s;
-    box-shadow: inset 0 0 0 1px var(--bd-op);
+        border-radius 0.4s cubic-bezier(0, 1, 0.35, 1) 0.2s;
     transform-origin: bottom left;
+}
+
+.song-album-art::after {
+  border-radius: 4px;
+  transition:
+      border 0.4s cubic-bezier(0, 1, 0.35, 1) 0.2s,
+      border-radius 0.4s cubic-bezier(0, 1, 0.35, 1) 0.2s;
 }
 
 .song-album-art:hover {
   transform: scale(8);
   border-radius: 1px;
-  box-shadow: inset 0 0 0 0.01em var(--bd-op);
   z-index: 99999;
+}
+
+.song-album-art:hover::after {
+  border: 0.001rem solid var(--bd);
+  border-radius: 1px;
 }
 
 @keyframes scroll {
@@ -134,7 +144,6 @@ watch(() => audioPlayer.reactive.currentSong, changeImagePath);
     font-size: 22px;
     opacity: 0.5;
     margin-left: 12px;
-    cursor: pointer;
     border-radius: 100px;
 }
 

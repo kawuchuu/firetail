@@ -59,7 +59,6 @@ const platform = window.process.platform;
   height: 18px;
   width: 18px;
   margin-right: 10px;
-  cursor: pointer;
   /* border: solid 1px #5f587c; */
   -webkit-app-region: no-drag;
 }

@@ -21,7 +21,7 @@ function toggleDebugMode() {
         <SubtitleOption>{{$t("SETTINGS.SUBTITLES.ADVANCED")}}</SubtitleOption>
         <SwitchOption :label="$t('SETTINGS.SHOW_FILE_CODEC')" :init-enabled="advancedFileInfoEnabled" :action="advancedFileInfoAction" />
         <SwitchOption :label="$t('SETTINGS.FORCE_RTL')" :init-enabled="false" />
-        <SwitchOption :label="$t('SETTINGS.DEBUG_MODE')" :store-key="'debugMode'" :store-category="'switchVx'" @click="toggleDebugMode" />
+        <SwitchOption :label="$t('SETTINGS.DEBUG_MODE')" :store-key="'debugMode'" :store-category="'switchVx'" :action="toggleDebugMode" />
     </section>
 </template>
 

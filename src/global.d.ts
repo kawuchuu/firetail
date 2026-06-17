@@ -38,6 +38,7 @@ interface PlayerPreload {
 interface PathPreload {
   getImages: () => Promise<string>;
   getImagesSync: () => string;
+  join: (...paths: string[]) => Promise<string>;
 }
 
 interface ProcessPreload {
@@ -77,6 +78,11 @@ interface SafeStoragePreload {
   decryptString: (text: Buffer) => Promise<string>;
 }
 
+interface PluginsPreload {
+  getPluginManifests: () => Promise<Array<{ pluginDir: string; manifest: PluginManifest }>>;
+  readPluginFile: (filePath: string) => Promise<string>;
+}
+
 declare global {
   interface Window {
     library: LibraryPreload;
@@ -88,5 +94,6 @@ declare global {
     misc: MiscPreload;
     setupApp: SetupAppPreload;
     safeStorage: SafeStoragePreload;
+    plugins: PluginsPreload;
   }
 }

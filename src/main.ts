@@ -123,11 +123,41 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+const allowedMimeTypes = [
+    'audio/mpeg',
+    'audio/ogg',
+    'audio/flac',
+    'audio/wav',
+    'audio/x-wav',
+    'audio/aiff',
+    'audio/x-aiff',
+    'audio/mp4',
+    'audio/aac',
+    'audio/x-m4a',
+    'audio/opus',
+    'audio/webm',
+    'audio/x-ms-wma',
+    'audio/x-matroska',
+    'audio/3gp',
+    'audio/amr',
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+    'image/gif',
+    'image/bmp',
+    'image/tiff',
+    'image/avif',
+    'image/svg+xml'
+]
+
 // holy fuck this was annoying, seems to work now. needs more testing though
 function setupLocalResourceProtocol() {
   protocol.handle('media', async (request) => {
     try {
       const filePath = mediaUrlToPath(request.url);
+      const mimeType = mime.getType(path.extname(filePath));
+      if (allowedMimeTypes.indexOf(mimeType) === -1) return new Response('file type disallowed', { status: 400 });
       const stat = await pstat(filePath);
       if (!stat.isFile()) return new Response('not a file', { status: 400 });
       const range = request.headers.get('range');
@@ -136,7 +166,7 @@ function setupLocalResourceProtocol() {
         'Vary': 'Range',
         'Cache-Control': 'no-store',
         'Access-Control-Allow-Origin': '*',
-        'Content-Type': mime.getType(path.extname(filePath))
+        'Content-Type': mimeType
       };
       if (request.method === 'HEAD') {
         headers['Content-Length'] = String(stat.size);

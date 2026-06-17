@@ -17,7 +17,6 @@
   align-items: center;
   padding: 6px 0;
   border-radius: 5px;
-  cursor: pointer;
   gap: 4px;
 }
 

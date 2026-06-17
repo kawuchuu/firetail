@@ -9,12 +9,25 @@ import virtualScroller from 'vue-virtual-scroller';
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import viewStoreModule from "./modules/view-store";
 import infoStoreModule from "./modules/info-store";
+import {usePlugins} from "./plugins/usePlugins";
+
+import * as Vue from 'vue';
+import {timeFormat} from "./modules/timeformat";
+;(window as any).FiretailVue = Vue;
 
 export const audioPlayer = new AudioPlayer();
 export const viewStore = viewStoreModule;
 export const infoStore = infoStoreModule;
 const app = createApp(App);
 const i18n = setupI18n();
+
+;(window as any).FiretailAPI = {
+    audioPlayer,
+    modules: {
+        timeFormat,
+    },
+    library: window.library,
+}
 
 async function setupVue() {
     app.use(virtualScroller);
@@ -38,6 +51,22 @@ function loadSettings() {
     }
 }
 
-loadSettings();
-setupVue();
-setupApp();
+const pluginStore = usePlugins();
+
+async function loadPlugins() {
+    await pluginStore.loadAll();
+    for (const route of pluginStore.pluginRoutes.value) {
+        router.addRoute({
+            path: `/${route.routePath}`,
+            name: route.routeName,
+            component: route.component,
+        })
+    }
+    console.log(router.getRoutes())
+}
+
+loadPlugins().then(() => {
+    loadSettings();
+    setupVue();
+    setupApp();
+});

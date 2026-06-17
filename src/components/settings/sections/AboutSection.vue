@@ -114,7 +114,6 @@ a {
 .open-more {
     display: flex;
     align-items: center;
-    cursor: pointer;
     margin-bottom: 0;
     gap: 10px;
 

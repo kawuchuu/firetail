@@ -5,7 +5,6 @@ import BaseSongTop from "./components/songlistviews/BaseSongTop.vue";
 import BaseSongBottom from "./components/songlistviews/BaseSongBottom.vue";
 import AllSongs from "./routes/AllSongs.vue";
 import Albums from "./routes/Albums.vue";
-import TestAudio from "./routes/TestAudio.vue";
 import SettingsView from "./routes/SettingsView.vue";
 import Unknown from "./routes/Unknown.vue";
 import Artists from "./routes/Artists.vue";
@@ -15,10 +14,6 @@ const routes = [
     {
       path: '/:pathMatch(.*)*',
       component: Unknown
-    },
-    {
-        path: '/audiodebug',
-        component: TestAudio,
     },
     {
         path: '/',

@@ -23,7 +23,6 @@ defineProps<{
     color: var(--hl-txt);
     border-radius: 10px;
     width: auto;
-    cursor: pointer;
     //margin: 0px 8px;
 
     span {

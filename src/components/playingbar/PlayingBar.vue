@@ -6,6 +6,7 @@ import PlayingControlsRight from "./PlayingControlsRight.vue";
 
 <template>
     <div class="playing-bar">
+        <div id="songImage"/>
         <PlayingMeta />
         <PlayingControlsMid />
         <PlayingControlsRight class="playing-controls-right" />
@@ -19,7 +20,7 @@ import PlayingControlsRight from "./PlayingControlsRight.vue";
     width: calc(100vw - 30px);
     height: 85px;
     display: grid;
-    grid-template-columns: 1fr 45% 1fr;
+    grid-template-columns: 55px 1fr 45% 1fr;
     gap: 15px;
     align-items: center;
     transition: 0.25s;
@@ -34,7 +35,7 @@ import PlayingControlsRight from "./PlayingControlsRight.vue";
 
 @media (max-width: 970px) {
     .playing-bar {
-        grid-template-columns: 1fr 1.5fr;
+        grid-template-columns: 55px 1fr 1.5fr;
     }
 
     .playing-controls-right {

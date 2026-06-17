@@ -39,11 +39,12 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <div class="switch-option">
+    <div class="switch-option" @click="onClick">
         <p>{{label}}</p>
-        <div class="switch" :class="enabled ? 'enabled' : ''" @click="onClick">
+        <div class="switch inner-outline" :class="enabled ? 'enabled' : ''">
             <div class="circle-inner" />
         </div>
+        <div class="highlight" />
     </div>
 </template>
 
@@ -52,26 +53,53 @@ onBeforeMount(() => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 6px 0px;
+    padding: 6px 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
 
     p {
         margin: 0;
     }
 }
 
+.highlight {
+  position: absolute;
+  width: calc(100% + 20px);
+  height: 100%;
+  transform: translateX(-10px) scale(0.99);
+  background: #ffffff10;
+  outline: solid 1px var(--bd);
+  border-radius: 10px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.15s, transform 0.3s, width 0.3s, background 0.3s;
+}
+
+.switch-option:hover .highlight {
+  transform: translateX(-10px) scale(1);
+  opacity: 1;
+}
+
+.switch-option:active .highlight {
+  transform: translateX(-8px) scale(1.01);
+  opacity: 1;
+  background: var(--bd);
+  width: calc(100% + 16px);
+}
+
 .switch {
     width: 54px;
     height: 30px;
     background-color: var(--button);
-    box-shadow: inset 0 0 0 1px var(--bd-op);
     border-radius: 50px;
     display: flex;
     align-items: center;
     transition-duration: 0.15s;
     transition-property: background-color;
     margin: 4px 0 4px 4px;
-    cursor: pointer;
     overflow: hidden;
+    position: relative;
 
     .circle-inner {
         width: 24px;
@@ -85,13 +113,17 @@ onBeforeMount(() => {
     }
 }
 
-.switch:active {
+.switch::after {
+  border-radius: 50px;
+}
+
+.switch-option:active .switch {
     .circle-inner {
         width: 30px;
     }
 }
 
-.switch.enabled {
+.switch-option .switch.enabled {
     background-color: var(--hl-txt);
 
     .circle-inner {
@@ -100,19 +132,19 @@ onBeforeMount(() => {
     }
 }
 
-.switch.enabled:active {
+.switch-option:active .switch.enabled {
     .circle-inner {
         transform: translateX(21px);
     }
 }
 
 .rtl {
-    .switch.enabled {
+    .switch-option .switch.enabled {
         .circle-inner {
             transform: translateX(-21px);
         }
     }
-    .switch.enabled:active {
+    .switch-option:active .switch.enabled {
         .circle-inner {
             transform: translateX(-15px);
         }
