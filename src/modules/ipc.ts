@@ -57,9 +57,9 @@ export default function startIpc() {
             return readdirSync(pluginsDir, { withFileTypes: true })
                 .filter(e => e.isDirectory())
                 .map(e => {
-                    const manifestPath = join(pluginsDir, e.name, 'manifest.json')
+                    const manifestPath = path.join(pluginsDir, e.name, 'manifest.json')
                     const source = readFileSync(manifestPath, 'utf-8')
-                    return { pluginDir: join(pluginsDir, e.name), manifest: JSON.parse(source) }
+                    return { pluginDir: path.join(pluginsDir, e.name), manifest: JSON.parse(source) }
                 });
         } catch {
             return [];
