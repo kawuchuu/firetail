@@ -7,6 +7,7 @@ import TopBar from "./components/TopBar.vue";
 import {viewStore} from "./renderer";
 import {onBeforeMount, onMounted, ref} from "vue";
 import {OverlayScrollbarsComponent} from "overlayscrollbars-vue";
+import Notification from "./components/Notification.vue";
 
 const isDraggedOver = ref(false);
 
@@ -56,6 +57,7 @@ onBeforeMount(async () => {
         <p>You can drop music files and folders with music inside</p>
       </div>
     </div>
+    <Notification title="Notification title" message="This is a test notification!" :auto-dismiss-time="3000"/>
     <div class="main-content">
       <SideBar />
       <div class="screen-container">
