@@ -71,7 +71,7 @@ export async function addFiles(songs: string[][], coverImagePaths: string[]): Pr
             console.log(err);
         });
         if (!meta) return null;
-        let explicit: number | null = null;
+        let explicit: number | null = 0;
         if (meta.native.iTunes) {
             const result = meta.native.iTunes.find(tag => tag.id === 'rtng');
             if (result) explicit = result.value;

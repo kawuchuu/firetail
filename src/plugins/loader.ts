@@ -5,6 +5,7 @@ export interface PluginManifest {
   name: string,
   version: string,
   entry: string,
+  cssFile: string,
   contributes: {
     routes?: Routes[],
     navItems?: NavItem[]
@@ -29,9 +30,16 @@ export interface LoadedPlugin {
   components: PluginComponent[]
 }
 
-async function loadPluginModule(pluginDir: string, entry: string): Promise<PluginComponent[]> {
+async function loadPluginModule(pluginDir: string, entry: string, cssFile?: string): Promise<PluginComponent[]> {
   const filePath = await window.path.join(pluginDir, entry);
   const source = await window.plugins.readPluginFile(filePath);
+  if (cssFile) {
+    const cssFilePath = await window.path.join(pluginDir, cssFile);
+    const cssFileSource = await window.plugins.readPluginFile(cssFilePath);
+    const styleEl = document.createElement("style");
+    styleEl.innerHTML = cssFileSource;
+    document.head.appendChild(styleEl);
+  }
   const fn = new Function('FiretailVue', 'FiretailAPI', `${source}; return FiretailPlugin`);
   const plugin = fn((window as any).FiretailVue, (window as any).FiretailAPI);
   if (!plugin?.components) throw new Error(`Plugin at ${filePath} does not export a component`);
@@ -39,6 +47,6 @@ async function loadPluginModule(pluginDir: string, entry: string): Promise<Plugi
 }
 
 export async function loadPlugin(pluginDir: string, manifest: PluginManifest): Promise<LoadedPlugin> {
-  const components = await loadPluginModule(pluginDir, manifest.entry);
+  const components = await loadPluginModule(pluginDir, manifest.entry, manifest.cssFile ?? manifest.cssFile);
   return { manifest, components }
 }

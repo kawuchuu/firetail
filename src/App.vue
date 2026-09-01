@@ -102,6 +102,11 @@ onBeforeMount(async () => {
   src: url('./assets/figtree-variable.woff2') format('woff');
 }
 
+@font-face {
+  font-family: '8bitoperator JVE';
+  src: url('./assets/8bitoperator_jve.ttf') format('truetype');
+}
+
 html {
   --main-border-radius: 10px 0px 0px 10px;
   --main-border-radius-element: 10px 0px 0px;

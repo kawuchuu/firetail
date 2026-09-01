@@ -1,3 +1,47 @@
+<script setup lang="ts">
+import LibrarySection from "../components/settings/sections/LibrarySection.vue";
+import GeneralSection from "../components/settings/sections/GeneralSection.vue";
+import AccessibilitySection from "../components/settings/sections/AccessibilitySection.vue";
+import AppearanceSection from "../components/settings/sections/AppearanceSection.vue";
+import UpdatesSection from "../components/settings/sections/UpdatesSection.vue";
+import AdvancedSection from "../components/settings/sections/AdvancedSection.vue";
+import AboutSection from "../components/settings/sections/AboutSection.vue";
+import IntegrationSection from "../components/settings/sections/IntegrationSection.vue";
+import {onMounted, onUnmounted, ref, watch} from "vue";
+import DRText from "../components/DRText.vue";
+import {audioPlayer} from "../renderer";
+
+const showMoss = ref(false);
+const mossClicked = ref(false);
+const mossKeyCheck = ref(0);
+
+function checkMossKey(e: KeyboardEvent) {
+  if (/^(?!.*[mos]).*$/.test(e.key)) mossKeyCheck.value = 0;
+  if (e.key === 'm' && mossKeyCheck.value === 0) return mossKeyCheck.value++;
+  if (e.key === 'o' && mossKeyCheck.value === 1) return mossKeyCheck.value++;
+  if (e.key === 's' && mossKeyCheck.value === 2) return mossKeyCheck.value++;
+  if (e.key === 's' && mossKeyCheck.value === 3) {
+    mossKeyCheck.value = 0;
+    showMoss.value = true;
+  }
+}
+
+watch(mossClicked, () => {
+  if (audioPlayer.currentSong && !audioPlayer.paused) {
+    audioPlayer.togglePlay();
+  }
+})
+
+onMounted(() => {
+  Math.random() <= 0.02 ? showMoss.value = true : showMoss.value = false;
+  window.addEventListener('keydown', checkMossKey);
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', checkMossKey);
+});
+</script>
+
 <template>
     <div class="root">
         <main>
@@ -16,32 +60,13 @@
             </div>
         </main>
     </div>
+    <div v-if="mossClicked" @click="mossClicked = false" class="textbox-container">
+      <DRText />
+    </div>
+    <div v-if="showMoss" class="egg">
+      <img draggable="false" @click="mossClicked = true; showMoss = false;" class="moss" src="../assets/moss.png" />
+    </div>
 </template>
-
-<script>
-import LibrarySection from "../components/settings/sections/LibrarySection.vue";
-import GeneralSection from "../components/settings/sections/GeneralSection.vue";
-import AccessibilitySection from "../components/settings/sections/AccessibilitySection.vue";
-import AppearanceSection from "../components/settings/sections/AppearanceSection.vue";
-import UpdatesSection from "../components/settings/sections/UpdatesSection.vue";
-import AdvancedSection from "../components/settings/sections/AdvancedSection.vue";
-import AboutSection from "../components/settings/sections/AboutSection.vue";
-import IntegrationSection from "../components/settings/sections/IntegrationSection.vue";
-
-export default {
-    name: "SettingsView.vue",
-    components: {
-        IntegrationSection,
-        AboutSection,
-        AdvancedSection,
-        UpdatesSection,
-        AppearanceSection,
-        AccessibilitySection,
-        GeneralSection,
-        LibrarySection
-    }
-}
-</script>
 
 <style scoped lang="scss">
 $currentGradColour: #006eff;
@@ -87,5 +112,27 @@ main {
 
 .boldText .top-title h1 {
     font-weight: 800;
+}
+
+.textbox-container {
+  position: fixed;
+  width: calc(100% - var(--sidebar-width));
+  height: 100%;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.egg {
+  position: relative;
+}
+
+.moss {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: rotate(90deg);
 }
 </style>

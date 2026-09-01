@@ -22,6 +22,7 @@ class FiretailDB {
     this.db.pragma('journal_mode = WAL');
     const tableCount:number = this.determineNumber(this.db.prepare("SELECT COUNT(*) AS amount FROM sqlite_schema WHERE type='table'").pluck().get() as Amount);
     const userVersion:number = this.determineNumber(this.db.pragma("user_version", {simple: true}));
+    this.setupNewDatabase();
     if (tableCount <= 0) {
       this.setupNewDatabase();
     } else if (userVersion < this.targetVersion) {
@@ -140,11 +141,77 @@ class FiretailDB {
   }
 
   setupNewDatabase() {
-    this.db.prepare('CREATE TABLE IF NOT EXISTS library (title text, artist text, allArtists text, albumArtist text, album text, duration text, realdur number, path text, id text, hasImage number, trackNum number, year text, disc number, explicit number, genre text)').run();
-    this.db.prepare('CREATE TABLE IF NOT EXISTS albums (title text, albumArtist text, albumType text, UNIQUE(title, albumArtist))').run();
-    this.db.prepare('CREATE TABLE IF NOT EXISTS favourites (id text)').run();
-    this.db.prepare('CREATE TABLE IF NOT EXISTS playlists (name text, desc text, id text, songIds text, hasImage number)').run();
-    this.db.prepare('CREATE TABLE IF NOT EXISTS stats (id text, plays number, lastplay number)').run();
+    this.db.pragma('foreign_keys = ON');
+
+    this.db.prepare(`
+      CREATE TABLE IF NOT EXISTS library (
+        id TEXT PRIMARY KEY,
+        title TEXT NOT NULL,
+        artist TEXT,
+        allArtists TEXT,
+        albumArtist TEXT,
+        album TEXT,
+        duration TEXT,
+        realdur REAL,
+        path TEXT NOT NULL,
+        hasImage INTEGER NOT NULL DEFAULT 0 CHECK (hasImage IN (0,1)),
+        trackNum INTEGER,
+        year TEXT,
+        disc INTEGER,
+        explicit INTEGER NOT NULL DEFAULT 0 CHECK (explicit IN (0,1)),
+        genre TEXT
+      ) STRICT
+    `).run();
+
+    this.db.prepare(`
+      CREATE TABLE IF NOT EXISTS albums (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        albumArtist TEXT,
+        albumType TEXT,
+        UNIQUE(title, albumArtist)
+      ) STRICT
+    `).run();
+
+    this.db.prepare(`
+      CREATE TABLE IF NOT EXISTS favourites (
+        songId TEXT PRIMARY KEY REFERENCES library(id) ON DELETE CASCADE,
+        addedAt INTEGER NOT NULL DEFAULT (unixepoch())
+      ) STRICT
+    `).run();
+
+    this.db.prepare(`
+      CREATE TABLE IF NOT EXISTS playlists (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        description TEXT,
+        imagePath TEXT,
+        createdAt INTEGER NOT NULL DEFAULT (unixepoch()),
+        updatedAt INTEGER NOT NULL DEFAULT (unixepoch())
+      ) STRICT
+    `).run();
+
+    this.db.prepare(`
+      CREATE TABLE IF NOT EXISTS playlistSongs (
+        playlistId INTEGER NOT NULL REFERENCES playlists(id) ON DELETE CASCADE,
+        songId TEXT NOT NULL REFERENCES library(id) ON DELETE CASCADE,
+        position INTEGER NOT NULL,
+        PRIMARY KEY (playlistId, songId)
+      ) STRICT
+    `).run();
+
+    this.db.prepare('CREATE INDEX IF NOT EXISTS indexPlaylistSongsOrder ON playlistSongs(playlistId, position)').run();
+    this.db.prepare('CREATE INDEX IF NOT EXISTS indexLibraryAlbum ON library(album, albumArtist)').run();
+    this.db.prepare('CREATE INDEX IF NOT EXISTS indexLibraryArtist ON library(artist)').run();
+
+    this.db.prepare(`
+      CREATE TABLE IF NOT EXISTS stats (
+        songId TEXT PRIMARY KEY REFERENCES library(id) ON DELETE CASCADE,
+        plays INTEGER NOT NULL DEFAULT 0,
+        lastplay INTEGER
+      ) STRICT
+    `).run();
+
     this.db.pragma(`user_version=${this.targetVersion}`);
   }
 
@@ -152,6 +219,7 @@ class FiretailDB {
     console.log(`Provided database version ${userVersion}. Upgrading to version ${this.targetVersion}...`);
     switch(userVersion) {
       case 0: {
+        //TODO: Add upgrade to new playlist system
         this.db.prepare('CREATE TABLE IF NOT EXISTS albums (title text, albumArtist text, albumType text, UNIQUE(title, albumArtist))').run()
       }
     }

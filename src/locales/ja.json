@@ -1,12 +1,14 @@
 {
     "SIDEBAR": {
-        "HOME": "家",
+        "HOME": "ホーム",
+        "AUDIO_DEBUG": "オーディオデバッグ",
         "SETTINGS": "設定",
         "LIBRARY": "ライブラリ",
         "FAVOURITE": "お気に入り",
         "SONGS": "曲",
         "ARTISTS": "アーティスト",
         "ALBUMS": "アルバム",
+        "GENRES": "ジャンル",
         "PLAYLISTS": "プレイリスト",
         "CREATE_PLAYLIST": "プレイリストを作成"
     },
@@ -15,23 +17,30 @@
         "ARTISTS": "アーティスト",
         "ALBUMS": "アルバム",
         "FAVOURITES": "お気に入り",
-        "HOME": "家",
-        "UNKNOWN": "パスが見つかりませんでした"
+        "HOME": "ホーム",
+        "UNKNOWN": "パスが見つかりませんでした",
+        "UNKNOWN_DESC": "申し訳ございません。これがエラーだと思われる場合は、こちらから問題を報告してください。"
     },
     "TOP_TITLE": {
-        "COUNT_TYPE_SONGS": "{count}曲"
+        "COUNT_TYPE_SONGS": "{count}曲",
+        "LIST_LENGTH": {
+            "HOURS": "{count}時間",
+            "MINUTES": "{count}分",
+            "SECONDS": "{count}秒"
+        }
     },
     "SONG_LIST": {
         "LIST_TITLE": "タイトル",
         "LIST_ARTIST": "アーティスト",
         "LIST_ALBUM": "アルバム",
-        "LIST_DURATION": "限目"
+        "LIST_DURATION": "長さ"
     },
     "PLAYING_BAR": {
         "SONG_TITLE_NOT_PLAYING": "再生停止中..."
     },
     "TOP_BAR": {
-        "ADD_SONGS": "曲を追加する"
+        "ADD_SONGS": "曲を追加する",
+        "NUKE": "ライブラリを削除"
     },
     "SETTINGS": {
         "TITLE": "設定",
@@ -39,6 +48,7 @@
             "GENERAL": "一般",
             "LIBRARY": "ライブラリ",
             "APPEARANCE": "アプリケーションの外観",
+            "INTEGRATION": "連携",
             "ACCESSIBILITY": "アクセシビリティ",
             "ADVANCED": "高度な設定",
             "UPDATE": "ソフトウェアの更新",
@@ -47,41 +57,55 @@
         "BUTTON": {
             "CLEAR_LIBRARY": "ライブラリを削除",
             "REFRESH": "再作成する",
-            "CHECK_UPDATE": "アップデートを確認"
+            "CHECK_UPDATE": "アップデートを確認",
+            "CONNECT_SPOTIFY": "Spotify に接続",
+            "CONNECT_LASTFM": "Last.fm に接続",
+            "DISCONNECT": "接続を解除"
         },
         "DROP_DOWN": {
-            "LANG_AUTO": "自動の",
+            "LANG_AUTO": "自動",
+            "APP_THEME": {
+                "FIRETAIL": "Firetail",
+                "CLASSIC": "クラシック",
+                "CYBER": "サイバー"
+            },
             "COLOUR_THEME": {
                 "SYSTEM": "システム",
-                "DARK": "暗い",
-                "LIGHT": "光"
+                "DARK": "ダーク",
+                "LIGHT": "ライト"
             },
             "START_SCREEN": {
-                "HOME": "家",
+                "HOME": "ホーム",
                 "SONGS": "曲",
                 "ARTISTS": "アーティスト",
                 "ALBUMS": "アルバム",
                 "FAVOURITES": "お気に入り"
             },
             "UPDATE_BRANCH": {
-                "STABLE": "堅牢",
-                "PREVIEW": "試写",
-                "DEVELOPMENT": "不完全"
+                "STABLE": "安定版",
+                "PREVIEW": "プレビュー版",
+                "DEVELOPMENT": "開発版"
             }
         },
         "LANGUAGE": "言語を選択",
         "START_PAGE": "Firetail 起動時に表示するページを選択します",
-        "CLEAR_LIBRARY": "音楽ライブラリを削除する",
+        "CLEAR_LIBRARY": "Firetail の音楽ライブラリを削除する",
         "REFRESH_METADATA": "ライブラリメタデータを再作成する",
-        "APP_THEME": "応募テーマ",
+        "APP_THEME": "アプリのテーマ（変更には再起動が必要です）",
         "COLOUR_THEME": "色のテーマ",
         "COLOUR_BAR": "下部バーのアルバム画像の色に合わせます",
         "INCREASE_PERFORMANCE": "エフェクトを簡素化し、パフォーマンスを向上させる",
+        "SPOTIFY_INTEGRATION_DISCONNECTED": "Spotify アカウントを接続すると、追加のメタデータ機能が利用できます",
+        "SPOTIFY_INTEGRATION_CONNECTED": "こんにちは、{user}さん！ Spotify アカウントは Firetail に接続されています。",
+        "SPOTIFY_DISCLAIMER": "この機能を使用すると、Spotify の利用規約およびプライバシーポリシーに同意したことになります。これらの機能を提供するため、Firetail ライブラリの一部の情報が Spotify に送信されます。Spotify のアカウント設定から Firetail アプリを削除することで、いつでも連携を解除できます。",
+        "LASTFM_INTEGRATION_DISCONNECTED": "Last.fm アカウントを接続すると、再生履歴をスクロブリングできます",
+        "LASTFM_DISCLAIMER": "この機能を使用すると、Last.fm の利用規約およびプライバシーポリシーに同意したことになります。あなたの再生履歴は Last.fm に送信されます。Last.fm のアカウント設定から Firetail アプリを削除することで、いつでも連携を解除できます。",
         "USE_HIGH_CONTRAST": "ハイコントラストカラー",
         "REDUCE_MOTION": "動きを減らす",
         "BOLD_TEXT": "文字を太くする",
         "SHOW_FILE_CODEC": "音楽ファイルのコーデックを表示",
         "FORCE_RTL": "RTLインターフェースを使用する",
+        "DEBUG_MODE": "デバッグモードを有効にする",
         "CHECK_UPDATE": "ソフトウェアアップデートを検索する",
         "UPDATE_BRANCH": "アップデートチャンネルの選択",
         "ABOUT": {
@@ -94,8 +118,8 @@
             "VIEW_CHANGELOG": "変更ログを参照",
             "ADVANCED_INFO_LABEL": "高度な情報",
             "ADVANCED_INFO": {
-                "BUILD": "建てる : {build}",
-                "PLATFORM": "プラットホーム : {platform}",
+                "BUILD": "ビルド : {build}",
+                "PLATFORM": "プラットフォーム : {platform}",
                 "PLATFORM_VER": "プラットフォームのバージョン : {version}",
                 "ARCHITECTURE": "アーキテクチャ : {arch}",
                 "ELECTRON": "Electron : {version}",
@@ -129,6 +153,12 @@
             "DEFAULT_DESC": "楽しい概要",
             "REMOVE_IMAGE": "写真を削除",
             "CHOOSE_IMAGE": "写真を選ぶ"
+        },
+        "PROMPT": {
+            "RESTART": {
+                "TITLE": "再起動が必要です",
+                "MESSAGE": "この設定を変更するには、Firetail を再起動する必要があります。"
+            }
         }
     },
     "BUTTONS": {
@@ -165,7 +195,9 @@
             "ADD_QUEUE": "[次に再生] に追加",
             "GO_ARTIST": "アーティストページへ",
             "GO_ALBUM": "アルバムページへ",
+            "VIEW_EXPLORER": "エクスプローラーで表示",
             "VIEW_FINDER": "Finder で表示",
+            "VIEW_FILEMGR": "ファイルマネージャーで表示",
             "ADD_FAVOURITE": "お気に入りに追加",
             "ADD_PLAYLIST": "プレイリストに追加する",
             "REMOVE_FAVOURITE": "お気に入りから削除",

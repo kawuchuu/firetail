@@ -1,45 +1,36 @@
 <script setup lang="ts">
 import {computed, onMounted, ref, watch} from "vue";
+import {useNotification} from "../modules/useNotification";
 
-const props = defineProps<{
-  icon?: string;
-  title: string;
-  message: string;
-  autoDismissTime?: number;
-  progressBar?: boolean;
-  progressAmount?: number;
-}>();
+const notificationHandle = useNotification();
 
 const animationTiming = computed(() => {
-  return `animation-duration: ${props.autoDismissTime}ms`;
+  return `animation-duration: ${notificationHandle.autoDismissTime.value}ms`;
 });
-
-const notificationActive = ref(false);
 
 let autoDismissTimeout = 0;
 
 function dismiss() {
-  notificationActive.value = false;
+  notificationHandle.notificationActive.value = false;
   clearTimeout(autoDismissTimeout);
 }
 
-onMounted(() => {
-  notificationActive.value = true;
-  if (props.autoDismissTime) {
-    autoDismissTimeout = setTimeout(dismiss, props.autoDismissTime);
+watch(() => notificationHandle.notificationActive.value, (watchNew) => {
+  if (watchNew && notificationHandle.autoDismissTime.value > 0) {
+    autoDismissTimeout = setTimeout(dismiss, notificationHandle.autoDismissTime.value);
   }
 })
 </script>
 
 <template>
-  <div class="notification" :class="notificationActive ? 'active' : 'hidden'">
-    <div v-if="autoDismissTime" class="indicator" :style="animationTiming" />
+  <div class="notification" :class="notificationHandle.notificationActive.value ? 'active' : 'hidden'">
+    <div v-if="notificationHandle.autoDismissTime" class="indicator" :style="animationTiming" />
     <div class="dismiss" @click="dismiss">
       <i class="ft-icon std-icon-btn">close</i>
     </div>
     <div class="notification-inner">
-      <h3>{{title}}</h3>
-      <p>{{message}}</p>
+      <h3>{{notificationHandle.title}}</h3>
+      <p>{{notificationHandle.message}}</p>
     </div>
   </div>
 </template>
@@ -79,7 +70,7 @@ onMounted(() => {
   transform: translateY(-70%);
   width: 300px;
   height: auto;
-  background-color: var(--bg);
+  background-color: var(--fg-bg);
   border: solid 1px var(--bd);
   border-radius: 10px;
   padding: 16px 18px;
@@ -90,6 +81,10 @@ onMounted(() => {
     position: absolute;
     top: 12px;
     right: 12px;
+
+    i {
+      font-size: 1.35em;
+    }
   }
 
   .notification-inner {

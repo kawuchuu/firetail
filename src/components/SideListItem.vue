@@ -1,17 +1,39 @@
 <script setup lang="ts">
-defineProps<{
+import { ref, watch } from "vue";
+
+const props = defineProps<{
   title: string;
   url: string;
   subtitle?: string;
   imagePath?: string;
   circleImage?: boolean;
 }>();
+
+const imageLoaded = ref(false);
+
+watch(
+  () => props.imagePath,
+  () => {
+    imageLoaded.value = false;
+  },
+);
 </script>
 
 <template>
   <div class="list-items">
     <router-link :to="url">
-      <img alt="" loading="lazy" :class="['item-img', circleImage ? 'circle' : '']" :src="imagePath ?? imagePath"/>
+      <div :class="['item-img-wrapper', circleImage ? 'circle' : '']">
+        <img
+          v-if="imagePath"
+          alt=""
+          loading="eager"
+          decoding="sync"
+          :class="['item-img', imageLoaded ? 'loaded' : '']"
+          :src="imagePath"
+          @load="imageLoaded = true"
+        />
+      </div>
+
       <div class="item-info">
         <span class="title">{{ title }}</span>
         <span v-if="subtitle" class="album-artist">{{ subtitle }}</span>
@@ -81,7 +103,7 @@ defineProps<{
   }
 }
 
-.item-img {
+.item-img-wrapper {
   min-width: 45px;
   min-height: 45px;
   max-width: 45px;
@@ -93,10 +115,24 @@ defineProps<{
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  overflow: hidden;
 }
 
-.item-img.circle {
+.item-img-wrapper.circle {
   border-radius: 100%;
   background-image: url('../assets/no_artist.svg');
+}
+
+.item-img {
+  display: block;
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.item-img.loaded {
+  opacity: 1;
 }
 </style>

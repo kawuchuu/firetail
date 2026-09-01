@@ -17,8 +17,8 @@
     "ALBUMS": "Álbumes",
     "FAVOURITES": "Favoritos",
     "HOME": "Inicio",
-    "UNKNOWN": "The route you were looking for could not be found.",
-    "UNKNOWN_DESC": "Sorry about that. If you believe this is an error, please create an issue here."
+    "UNKNOWN": "No se pudo encontrar la ruta que buscabas.",
+    "UNKNOWN_DESC": "Lo sentimos. Si crees que se trata de un error, crea un informe aquí."
   },
   "TOP_TITLE": {
     "COUNT_TYPE_SONGS": "No hay canciones | 1 canción | {count} canciones",
@@ -38,8 +38,8 @@
     "SONG_TITLE_NOT_PLAYING": "No hay música en reproducción..."
   },
   "TOP_BAR": {
-    "ADD_SONGS": "Add Songs",
-    "NUKE": "Remove Library"
+    "ADD_SONGS": "Añadir canciones",
+    "NUKE": "Eliminar biblioteca"
   },
   "SETTINGS": {
     "TITLE": "Ajustes",
@@ -57,15 +57,15 @@
       "CLEAR_LIBRARY": "Eliminar biblioteca",
       "REFRESH": "Refrescar",
       "CHECK_UPDATE": "Buscar actualizaciones",
-      "CONNECT_SPOTIFY": "Connect to Spotify",
-      "CONNECT_LASTFM": "Connect to Last.fm",
-      "DISCONNECT": "Disconnect"
+      "CONNECT_SPOTIFY": "Conectar con Spotify",
+      "CONNECT_LASTFM": "Conectar con Last.fm",
+      "DISCONNECT": "Desconectar"
     },
     "DROP_DOWN": {
-      "LANG_AUTO": "Auto",
+      "LANG_AUTO": "Automático",
       "APP_THEME": {
         "FIRETAIL": "Firetail",
-        "CLASSIC": "Classic",
+        "CLASSIC": "Clásico",
         "CYBER": "Cyber"
       },
       "COLOUR_THEME": {
@@ -81,24 +81,24 @@
         "FAVOURITES": "Favoritos"
       },
       "UPDATE_BRANCH": {
-        "STABLE": "Stable",
-        "PREVIEW": "Preview",
-        "DEVELOPMENT": "Development"
+        "STABLE": "Estable",
+        "PREVIEW": "Vista previa",
+        "DEVELOPMENT": "Desarrollo"
       }
     },
     "LANGUAGE": "Elige un idioma",
     "START_PAGE": "Elige la pantalla que se muestra al abrir Firetail",
     "CLEAR_LIBRARY": "Borra tu biblioteca de música de Firetail",
-    "REFRESH_METADATA": "Refresh your library\u0027s metadata",
-    "APP_THEME": "App theme (requires reload for now)",
+    "REFRESH_METADATA": "Actualiza los metadatos de tu biblioteca",
+    "APP_THEME": "Tema de la aplicación (requiere reiniciar por ahora)",
     "COLOUR_THEME": "Tema de color",
     "COLOUR_BAR": "Mostrar el color del álbum en la barra de reproducción",
     "INCREASE_PERFORMANCE": "Reducir los efectos visuales para mejorar el rendimiento",
-    "SPOTIFY_INTEGRATION_DISCONNECTED": "Connect your Spotify account for additional metadata features",
-    "SPOTIFY_INTEGRATION_CONNECTED": "Hi, {user}! Your Spotify account is currently connected to Firetail.",
-    "SPOTIFY_DISCLAIMER": "By using this feature, you agree to Spotify's Terms and Conditions of Use and Privacy Policy. Some information about your Firetail library will be sent to Spotify in order to provide these features. You can opt-out at any time by removing the Firetail application in your Spotify account settings.",
-    "LASTFM_INTEGRATION_DISCONNECTED": "Connect your Last.fm account to scrobble your listening activity",
-    "LASTFM_DISCLAIMER": "By using this feature, you agree to Last.fm's Terms of Use and Privacy Policy. Your listening activity will be sent to Last.fm. You can opt-out at any time by removing the Firetail application in your Last.fm account settings.",
+    "SPOTIFY_INTEGRATION_DISCONNECTED": "Conecta tu cuenta de Spotify para acceder a funciones adicionales de metadatos",
+    "SPOTIFY_INTEGRATION_CONNECTED": "¡Hola, {user}! Tu cuenta de Spotify está conectada a Firetail.",
+    "SPOTIFY_DISCLAIMER": "Al usar esta función, aceptas los Términos y condiciones de uso y la Política de privacidad de Spotify. Se enviará a Spotify cierta información sobre tu biblioteca de Firetail para proporcionar estas funciones. Puedes cancelar la conexión en cualquier momento eliminando la aplicación Firetail en los ajustes de tu cuenta de Spotify.",
+    "LASTFM_INTEGRATION_DISCONNECTED": "Conecta tu cuenta de Last.fm para registrar tu actividad de reproducción (scrobbling)",
+    "LASTFM_DISCLAIMER": "Al usar esta función, aceptas los Términos de uso y la Política de privacidad de Last.fm. Tu actividad de reproducción se enviará a Last.fm. Puedes cancelar la conexión en cualquier momento eliminando la aplicación Firetail en los ajustes de tu cuenta de Last.fm.",
     "USE_HIGH_CONTRAST": "Modo de alto contraste",
     "REDUCE_MOTION": "Reducir movimiento",
     "BOLD_TEXT": "Activar texto en negrita",
@@ -106,12 +106,12 @@
     "FORCE_RTL": "Forzar interfaz de derecha a izquierda",
     "DEBUG_MODE": "Habilitar el modo de depuración",
     "CHECK_UPDATE": "Buscar actualizaciones",
-    "UPDATE_BRANCH": "Choose a channel for app updates",
+    "UPDATE_BRANCH": "Elige un canal para las actualizaciones de la aplicación",
     "ABOUT": {
       "VERSION": "Versión {version}",
       "COPYRIGHT": "© {year} {author}",
-      "BUG_REPORT": "Found a bug? Please report it {link}",
-      "BUG_REPORT_LINK": "here on GitHub.",
+      "BUG_REPORT": "¿Encontraste un error? Infórmalo {link}",
+      "BUG_REPORT_LINK": "aquí en GitHub.",
       "LICENSE_CHANGELOG": "{license}, {changelog}",
       "THIRD_PARTY_LICENSE": "Licencias de terceros",
       "VIEW_CHANGELOG": "mostrar registro de cambios",
@@ -155,8 +155,8 @@
     },
     "PROMPT": {
       "RESTART": {
-        "TITLE": "Restart Required",
-        "MESSAGE": "Changing this option requires a restart of Firetail to take full effect."
+        "TITLE": "Reinicio necesario",
+        "MESSAGE": "Para aplicar completamente este cambio, es necesario reiniciar Firetail."
       }
     }
   },
@@ -176,7 +176,7 @@
     "REPEAT": "Repetir",
     "QUEUE": "Cola",
     "VOLUME": "Volumen",
-    "ZEN_MODE": "Zen Mode",
+    "ZEN_MODE": "Modo Zen",
     "FAVOURITE": "Favorito"
   },
   "SEARCH": {
@@ -191,22 +191,22 @@
   },
   "CONTEXT_MENU": {
     "SONG_LIST_ITEM": {
-      "ADD_QUEUE": "Add to queue",
-      "GO_ARTIST": "Go to artist",
-      "GO_ALBUM": "Go to album",
-      "VIEW_EXPLORER": "Show in File Explorer",
-      "VIEW_FINDER": "Show in Finder",
-      "VIEW_FILEMGR": "Show in File Manager",
-      "ADD_FAVOURITE": "Add to favorites",
-      "ADD_PLAYLIST": "Add to playlist",
-      "REMOVE_FAVOURITE": "Remove from favorites",
-      "REMOVE_PLAYLIST": "Remove from playlist",
-      "DELETE": "Remove from library"
+      "ADD_QUEUE": "Añadir a la cola",
+      "GO_ARTIST": "Ir al artista",
+      "GO_ALBUM": "Ir al álbum",
+      "VIEW_EXPLORER": "Mostrar en el Explorador de archivos",
+      "VIEW_FINDER": "Mostrar en Finder",
+      "VIEW_FILEMGR": "Mostrar en el administrador de archivos",
+      "ADD_FAVOURITE": "Añadir a favoritos",
+      "ADD_PLAYLIST": "Añadir a una playlist",
+      "REMOVE_FAVOURITE": "Quitar de favoritos",
+      "REMOVE_PLAYLIST": "Quitar de la playlist",
+      "DELETE": "Eliminar de la biblioteca"
     },
     "PLAYLIST_SIDE_ITEM": {
-      "EDIT_PLAYLIST": "Edit playlist",
-      "RENAME": "Rename",
-      "REMOVE_PLAYLIST": "Remove playlist"
+      "EDIT_PLAYLIST": "Editar esta playlist",
+      "RENAME": "Cambiar nombre",
+      "REMOVE_PLAYLIST": "Eliminar esta playlist"
     }
   },
   "APP_NAME": "Firetail",

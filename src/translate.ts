@@ -19,7 +19,7 @@ const loadLocaleMessages = async () => {
 export async function setupI18n() {
     return createI18n({
         locale: navigator.language,
-        fallbackLocale: 'en-US',
+        fallbackLocale: 'en-GB',
         messages: await loadLocaleMessages(),
         silentTranslationWarn: true,
         silentFallbackWarn: true,

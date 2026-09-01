@@ -55,13 +55,14 @@ export default function startIpc() {
         const pluginsDir = path.join(app.getPath('userData'), 'plugins');
         try {
             return readdirSync(pluginsDir, { withFileTypes: true })
-                .filter(e => e.isDirectory())
+                .filter(e => {return e.isDirectory() && !e.name.startsWith('.')})
                 .map(e => {
                     const manifestPath = path.join(pluginsDir, e.name, 'manifest.json')
                     const source = readFileSync(manifestPath, 'utf-8')
                     return { pluginDir: path.join(pluginsDir, e.name), manifest: JSON.parse(source) }
                 });
-        } catch {
+        } catch(err) {
+            console.log(err)
             return [];
         }
     });
