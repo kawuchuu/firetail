@@ -3,19 +3,21 @@ import {onMounted, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 import {getArt} from "../../modules/art";
 import {audioPlayer, viewStore} from "../../renderer";
+import noAlbum from "../../assets/no_album.svg";
 
 const route = useRoute();
-const imagePath = ref('../../assets/no_album.svg');
+const imagePath = ref(noAlbum);
 
 const props = defineProps<{
-  genres: Object[],
-  artists: Object[],
+  genres?: Object[],
+  artists?: Object[],
+  description?: string,
 }>();
 
 async function updateAlbumArt() {
   if (route.params.album && route.params.albumArtist) {
     imagePath.value = await getArt(route.params.albumArtist, route.params.album);
-  } else imagePath.value = '../../assets/no_album.svg';
+  } else imagePath.value = noAlbum;
 }
 
 watch(() => route.params, updateAlbumArt);
@@ -31,6 +33,10 @@ onMounted(() => {
   <div class="info-view">
     <div class="album-art">
       <img :src="imagePath" alt="Album art"/>
+    </div>
+    <p v-if="description" class="subtitle">Description</p>
+    <div v-if="description" class="description">
+      <p>{{description}}</p>
     </div>
     <p v-if="genres && genres.length > 0" class="subtitle">Genres</p>
     <div v-if="genres && genres.length > 0" class="genres">
@@ -53,7 +59,7 @@ onMounted(() => {
 }
 
 .album-art {
-  width: auto;
+  width: calc(100% - 80px);
   height: auto;
   padding: 40px 24px 0 40px;
 
@@ -114,6 +120,14 @@ onMounted(() => {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+  }
+}
+
+.description {
+  padding: 0 40px;
+
+  p {
+    margin: 0;
   }
 }
 </style>

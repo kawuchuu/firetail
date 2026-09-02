@@ -21,7 +21,8 @@ const props = defineProps<{
   showInfoView?: boolean,
   artistName?: string,
   genres?: string[],
-  artists?: string[]
+  artists?: string[],
+  description?: string,
 }>();
 
 const route = useRoute();
@@ -225,7 +226,7 @@ onMounted(() => {
     <ContextMenu :top="contextMenuPos.y" :left="contextMenuPos.x" v-if="isContextMenuVisible">
       <ContextMenuItem></ContextMenuItem>
     </ContextMenu>
-    <SongViewInfoView v-if="showInfoView" :genres="genres" :artists="artists" />
+    <SongViewInfoView v-if="showInfoView" :genres="genres" :artists="artists" :description="description" />
   </div>
 </template>
 
@@ -285,7 +286,7 @@ onMounted(() => {
 
 .column-sort-wrapper.sticky .column-sort {
   position: fixed;
-  width: calc(var(--fixed-width) - 46px - var(--song-list-width) - var(--info-view-width));
+  width: calc(var(--fixed-width) - var(--info-view-width) - var(--song-list-width) - var(--padding-compensate));
   pointer-events: none;
   border-color: transparent;
 }

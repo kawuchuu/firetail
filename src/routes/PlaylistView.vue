@@ -31,12 +31,33 @@ onBeforeMount(() => {
 
 <template>
   <RouterView v-slot="{ Component }" class="wrapper">
-    <component :is="Component" :song-list="songList" :list-length="listLength" :list-name="playlist?.name || 'Playlist'" />
+    <component
+        :is="Component"
+        :song-list="songList"
+        :list-length="listLength"
+        :list-name="playlist?.name || 'Playlist'"
+        :show-info-view="true"
+        :description="playlist?.description"
+    />
   </RouterView>
 </template>
 
 <style scoped lang="scss">
 .wrapper {
-  --info-view-width: -16px;
+  --info-view-width: 450px;
+  --song-list-width: 0px;
+  --padding-compensate: 32px;
+}
+
+@media (max-width: 1600px) {
+  .wrapper {
+    --info-view-width: 350px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .wrapper {
+    --info-view-width: 250px;
+  }
 }
 </style>

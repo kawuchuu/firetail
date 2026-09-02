@@ -30,6 +30,7 @@ onMounted(() => {
 
 <style scoped>
 .wrapper {
-  --info-view-width: -16px;
+  --info-view-width: 0px;
+  --padding-compensate: 32px;
 }
 </style>

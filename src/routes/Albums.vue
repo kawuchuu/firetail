@@ -97,6 +97,7 @@ onMounted(() => {
 .albums-view-container {
   --song-list-width: 300px;
   --info-view-width: 450px;
+  --padding-compensate: 64px;
 }
 
 .song-list-container {
