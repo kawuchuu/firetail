@@ -41,7 +41,7 @@ const play = inject<(index: number) => void>("play");
 </script>
 
 <template>
-  <div class="song-item" :class="[isActive, isSimple ? 'simple' : '']" @dblclick="startPlaying"  @mouseover="hovering = true" @mouseleave="hovering = false">
+  <div class="song-item inner-outline" :class="[isActive, isSimple ? 'simple' : '']" @dblclick="startPlaying"  @mouseover="hovering = true" @mouseleave="hovering = false">
     <i v-if="(listIcon !== 'volume-up' && !isSimple) || (isSimple && hovering && listIcon !== 'volume-up')" class="ft-icon play-pause" :style="(hovering || (isActive === 'active')) ? 'opacity: 1' : 'opacity: 0'" @click="play(index)">{{ listIcon }}</i>
     <div v-if="listIcon == 'volume-up'" class="playing-ani" @click="">
       <div class="bar one"></div>
@@ -91,6 +91,14 @@ const play = inject<(index: number) => void>("play");
   border-radius: 10px;
 }
 
+.song-item::after {
+  display: none;
+}
+
+.song-item:hover::after, .song-item.highlight::after {
+  display: block;
+}
+
 .song-item.simple {
   height: 55px;
 }
@@ -108,45 +116,51 @@ const play = inject<(index: number) => void>("play");
 
 .song-item:hover {
   background: #ffffff18;
-  box-shadow: inset 0 0 0 1px var(--bd-op);
 }
 
-.song-item.nohover:hover {
-  background: none;
+.song-item:not(.highlight) {
+  border-radius: 10px;
 }
 
-.song-item.hactive {
-  background: #ffffff36;
+.song-item:hover:not(.highlight)::after {
+  border-radius: 10px;
 }
 
-.song-item.hactive:hover {
-  background: #ffffff22;
+.highlight {
+  background: var(--bd);
+  border-radius: 0;
 }
 
-.song-item.hactive.notop {
-  border-radius: 0px 0px 10px 10px;
+.highlight:not(.highlight-first):not(.highlight-last)::after {
+  border-top: none;
+  border-bottom: none;
 }
 
-.song-item.hactive.nobottom {
-  border-radius: 10px 10px 0px 0px;
+.highlight-first {
+  border-radius: 10px 10px 0 0;
 }
 
-.song-item.hactive.none {
-  border-radius: 0px;
+.highlight-first::after {
+  border-radius: 10px 10px 0 0;
+  border-bottom: none;
 }
 
-html.light {
-  li:hover {
-    background: #00000010;
-  }
+.highlight-last {
+  border-radius: 0 0 10px 10px;
+}
 
-  .song-item.hactive {
-    background: #00000028;
-  }
+.highlight-last::after {
+  border-radius: 0 0 10px 10px;
+  border-top: none;
+}
 
-  .song-item.hactive:hover {
-    background: #00000022;
-  }
+.highlight-first.highlight-last {
+  border-radius: 10px;
+}
+
+.highlight-first.highlight-last::after {
+  border-radius: 10px;
+  border: solid 1px var(--bd);
 }
 
 .play-pause {
@@ -275,7 +289,7 @@ html.light {
   border-radius: 100px;
 }
 
-.song-item:hover .favourite-icon, .song-item.hactive .favourite-icon {
+.song-item:hover .favourite-icon, .song-item.highlight .favourite-icon {
   opacity: 0.5;
 }
 

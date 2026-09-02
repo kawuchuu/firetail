@@ -21,3 +21,12 @@ export enum RepeatMode {
   REPEAT_ALL,
   REPEAT_ONE
 }
+
+export interface Playlist {
+  id: number;
+  name: string;
+  description: string;
+  imagePath: string;
+  createdAt: number;
+  updatedAt: number;
+}

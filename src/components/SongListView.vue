@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import FiretailSong from "../types/FiretailSong";
 import {audioPlayer, viewStore} from "../renderer";
-import {computed, nextTick, onMounted, provide, ref, watch, Ref} from "vue";
+import {computed, nextTick, onMounted, provide, ref, watch, Ref, useTemplateRef} from "vue";
 import SongListItem from "./SongListItem.vue";
 import SongViewInfoView from "./songlistviews/SongViewInfoView.vue";
 import {useRoute} from "vue-router";
@@ -36,6 +36,55 @@ const bgImagePath = ref('');
 const isContextMenuVisible = ref(false);
 const contextMenuPos:Ref<Vector2> = ref(new Vector2(0, 0));
 
+const highlighted = ref<number[]>([]);
+const lastHighlightedIndex = ref<number | null>(null);
+
+const songDragOverlay = useTemplateRef('songDragOverlay');
+const songDragOverlayText = ref("Nothing here...");
+
+function isHighlighted(index: number) {
+  return highlighted.value.includes(index);
+}
+
+function getHighlightClasses(index: number) {
+  if (!isHighlighted(index)) return '';
+  return {
+    highlight: true,
+    'highlight-first': !isHighlighted(index - 1),
+    'highlight-last': !isHighlighted(index + 1),
+  }
+}
+
+function getIndexRange(from: number, to: number) {
+  const start = Math.min(from, to);
+  const end = Math.max(from, to);
+  return Array.from({ length: end - start + 1 }, (_, offset) => start + offset);
+}
+
+function handleHighlightPointerDown(index: number, evt: PointerEvent) {
+  if (evt.shiftKey && lastHighlightedIndex.value !== null) {
+    const range = getIndexRange(lastHighlightedIndex.value, index);
+    if (evt.ctrlKey) {
+      highlighted.value = Array.from(new Set([...highlighted.value, ...range]));
+    } else {
+      highlighted.value = range;
+    }
+    return;
+  }
+  if (evt.ctrlKey) {
+    toggleHighlighted(index);
+    lastHighlightedIndex.value = index;
+    return;
+  }
+  if (highlighted.value.indexOf(index) != -1) return;
+  highlighted.value = [index];
+  lastHighlightedIndex.value = index;
+}
+
+function handleHighlightPointerUp(index: number, evt: PointerEvent) {
+  if (!evt.shiftKey && !evt.ctrlKey) highlighted.value = [index];
+}
+
 function play(index:number) {
   audioPlayer.enqueue(props.songList, true, true, index);
 }
@@ -44,9 +93,27 @@ function closeContextMenu() {
   isContextMenuVisible.value = false;
 }
 
-function openContextMenu(evt: PointerEvent) {
+function openContextMenu(item: FiretailSong, evt: PointerEvent) {
   isContextMenuVisible.value = true;
+  console.log(item)
   contextMenuPos.value.set(evt.x, evt.y);
+}
+
+function toggleHighlighted(index: number) {
+  if (highlighted.value.indexOf(index) != -1) {
+    highlighted.value.splice(highlighted.value.indexOf(index), 1);
+  } else {
+    highlighted.value.push(index);
+  }
+}
+
+function startSongDrag(evt: DragEvent) {
+  evt.dataTransfer?.clearData();
+  const highlightedSongs = highlighted.value.map(index => props.songList[index]);
+  evt.dataTransfer?.setData('firetail/song', JSON.stringify(highlightedSongs));
+  songDragOverlayText.value = `${highlightedSongs[0].artist} - ${highlightedSongs[0].title}`;
+  if (highlightedSongs.length > 1) songDragOverlayText.value += ` + ${highlightedSongs.length - 1} more`;
+  evt.dataTransfer?.setDragImage(songDragOverlay.value as Element, 0, 0);
 }
 
 function updateScroll() {
@@ -90,6 +157,11 @@ onMounted(() => {
 
 <template>
   <div class="wrapper" :class="showInfoView ? 'show-info-view' : ''">
+    <teleport to="body">
+      <div class="song-drag-overlay" ref="songDragOverlay">
+        <p>{{songDragOverlayText}}</p>
+      </div>
+    </teleport>
     <div class="bg-gradient">
       <div class="list-gradient-fade" />
       <div class="bg-fade-bottom" />
@@ -137,7 +209,17 @@ onMounted(() => {
         </div>
       </template>
       <template #default="{ item, index, active }" ref="test">
-        <SongListItem :song="item" :index="index" :is-simple="isSimple" @contextmenu="openContextMenu" />
+        <SongListItem
+            :class="getHighlightClasses(index)"
+            :song="item"
+            :index="index"
+            :is-simple="isSimple"
+            @pointerdown.left="handleHighlightPointerDown(index, $event)"
+            @pointerup.left="handleHighlightPointerUp(index, $event)"
+            @contextmenu="openContextMenu(item, $event)"
+            draggable="true"
+            @dragstart="startSongDrag"
+        />
       </template>
     </RecycleScroller>
     <ContextMenu :top="contextMenuPos.y" :left="contextMenuPos.x" v-if="isContextMenuVisible">
@@ -299,6 +381,22 @@ html.boldText .column-sort-info h2 {
   position: absolute;
   top: 420px;
   z-index: 2;
+}
+
+.song-drag-overlay {
+  max-width: 256px;
+  padding: 12px 14px;
+  background: var(--fg-bg);
+  border-radius: 10px;
+  border: solid 1px var(--bd);
+  position: absolute;
+  right: 0;
+  top: 50%;
+  z-index: -1;
+
+  p {
+    margin: 0;
+  }
 }
 
 @keyframes fadeIn {

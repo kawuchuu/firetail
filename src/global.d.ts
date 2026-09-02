@@ -1,7 +1,7 @@
 import FiretailSong from "./types/FiretailSong";
 import {Albums} from "./types/Albums";
 import {Ref} from "vue";
-import {RepeatMode} from "./types/Common";
+import {Playlist, RepeatMode} from "./types/Common";
 
 interface LibraryPreload {
   getAllSongs: () => FiretailSong[];
@@ -12,6 +12,10 @@ interface LibraryPreload {
   getAllFromArtist: (artist: string) => FiretailSong[];
   addToLibrary: (locations: string[]) => void;
   onRefreshView: (callback: any) => Electron.IpcRenderer;
+}
+
+interface PlaylistsPreload {
+  getAllPlaylists: () => Playlist[];
 }
 
 interface PlayerPreload {
@@ -86,6 +90,7 @@ interface PluginsPreload {
 declare global {
   interface Window {
     library: LibraryPreload;
+    playlists: PlaylistsPreload;
     player: PlayerPreload;
     path: PathPreload;
     processPreload: ProcessPreload;

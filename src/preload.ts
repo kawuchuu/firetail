@@ -13,6 +13,10 @@ contextBridge.exposeInMainWorld('library', {
   onRefreshView: (callback) => ipcRenderer.on('refreshView', (_event, value) => callback(value))
 });
 
+contextBridge.exposeInMainWorld('playlists', {
+  getAllPlaylists: () => ipcRenderer.sendSync('getAllPlaylists'),
+});
+
 contextBridge.exposeInMainWorld('player', {
   next: (callback) => ipcRenderer.on('playerNext', () => callback()),
   previous: (callback) => ipcRenderer.on('playerPrevious', () => callback()),

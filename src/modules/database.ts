@@ -106,6 +106,10 @@ class FiretailDB {
     })(getAllAlbums);
   }
 
+  getAllPlaylists() {
+    return this.db.prepare("SELECT * FROM playlists GROUP BY createdAt").all();
+  }
+
   startDBIpc() {
     ipcMain.on('getAllSongs', (event) => {
       event.returnValue = this.getAllSongs();
@@ -137,6 +141,10 @@ class FiretailDB {
       const performAddFiles:FiretailSong[] = await addFiles(finalPaths.processFilesAr, finalPaths.coverImagePaths);
       this.addToLibrary(performAddFiles);
       mainWindow.webContents.send('refreshView');
+    });
+
+    ipcMain.on('getAllPlaylists', (event) => {
+      event.returnValue = this.getAllPlaylists();
     });
   }
 

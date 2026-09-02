@@ -3,6 +3,7 @@ import SidebarItem from "./SidebarItem.vue";
 import SidebarTitle from "./SidebarTitle.vue";
 import {viewStore} from "../../renderer";
 import {usePlugins} from "../../plugins/usePlugins";
+import SidebarPlaylists from "./SidebarPlaylists.vue";
 
 const pluginStore = usePlugins();
 const navItems = pluginStore.navItems.value;
@@ -21,6 +22,7 @@ console.log(navItems)
             <SidebarItem to="/genres" :icon="'genre'" :label="'GENRES'"></SidebarItem>
             <SidebarItem to="/likes" :icon="'heart'" :label="'FAVOURITE'"></SidebarItem>
             <SidebarTitle :title="'PLAYLISTS'"></SidebarTitle>
+            <SidebarPlaylists />
         </div>
     </div>
 </template>
