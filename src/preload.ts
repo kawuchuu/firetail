@@ -15,6 +15,10 @@ contextBridge.exposeInMainWorld('library', {
 
 contextBridge.exposeInMainWorld('playlists', {
   getAllPlaylists: () => ipcRenderer.sendSync('getAllPlaylists'),
+  getPlaylist: (playlistId: number) => ipcRenderer.sendSync('getPlaylist', playlistId),
+  getAllSongsFromPlaylist: (playlistId: number) => ipcRenderer.sendSync('getAllSongsFromPlaylist', playlistId),
+  getAllActualSongsFromPlaylist: (playlistId: number) => ipcRenderer.sendSync('getAllActualSongsFromPlaylist', playlistId),
+  addToPlaylist: (songs: FiretailSong[], playlistId: number) => ipcRenderer.send('addToPlaylist', songs, playlistId),
 });
 
 contextBridge.exposeInMainWorld('player', {

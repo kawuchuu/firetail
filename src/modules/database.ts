@@ -4,6 +4,7 @@ import FiretailSong from "../types/FiretailSong";
 import {addFiles, processFiles} from "./import";
 import {mainWindow} from "../main";
 import {Albums, AlbumsDB} from "../types/Albums";
+import {PlaylistSong} from "../types/Common";
 
 interface Sum {
   sum: number;
@@ -110,6 +111,38 @@ class FiretailDB {
     return this.db.prepare("SELECT * FROM playlists GROUP BY createdAt").all();
   }
 
+  getPlaylist(playlistId: number) {
+    return this.db.prepare("SELECT * FROM playlists WHERE id = ?").get(playlistId);
+  }
+
+  getAllSongsFromPlaylist(playlistId: number) {
+    return this.db.prepare("SELECT * FROM playlistSongs WHERE playlistId = ? ORDER BY position").all(playlistId);
+  }
+
+  getAllActualSongsFromPlaylist(playlistId: number) {
+    return this.db.prepare("SELECT library.* FROM library JOIN playlistSongs ON playlistSongs.songId = library.id WHERE playlistSongs.playlistId = ? ORDER BY playlistSongs.position").all(playlistId);
+  }
+
+  addToPlaylist(songsToInsert: FiretailSong[], playlistId: number) {
+    const existingSongsFromPlaylist = this.getAllSongsFromPlaylist(playlistId) as PlaylistSong[];
+    let startFrom = 0;
+    if (existingSongsFromPlaylist.length > 0) {
+      startFrom = existingSongsFromPlaylist[existingSongsFromPlaylist.length - 1].position + 1;
+    }
+    const insert = this.db.prepare("INSERT INTO playlistSongs (playlistId, songId, position) VALUES (@playlistId, @songId, @position)");
+    this.db.transaction((newPlaylistSongs: FiretailSong[]) => {
+      let newPosition = startFrom;
+      for (const song in newPlaylistSongs) {
+        insert.run({
+          playlistId,
+          songId: newPlaylistSongs[song].id,
+          position: newPosition
+        })
+        newPosition++;
+      }
+    })(songsToInsert);
+  }
+
   startDBIpc() {
     ipcMain.on('getAllSongs', (event) => {
       event.returnValue = this.getAllSongs();
@@ -145,6 +178,22 @@ class FiretailDB {
 
     ipcMain.on('getAllPlaylists', (event) => {
       event.returnValue = this.getAllPlaylists();
+    });
+
+    ipcMain.on('getPlaylist', (event, playlistId: number) => {
+      event.returnValue = this.getPlaylist(playlistId);
+    });
+
+    ipcMain.on('getAllSongsFromPlaylist', (event, playlistId: number) => {
+      event.returnValue = this.getAllSongsFromPlaylist(playlistId);
+    });
+
+    ipcMain.on('getAllActualSongsFromPlaylist', (event, playlistId: number) => {
+      event.returnValue = this.getAllActualSongsFromPlaylist(playlistId);
+    })
+
+    ipcMain.on('addToPlaylist', (event, songs: FiretailSong[], playlistId: number) => {
+      this.addToPlaylist(songs, playlistId);
     });
   }
 

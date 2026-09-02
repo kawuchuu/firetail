@@ -16,6 +16,10 @@ interface LibraryPreload {
 
 interface PlaylistsPreload {
   getAllPlaylists: () => Playlist[];
+  getPlaylist: (playlistId: number) => Playlist;
+  getAllSongsFromPlaylist: (playlistId: number) => FiretailSong[];
+  getAllActualSongsFromPlaylist: (playlistId: number) => FiretailSong[];
+  addToPlaylist: (songs: FiretailSong[], playlistId: number) => void;
 }
 
 interface PlayerPreload {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {onBeforeMount, Ref, ref} from "vue";
 import {Playlist} from "../../types/Common";
+import FiretailSong from "../../types/FiretailSong";
 
 const playlists: Ref<Playlist[]> = ref([]);
 
@@ -11,9 +12,11 @@ function songDragOver(evt: DragEvent) {
   }
 }
 
-function songDragEnd(evt: DragEvent) {
+function songDragEnd(playlist: Playlist, evt: DragEvent) {
   evt.preventDefault();
-  console.log(evt.dataTransfer?.getData('firetail/song'));
+  const songs = JSON.parse(evt.dataTransfer?.getData('firetail/song') || '[]') as FiretailSong[];
+  console.log(playlist.id);
+  window.playlists.addToPlaylist(songs, playlist.id);
 }
 
 onBeforeMount(() => {
@@ -22,7 +25,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <router-link v-for="item in playlists" :key="item.id" to="/playlist" draggable="true" @dragover="songDragOver" @drop="songDragEnd">
+  <router-link v-for="item in playlists" :key="item.id" :to="`/playlists/${item.id}`" draggable="true" @dragover="songDragOver" @drop="songDragEnd(item, $event)">
     <div class="playlist-item inner-outline">
       <i class="ft-icon">queue</i>
       <span>{{item.name}}</span>

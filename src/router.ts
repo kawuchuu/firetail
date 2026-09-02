@@ -9,6 +9,7 @@ import SettingsView from "./routes/SettingsView.vue";
 import Unknown from "./routes/Unknown.vue";
 import Artists from "./routes/Artists.vue";
 import BlankChild from "./components/BlankChild.vue";
+import PlaylistView from "./routes/PlaylistView.vue";
 
 const routes = [
     {
@@ -70,6 +71,21 @@ const routes = [
                 component: BlankChild
             }
         ]
+    },
+    {
+        path: '/playlists/:id',
+        component: PlaylistView,
+        children: [{
+            path: '',
+            component: SongListView,
+            children: [{
+                path: '',
+                components: {
+                    top: BaseSongTop,
+                    bottom: BaseSongBottom
+                }
+            }]
+        }]
     },
     {
         path: '/settings',

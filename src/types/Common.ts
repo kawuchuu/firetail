@@ -30,3 +30,9 @@ export interface Playlist {
   createdAt: number;
   updatedAt: number;
 }
+
+export interface PlaylistSong {
+  playlistId: number;
+  songId: string;
+  position: number;
+}
