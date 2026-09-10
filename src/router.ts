@@ -10,6 +10,7 @@ import Unknown from "./routes/Unknown.vue";
 import Artists from "./routes/Artists.vue";
 import BlankChild from "./components/BlankChild.vue";
 import PlaylistView from "./routes/PlaylistView.vue";
+import Genres from "./routes/Genres.vue";
 
 const routes = [
     {
@@ -77,6 +78,21 @@ const routes = [
         component: PlaylistView,
         children: [{
             path: '',
+            component: SongListView,
+            children: [{
+                path: '',
+                components: {
+                    top: BaseSongTop,
+                    bottom: BaseSongBottom
+                }
+            }]
+        }]
+    },
+    {
+        path: '/genres',
+        component: Genres,
+        children: [{
+            path: ':id',
             component: SongListView,
             children: [{
                 path: '',

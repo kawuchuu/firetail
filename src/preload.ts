@@ -9,6 +9,8 @@ contextBridge.exposeInMainWorld('library', {
   getAllFromMatchingColumns: (column: string, value: string) => ipcRenderer.sendSync('getAllFromMatchingColumns', [column, value]),
   getAllFromAlbum: (album: string, albumArtist: string) => ipcRenderer.sendSync('getAllFromAlbum', [album, albumArtist]),
   getAllFromArtist: (artist: string) => ipcRenderer.sendSync('getAllFromArtist', artist),
+  getGenres: () => ipcRenderer.sendSync('getGenres'),
+  getSongsFromGenre: (genre: string) => ipcRenderer.sendSync('getSongsFromGenre', genre),
   addToLibrary: (locations:string[]) => ipcRenderer.send('addToLibrary', locations),
   onRefreshView: (callback) => ipcRenderer.on('refreshView', (_event, value) => callback(value))
 });

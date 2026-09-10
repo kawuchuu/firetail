@@ -143,6 +143,16 @@ class FiretailDB {
     })(songsToInsert);
   }
 
+  getGenres() {
+    return this.db.prepare('SELECT DISTINCT g.value FROM library, json_each(genre) g WHERE genre IS NOT NULL ORDER BY genre').all();
+  }
+
+  getSongsFromGenre(genre: string) {
+    const songs = this.db.prepare('SELECT library.* FROM library, json_each(genre) genre WHERE genre IS NOT NULL AND genre.value = ?').all(genre);
+    const sum = this.db.prepare('SELECT SUM(library.realdur) AS dur FROM library, json_each(genre) genre WHERE genre IS NOT NULL AND genre.value = ?').all(genre);
+    return {songs, sum}
+  }
+
   startDBIpc() {
     ipcMain.on('getAllSongs', (event) => {
       event.returnValue = this.getAllSongs();
@@ -194,6 +204,14 @@ class FiretailDB {
 
     ipcMain.on('addToPlaylist', (event, songs: FiretailSong[], playlistId: number) => {
       this.addToPlaylist(songs, playlistId);
+    });
+
+    ipcMain.on('getGenres', (event) => {
+      event.returnValue = this.getGenres();
+    });
+
+    ipcMain.on('getSongsFromGenre', (event, genre: string) => {
+      event.returnValue = this.getSongsFromGenre(genre);
     });
   }
 

@@ -10,6 +10,8 @@ interface LibraryPreload {
   getAllFromMatchingColumns: (column: string, value: string) => FiretailSong[];
   getAllFromAlbum: (album: string, albumArtist: string) => FiretailSong[];
   getAllFromArtist: (artist: string) => FiretailSong[];
+  getGenres: () => string[];
+  getSongsFromGenre: (genre: string) => FiretailSong[];
   addToLibrary: (locations: string[]) => void;
   onRefreshView: (callback: any) => Electron.IpcRenderer;
 }

@@ -10,6 +10,8 @@ import IntegrationSection from "../components/settings/sections/IntegrationSecti
 import {onMounted, onUnmounted, ref, watch} from "vue";
 import DRText from "../components/DRText.vue";
 import {audioPlayer} from "../renderer";
+import SideList from "../components/SideList.vue";
+import SideListItem from "../components/SideListItem.vue";
 
 const showMoss = ref(false);
 const mossClicked = ref(false);
@@ -44,6 +46,8 @@ onUnmounted(() => {
 
 <template>
     <div class="root">
+        <SideList>
+        </SideList>
         <main>
             <div class="top-title">
                 <h1>{{$t('SETTINGS.TITLE')}}</h1>
@@ -52,7 +56,7 @@ onUnmounted(() => {
                 <GeneralSection />
                 <AccessibilitySection />
                 <LibrarySection />
-<!--                <AppearanceSection />-->
+                <AppearanceSection />
                 <IntegrationSection />
                 <UpdatesSection />
                 <AdvancedSection />
@@ -72,14 +76,15 @@ onUnmounted(() => {
 $currentGradColour: #006eff;
 
 .root {
-    padding: 0px 70px;
+    --song-list-width: 300px;
 }
 
 main {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
+  position: relative;
+  left: calc(var(--song-list-width) + 32px);
+  width: calc(100% - var(--song-list-width) - 32px - 140px);
+  height: calc(100vh - 44px - 85px);
+  --main-border-radius-element: 0px;
 }
 
 .option-wrapper {
@@ -134,5 +139,11 @@ main {
   bottom: 0;
   left: 0;
   transform: rotate(90deg);
+}
+
+@media (max-width: 1350px) {
+  .root {
+    --song-list-width: 63px;
+  }
 }
 </style>
