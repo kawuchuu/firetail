@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, inject, Ref, ref} from "vue";
+import {computed, inject, Ref, ref, useTemplateRef} from "vue";
 
 const props = defineProps<{
   top: number;
@@ -7,7 +7,7 @@ const props = defineProps<{
 }>();
 
 const close = inject<() => void>("closeContextMenu");
-const contextMenu: Ref<HTMLDivElement> = ref();
+const contextMenu = useTemplateRef('contextMenu');
 
 const offset = computed(() => {
   let correctTop = props.top;
@@ -25,7 +25,7 @@ const offset = computed(() => {
 
 <template>
   <teleport to="body">
-    <div class="context-menu-wrapper" @pointerdown="close">
+    <div class="context-menu-wrapper" @pointerdown.self="close">
       <div class="context-menu" :style="offset" ref="contextMenu">
         <slot>context menu wip</slot>
       </div>
@@ -44,8 +44,8 @@ const offset = computed(() => {
 }
 
 .context-menu {
-  width: 175px;
-  height: 300px;
+  min-width: 175px;
+  min-height: 40px;
   background: var(--fg-bg);
   border: solid 1px var(--bd);
   border-radius: 10px;

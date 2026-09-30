@@ -4,10 +4,10 @@ import {audioPlayer, viewStore} from "../renderer";
 import {computed, nextTick, onMounted, provide, ref, watch, Ref, useTemplateRef} from "vue";
 import SongListItem from "./SongListItem.vue";
 import SongViewInfoView from "./songlistviews/SongViewInfoView.vue";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {getArt} from "../modules/art";
 import ContextMenu from "./ContextMenu.vue";
-import {Vector2} from "../types/Common";
+import {ContextMenuItemType, Vector2} from "../types/Common";
 import ContextMenuItem from "./ContextMenuItem.vue";
 
 provide('play', play);
@@ -26,6 +26,7 @@ const props = defineProps<{
 }>();
 
 const route = useRoute();
+const router = useRouter();
 
 const isSticky = ref(false);
 const columnSortInfo = ref(null);
@@ -39,6 +40,8 @@ const contextMenuPos:Ref<Vector2> = ref(new Vector2(0, 0));
 
 const highlighted = ref<number[]>([]);
 const lastHighlightedIndex = ref<number | null>(null);
+
+const artistContextName = ref('Unknown');
 
 const songDragOverlay = useTemplateRef('songDragOverlay');
 const songDragOverlayText = ref("Nothing here...");
@@ -96,7 +99,13 @@ function closeContextMenu() {
 
 function openContextMenu(item: FiretailSong, evt: PointerEvent) {
   isContextMenuVisible.value = true;
-  console.log(item)
+  artistContextName.value = item.artist;
+  const highlightedSongs = highlighted.value.map(index => props.songList[index]);
+  if (highlightedSongs.indexOf(item) == -1) {
+    const thisIndex = props.songList.indexOf(item);
+    highlighted.value = [thisIndex];
+    lastHighlightedIndex.value = thisIndex;
+  }
   contextMenuPos.value.set(evt.x, evt.y);
 }
 
@@ -224,7 +233,28 @@ onMounted(() => {
       </template>
     </RecycleScroller>
     <ContextMenu :top="contextMenuPos.y" :left="contextMenuPos.x" v-if="isContextMenuVisible">
-      <ContextMenuItem></ContextMenuItem>
+      <ContextMenuItem :label="$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_PLAYLIST')"></ContextMenuItem>
+      <ContextMenuItem :label="$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_QUEUE')" icon="queue"></ContextMenuItem>
+      <ContextMenuItem :label="$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_FAVOURITE')"/>
+      <ContextMenuItem :type="ContextMenuItemType.DIVIDER" />
+      <ContextMenuItem
+          v-if="!route.path.startsWith('/artists') && highlighted.length <= 1"
+          :label="$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ARTIST', { artist: artistContextName })"
+          icon="person"
+          @click="router.push(`/artists/${songList[highlighted[0]].artist}`)"
+      />
+      <ContextMenuItem
+          v-if="!route.path.startsWith('/albums') && highlighted.length <= 1"
+          :label="$t('CONTEXT_MENU.SONG_LIST_ITEM.GO_ALBUM')"
+          icon="album"
+          @click="router.push(`/albums/${encodeURIComponent(songList[highlighted[0]].albumArtist)}/${encodeURIComponent(songList[highlighted[0]].album)}`)"
+      />
+      <ContextMenuItem v-if="highlighted.length <= 1" :type="ContextMenuItemType.DIVIDER" />
+      <ContextMenuItem :label="$t('CONTEXT_MENU.SONG_LIST_ITEM.DELETE')" icon="close" />
+      <ContextMenuItem v-if="route.path.startsWith('/playlists')" :label="$t('CONTEXT_MENU.SONG_LIST_ITEM.REMOVE_PLAYLIST')" icon="close" />
+      <ContextMenuItem v-if="highlighted.length <= 1" :type="ContextMenuItemType.DIVIDER" />
+      <ContextMenuItem v-if="highlighted.length <= 1" label="Show in file manager" />
+      <ContextMenuItem v-if="highlighted.length <= 1" label="File info" />
     </ContextMenu>
     <SongViewInfoView v-if="showInfoView" :genres="genres" :artists="artists" :description="description" />
   </div>

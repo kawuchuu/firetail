@@ -20,7 +20,9 @@ contextBridge.exposeInMainWorld('playlists', {
   getPlaylist: (playlistId: number) => ipcRenderer.sendSync('getPlaylist', playlistId),
   getAllSongsFromPlaylist: (playlistId: number) => ipcRenderer.sendSync('getAllSongsFromPlaylist', playlistId),
   getAllActualSongsFromPlaylist: (playlistId: number) => ipcRenderer.sendSync('getAllActualSongsFromPlaylist', playlistId),
+  createPlaylist: (playlistName: string, playlistDescription: string, playlistImagePath: string) => ipcRenderer.send('createPlaylist', playlistName, playlistDescription, playlistImagePath),
   addToPlaylist: (songs: FiretailSong[], playlistId: number) => ipcRenderer.send('addToPlaylist', songs, playlistId),
+  onRefreshPlaylists: (callback) => ipcRenderer.on('refreshPlaylists', (_event, value) => callback(value)),
 });
 
 contextBridge.exposeInMainWorld('player', {

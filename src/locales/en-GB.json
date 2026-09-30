@@ -192,7 +192,7 @@
   "CONTEXT_MENU": {
     "SONG_LIST_ITEM": {
       "ADD_QUEUE": "Add to queue",
-      "GO_ARTIST": "Go to artist",
+      "GO_ARTIST": "More from {artist}",
       "GO_ALBUM": "Go to album",
       "VIEW_EXPLORER": "Show in File Explorer",
       "VIEW_FINDER": "Show in Finder",

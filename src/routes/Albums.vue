@@ -60,8 +60,9 @@ onMounted(() => {
   regularAlbums.value = albums.get('album');
   eps.value = albums.get('ep');
   singles.value = albums.get('single');
-  if (route.params.album) return;
-  router.replace(`/albums/${encodeURIComponent(albums.get('album')[0].albumArtist)}/${encodeURIComponent(albums.get('album')[0].title)}`);
+  if (!route.params.album) {
+    router.replace(`/albums/${encodeURIComponent(albums.get('album')[0].albumArtist)}/${encodeURIComponent(albums.get('album')[0].title)}`);
+  }
 })
 </script>
 

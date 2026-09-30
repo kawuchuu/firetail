@@ -29,7 +29,9 @@ function getNewArtistData(artist: Parameters) {
 
 onMounted(() => {
   artists.value = window.library.getAllArtists();
-  router.replace(`/artists/${encodeURIComponent(artists.value[0])}`);
+  if (!route.params?.artist) {
+    router.replace(`/artists/${encodeURIComponent(artists.value[0])}`);
+  }
 })
 </script>
 

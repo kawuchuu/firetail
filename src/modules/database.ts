@@ -120,7 +120,21 @@ class FiretailDB {
   }
 
   getAllActualSongsFromPlaylist(playlistId: number) {
-    return this.db.prepare("SELECT library.* FROM library JOIN playlistSongs ON playlistSongs.songId = library.id WHERE playlistSongs.playlistId = ? ORDER BY playlistSongs.position").all(playlistId);
+    const songs = this.db.prepare("SELECT library.* FROM library JOIN playlistSongs ON playlistSongs.songId = library.id WHERE playlistSongs.playlistId = ? ORDER BY playlistSongs.position").all(playlistId);
+    let sum = 0;
+    const sumStatement = this.db.prepare("SELECT SUM(library.realdur) AS sum FROM library JOIN playlistSongs ON playlistSongs.songId = library.id WHERE playlistSongs.playlistId = ?").pluck().get(playlistId);
+    if (sumStatement !== null) {
+      console.log(sumStatement);
+      sum = this.determineNumber(sumStatement);
+    }
+    return {songs, sum}
+  }
+
+  createPlaylist(playlistName: string, playlistDescription: string, playlistImagePath: string) {
+    return this.db.prepare('INSERT INTO playlists (name, description, imagePath) VALUES (@name, @description, null)').run({
+      name: playlistName,
+      description: playlistDescription
+    });
   }
 
   addToPlaylist(songsToInsert: FiretailSong[], playlistId: number) {
@@ -200,7 +214,12 @@ class FiretailDB {
 
     ipcMain.on('getAllActualSongsFromPlaylist', (event, playlistId: number) => {
       event.returnValue = this.getAllActualSongsFromPlaylist(playlistId);
-    })
+    });
+
+    ipcMain.on('createPlaylist', (event, playlistName: string, playlistDescription: string, playlistImagePath: string) => {
+      this.createPlaylist(playlistName, playlistDescription, playlistImagePath);
+      mainWindow.webContents.send('refreshPlaylists');
+    });
 
     ipcMain.on('addToPlaylist', (event, songs: FiretailSong[], playlistId: number) => {
       this.addToPlaylist(songs, playlistId);

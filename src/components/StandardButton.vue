@@ -1,14 +1,14 @@
 <script setup lang="ts">
 defineProps<{
   icon?: string;
-  style?: string;
+  appearance?: string;
 }>();
 </script>
 
 <template>
     <div class="wrapper">
-        <div class="button" @click="doOnClick" :class="style">
-            <i v-if="icon" class="ft-icon">{{ button.icon }}</i>
+        <div class="button" :class="appearance">
+            <i v-if="icon" class="ft-icon">{{ icon }}</i>
             <span><slot/></span>
         </div>
     </div>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import FiretailSong from "src/types/FiretailSong";
-import {onBeforeMount, ref, Ref} from "vue";
+import FiretailSong from "../types/FiretailSong";
+import {onBeforeMount, ref, Ref, watch} from "vue";
 import {useRoute} from "vue-router";
 import {Playlist, SongsGenre} from "../types/Common";
 
@@ -15,17 +15,22 @@ interface SongsSum {
   sum: number
 }
 
+watch(() => route.params?.id, getPlaylist, {immediate: true});
+
+function getPlaylist() {
+  if (route.params.id) playlist.value = window.playlists.getPlaylist(parseInt(route.params.id as string));
+  getSongs();
+}
+
 function getSongs() {
   if (!playlist.value) return;
-  const allSongs = window.playlists.getAllActualSongsFromPlaylist(playlist.value.id);
-  console.log(allSongs);
-  songList.value = allSongs;
+  const allSongs:SongsSum = window.playlists.getAllActualSongsFromPlaylist(playlist.value.id);
+  songList.value = allSongs.songs;
+  listLength.value = allSongs.sum;
 }
 
 onBeforeMount(() => {
-  if (route.params.id) playlist.value = window.playlists.getPlaylist(parseInt(route.params.id as string));
-  console.log(playlist.value);
-  getSongs();
+  getPlaylist();
 })
 </script>
 

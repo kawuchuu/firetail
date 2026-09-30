@@ -36,3 +36,8 @@ export interface PlaylistSong {
   songId: string;
   position: number;
 }
+
+export enum ContextMenuItemType {
+  BUTTON,
+  DIVIDER
+}
