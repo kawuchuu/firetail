@@ -1,4 +1,5 @@
 import { createI18n } from "vue-i18n";
+import {applyLocaleToDocument, getSavedLocalePref, resolveLocale} from "./modules/locale";
 
 const loadLocaleMessages = async () => {
     //const locales = require.context('./locales', true, /[A-Za-z0-9-_,\s]+\.json$/i)
@@ -17,10 +18,13 @@ const loadLocaleMessages = async () => {
 }
 
 export async function setupI18n() {
+    const messages = await loadLocaleMessages();
+    const locale = resolveLocale(getSavedLocalePref(), Object.keys(messages));
+    applyLocaleToDocument(locale, messages);
     return createI18n({
-        locale: navigator.language,
+        locale,
         fallbackLocale: 'en-GB',
-        messages: await loadLocaleMessages(),
+        messages,
         silentTranslationWarn: true,
         silentFallbackWarn: true,
         fallbackRoot: true,

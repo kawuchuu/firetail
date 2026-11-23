@@ -1,17 +1,68 @@
 <script setup lang="ts">
-import LibrarySection from "../components/settings/sections/LibrarySection.vue";
-import GeneralSection from "../components/settings/sections/GeneralSection.vue";
-import AccessibilitySection from "../components/settings/sections/AccessibilitySection.vue";
-import AppearanceSection from "../components/settings/sections/AppearanceSection.vue";
-import UpdatesSection from "../components/settings/sections/UpdatesSection.vue";
-import AdvancedSection from "../components/settings/sections/AdvancedSection.vue";
-import AboutSection from "../components/settings/sections/AboutSection.vue";
-import IntegrationSection from "../components/settings/sections/IntegrationSection.vue";
-import {onMounted, onUnmounted, ref, watch} from "vue";
+import {settingsSections} from "../components/settings/sections";
+import {onMounted, onUnmounted, ref, useTemplateRef, watch} from "vue";
 import DRText from "../components/DRText.vue";
 import {audioPlayer} from "../renderer";
 import SideList from "../components/SideList.vue";
-import SideListItem from "../components/SideListItem.vue";
+
+const root = useTemplateRef<HTMLElement>('root');
+const activeSection = ref(settingsSections[0].id);
+const sectionEls = new Map<string, HTMLElement>();
+let scroller: HTMLElement | null = null;
+let scrollLock: ReturnType<typeof setTimeout> | null = null;
+
+function setSectionEl(id: string, el: unknown) {
+  if (el instanceof HTMLElement) sectionEls.set(id, el);
+  else sectionEls.delete(id);
+}
+
+function scrollToSection(id: string) {
+  const el = sectionEls.get(id);
+  if (!el) return;
+  activeSection.value = id;
+  const reduceMotion = document.documentElement.classList.contains('reduceMotion')
+    || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (scrollLock) clearTimeout(scrollLock);
+  scrollLock = setTimeout(releaseScrollLock, 1000);
+  el.scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block: 'start'});
+}
+
+function releaseScrollLock() {
+  if (scrollLock) clearTimeout(scrollLock);
+  scrollLock = null;
+}
+
+function updateActiveSection() {
+  if (scrollLock || !scroller) return;
+  if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 2) {
+    activeSection.value = settingsSections[settingsSections.length - 1].id;
+    return;
+  }
+  const threshold = scroller.getBoundingClientRect().top + 100;
+  let current = settingsSections[0].id;
+  for (const section of settingsSections) {
+    const el = sectionEls.get(section.id);
+    if (el && el.getBoundingClientRect().top <= threshold) current = section.id;
+  }
+  activeSection.value = current;
+}
+
+function onScrollEnd() {
+  releaseScrollLock();
+  updateActiveSection();
+}
+
+onMounted(() => {
+  scroller = root.value?.closest<HTMLElement>('[data-overlayscrollbars-viewport]') ?? null;
+  scroller?.addEventListener('scroll', updateActiveSection, {passive: true});
+  scroller?.addEventListener('scrollend', onScrollEnd);
+});
+
+onUnmounted(() => {
+  scroller?.removeEventListener('scroll', updateActiveSection);
+  scroller?.removeEventListener('scrollend', onScrollEnd);
+  releaseScrollLock();
+});
 
 const showMoss = ref(false);
 const mossClicked = ref(false);
@@ -45,22 +96,35 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="root">
+    <div class="root" ref="root">
         <SideList>
+            <nav class="settings-nav">
+                <button
+                    v-for="section in settingsSections"
+                    :key="section.id"
+                    type="button"
+                    class="settings-nav-item"
+                    :class="{active: activeSection === section.id}"
+                    :aria-current="activeSection === section.id ? 'true' : undefined"
+                    @click="scrollToSection(section.id)"
+                >
+                    {{ $t(`SETTINGS.SUBTITLES.${section.label}`) }}
+                </button>
+            </nav>
         </SideList>
         <main>
             <div class="top-title">
                 <h1>{{$t('SETTINGS.TITLE')}}</h1>
             </div>
             <div class="option-wrapper">
-                <GeneralSection />
-                <AccessibilitySection />
-                <LibrarySection />
-                <AppearanceSection />
-                <IntegrationSection />
-                <UpdatesSection />
-                <AdvancedSection />
-                <AboutSection />
+                <div
+                    v-for="section in settingsSections"
+                    :key="section.id"
+                    :ref="el => setSectionEl(section.id, el)"
+                    class="settings-section"
+                >
+                    <component :is="section.component" />
+                </div>
             </div>
         </main>
     </div>
@@ -76,7 +140,7 @@ onUnmounted(() => {
 $currentGradColour: #006eff;
 
 .root {
-    --song-list-width: 300px;
+    --song-list-width: 240px;
 }
 
 main {
@@ -141,9 +205,65 @@ main {
   transform: rotate(90deg);
 }
 
+.settings-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.settings-nav-item {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 42px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 15px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.75;
+  transition: 0.1s;
+  transition-property: background, opacity;
+}
+
+.settings-nav-item:hover {
+  opacity: 1;
+}
+
+.settings-nav-item:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: -2px;
+}
+
+.settings-nav-item.active {
+  background: var(--button);
+  box-shadow: inset 0 0 0 1px var(--bd-op);
+  opacity: 1;
+  font-weight: 600;
+}
+
+.boldText .settings-nav-item.active {
+  font-weight: bold;
+}
+
+.settings-section {
+  scroll-margin-top: 16px;
+}
+
 @media (max-width: 1350px) {
   .root {
-    --song-list-width: 63px;
+    --song-list-width: 200px;
+  }
+
+  .root .side-list-container:hover {
+    width: var(--song-list-width);
   }
 }
 </style>

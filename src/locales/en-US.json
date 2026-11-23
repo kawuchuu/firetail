@@ -106,6 +106,7 @@
     "SHOW_FILE_CODEC": "Show file codec information",
     "FORCE_RTL": "Force UI to right-to-left",
     "DEBUG_MODE": "Enable debug mode",
+    "GAPLESS_PLAYBACK": "Gapless playback (uses more memory)",
     "CHECK_UPDATE": "Check for app updates",
     "UPDATE_BRANCH": "Choose a channel for app updates",
     "ABOUT": {

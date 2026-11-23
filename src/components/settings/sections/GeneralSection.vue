@@ -1,13 +1,30 @@
 <script setup lang="ts">
 import SubtitleOption from "../options/SubtitleOption.vue";
 import DropdownOption from "../options/DropdownOption.vue";
-import {onBeforeMount, ref, Ref} from "vue";
+import {computed, ref, Ref} from "vue";
 import {useI18n} from "vue-i18n";
 import DropdownItem from "../../../types/DropdownItem";
+import SwitchOption from "../options/SwitchOption.vue";
+import {audioPlayer} from "../../../renderer";
+import {applyLocaleToDocument, getSavedLocalePref, resolveLocale, SYSTEM_LOCALE} from "../../../modules/locale";
+
+function gaplessAction(enabled: boolean) {
+  audioPlayer.setGapless(enabled);
+}
 
 const i18n = useI18n();
 
-const locales:Ref<Array<DropdownItem>> = ref([{label: 'SETTINGS.DROP_DOWN.LANG_AUTO', value: "system"}]);
+function allMessages() {
+  return i18n.messages.value as Record<string, Record<string, unknown>>;
+}
+
+const locales = computed<DropdownItem[]>(() => [
+  {label: 'SETTINGS.DROP_DOWN.LANG_AUTO', value: SYSTEM_LOCALE},
+  ...i18n.availableLocales.map(locale => {
+    const name = allMessages()[locale]?.LANG_NAME;
+    return {label: typeof name === 'string' && name ? name : locale, value: locale};
+  }),
+]);
 const startPages:Ref<Array<DropdownItem>> = ref([
   { label: 'SETTINGS.DROP_DOWN.START_SCREEN.HOME', value: 'home' },
   { label: 'SETTINGS.DROP_DOWN.START_SCREEN.SONGS', value: 'songs' },
@@ -15,30 +32,16 @@ const startPages:Ref<Array<DropdownItem>> = ref([
   { label: 'SETTINGS.DROP_DOWN.START_SCREEN.ALBUMS', value: 'albums' },
   { label: 'SETTINGS.DROP_DOWN.START_SCREEN.FAVOURITES', value: 'favourites' },
 ]);
-const currentLocale:Ref<DropdownItem> = ref({label: 'SETTINGS.DROP_DOWN.LANG_AUTO', value: "system"});
+const savedPref = getSavedLocalePref();
+const currentLocale: Ref<DropdownItem> = ref(
+  locales.value.find(item => item.value === savedPref) ?? locales.value[0]
+);
 
-function changeLocale(locale:DropdownItem) {
-  //if (locale.value === 'system') locale = {value: window.navigator.language}
-  i18n.locale.value = locale.value;
-  if (i18n.messages.value[locale.value]['RTL']) {
-    if (!this.$store.state.nav.rtl) this.$store.commit('panel/showNewPrompt', {title: this.$t('PANEL.PROMPT.RESTART.TITLE'), message: this.$t('PANEL.PROMPT.RESTART.MESSAGE'), buttons: 'dismiss'})
-    this.$store.commit('nav/updateRTL', true)
-  } else {
-    if (this.$store.state.nav.rtl) this.$store.commit('panel/showNewPrompt', {title: this.$t('PANEL.PROMPT.RESTART.TITLE'), message: this.$t('PANEL.PROMPT.RESTART.MESSAGE'), buttons: 'dismiss'})
-    this.$store.commit('nav/updateRTL', false)
-  }
+function changeLocale(item: DropdownItem) {
+  const locale = resolveLocale(item.value, i18n.availableLocales);
+  i18n.locale.value = locale;
+  applyLocaleToDocument(locale, allMessages());
 }
-
-onBeforeMount(async () => {
-  const result = await window.ftStore.getItem('lang')
-  console.log('ITEM IS ' + result)
-  console.log(this)
-  if (result !== 'system') currentLocale.value = {label: i18n.messages.value[i18n.locale.value].LANG_NAME, value: i18n.locale.value}
-  i18n.availableLocales.forEach(locale => {
-    if (i18n.messages.value[locale].LANG_NAME === "") locales.value.push({label: locale, value: locale})
-    else locales.value.push({label: i18n.messages.value[locale].LANG_NAME, value: locale})
-  })
-})
 </script>
 
 <template>
@@ -46,6 +49,7 @@ onBeforeMount(async () => {
         <SubtitleOption>{{$t('SETTINGS.SUBTITLES.GENERAL')}}</SubtitleOption>
         <DropdownOption :label="$t('SETTINGS.LANGUAGE')" :store-key="'lang'" :store-category="'multiOption'" :init-selected="currentLocale" :options="locales" :on-change="changeLocale"/>
         <DropdownOption :label="$t('SETTINGS.START_PAGE')" :init-selected="startPages[1]" :options="startPages"/>
+        <SwitchOption :label="$t('SETTINGS.GAPLESS_PLAYBACK')" :store-key="'gaplessPlayback'" :store-category="'audio'" :action="gaplessAction" />
     </section>
 </template>
 

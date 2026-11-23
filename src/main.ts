@@ -25,6 +25,8 @@ protocol.registerSchemesAsPrivileged([{
 
 app.setName('firetail');
 
+app.commandLine.appendSwitch('js-flags', '--expose-gc');
+
 // manually redefining some mime types to ensure content-type is correct
 export const mime = new Mime(standardTypes, otherTypes);
 mime.define({'audio/flac': ['flac']}, true);
