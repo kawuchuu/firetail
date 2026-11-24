@@ -27,6 +27,12 @@ interface PlaylistsPreload {
   onRefreshPlaylists: (callback: any) => Electron.IpcRenderer;
 }
 
+interface FavouritesPreload {
+  getIds: () => string[];
+  set: (songId: string, favourite: boolean) => void;
+  onRefresh: (callback: () => void) => Electron.IpcRenderer;
+}
+
 interface PlayerPreload {
   next: (callback: any) => Electron.IpcRenderer;
   previous: (callback: any) => Electron.IpcRenderer;
@@ -100,6 +106,7 @@ declare global {
   interface Window {
     library: LibraryPreload;
     playlists: PlaylistsPreload;
+    favourites: FavouritesPreload;
     player: PlayerPreload;
     path: PathPreload;
     processPreload: ProcessPreload;

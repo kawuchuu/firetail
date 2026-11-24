@@ -1,35 +1,34 @@
 <script setup lang="ts">
-import {useTemplateRef} from "vue";
 import Modal from "../Modal.vue";
-import Button from "../StandardButton.vue";
+import StandardButton from "../StandardButton.vue";
 
-interface Button {
+interface DialogueButton {
   label: string;
-  click?: Function;
+  click?: () => void;
+  appearance?: string;
 }
+
+const open = defineModel<boolean>('open', {default: false});
 
 defineProps<{
-  buttons: Button[];
+  buttons: DialogueButton[];
   title: string;
 }>();
-
-const baseModal = useTemplateRef('baseModal');
-
-function setActive(active: boolean) {
-  baseModal.value.setModalActive(active);
-}
-
-defineExpose({setActive});
 </script>
 
 <template>
-  <Modal :title="title" ref="baseModal">
+  <Modal v-model:open="open" :title="title">
     <div class="dialogue-container">
       <slot/>
       <div class="buttons">
-        <Button v-for="item in buttons" @click="item.click">
+        <StandardButton
+          v-for="item in buttons"
+          :key="item.label"
+          :appearance="item.appearance"
+          @click="item.click?.()"
+        >
           {{item.label}}
-        </Button>
+        </StandardButton>
       </div>
     </div>
   </Modal>

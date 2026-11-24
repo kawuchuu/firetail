@@ -157,6 +157,18 @@ class FiretailDB {
     })(songsToInsert);
   }
 
+  getFavouriteIds() {
+    return this.db.prepare('SELECT songId FROM favourites ORDER BY addedAt').pluck().all() as string[];
+  }
+
+  setFavourite(songId: string, favourite: boolean) {
+    if (favourite) {
+      this.db.prepare('INSERT OR IGNORE INTO favourites (songId) SELECT id FROM library WHERE id = ?').run(songId);
+    } else {
+      this.db.prepare('DELETE FROM favourites WHERE songId = ?').run(songId);
+    }
+  }
+
   getGenres() {
     return this.db.prepare('SELECT DISTINCT g.value FROM library, json_each(genre) g WHERE genre IS NOT NULL ORDER BY genre').all();
   }
@@ -223,6 +235,15 @@ class FiretailDB {
 
     ipcMain.on('addToPlaylist', (event, songs: FiretailSong[], playlistId: number) => {
       this.addToPlaylist(songs, playlistId);
+    });
+
+    ipcMain.on('getFavouriteIds', (event) => {
+      event.returnValue = this.getFavouriteIds();
+    });
+
+    ipcMain.on('setFavourite', (event, songId: string, favourite: boolean) => {
+      this.setFavourite(songId, favourite);
+      mainWindow.webContents.send('refreshFavourites');
     });
 
     ipcMain.on('getGenres', (event) => {

@@ -25,6 +25,12 @@ contextBridge.exposeInMainWorld('playlists', {
   onRefreshPlaylists: (callback) => ipcRenderer.on('refreshPlaylists', (_event, value) => callback(value)),
 });
 
+contextBridge.exposeInMainWorld('favourites', {
+  getIds: () => ipcRenderer.sendSync('getFavouriteIds'),
+  set: (songId: string, favourite: boolean) => ipcRenderer.send('setFavourite', songId, favourite),
+  onRefresh: (callback: () => void) => ipcRenderer.on('refreshFavourites', () => callback()),
+});
+
 contextBridge.exposeInMainWorld('player', {
   next: (callback) => ipcRenderer.on('playerNext', () => callback()),
   previous: (callback) => ipcRenderer.on('playerPrevious', () => callback()),

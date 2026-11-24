@@ -2,32 +2,34 @@
 defineProps<{
   icon?: string;
   appearance?: string;
+  type?: 'button' | 'submit' | 'reset';
 }>();
 </script>
 
 <template>
-    <div class="wrapper">
-        <div class="button" :class="appearance">
-            <i v-if="icon" class="ft-icon">{{ icon }}</i>
-            <span><slot/></span>
-        </div>
-    </div>
+    <button :type="type ?? 'button'" class="button" :class="appearance">
+        <i v-if="icon" class="ft-icon">{{ icon }}</i>
+        <span><slot/></span>
+    </button>
 </template>
 
 <style lang="scss" scoped>
 .button {
+    appearance: none;
+    box-sizing: content-box;
     height: 20px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     padding: 10px 15px;
+    border: none;
+    background: transparent;
+    font: inherit;
     color: var(--hl-txt);
     border-radius: 10px;
     width: auto;
-    //margin: 0px 8px;
 
     span {
         font-weight: 600;
-        //text-transform: uppercase;
     }
 
     i {
@@ -39,10 +41,6 @@ defineProps<{
     font-weight: bold;
 }
 
-.button:last-child {
-    margin-right: 0px;
-}
-
 .button:hover {
     background-color: var(--hl-op);
     box-shadow: inset 0 0 0 1px var(--bd-op);
@@ -52,6 +50,11 @@ defineProps<{
     background-color: var(--hl-op);
     box-shadow: inset 0 0 0 1px var(--bd-op);
     opacity: 0.5;
+}
+
+.button:focus-visible {
+    outline: 2px solid var(--hl-txt);
+    outline-offset: 2px;
 }
 
 .button.primary {

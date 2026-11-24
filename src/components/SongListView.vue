@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import FiretailSong from "../types/FiretailSong";
 import {audioPlayer, viewStore} from "../renderer";
-import {computed, nextTick, onMounted, provide, ref, watch, Ref, useTemplateRef} from "vue";
+import {computed, onBeforeUnmount, onMounted, provide, ref, watch, Ref, useTemplateRef} from "vue";
 import SongListItem from "./SongListItem.vue";
 import SongViewInfoView from "./songlistviews/SongViewInfoView.vue";
 import {useRoute, useRouter} from "vue-router";
@@ -29,11 +29,9 @@ const route = useRoute();
 const router = useRouter();
 
 const isSticky = ref(false);
-const columnSortInfo = ref(null);
-const columnSortWrapper = ref(null);
-const topView = ref(null);
-const sortInfoOpacity = ref(0);
-let opacityToScrollBy = ref(0);
+const listHeader = useTemplateRef<HTMLElement>('listHeader');
+const stickySentinel = useTemplateRef<HTMLElement>('stickySentinel');
+let stickyObserver: IntersectionObserver | null = null;
 const bgImagePath = ref('');
 const isContextMenuVisible = ref(false);
 const contextMenuPos:Ref<Vector2> = ref(new Vector2(0, 0));
@@ -126,10 +124,20 @@ function startSongDrag(evt: DragEvent) {
   evt.dataTransfer?.setDragImage(songDragOverlay.value as Element, 0, 0);
 }
 
-function updateScroll() {
-  sortInfoOpacity.value = 1 - (((opacityToScrollBy.value - viewStore.scroll) / opacityToScrollBy.value));
-  sortInfoOpacity.value = Math.round((sortInfoOpacity.value - Number.EPSILON) * 100) / 100;
-  isSticky.value = sortInfoOpacity.value >= 1;
+function observeSticky() {
+  stickyObserver?.disconnect();
+  const sentinel = stickySentinel.value;
+  const header = listHeader.value;
+  if (!sentinel || !header) return;
+  const stickyTop = parseFloat(getComputedStyle(header).top) || 0;
+  stickyObserver = new IntersectionObserver(([entry]) => {
+    const rootTop = entry.rootBounds?.top ?? 0;
+    isSticky.value = !entry.isIntersecting && entry.boundingClientRect.top < rootTop;
+  }, {
+    root: sentinel.closest<HTMLElement>('[data-overlayscrollbars-viewport]'),
+    rootMargin: `-${stickyTop}px 0px 0px 0px`,
+  });
+  stickyObserver.observe(sentinel);
 }
 
 async function updateBackgroundArt() {
@@ -144,25 +152,14 @@ const getImage = computed( () => {
   } else return ''
 });
 
-watch(() => viewStore.scroll, updateScroll);
-watch(() => route.params, () => {
-  updateBackgroundArt();
-  nextTick(() => {
-    opacityToScrollBy.value = document.querySelector('.scroll-wrapper').getBoundingClientRect().y - columnSortInfo.value.clientHeight - columnSortWrapper.value.clientHeight - 48;
-  })
-});
-
-const getColumnSortOffset = computed(() => {
-  if (!columnSortInfo.value || !columnSortInfo.value.clientHeight) return 'top: 0'
-  return `top: ${columnSortInfo.value.clientHeight + 43}px`;
-});
+watch(() => route.params, updateBackgroundArt);
 
 onMounted(() => {
-  nextTick(() => {
-    opacityToScrollBy.value = document.querySelector('.scroll-wrapper').getBoundingClientRect().y - columnSortInfo.value.clientHeight - columnSortWrapper.value.clientHeight - 48;
-  });
+  observeSticky();
   updateBackgroundArt();
-})
+});
+
+onBeforeUnmount(() => stickyObserver?.disconnect());
 </script>
 
 <template>
@@ -179,59 +176,59 @@ onMounted(() => {
       <div class="bg-noise" />
       <div class="bg-image" />
     </div>
-    <RecycleScroller
-        v-if="viewStore.isOverlayScrollInit"
-        :items="songList"
-        :item-size="isSimple ? 55 : 42"
-        :emit-update="true"
-        :page-mode="true"
-        key-field="id"
-        list-class="scroll-wrapper"
-        class="scroller"
-    >
-      <template #before>
-        <div class="top-view" ref="topView">
-          <RouterView v-slot="{ Component }" name="top">
-            <component
-                :is="Component"
-                :list-name="listName"
-                :list-size="songList.length"
-                :artist-name="artistName"
-                :list-length="listLength"
-            />
-          </RouterView>
-        </div>
-        <div class="column-sort-info" ref="columnSortInfo" :style="`opacity: ${sortInfoOpacity}`">
+    <div class="list-column">
+      <div class="top-view">
+        <RouterView v-slot="{ Component }" name="top">
+          <component
+              :is="Component"
+              :list-name="listName"
+              :list-size="songList.length"
+              :artist-name="artistName"
+              :list-length="listLength"
+          />
+        </RouterView>
+      </div>
+      <div ref="stickySentinel" class="sticky-sentinel" />
+      <div ref="listHeader" class="list-header" :class="{stuck: isSticky, simple: isSimple}">
+        <div class="list-header-title" aria-hidden="true">
           <h2>{{listName}}</h2>
         </div>
-        <div class="column-sort-wrapper" ref="columnSortWrapper" :class="[isSimple ? 'simple' : '', isSticky ? 'sticky' : '']">
-          <div class="column-sort" :style="getColumnSortOffset">
-            <span class="a">#</span>
-            <div class="artist-title-album">
-              <span class="list-title">{{$t('SONG_LIST.LIST_TITLE')}}</span>
-              <span v-if="!isSimple" class="list-artist">{{$t('SONG_LIST.LIST_ARTIST')}}</span>
-              <span v-if="!isSimple" class="list-album">{{$t('SONG_LIST.LIST_ALBUM')}}</span>
-              <i class="ft-icon favourite-icon"></i>
-              <span class="list-duration"><i class="ft-icon">clock</i></span>
-            </div>
+        <div class="column-sort">
+          <span class="a">#</span>
+          <div class="artist-title-album">
+            <span class="list-title">{{$t('SONG_LIST.LIST_TITLE')}}</span>
+            <span v-if="!isSimple" class="list-artist">{{$t('SONG_LIST.LIST_ARTIST')}}</span>
+            <span v-if="!isSimple" class="list-album">{{$t('SONG_LIST.LIST_ALBUM')}}</span>
+            <i class="ft-icon favourite-icon"></i>
+            <span class="list-duration"><i class="ft-icon">clock</i></span>
           </div>
-          <div class="bg" :style="getColumnSortOffset"></div>
         </div>
-      </template>
-      <template #default="{ item, index, active }" ref="test">
-        <SongListItem
-            :class="getHighlightClasses(index)"
-            :song="item"
-            :index="index"
-            :is-simple="isSimple"
-            @pointerdown.left="handleHighlightPointerDown(index, $event)"
-            @pointerup.left="handleHighlightPointerUp(index, $event)"
-            @contextmenu="openContextMenu(item, $event)"
-            draggable="true"
-            @dragstart="startSongDrag"
-        />
-      </template>
-    </RecycleScroller>
+      </div>
+      <RecycleScroller
+          v-if="viewStore.isOverlayScrollInit"
+          :items="songList"
+          :item-size="isSimple ? 55 : 42"
+          :emit-update="true"
+          :page-mode="true"
+          key-field="id"
+          list-class="scroll-wrapper"
+          class="scroller"
+      >
+        <template #default="{ item, index }">
+          <SongListItem
+              :class="getHighlightClasses(index)"
+              :song="item"
+              :index="index"
+              :is-simple="isSimple"
+              @pointerdown.left="handleHighlightPointerDown(index, $event)"
+              @pointerup.left="handleHighlightPointerUp(index, $event)"
+              @contextmenu="openContextMenu(item, $event)"
+              draggable="true"
+              @dragstart="startSongDrag"
+          />
+        </template>
+      </RecycleScroller>
+    </div>
     <ContextMenu :top="contextMenuPos.y" :left="contextMenuPos.x" v-if="isContextMenuVisible">
       <ContextMenuItem :label="$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_PLAYLIST')"></ContextMenuItem>
       <ContextMenuItem :label="$t('CONTEXT_MENU.SONG_LIST_ITEM.ADD_QUEUE')" icon="queue"></ContextMenuItem>
@@ -264,7 +261,7 @@ onMounted(() => {
 .wrapper {
   width: calc(100% - 32px);
   height: 100%;
-  --fixed-width: calc(100vw - var(--sidebar-width));
+  --info-view-width: 0px;
 
   padding: 0 16px;
 
@@ -273,19 +270,70 @@ onMounted(() => {
 }
 
 .wrapper.show-info-view {
-  grid-template-columns: 1fr 450px;
+  --info-view-width: 450px;
+  grid-template-columns: 1fr var(--info-view-width);
 }
 
 .scroller {
-  width: calc(100%);
-  height: 100%;
+  width: 100%;
   margin-bottom: 15px;
 }
 
-.column-sort-wrapper {
-  width: 100%;
+.list-column {
+  min-width: 0;
+  --list-title-height: 60px;
+}
+
+.sticky-sentinel {
+  height: 1px;
+  margin-bottom: -1px;
+}
+
+.list-header {
+  position: sticky;
+  top: var(--list-title-height);
+  z-index: 3;
   height: 42px;
   margin-bottom: 5px;
+}
+
+.list-header::before {
+  content: "";
+  position: absolute;
+  inset: 0 calc(-16px - var(--info-view-width)) 0 -16px;
+  background: var(--bg);
+  border-bottom: solid 1px var(--bd);
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.list-header-title {
+  position: absolute;
+  bottom: 100%;
+  left: -16px;
+  right: calc(-16px - var(--info-view-width));
+  height: var(--list-title-height);
+  display: flex;
+  align-items: center;
+  background: var(--fg-bg);
+  border-radius: var(--main-border-radius-element);
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+
+  h2 {
+    margin: 0 75px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.list-header.stuck::before,
+.list-header.stuck .list-header-title {
+  opacity: 1;
 }
 
 .column-sort {
@@ -294,11 +342,9 @@ onMounted(() => {
   align-items: center;
   column-gap: 5px;
   justify-items: center;
-  position: sticky;
-  top: 44px;
   height: 42px;
-  z-index: 3;
   border-bottom: solid 1px var(--text-op);
+  transition: border-color 0.2s;
 
   .artist-title-album {
     display: grid;
@@ -310,53 +356,15 @@ onMounted(() => {
   }
 }
 
-.column-sort-wrapper.simple .column-sort .artist-title-album {
+.list-header.simple .column-sort .artist-title-album {
   grid-template-columns: 3fr 20px 0fr;
 }
 
-.column-sort-wrapper.sticky .column-sort {
-  position: fixed;
-  width: calc(var(--fixed-width) - var(--info-view-width) - var(--song-list-width) - var(--padding-compensate));
-  pointer-events: none;
+.list-header.stuck .column-sort {
   border-color: transparent;
 }
 
-.column-sort-wrapper .bg {
-  width: calc(var(--fixed-width) - var(--song-list-width));
-  height: 42px;
-  background: var(--bg);
-  border-bottom: solid 1px var(--bd);
-  position: fixed;
-  right: 0;
-  z-index: 1;
-  opacity: 0;
-  transition: 0.2s;
-  transition-property: opacity;
-  pointer-events: none;
-}
-
-.column-sort-wrapper.sticky .bg {
-  opacity: 1;
-}
-
-.column-sort-info {
-  position: fixed;
-  width: calc(var(--fixed-width) - var(--song-list-width));
-  transform: translateX(-16px);
-  top: 44px;
-  background: var(--fg-bg);
-  z-index: 2;
-  border-radius: var(--main-border-radius-element);
-  pointer-events: none;
-  transition: 100ms;
-  transition-property: opacity;
-
-  h2 {
-    margin: 15px 75px;
-  }
-}
-
-html.boldText .column-sort-info h2 {
+html.boldText .list-header-title h2 {
   font-weight: 800;
 }
 
@@ -452,20 +460,14 @@ html.boldText .column-sort-info h2 {
 }
 
 @media (max-width: 1600px) {
-  .wrapper {
-    --info-view-width: 350px;
-  }
   .wrapper.show-info-view {
-    grid-template-columns: 1fr 350px;
+    --info-view-width: 350px;
   }
 }
 
 @media (max-width: 1200px) {
-  .wrapper {
-    --info-view-width: 250px;
-  }
   .wrapper.show-info-view {
-    grid-template-columns: 1fr 250px;
+    --info-view-width: 250px;
   }
 }
 </style>

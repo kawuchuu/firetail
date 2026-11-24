@@ -166,6 +166,7 @@
     "CREATE": "Create",
     "OK": "OK",
     "CANCEL": "Cancel",
+    "CLOSE": "Close",
     "YES": "Yes",
     "NO": "No",
     "SAVE": "Save"

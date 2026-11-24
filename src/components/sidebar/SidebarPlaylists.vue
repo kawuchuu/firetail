@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onBeforeMount, onMounted, Ref, ref, useTemplateRef} from "vue";
+import {onBeforeMount, onMounted, Ref, ref} from "vue";
 import {Playlist} from "../../types/Common";
 import FiretailSong from "../../types/FiretailSong";
 import SidebarItem from "./SidebarItem.vue";
@@ -9,7 +9,7 @@ import TextInput from "../TextInput.vue";
 
 const playlists: Ref<Playlist[]> = ref([]);
 
-const playlistModal = useTemplateRef('playlistModal');
+const showPlaylistModal = ref(false);
 const modalPlaylistName = ref('My Playlist');
 const modalPlaylistDescription = ref('');
 
@@ -23,7 +23,7 @@ function songDragOver(evt: DragEvent) {
 function createOrUpdate() {
   console.log(modalPlaylistName.value, modalPlaylistDescription.value);
   window.playlists.createPlaylist(modalPlaylistName.value, modalPlaylistDescription.value, '');
-  playlistModal?.value?.setModalActive(false);
+  showPlaylistModal.value = false;
 }
 
 function songDragEnd(playlist: Playlist, evt: DragEvent) {
@@ -47,11 +47,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="add-playlist" @click="playlistModal?.setModalActive(true)">
+  <div class="add-playlist" @click="showPlaylistModal = true">
     <i class="ft-icon">add</i>
     <span>{{$t('SIDEBAR.CREATE_PLAYLIST')}}</span>
   </div>
-  <Modal title="Create Playlist" ref="playlistModal">
+  <Modal v-model:open="showPlaylistModal" title="Create Playlist">
     <div class="playlist-modal">
       <div class="playlist-inner">
         <div class="playlist-image">

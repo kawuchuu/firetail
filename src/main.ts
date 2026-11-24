@@ -1,4 +1,4 @@
-import {app, BrowserWindow, protocol, net} from 'electron';
+import {app, BrowserWindow, protocol, net, shell} from 'electron';
 import path from 'path/posix';
 import Database from "./modules/database";
 import FiretailStorage from "./modules/storage";
@@ -63,7 +63,6 @@ const createWindow = () => {
     backgroundColor: '#000000',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      disableBlinkFeatures: "Auxclick"
     },
     titleBarOverlay: {
       height: 44,
@@ -77,6 +76,11 @@ const createWindow = () => {
   });
 
   mainWindow.setMenuBarVisibility(false);
+
+  mainWindow.webContents.setWindowOpenHandler(({url}) => {
+    if (/^https?:\/\//i.test(url)) shell.openExternal(url);
+    return {action: 'deny'};
+  });
 
   startIpc();
 
