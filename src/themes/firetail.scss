@@ -7,12 +7,8 @@ html.dark {
     --bd: #ffffff26 !important;
     --bd-op: #ffffff1e !important;
     --button: #322d47 !important;
-    --hl-txt: #eb6e64 !important;
-    --hl-op: #eb6e642a !important;
-
-    /* .playing-bar {
-        background-color: #1f1e25 !important;
-    } */
+    --hl-txt: #ff7c71 !important;
+    --hl-op: #ff7c712a !important;
 
     .bg-banner {
         background-image: url('../assets/songs-banner-new.png');
@@ -39,10 +35,6 @@ html.light {
     --button: #937bff !important;
     --hl-txt: #d44835 !important;
     --hl-op: #eb6e642a !important;
-
-    /* .playing-bar {
-        background-color: var(--bg) !important;
-    } */
 
     .bg-banner {
         background-image: url('../assets/songs-banner-new.png');

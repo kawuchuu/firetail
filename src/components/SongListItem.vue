@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import FiretailSong from "../types/FiretailSong";
-import {computed, inject, onMounted, ref} from "vue";
+import {computed, inject} from "vue";
 import {audioPlayer} from "../renderer";
 
 const props = defineProps<{
@@ -12,8 +12,6 @@ const props = defineProps<{
 /*onMounted(() => {
   console.log(props.song.id);
 })*/
-
-const hovering = ref(false);
 
 const isActive = computed(() => {
   if (!audioPlayer.reactive.currentSong) return '';
@@ -41,16 +39,15 @@ const play = inject<(index: number) => void>("play");
 </script>
 
 <template>
-  <div class="song-item inner-outline" :class="[isActive, isSimple ? 'simple' : '']" @dblclick="startPlaying"  @mouseover="hovering = true" @mouseleave="hovering = false">
-    <i v-if="(listIcon !== 'volume-up' && !isSimple) || (isSimple && hovering && listIcon !== 'volume-up')" class="ft-icon play-pause" :style="(hovering || (isActive === 'active')) ? 'opacity: 1' : 'opacity: 0'" @click="play(index)">{{ listIcon }}</i>
-    <div v-if="listIcon == 'volume-up'" class="playing-ani" @click="">
+  <div class="song-item inner-outline" :class="[isActive, isSimple ? 'simple' : '']" @dblclick="startPlaying">
+    <div v-if="listIcon === 'volume-up'" class="playing-ani">
       <div class="bar one"></div>
       <div class="bar two"></div>
       <div class="bar three"></div>
     </div>
-    <div v-if="isSimple && listIcon !== 'volume-up' && !hovering">
-      <p v-if="song.trackNum !== null" class="track-num">{{song.trackNum}}</p>
-      <p v-else class="track-num">-</p>
+    <div v-else class="lead">
+      <i class="ft-icon play-pause" @click="play(index)">{{ listIcon }}</i>
+      <p v-if="isSimple" class="track-num">{{ song.trackNum ?? '-' }}</p>
     </div>
     <div class="artist-title-album">
       <div class="list-title">
@@ -70,7 +67,7 @@ const play = inject<(index: number) => void>("play");
         <p>{{song.artist}}</p>
       </div>
       <div v-if="!isSimple" class="list-album"><p>{{song.album}}</p></div>
-      <i class="ft-icon favourite-icon" :style="hovering ? 'opacity: 1' : 'opacity: 0'">heart</i>
+      <i class="ft-icon favourite-icon">heart</i>
       <p class="list-duration"><span>{{song.duration}}</span></p>
     </div>
   </div>
@@ -169,8 +166,30 @@ const play = inject<(index: number) => void>("play");
   opacity: 0;
 }
 
+.song-item:hover .play-pause, .song-item.active .play-pause {
+  opacity: 1;
+}
+
 .play-pause:hover {
   opacity: .5 !important;
+}
+
+.lead {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.song-item.simple .play-pause {
+  display: none;
+}
+
+.song-item.simple:hover .play-pause {
+  display: inline-block;
+}
+
+.song-item.simple:hover .track-num {
+  display: none;
 }
 
 .song-item.active {

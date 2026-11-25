@@ -11,6 +11,7 @@ import Artists from "./routes/Artists.vue";
 import BlankChild from "./components/BlankChild.vue";
 import PlaylistView from "./routes/PlaylistView.vue";
 import Genres from "./routes/Genres.vue";
+import {setupScrollRestoration} from "./modules/scroll-handler";
 
 const routes = [
     {
@@ -113,5 +114,7 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes,
 })
+
+setupScrollRestoration(router);
 
 export default router

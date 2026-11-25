@@ -8,6 +8,8 @@ import {viewStore} from "./renderer";
 import {onBeforeMount, onMounted, ref} from "vue";
 import {OverlayScrollbarsComponent} from "overlayscrollbars-vue";
 import Notification from "./components/Notification.vue";
+import {setScrollViewport} from "./modules/scroll-handler";
+import type {OverlayScrollbars} from "overlayscrollbars";
 
 const isDraggedOver = ref(false);
 
@@ -39,7 +41,8 @@ function filesDropped(evt:DragEvent) {
   window.library.addToLibrary(files);
 }
 
-function initScrollbar() {
+function initScrollbar(instance: OverlayScrollbars) {
+  setScrollViewport(instance.elements().viewport);
   viewStore.isOverlayScrollInit = true;
 }
 

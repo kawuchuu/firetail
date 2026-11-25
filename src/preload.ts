@@ -11,6 +11,8 @@ contextBridge.exposeInMainWorld('library', {
   getAllFromArtist: (artist: string) => ipcRenderer.sendSync('getAllFromArtist', artist),
   getGenres: () => ipcRenderer.sendSync('getGenres'),
   getSongsFromGenre: (genre: string) => ipcRenderer.sendSync('getSongsFromGenre', genre),
+  getSongFileInfo: (songId: string) => ipcRenderer.invoke('getSongFileInfo', songId),
+  revealSong: (songId: string) => ipcRenderer.send('revealSong', songId),
   addToLibrary: (locations:string[]) => ipcRenderer.send('addToLibrary', locations),
   onRefreshView: (callback) => ipcRenderer.on('refreshView', (_event, value) => callback(value))
 });

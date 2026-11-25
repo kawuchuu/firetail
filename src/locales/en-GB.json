@@ -212,5 +212,37 @@
     }
   },
   "APP_NAME": "Firetail",
-  "LANG_NAME": "English"
+  "LANG_NAME": "English",
+  "SONG_INFO": {
+    "TITLE": "Song info",
+    "MENU_ITEM": "Song info",
+    "TRACK": "Track",
+    "FILE": "File",
+    "ALBUM_ARTIST": "Album artist",
+    "TRACK_NUMBER": "Track number",
+    "DISC": "Disc",
+    "YEAR": "Year",
+    "COMPOSER": "Composer",
+    "BPM": "BPM",
+    "LABEL": "Label",
+    "COMMENT": "Comment",
+    "FORMAT": "Format",
+    "BITRATE": "Bitrate",
+    "SAMPLE_RATE": "Sample rate",
+    "BIT_DEPTH": "Bit depth",
+    "CHANNELS": "Channels",
+    "SIZE": "Size",
+    "MODIFIED": "Modified",
+    "TAGS": "Tags",
+    "ENCODER": "Encoder",
+    "LOSSLESS": "Lossless",
+    "LOSSY": "Lossy",
+    "MONO": "Mono",
+    "STEREO": "Stereo",
+    "CHANNEL_COUNT": "{count} channels",
+    "BITS": "{count}-bit",
+    "SHOW_FILE": "Show in folder",
+    "LOADING": "Reading file…",
+    "UNAVAILABLE": "This file couldn't be read. It may have been moved or deleted."
+  }
 }

@@ -9,6 +9,7 @@ import {getArt} from "../modules/art";
 import ContextMenu from "./ContextMenu.vue";
 import {ContextMenuItemType, Vector2} from "../types/Common";
 import ContextMenuItem from "./ContextMenuItem.vue";
+import SongInfoModal from "./modals/SongInfoModal.vue";
 
 provide('play', play);
 provide("closeContextMenu", closeContextMenu);
@@ -40,6 +41,8 @@ const highlighted = ref<number[]>([]);
 const lastHighlightedIndex = ref<number | null>(null);
 
 const artistContextName = ref('Unknown');
+const showSongInfo = ref(false);
+const songInfoTarget = ref<FiretailSong | null>(null);
 
 const songDragOverlay = useTemplateRef('songDragOverlay');
 const songDragOverlayText = ref("Nothing here...");
@@ -105,6 +108,20 @@ function openContextMenu(item: FiretailSong, evt: PointerEvent) {
     lastHighlightedIndex.value = thisIndex;
   }
   contextMenuPos.value.set(evt.x, evt.y);
+}
+
+function openSongInfo() {
+  const song = props.songList[highlighted.value[0]];
+  closeContextMenu();
+  if (!song) return;
+  songInfoTarget.value = song;
+  showSongInfo.value = true;
+}
+
+function revealHighlighted() {
+  const song = props.songList[highlighted.value[0]];
+  closeContextMenu();
+  if (song) window.library.revealSong(song.id);
 }
 
 function toggleHighlighted(index: number) {
@@ -250,9 +267,10 @@ onBeforeUnmount(() => stickyObserver?.disconnect());
       <ContextMenuItem :label="$t('CONTEXT_MENU.SONG_LIST_ITEM.DELETE')" icon="close" />
       <ContextMenuItem v-if="route.path.startsWith('/playlists')" :label="$t('CONTEXT_MENU.SONG_LIST_ITEM.REMOVE_PLAYLIST')" icon="close" />
       <ContextMenuItem v-if="highlighted.length <= 1" :type="ContextMenuItemType.DIVIDER" />
-      <ContextMenuItem v-if="highlighted.length <= 1" label="Show in file manager" />
-      <ContextMenuItem v-if="highlighted.length <= 1" label="File info" />
+      <ContextMenuItem v-if="highlighted.length <= 1" label="Show in file manager" @click="revealHighlighted" />
+      <ContextMenuItem v-if="highlighted.length <= 1" :label="$t('SONG_INFO.MENU_ITEM')" @click="openSongInfo" />
     </ContextMenu>
+    <SongInfoModal v-model:open="showSongInfo" :song="songInfoTarget" />
     <SongViewInfoView v-if="showInfoView" :genres="genres" :artists="artists" :description="description" />
   </div>
 </template>

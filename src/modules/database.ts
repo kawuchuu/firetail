@@ -1,10 +1,12 @@
 import DatabaseConstructor, {Database} from 'better-sqlite3';
-import {app, ipcMain} from 'electron';
+import {app, ipcMain, shell} from 'electron';
+import {stat} from 'node:fs/promises';
 import FiretailSong from "../types/FiretailSong";
 import {addFiles, processFiles} from "./import";
 import {mainWindow} from "../main";
 import {Albums, AlbumsDB} from "../types/Albums";
 import {PlaylistSong} from "../types/Common";
+import {SongFileInfo} from "../types/SongFileInfo";
 
 interface Sum {
   sum: number;
@@ -169,6 +171,43 @@ class FiretailDB {
     }
   }
 
+  getSongPath(songId: string) {
+    return this.db.prepare('SELECT path FROM library WHERE id = ?').pluck().get(songId) as string | undefined;
+  }
+
+  async getSongFileInfo(songId: string): Promise<SongFileInfo | null> {
+    const filePath = this.getSongPath(songId);
+    if (!filePath) return null;
+    const fileStat = await stat(filePath);
+    // eslint-disable-next-line import/no-unresolved
+    const musicMetadata = await import('music-metadata');
+    const meta = await musicMetadata.parseFile(filePath, {skipCovers: true}).catch(err => {
+      console.log(err);
+    });
+    const format = meta ? meta.format : undefined;
+    const common = meta ? meta.common : undefined;
+    return {
+      path: filePath,
+      size: fileStat.size,
+      modified: fileStat.mtimeMs,
+      container: format?.container,
+      codec: format?.codec,
+      codecProfile: format?.codecProfile,
+      lossless: format?.lossless,
+      bitrate: format?.bitrate,
+      sampleRate: format?.sampleRate,
+      bitsPerSample: format?.bitsPerSample,
+      channels: format?.numberOfChannels,
+      duration: format?.duration,
+      tool: format?.tool,
+      tagTypes: format?.tagTypes ? [...format.tagTypes] : [],
+      composer: common?.composer ?? [],
+      bpm: common?.bpm,
+      label: common?.label ?? [],
+      comment: (common?.comment ?? []).map(c => c.text).filter((t): t is string => !!t),
+    };
+  }
+
   getGenres() {
     return this.db.prepare('SELECT DISTINCT g.value FROM library, json_each(genre) g WHERE genre IS NOT NULL ORDER BY genre').all();
   }
@@ -252,6 +291,13 @@ class FiretailDB {
 
     ipcMain.on('getSongsFromGenre', (event, genre: string) => {
       event.returnValue = this.getSongsFromGenre(genre);
+    });
+
+    ipcMain.handle('getSongFileInfo', (_event, songId: string) => this.getSongFileInfo(songId));
+
+    ipcMain.on('revealSong', (_event, songId: string) => {
+      const filePath = this.getSongPath(songId);
+      if (filePath) shell.showItemInFolder(filePath);
     });
   }
 

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {onBeforeUnmount, onMounted, ref, useId, useTemplateRef, watch} from 'vue';
 
+defineOptions({inheritAttrs: false});
+
 const open = defineModel<boolean>('open', {default: false});
 
 defineProps<{
@@ -59,6 +61,7 @@ onBeforeUnmount(() => {
 <template>
   <teleport to="body">
     <dialog
+      v-bind="$attrs"
       ref="dialog"
       class="modal"
       :aria-labelledby="titleId"

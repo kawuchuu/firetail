@@ -3,6 +3,7 @@ import {Albums} from "./types/Albums";
 import {Ref} from "vue";
 import {Playlist, RepeatMode} from "./types/Common";
 import DatabaseConstructor from "better-sqlite3";
+import {SongFileInfo} from "./types/SongFileInfo";
 
 interface LibraryPreload {
   getAllSongs: () => FiretailSong[];
@@ -13,6 +14,8 @@ interface LibraryPreload {
   getAllFromArtist: (artist: string) => FiretailSong[];
   getGenres: () => string[];
   getSongsFromGenre: (genre: string) => FiretailSong[];
+  getSongFileInfo: (songId: string) => Promise<SongFileInfo | null>;
+  revealSong: (songId: string) => void;
   addToLibrary: (locations: string[]) => void;
   onRefreshView: (callback: any) => Electron.IpcRenderer;
 }
